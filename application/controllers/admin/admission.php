@@ -28,9 +28,112 @@ class Admission extends Admin_Controller
 	public function birth_certificate($student_id)
 	{
 		$student_id = (int) $student_id;
+		$student_id = (int) $student_id;
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT schoolId,schoolName,registrationNumber FROM schools WHERE `owner_id`='" . $userId . "'";
+		$this->data['school'] = $school =  $this->db->query($query)->result()[0];
+		$this->data['school_id']  = $school->schoolId;
+
 		$query = "SELECT * FROM students WHERE student_id = '" . $student_id . "'";
 		$this->data['student'] = $this->db->query($query)->result()[0];
 		$this->load->view(ADMIN_DIR . "admission/birth_certificate", $this->data);
+	}
+
+	public function update_student_profile()
+	{
+		$student_id = (int) $this->input->post('student_id');
+		//just for redirection the update page
+		if ($this->input->post('class_list')) {
+			$this->data['class_list'] = true;
+		} else {
+			$this->data['class_list'] = false;
+		}
+
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT schoolId,schoolName FROM schools WHERE `owner_id`='" . $userId . "'";
+		$this->data['school'] = $school =  $this->db->query($query)->result()[0];
+		$this->data['school_id']  = $school->schoolId;
+
+		$this->data["students"]  = $this->student_model->get_student($student_id);
+
+
+
+		$this->load->view(ADMIN_DIR . "admission/update_student_profile", $this->data);
+	}
+
+	public function change_class_form()
+	{
+		$student_id = (int) $this->input->post('student_id');
+
+		$this->data["students"]  = $this->student_model->get_student($student_id);
+
+
+
+		$this->load->view(ADMIN_DIR . "admission/change_class_form", $this->data);
+	}
+
+	public function change_student_class()
+	{
+		$student_id = (int) $this->input->post('student_id');
+		$class_id = (int) $this->input->post('class_id');
+		$query = "UPDATE students SET class_id = '" . $class_id . "' WHERE student_id = '" . $student_id . "'";
+		if ($this->db->query($query)) {
+			$this->session->set_flashdata("msg_success", $this->lang->line("success"));
+			redirect(ADMIN_DIR . "admission/view_student_profile/$student_id");
+		} else {
+			$this->session->set_flashdata("msg_success", $this->lang->line("msg_error"));
+			redirect(ADMIN_DIR . "admission/view_student_profile/$student_id");
+		}
+	}
+	public function delete_student_profile($student_id)
+	{
+		$student_id = (int) $student_id;
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT schoolId FROM schools WHERE `owner_id`='" . $userId . "'";
+		$this->data['school'] = $school =  $this->db->query($query)->result()[0];
+		$school_id = $school->schoolId;
+
+		$query = "UPDATE students SET status = '0' WHERE student_id = '" . $student_id . "' AND school_id = '" . $school_id . "'";
+		if ($this->db->query($query)) {
+			$this->session->set_flashdata("msg_success", $this->lang->line("success"));
+			redirect(ADMIN_DIR . "admission/view_student_profile/$student_id");
+		} else {
+			$this->session->set_flashdata("msg_success", $this->lang->line("msg_error"));
+			redirect(ADMIN_DIR . "admission/view_student_profile/$student_id");
+		}
+	}
+
+	public function restore_student_profile($student_id)
+	{
+		$student_id = (int) $student_id;
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT schoolId FROM schools WHERE `owner_id`='" . $userId . "'";
+		$this->data['school'] = $school =  $this->db->query($query)->result()[0];
+		$school_id = $school->schoolId;
+
+		$query = "UPDATE students SET status = '1' WHERE student_id = '" . $student_id . "' AND school_id = '" . $school_id . "'";
+		if ($this->db->query($query)) {
+			$this->session->set_flashdata("msg_success", $this->lang->line("success"));
+			redirect(ADMIN_DIR . "admission/view_student_profile/$student_id");
+		} else {
+			$this->session->set_flashdata("msg_success", $this->lang->line("msg_error"));
+			redirect(ADMIN_DIR . "admission/view_student_profile/$student_id");
+		}
+	}
+
+
+	public function slc_certificate($student_id)
+	{
+		$student_id = (int) $student_id;
+		$student_id = (int) $student_id;
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT schoolId,schoolName,registrationNumber FROM schools WHERE `owner_id`='" . $userId . "'";
+		$this->data['school'] = $school =  $this->db->query($query)->result()[0];
+		$this->data['school_id']  = $school->schoolId;
+
+		$query = "SELECT * FROM students WHERE student_id = '" . $student_id . "'";
+		$this->data['student'] = $this->db->query($query)->result()[0];
+		$this->load->view(ADMIN_DIR . "admission/slc_certificate", $this->data);
 	}
 
 	public function rsr()
@@ -43,6 +146,11 @@ class Admission extends Admin_Controller
 	public function update_profile($student_id)
 	{
 		$student_id = (int) $student_id;
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT schoolId FROM schools WHERE `owner_id`='" . $userId . "'";
+		$this->data['school'] = $school =  $this->db->query($query)->result()[0];
+		$school_id = $school->schoolId;
+
 		$input["student_class_no"] = $this->input->post("student_class_no");
 		$input["student_admission_no"] = $this->input->post("student_admission_no");
 		$input["student_name"] = ucwords(strtolower($this->input->post("student_name")));
@@ -63,10 +171,21 @@ class Admission extends Admin_Controller
 		$input["is_disable"] = ucwords(strtolower($this->input->post("is_disable")));
 		$input["ehsaas"] = ucwords(strtolower($this->input->post("ehsaas")));
 		$input["nic_issue_date"] = $this->input->post("nic_issue_date");
-		$this->db->where("student_id", $student_id);
+		$input["gender"] = $this->input->post("gender");
+		$input["domicile_id"] = $this->input->post("domicile_id");
+
+
+		$where_condition = array('student_id' => $student_id, 'school_id' => $school_id);
+		$this->db->where($where_condition);
 		if ($this->db->update("students", $input)) {
 			$this->session->set_flashdata("msg_success", $this->lang->line("success"));
-			redirect(ADMIN_DIR . "admission/view_student_profile/$student_id");
+			if ($this->input->post('class_id')) {
+				$class_id = $this->input->post('class_id');
+				redirect(ADMIN_DIR . "admission/view_students/$class_id");
+			} else {
+
+				redirect(ADMIN_DIR . "admission/view_student_profile/$student_id");
+			}
 		} else {
 			$this->session->set_flashdata("msg_success", $this->lang->line("msg_error"));
 			redirect(ADMIN_DIR . "admission/view_student_profile/$student_id");
@@ -137,10 +256,16 @@ class Admission extends Admin_Controller
 			'uc_id' => $uc_id,
 			'gender' => $this->input->post("gender"),
 			'form_b' => $this->input->post("form_b"),
-			'school_id' => $school_id
+			'school_id' => $school_id,
+			'domicile_id' => $this->input->post("domicile_id")
 
 		);
 		if ($this->db->insert('students', $data)) {
+			$student_id = $this->db->insert_id();
+			$psra_stat_id = 10000;
+			$query = "UPDATE students SET psra_student_id = '" . ($psra_stat_id + $student_id) . "' WHERE student_id = '" . $student_id . "'";
+			$this->db->query($query);
+
 			$this->session->set_flashdata("msg_success", $this->lang->line("success"));
 			redirect(ADMIN_DIR . "admission/view_students/$class_id/$section_id");
 		} else {
@@ -160,7 +285,7 @@ class Admission extends Admin_Controller
 		$query = "SELECT schoolId,schoolName FROM schools WHERE `owner_id`='" . $userId . "'";
 		$this->data['school'] = $school =  $this->db->query($query)->result()[0];
 		$this->data['school_id']  = $school->schoolId;
-		$query = "SELECT * FROM `classes` WHERE status=1 ORDER BY class_id DESC";
+		$query = "SELECT * FROM `classes` WHERE status=1 ORDER BY class_id ASC";
 
 		$result = $this->db->query($query);
 		$classes = $result->result();
@@ -615,8 +740,12 @@ class Admission extends Admin_Controller
 	public function view_student_profile($student_id)
 	{
 		$student_id = (int) $student_id;
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT schoolId,schoolName FROM schools WHERE `owner_id`='" . $userId . "'";
+		$this->data['school'] = $school =  $this->db->query($query)->result()[0];
+		$this->data['school_id']  = $school->schoolId;
 
-		$this->data["students"] = $student = $this->student_model->get_student($student_id);
+		$this->data["students"]  = $this->student_model->get_student($student_id);
 
 
 		$this->data["title"] = "Student Detail";

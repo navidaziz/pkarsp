@@ -67,7 +67,7 @@ function numToOrdinalWord($num)
 
 <head>
   <meta charset="utf-8">
-  <title>School Birth Certificate</title>
+  <title>School Leaving Certificate</title>
   <link rel="stylesheet" href="style.css">
   <link rel="license" href="http://www.opensource.org/licenses/mit-license/">
   <script src="script.js"></script>
@@ -206,7 +206,7 @@ function numToOrdinalWord($num)
         <tr>
           <td colspan="2" style="text-align: center;">
             <br />
-            <h3>BIRTH CERTIFICATE</h3>
+            <h3>School Leaving Certificate</h3>
           </td>
 
         </tr>

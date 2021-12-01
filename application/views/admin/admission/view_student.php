@@ -1,12 +1,3 @@
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dat aTables.css">
-
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.0/js/dataTables.buttons.min.js"></script>
-<script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-<script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.0/js/buttons.html5.min.js"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.0/js/buttons.print.min.js"></script>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -62,88 +53,111 @@
 
 
                     <td>
-                      Addmission No:
-                      <input type="text" name="student_admission_no" value="" required />
+                      <strong> Addmission No: </strong><br />
+                      <input style="width:90px !important; " type="text" name="student_admission_no" value="" required />
                     </td>
 
                     <td>
-                      Student Name
+                      <strong> Student Name </strong><br />
                       <input type="text" name="student_name" value="" required />
                     </td>
 
                     <td>
-                      Father Name
+                      <strong> Father Name </strong><br />
                       <input type="text" name="student_father_name" value="" required />
                     </td>
                     <td>
-                      Form B No.
-                      <input id="form_b" type="text" id="form_b" name="form_b" value="" />
-                    </td>
-                    <td>
-                      Date Of Birth<input style="width: 130px;" type="date" name="student_data_of_birth" value="" required />
-
-                    </td>
-
-                    <td>
-                      Date of Admission<input style="width: 130px;" type="date" name="admission_date" value="" required />
-
-                    </td>
-
-
-                    <td>
-                      Contact Number
-                      <input type="tel" id="father_mobile_number" name="father_mobile_number" value="" required />
+                      <strong> Father CNIC</strong><br />
+                      <input style="width:110px !important; " type="text" id="father_nic" name="father_nic" value="" required />
 
                     </td>
                     <td>
-                      Father NIC
-                      <input type="text" id="father_nic" name="father_nic" value="" />
+                      <strong> Form B No.</strong><br />
+                      <input style="width:110px !important; " id="form_b" type="text" id="form_b" name="form_b" value="" />
+                    </td>
+                    <td>
+                      <strong> Date Of Birth
+                      </strong><br />
+                      <input min="<?php echo date("Y") - 30; ?>-12-31" max="<?php echo date("Y") - 2; ?>-12-31" style="width: 125px;" type="date" name="student_data_of_birth" value="" required />
+
+                    </td>
+
+                    <td>
+                      <strong>Date of Admission</strong><br />
+                      <input min="<?php echo date("Y") - 5; ?>-12-31" max="<?php echo date("Y-m-d"); ?>" style=" width: 125px;" type="date" name="admission_date" value="" required />
+
+                    </td>
+
+
+                    <td>
+                      <strong> Contact Number</strong><br />
+                      <input style="width:95px !important; " type="tel" id="father_mobile_number" name="father_mobile_number" value="" required />
+
+                    </td>
+
+                    <td> <strong>Student Address </strong><br /> <input type="text" name="student_address" value="" required />
 
                     </td>
                   </tr>
                   <tr>
-                    <td>Gender: <input type="radio" name="gender" value="Male" required />
+                    <td><strong>Gender:</strong><br /> <input type="radio" name="gender" value="Male" required />
                       Male
-                      <span style="margin-left: 20px;"></span>
+                      <span style="margin-left: 10px;"></span>
 
                       <input type="radio" name="gender" value="Female" required />
                       Female
                     </td>
-                    <td>Disable
+                    <td><strong>Disable </strong><br />
                       <input type="radio" name="is_disable" value="Yes" required />
                       Yes
-                      <span style="margin-left: 20px;"></span>
+                      <span style="margin-left: 10px;"></span>
 
                       <input type="radio" name="is_disable" value="No" required />
                       No
                     </td>
-                    <td>Orphan: <input type="radio" name="orphan" value="Yes" required />
+                    <td><strong>Orphan: </strong><br /> <input type="radio" name="orphan" value="Yes" required />
                       Yes
-                      <span style="margin-left: 20px;"></span>
+                      <span style="margin-left: 10px;"></span>
 
                       <input type="radio" name="orphan" value="No" required />
                       No
                     </td>
-                    <td>Religion
+                    <td colspan="2"> <strong> Religion:</strong><br />
                       <input type="radio" name="religion" value="Muslim" required />
                       Muslim
-                      <span style="margin-left: 20px;"></span>
+                      <span style="margin-left: 10px;"></span>
 
                       <input type="radio" name="religion" value="Non Muslim" required />
                       Non Muslim
                     </td>
-                    <td colspan="2">Nationality:
-                      <input type="radio" name="nationality" value="Pakistan" required />
+                    <td colspan="2"> <strong>Nationality:</strong><br />
+                      <input type="radio" id="pakistani" name="nationality" onclick="$('#other_nationality').hide(); $( '#foreigner' ).prop( 'checked' , false );" value="Pakistan" required />
                       Pakistani
-                      <span style="margin-left: 20px;"></span>
+                      <span style="margin-left: 10px;"></span>
 
-                      <input type="radio" name="nationality" value="Foreigner" required />
-                      Foreigner
+                      <input id="foreigner" type="radio" required onclick="$('#other_nationality').show(); $( '#pakistani' ).prop( 'checked' , false ); " /> Foreigner
+
+                      <div style="display: none;" id="other_nationality"><input type="radio" name="nationality" value="Afghani" required /> Afghani
+                        <span style="margin-left: 10px;"></span>
+                        <input type="radio" name="nationality" value="Non Afghani" required /> Non Afghani
+
+                      </div>
+
+
+                    </td>
+                    <td>
+                      <strong>Domicile</strong><br />
+                      <select name="domicile_id" required>
+                        <option value="">Select Domicile</option>
+                        <?php $query = "SELECT * FROM district ORDER BY districtTitle ASC";
+                        $districts = $this->db->query($query)->result();
+                        foreach ($districts as $district) { ?>
+                          <option value="<?php echo $district->districtId ?>"><?php echo $district->districtTitle ?></option>
+                        <?php } ?>
+                      </select>
                     </td>
 
-                    <td> Student Address <input type="text" name="student_address" value="" required />
 
-                    </td>
                     <td style="text-align: center; vertical-align: middle;">
                       <input class="btn btn-success btn-sm" type="submit" value="Add New Student" name="Add Student" />
                     </td>
@@ -182,7 +196,8 @@
                 <th>Orphan</th>
 
                 <th>Disable</th>
-                <th>Class</th>
+                <th>Domicile</th>
+                <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -210,8 +225,16 @@
                       <td><?php echo $student->nationality; ?></td>
                       <td><?php echo $student->orphan; ?></td>
                       <td><?php echo $student->is_disable; ?></td>
-                      <td><?php echo $student->Class_title; ?></td>
+                      <td>
+                        <?php
+                        $query = "SELECT districtTitle FROM district WHERE districtId = '" . $students[0]->domicile_id . "'";
+                        echo $this->db->query($query)->result()[0]->districtTitle; ?>
+                      </td>
+                      <td>
+                        <button onclick="update_profile('<?php echo $student->student_id; ?>')" class="btn btn-link btn-sm"><i class="fa fa-edit" aria-hidden="true"></i> Edit</button>
 
+                        <a href="<?php echo site_url(ADMIN_DIR . "admission/view_student_profile/" . $student->student_id) ?>">View</a>
+                      </td>
 
                     </tr>
                   <?php endforeach;  ?>
@@ -232,6 +255,35 @@
     </div>
   </section>
 </div>
+
+<div id="general_model" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" id="general_model_body">
+
+
+    </div>
+  </div>
+</div>
+
+<script>
+  function update_profile(student_id) {
+    $.ajax({
+      type: "POST",
+      url: "<?php echo site_url(ADMIN_DIR . "admission/update_student_profile"); ?>",
+      data: {
+        student_id: student_id,
+        class_list: 'class_list'
+      }
+    }).done(function(data) {
+
+      $('#general_model_body').html(data);
+    });
+
+    $('#general_model').modal('show');
+  }
+</script>
+
+
 <script>
   $(document).ready(function() {
     $('#father_mobile_number').inputmask('(9999)-9999999');

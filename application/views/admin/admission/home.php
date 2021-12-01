@@ -77,7 +77,7 @@
                         $count = 1; ?>
                         <tr>
                           <?php if ($count == 1) { ?>
-                            <th style="text-align: center;"><?php echo $class->Class_title; ?>
+                            <th style="text-align: center;"><?php echo $class->class_title; ?>
 
                             </th>
                           <?php
@@ -111,7 +111,21 @@
                       <tr>
                         <th>Total Students</th>
                         <th><?php $query = "SELECT COUNT(*) as total FROM students as s
-                              WHERE s.status IN(1,2) and s.class_id IN (2,3,4,5,6) AND school_id = $school_id";
+                              WHERE s.status IN(1,2)  AND school_id = $school_id";
+                            echo $this->db->query($query)->result()[0]->total;
+                            ?></th>
+                      </tr>
+                      <tr>
+                        <th>School Leaving Certificates</th>
+                        <th><?php $query = "SELECT COUNT(*) as total FROM students as s
+                              WHERE s.status IN(3)  AND school_id = $school_id";
+                            echo $this->db->query($query)->result()[0]->total;
+                            ?></th>
+                      </tr>
+                      <tr>
+                        <th>Trashed Students</th>
+                        <th><?php $query = "SELECT COUNT(*) as total FROM students as s
+                              WHERE s.status IN(0)  AND school_id = $school_id";
                             echo $this->db->query($query)->result()[0]->total;
                             ?></th>
                       </tr>

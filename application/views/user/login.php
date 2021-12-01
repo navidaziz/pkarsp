@@ -75,7 +75,7 @@
 
       <p class="login-box-msg">Use Chrome Web Browser</p>
 
-      <?php echo validation_errors(); ?> <form action="<?php echo base_url('user/login'); ?>" method="post">
+      <?php echo validation_errors(); ?> <form onsubmit="return validate()" action="<?php echo base_url('user/login'); ?>" method="post">
         <div class="form-group has-feedback">
           <input type="text" class="form-control" name="userName" placeholder="user name">
           <span class="fa fa-user form-control-feedback"></span>
@@ -114,6 +114,7 @@
           <?php }  ?>
           <div style="margin:0 0 10px 15px" class="g-recaptcha" data-sitekey="6Leuqa4ZAAAAAEBURd3DWqmwV4cdzXi5zzcljMLR">
           </div>
+          <Strong class="validation_message" style="margin:0 0 10px 15px; color:red"></Strong>
           <!-- /.col -->
           <div class="col-xs-12">
             <button type="submit" class="btn btn-primary btn-block btn-flat col-xs-6 pull-right">Sign In</button>
@@ -171,8 +172,8 @@
 
               <div style="text-align: center;">
                 <p for="exampleInputEmail1">Please enter your User Name and Email address to find your Password</p>
-                <input style="width: 50%;" type="text" placeholder="User Name" class="" name="username" id="username" required="required"><br><br>
-                <input style="width: 50%;" type="email" placeholder="Email Address" class="" name="email" id="exampleInputEmail1" required="required">
+                <input required style="width: 50%;" type="text" placeholder="User Name" class="" name="username" id="username" required="required"><br><br>
+                <input required style="width: 50%;" type="email" placeholder="Email Address" class="" name="email" id="exampleInputEmail1" required="required">
               </div>
             </div>
 
@@ -254,5 +255,25 @@
 
   <?php } ?>
 </body>
+<script>
+  // window.onload = function() {
+  //   var $recaptcha = document.querySelector('#g-recaptcha-response');
+
+  //   if ($recaptcha) {
+  //     $recaptcha.setAttribute("required", "required");
+  //   }
+  // };
+
+  function validate() {
+
+    emp = document.getElementById('g-recaptcha-response').value;
+    if (emp == "") {
+      $('.validation_message').html("Please Click on I'm not a robot. Thanks");
+      return false;
+    }
+
+  }
+</script>
+
 
 </html>

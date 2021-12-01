@@ -65,7 +65,7 @@
       <div class="box-body">
 
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-3">
             <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 10px; padding: 10px; background-color: white;">
               <h2>School ID: <?php echo $school->schoolId ?></h2>
               <h3>Reg. ID: <?php echo $school->registrationNumber ?></h3>
@@ -166,8 +166,41 @@
             </div>
           </div>
 
+          <div class="col-md-4">
+            <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 10px; padding: 10px; background-color: white;">
+              <h4><i class="fa fa-envelope-o"></i> Inbox Messages</h4>
+              <?php
+
+              $query =
+                "SELECT message_for_all.*,`message_school`.`school_id` FROM `message_for_all`
+                     left join message_school on `message_for_all`.`message_id`=`message_school`.`message_id`
+                     where `message_school`.`school_id`=$school_id  order by `message_for_all`.`message_id` DESC";
+              $query_result = $this->db->query($query);
+              $school_messages = $query_result->result(); ?>
+              <table class="table">
+                <?php
+                foreach ($school_messages as $message) : ?>
+                  <tr>
+
+                    <td class=" message">
+                      <a href="<?php echo base_url('messages/school_message_details/'); ?><?php echo $message->message_id; ?>">
+                        <strong style="font-size: 14px;"> <?php echo $message->subject; ?></strong>
+                      </a>
+                      <small style="display: block; color:gray" class="pull-right">
+                        <i class="fa fa-clock-o" aria-hidden="true"></i>
+                        <?php echo date("dS F Y", strtotime($message->created_date)); ?>
+                    </td>
+
+                  </tr>
+
+                <?php endforeach; ?>
+              </table>
+            </div>
+          </div>
+
           <div class="col-md-5">
             <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 10px; padding: 10px; background-color: white;">
+
 
               <?php if ($school->registrationNumber) { ?>
                 <h3>Registration and renewal detail</h3>

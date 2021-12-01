@@ -338,6 +338,15 @@ $menu_list .= "</ul>";
 
     .modal-content {
       background-color: #dfeffc;
+    }
+
+    .content-header>.breadcrumb>li>a {
+      color: #444;
+      text-decoration: none;
+      display: inline-block;
+      font-size: larger !important;
+      color: #5C9CCC !important;
+    }
   </style>
 
   <!-- google code ends -->
