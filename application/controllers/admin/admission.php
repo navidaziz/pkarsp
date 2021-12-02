@@ -122,16 +122,40 @@ class Admission extends Admin_Controller
 	}
 
 
-	public function slc_certificate($student_id)
+	public function slc_certificate($slc_id)
 	{
-		$student_id = (int) $student_id;
-		$student_id = (int) $student_id;
+
 		$userId = $this->session->userdata('userId');
-		$query = "SELECT schoolId,schoolName,registrationNumber FROM schools WHERE `owner_id`='" . $userId . "'";
+		$query = "SELECT * FROM schools WHERE `owner_id`='" . $userId . "'";
 		$this->data['school'] = $school =  $this->db->query($query)->result()[0];
 		$this->data['school_id']  = $school->schoolId;
 
-		$query = "SELECT * FROM students WHERE student_id = '" . $student_id . "'";
+
+		$query = "SELECT
+		`students`.`student_class_no`
+		, `students`.`student_name`
+		, `students`.`student_father_name`
+		, `students`.`student_data_of_birth`
+		, `students`.`student_address`
+		, `students`.`student_admission_no`
+		, `students`.`nationality`
+		, `students`.`gender`
+		, student_leaving_certificates.slc_id
+		, `student_leaving_certificates`.`slc_file_no`
+		, `student_leaving_certificates`.`slc_certificate_no`
+		, `student_leaving_certificates`.`leaving_reason`
+		, `student_leaving_certificates`.`psra_student_id`
+		, `student_leaving_certificates`.`current_class`
+		, `student_leaving_certificates`.`promoted_to_class`
+		, `student_leaving_certificates`.`academic_record`
+		, `student_leaving_certificates`.`character_and_conduct`
+		, `student_leaving_certificates`.`remarks`
+	FROM
+		`students`
+		INNER JOIN `student_leaving_certificates` 
+			ON (`students`.`student_id` = `student_leaving_certificates`.`student_id`) 
+			WHERE student_leaving_certificates.slc_id = '" . $slc_id . "' 
+			ORDER BY student_leaving_certificates.slc_id LIMIT 1";
 		$this->data['student'] = $this->db->query($query)->result()[0];
 		$this->load->view(ADMIN_DIR . "admission/slc_certificate", $this->data);
 	}
@@ -514,96 +538,149 @@ class Admission extends Admin_Controller
 	public function re_admit_again()
 	{
 		$student_id = (int) $this->input->post("student_id");
-		$class_id = (int) $this->input->post("class_id");
-		$section_id = (int) $this->input->post("section_id");
-		$admission_no = (int) $this->input->post("admission_no");
-		$re_admit_again_reason = $this->db->escape($this->input->post("re_admit_again_reason"));
-		$query = "UPDATE students set `status` = '1',  `student_admission_no` = '" . $admission_no . "' WHERE student_id = '" . $student_id . "'";
-		if ($this->db->query($query)) {
-			$query = "SELECT * FROM students WHERE student_id = '" . $student_id . "'";
-			$student = $this->db->query($query)->result()[0];
-			$query = "INSERT INTO `student_history`(`student_id`, `student_admission_no`, `session_id`, `class_id`, `section_id`, `history_type`, `remarks`, `created_by`) 
-				          VALUES ('" . $student->student_id . "','" . $admission_no . "','" . $student->session_id . "','" . $student->class_id . "','" . $student->section_id . "','Re Admit'," . $re_admit_again_reason . ", '" . $this->session->userdata('user_id') . "')";
-			$this->db->query($query);
-		}
-		if ($this->input->post("redirect_page") == 'view_student_profile') {
-			$this->session->set_flashdata("msg_success", "Student Re-Admit Successfully");
-			redirect(ADMIN_DIR . "admission/view_student_profile/" . $student_id);
+
+
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT schoolId,schoolName FROM schools WHERE `owner_id`='" . $userId . "'";
+		$this->data['school'] = $school =  $this->db->query($query)->result()[0];
+		$school_id  = $school->schoolId;
+		$query = "SELECT * FROM students WHERE student_id = '" . $student_id . "' AND school_id = '" . $school_id . "'";
+		$student_record = $this->db->query($query)->result();
+		if ($student_record) {
+			$class_id = (int) $this->input->post("class_id");
+			$section_id = (int) $this->input->post("section_id");
+			$admission_no = (int) $this->input->post("admission_no");
+			$re_admit_again_reason = $this->db->escape($this->input->post("re_admit_again_reason"));
+			$query = "UPDATE students set `status` = '1',  `student_admission_no` = '" . $admission_no . "' WHERE student_id = '" . $student_id . "'";
+			if ($this->db->query($query)) {
+				$query = "SELECT * FROM students WHERE student_id = '" . $student_id . "'";
+				$student = $this->db->query($query)->result()[0];
+				$query = "INSERT INTO `student_history`(`student_id`, `student_admission_no`, `session_id`, `class_id`, `section_id`, `history_type`, `remarks`, `created_by`) 
+					  VALUES ('" . $student->student_id . "','" . $admission_no . "','" . $student->session_id . "','" . $student->class_id . "','" . $student->section_id . "','Re Admit'," . $re_admit_again_reason . ", '" . $this->session->userdata('user_id') . "')";
+				$this->db->query($query);
+			}
+			if ($this->input->post("redirect_page") == 'view_student_profile') {
+				$this->session->set_flashdata("msg_success", "Student Re-Admit Successfully");
+				redirect(ADMIN_DIR . "admission/view_student_profile/" . $student_id);
+			} else {
+				$this->session->set_flashdata("msg_success", "Student Re-Admit Successfully");
+				redirect(ADMIN_DIR . "admission/struck_off_students/" . $class_id . "/" . $section_id);
+			}
 		} else {
-			$this->session->set_flashdata("msg_success", "Student Re-Admit Successfully");
-			redirect(ADMIN_DIR . "admission/struck_off_students/" . $class_id . "/" . $section_id);
+			$this->session->set_flashdata("msg_error", "You are not allowed to readmint");
+			redirect(ADMIN_DIR . "admission/view_student_profile/" . $student_id);
 		}
 	}
 
 	public function withdraw_student()
 	{
+
+
 		$student_id = (int) $this->input->post("student_id");
-		$class_id = (int) $this->input->post("class_id");
-		$section_id = (int) $this->input->post("section_id");
-		$admission_no = (int) $this->input->post("admission_no");
-		$admission_date = $this->db->escape($this->input->post("admission_date"));
+
+		$student_id = (int) $student_id;
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT schoolId,schoolName FROM schools WHERE `owner_id`='" . $userId . "'";
+		$this->data['school'] = $school =  $this->db->query($query)->result()[0];
+		$school_id  = $school->schoolId;
+		$query = "SELECT * FROM students WHERE student_id = '" . $student_id . "' AND school_id = '" . $school_id . "'";
+		$student_record = $this->db->query($query)->result();
+
+
 		$school_leaving_date = $this->db->escape($this->input->post("school_leaving_date"));
 		$slc_issue_date = $this->db->escape($this->input->post("slc_issue_date"));
 		$slc_file_no = $this->db->escape($this->input->post("slc_file_no"));
 		$slc_certificate_no = $this->db->escape($this->input->post("slc_certificate_no"));
 		$withdraw_reason = $this->db->escape($this->input->post("withdraw_reason"));
-		$query = "UPDATE students set `status` = '3',  
-		          `student_admission_no` = '" . $admission_no . "' 
-				  WHERE student_id = '" . $student_id . "'";
-		if ($this->db->query($query)) {
-			$query = "SELECT * FROM students WHERE student_id = '" . $student_id . "'";
-			$student = $this->db->query($query)->result()[0];
+		$character_and_conduct = $this->db->escape($this->input->post("character_and_conduct"));
+		$academic_record = $this->db->escape($this->input->post("acadmic_record"));
 
-			$query = "INSERT INTO `student_leaving_certificates`(
+		$promoted_to_class = $this->db->escape($this->input->post("promoted_to_class"));
+		$current_class = $this->db->escape($this->input->post("current_class"));
+
+
+		if ($student_record) {
+			$student = $student_record[0];
+			$query = "UPDATE students set `status` = '3',  
+		          `school_id` = '" . $school_id . "' 
+				  WHERE student_id = '" . $student_id . "'";
+			if ($this->db->query($query)) {
+
+
+				$query = "INSERT INTO `student_leaving_certificates`(
 				      `student_id`, 
 			          `admission_no`, 
 					  `session_id`, 
 					  `class_id`, 
 					  `section_id`, 
 					  `admission_date`, 
+					  `student_data_of_birth`,
 					  `school_leaving_date`, 
 					  `slc_issue_date`, 
 					  `slc_file_no`, 
 					  `slc_certificate_no`, 
 					  `leaving_reason`,
+					  `character_and_conduct`,
+					  `academic_record`,
+					  `school_id`,
+					  `psra_student_id`,
+					  `student_name`,
+					  `father_name`,
+					  `current_class`,
+					  `promoted_to_class`,
 					  `created_by`) 
 				      VALUES ('" . $student->student_id . "',
-					          '" . $admission_no . "',
+					          '" . $student->student_admission_no . "',
 							  '" . $student->session_id . "',
 							  '" . $student->class_id . "',
 							  '" . $student->section_id . "',
-							  " . $admission_date . ",
+							  " . $student->admission_date . ",
+							  " . $student->student_data_of_birth . ",
 							  " . $school_leaving_date . ",
 							  " . $slc_issue_date . ",
 							  " . $slc_file_no . ",
 							  " . $slc_certificate_no . ",
 							  " . $withdraw_reason . ", 
-							  '" . $this->session->userdata('user_id') . "')";
-			$this->db->query($query);
+							  " . $character_and_conduct . ", 
+							  " . $academic_record . ",  
+							  '" . $school_id . "',
+							  '" . $student->psra_student_id . "',
+							  '" . $student->student_name . "',
+							  '" . $student->student_father_name . "',
+							  " . $current_class . ",
+							  " . $promoted_to_class . ",
+							  '" . $userId . "')";
+				$this->db->query($query);
 
-			$query = "INSERT INTO `student_history`(`student_id`, 
+				$query = "INSERT INTO `student_history`(`student_id`, 
 			          `student_admission_no`, 
 					  `session_id`, 
 					  `class_id`, 
 					  `section_id`, 
 					  `history_type`, 
 					  `remarks`, 
+					  `school_id`,
 					  `created_by`) 
 				      VALUES ('" . $student->student_id . "',
-					          '" . $admission_no . "',
+					          '" . $student->student_admission_no . "',
 							  '" . $student->session_id . "',
 							  '" . $student->class_id . "',
-							  '" . $student->section_id . "
-							  ','Withdraw'," . $withdraw_reason . ", 
-							  '" . $this->session->userdata('user_id') . "')";
-			$this->db->query($query);
-		}
-		if ($this->input->post("redirect_page") == 'view_student_profile') {
-			$this->session->set_flashdata("msg_success", "Student Withdraw Successfully");
-			redirect(ADMIN_DIR . "admission/view_student_profile/" . $student_id);
+							  '" . $student->section_id . "',
+							  'Withdraw'," . $withdraw_reason . ", 
+							  '" . $school_id . "',
+							  '" . $userId . "')";
+				$this->db->query($query);
+			}
+			if ($this->input->post("redirect_page") == 'view_student_profile') {
+				$this->session->set_flashdata("msg_success", "Student Withdraw Successfully");
+				redirect(ADMIN_DIR . "admission/view_student_profile/" . $student_id);
+			} else {
+				$this->session->set_flashdata("msg_success", "Student Withdraw Successfully");
+				redirect(ADMIN_DIR . "admission/struck_off_students/" . $class_id . "/" . $section_id);
+			}
 		} else {
-			$this->session->set_flashdata("msg_success", "Student Withdraw Successfully");
-			redirect(ADMIN_DIR . "admission/struck_off_students/" . $class_id . "/" . $section_id);
+			$this->session->set_flashdata("msg_error", "You are not allowed to withdraw the student.");
+			redirect(ADMIN_DIR . "admission/view_student_profile/" . $student_id);
 		}
 	}
 

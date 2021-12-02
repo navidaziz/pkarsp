@@ -77,12 +77,7 @@ function numToOrdinalWord($num)
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
   <meta name="description" content="">
   <meta name="author" content="">
-  <link rel="stylesheet" type="text/css" href="<?php echo site_url("assets/" . ADMIN_DIR); ?>/css/cloud-admin.css" media="screen,print" />
-  <link rel="stylesheet" type="text/css" href="<?php echo site_url("assets/" . ADMIN_DIR); ?>/css/themes/default.css" media="screen,print" id="skin-switcher" />
-  <link rel="stylesheet" type="text/css" href="<?php echo site_url("assets/" . ADMIN_DIR); ?>/css/responsive.css" media="screen,print" />
-  <link rel="stylesheet" type="text/css" href="<?php echo site_url("assets/" . ADMIN_DIR); ?>/css/custom.css" media="screen,print" />
-
-
+  <link rel="stylesheet" href='<?php echo base_url("assets/lib/bootstrap/dist/css/bootstrap.min.css"); ?>'>
   <style>
     body {
       background: rgb(204, 204, 204);
@@ -155,26 +150,32 @@ function numToOrdinalWord($num)
   <page size='A4'>
     <div style="padding: 5px; padding-top:20px;  padding-left:20px; padding-right:20px; 
     " contenteditable="true">
-      <table style="width: 100%;">
+      <table class="table table-bordered">
 
         <tr>
           <td colspan="2" style="text-align: center;">
             <h3><?php echo ucwords(strtolower($school->schoolName)); ?></h3>
-            <h5 style="border: 1px solid gray; width: 100%; margin: 0px auto; padding: 4px;">
+            <?php if ($school->address) { ?>
+              <h5>Address: <?php echo ucwords(strtolower($school->address)); ?></h5>
+            <?php } ?>
+            <?php if ($school->telePhoneNumber) { ?>
+              <h5>Ph: <?php echo ucwords(strtolower($school->telePhoneNumber)); ?></h5>
+            <?php } ?>
+
+            <h5>
               School ID: <strong><?php echo $school->schoolId; ?></strong>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               Registration No: <strong><?php echo $school->registrationNumber; ?></strong></h5>
           </td>
 
         </tr>
         <tr>
+          <td>SLC File No: <?php echo $student->slc_file_no; ?></td>
+          <td>SLC Certificate No: <?php echo $student->slc_certificate_no; ?></td>
+          <td>SCL-ID: <?php echo $student->slc_id; ?></td>
+        </tr>
+        <tr>
+
           <td colspan="2" style="padding-left:20px ;">
             <br />
             <span class="pull-left">

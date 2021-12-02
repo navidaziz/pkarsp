@@ -250,15 +250,24 @@ $section_id = $students[0]->section_id;
                                         <br />
                                     <?php  } ?>
                                     <?php if ($student->status == 2) { ?>
-                                        <button onclick="re_admit('<?php echo $student->student_id; ?>', '<?php echo $student->student_name; ?>', '<?php echo $student->student_father_name; ?>', '<?php echo $student->student_admission_no; ?>')" class="btn btn-success " aria-hidden="true"> Re-Admit</button>
-                                        <br />
+
                                         <button onclick="withdraw('<?php echo $student->student_id; ?>', '<?php echo $student->student_name; ?>', '<?php echo $student->student_father_name; ?>', '<?php echo $student->student_admission_no; ?>', '<?php echo $student->admission_date; ?>')" class="btn btn-danger " aria-hidden="true">Admission Withdraw</button>
                                         <br />
-                                    <?php  } ?>
-                                    <?php if ($student->status == 3) { ?>
-                                        <button onclick="re_admit('<?php echo $student->student_id; ?>', '<?php echo $student->student_name; ?>', '<?php echo $student->student_father_name; ?>', '<?php echo $student->student_admission_no; ?>')" class="btn btn-primary " aria-hidden="true"> Re-Admit</button>
+                                        <button onclick="re_admit('<?php echo $student->student_id; ?>', '<?php echo $student->student_name; ?>', '<?php echo $student->student_father_name; ?>', '<?php echo $student->student_admission_no; ?>')" class="btn btn-success " aria-hidden="true"> <i class="fa fa-undo" aria-hidden="true"></i> Re-Admit</button>
                                         <br />
-                                        <a class="btn btn-danger " target="new" href="<?php echo site_url(ADMIN_DIR . "admission/slc_certificate/" . $student->student_id); ?>"><i class="fa fa-print" aria-hidden="true"></i> School Leaving Certificate</a>
+                                    <?php  } ?>
+                                    <?php if ($student->status == 3) {
+
+                                        $query = "SELECT `slc_id` FROM student_leaving_certificates WHERE student_id = '" . $student->student_id . "' 
+                                        ORDER  BY `student_leaving_certificates`.`slc_id` DESC LIMIT 1";
+                                        $slc_id = $this->db->query($query)->result()[0]->slc_id;
+
+                                    ?>
+
+                                        <a class="btn btn-danger " target="new" href="<?php echo site_url(ADMIN_DIR . "admission/slc_certificate/" . $slc_id); ?>"><i class="fa fa-print" aria-hidden="true"></i> School Leaving Certificate</a>
+                                        <br />
+
+                                        <button onclick="re_admit('<?php echo $student->student_id; ?>', '<?php echo $student->student_name; ?>', '<?php echo $student->student_father_name; ?>', '<?php echo $student->student_admission_no; ?>')" class="btn btn-primary " aria-hidden="true"> <i class="fa fa-undo" aria-hidden="true"></i> Re-Admit</button>
                                         <br />
 
                                     <?php  } ?>
@@ -400,14 +409,6 @@ $section_id = $students[0]->section_id;
                     <table class="table table-bordered" style="width: 100%;">
 
                         <tr>
-                            <td>Admission No:</td>
-                            <td><input type="text" required name="admission_no" id="adNo" value="" /></td>
-                        </tr>
-                        <tr>
-                            <td>Admission Date:</td>
-                            <td><input type="date" required name="admission_date" id="add_date" value="" /></td>
-                        </tr>
-                        <tr>
                             <td>Schoool Leaving Date:</td>
                             <td> <input type="date" required name="school_leaving_date" id="school_leaving_date" value="" />
                             </td>
@@ -425,9 +426,52 @@ $section_id = $students[0]->section_id;
                             <td><input type="text" required name="slc_certificate_no" id="slc_certificate_no" value="" /></td>
                         </tr>
                         <tr>
+                            <td>Character and Conduct</td>
+                            <?php
+                            $scales = array("Excellent", "Very Good", "Good", "Fair", "Poor")
+                            ?>
+                            <td>
+                                <?php foreach ($scales as $scale) { ?>
+                                    <input type="radio" name="character_and_conduct" value="<?php echo $scale; ?>" required="">
+                                    <?php echo $scale; ?>
+                                    <span style="margin-left: 10px;"></span>
+                                <?php } ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Academic Record</td>
+                            <td>
+                                <?php foreach ($scales as $scale) { ?>
+                                    <input type="radio" name="academic_record" value="<?php echo $scale; ?>" required="">
+                                    <?php echo $scale; ?>
+                                    <span style="margin-left: 10px;"></span>
+                                <?php } ?>
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td colspan="2">
+                                <?php $query = "SELECT class_title FROM classes WHERE class_id ='" . $students[0]->class_id . "'";
+                                $class_name = $this->db->query($query)->result()[0]->class_title;
+                                ?>
+                                Student is currently in class - <strong><?php echo $class_name; ?>.
+                                    <input type="hidden" name="current_class" value="<?php echo $class_name; ?>" /> </strong>
+                                <?php $query = "SELECT class_id, class_title FROM classes WHERE class_id >= '" . $students[0]->class_id . "' LIMIT 2";
+                                $classes = $this->db->query($query)->result();
+                                ?>
+
+                                Promote to class
+                                <select name="promoted_to_class">
+                                    <?php foreach ($classes as $class) { ?>
+                                        <option <?php if ($class->class_id == $students[0]->class_id) { ?> selected <?php } ?> value="<?php echo $class->class_title; ?>"><?php echo $class->class_title; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
                             <td>Withdrawal Reason:</td>
                             <td>
-                                <textarea style="width: 100%;" name="withdraw_reason"></textarea>
+                                <input style="width: 100%;" type="text" required name="withdraw_reason" id="withdraw_reason" value="" />
                             </td>
                         </tr>
                         <tr>
