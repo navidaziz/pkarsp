@@ -140,6 +140,7 @@ class Admission extends Admin_Controller
 		, `students`.`student_admission_no`
 		, `students`.`nationality`
 		, `students`.`gender`
+		, `students`.`admission_date`
 		, student_leaving_certificates.slc_id
 		, `student_leaving_certificates`.`slc_file_no`
 		, `student_leaving_certificates`.`slc_certificate_no`
@@ -593,7 +594,8 @@ class Admission extends Admin_Controller
 		$slc_certificate_no = $this->db->escape($this->input->post("slc_certificate_no"));
 		$withdraw_reason = $this->db->escape($this->input->post("withdraw_reason"));
 		$character_and_conduct = $this->db->escape($this->input->post("character_and_conduct"));
-		$academic_record = $this->db->escape($this->input->post("acadmic_record"));
+		$academic_record = $this->db->escape($this->input->post("academic_record"));
+
 
 		$promoted_to_class = $this->db->escape($this->input->post("promoted_to_class"));
 		$current_class = $this->db->escape($this->input->post("current_class"));
@@ -651,6 +653,8 @@ class Admission extends Admin_Controller
 							  " . $promoted_to_class . ",
 							  '" . $userId . "')";
 				$this->db->query($query);
+
+
 
 				$query = "INSERT INTO `student_history`(`student_id`, 
 			          `student_admission_no`, 

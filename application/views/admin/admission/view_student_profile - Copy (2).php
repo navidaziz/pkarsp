@@ -207,11 +207,9 @@ $section_id = $students[0]->section_id;
                                                     <span class="pull-left"><?php echo $student_history->history_type; ?> </span>
                                                     <span class="pull-right"><?php echo date("d M, Y", strtotime($student_history->create_date)); ?></span> <br />
                                                     <small style="margin-left: 5px; margin-right: 5px;">
-                                                        <?php $query = "SELECT *, userTitle 
-                                                                             FROM student_leaving_certificates as slc, 
-                                                                                users as u
-                                                                                WHERE slc.created_by = u.userId
-                                                                                AND student_id = '" . $students[0]->student_id . "'";
+                                                        <?php $query = "SELECT *, userTitle FROM student_leaving_certificates as slc, users  as u
+                                                    WHERE slc.student_id = '" . $students[0]->student_id . "'
+                                                    AND date(slc.created_date) <= '" . date("Y-m-d", strtotime($student_history->create_date)) . "'";
                                                         $slc = $this->db->query($query)->result()[0];
                                                         ?>
                                                         Got School leaving Certificate.<br />
@@ -219,7 +217,7 @@ $section_id = $students[0]->section_id;
                                                         SLC issue Date: <?php echo date("d M, Y", strtotime($slc->slc_issue_date)); ?> <br />
                                                         File Ref. No: <?php echo $slc->slc_file_no; ?> Certificate Ref. No: <?php echo $slc->slc_certificate_no; ?><br />
                                                         School leaving Reason: <i><?php echo $slc->leaving_reason; ?></i><br />
-                                                        User: <?php echo $slc->userTitle; ?>
+                                                        User: <?php echo $slc->user_title; ?>
                                                     </small>
                                                 <?php } else { ?>
                                                     <span class="pull-left"><?php echo $student_history->history_type; ?></span>
@@ -266,13 +264,10 @@ $section_id = $students[0]->section_id;
                                         $slc_id = $this->db->query($query)->result()[0]->slc_id;
 
                                     ?>
-                                        <div style="border:1px solid #9FC8E8; border-radius: 10px;   padding: 5px; background-color: white;">
-                                            <h5>Print SLC Certificate</h5>
 
-                                            <a class="btn btn-danger " target="_new" href="<?php echo site_url(ADMIN_DIR . "admission/slc_certificate/" . $slc_id); ?>"><i class="fa fa-print" aria-hidden="true"></i> Print SLC Certificate</a>
-                                            <br />
-                                        </div>
+                                        <a class="btn btn-danger " target="new" href="<?php echo site_url(ADMIN_DIR . "admission/slc_certificate/" . $slc_id); ?>"><i class="fa fa-print" aria-hidden="true"></i> School Leaving Certificate</a>
                                         <br />
+
                                         <button onclick="re_admit('<?php echo $student->student_id; ?>', '<?php echo $student->student_name; ?>', '<?php echo $student->student_father_name; ?>', '<?php echo $student->student_admission_no; ?>')" class="btn btn-primary " aria-hidden="true"> <i class="fa fa-undo" aria-hidden="true"></i> Re-Admit</button>
                                         <br />
 

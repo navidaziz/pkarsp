@@ -227,7 +227,7 @@
                       <td><?php echo $student->is_disable; ?></td>
                       <td>
                         <?php
-                        $query = "SELECT districtTitle FROM district WHERE districtId = '" . $students[0]->domicile_id . "'";
+                        $query = "SELECT districtTitle FROM district WHERE districtId = '" . $student->domicile_id . "'";
                         echo $this->db->query($query)->result()[0]->districtTitle; ?>
                       </td>
                       <td>

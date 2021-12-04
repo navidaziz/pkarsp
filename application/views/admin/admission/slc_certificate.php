@@ -150,10 +150,10 @@ function numToOrdinalWord($num)
   <page size='A4'>
     <div style="padding: 5px; padding-top:20px;  padding-left:20px; padding-right:20px; 
     " contenteditable="true">
-      <table class="table table-bordered">
+      <table class="" style="width:100%">
 
         <tr>
-          <td colspan="2" style="text-align: center;">
+          <td colspan="2">
             <h3><?php echo ucwords(strtolower($school->schoolName)); ?></h3>
             <?php if ($school->address) { ?>
               <h5>Address: <?php echo ucwords(strtolower($school->address)); ?></h5>
@@ -164,55 +164,48 @@ function numToOrdinalWord($num)
 
             <h5>
               School ID: <strong><?php echo $school->schoolId; ?></strong>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              Registration No: <strong><?php echo $school->registrationNumber; ?></strong></h5>
-          </td>
-
-        </tr>
-        <tr>
-          <td>SLC File No: <?php echo $student->slc_file_no; ?></td>
-          <td>SLC Certificate No: <?php echo $student->slc_certificate_no; ?></td>
-          <td>SCL-ID: <?php echo $student->slc_id; ?></td>
-        </tr>
-        <tr>
-
-          <td colspan="2" style="padding-left:20px ;">
-            <br />
-            <span class="pull-left">
-              <strong>PSRA Student Registration No: <?php echo $student->psra_student_id ?></strong>
               <br />
-              <strong> Admission No.
-                <span style="text-decoration: underline; font-weight: bold;">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
-                  <?php echo $student->student_admission_no ?>
-                  &nbsp;&nbsp;&nbsp;&nbsp;
-                </span></strong>
+              Registration No: <strong><?php echo $school->registrationNumber; ?></strong>
+            </h5>
+          </td>
+          <td style="vertical-align: middle;">
+            SLC File No: <?php echo $student->slc_file_no; ?>
+            <br />SLC Certificate No: <?php echo $student->slc_certificate_no; ?>
+            <br />SCL-ID: <?php echo $student->slc_id; ?>
+            <br />
+            PSRA Student ID: <strong><?php echo $student->psra_student_id ?></strong>
+            <br />
+            Admission No.
+            <span style="text-decoration: underline; font-weight: bold;">
+              <?php echo $student->student_admission_no ?>
             </span>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <br />
+            Dated:
+            <strong>
+              <span style="text-decoration: underline; font-weight: bold;">
+                <?php echo date("d F, Y") ?>
+              </span></strong>
 
-            <span class="pull-right"> <strong> Dated:
-
-                <span style="text-decoration: underline; font-weight: bold;">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
-                  <?php echo date("d F, Y") ?>
-                  &nbsp;&nbsp;&nbsp;&nbsp;
-                </span></strong></span>
           </td>
 
         </tr>
         <tr>
-          <td colspan="2" style="text-align: center;">
+          <td colspan="3">
+            <hr />
+          </td>
+        </tr>
+
+        <tr>
+          <td colspan="3" style="text-align: center;">
             <br />
             <h3>School Leaving Certificate</h3>
+            <br />
+            <br />
           </td>
 
         </tr>
         <tr>
-          <td colspan="2">
+          <td colspan="3">
             <br />
             <p style="font-size: 16px; padding-left: 20px; padding-right: 20px;">It is certified that
               <span style="text-decoration: underline; font-weight: bold;">
@@ -240,6 +233,42 @@ function numToOrdinalWord($num)
               </span>
               ).
             </p>
+            <p style="font-size: 16px; padding-left: 20px; padding-right: 20px;">Admission No.
+              <span style="text-decoration: underline; font-weight: bold;">
+                <?php echo $student->student_admission_no ?>
+              </span>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              Admission Date.
+              <strong>
+                <span style="text-decoration: underline; font-weight: bold;">
+                  <?php echo date("d F, Y", strtotime($student->admission_date)) ?>
+                </span></strong>
+              <br />
+              Studying Class
+              <span style="text-decoration: underline; font-weight: bold;">
+                <?php echo $student->current_class; ?>
+              </span>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              Promoted to
+              <span style="text-decoration: underline; font-weight: bold;">
+                <?php echo $student->promoted_to_class; ?>
+              </span>
+            </p>
+
+
+            <p style="font-size: 16px; padding-left: 20px; padding-right: 20px;">Character and Conduct
+              <span style="text-decoration: underline; font-weight: bold;">
+                <?php echo $student->character_and_conduct ?>
+              </span>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              Academic Progress
+              <strong>
+                <span style="text-decoration: underline; font-weight: bold;">
+                  <?php echo $student->academic_record; ?>
+                </span></strong>
+              <br />
+
+            </p>
           </td>
 
         </tr>
@@ -247,16 +276,19 @@ function numToOrdinalWord($num)
           <td colspan="1">
             <br />
             <br />
-            <p style="padding-right: 20px; padding-left: 20px; padding-top: 40px; ">
-              <span class="pull-left" style="text-align: center; font-weight: bold;">Incharge Admission</span>
-              <br /><?php echo ucwords(strtolower($school->schoolName)); ?></span>
+            <p style="padding-right: 20px; padding-left: 20px; padding-top: 40px; text-align:center ">
+              <span style="text-align: center; font-weight: bold;">Incharge Admission</span>
+              <br /><span><?php echo ucwords(strtolower($school->schoolName)); ?></span>
             </p>
           </td>
+          <td colspan="1"></td>
           <td colspan="1">
             <br />
             <br />
-            <p style="padding-right: 20px; padding-left: 20px; padding-top: 40px; ">
-              <span class="pull-right" style="text-align: center; font-weight: bold;">Principal<br /><?php echo ucwords(strtolower($school->schoolName)); ?></span>
+            <p style="padding-right: 20px; padding-left: 20px; padding-top: 40px; text-align:center ">
+              <span style="text-align: center; font-weight: bold;">Principal
+              </span><br />
+              <span><?php echo ucwords(strtolower($school->schoolName)); ?></span>
             </p>
           </td>
 
