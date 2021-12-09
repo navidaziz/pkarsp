@@ -28,7 +28,6 @@ class Admission extends Admin_Controller
 	public function birth_certificate($student_id)
 	{
 		$student_id = (int) $student_id;
-		$student_id = (int) $student_id;
 		$userId = $this->session->userdata('userId');
 		$query = "SELECT schoolId,schoolName,registrationNumber FROM schools WHERE `owner_id`='" . $userId . "'";
 		$this->data['school'] = $school =  $this->db->query($query)->result()[0];
@@ -121,9 +120,51 @@ class Admission extends Admin_Controller
 		}
 	}
 
+	public function set_barcode($code)
+	{
+		// Load library
+		//$this->load->library('zend');
+		// Load in folder Zend
+		//$this->zend->load('Zend/Barcode');
+		// Generate barcode
+		//$rendererOptions = array(
+		//	'imageType'          => 'png',
+		//	'horizontalPosition' => 'center',
+		//	'verticalPosition'   => 'middle',
+		//);
+		//Zend_Barcode::render('code39', 'image', array('text' => (int) $code), $rendererOptions);
+	}
+
+
+	public function search_slc()
+	{
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT schoolId FROM schools WHERE `owner_id`='" . $userId . "'";
+		$school_id =  $this->db->query($query)->result()[0]->schoolId;
+		$slc_id = (int) $this->input->post("search_slc");
+		$slc_id = $this->db->escape($slc_id);
+		$query = "SELECT
+		`student_leaving_certificates`.`slc_id`
+		, `students`.*
+		, `student_leaving_certificates`.`school_leaving_date`
+		, `student_leaving_certificates`.`slc_issue_date`
+	FROM
+		`students`
+		INNER JOIN `student_leaving_certificates` 
+			ON (`students`.`student_id` = `student_leaving_certificates`.`student_id`)
+			WHERE `student_leaving_certificates`.`slc_id`= $slc_id";
+
+
+		$students_list = $this->db->query($query)->result();
+
+		$this->data['students_list'] = $students_list;
+		$this->load->view(ADMIN_DIR . "admission/student_slc_list", $this->data);
+	}
 
 	public function slc_certificate($slc_id)
 	{
+
+
 
 		$userId = $this->session->userdata('userId');
 		$query = "SELECT * FROM schools WHERE `owner_id`='" . $userId . "'";
@@ -282,7 +323,10 @@ class Admission extends Admin_Controller
 			'gender' => $this->input->post("gender"),
 			'form_b' => $this->input->post("form_b"),
 			'school_id' => $school_id,
-			'domicile_id' => $this->input->post("domicile_id")
+			'domicile_id' => $this->input->post("domicile_id"),
+			'student_previous_id' =>  $this->input->post("student_previous_id"),
+			'admission_slc_id' =>  $this->input->post("admission_slc_id")
+
 
 		);
 		if ($this->db->insert('students', $data)) {

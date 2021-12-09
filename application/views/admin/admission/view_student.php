@@ -5,7 +5,7 @@
     <h2 style="display:inline;">
       <?php echo ucwords(strtolower($school->schoolName)); ?>
     </h2><br />
-    <small> Students Admission</small>
+    <small> <?php echo $students[0]->Class_title . ""; ?> Students list</a></small>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
       <li><a href="<?php echo site_url("admin/admission"); ?>">Admission</a></li>
@@ -131,7 +131,7 @@
                       Non Muslim
                     </td>
                     <td colspan="2"> <strong>Nationality:</strong><br />
-                      <input type="radio" id="pakistani" name="nationality" onclick="$('#other_nationality').hide(); $( '#foreigner' ).prop( 'checked' , false );" value="Pakistan" required />
+                      <input type="radio" id="pakistani" name="nationality" onclick="$('#other_nationality').hide(); $( '#foreigner' ).prop( 'checked' , false );" value="Pakistani" required />
                       Pakistani
                       <span style="margin-left: 10px;"></span>
 

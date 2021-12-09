@@ -15,7 +15,7 @@ class Renewal extends MY_Controller
 
 		$query = "SELECT COUNT(*) AS total FROM school WHERE schools_id = '" . $school_id . "' AND session_year_id='" . $session_id . "'";
 
-		if ($this->db->query()->result()[0]->total == 0) {
+		if ($this->db->query($query)->result()[0]->total == 0) {
 			$school_session = array(
 				'reg_type_id' => 2,
 				'schools_id' => $school_id,
@@ -39,6 +39,7 @@ class Renewal extends MY_Controller
 
 			$this->db->where('userId', $school->owner_id)->update('users', array('school_renewed' => 1));
 		} else {
+			echo "You are already applied";
 		}
 	}
 }

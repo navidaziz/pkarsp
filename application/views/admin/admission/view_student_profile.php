@@ -105,7 +105,8 @@ $section_id = $students[0]->section_id;
 
                         </div>
                     </div>
-                    <?php if (1 == 1) {  ?>
+                    <?php
+                    if ($students[0]->school_id == $school->schoolId) {  ?>
                         <div class="col-md-3">
 
 

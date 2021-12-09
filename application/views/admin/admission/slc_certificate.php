@@ -169,23 +169,29 @@ function numToOrdinalWord($num)
             </h5>
           </td>
           <td style="vertical-align: middle;">
-            SLC File No: <?php echo $student->slc_file_no; ?>
-            <br />SLC Certificate No: <?php echo $student->slc_certificate_no; ?>
-            <br />SCL-ID: <?php echo $student->slc_id; ?>
-            <br />
-            PSRA Student ID: <strong><?php echo $student->psra_student_id ?></strong>
-            <br />
-            Admission No.
-            <span style="text-decoration: underline; font-weight: bold;">
-              <?php echo $student->student_admission_no ?>
-            </span>
-            <br />
-            Dated:
-            <strong>
+            <div class="pull-right">
+              SCL-ID:
+              <strong>
+                <span style="text-decoration: underline; font-weight: bold;">
+                  <?php echo $student->slc_id; ?>
+                </span></strong>
+              <br />
+              PSRA Student ID: <strong><?php echo $student->psra_student_id ?></strong>
+              <br />
+              Admission No.
               <span style="text-decoration: underline; font-weight: bold;">
-                <?php echo date("d F, Y") ?>
-              </span></strong>
+                <?php echo $student->student_admission_no ?>
+              </span>
+              <br />
+              Dated:
+              <strong>
+                <span style="text-decoration: underline; font-weight: bold;">
+                  <?php echo date("d F, Y") ?>
+                </span></strong>
+              <!-- <img width="50%" style="display: inline-block;" src="" /> -->
 
+              <br />
+            </div>
           </td>
 
         </tr>
@@ -193,6 +199,11 @@ function numToOrdinalWord($num)
           <td colspan="3">
             <hr />
           </td>
+        </tr>
+        <tr>
+          <td>File No: <?php echo $student->slc_file_no; ?> </td>
+          <td> </td>
+          <td style="text-align: right;">Certificate No: <?php echo $student->slc_certificate_no; ?> </td>
         </tr>
 
         <tr>
