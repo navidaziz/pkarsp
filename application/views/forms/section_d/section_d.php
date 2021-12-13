@@ -34,10 +34,10 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h2 style="display:inline;">
-        <?php echo @ucfirst($title); ?> Session: <?php echo $session_detail->sessionYearTitle; ?>
+        <?php echo ucwords(strtolower($school->schoolName)); ?>
       </h2>
       <br />
-      <small><?php echo @$description; ?></small>
+      <h4>S-ID: <?php echo $school->schools_id; ?> - REG No: <?php echo $school->registrationNumber ?></h4>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <!-- <li><a href="#">Examples</a></li> -->
@@ -47,6 +47,7 @@
 
     <!-- Main content -->
     <section class="content">
+      <?php $this->load->view('forms/navigation_bar');   ?>
 
       <div class="box box-primary box-solid">
         <div class="box-header with-border">
@@ -56,11 +57,7 @@
         <!-- /.box-header -->
         <div class="box-body">
           <div class="row">
-            <div class="col-md-12">
-              <h3><?php echo $school->schoolName; ?></h3>
-              <h4>S-ID: <?php echo $school->schoolId; ?> - REG No: <?php echo $school->registrationNumber ?></h4>
 
-            </div>
             <div class="col-md-12">
 
 
@@ -193,6 +190,17 @@
 
 
             </div>
+
+            <div class="col-md-12">
+              <div style=" font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
+                <a class="btn btn-link pull-left" href="<?php echo site_url("form/section_c/$session_id"); ?>">
+                  <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Section C ( Students Enrolment ) </a>
+                <input class="btn btn-primary" type="submit" name="" value="Add Section D Data" />
+                <a class="btn btn-link pull-right" href="<?php echo site_url("form/section_e/$session_id"); ?>">
+                  Section E ( School Fee Detail )<i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
+              </div>
+            </div>
+
 
           </div>
         </div>

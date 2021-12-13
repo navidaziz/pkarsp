@@ -5,7 +5,6 @@
         type: "POST",
         url: "<?php echo site_url("form/update_class_fee_from"); ?>",
         data: {
-          schools_id: <?php echo $school->schoolId; ?>,
           class_id: class_id,
           school_id: <?php echo $school_id; ?>,
           session_id: <?php echo $session_id; ?>
@@ -33,10 +32,10 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h2 style="display:inline;">
-        <?php echo @ucfirst($title); ?> Session: <?php echo $session_detail->sessionYearTitle; ?>
+        <?php echo ucwords(strtolower($school->schoolName)); ?>
       </h2>
       <br />
-      <small><?php echo @$description; ?></small>
+      <h4>S-ID: <?php echo $school->schools_id; ?> - REG No: <?php echo $school->registrationNumber ?></h4>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <!-- <li><a href="#">Examples</a></li> -->
@@ -47,6 +46,8 @@
     <!-- Main content -->
     <section class="content">
 
+      <?php $this->load->view('forms/navigation_bar');   ?>
+
       <div class="box box-primary box-solid">
         <div class="box-header with-border">
           <h3 class="box-title"><?php echo @$description; ?></h3>
@@ -55,12 +56,8 @@
         <!-- /.box-header -->
         <div class="box-body">
           <div class="row">
-            <div class="col-md-3">
-              <h3><?php echo $school->schoolName; ?></h3>
-              <h4>S-ID: <?php echo $school->schoolId; ?> - REG No: <?php echo $school->registrationNumber ?></h4>
 
-            </div>
-            <div class="col-md-9">
+            <div class="col-md-12">
               <style>
                 .table>tbody>tr>td,
                 .table>tbody>tr>th,
@@ -91,9 +88,19 @@
                 <tr>
 
                   <?php
-                  $sessions =  $this->db->query("SELECT * FROM `session_year` 
-                  WHERE `session_year`.`sessionYearId`<= $session_id
-                  ORDER BY `session_year`.`sessionYearId` DESC LIMIT 3")->result();
+                  $query = "SELECT
+                          `session_year`.`sessionYearTitle`
+                          , `session_year`.`sessionYearId`
+                          , `school`.`schoolId`
+                          FROM
+                          `school`
+                          INNER JOIN `session_year` 
+                          ON (`school`.`session_year_id` = `session_year`.`sessionYearId`)
+                          WHERE `session_year`.`sessionYearId`<= $session_id
+                          AND  `school`.`schools_id` = '" . $school->schools_id . "'
+                          ORDER BY `session_year`.`sessionYearId` DESC LIMIT 3";
+                  $sessions =  $this->db->query($query)->result();
+
                   asort($sessions);
                   foreach ($sessions  as $session) { ?>
                     <th colspan="4" style="text-align: center;"><?php echo $session->sessionYearTitle; ?></th>
@@ -127,37 +134,45 @@
                                 , `fee`.`securityFund`
                                 , `fee`.`otherFund`
                             FROM
-                                `school` INNER JOIN `fee` 
-                                ON (`school`.`schoolId` = `fee`.`school_id`)
-                                WHERE `school`.`schools_id` = '" . $school->schoolId . "'
-                                AND `fee`.`class_id` ='" . $class->classId . "'
-                                AND `school`.`session_year_id`='" . $session->sessionYearId . "';";
+                                `fee`  WHERE `fee`.`school_id` = '" . $session->schoolId . "'
+                                AND `fee`.`class_id` ='" . $class->classId . "'";
+
                       $session_fee = $this->db->query($query)->result()[0];
-
-                    ?>
-                      <td style="text-align: center;"><?php if (is_numeric($session_fee->addmissionFee)) {
-                                                        echo $session_fee->addmissionFee;
-                                                      } ?></td>
-                      <td style="text-align: center;"><?php if (is_numeric($session_fee->tuitionFee)) {
-                                                        echo $session_fee->tuitionFee;
-                                                      } ?></td>
-                      <td style="text-align: center;"><?php if (is_numeric($session_fee->securityFund)) {
-                                                        echo $session_fee->securityFund;
-                                                      } ?></td>
-                      <td style="text-align: center;"><?php if (is_numeric($session_fee->otherFund)) {
-                                                        echo $session_fee->otherFund;
-                                                      } ?></td>
-
-
-
-
-                      <?php if ($session_fee) {
+                      if ($session_fee) {
                         $add = 1;
                       } else {
                         $add = 0;
-                      } ?>
+                      }
+
+                      $session_fee->addmissionFee = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->addmissionFee));
+                      $session_fee->tuitionFee = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->tuitionFee));
+                      $session_fee->securityFund = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->securityFund));
+                      $session_fee->otherFund = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->otherFund));
+
+                    ?>
+                      <td style="text-align: center;"><?php //if (is_numeric($session_fee->addmissionFee)) {
+                                                      echo $session_fee->addmissionFee;
+                                                      //} 
+                                                      ?></td>
+                      <td style="text-align: center;"><?php //if (is_numeric($session_fee->tuitionFee)) {
+                                                      echo $session_fee->tuitionFee;
+                                                      //} 
+                                                      ?></td>
+                      <td style="text-align: center;"><?php //if (is_numeric($session_fee->securityFund)) {
+                                                      echo $session_fee->securityFund;
+                                                      //} 
+                                                      ?></td>
+                      <td style="text-align: center;"><?php //if (is_numeric($session_fee->otherFund)) {
+                                                      echo $session_fee->otherFund;
+                                                      //} 
+                                                      ?></td>
+
+
+
+
 
                       <?php
+
                       if ($session->sessionYearId == $session_id) {
                         if ($add) {
 
@@ -182,7 +197,7 @@
                         <?php } ?>
 
 
-                      <?php } ?>
+                      <?php  } ?>
 
                     <?php } ?>
 
@@ -201,6 +216,17 @@
 
 
 
+            </div>
+
+
+            <div class="col-md-12">
+              <div style=" font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
+                <a class="btn btn-link pull-left" href="<?php echo site_url("form/section_d/$session_id"); ?>">
+                  <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Section D ( School Fee Detail ) </a>
+                <input class="btn btn-primary" type="submit" name="" value="Add Section E Data" />
+                <a class="btn btn-link pull-right" href="<?php echo site_url("form/section_f/$session_id"); ?>">
+                  Section F ( Security Measures )<i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
+              </div>
             </div>
 
           </div>

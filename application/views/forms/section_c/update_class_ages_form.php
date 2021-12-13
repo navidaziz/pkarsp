@@ -28,7 +28,6 @@
       <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
       <input type="hidden" name="gender_id" value="<?php echo $gender_id; ?>" />
       <input type="hidden" name="class_id" value="<?php echo $class_id; ?>" />
-      <input type="hidden" name="schools_id" value="<?php echo $schools_id; ?>" />
 
       <tr>
         <th style="text-align: center; background-color: <?php if ($gender_id == 1) { ?> #9FC8E8 <?php } else { ?> #FFC0CB <?php } ?>;">Age Range</th>
@@ -44,7 +43,7 @@
                                             WHERE age_id ='" . $age->ageId . "' 
                                             AND class_id ='" . $class_id . "'
                                             AND gender_id ='" . $gender_id . "'
-                                            AND school_id = '" . $schools_id . "'";
+                                            AND school_id = '" . $school_id . "'";
                                           $query_result = $this->db->query($query)->result();
                                           if ($query_result) {
                                             $total_students += $query_result[0]->enrolled;
@@ -75,9 +74,9 @@
 
       <tr>
         <th style="text-align: center; background-color: <?php if ($gender_id == 1) { ?> #9FC8E8 <?php } else { ?> #FFC0CB <?php } ?>;">Non-Muslims <?php if ($gender_id == 1) { ?> Boys <?php } else { ?> Girls <?php } ?> In Class <?php echo $class->classTitle ?></th>
-        <td style="text-align: center;"><input value=" <?php if ($query_result) {
-                                                          echo $query_result[0]->non_muslim;
-                                                        } ?>" style="width: 50px;" type="number" min="0" max="<?php echo $total_students; ?>" id="non_muslim" name="non_muslim" />
+        <td style="text-align: center;"><input value="<?php if ($query_result) {
+                                                        echo $query_result[0]->non_muslim;
+                                                      } ?>" style="width: 50px;" type="number" min="0" max="<?php echo $total_students; ?>" id="non_muslim" name="non_muslim" />
         </td>
 
       </tr>
