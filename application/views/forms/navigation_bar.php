@@ -3,6 +3,9 @@
 $query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
 $form_status = $this->db->query($query)->result()[0];
 ?>
+
+
+
 <div class="box" style="border-top: 0px solid #d2d6de !important;">
     <div class="row">
         <div class="col-md-12">
@@ -28,19 +31,19 @@ $form_status = $this->db->query($query)->result()[0];
                     </a>
                 </li>
                 <li <?php if ($this->uri->segment(2) == 'section_f') { ?> class="active" <?php  } ?> style="text-align: center;">
-                    <span class="step" data-toggle="tooltip" data-placement="top" title="Please Complete Section E.">
-                        <span class="step"><i class="fa fa-spinner" aria-hidden="true"></i> SECTION F</span>
-                    </span>
+                    <a href="<?php echo site_url("form/section_f/$session_id"); ?>" data-toggle="tooltip" data-placement="top" title="Please Complete Section E.">
+                        <i class="fa fa-spinner" aria-hidden="true"></i> SECTION F
+                    </a>
                 </li>
                 <li <?php if ($this->uri->segment(2) == 'section_g') { ?> class="active" <?php  } ?> style="text-align: center;">
-                    <span class="step" data-toggle="tooltip" data-placement="top" title="Please Complete Section F.">
-                        <span class="step"><i class="fa fa-spinner" aria-hidden="true"></i> SECTION G</span>
-                    </span>
+                    <a href="<?php echo site_url("form/section_g/$session_id"); ?>" data-toggle="tooltip" data-placement="top" title="Please Complete Section F.">
+                        <i class="fa fa-spinner" aria-hidden="true"></i> SECTION G
+                    </a>
                 </li>
                 <li <?php if ($this->uri->segment(2) == 'section_h') { ?> class="active" <?php  } ?> style="text-align: center;">
-                    <span class="step" data-toggle="tooltip" data-placement="top" title="Please Complete Section G.">
-                        <span class="step"><i class="fa fa-spinner" aria-hidden="true"></i> SECTION H</span>
-                    </span>
+                    <a href="<?php echo site_url("form/section_h/$session_id"); ?>" data-toggle="tooltip" data-placement="top" title="Please Complete Section F.">
+                        <i class="fa fa-spinner" aria-hidden="true"></i> SECTION H
+                    </a>
                 </li>
                 <li <?php if ($this->uri->segment(2) == 'section_i') { ?> class="active" <?php  } ?> style="text-align: center;">
                     <span class="step" data-toggle="tooltip" data-placement="top" title="Please Complete Section H.">

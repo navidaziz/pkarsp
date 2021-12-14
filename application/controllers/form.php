@@ -677,4 +677,102 @@ class Form extends MY_Controller
 			redirect("form/section_f/$session_id");
 		}
 	}
+
+
+	public function section_g($session_id)
+	{
+
+		//new here 
+
+
+		$this->data['session_id'] = $session_id = (int) $session_id;
+		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
+		                                                  WHERE sessionYearId = $session_id")->result()[0];
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT 
+		`school`.`schoolId` AS `school_id`
+					, `schools`.`schoolId` AS `schools_id`
+					, `school`.`session_year_id`
+					, `schools`.`registrationNumber`
+					, `schools`.`schoolName`
+					, `schools`.`yearOfEstiblishment`
+					, `schools`.`school_type_id`
+					, `schools`.`gender_type_id`
+				FROM
+					`schools`
+					INNER JOIN `school` 
+						ON (`schools`.`schoolId` = `school`.`schools_id`)
+						WHERE `school`.`session_year_id`='" . $session_id . "'
+						AND `schools`.`owner_id`='" . $userId . "'";
+
+
+		$this->data['school'] =  $this->db->query($query)->result()[0];
+		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
+		$this->load->model("school_m");
+		$this->data['building_structure'] = $this->school_m->get_building_structure();
+		$this->data['hazards_surrounded'] = $this->school_m->get_hazards_surrounded();
+		$this->data['hazards_electrification'] = $this->school_m->get_hazards_electrification();
+		$this->data['unsafe_list'] = $this->school_m->get_unsafe_list();
+		$this->data['hazards_hazard_with_associated_risks'] = $this->school_m->hazards_hazard_with_associated_risks($school_id)[0];
+		// unsafe_ids 
+		$unsafe_list = $this->school_m->get_unsafe_by_school_id($school_id);
+		// var_dump($this->data['hazards_hazard_with_associated_risks']);
+		// exit;
+		$unsafe_ids = array();
+		foreach ($unsafe_list as $unsafe) {
+			$unsafe_ids[] = $unsafe->unsafe_list_id;
+		}
+		$this->data['unsafe_ids'] = $unsafe_ids;
+
+		$this->data['title'] = 'Apply For Renewal';
+		$this->data['description'] = 'Apply For Renewal';
+		$this->data['view'] = 'forms/section_g/section_g';
+		$this->load->view('layout', $this->data);
+	}
+
+	public function update_form_g_data()
+	{
+
+
+		$posts = $this->input->post();
+		unset($posts['session_id']);
+		$unSafeList1 = $posts['unSafeList'];
+		unset($posts['unSafeList']);
+
+
+		$hazardsWithAssociatedRisksId = $posts['hazardsWithAssociatedRisksId'];
+		$school_id = $posts['school_id'];
+		$this->db->where('school_id', $school_id);
+		$this->db->delete('hazards_with_associated_risks_unsafe_list');
+		unset($posts['school_id']);
+		unset($posts['hazardsWithAssociatedRisksId']);
+		$this->db->where('hazardsWithAssociatedRisksId', $hazardsWithAssociatedRisksId)->update('hazards_with_associated_risks', $posts);
+		$query_result = $this->db->affected_rows();
+
+		// unsafe list deletion old list and insert new one 
+		if ($posts['accessRoute'] != 'Safe') {
+			$count = count($unSafeList1);
+			$batch_data = [];
+			for ($i = 0; $i < $count; $i++) {
+				array_push($batch_data,  array(
+					'`unsafe_list_id`' => $unSafeList1[$i],
+					'`school_id`' => $school_id
+				));
+			}
+
+			// supply id column and then table name in argument list
+
+			$this->db->insert_batch('`hazards_with_associated_risks_unsafe_list`', $batch_data);
+			$insert_id = $this->db->insert_id();
+		}
+		if ($query_result > 0) {
+			$this->session->set_flashdata('msg', 'Hazards with Associated Risks.');
+			$session_id = (int) $this->input->post('session_id');
+			redirect("form/section_g/$session_id");
+		} else {
+			$this->session->set_flashdata('msg', 'Hazards with Associated Risks.');
+			$session_id = (int) $this->input->post('session_id');
+			redirect("form/section_g/$session_id");
+		}
+	}
 }
