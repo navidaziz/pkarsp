@@ -22,7 +22,6 @@ class School_dashboard extends MY_Controller
 		//$this->data['schooldata'] = $this->school_m->get_school_data_for_school_insertion($userId);
 		$query = "SELECT schoolId FROM schools WHERE `owner_id`='" . $userId . "'";
 		$this->data['school_id'] = $school_id = $this->db->query($query)->result()[0]->schoolId;
-
 		$query = "SELECT 
 		`schools`.`schoolId`,
 		`schools`.`reg_type_id`,
@@ -31,6 +30,7 @@ class School_dashboard extends MY_Controller
 		`schools`.`telePhoneNumber`,
 		`schools`.`district_id`,
 		`district`.`districtTitle`,
+		`schools`.`tehsil_id`,
 		`tehsils`.`tehsilTitle`,
 		`uc`.`ucTitle`,
 		`schools`.`uc_id`,

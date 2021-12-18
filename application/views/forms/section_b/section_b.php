@@ -48,7 +48,7 @@
     </section>
 
     <!-- Main content -->
-    <section class="content">
+    <section class="content" style="padding-top: 0px !important;">
 
       <?php $this->load->view('forms/navigation_bar');   ?>
 

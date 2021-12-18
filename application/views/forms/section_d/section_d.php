@@ -46,14 +46,11 @@
     </section>
 
     <!-- Main content -->
-    <section class="content">
+    <section class="content" style="padding-top: 0px !important;">
       <?php $this->load->view('forms/navigation_bar');   ?>
 
       <div class="box box-primary box-solid">
-        <div class="box-header with-border">
-          <h3 class="box-title"><?php echo @$description; ?></h3>
-          <!-- /.box-tools -->
-        </div>
+
         <!-- /.box-header -->
         <div class="box-body">
           <div class="row">
@@ -79,7 +76,7 @@
                 .table>tfoot>tr>th,
                 .table>thead>tr>td,
                 .table>thead>tr>th {
-                  padding: 5px !important;
+                  padding: 1px !important;
                 }
               </style>
 
@@ -111,7 +108,7 @@
                   <tbody id="staff_tbody">
                     <tr>
                       <td>#</td>
-                      <td><input type="text" name="schoolStaffName" style="widtd: 130px;" required /> </th>
+                      <td><input type="text" name="schoolStaffName" style="width: 130px;" required /> </th>
                       <td><input type="text" name="schoolStaffFatherOrHusband" style="width: 130px;" required /> </td>
                       <td><input type="text" id="schoolStaffCnic" name="schoolStaffCnic" style="width: 110px;" required /> </td>
                       <td> <select class="sele ct2" id="schoolStaffGender" name="schoolStaffGender" required="required">
@@ -141,7 +138,7 @@
                       <td><input type="text" name="schoolStaffDesignition" style="width: 70px;" required /></td>
                       <td><input type="date" name="schoolStaffAppointmentDate" style="width: 122px;" required /></td>
                       <td><input type="number" name="schoolStaffNetPay" style="width: 70px;" required /></td>
-                      <td><input placeholder="10%, 20% etc" type="text" name="schoolStaffAnnualIncreament" style="width: 50px;" required /></td>
+                      <td><input placeholder="" type="number" name="schoolStaffAnnualIncreament" style="width: 50px;" required /> <strong>%</strong></td>
 
                       <td>
 

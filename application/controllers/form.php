@@ -18,6 +18,39 @@ class Form extends MY_Controller
 		echo "We are working on it";
 	}
 
+	public function section_a()
+	{
+
+
+		$this->load->model("school_m");
+		$userId = $this->session->userdata('userId');
+		$this->data['schooldata'] = $this->school_m->get_school_data_for_school_insertion($userId);
+		var_dump($this->data['schooldata']);
+		$tehsil_id = $this->data['schooldata']->tehsil_id;
+		$this->data['ucs_list'] = $this->db->where('tehsil_id', $tehsil_id)->get('uc')->result();
+		// var_dump($ucs_list);
+		// exit();
+		$this->load->model("general_modal");
+		$this->load->model("session_m");
+		$next = $this->session_m->get_next_session();
+		$this->data['next_session_id'] = $next->session_id;
+		$this->data['school_types'] = $this->general_modal->school_types();
+		$this->data['districts'] = $this->general_modal->districts();
+		$this->data['gender_of_school'] = $this->general_modal->gender_of_school();
+		$this->data['level_of_institute'] = $this->general_modal->level_of_institute();
+		$this->data['reg_type'] = $this->general_modal->registration_type();
+		$this->data['tehsils'] = $this->general_modal->tehsils();
+		$this->data['ucs'] = $this->general_modal->ucs();
+		$this->data['locations'] = $this->general_modal->location();
+		$this->data['bise_list'] = $this->general_modal->bise_list();
+
+
+		$this->data['title'] = 'Apply For Renewal';
+		$this->data['description'] = 'Section B (Physical Facilities)';
+		$this->data['view'] = 'forms/section_a/section_a';
+		$this->load->view('layout', $this->data);
+	}
+
 	public function section_b($session_id)
 	{
 
@@ -103,122 +136,82 @@ class Form extends MY_Controller
 	public function update_form_b_data()
 	{
 		$posts = $this->input->post();
-		if (!isset($posts['numberOfComputer'])) {
-			$numberOfComputer = "";
-		} else {
-			$numberOfComputer = $posts['numberOfComputer'];
-		}
-		// // var_dump($posts);
-		// exit();
-		$validation_config = array(
-			array(
-				'field' =>  'building_id',
-				'label' =>  'School Building',
-				'rules' =>  'trim|required'
-			),
-			array(
-				'field' =>  'numberOfClassRoom',
-				'label' =>  'Number Of Class Rooms',
-				'rules' =>  'trim|required'
-			),
-			array(
-				'field' =>  'numberOfOtherRoom',
-				'label' =>  'Number Of Other Rooms',
-				'rules' =>  'trim|required'
-			),
-			array(
-				'field' =>  'totalArea',
-				'label' =>  'Total Area',
-				'rules' =>  'trim|required'
-			),
-			array(
-				'field' =>  'coveredArea',
-				'label' =>  'Covered Area',
-				'rules' =>  'trim|required'
-			)
+
+
+		$posts = $this->input->post();
+		$school_id = $posts['school_id'];
+		$physical_facilities = array(
+			'building_id' => $posts['building_id'],
+			'numberOfClassRoom' => $posts['numberOfClassRoom'],
+			'numberOfOtherRoom' => $posts['numberOfOtherRoom'],
+			'rent_amount' => $posts['rent_amount'],
+			'totalArea' => $posts['totalArea'],
+			'coveredArea' => $posts['coveredArea'],
+			'numberOfComputer' => $posts['numberOfComputer'],
+			'numberOfLatrines' => $posts['numberOfLatrines'],
+			'school_id' => $posts['school_id']
 		);
-
-		$this->form_validation->set_rules($validation_config);
-		if ($this->form_validation->run() === TRUE) {
-			$posts = $this->input->post();
-			$school_id = $posts['school_id'];
-			$mainData = array(
-				'building_id' => $posts['building_id'],
-				'numberOfClassRoom' => $posts['numberOfClassRoom'],
-				'numberOfOtherRoom' => $posts['numberOfOtherRoom'],
-				'rent_amount' => $posts['rent_amount'],
-				'totalArea' => $posts['totalArea'],
-				'coveredArea' => $posts['coveredArea'],
-				'numberOfComputer' => $numberOfComputer,
-				'numberOfLatrines' => $posts['numberOfLatrines'],
-				'school_id' => $posts['school_id']
-			);
+		$this->db->where('school_id', $school_id);
+		$this->db->delete(array('physical_facilities', 'physical_facilities_physical', 'physical_facilities_academic', 'physical_facilities_co_curricular', 'physical_facilities_others'));
 
 
-			$this->db->where('physicalFacilityId', $posts['physicalFacilityId'])->update('physical_facilities', $mainData);
-			$affected_row = $this->db->affected_rows();
-
-			$this->db->where('school_id', $school_id);
-			$this->db->delete(array('physical_facilities_physical', 'physical_facilities_academic', 'physical_facilities_co_curricular', 'physical_facilities_others'));
 
 
-			if (isset($posts['pf_physical_id'])) {
-				$pf_physical_ids = $posts['pf_physical_id'];
-				foreach ($pf_physical_ids as $pf_physical_id) {
-					$this->db->insert('physical_facilities_physical', array('pf_physical_id' => $pf_physical_id, 'school_id' => $posts['school_id']));
-				}
+		$this->db->insert('physical_facilities', $physical_facilities);
+
+
+
+		if (isset($posts['pf_physical_id'])) {
+			$pf_physical_ids = $posts['pf_physical_id'];
+			foreach ($pf_physical_ids as $pf_physical_id) {
+				$this->db->insert('physical_facilities_physical', array('pf_physical_id' => $pf_physical_id, 'school_id' => $posts['school_id']));
 			}
+		}
 
-			if (isset($posts['academic_id'])) {
-				$academic_ids    = $posts['academic_id'];
-				foreach ($academic_ids as $academic_id) {
-					$this->db->insert('physical_facilities_academic', array('academic_id' => $academic_id, 'school_id' => $posts['school_id']));
-					if ($academic_id == 2) {
-						$this->db->where('school_id', $posts['school_id']);
-						if ($this->db->delete('school_library')) {
-							$libary_books    = $posts['libary_books'];
-							foreach ($libary_books as $book_type_id => $numberOfBooks) {
-								$libary_book_inputs['book_type_id'] = $book_type_id;
-								$libary_book_inputs['numberOfBooks'] = $numberOfBooks;
-								$libary_book_inputs['school_id'] = $posts['school_id'];
-								$this->db->insert('school_library', $libary_book_inputs);
-							}
+		if (isset($posts['academic_id'])) {
+			$academic_ids    = $posts['academic_id'];
+			foreach ($academic_ids as $academic_id) {
+				$this->db->insert('physical_facilities_academic', array('academic_id' => $academic_id, 'school_id' => $posts['school_id']));
+				if ($academic_id == 2) {
+					$this->db->where('school_id', $posts['school_id']);
+					if ($this->db->delete('school_library')) {
+						$libary_books    = $posts['libary_books'];
+						foreach ($libary_books as $book_type_id => $numberOfBooks) {
+							$libary_book_inputs['book_type_id'] = $book_type_id;
+							$libary_book_inputs['numberOfBooks'] = $numberOfBooks;
+							$libary_book_inputs['school_id'] = $posts['school_id'];
+							$this->db->insert('school_library', $libary_book_inputs);
 						}
 					}
 				}
 			}
-
-
-			if (isset($posts['co_curricular_id'])) {
-				$co_curricular_ids    = $posts['co_curricular_id'];
-				foreach ($co_curricular_ids as $co_curricular_id) {
-					$this->db->insert('physical_facilities_co_curricular', array('co_curricular_id' => $co_curricular_id, 'school_id' => $posts['school_id']));
-				}
-			}
-
-			if (isset($posts['other_id'])) {
-				$other_ids    = $posts['other_id'];
-				foreach ($other_ids as $other_id) {
-					$this->db->insert('physical_facilities_others', array('other_id' => $other_id, 'school_id' => $posts['school_id']));
-				}
-			}
-
-			//update form ......
-
-			$form_input['form_b_status'] = 1;
-			$this->db->where('school_id', $school_id);
-			$this->db->update('forms_process', $form_input);
-
-
-			$this->session->set_flashdata('msg', 'Facility Detail Added Successfully.');
-			$session_id = (int) $this->input->post('session_id');
-			redirect("form/section_b/$session_id");
-		} else {
-
-			$this->session->set_flashdata('msg', 'Error Try Again With Valid Data');
-			$session_id = (int) $this->input->post('session_id');
-			redirect("form/section_b/$session_id");
 		}
+
+
+		if (isset($posts['co_curricular_id'])) {
+			$co_curricular_ids    = $posts['co_curricular_id'];
+			foreach ($co_curricular_ids as $co_curricular_id) {
+				$this->db->insert('physical_facilities_co_curricular', array('co_curricular_id' => $co_curricular_id, 'school_id' => $posts['school_id']));
+			}
+		}
+
+		if (isset($posts['other_id'])) {
+			$other_ids    = $posts['other_id'];
+			foreach ($other_ids as $other_id) {
+				$this->db->insert('physical_facilities_others', array('other_id' => $other_id, 'school_id' => $posts['school_id']));
+			}
+		}
+
+		//update form ......
+
+		$form_input['form_b_status'] = 1;
+		$this->db->where('school_id', $school_id);
+		$this->db->update('forms_process', $form_input);
+
+
+		$this->session->set_flashdata('msg', 'Facility Detail Added Successfully.');
+		$session_id = (int) $this->input->post('session_id');
+		redirect("form/section_b/$session_id");
 	}
 
 	public function section_d($session_id)
@@ -250,7 +243,9 @@ class Form extends MY_Controller
 
 		$query = "SELECT * FROM school_staff WHERE school_id ='" . $school_id . "'";
 		$this->data['school_staff'] = $this->db->query($query)->result();
-
+		$this->load->model("school_m");
+		$this->data['gender'] = $this->school_m->get_gender();
+		$this->data['staff_type'] = $this->school_m->get_staff_type();
 		$this->data['title'] = 'Apply For Renewal';
 		$this->data['description'] = 'Section D (School Employees Detail)';
 		$this->data['view'] = 'forms/section_d/section_d';
@@ -623,54 +618,26 @@ class Form extends MY_Controller
 	public function update_from_f_data()
 	{
 		$session_id = (int) $this->input->post('session_id');
-		$securityMeasureId = $this->input->post('securityMeasureId');
+		//$securityMeasureId = $this->input->post('securityMeasureId');
 		$posts = $this->input->post();
+		$school_id = $posts['school_id'];
 		unset($posts['securityMeasureId']);
-		unset($posts['school_id']);
 		// var_dump($posts);
 		unset($posts['session_id']);
-		// var_dump($posts);
-		// exit();
-		$validation_config = array(
-			array(
-				'field' =>  'securityStatus',
-				'label' =>  'Security Status',
-				'rules' =>  'trim|required'
-			),
-			array(
-				'field' =>  'securityProvided',
-				'label' =>  'Security Provided',
-				'rules' =>  'trim|required'
-			),
-			array(
-				'field' =>  'exitDoorsNumber',
-				'label' =>  'Exit Doors Number',
-				'rules' =>  'trim|required'
-			),
-			array(
-				'field' =>  'watchTower',
-				'label' =>  'watch Tower',
-				'rules' =>  'trim|required'
-			)
-		);
 
-		$this->form_validation->set_rules($validation_config);
-		if ($this->form_validation->run() === TRUE) {
-			// $staff_info = $this->input->post();
-			$this->db->where('securityMeasureId', $securityMeasureId)->update('security_measures', $posts);
-			$affected_row = $this->db->affected_rows();
-			$arr = array();
 
-			if ($affected_row) {
 
-				$this->session->set_flashdata('msg', 'Security Measures Successfully Changed.');
-				$session_id = (int) $this->input->post('session_id');
-				redirect("form/section_f/$session_id");
-			} else {
-				$this->session->set_flashdata('msg', 'Error Try Again');
-				$session_id = (int) $this->input->post('session_id');
-				redirect("form/section_f/$session_id");
-			}
+		// $staff_info = $this->input->post();
+		$this->db->where('school_id', $school_id);
+		$this->db->delete('security_measures');
+		$this->db->insert('security_measures', $posts);
+		$affected_row = $this->db->affected_rows();
+
+		if ($affected_row) {
+
+			$this->session->set_flashdata('msg', 'Security Measures Successfully Changed.');
+			$session_id = (int) $this->input->post('session_id');
+			redirect("form/section_f/$session_id");
 		} else {
 			$this->session->set_flashdata('msg', 'Error Try Again');
 			$session_id = (int) $this->input->post('session_id');
@@ -744,9 +711,14 @@ class Form extends MY_Controller
 		$school_id = $posts['school_id'];
 		$this->db->where('school_id', $school_id);
 		$this->db->delete('hazards_with_associated_risks_unsafe_list');
-		unset($posts['school_id']);
+
+		$this->db->where('school_id', $school_id);
+		$this->db->delete('hazards_with_associated_risks');
+
+
 		unset($posts['hazardsWithAssociatedRisksId']);
-		$this->db->where('hazardsWithAssociatedRisksId', $hazardsWithAssociatedRisksId)->update('hazards_with_associated_risks', $posts);
+
+		$this->db->insert('hazards_with_associated_risks', $posts);
 		$query_result = $this->db->affected_rows();
 
 		// unsafe list deletion old list and insert new one 
@@ -774,5 +746,72 @@ class Form extends MY_Controller
 			$session_id = (int) $this->input->post('session_id');
 			redirect("form/section_g/$session_id");
 		}
+	}
+
+	public function section_h($session_id)
+	{
+
+		//new here 
+
+
+		$this->data['session_id'] = $session_id = (int) $session_id;
+		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
+		                                                  WHERE sessionYearId = $session_id")->result()[0];
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT 
+		`school`.`schoolId` AS `school_id`
+					, `schools`.`schoolId` AS `schools_id`
+					, `school`.`session_year_id`
+					, `schools`.`registrationNumber`
+					, `schools`.`schoolName`
+					, `schools`.`yearOfEstiblishment`
+					, `schools`.`school_type_id`
+					, `schools`.`gender_type_id`
+				FROM
+					`schools`
+					INNER JOIN `school` 
+						ON (`schools`.`schoolId` = `school`.`schools_id`)
+						WHERE `school`.`session_year_id`='" . $session_id . "'
+						AND `schools`.`owner_id`='" . $userId . "'";
+
+
+		$this->data['school'] =  $this->db->query($query)->result()[0];
+		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
+		$this->load->model("school_m");
+		$this->data['school_fee_concession'] = $this->school_m->fee_concession_by_school_id($school_id);
+
+		$this->data['title'] = 'Apply For Renewal';
+		$this->data['description'] = 'Apply For Renewal';
+		$this->data['view'] = 'forms/section_h/section_h';
+		$this->load->view('layout', $this->data);
+	}
+
+	public function update_form_h_data()
+	{
+
+
+
+
+		$school_id = (int) $this->input->post('school_id');
+		$session_id = (int) $this->input->post('session_id');
+
+
+		$this->db->where('school_id', $school_id);
+		$this->db->delete('fee_concession');
+
+		$concession_types = $_POST['concession_types'];
+
+		foreach ($concession_types as $concession_type_id => $concession_type) {
+
+			$input['concession_id'] = (int) $concession_type_id;
+			$input['percentage'] = (int) $concession_type["percentage"];
+			$input['numberOfStudent'] = (int) $concession_type["numberOfStudent"];
+			$input['school_id'] = (int) $school_id;
+			$this->db->insert('fee_concession', $input);
+		}
+
+		$this->session->set_flashdata('msg', 'Hazards with Associated Risks.');
+		$session_id = (int) $this->input->post('session_id');
+		redirect("form/section_h/$session_id");
 	}
 }

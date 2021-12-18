@@ -45,7 +45,7 @@
     </section>
 
     <!-- Main content -->
-    <section class="content">
+    <section class="content" style="padding-top: 0px !important;">
 
       <?php $this->load->view('forms/navigation_bar');   ?>
 
@@ -82,6 +82,8 @@
               </small>
               </p>
 
+
+
               <form class="form-horizontal" method="post" id="Form1" action="<?php echo base_url('form/update_form_g_data'); ?>">
                 <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
                 <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
@@ -96,7 +98,7 @@
                   <div style=" font-size: 16px; border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 10px; padding: 10px; background-color: white;">
                     <table class="table table-bordered">
                       <tr>
-                        <th>Exposed to floods:</th>
+                        <th style="width: 500px;">Exposed to floods:</th>
                         <td>
 
                           <?php foreach ($options as $key => $value) : ?>
@@ -159,24 +161,29 @@
                             } else {
                               $check = '';
                             } ?>
-                            <span style="margin-left: 20px;"></span> <input type="radio" <?php echo $check; ?> name="accessRoute" value="<?php echo $value; ?>" required> <?php echo $value; ?>
+                            <span style="margin-left: 20px;"></span>
+                            <input onclick="<?php if ($value == 'Safe') { ?> $('#more_options').hide(); <?php } ?><?php if ($value == 'Unsafe') { ?>  $('#more_options').show(); <?php } ?>" type="radio" <?php echo $check; ?> name="accessRoute" value="<?php echo $value; ?>" required> <?php echo $value; ?>
 
                           <?php endforeach; ?>
-                          <br />
-                          If Unsafe: Describe the following
-                          <br />
-                          <?php $counter = 0; ?>
-                          <?php foreach ($unsafe_list as $un_list) : ?>
-                            <?php if (in_array($un_list->unSafeListId, $unsafe_ids)) {
-                              $check = "checked";
-                            } else {
-                              $check = '';
-                            } ?>
-
-
-                            <span style="margin-left: 20px;"></span> <input type="checkbox" <?php echo $check; ?> name="unSafeList[]" value="<?php echo $un_list->unSafeListId; ?>"> <?php echo $un_list->unSafeListTitle; ?>
+                          <span id="more_options" <?php if ($hazards_hazard_with_associated_risks->accessRoute == 'Safe') { ?>style="display: none;" <?php }  ?>>
                             <br />
-                          <?php endforeach; ?>
+                            <br />
+                            <span style="margin-left: 20px;"></span> If Unsafe: Describe the following
+                            <br />
+                            <?php $counter = 0; ?>
+                            <?php foreach ($unsafe_list as $un_list) : ?>
+                              <?php if (in_array($un_list->unSafeListId, $unsafe_ids)) {
+                                $check = "checked";
+                              } else {
+                                $check = '';
+                              } ?>
+
+
+                              <span style="margin-left: 20px;"></span>
+                              <input class="unSafeList" type="checkbox" <?php echo $check; ?> name="unSafeList[]" value="<?php echo $un_list->unSafeListId; ?>"> <?php echo $un_list->unSafeListTitle; ?>
+
+                            <?php endforeach; ?>
+                          </span>
                         </td>
                       </tr>
 
@@ -281,7 +288,9 @@
                       <tr>
                         <th>Electrification condition</td>
                         <td>
-                          <?php $counter = 0; ?>
+                          <?php
+                          $counter = 0;
+                          $check = ""; ?>
                           <?php foreach ($condition as $key => $value) : ?>
                             <?php if ($hazards_hazard_with_associated_risks->electrification_condition_id == $key) {
                               $check = "checked";
@@ -291,7 +300,7 @@
 
 
 
-                            <span style="margin-left: 20px;"></span> <input type="radio" <?php echo $check; ?> name="electrification_condition_id" value="<?php echo $value; ?>" required> <?php echo $value; ?>
+                            <span style="margin-left: 20px;"></span> <input type="radio" <?php echo $check; ?> name="electrification_condition_id" value="<?php echo $key; ?>" required> <?php echo $value; ?>
 
                           <?php endforeach; ?>
                         </td>

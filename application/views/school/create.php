@@ -250,31 +250,59 @@
                 {
                 */ ?>
               <div style="text-align: center;">
-                <button class="btn btn-danger" style="margin:5px" onclick="openForm2()">Please Submit COVID-19 Vaccination Report of Students Age 12+</button>
+                <button class="btn btn-danger" style="margin:5px" data-toggle="modal" data-target="#CovidVaccinated">Please Submit COVID-19 Vaccination Report of Students Age 12+</button>
               </div>
-              <div class="form-popup" id="myForm2">
-                <form id="covidform2" class="form-container" class="form-container" action="<?php echo base_url('Temp_controller/temp_student_covid'); ?>" method="post">
-                  <?php $this->session->flashdata("msg");  ?>
-                  <label for="date"><b>Select date:</b></label>
-                  <input type="date" id="date" name="date" required>
-                  <div class="form-group">
-                    <h5 style="padding-left: 10px"><strong>Vaccination Report of Students of the age 12+:</strong></h5>
-                    <label class="control-label col-sm-2" for="tenrolled">Total:</label>
-                    <input class="col-sm-2" type="number" name="tenrolled" required>
-                    <label class="control-label col-sm-2" for="tvaccinated">Vaccinated:</label>
-                    <input class="col-sm-2" type="number" name="tvaccinated"><br>
+
+
+              <!-- Modal Covid -->
+              <div class="modal fade" id="CovidVaccinated" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title pull-left" id="exampleModalLabel">COVID-19 Vaccination Report of Students Age 12+</h5>
+                      <button type="button" class="close pull-right" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form onsubmit="return confirm('Are you sure you want to continue with this COVID-19 Vaccination Data.');" id="mrForm" action="<?php echo base_url('Temp_controller/temp_student_covid'); ?>" method="post">
+                        <input type="hidden" name="school_id" value="<?= $schooldata->schoolId ?>" />
+                        <input type="hidden" name="date" value="<?= date('Y-m-d') ?>" />
+
+                        <h4>COVID-19 Vaccination Report of Students Age 12+</h4>
+
+                        <table class="table">
+                          <tr>
+                            <th>Total Students Age 12+</th>
+                            <th>Total Vaccinated (1st Dose)</th>
+                            <th>Total Vaccinated (2nd Dose)</th>
+                          </tr>
+                          <tr>
+                            <th><input class="form-control" style="width: 100% !important;" min="1" type="number" name="tenrolled" required></th>
+                            <th><input class="form-control" style="width: 100% !important;" min="0" type="number" name="tvaccinated" required></th>
+                            <th><input class="form-control" style="width: 100% !important;" min="0" type="number" name="tvaccinated2" required></th>
+                          </tr>
+                          <tr>
+                            <td colspan="2">Remarks: <br />
+                              <textarea style="width: 100%; padding-top: 0px !important ; " name="remarks"></textarea>
+                            </td>
+                            <td>Submit Report <br />
+                              <input type="Submit" class="btn btn-primary" value="Submit Covid-19 Vaccinated">
+                            </td>
+                          </tr>
+
+                        </table>
+
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
                   </div>
-                  <div class="form-group">
-                    <label style="padding-left: 10px" for="remarks"><strong>Remarks:</strong></label>
-                  </div>
-                  <textarea rows="4" cols="50" name="remarks" form="covidform"></textarea><br>
-                  <input type="hidden" name="school_id" value="<?= $schooldata->schoolId ?>"><br>
-                  <div style="text-align: center;">
-                    <input type="Submit" class="btn btn-primary" name="" value="Submit">
-                    <button type="button" class="btn cancel" onclick="closeForm2()">Close</button>
-                  </div>
-                </form>
+                </div>
               </div>
+
+
               <script>
                 function openForm2() {
                   document.getElementById("myForm2").style.display = "block";
