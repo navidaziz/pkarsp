@@ -2,12 +2,11 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h2 style="display:inline;">
-      <?php echo ucwords(strtolower($school->schoolName)); ?>
+      COVID-19 Vaccination Report of Students Age 12+
     </h2><br />
-    <small>COVID-19 Vaccination Report of Students Age 12+</small>
+    <small><?php echo ucwords(strtolower($school->schoolName)); ?></small>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li><a href="<?php echo site_url("admin/admission"); ?>">Admission</a></li>
       <li><a href="">COVID-19 Vaccination Report of Students Age 12+</a></li>
     </ol>
   </section>
@@ -87,57 +86,64 @@
                   <input onclick="$('#Other_remarks').show();$('#other_field').prop('required', true)" class="remarks_filed" type="radio" name="remarks" value="Other" /> Other <br />
                   <span id="Other_remarks" style="display: none;">
 
-                    <input id="other_field" type="text" name="other_remarks" />
+                    <input style="width: 100%;" id="other_field" type="text" name="other_remarks" />
                     <br />
                   </span>
                 </div>
                 <br />
                 <span style="text-align: center;">
-                  <input class="btn btn-danger btn-sm" type="submit" value="Add New Student" name="Add Student" />
+                  <input class="btn btn-danger btn-sm" type="submit" value="Add Student Report" name="Add Student" />
                 </span>
               </div>
             </form>
           </div>
 
           <div class="col-md-10">
-            <h4> COVID-19 Vaccination Report of Students Age 12+</h4>
+            <h4 style="border-left: 20px solid #9FC8E8; padding-left:5px"> COVID-19 Vaccination Report of Students Age 12+</h4>
             <table class="table" id="main_table" style="font-size: 12px;">
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Admission No</th>
+                  <th>Adm. No</th>
                   <th>Student Name</th>
                   <th>Father Name</th>
                   <th>Father CNIC</th>
                   <th>Form B</th>
-                  <th>Date of Birth</th>
+                  <th>DOB</th>
                   <th>Gender</th>
                   <th>Viccinated</th>
-                  <th>First Dose</th>
+                  <th>1st Dose</th>
                   <th>2nd Dose</th>
                   <th>Remarks</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
-                <?php foreach ($students as $student) : ?>
+                <?php $count = 1;
+                foreach ($students as $student) : ?>
                   <tr>
-                    <td><?php echo $count++; ?></td>
+                    <td><a style="color: #F7C6C5;" onclick="return confirm('Are your sure you want to delete student record?')" href="<?php echo site_url("covid_vaccination_students/delete/$student->student_id"); ?>"><i class="fa fa-trash" aria-hidden="true"></i></a> <?php echo $count++; ?></td>
                     <td><span><?php echo $student->student_admission_no; ?></span></td>
                     <td><span><?php echo $student->student_name;  ?></span></td>
                     <td><?php echo $student->student_father_name;  ?></td>
                     <td><?php echo $student->father_nic; ?></td>
                     <td><?php echo $student->form_b; ?> </td>
-                    <td><?php echo $student->student_data_of_birth; ?> </td>
+                    <td><?php echo date('d-m-y', strtotime($student->student_data_of_birth)); ?> </td>
                     <td><?php echo $student->gender;  ?></td>
                     <td><?php echo $student->vaccinated; ?> </td>
-                    <td><?php echo $student->first_dose; ?> </td>
-                    <td><?php echo $student->second_dose;  ?> </td>
+                    <td><?php
+                        if ($student->first_dose != '') {
+                          echo date('d-m-y', strtotime($student->first_dose));
+                        }  ?></td>
+                    <td><?php
+                        if ($student->second_dose != '') {
+                          echo date('d-m-y', strtotime($student->second_dose));
+                        }  ?>
+                    </td>
                     <td><?php echo $student->remarks; ?> </td>
 
                     <td>
-                      <a href="#" onclick="update_profile('<?php echo $student->student_id; ?>')">Update</a> -
-                      <a href="#" onclick="update_profile('<?php echo $student->student_id; ?>')">Delete</a>
+                      <a href="#" onclick="update_profile('<?php echo $student->student_id; ?>')">Update</a>
                     </td>
 
                   </tr>

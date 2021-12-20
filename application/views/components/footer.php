@@ -330,7 +330,26 @@ if ($this->session->flashdata("msg") || $this->session->flashdata("msg_error") |
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.0/js/buttons.html5.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.0/js/buttons.print.min.js"></script>
 
+<style>
+  .dt-buttons {
+    float: left;
+  }
 
+  div.dataTables_filter input {
+    /* width: 16em; */
+    border: 1px solid #e2e7eb;
+    border-radius: 3px;
+    box-shadow: none;
+    color: #555;
+    display: inline-block;
+    font-size: 12px;
+    line-height: 1.42857;
+    padding: 4px 12px;
+    vertical-align: middle;
+    width: 10em;
+    margin-bottom: 3px;
+  }
+</style>
 <!--<link rel="stylesheet" href='https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css'>
 <link rel="stylesheet" href='https://cdn.datatables.net/buttons/2.1.0/css/buttons.dataTables.min.css'> -->
 </body>
