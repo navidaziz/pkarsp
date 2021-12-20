@@ -158,7 +158,7 @@ class Login extends Admin_Controller
 				$this->session->set_userdata($user_data);
 				$this->session->set_flashdata('msg_success', "<strong>" . $user->user_title . '</strong><br/><i>welcome to PSRA MIS.</i>');
 
-				if ($user->role_id == 100) {
+				if ($user->role_id == 15) {
 					$query = "SELECT `schools`.`schoolId` FROM `schools` WHERE owner_id = '" . $user->userId . "'";
 					$school_result = $this->db->query($query)->result();
 					if ($school_result) {

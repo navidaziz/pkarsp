@@ -66,7 +66,7 @@ class Register extends Admin_Controller
         if ($this->form_validation->run() === TRUE) {
             $inputs = array();
 
-            $inputs["role_id"]  = 100;
+            $inputs["role_id"]  = 15;
             $inputs["userName"]  = $this->input->post('userName');
             $inputs["userPassword"]  = $this->input->post('userPassword');
             $inputs["userEmail"]  = $this->input->post('userEmail');

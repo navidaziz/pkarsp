@@ -42,10 +42,10 @@ $form_status = $this->db->query($query)->result()[0];
                         <?php if ($form_status->form_h_status == 1) { ?> <i class="fa fa-check" aria-hidden="true"></i> <?php } else { ?> <i class="fa fa-spinner" aria-hidden="true"></i> <?php } ?> SECTION H
                     </a>
                 </li>
-                <li <?php if ($this->uri->segment(2) == 'section_i') { ?> class="active" <?php  } ?> style="text-align: center;">
-                    <span class="step" data-toggle="tooltip" data-placement="top" title="Please Complete Section H.">
-                        <span class="step"><?php if ($form_status->form_i_status == 1) { ?> <i class="fa fa-check" aria-hidden="true"></i> <?php } else { ?> <i class="fa fa-spinner" aria-hidden="true"></i> <?php } ?>SUBMIT</span>
-                    </span>
+                <li <?php if ($this->uri->segment(2) == 'submit_form') { ?> class="active" <?php  } ?> style="text-align: center;">
+                    <a href="<?php echo site_url("form/submit_form/$session_id"); ?>" data-toggle="tooltip" data-placement="top" title="Please Complete Section H.">
+                        <?php if ($form_status->form_h_status == 1) { ?> <i class="fa fa-check" aria-hidden="true"></i> <?php } else { ?> <i class="fa fa-spinner" aria-hidden="true"></i> <?php } ?> Submit Form
+                    </a>
                 </li>
 
             </ul>

@@ -3,7 +3,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Form extends MY_Controller
 {
+	public function __construct()
+	{
 
+		parent::__construct();
+	}
 
 
 	public function index()
@@ -18,41 +22,12 @@ class Form extends MY_Controller
 		echo "We are working on it";
 	}
 
-	public function section_a()
-	{
 
-
-		$this->load->model("school_m");
-		$userId = $this->session->userdata('userId');
-		$this->data['schooldata'] = $this->school_m->get_school_data_for_school_insertion($userId);
-		var_dump($this->data['schooldata']);
-		$tehsil_id = $this->data['schooldata']->tehsil_id;
-		$this->data['ucs_list'] = $this->db->where('tehsil_id', $tehsil_id)->get('uc')->result();
-		// var_dump($ucs_list);
-		// exit();
-		$this->load->model("general_modal");
-		$this->load->model("session_m");
-		$next = $this->session_m->get_next_session();
-		$this->data['next_session_id'] = $next->session_id;
-		$this->data['school_types'] = $this->general_modal->school_types();
-		$this->data['districts'] = $this->general_modal->districts();
-		$this->data['gender_of_school'] = $this->general_modal->gender_of_school();
-		$this->data['level_of_institute'] = $this->general_modal->level_of_institute();
-		$this->data['reg_type'] = $this->general_modal->registration_type();
-		$this->data['tehsils'] = $this->general_modal->tehsils();
-		$this->data['ucs'] = $this->general_modal->ucs();
-		$this->data['locations'] = $this->general_modal->location();
-		$this->data['bise_list'] = $this->general_modal->bise_list();
-
-
-		$this->data['title'] = 'Apply For Renewal';
-		$this->data['description'] = 'Section B (Physical Facilities)';
-		$this->data['view'] = 'forms/section_a/section_a';
-		$this->load->view('layout', $this->data);
-	}
 
 	public function section_b($session_id)
 	{
+
+
 
 
 		$this->data['session_id'] = $session_id = (int) $session_id;
@@ -67,7 +42,8 @@ class Form extends MY_Controller
 					, `schools`.`schoolName`
 					, `schools`.`yearOfEstiblishment`
 					, `schools`.`school_type_id`
-					, `schools`.`gender_type_id`
+					, `schools`.`gender_type_id` , `school`.`reg_type_id`
+					, `school`.`reg_type_id`
 				FROM
 					`schools`
 					INNER JOIN `school` 
@@ -78,7 +54,7 @@ class Form extends MY_Controller
 
 		$this->data['school'] =  $this->db->query($query)->result()[0];
 		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
-
+		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
 
 
 
@@ -126,7 +102,7 @@ class Form extends MY_Controller
 
 		$this->data['school_library'] = $this->school_m->get_library_books_by_school_id($school_id);
 
-		$this->data['title'] = 'Apply For Renewal';
+		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
 		$this->data['description'] = 'Section B (Physical Facilities)';
 		$this->data['view'] = 'forms/section_b/section_b';
 		$this->load->view('layout', $this->data);
@@ -217,6 +193,7 @@ class Form extends MY_Controller
 	public function section_d($session_id)
 	{
 
+
 		$this->data['session_id'] = $session_id = (int) $session_id;
 		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
 		                                                  WHERE sessionYearId = $session_id")->result()[0];
@@ -229,7 +206,7 @@ class Form extends MY_Controller
 					, `schools`.`schoolName`
 					, `schools`.`yearOfEstiblishment`
 					, `schools`.`school_type_id`
-					, `schools`.`gender_type_id`
+					, `schools`.`gender_type_id` , `school`.`reg_type_id`
 				FROM
 					`schools`
 					INNER JOIN `school` 
@@ -246,7 +223,7 @@ class Form extends MY_Controller
 		$this->load->model("school_m");
 		$this->data['gender'] = $this->school_m->get_gender();
 		$this->data['staff_type'] = $this->school_m->get_staff_type();
-		$this->data['title'] = 'Apply For Renewal';
+		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
 		$this->data['description'] = 'Section D (School Employees Detail)';
 		$this->data['view'] = 'forms/section_d/section_d';
 		$this->load->view('layout', $this->data);
@@ -370,7 +347,7 @@ class Form extends MY_Controller
 					, `schools`.`schoolName`
 					, `schools`.`yearOfEstiblishment`
 					, `schools`.`school_type_id`
-					, `schools`.`gender_type_id`
+					, `schools`.`gender_type_id` , `school`.`reg_type_id`
 					, `schools`.`level_of_school_id`
 				FROM
 					`schools`
@@ -389,7 +366,7 @@ class Form extends MY_Controller
 		$query = "SELECT * FROM class ";
 		$this->data['classes'] = $this->db->query($query)->result();
 
-		$this->data['title'] = 'Apply For Renewal';
+		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
 		$this->data['description'] = 'Section E (School Fee Detail)';
 		$this->data['view'] = 'forms/section_e/section_e';
 		$this->load->view('layout', $this->data);
@@ -453,7 +430,7 @@ class Form extends MY_Controller
 					, `schools`.`schoolName`
 					, `schools`.`yearOfEstiblishment`
 					, `schools`.`school_type_id`
-					, `schools`.`gender_type_id`
+					, `schools`.`gender_type_id` , `school`.`reg_type_id`
 				FROM
 					`schools`
 					INNER JOIN `school` 
@@ -475,7 +452,7 @@ class Form extends MY_Controller
 		$this->data['classes'] = $this->db->query($query)->result();
 		$this->data['ages'] = $this->db->query("SELECT * FROM age")->result();
 
-		$this->data['title'] = 'Apply For Renewal';
+		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
 		$this->data['description'] = 'Apply For Renewal';
 		$this->data['view'] = 'forms/section_c/section_c';
 		$this->load->view('layout', $this->data);
@@ -590,7 +567,7 @@ class Form extends MY_Controller
 					, `schools`.`schoolName`
 					, `schools`.`yearOfEstiblishment`
 					, `schools`.`school_type_id`
-					, `schools`.`gender_type_id`
+					, `schools`.`gender_type_id` , `school`.`reg_type_id`
 				FROM
 					`schools`
 					INNER JOIN `school` 
@@ -609,7 +586,7 @@ class Form extends MY_Controller
 
 		$this->data['school_security_measures'] = $this->db->where('school_id', $school_id)->get('security_measures')->result()[0];
 
-		$this->data['title'] = 'Apply For Renewal';
+		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
 		$this->data['description'] = 'Apply For Renewal';
 		$this->data['view'] = 'forms/section_f/section_f';
 		$this->load->view('layout', $this->data);
@@ -664,7 +641,7 @@ class Form extends MY_Controller
 					, `schools`.`schoolName`
 					, `schools`.`yearOfEstiblishment`
 					, `schools`.`school_type_id`
-					, `schools`.`gender_type_id`
+					, `schools`.`gender_type_id` , `school`.`reg_type_id`
 				FROM
 					`schools`
 					INNER JOIN `school` 
@@ -691,7 +668,7 @@ class Form extends MY_Controller
 		}
 		$this->data['unsafe_ids'] = $unsafe_ids;
 
-		$this->data['title'] = 'Apply For Renewal';
+		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
 		$this->data['description'] = 'Apply For Renewal';
 		$this->data['view'] = 'forms/section_g/section_g';
 		$this->load->view('layout', $this->data);
@@ -766,7 +743,7 @@ class Form extends MY_Controller
 					, `schools`.`schoolName`
 					, `schools`.`yearOfEstiblishment`
 					, `schools`.`school_type_id`
-					, `schools`.`gender_type_id`
+					, `schools`.`gender_type_id` , `school`.`reg_type_id`
 				FROM
 					`schools`
 					INNER JOIN `school` 
@@ -780,7 +757,7 @@ class Form extends MY_Controller
 		$this->load->model("school_m");
 		$this->data['school_fee_concession'] = $this->school_m->fee_concession_by_school_id($school_id);
 
-		$this->data['title'] = 'Apply For Renewal';
+		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
 		$this->data['description'] = 'Apply For Renewal';
 		$this->data['view'] = 'forms/section_h/section_h';
 		$this->load->view('layout', $this->data);
@@ -813,5 +790,86 @@ class Form extends MY_Controller
 		$this->session->set_flashdata('msg', 'Hazards with Associated Risks.');
 		$session_id = (int) $this->input->post('session_id');
 		redirect("form/section_h/$session_id");
+	}
+
+	private function registaion_type($type_id)
+	{
+		if ($type_id == 1) {
+			return 'Registration';
+		}
+		if ($type_id == 2) {
+			return 'Renewal';
+		}
+		if ($type_id == 3) {
+			return 'Up-Gradation';
+		}
+		if ($type_id == 4) {
+			return 'Up-Gradation And Renewal';
+		}
+	}
+
+	public function submit_form($session_id)
+	{
+		$this->data['session_id'] = $session_id = (int) $session_id;
+		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
+		                                                  WHERE sessionYearId = $session_id")->result()[0];
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT 
+		`school`.`schoolId` AS `school_id`
+					, `schools`.`schoolId` AS `schools_id`
+					, `school`.`session_year_id`
+					, `schools`.`registrationNumber`
+					, `schools`.`schoolName`
+					, `schools`.`yearOfEstiblishment`
+					, `schools`.`school_type_id`
+					, `schools`.`gender_type_id` , `school`.`reg_type_id`
+				FROM
+					`schools`
+					INNER JOIN `school` 
+						ON (`schools`.`schoolId` = `school`.`schools_id`)
+						WHERE `school`.`session_year_id`='" . $session_id . "'
+						AND `schools`.`owner_id`='" . $userId . "'";
+
+
+		$this->data['school'] =  $this->db->query($query)->result()[0];
+		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
+
+
+		$query = "SELECT session_id, last_date, fine_percentage FROM `session_fee_submission_dates` 
+		               WHERE session_id= $session_id AND last_date >='" . date('Y-m-d') . "' 
+					   ORDER BY last_date ASC LIMIT 1";
+		$this->data['late_fee'] = $this->db->query($query)->result()[0];
+
+		$query = "SELECT * FROM `session_fee_submission_dates` WHERE session_id = '" . $session_id . "'";
+		$this->data['session_fee_submission_dates'] = $this->db->query($query)->result();
+
+		echo $query = "SELECT MAX(tuitionFee) as max_tution_fee  FROM `fee` WHERE school_id= '" . $school_id . "'";
+		$this->data['max_tuition_fee'] = $max_tuition_fee = preg_replace(
+			'/[^0-9.]/',
+			'',
+			$this->db->query($query)->result()[0]->max_tution_fee
+		);
+
+		$query = "SELECT fee_min, fee_max, renewal_app_processsing_fee, renewal_app_inspection_fee, renewal_fee FROM `fee_structure` WHERE fee_min <= $max_tuition_fee ORDER BY fee_min DESC LIMIT 1";
+		$this->data['fee_sturucture'] = $this->db->query($query)->result()[0];
+
+
+		$this->data['title'] = 'Apply For Renewal';
+		$this->data['description'] = 'Apply For Renewal';
+		$this->data['view'] = 'apply/renewal';
+		$this->data['view'] = 'forms/submit_form/submit_form';
+		$this->load->view('layout', $this->data);
+	}
+
+	private  function check_school_session_entry($session_id, $school_id)
+	{
+		$query = "SELECT * FROM school WHERE schools_id = '" . $school_id . "' and session_year_id= '" . $session_id . "'";
+		$school_session_entry = $this->db->query($query)->result();
+
+
+		if (!$school_session_entry) {
+			$this->session->set_flashdata('msg_error', 'You are not applied for this session.');
+			redirect('school_dashboard');
+		}
 	}
 }

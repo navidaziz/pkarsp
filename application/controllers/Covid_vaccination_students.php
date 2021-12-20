@@ -168,7 +168,8 @@ class Covid_vaccination_students extends Admin_Controller
 			'gender' => $this->input->post("gender"),
 			'form_b' => $this->input->post("form_b"),
 			'school_id' => $school_id,
-			'vaccinated' => $this->input->post("vaccinated")
+			'vaccinated' => $this->input->post("vaccinated"),
+			'created_by' => $userId
 		);
 
 		if ($this->input->post("vaccinated") == 'Yes') {
