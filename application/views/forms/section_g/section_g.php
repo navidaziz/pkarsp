@@ -50,11 +50,8 @@
       <?php $this->load->view('forms/navigation_bar');   ?>
 
       <div class="box box-primary box-solid">
-        <div class="box-header with-border">
-          <h3 class="box-title"><strong>SECTION G </strong> (Hazards with Associated Risks)</h3>
-          <!-- /.box-tools -->
-        </div>
-        <!-- /.box-header -->
+
+
         <div class="box-body">
           <div class="row">
 
@@ -75,7 +72,7 @@
               <p>
               <h4 style="border-left: 20px solid #9FC8E8; padding-left:5px"><strong>SECTION G</strong> (Hazards with Associated Risks)<br />
                 <small style="color: red;">
-                  Note:
+                  Note: Every option is mandatory.
                 </small>
               </h4>
 
@@ -456,7 +453,10 @@
                       <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Section F ( Security Measures ) </a>
 
                     <span style="margin-left: 20px;"></span> <input class="btn btn-primary" type="submit" name="" value="Update Section G Data" />
-                    <a class="btn btn-link pull-right" href="<?php echo site_url("form/section_h/$session_id"); ?>"> Section H ( Hazards With Associated Risk's ) <i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
+
+                    <?php if ($form_status->form_g_status == 1) { ?>
+                      <a class="btn btn-link pull-right" href="<?php echo site_url("form/section_h/$session_id"); ?>"> Section H ( Fee Concession ) <i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
+                    <?php } ?>
                   </div>
                 </div>
 

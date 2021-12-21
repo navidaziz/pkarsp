@@ -45,15 +45,12 @@
     </section>
 
     <!-- Main content -->
-    <section class="content">
+    <section class="content" style="padding-top: 0px !important;">
 
       <?php $this->load->view('forms/navigation_bar');   ?>
 
       <div class="box box-primary box-solid">
-        <div class="box-header with-border">
-          <h3 class="box-title"><strong>SECTION F</strong> (Security Measures)</h3>
-          <!-- /.box-tools -->
-        </div>
+
         <!-- /.box-header -->
         <div class="box-body">
           <div class="row">
@@ -358,15 +355,13 @@
                   <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Section E ( School Fee Detail ) </a>
 
                 <input class="btn btn-primary" type="submit" name="" value="Update Section F Data" />
-                <a class="btn btn-link pull-right" href="<?php echo site_url("form/section_h/$session_id"); ?>"> Section G ( Hazards With Associated Risk's ) <i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
+                <?php if ($form_status->form_f_status == 1) { ?>
+                  <a class="btn btn-link pull-right" href="<?php echo site_url("form/section_g/$session_id"); ?>"> Section G ( Hazards With Associated Risk's ) <i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
+                <?php } ?>
               </div>
             </div>
 
-            <?php
 
-            echo $form_complete;
-
-            ?>
 
 
             </form>

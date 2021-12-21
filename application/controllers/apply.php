@@ -103,9 +103,25 @@ class Apply extends MY_Controller
 
 	public function print_renewal_bank_challan($session_id)
 	{
-		$this->data['school_id'] = (int) $school_id = 4;
-		$this->data['school_detail'] = $this->db->query("SELECT * FROM schools WHERE schoolId = '" . $school_id . "'")->result()[0];
-		$this->data['session_id'] = (int) $session_id =  4;
+		$this->data['session_id'] = $session_id = (int) $session_id;
+		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
+		                                                  WHERE sessionYearId = $session_id")->result()[0];
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT 
+		`school`.`schoolId` AS `school_id`
+					, `schools`.*
+				FROM
+					`schools`
+					INNER JOIN `school` 
+						ON (`schools`.`schoolId` = `school`.`schools_id`)
+						WHERE `school`.`session_year_id`='" . $session_id . "'
+						AND `schools`.`owner_id`='" . $userId . "'";
+
+
+		$this->data['school_detail'] =  $this->db->query($query)->result()[0];
+		$this->data['school_id'] = $school_id = $this->data['school_detail']->school_id;
+		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
+		$this->data['form_status'] = $this->db->query($query)->result()[0];
 
 		$query = "SELECT session_id, last_date, fine_percentage FROM `session_fee_submission_dates` 
 		               WHERE session_id= $session_id AND last_date >='" . date('Y-m-d') . "' 
@@ -116,14 +132,14 @@ class Apply extends MY_Controller
 		$this->data['session_fee_submission_dates'] = $this->db->query($query)->result();
 
 		$query = "SELECT MAX(tuitionFee) as max_tution_fee  FROM `fee` WHERE school_id= '" . $school_id . "'";
-		$this->data['max_tuition_fee'] = $max_tuition_fee = preg_replace('/[^0-9.]/', '', $this->db->query($query)->result()[0]->max_tution_fee);
+		$this->data['max_tuition_fee'] = $max_tuition_fee = preg_replace(
+			'/[^0-9.]/',
+			'',
+			$this->db->query($query)->result()[0]->max_tution_fee
+		);
 
 		$query = "SELECT fee_min, fee_max, renewal_app_processsing_fee, renewal_app_inspection_fee, renewal_fee FROM `fee_structure` WHERE fee_min <= $max_tuition_fee ORDER BY fee_min DESC LIMIT 1";
 		$this->data['fee_sturucture'] = $this->db->query($query)->result()[0];
-
-		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` WHERE sessionYearId = $session_id")->result()[0];
-
-
 		$this->load->view('apply/renewal_bank_challan_print', $this->data);
 	}
 

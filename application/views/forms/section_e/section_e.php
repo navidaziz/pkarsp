@@ -44,15 +44,12 @@
     </section>
 
     <!-- Main content -->
-    <section class="content">
+    <section class="content" style="padding-top: 0px !important;">
 
       <?php $this->load->view('forms/navigation_bar');   ?>
 
       <div class="box box-primary box-solid">
-        <div class="box-header with-border">
-          <h3 class="box-title"><?php echo @$description; ?></h3>
-          <!-- /.box-tools -->
-        </div>
+
         <!-- /.box-header -->
         <div class="box-body">
           <div class="row">
@@ -74,7 +71,7 @@
               <p>
               <h4 style="border-left: 20px solid #9FC8E8; padding-left:5px"><strong>SECTION E</strong> (SCHOOL FEE DETAIL)<br />
                 <small style="color: red;">
-                  Note:
+                  Note: please fill fee detail for all classes.
                 </small>
               </h4>
 
@@ -207,11 +204,6 @@
 
               </table>
 
-              <?php
-
-              echo $form_complete;
-
-              ?>
 
 
 
@@ -222,10 +214,15 @@
             <div class="col-md-12">
               <div style=" font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
                 <a class="btn btn-link pull-left" href="<?php echo site_url("form/section_d/$session_id"); ?>">
+
                   <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Section D ( School Fee Detail ) </a>
-                <input class="btn btn-primary" type="submit" name="" value="Add Section E Data" />
-                <a class="btn btn-link pull-right" href="<?php echo site_url("form/section_f/$session_id"); ?>">
-                  Section F ( Security Measures )<i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
+                <?php if ($form_complete) { ?>
+                  <a href="<?php echo site_url("form/complete_section_e/$session_id"); ?>" class="btn btn-primary">Add Section E Data</a>
+                <?php } else { ?> <br /> <?php } ?>
+                <?php if ($form_status->form_e_status == 1) { ?>
+                  <a class="btn btn-link pull-right" href="<?php echo site_url("form/section_f/$session_id"); ?>">
+                    Section F ( Security Measures )<i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
+                <?php } ?>
               </div>
             </div>
 

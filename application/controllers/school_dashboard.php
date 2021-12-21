@@ -57,7 +57,9 @@ class School_dashboard extends MY_Controller
 		`bise`.`biseName`,
 		`schools`.`otherBiseName`,
 		`schools`.`management_id`,
-		`management`.`managementTitle`
+		`management`.`managementTitle`,
+		`schools`.`level_of_school_id`,
+		`levelofinstitute`.`levelofInstituteTitle`
 	  FROM
 		`schools` 
 		
@@ -65,7 +67,10 @@ class School_dashboard extends MY_Controller
 		  ON (
 			`schools`.`schoolId` = `bank_account`.`school_id`
 		  ) 
-		
+		  LEFT JOIN `levelofinstitute` 
+		  ON (
+			`schools`.`level_of_school_id` = `levelofinstitute`.`levelofInstituteId`
+		  ) 
 		LEFT JOIN `district` 
 		  ON (
 			`schools`.`district_id` = `district`.`districtId`

@@ -26,10 +26,6 @@ class Form extends MY_Controller
 
 	public function section_b($session_id)
 	{
-
-
-
-
 		$this->data['session_id'] = $session_id = (int) $session_id;
 		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
 		                                                  WHERE sessionYearId = $session_id")->result()[0];
@@ -56,7 +52,8 @@ class Form extends MY_Controller
 		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
 		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
 
-
+		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
+		$this->data['form_status'] = $this->db->query($query)->result()[0];
 
 
 		$this->load->model("general_modal");
@@ -108,6 +105,90 @@ class Form extends MY_Controller
 		$this->load->view('layout', $this->data);
 	}
 
+	public function section_d($session_id)
+	{
+
+
+		$this->data['session_id'] = $session_id = (int) $session_id;
+		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
+		                                                  WHERE sessionYearId = $session_id")->result()[0];
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT 
+		`school`.`schoolId` AS `school_id`
+					, `schools`.`schoolId` AS `schools_id`
+					, `school`.`session_year_id`
+					, `schools`.`registrationNumber`
+					, `schools`.`schoolName`
+					, `schools`.`yearOfEstiblishment`
+					, `schools`.`school_type_id`
+					, `schools`.`gender_type_id` , `school`.`reg_type_id`
+				FROM
+					`schools`
+					INNER JOIN `school` 
+						ON (`schools`.`schoolId` = `school`.`schools_id`)
+						WHERE `school`.`session_year_id`='" . $session_id . "'
+						AND `schools`.`owner_id`='" . $userId . "'";
+
+
+		$this->data['school'] =  $this->db->query($query)->result()[0];
+		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
+		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
+		$this->data['form_status'] = $this->db->query($query)->result()[0];
+
+		$query = "SELECT *, gender.genderTitle, staff_type.staffTtitle  FROM school_staff, gender, staff_type 
+				  WHERE school_staff.schoolStaffType = staff_type.staffTypeId
+				  AND  school_staff.schoolStaffGender = gender.genderId
+				  AND school_id ='" . $school_id . "'";
+		$this->data['school_staff'] = $this->db->query($query)->result();
+		$this->load->model("school_m");
+		$this->data['gender'] = $this->school_m->get_gender();
+		$this->data['staff_type'] = $this->school_m->get_staff_type();
+		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
+		$this->data['description'] = 'Section D (School Employees Detail)';
+		$this->data['view'] = 'forms/section_d/section_d';
+		$this->load->view('layout', $this->data);
+	}
+
+	public function section_e($session_id)
+	{
+
+		$this->data['session_id'] = $session_id = (int) $session_id;
+		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
+		                                                  WHERE sessionYearId = $session_id")->result()[0];
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT 
+		`school`.`schoolId` AS `school_id`
+					, `schools`.`schoolId` AS `schools_id`
+					, `school`.`session_year_id`
+					, `schools`.`registrationNumber`
+					, `schools`.`schoolName`
+					, `schools`.`yearOfEstiblishment`
+					, `schools`.`level_of_school_id`
+					, `schools`.`gender_type_id` , `school`.`reg_type_id`
+					, `schools`.`level_of_school_id`
+				FROM
+					`schools`
+					INNER JOIN `school` 
+						ON (`schools`.`schoolId` = `school`.`schools_id`)
+						WHERE `school`.`session_year_id`='" . $session_id . "'
+						AND `schools`.`owner_id`='" . $userId . "'";
+
+
+		$this->data['school'] =  $this->db->query($query)->result()[0];
+		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
+		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
+		$this->data['form_status'] = $this->db->query($query)->result()[0];
+
+		$query = "SELECT classes_ids FROM `levelofinstitute`  WHERE levelofInstituteId='" . $this->data['school']->level_of_school_id . "'";
+		$classes_ids = $this->db->query($query)->result()[0]->classes_ids;
+		$query = "SELECT * FROM class WHERE classId IN(" . $classes_ids . ")";
+		$this->data['classes'] = $this->db->query($query)->result();
+
+		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
+		$this->data['description'] = 'Section E (School Fee Detail)';
+		$this->data['view'] = 'forms/section_e/section_e';
+		$this->load->view('layout', $this->data);
+	}
 
 	public function update_form_b_data()
 	{
@@ -190,44 +271,7 @@ class Form extends MY_Controller
 		redirect("form/section_b/$session_id");
 	}
 
-	public function section_d($session_id)
-	{
 
-
-		$this->data['session_id'] = $session_id = (int) $session_id;
-		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
-		                                                  WHERE sessionYearId = $session_id")->result()[0];
-		$userId = $this->session->userdata('userId');
-		$query = "SELECT 
-		`school`.`schoolId` AS `school_id`
-					, `schools`.`schoolId` AS `schools_id`
-					, `school`.`session_year_id`
-					, `schools`.`registrationNumber`
-					, `schools`.`schoolName`
-					, `schools`.`yearOfEstiblishment`
-					, `schools`.`school_type_id`
-					, `schools`.`gender_type_id` , `school`.`reg_type_id`
-				FROM
-					`schools`
-					INNER JOIN `school` 
-						ON (`schools`.`schoolId` = `school`.`schools_id`)
-						WHERE `school`.`session_year_id`='" . $session_id . "'
-						AND `schools`.`owner_id`='" . $userId . "'";
-
-
-		$this->data['school'] =  $this->db->query($query)->result()[0];
-		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
-
-		$query = "SELECT * FROM school_staff WHERE school_id ='" . $school_id . "'";
-		$this->data['school_staff'] = $this->db->query($query)->result();
-		$this->load->model("school_m");
-		$this->data['gender'] = $this->school_m->get_gender();
-		$this->data['staff_type'] = $this->school_m->get_staff_type();
-		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
-		$this->data['description'] = 'Section D (School Employees Detail)';
-		$this->data['view'] = 'forms/section_d/section_d';
-		$this->load->view('layout', $this->data);
-	}
 
 	public function add_employee_date()
 	{
@@ -332,45 +376,7 @@ class Form extends MY_Controller
 	}
 
 
-	public function section_e($session_id)
-	{
 
-		$this->data['session_id'] = $session_id = (int) $session_id;
-		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
-		                                                  WHERE sessionYearId = $session_id")->result()[0];
-		$userId = $this->session->userdata('userId');
-		$query = "SELECT 
-		`school`.`schoolId` AS `school_id`
-					, `schools`.`schoolId` AS `schools_id`
-					, `school`.`session_year_id`
-					, `schools`.`registrationNumber`
-					, `schools`.`schoolName`
-					, `schools`.`yearOfEstiblishment`
-					, `schools`.`school_type_id`
-					, `schools`.`gender_type_id` , `school`.`reg_type_id`
-					, `schools`.`level_of_school_id`
-				FROM
-					`schools`
-					INNER JOIN `school` 
-						ON (`schools`.`schoolId` = `school`.`schools_id`)
-						WHERE `school`.`session_year_id`='" . $session_id . "'
-						AND `schools`.`owner_id`='" . $userId . "'";
-
-
-		$this->data['school'] =  $this->db->query($query)->result()[0];
-		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
-
-		$query = "SELECT classes_ids FROM `levelofinstitute`  WHERE levelofInstituteId='" . $this->data['school']->level_of_school_id . "'";
-		$classes_ids = $this->db->query($query)->result()[0]->classes_ids;
-		$query = "SELECT * FROM class WHERE classId IN(" . $classes_ids . ")";
-		$query = "SELECT * FROM class ";
-		$this->data['classes'] = $this->db->query($query)->result();
-
-		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
-		$this->data['description'] = 'Section E (School Fee Detail)';
-		$this->data['view'] = 'forms/section_e/section_e';
-		$this->load->view('layout', $this->data);
-	}
 
 	public function update_class_fee_from()
 	{
@@ -429,7 +435,7 @@ class Form extends MY_Controller
 					, `schools`.`registrationNumber`
 					, `schools`.`schoolName`
 					, `schools`.`yearOfEstiblishment`
-					, `schools`.`school_type_id`
+					, `schools`.`level_of_school_id`
 					, `schools`.`gender_type_id` , `school`.`reg_type_id`
 				FROM
 					`schools`
@@ -441,11 +447,11 @@ class Form extends MY_Controller
 
 		$this->data['school'] =  $this->db->query($query)->result()[0];
 		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
-
-		$school_type_id = $this->data['school']->school_type_id;
-		$gender_type_id = $this->data['school']->gender_type_id;
+		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
+		$this->data['form_status'] = $this->db->query($query)->result()[0];
+		$level_of_school_id = $this->data['school']->level_of_school_id;
 		$query = "SELECT classes_ids FROM `levelofinstitute` 
-		          WHERE levelofInstituteId='" . $school_type_id . "'";
+		          WHERE levelofInstituteId='" . $level_of_school_id . "'";
 		$classes_ids = $this->db->query($query)->result()[0]->classes_ids;
 		$query = "SELECT * FROM class WHERE classId IN(" . $classes_ids . ")";
 
@@ -453,7 +459,7 @@ class Form extends MY_Controller
 		$this->data['ages'] = $this->db->query("SELECT * FROM age")->result();
 
 		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
-		$this->data['description'] = 'Apply For Renewal';
+		$this->data['description'] = '';
 		$this->data['view'] = 'forms/section_c/section_c';
 		$this->load->view('layout', $this->data);
 	}
@@ -511,8 +517,8 @@ class Form extends MY_Controller
 		           AND class_id ='" . $class_id . "' AND gender_id ='" . $gender_id . "' ";
 		$this->db->query($query);
 
-		$class_ages = array_filter($this->input->post("class_age"));
-
+		//$class_ages = array_filter($this->input->post("class_age"));
+		$class_ages = $this->input->post("class_age");
 		foreach ($class_ages as $age_id => $enrolled) {
 			$inputs['age_id'] = $age_id;
 			$inputs['class_id'] = $class_id;
@@ -578,6 +584,10 @@ class Form extends MY_Controller
 
 		$this->data['school'] =  $this->db->query($query)->result()[0];
 		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
+
+		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
+		$this->data['form_status'] = $this->db->query($query)->result()[0];
+
 		$this->load->model("school_m");
 		$this->data['security_status'] = $this->school_m->get_security_status();
 		$this->data['security_provided'] = $this->school_m->get_security_provided();
@@ -587,7 +597,7 @@ class Form extends MY_Controller
 		$this->data['school_security_measures'] = $this->db->where('school_id', $school_id)->get('security_measures')->result()[0];
 
 		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
-		$this->data['description'] = 'Apply For Renewal';
+		$this->data['description'] = '';
 		$this->data['view'] = 'forms/section_f/section_f';
 		$this->load->view('layout', $this->data);
 	}
@@ -611,6 +621,9 @@ class Form extends MY_Controller
 		$affected_row = $this->db->affected_rows();
 
 		if ($affected_row) {
+			$form_input['form_f_status'] = 1;
+			$this->db->where('school_id', $school_id);
+			$this->db->update('forms_process', $form_input);
 
 			$this->session->set_flashdata('msg', 'Security Measures Successfully Changed.');
 			$session_id = (int) $this->input->post('session_id');
@@ -652,6 +665,10 @@ class Form extends MY_Controller
 
 		$this->data['school'] =  $this->db->query($query)->result()[0];
 		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
+
+		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
+		$this->data['form_status'] = $this->db->query($query)->result()[0];
+
 		$this->load->model("school_m");
 		$this->data['building_structure'] = $this->school_m->get_building_structure();
 		$this->data['hazards_surrounded'] = $this->school_m->get_hazards_surrounded();
@@ -669,7 +686,7 @@ class Form extends MY_Controller
 		$this->data['unsafe_ids'] = $unsafe_ids;
 
 		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
-		$this->data['description'] = 'Apply For Renewal';
+		$this->data['description'] = '';
 		$this->data['view'] = 'forms/section_g/section_g';
 		$this->load->view('layout', $this->data);
 	}
@@ -715,6 +732,10 @@ class Form extends MY_Controller
 			$insert_id = $this->db->insert_id();
 		}
 		if ($query_result > 0) {
+			$form_input['form_g_status'] = 1;
+			$this->db->where('school_id', $school_id);
+			$this->db->update('forms_process', $form_input);
+
 			$this->session->set_flashdata('msg', 'Hazards with Associated Risks.');
 			$session_id = (int) $this->input->post('session_id');
 			redirect("form/section_g/$session_id");
@@ -754,11 +775,15 @@ class Form extends MY_Controller
 
 		$this->data['school'] =  $this->db->query($query)->result()[0];
 		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
+
+		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
+		$this->data['form_status'] = $this->db->query($query)->result()[0];
+
 		$this->load->model("school_m");
 		$this->data['school_fee_concession'] = $this->school_m->fee_concession_by_school_id($school_id);
 
 		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
-		$this->data['description'] = 'Apply For Renewal';
+		$this->data['description'] = '';
 		$this->data['view'] = 'forms/section_h/section_h';
 		$this->load->view('layout', $this->data);
 	}
@@ -786,6 +811,10 @@ class Form extends MY_Controller
 			$input['school_id'] = (int) $school_id;
 			$this->db->insert('fee_concession', $input);
 		}
+
+		$form_input['form_h_status'] = 1;
+		$this->db->where('school_id', $school_id);
+		$this->db->update('forms_process', $form_input);
 
 		$this->session->set_flashdata('msg', 'Hazards with Associated Risks.');
 		$session_id = (int) $this->input->post('session_id');
@@ -833,7 +862,8 @@ class Form extends MY_Controller
 
 		$this->data['school'] =  $this->db->query($query)->result()[0];
 		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
-
+		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
+		$this->data['form_status'] = $this->db->query($query)->result()[0];
 
 		$query = "SELECT session_id, last_date, fine_percentage FROM `session_fee_submission_dates` 
 		               WHERE session_id= $session_id AND last_date >='" . date('Y-m-d') . "' 
@@ -843,7 +873,7 @@ class Form extends MY_Controller
 		$query = "SELECT * FROM `session_fee_submission_dates` WHERE session_id = '" . $session_id . "'";
 		$this->data['session_fee_submission_dates'] = $this->db->query($query)->result();
 
-		echo $query = "SELECT MAX(tuitionFee) as max_tution_fee  FROM `fee` WHERE school_id= '" . $school_id . "'";
+		$query = "SELECT MAX(tuitionFee) as max_tution_fee  FROM `fee` WHERE school_id= '" . $school_id . "'";
 		$this->data['max_tuition_fee'] = $max_tuition_fee = preg_replace(
 			'/[^0-9.]/',
 			'',
@@ -854,10 +884,9 @@ class Form extends MY_Controller
 		$this->data['fee_sturucture'] = $this->db->query($query)->result()[0];
 
 
-		$this->data['title'] = 'Apply For Renewal';
-		$this->data['description'] = 'Apply For Renewal';
-		$this->data['view'] = 'apply/renewal';
-		$this->data['view'] = 'forms/submit_form/submit_form';
+		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
+		$this->data['description'] = '';
+		$this->data['view'] = 'forms/submit_form/registration';
 		$this->load->view('layout', $this->data);
 	}
 
@@ -871,5 +900,48 @@ class Form extends MY_Controller
 			$this->session->set_flashdata('msg_error', 'You are not applied for this session.');
 			redirect('school_dashboard');
 		}
+	}
+
+	public function complete_section_d($session_id)
+	{
+		$session_id = (int) $session_id;
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT 
+		`school`.`schoolId` AS `school_id` FROM
+					`schools`
+					INNER JOIN `school` 
+						ON (`schools`.`schoolId` = `school`.`schools_id`)
+						WHERE `school`.`session_year_id`='" . $session_id . "'
+						AND `schools`.`owner_id`='" . $userId . "'";
+
+
+		$this->data['school'] =  $this->db->query($query)->result()[0];
+		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
+		$form_input['form_d_status'] = 1;
+		$this->db->where('school_id', $school_id);
+		$this->db->update('forms_process', $form_input);
+		$this->session->set_flashdata('msg_success', 'Section D Data Submit Successfully.');
+		redirect("form/section_d/$session_id");
+	}
+	public function complete_section_e($session_id)
+	{
+		$session_id = (int) $session_id;
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT 
+		`school`.`schoolId` AS `school_id` FROM
+					`schools`
+					INNER JOIN `school` 
+						ON (`schools`.`schoolId` = `school`.`schools_id`)
+						WHERE `school`.`session_year_id`='" . $session_id . "'
+						AND `schools`.`owner_id`='" . $userId . "'";
+
+
+		$this->data['school'] =  $this->db->query($query)->result()[0];
+		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
+		$form_input['form_e_status'] = 1;
+		$this->db->where('school_id', $school_id);
+		$this->db->update('forms_process', $form_input);
+		$this->session->set_flashdata('msg_success', 'Section D Data Submit Successfully.');
+		redirect("form/section_e/$session_id");
 	}
 }

@@ -1,38 +1,3 @@
-<style type="text/css">
-  .error {
-    color: red;
-    font-weight: bold;
-    font-size: 12px;
-  }
-
-  .form-popup {
-    display: none;
-    position: fixed;
-    bottom: 0;
-    right: 15px;
-    border: 3px solid #f1f1f1;
-    z-index: 9;
-  }
-
-  .form-container {
-    max-width: 550px;
-    padding: 10px;
-    background-color: #ffe6e6;
-  }
-
-  .form-container input[type=number] {
-    width: 30%;
-    padding: 15px;
-    margin: 5px 0 22px 0;
-    border: 1px;
-    background: white;
-  }
-  }
-
-  .form-container label {
-    width: 10%;
-  }
-</style>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -74,18 +39,23 @@
                 <?php echo "Established In: " . $school->yearOfEstiblishment; ?>
                 <br>
               <?php endif; ?>
+              <?php if (!empty($school->levelofInstituteTitle)) : ?>
+                <?php echo "Institute Level: " . $school->levelofInstituteTitle; ?>
+                <br>
+              <?php endif; ?>
+
+              <?php if (!empty($school->genderOfSchoolTitle)) : ?>
+                <?php echo "Gender Education: " . $school->genderOfSchoolTitle; ?>
+                <br>
+              <?php endif; ?>
+
               <?php if (!empty($school->telePhoneNumber)) : ?>
                 <?php echo "Tele-Phone #: " . $school->telePhoneNumber; ?>
                 <br>
               <?php endif; ?>
-              <?php if (!empty($school->genderOfSchoolTitle)) : ?>
-                <?php echo "School For: " . $school->genderOfSchoolTitle; ?>
-                <br>
-              <?php endif; ?>
-              <?php if (!empty($school->levelofInstituteTitle)) : ?>
-                <?php echo "School Level: " . $school->levelofInstituteTitle; ?>
-                <br>
-              <?php endif; ?>
+
+
+
               <?php if (!empty($school->typeTitle)) : ?>
                 <?php echo "School System: " . $school->typeTitle; ?>
                 <br>

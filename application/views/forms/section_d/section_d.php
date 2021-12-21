@@ -62,7 +62,7 @@
               <p>
               <h4 style="border-left: 20px solid #9FC8E8; padding-left:5px"><strong><?php echo @$description; ?></strong><br />
                 <small style="color: red;">
-                  Note:
+                  Note: Please enter Institute Principal, Vice Principal, All Teaching and Non Teaching Staffs and others detail for session: <?php echo $session_detail->sessionYearTitle; ?>.
                 </small>
               </h4>
 
@@ -192,9 +192,14 @@
               <div style=" font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
                 <a class="btn btn-link pull-left" href="<?php echo site_url("form/section_c/$session_id"); ?>">
                   <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Section C ( Students Enrolment ) </a>
-                <input class="btn btn-primary" type="submit" name="" value="Add Section D Data" />
-                <a class="btn btn-link pull-right" href="<?php echo site_url("form/section_e/$session_id"); ?>">
-                  Section E ( School Fee Detail )<i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
+                <?php if (count($school_staff) >= 5) { ?>
+                  <a href="<?php echo site_url("form/complete_section_d/$session_id"); ?>" class="btn btn-primary">Add Section D Data</a>
+                <?php } else { ?> <br /> <?php } ?>
+
+                <?php if ($form_status->form_d_status == 1) { ?>
+                  <a class="btn btn-link pull-right" href="<?php echo site_url("form/section_e/$session_id"); ?>">
+                    Section E ( School Fee Detail )<i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
+                <?php } ?>
               </div>
             </div>
 
