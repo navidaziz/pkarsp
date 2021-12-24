@@ -137,7 +137,7 @@
 
 
                   <?php if ($form_status->form_h_status == 1) { ?>
-                    <a class="btn btn-link pull-right" href="<?php echo site_url("form/submit_form/$session_id"); ?>"> Submit ( Submit Form ) <i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
+                    <a class="btn btn-link pull-right" href="<?php echo site_url("form/submit_bank_challan/$session_id"); ?>"> Submit ( Submit Form ) <i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
                   <?php } ?>
                 </div>
               </div>

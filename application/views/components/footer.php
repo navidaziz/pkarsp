@@ -243,6 +243,19 @@ $(document).ready(function(){
 <script src="<?php echo base_url('assets/lib/plugins/iCheck'); ?>/icheck.min.js"></script>
 <!-- Select2 -->
 <script src="<?php echo base_url('assets/lib'); ?>/select2/dist/js/select2.full.min.js"></script>
+
+<script src="<?php echo site_url("assets/" . ADMIN_DIR); ?>/js/jquery/jquery-2.0.3.min.js"></script>
+<!-- JQUERY UI-->
+<script src="<?php echo site_url("assets/" . ADMIN_DIR); ?>/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
+<!-- BOOTSTRAP -->
+<script src="<?php echo site_url("assets/" . ADMIN_DIR); ?>/bootstrap-dist/js/bootstrap.min.js"></script>
+
+<!-- UNIFORM -->
+<script type="text/javascript" src="<?php echo site_url("assets/" . ADMIN_DIR); ?>/js/uniform/jquery.uniform.min.js"></script>
+<!-- BACKSTRETCH -->
+<script type="text/javascript" src="<?php echo site_url("assets/" . ADMIN_DIR); ?>/js/backstretch/jquery.backstretch.min.js"></script>
+<!-- CUSTOM SCRIPT -->
+<script src="<?php echo site_url("assets/" . ADMIN_DIR); ?>/js/script.js"></script>
 <script src="<?php echo base_url('assets/lib/plugins/input-mask/jquery.inputmask.js'); ?>"></script>
 <script type="text/javascript">
   //Initialize Select2 Elements

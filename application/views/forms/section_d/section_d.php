@@ -84,28 +84,39 @@
                 <input type="hidden" name="schools_id" value="<?php echo $school->schoolId; ?>" />
                 <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
                 <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
+                <?php
+                $query = "SELECT COUNT(*) total FROM `school_staff` 
+                WHERE  lower(`school_staff`.`schoolStaffDesignition`) = 'principal' 
+                AND school_id = '" . $school_id . "'";
+                $total_pricipal = $this->db->query($query)->result()[0]->total;
+                ?>
+
+
                 <table class="table">
+
                   <thead>
+
                     <tr>
-                      <th>#</th>
-                      <th>Name</th>
-                      <th>F/Husband Name</th>
-                      <th>CNIC</th>
-                      <th>Gender</th>
-                      <th>Type</th>
-                      <th>Academic</th>
-                      <th>Professional</th>
-                      <th>Training In Months</th>
-                      <th>Experience In Months</th>
-                      <th>Designation</th>
-                      <th>Appointment At</th>
-                      <th>Net.Pay</th>
-                      <th>Annual Increament</th>
-                      <th>Action</th>
+                      <td>#</th>
+                      <td>Name</th>
+                      <td>F/Husband Name</th>
+                      <td>CNIC</th>
+                      <td>Gender</th>
+                      <td>Type</th>
+                      <td>Academic</th>
+                      <td>Professional</th>
+                      <td>Training In Months</th>
+                      <td>Experience In Months</th>
+                      <td>Designation</th>
+                      <td>Appointment At</th>
+                      <td>Net.Pay</th>
+                      <td>Annual Increament</th>
+                      <td>Action</th>
                     </tr>
 
                   </thead>
                   <tbody id="staff_tbody">
+
                     <tr>
                       <td>#</td>
                       <td><input type="text" name="schoolStaffName" style="width: 130px;" required /> </th>
@@ -135,7 +146,7 @@
                       <td><input type="text" name="schoolStaffQaulificationProfessional" style="width: 70px;" required /></td>
                       <td><input type="number" name="TeacherTraining" style="width: 70px;" required /></td>
                       <td><input type="number" name="TeacherExperience" style="width: 70px;" required /></td>
-                      <td><input type="text" name="schoolStaffDesignition" style="width: 70px;" required /></td>
+                      <td><input <?php if ($total_pricipal == 0) { ?> readonly value="Principal" <?php } ?> type="text" name="schoolStaffDesignition" style="width: 70px;" required /></td>
                       <td><input type="date" name="schoolStaffAppointmentDate" style="width: 122px;" required /></td>
                       <td><input type="number" name="schoolStaffNetPay" style="width: 70px;" required /></td>
                       <td><input placeholder="" type="number" name="schoolStaffAnnualIncreament" style="width: 50px;" required /> <strong>%</strong></td>

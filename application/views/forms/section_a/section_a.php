@@ -53,12 +53,6 @@
       <?php $this->load->view('forms/navigation_bar');   ?>
 
       <div class="box box-primary box-solid">
-        <div class="box-header with-border">
-          <h3 class="box-title"><?php echo @$description; ?></h3>
-          <!-- /.box-tools -->
-        </div>
-        <!-- /.box-header -->
-
 
         <div class="box-body">
 

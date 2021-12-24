@@ -53,17 +53,16 @@
       <?php $this->load->view('forms/navigation_bar');   ?>
 
       <div class="box box-primary box-solid">
-        <div class="box-header with-border">
-          <h3 class="box-title"><?php echo @$description; ?></h3>
-          <!-- /.box-tools -->
-        </div>
-        <!-- /.box-header -->
-
 
         <div class="box-body">
 
 
           <div class="row">
+            <div class="col-md-12">
+              <h4 style="border-left: 20px solid #9FC8E8; padding-left:5px"><strong>SECTION B (PHYSICAL FACILITIES)</strong><br />
+
+              </h4>
+            </div>
 
             <form class="form-horizontal" method="post" id="Form1" action="<?php echo base_url('form/update_form_b_data'); ?>">
               <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />

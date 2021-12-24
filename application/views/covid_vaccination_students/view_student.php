@@ -71,12 +71,12 @@
                   <strong> Ist Dose
                   </strong>
                   <br />
-                  <input id="first_dose" min="" max="<?php echo date("Y") - 2; ?>-12-31" style="width: 125px;" type="date" name="first_dose" value="" />
+                  <input id="first_dose" style="width: 125px;" type="date" name="first_dose" value="" />
                   <br />
                   <strong> 2nd Dose
                   </strong>
                   <br />
-                  <input id="second_dose" min="" max="<?php echo date("Y") - 2; ?>-12-31" style="width: 125px;" type="date" name="second_dose" value="" />
+                  <input id="second_dose" style="width: 125px;" type="date" name="second_dose" value="" />
                   <br />
                 </div>
                 <div id="remarks" style="display: none;">

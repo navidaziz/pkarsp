@@ -310,11 +310,12 @@
                   <?php if ($registration) { ?>
                     <?php if ($registration[0]->status == 0) { ?>
                       <a class="btn btn-success" href="<?php echo site_url("form/section_b/$session->sessionYearId"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Registration Process <?php echo $session->sessionYearTitle; ?></a>
-                    <?php } else {
-                      echo "Inprogress ";
-                    } ?>
+                    <?php }   ?>
+                    <?php if ($registration[0]->status == 2) { ?>
+                      <a class="btn btn-success" href="<?php echo site_url("online_application/status/$session->sessionYearId"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Bank Challan Verification Session <?php echo $session->sessionYearTitle; ?></a>
+                    <?php } ?>
                   <?php } else { ?>
-                    <a class="btn btn-primary" href="<?php echo site_url("apply/registration/$session->sessionYearId"); ?>">Apply for Registraion <?php echo $session->sessionYearTitle; ?></a>
+                    <a class="btn btn-primary" href="<?php echo site_url("apply/registration/$session->sessionYearId"); ?>">Apply for Registraion. <?php echo $session->sessionYearTitle; ?></a>
                   <?php } ?>
 
                 </div>

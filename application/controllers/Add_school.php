@@ -62,6 +62,7 @@ class Add_school extends Admin_Controller
 
 	public function process_data()
 	{
+
 		$userId = $this->session->userdata('userId');
 		$woner_data['userTitle'] = $this->input->post('userTitle');
 		$woner_data['contactNumber'] = $this->input->post('contactNumber');
@@ -89,17 +90,38 @@ class Add_school extends Admin_Controller
 		unset($school_date['bankBranchCode']);
 		unset($school_date['bankAccountName']);
 
+		if ($school_date['uc_id'] != 0) {
+			unset($school_date['uc_text']);
+		}
+		if ($school_date['biseRegister'] == 'No') {
+			unset($school_date['biseregistrationNumber']);
+			unset($school_date['primaryRegDate']);
+			unset($school_date['middleRegDate']);
+			unset($school_date['highRegDate']);
+			unset($school_date['interRegDate']);
+		}
+
+		if ($school_date['biseAffiliated'] == 'No') {
+			unset($school_date['bise_id']);
+			unset($school_date['otherBiseName']);
+		} else {
+			if ($school_date['bise_id'] != 10) {
+				unset($school_date['otherBiseName']);
+			}
+		}
+
 		$this->db->insert('schools', $school_date);
 		$school_id = $this->db->insert_id();
 
-
-		$bank_data['accountTitle'] = $this->input->post('accountTitle');
-		$bank_data['bankAccountNumber'] = $this->input->post('bankAccountNumber');
-		$bank_data['bankBranchAddress'] = $this->input->post('bankBranchAddress');
-		$bank_data['bankBranchCode'] = $this->input->post('bankBranchCode');
-		$bank_data['bankAccountName'] = $this->input->post('bankAccountName');
-		$bank_data['school_id'] = $school_id;
-		$this->db->insert('bank_account', $bank_data);
+		if ($school_date['banka_acount_details'] == 'Yes') {
+			$bank_data['accountTitle'] = $this->input->post('accountTitle');
+			$bank_data['bankAccountNumber'] = $this->input->post('bankAccountNumber');
+			$bank_data['bankBranchAddress'] = $this->input->post('bankBranchAddress');
+			$bank_data['bankBranchCode'] = $this->input->post('bankBranchCode');
+			$bank_data['bankAccountName'] = $this->input->post('bankAccountName');
+			$bank_data['school_id'] = $school_id;
+			$this->db->insert('bank_account', $bank_data);
+		}
 
 		$this->session->set_userdata('role_homepage_uri', 'school_dashboard');
 		redirect('school_dashboard');

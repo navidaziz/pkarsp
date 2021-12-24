@@ -193,10 +193,18 @@ class Form extends MY_Controller
 	public function update_form_b_data()
 	{
 		$posts = $this->input->post();
-
-
-		$posts = $this->input->post();
 		$school_id = $posts['school_id'];
+		$this->db->where('school_id', $school_id);
+		$this->db->delete(array(
+			'physical_facilities',
+			'physical_facilities_physical',
+			'physical_facilities_academic',
+			'physical_facilities_co_curricular',
+			'physical_facilities_others'
+		));
+
+
+
 		$physical_facilities = array(
 			'building_id' => $posts['building_id'],
 			'numberOfClassRoom' => $posts['numberOfClassRoom'],
@@ -208,8 +216,6 @@ class Form extends MY_Controller
 			'numberOfLatrines' => $posts['numberOfLatrines'],
 			'school_id' => $posts['school_id']
 		);
-		$this->db->where('school_id', $school_id);
-		$this->db->delete(array('physical_facilities', 'physical_facilities_physical', 'physical_facilities_academic', 'physical_facilities_co_curricular', 'physical_facilities_others'));
 
 
 
@@ -406,12 +412,12 @@ class Form extends MY_Controller
 				AND class_id ='" . $class_id . "'";
 		$this->db->query($query);
 
-		$input['school_id'] = $this->input->post('school_id');
-		$input['class_id'] = $this->input->post('class_id');
-		$input['addmissionFee'] = $this->input->post('addmissionFee');
-		$input['tuitionFee'] = $this->input->post('tuitionFee');
-		$input['securityFund'] = $this->input->post('securityFund');
-		$input['otherFund'] = $this->input->post('otherFund');
+		$input['school_id'] = (int) $this->input->post('school_id');
+		$input['class_id'] = (int) $this->input->post('class_id');
+		$input['addmissionFee'] = (int) $this->input->post('addmissionFee');
+		$input['tuitionFee'] = (int) $this->input->post('tuitionFee');
+		$input['securityFund'] = (int) $this->input->post('securityFund');
+		$input['otherFund'] = (int) $this->input->post('otherFund');
 		$this->db->insert('fee', $input);
 
 		$this->session->set_flashdata('msg', 'Class Fee Detail Add Successfully.');
@@ -447,6 +453,9 @@ class Form extends MY_Controller
 
 		$this->data['school'] =  $this->db->query($query)->result()[0];
 		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
+
+		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
+
 		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
 		$this->data['form_status'] = $this->db->query($query)->result()[0];
 		$level_of_school_id = $this->data['school']->level_of_school_id;
@@ -585,6 +594,8 @@ class Form extends MY_Controller
 		$this->data['school'] =  $this->db->query($query)->result()[0];
 		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
 
+		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
+
 		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
 		$this->data['form_status'] = $this->db->query($query)->result()[0];
 
@@ -665,6 +676,8 @@ class Form extends MY_Controller
 
 		$this->data['school'] =  $this->db->query($query)->result()[0];
 		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
+
+		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
 
 		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
 		$this->data['form_status'] = $this->db->query($query)->result()[0];
@@ -776,6 +789,8 @@ class Form extends MY_Controller
 		$this->data['school'] =  $this->db->query($query)->result()[0];
 		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
 
+		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
+
 		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
 		$this->data['form_status'] = $this->db->query($query)->result()[0];
 
@@ -837,9 +852,10 @@ class Form extends MY_Controller
 		}
 	}
 
-	public function submit_form($session_id)
+	public function submit_bank_challan($session_id)
 	{
 		$this->data['session_id'] = $session_id = (int) $session_id;
+
 		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
 		                                                  WHERE sessionYearId = $session_id")->result()[0];
 		$userId = $this->session->userdata('userId');
@@ -852,6 +868,8 @@ class Form extends MY_Controller
 					, `schools`.`yearOfEstiblishment`
 					, `schools`.`school_type_id`
 					, `schools`.`gender_type_id` , `school`.`reg_type_id`
+					, `schools`.`level_of_school_id`
+					, `schools`.`yearOfEstiblishment`
 				FROM
 					`schools`
 					INNER JOIN `school` 
@@ -862,6 +880,9 @@ class Form extends MY_Controller
 
 		$this->data['school'] =  $this->db->query($query)->result()[0];
 		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
+
+		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
+
 		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
 		$this->data['form_status'] = $this->db->query($query)->result()[0];
 
@@ -886,19 +907,26 @@ class Form extends MY_Controller
 
 		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
 		$this->data['description'] = '';
-		$this->data['view'] = 'forms/submit_form/registration';
+		$this->data['view'] = 'forms/submit_bank_challan/registration';
 		$this->load->view('layout', $this->data);
 	}
 
 	private  function check_school_session_entry($session_id, $school_id)
 	{
-		$query = "SELECT * FROM school WHERE schools_id = '" . $school_id . "' and session_year_id= '" . $session_id . "'";
+		$query = "SELECT * FROM school 
+		          WHERE schools_id = '" . $school_id . "' 
+				  AND session_year_id= '" . $session_id . "'";
 		$school_session_entry = $this->db->query($query)->result();
 
 
 		if (!$school_session_entry) {
 			$this->session->set_flashdata('msg_error', 'You are not applied for this session.');
 			redirect('school_dashboard');
+		} else {
+			$school_session_detail = $school_session_entry[0];
+			if ($school_session_detail->status != 0) {
+				redirect('online_application/status/$session_id');
+			}
 		}
 	}
 
@@ -917,6 +945,9 @@ class Form extends MY_Controller
 
 		$this->data['school'] =  $this->db->query($query)->result()[0];
 		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
+
+		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
+
 		$form_input['form_d_status'] = 1;
 		$this->db->where('school_id', $school_id);
 		$this->db->update('forms_process', $form_input);
@@ -938,10 +969,44 @@ class Form extends MY_Controller
 
 		$this->data['school'] =  $this->db->query($query)->result()[0];
 		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
+
+		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
+
 		$form_input['form_e_status'] = 1;
 		$this->db->where('school_id', $school_id);
 		$this->db->update('forms_process', $form_input);
 		$this->session->set_flashdata('msg_success', 'Section D Data Submit Successfully.');
 		redirect("form/section_e/$session_id");
+	}
+
+
+	public function add_bank_challan()
+	{
+		$session_id = (int) $this->input->post('session_id');
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT 
+		`school`.`schoolId` AS `school_id` FROM
+					`schools`
+					INNER JOIN `school` 
+						ON (`schools`.`schoolId` = `school`.`schools_id`)
+						WHERE `school`.`session_year_id`='" . $session_id . "'
+						AND `schools`.`owner_id`='" . $userId . "'";
+
+
+		$this->data['school'] =  $this->db->query($query)->result()[0];
+		$school_id = $this->data['school']->school_id;
+		$challan_detail['challan_for'] = $this->input->post('challan_for');
+		$challan_detail['challan_no'] = $this->input->post('challan_no');
+		$challan_detail['challan_date'] = $this->input->post('challan_date');
+		$challan_detail['session_id'] = $session_id;
+		$challan_detail['school_id'] = $school_id;
+		$challan_detail['created_by'] = $userId;
+
+		$this->db->insert('bank_challans', $challan_detail);
+		$this->db->where('schoolId', $school_id);
+		$input['status'] = 2;
+		$this->db->update('school', $input);
+		$this->session->set_flashdata('msg_success', 'Bank Challan Submit Successfully.');
+		redirect("form/submit_bank_challan/$session_id");
 	}
 }
