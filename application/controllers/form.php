@@ -925,7 +925,7 @@ class Form extends MY_Controller
 		} else {
 			$school_session_detail = $school_session_entry[0];
 			if ($school_session_detail->status != 0) {
-				redirect('online_application/status/$session_id');
+				redirect("online_application/status/$session_id");
 			}
 		}
 	}

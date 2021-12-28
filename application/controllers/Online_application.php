@@ -23,13 +23,24 @@ class Online_application extends MY_Controller
 					, `schools`.`schoolName`
 					, `schools`.`yearOfEstiblishment`
 					, `schools`.`school_type_id`
-					, `schools`.`gender_type_id` , `school`.`reg_type_id`
+					, `schools`.`gender_type_id` 
+					, `school`.`reg_type_id`
+					, `school`.`status`
+					, `levelofinstitute`.`levelofInstituteTitle`
+					, `gender`.`genderTitle`
+					, `reg_type`.`regTypeTitle`
 				FROM
 					`schools`
-					INNER JOIN `school` 
-						ON (`schools`.`schoolId` = `school`.`schools_id`)
-						WHERE `school`.`session_year_id`='" . $session_id . "'
-						AND `schools`.`owner_id`='" . $userId . "'";
+					, `school`
+					,`levelofinstitute`
+					,`gender`
+					,`reg_type` 
+				WHERE  `levelofinstitute`.`levelofInstituteId` = `school`.`level_of_school_id`
+				AND `gender`.`genderId` = `school`.`gender_type_id`
+				AND `reg_type`.`regTypeId` = `school`.`reg_type_id`
+				AND `schools`.`schoolId` = `school`.`schools_id`
+				AND  `school`.`session_year_id`='" . $session_id . "'
+				AND `schools`.`owner_id`='" . $userId . "'";
 
 
 		$this->data['school'] =  $this->db->query($query)->result()[0];
@@ -42,9 +53,9 @@ class Online_application extends MY_Controller
 
 
 
-		$this->data['title'] = 'Apply For';
+		$this->data['title'] = 'Applied For';
 		$this->data['description'] = '';
-		$this->data['view'] = 'forms/section_h/section_h';
+		$this->data['view'] = 'online_application/status';
 		$this->load->view('layout', $this->data);
 	}
 }

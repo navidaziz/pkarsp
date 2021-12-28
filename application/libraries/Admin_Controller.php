@@ -19,12 +19,12 @@ class Admin_Controller extends MY_Controller
         $this->data['method_name'] = $this->method_name = $this->router->fetch_method();
         $this->data['menu_arr'] = $this->mr_m->roleMenu($this->session->userdata("role_id"));
 
-        $this->load->model("system_global_setting_model");
-        $system_global_setting_id = 1;
-        $fields = $fields = array("sytem_admin_logo", "system_title", "system_sub_title", "sytem_public_logo");
-        $join_table = $join_table = array();
-        $where = "system_global_setting_id = $system_global_setting_id";
-        $this->data["system_global_settings"] = $this->system_global_setting_model->joinGet($fields, "system_global_settings", $join_table, $where, false, true);
+        // $this->load->model("system_global_setting_model");
+        // $system_global_setting_id = 1;
+        // $fields = $fields = array("sytem_admin_logo", "system_title", "system_sub_title", "sytem_public_logo");
+        // $join_table = $join_table = array();
+        // $where = "system_global_setting_id = $system_global_setting_id";
+        // $this->data["system_global_settings"] = $this->system_global_setting_model->joinGet($fields, "system_global_settings", $join_table, $where, false, true);
 
 
 

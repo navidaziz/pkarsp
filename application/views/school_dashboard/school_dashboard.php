@@ -31,7 +31,7 @@
 
         <div class="row">
           <div class="col-md-3">
-            <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 10px; padding: 10px; background-color: white;">
+            <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
               <h2>School ID: <?php echo $school->schoolId ?></h2>
               <h3>Reg. ID: <?php echo $school->registrationNumber ?></h3>
               <br />
@@ -137,7 +137,7 @@
           </div>
 
           <div class="col-md-4">
-            <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 10px; padding: 10px; background-color: white;">
+            <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
               <?php
               $query =
                 "SELECT COUNT(`message_for_all`.`message_id`) as total FROM `message_for_all`
@@ -177,11 +177,13 @@
                 <?php endforeach; ?>
 
               </table>
-              <div style="text-align: center;">
-                <a class="btn btn-primary btn-sm" href="<?php echo site_url('messages/inbox'); ?>"><i class="fa fa-envelope-o"></i> All Inbox Messages</a>
-              </div>
+              <?php if ($total_messages > 6) { ?>
+                <div style="text-align: center;">
+                  <a class="btn btn-primary btn-sm" href="<?php echo site_url('messages/inbox'); ?>"><i class="fa fa-envelope-o"></i> All Inbox Messages</a>
+                </div>
+              <?php } ?>
             </div>
-            <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 10px; padding: 10px; background-color: white;">
+            <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
 
               <?php $query = "SELECT COUNT(*) as total FROM `message_for_all` 
                      WHERE `message_for_all`.`select_all`='yes'";
@@ -216,15 +218,16 @@
 
                 <?php endforeach; ?>
               </table>
-              <div style="text-align: center;">
-                <a class="btn btn-success btn-sm" href="<?php echo site_url('messages/inbox'); ?>"><i class="fa fa-bell-o"></i> All Notifications</a>
-              </div>
-
+              <?php if ($total_notifications > 6) { ?>
+                <div style="text-align: center;">
+                  <a class="btn btn-success btn-sm" href="<?php echo site_url('messages/inbox'); ?>"><i class="fa fa-bell-o"></i> All Notifications</a>
+                </div>
+              <?php } ?>
             </div>
           </div>
 
           <div class="col-md-5">
-            <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 10px; padding: 10px; background-color: white;">
+            <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
 
 
               <?php if ($school->registrationNumber) { ?>
@@ -320,6 +323,23 @@
 
                 </div>
               <?php  } ?>
+
+
+            </div>
+
+            <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
+              <h4>Other Online Requests</h4>
+              <a class="btn btn-primary" href="<?php echo site_url('change/of_name'); ?>">
+                <i class="fa fa-edit"></i>
+                Change of Name</a>
+              <a class="btn btn-success" href="<?php echo site_url('change/of_building'); ?>">
+                <i class="fa fa-building"></i>
+                Change of Building</a>
+
+              <a class="btn btn-warning" href="<?php echo site_url('change/of_ownership'); ?>">
+                <i class="fa fa-user" aria-hidden="true"></i>
+                Change of Ownership</a>
+
             </div>
           </div>
 
