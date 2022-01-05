@@ -35,7 +35,7 @@ class Bank_challans extends MY_Controller
 			$this->db->where('bank_challan_id', $bank_challan_id);
 			$query_result = $this->db->update('bank_challans', $input);
 			if ($query_result) {
-				$query = "SELECT session_id, school_id 
+				$query = "SELECT session_id, school_id, schools_id 
 		          FROM bank_challans 
 				  WHERE bank_challan_id = '" . $bank_challan_id . "'";
 				$school_session_detail = $this->db->query($query)->result()[0];
@@ -69,18 +69,46 @@ class Bank_challans extends MY_Controller
 			$input["total_deposit_fee"] = (float) $this->input->post("total_deposit_fee");
 			$input['verified_by'] = $this->session->userdata('userId');
 			$input['verified_date'] = date("Y-m-d h:i:sa");
+			if ($this->input->post("bise_verified")) {
+				$input['bise_tdr'] = (float) $this->input->post("bise_tdr");
+			}
 			$this->db->where('bank_challan_id', $bank_challan_id);
 			$query_result = $this->db->update('bank_challans', $input);
+
+
 			if ($query_result) {
-				$query = "SELECT session_id, school_id 
-		          FROM bank_challans 
-				  WHERE bank_challan_id = '" . $bank_challan_id . "'";
-				$school_session_detail = $this->db->query($query)->result()[0];
-				$where['schoolId'] = $school_session_detail->school_id;
-				$where['session_year_id'] = $school_session_detail->session_id;
-				$this->db->where($where);
-				$update['status'] = '3';
-				$this->db->update('school', $update);
+				$query = "SELECT `session_id`, `school_id`, `schools_id`, `challan_for` 
+						FROM bank_challans 
+						WHERE bank_challan_id = '" . $bank_challan_id . "'";
+				$bank_challan_detail = $this->db->query($query)->result()[0];
+				//here we need to change the status of renew/ registration/ and upgradation and renewal upgradation.
+				if ($bank_challan_detail->challan_for == 'Registration' or $bank_challan_detail->challan_for == 'Renewal') {
+
+					$where['schoolId'] = $bank_challan_detail->school_id;
+					$where['session_year_id'] = $bank_challan_detail->session_id;
+					$this->db->where($where);
+					$update['status'] = '3';
+					// if (
+					// 	$bank_challan_detail->challan_for == 'Registration'
+					// 	and $this->input->post("bise_verified")
+					// ) {
+					// 	$update['reg_type_id'] = '2';
+					// }
+
+					$this->db->update('school', $update);
+
+					if ($this->input->post("bise_verified")) {
+						$where = array();
+						$update = array();
+						$where['schoolId'] = $bank_challan_detail->schools_id;
+						$this->db->where($where);
+						$update['bise_verified'] = $this->input->post("bise_verified");
+						$this->db->update('schools', $update);
+					}
+				}
+
+
+
 				$this->session->set_flashdata('msg_success', 'Bank Challan Verified Successfully.');
 				redirect("bank_challans");
 			}

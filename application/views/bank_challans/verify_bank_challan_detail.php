@@ -1,6 +1,6 @@
 <div class="modal-header">
   <h4 style="border-left: 20px solid #9FC8E8;  padding-left:5px;" class="pull-left">
-    Bank Challan Detail
+    Bank Challan Bank Challan Verification
   </h4>
   <button type="button pull-right" class="close" data-dismiss="modal" aria-label="Close">
     <span aria-hidden="true">&times;</span>
@@ -18,7 +18,9 @@
     `session_year`.`sessionYearTitle`,
     `school`.`schools_id`,
     `schools`.`schoolName`,
-    `schools`.`yearOfEstiblishment`
+    `schools`.`yearOfEstiblishment`,
+    `schools`.biseRegister,
+    `schools`.biseregistrationNumber
     FROM
     `school`,
     `bank_challans`,
@@ -45,7 +47,7 @@
       </tr>
       <tr>
 
-        <td><?php echo $session_bank_challan->challan_for; ?></td>
+        <td><?php echo $session_bank_challan->challan_for; ?> - <?php echo $session_bank_challan->sessionYearTitle; ?></td>
         <td><?php echo $session_bank_challan->challan_no; ?></td>
         <td><?php echo date('d M, Y', strtotime($session_bank_challan->challan_date)); ?></td>
         <td><input onclick="$('#amount_tr').show();$('#amount_deposit').prop('required',true);$('#remarks_tr').hide();$('#remarks').prop('required',false);" type="radio" name="verified" value="yes" required /> Yes
@@ -56,74 +58,116 @@
       <tr id="amount_tr" style="display: none;">
         <td colspan="4">
           <table class="table" style="width: 100%;">
-            <tr>
-              <td>
-                Application Processing Fee:</td>
-              <td><input type="number" name="application_processing_fee" min="0" /> </td>
-            </tr>
-            <tr>
-              <td> Renewal Fee:</td>
-              <td><input type="number" name="renewal_fee" required min="0" /> </td>
-            </tr>
-            <tr>
-              <td>
-                Up-Gradation Fee:</td>
-              <td><input type="number" name="upgradation_fee" required min="0" /> </td>
-            </tr>
-            <tr>
-              <td>
-                Inspection Fee:
-              </td>
-              <td><input type="number" name="inspection_fee" required min="0" /> </td>
-            </tr>
-            <tr>
-              <td>
-                Fine:
-              </td>
-              <td><input type="number" name="fine" required min="0" /> </td>
-            </tr>
-            <tr>
-              <td>
-                Security Fee:
-              </td>
-              <td><input type="number" name="security_fee" required min="0" /> </td>
-            </tr>
-            <tr>
-              <td>
-                Late Fee:
-              </td>
-              <td><input type="number" name="late_fee" required min="0" /> </td>
-            </tr>
-            <tr>
-              <td>
-                Renewal and Up-Gradation Fee:
-              </td>
-              <td><input type="number" name="renewal_and_upgradation_fee" required min="0" /> </td>
-            </tr>
-            <tr>
-              <td>
-                Change of Name Fee:
-              </td>
-              <td><input type="number" name="change_of_name_fee" required min="0" /> </td>
-            </tr>
-            <tr>
-              <td>
-                Change of Ownership Fee:
-              </td>
-              <td><input type="number" name="change_of_ownership_fee" required min="0" /> </td>
-            </tr>
-            <tr>
-              <td>
-                Change of Building Fee:
-              </td>
-              <td><input type="number" name="change_of_building_fee" required min="0" /> </td>
-            </tr>
+            <?php if ($session_bank_challan->challan_for == 'Renewal' or $session_bank_challan->challan_for == 'Registration' or $session_bank_challan->challan_for == 'Upgradation' or $session_bank_challan->challan_for == 'Renewal Upgradation') { ?>
+              <tr>
+                <td style="width: 200px;">
+                  Application Processing Fee:</td>
+                <td><input type="number" name="application_processing_fee" min="0" required /> </td>
+              </tr>
+              <tr>
+                <td>
+                  Inspection Fee:
+                </td>
+                <td><input type="number" name="inspection_fee" required min="0" /> </td>
+              </tr>
+
+              <?php if ($session_bank_challan->challan_for == 'Renewal') { ?>
+                <tr>
+                  <td> Renewal Fee:</td>
+                  <td><input type="number" name="renewal_fee" required min="0" /> </td>
+                </tr>
+              <?php } ?>
+
+              <tr>
+                <td>
+                  Late Fee:
+                </td>
+                <td><input type="number" name="late_fee" required min="0" /> </td>
+              </tr>
+
+            <?php } ?>
+            <?php if ($session_bank_challan->challan_for == 'Registration') { ?>
+              <tr>
+                <td>
+                  Security Fee:
+                </td>
+                <td><input type="number" name="security_fee" required min="0" /> </td>
+              </tr>
+            <?php } ?>
+
+
+
+            <?php if ($session_bank_challan->challan_for == 'Upgradation') { ?>
+              <tr>
+                <td>
+                  Up-Gradation Fee:</td>
+                <td><input type="number" name="upgradation_fee" required min="0" /> </td>
+              </tr>
+            <?php } ?>
+
+            <?php if ($session_bank_challan->challan_for == 'Renewal Upgradation') { ?>
+              <tr>
+                <td>
+                  Renewal and Up-Gradation Fee:
+                </td>
+                <td><input type="number" name="renewal_and_upgradation_fee" required min="0" /> </td>
+              </tr>
+            <?php } ?>
+            <?php if ($session_bank_challan->challan_for == 'Renewal' or $session_bank_challan->challan_for == 'Registration' or $session_bank_challan->challan_for == 'Upgradation' or $session_bank_challan->challan_for == 'Renewal Upgradation') { ?>
+              <tr>
+                <td>
+                  Fine:
+                </td>
+                <td><input type="number" name="fine" required min="0" /> </td>
+              </tr>
+            <?php } ?>
+            <?php if ($session_bank_challan->challan_for == 'Change Of Name') { ?>
+              <tr>
+                <td>
+                  Change of Name Fee:
+                </td>
+                <td><input type="number" name="change_of_name_fee" required min="0" /> </td>
+              </tr>
+            <?php } ?>
+            <?php if ($session_bank_challan->challan_for == 'Change Of Ownership') { ?>
+              <tr>
+                <td>
+                  Change of Ownership Fee:
+                </td>
+                <td><input type="number" name="change_of_ownership_fee" required min="0" /> </td>
+              </tr>
+            <?php } ?>
+            <?php if ($session_bank_challan->challan_for == 'Change Of Building') { ?>
+              <tr>
+                <td>
+                  Change of Building Fee:
+                </td>
+                <td><input type="number" name="change_of_building_fee" required min="0" /> </td>
+              </tr>
+            <?php } ?>
             <tr>
               <td>
                 Total Fee:
               </td>
               <td><input type="number" id="total_deposit_fee" name="total_deposit_fee" value="yes" required min="0" /></td>
             </tr>
+
+            <?php if (strtolower($session_bank_challan->biseRegister) == 'yes' and  $session_bank_challan->challan_for == 'Registration') { ?>
+              <tr>
+                <td>
+                  Verifiy BISE Information
+                </td>
+                <td><strong>BISE REG ID: <?php echo $session_bank_challan->biseregistrationNumber; ?></strong><span style="margin-left:10px ;"></span>
+                  <input onclick="$('#bise_tdr_span').show();$('#bise_tdr').prop('required',true);" type="radio" name="bise_verified" value="Yes" required /> Verified
+                  <input onclick="$('#bise_tdr_span').hide();$('#bise_tdr').prop('required',false);" type="radio" name="bise_verified" value="No" required /> Not Verified <br />
+                  <span id="bise_tdr_span" style="display: none;">
+                    TDR Amount: <input min="0" type="number" id="bise_tdr" name="bise_tdr" value="" />
+                  </span>
+
+                </td>
+              </tr>
+            <?php } ?>
+
             <tr>
               <td colspan="2" style="text-align: center;">
                 <input class="btn btn-primary" type="submit" value="Verified" name="verified" />

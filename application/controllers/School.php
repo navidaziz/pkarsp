@@ -3722,7 +3722,7 @@ class School extends Admin_Controller
             'school_id' => $school_inserted_id
           ));
 
-          $this->db->where('userId', $schools->owner_id)->update('users', array('school_renewed' => 1));
+          //$this->db->where('userId', $schools->owner_id)->update('users', array('school_renewed' => 1));
           $counter++;
         }
 

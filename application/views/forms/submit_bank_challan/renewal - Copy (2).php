@@ -31,8 +31,7 @@
       </h2>
       <br />
       <small>
-        <h4>S-ID: <?php echo $school->schools_id; ?>
-          <?php if ($school->registrationNumber) { ?> - REG No: <?php echo $school->registrationNumber ?> <?php } ?></h4>
+        <h4>S-ID: <?php echo $school->school_id; ?> <?php if ($school->registrationNumber) { ?> - REG No: <?php echo $school->registrationNumber ?> <?php } ?></h4>
       </small>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -48,19 +47,11 @@
 
         <div class="box-body" style="padding: 3px;">
 
-          <form method="post" action="<?php echo site_url("form/update_test_date"); ?>">
+          <form method="post" action="<?php echo site_url("form/update_test_renewal/" . $session_id); ?>">
             <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
             <input type="hidden" name="schools_id" value="<?php echo $school->schools_id; ?>" />
 
-            Levels:
-            <select name="level">
-              <?php $query = "SELECT * FROM `levelofinstitute`";
-              $levels = $this->db->query($query)->result();
-              foreach ($levels as $level) { ?>
-                <option value="<?php echo $level->levelofInstituteId; ?>"><?php echo $level->levelofInstituteTitle; ?></option>
-              <?php  } ?>
-            </select>
-            year of establishment: <input name="year_of_es" type="month" required />
+
             Max Fee: <input name="max_fee" type="number" required />
             <input type="submit" name="update" />
           </form>
@@ -73,7 +64,7 @@
                 <h4> <i class="fa fa-info-circle" aria-hidden="true"></i> How system calculate deposit fee challan?</h4>
                 <ol>
                   <li>According to data you entered, your institute established <strong><?php echo date('M Y', strtotime($school->yearOfEstiblishment)); ?></strong>, charged max tuition fee
-                    <strong><?php echo $max_tuition_fee; ?> Rs. </strong> per month.
+                    <strong><?php echo $max_tuition_fee; ?> Rs. </strong> per month for Session: <strong><?php echo $session_detail->sessionYearTitle; ?></strong>.
                   </li>
                   <li>As per PSRA Registration and Renewal Fee Structure, Institute charged monthly fee between
                     <strong><?php echo $fee_sturucture->fee_min; ?> Rs. </strong> and <strong> <?php echo $fee_sturucture->fee_max; ?> Rs. </strong>
@@ -81,17 +72,9 @@
                     <ol>
                       <li> Application Processing Fee: <strong><?php echo $fee_sturucture->renewal_app_processsing_fee; ?> Rs. </strong></li>
                       <li> Inspection Fee: <strong><?php echo $fee_sturucture->renewal_app_inspection_fee; ?> Rs.</strong></li>
-                      <li> Security Fee (1st Time Registration)
-                        <ol>
-                          <?php
-                          $query = "SELECT * FROM `levelofinstitute`";
-                          $level_securities = $this->db->query($query)->result();
-                          foreach ($level_securities as $level_security) {
-                          ?>
-                            <li><?php echo  $level_security->levelofInstituteTitle; ?> <strong> <?php echo  $level_security->security_fee; ?> Rs.</strong> </li>
-                          <?php } ?>
-                        </ol>
-                      </li>
+                      <li> Renewal Fee: <strong><?php echo $fee_sturucture->renewal_fee; ?> Rs.</strong></li>
+
+
 
                   </li>
 
@@ -100,7 +83,7 @@
                 </li>
                 </ol>
                 <button onclick="renewal_fee_sturucture()" class="btn btn-link">
-                  <i class="fa fa-info-circle" aria-hidden="true"></i> PSRA Registration Fee Struture Detail</button>
+                  <i class="fa fa-info-circle" aria-hidden="true"></i> PSRA Fee Struture Detail</button>
               </div>
             </div>
 
@@ -131,32 +114,14 @@
                     </tr>
                   <?php }
                   ?>
-                  <?php
-                  $pecial_fine = 0;
-                  if ($session_id == 1) { ?>
-                    <tr>
-                      <td colspan="2" style="text-align: center;">2018-19 Special Fine<br />1 Dec, 2019</td>
-                      <td>
-                        <strong>50,000 Rs.</strong> <br> Primary / Middle Level <br>
-                        <strong>200,000 Rs. </strong> <br> High / Higher Level
-                      </td>
-                    </tr>
-
-                  <?php
-                    if ($school->level_of_school_id == 1  or  $school->level_of_school_id == 2) {
-                      $special_fine = 50000;
-                    }
-                    if ($school->level_of_school_id == 3  or  $school->level_of_school_id == 4) {
-                      $special_fine = 200000;
-                    }
-                  } ?>
+                  <?php $pecial_fine = 0; ?>
 
                 </table>
               </div>
             </div>
             <div class="col-md-4">
               <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
-                <h4>Session: <?php echo $session_detail->sessionYearTitle; ?> Registration Fee Detail</h4>
+                <h4>Session: <?php echo $session_detail->sessionYearTitle; ?> Renewal Fee Detail</h4>
                 <table class="table" style="font-size: 13px;">
                   <thead>
                     <tr>
@@ -175,16 +140,23 @@
                     </tr>
 
                     <tr>
-                      <td><strong>Total Session <?php echo $session_detail->sessionYearTitle; ?> Registration Fee </strong></td>
+                      <td>Renewal Fee</td>
+                      <td><?php echo $fee_sturucture->renewal_fee; ?> Rs.</td>
+                    </tr>
+
+                    <tr>
+                      <td><strong>Total Session <?php echo $session_detail->sessionYearTitle; ?> Renewal Fee </strong></td>
                       <td>
                         <strong>
-                          <?php $total = $fee_sturucture->renewal_app_processsing_fee + $fee_sturucture->renewal_app_inspection_fee;
+                          <?php $total = $fee_sturucture->renewal_app_processsing_fee + $fee_sturucture->renewal_app_inspection_fee + $fee_sturucture->renewal_fee;
 
                           echo number_format($total);
                           ?> Rs.
                         </strong>
                       </td>
                     </tr>
+
+
 
                     <tr>
                       <td>Late Fee Fine <br /><small><?php
@@ -194,7 +166,7 @@
                                                         echo 100;
                                                       }
                                                       ?>% on
-                          (Application Processing+Inspection Fee)</small>
+                          (Application Processing+Inspection Fee+Renewal)</small>
                       </td>
                       <td><?php
                           if ($late_fee->fine_percentage) {
@@ -206,33 +178,13 @@
                           ?>
                         Rs.</td>
                     </tr>
-                    <tr>
-                      <?php
-                      $query = "SELECT * FROM `levelofinstitute` 
-                                WHERE `levelofinstitute`.`levelofInstituteId` = $school->level_of_school_id";
-                      $level_securities = $this->db->query($query)->result()[0];
 
-                      ?>
-                      <td>Security Fee (<?php echo $level_securities->levelofInstituteTitle; ?>)</td>
-                      <td>
-                        <?php echo number_format($level_securities->security_fee); ?> Rs.
 
-                      </td>
-                    </tr>
-                    <?php if ($session_id == 1) { ?>
-                      <tr>
-                        <td>2018-19 Special Fine (<?php echo $level_securities->levelofInstituteTitle; ?>)</td>
-                        <td>
-                          <?php echo number_format($special_fine); ?> Rs.
 
-                        </td>
-                      </tr>
-                    <?php } ?>
-                    <tr>
 
-                      <td colspan="2" style="text-align: right;">
-                        <h4>Total <?php echo number_format($total + $fine + $level_securities->security_fee + $special_fine); ?> Rs.</h4>
-                      </td>
+                    <td colspan="2" style="text-align: right;">
+                      <h4>Total <?php echo number_format($total + $fine); ?> Rs.</h4>
+                    </td>
 
                     </tr>
                     <!-- <tr>
@@ -242,7 +194,7 @@
                     </tr> -->
                     <tr>
                       <td colspan="2" style="text-align:center;">
-                        <a target="new" class="btn btn-primary" href="<?php echo site_url("apply/print_renewal_bank_challan/$session_id") ?>"> <i class="fa fa-print" aria-hidden="true"></i> Print PSRA Registration Bank Challan From</a>
+                        <a target="new" class="btn btn-primary" href="<?php echo site_url("form/print_renewal_bank_challan/$session_id") ?>"> <i class="fa fa-print" aria-hidden="true"></i> Print PSRA Renewal Bank Challan From</a>
                       </td>
                     </tr>
                   </tbody>
@@ -259,14 +211,14 @@
           <div class="row">
             <div class="col-md-6">
               <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px;">
-                <h3> <i class="fa fa-info-circle" aria-hidden="true"></i> How to apply for Registration online ?</h3>
+                <h3> <i class="fa fa-info-circle" aria-hidden="true"></i> How to apply for Renewal online ?</h3>
                 <p>
                 <ol>
-                  <li>Print bank filled challan.</li>
+                  <li>Click Print PSRA Renewal Bank Challan From</li>
                   <li>Deposit challan within due date.</li>
                   <li>Submit <strong>Bank STAN</strong> number and Transaction date</li>
-                  <li>Click apply for online Registration button</li>
-                  <li>View Registration application status on school dashboard</li>
+                  <li>Click Submit Bank Challan button</li>
+                  <li>View Renewal application status on school dashboard</li>
                   </ul>
                 </ol>
                 </p>
@@ -276,10 +228,10 @@
             </div>
             <div class="col-md-6">
               <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px;">
-                <h4>Submit Registration Challan for session <?php echo $session_detail->sessionYearTitle; ?></h4>
+                <h4>Submit bank challan for renewal session <?php echo $session_detail->sessionYearTitle; ?></h4>
                 <form action="<?php echo site_url("form/add_bank_challan"); ?>" method="post">
                   <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
-                  <input type="hidden" name="challan_for" value="Registration" />
+                  <input type="hidden" name="challan_for" value="Renewal" />
                   <table class="table table-bordered">
                     <tr>
                       <td>Bank Transaction No (STAN)</td>

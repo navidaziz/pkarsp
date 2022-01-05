@@ -537,6 +537,7 @@ LEFT JOIN `reg_type`
 
     public function physical_facilities_physical_by_school_id($school_id)
     {
+
         $physical_facilities_physical_query = "SELECT
                                         `physical_facilities_physical`.`pfPhysicalId`
                                         , `physical_facilities_physical`.`pf_physical_id`

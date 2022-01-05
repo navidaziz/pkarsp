@@ -122,4 +122,68 @@ class School_dashboard extends MY_Controller
 		$this->data['view'] = 'school_dashboard/school_dashboard';
 		$this->load->view('layout', $this->data);
 	}
+
+	public function certificate($schools_id, $school_id, $session_id)
+	{
+		$schools_id = (int) $schools_id;
+		$school_id = (int) $school_id;
+		$session_id = (int) $session_id;
+
+		$query = "SELECT
+                  `school`.`schoolId`
+                  ,`school`.`updatedDate`
+                  , `schools`.`registrationNumber`
+                  , `schools`.`schoolName`
+                  , `schools`.`district_id`
+                  , `district`.`districtTitle`
+                  , `district`.`bise`
+                  , `schools`.`gender_type_id`
+                  , `genderofschool`.`genderOfSchoolTitle`
+                  , `levelofinstitute`.`levelofInstituteTitle`
+                  , `levelofinstitute`.`upper_class`
+                  , `schools`.`biseregistrationNumber`
+                  ,`session_year`.`sessionYearTitle`
+                ,`tehsils`.`tehsilTitle`
+              FROM
+                  `schools`
+				  INNER JOIN `district` 
+                      ON (`schools`.`district_id` = `district`.`districtId`)
+				 INNER JOIN `tehsils` 
+                      ON (`schools`.`tehsil_id` = `tehsils`.`tehsilId`)
+				 INNER JOIN `school` 
+                      ON (`schools`.`schoolId` = `school`.`schools_id`)
+                  INNER JOIN `genderofschool` 
+                      ON (`school`.`gender_type_id` = `genderofschool`.`genderOfSchoolId`)
+                  INNER JOIN `levelofinstitute` 
+                      ON (`school`.`level_of_school_id` = `levelofinstitute`.`levelofInstituteId`)
+                  INNER JOIN `session_year` 
+                      ON (`school`.`session_year_id` = `session_year`.`sessionYearId`)
+                  WHERE `schools`.`schoolId` = '" . $schools_id . "' 
+				        AND `school`.`status`=1 
+						AND school.schoolId = '" . $school_id . "'
+						AND `school`.`session_year_id` = '" . $session_id . "'";
+
+		$school_info = $this->db->query($query)->row();
+
+		$query1 = "SELECT
+                 
+                  MIN(`age_and_class`.`class_id`)
+                  
+                  ,(select classTitle from class where classId= MIN(`age_and_class`.`class_id`)) as classTitle
+                  
+                  
+              FROM
+                  `age_and_class`
+                  
+                 
+                  
+                      
+                      INNER JOIN `class` 
+                      ON (`age_and_class`.`class_id` = `class`.`classId`)
+                    WHERE `age_and_class`.`school_id` =" . $school_info->schoolId . ";";
+		$this->data['schools_info'] = $school_info;
+		$this->data['lower_class'] = $this->db->query($query1)->row();
+
+		$this->load->view('school_dashboard/certificate_of_schools', $this->data);
+	}
 }

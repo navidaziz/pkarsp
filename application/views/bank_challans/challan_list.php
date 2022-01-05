@@ -82,7 +82,7 @@
                     <tr>
                       <td><?php echo $count++; ?></td>
                       <td><?php echo $session_bank_challan->schools_id; ?></td>
-                      <td><?php echo $session_bank_challan->challan_for; ?></td>
+                      <td><?php echo $session_bank_challan->challan_for; ?> - <?php echo $session_bank_challan->sessionYearTitle; ?></td>
                       <td><?php echo $session_bank_challan->challan_no; ?></td>
                       <td><?php echo date('d M, Y', strtotime($session_bank_challan->challan_date)); ?></td>
                       <td><button class="btn btn-success btn-sm" onclick="verifiy_bank_challan('<?php echo $session_bank_challan->bank_challan_id; ?>')">Verifiy Challan</button></td>

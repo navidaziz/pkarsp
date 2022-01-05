@@ -33,7 +33,7 @@
                     </a>
                 </li>
                 <li <?php if ($this->uri->segment(2) == 'section_h') { ?> class="active" <?php  } ?> style="text-align: center;">
-                    <a href="<?php if ($form_status->form_g_status == 1) { ?> <?php echo site_url("form/section_c/$session_id"); ?> <?php } else { ?> # <?php } ?>" data-toggle="tooltip" data-placement="top" title="Please Complete Section F.">
+                    <a href="<?php if ($form_status->form_g_status == 1) { ?> <?php echo site_url("form/section_h/$session_id"); ?> <?php } else { ?> # <?php } ?>" data-toggle="tooltip" data-placement="top" title="Please Complete Section F.">
                         <?php if ($form_status->form_h_status == 1) { ?> <i class="fa fa-check" aria-hidden="true"></i> <?php } else { ?> <i class="fa fa-spinner" aria-hidden="true"></i> <?php } ?> SECTION H
                     </a>
                 </li>

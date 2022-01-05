@@ -239,7 +239,6 @@
                     <th>Applied</th>
                     <th>Level</th>
                     <th>Status</th>
-                    <th>Status Type</th>
                   </tr>
                   <?php
                   $count = 1;
@@ -254,6 +253,11 @@
                       , `gender`.`genderTitle`
                       , `school`.`status`
                       , `school`.`status_type`
+                      , `school`.`session_year_id`
+                      , `school`.`schoolId` as school_id
+                      , `school`.`schools_id`
+                      , `school`.`status`
+
                   FROM `reg_type`,
                   `school`,
                   `school_type`,
@@ -274,8 +278,19 @@
                         <td><?php echo $session->sessionYearTitle; ?></td>
                         <td><?php echo $registaion_and_renewal->regTypeTitle; ?></td>
                         <td><?php echo $registaion_and_renewal->levelofInstituteTitle; ?></td>
-                        <td><?php echo $registaion_and_renewal->status; ?></td>
-                        <td><?php echo $registaion_and_renewal->status_type; ?></td>
+
+                        <td>
+                          <?php if ($registaion_and_renewal->status == 0) { ?>
+                            <a class="btn btn-success" href="<?php echo site_url("form/section_b/$registaion_and_renewal->session_year_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Renewal Process</a>
+                          <?php } else {   ?>
+                            <?php if ($registaion_and_renewal->status == 1) { ?>
+                              <a target="_new" href="<?php echo site_url("school_dashboard/certificate/" . $registaion_and_renewal->schools_id . "/" . $registaion_and_renewal->school_id . "/" . $registaion_and_renewal->session_year_id); ?>">Print Certificate<a>
+                                <?php } else { ?>
+                                  <a class="btn btn-success" href="<?php echo site_url("online_application/status/$registaion_and_renewal->session_year_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i>Inprogress View Status</a>
+
+                              <?php }
+                            } ?>
+                        </td>
 
                       </tr>
                     <?php   } else { ?>
@@ -284,7 +299,7 @@
                         <td><?php echo $session->sessionYearTitle; ?></td>
                         <td colspan="4">
                           <?php if ($stop_appy) { ?>
-                            <a class="btn btn-success" href="<?php echo site_url("renewal/apply/$session->sessionYearId"); ?>">Apply for Renewal</a>
+                            <a class="btn btn-success" href="<?php echo site_url("apply/renewal/$session->sessionYearId"); ?>">Apply for Renewal</a>
                             <a class="btn btn-warning" href="">Apply for Upgradation</a>
                           <?php } else { ?>
 
@@ -309,13 +324,14 @@
                   $query = "SELECT * FROM school 
                   WHERE schools_id = '" . $school_id . "' ";
                   $registration = $this->db->query($query)->result();
+                  $registration_session_id = $registration[0]->session_year_id;
                   ?>
                   <?php if ($registration) { ?>
                     <?php if ($registration[0]->status == 0) { ?>
-                      <a class="btn btn-success" href="<?php echo site_url("form/section_b/$session->sessionYearId"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Registration Process <?php echo $session->sessionYearTitle; ?></a>
+                      <a class="btn btn-success" href="<?php echo site_url("form/section_b/$registration_session_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Registration Process <?php echo $session->sessionYearTitle; ?></a>
                     <?php }   ?>
                     <?php if ($registration[0]->status == 2) { ?>
-                      <a class="btn btn-success" href="<?php echo site_url("online_application/status/$session->sessionYearId"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Bank Challan Verification Session <?php echo $session->sessionYearTitle; ?></a>
+                      <a class="btn btn-success" href="<?php echo site_url("online_application/status/$registration_session_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Bank Challan Verification Session <?php echo $session->sessionYearTitle; ?></a>
                     <?php } ?>
                   <?php } else { ?>
                     <a class="btn btn-primary" href="<?php echo site_url("apply/registration/$session->sessionYearId"); ?>">Apply for Registraion. <?php echo $session->sessionYearTitle; ?></a>

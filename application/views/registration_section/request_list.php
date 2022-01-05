@@ -1,23 +1,81 @@
+  <style>
+    .table_small>tbody>tr>td,
+    .table_small>tbody>tr>th,
+    .table_small>tfoot>tr>td,
+    .table_small>tfoot>tr>th,
+    .table_small>thead>tr>td,
+    .table_small>thead>tr>th {
+      padding: 2px;
+      line-height: 1.42857143;
+      vertical-align: top;
+      border-top: 1px solid #ddd;
+    }
+
+    .btn-group-sm>.btn,
+    .btn-sm {
+      padding: 1px 1px !important;
+      font-size: 12px;
+      line-height: 1.5;
+      border-radius: 3px;
+    }
+
+    .block_div {
+      border: 1px solid #9FC8E8;
+      border-radius: 10px;
+      min-height: 3px;
+      margin: 3px;
+      padding: 10px;
+      background-color: white;
+
+    }
+
+    @keyframes placeHolderShimmer {
+      0% {
+        background-position: -468px 0
+      }
+
+      100% {
+        background-position: 468px 0
+      }
+    }
+
+    .linear-background {
+      animation-duration: 1s;
+      animation-fill-mode: forwards;
+      animation-iteration-count: infinite;
+      animation-name: placeHolderShimmer;
+      animation-timing-function: linear;
+      background: #f6f7f8;
+      background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+      background-size: 1000px 104px;
+      height: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+  </style>
+
   <!-- Modal -->
   <script>
-    function verifiy_bank_challan(bank_challan_id) {
+    function view_request_detail(school_id, session_id) {
+      $('#request_detail_body').html('Please Wait .....');
       $.ajax({
         type: "POST",
-        url: "<?php echo site_url("bank_challans/get_bank_challan_detail"); ?>",
+        url: "<?php echo site_url("registration_section/get_request_detail"); ?>",
         data: {
-          bank_challan_id: bank_challan_id
+          school_id: school_id,
+          session_id: session_id
         }
       }).done(function(data) {
 
-        $('#verifiy_bank_challan_body').html(data);
+        $('#request_detail_body').html(data);
       });
 
-      $('#verifiy_bank_challan').modal('toggle');
+      $('#request_detail').modal('toggle');
     }
   </script>
-  <div class="modal fade" id="verifiy_bank_challan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content" id="verifiy_bank_challan_body">
+  <div class="modal fade" id="request_detail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 85% !important;">
+      <div class="modal-content" id="request_detail_body">
 
         ...
 
@@ -49,61 +107,20 @@
 
         <div class="box-body">
           <div class="row">
-
             <div class="col-md-4">
-
-
-              <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
-                <h4>New Registration Requests</h4>
-                <table class="table table-bordered">
-                  <tr>
-                    <th>#</th>
-                    <th>School ID</th>
-                    <th>School Name</th>
-                    <th>Action</th>
-                  </tr>
-                  <?php
-                  $count = 1;
-                  foreach ($new_registrations as $requests) { ?>
-                    <td><?php echo $count; ?></td>
-                    <td><?php echo $requests->schoolId ?></td>
-                    <td><?php echo $requests->schoolName ?></td>
-                  <?php } ?>
-
-                </table>
+              <div class="block_div" id="new_request">
+                <h5 style="text-align: center;" class="linear-background"></h5>
               </div>
-
-
-
             </div>
-
             <div class="col-md-4">
-
-
-              <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
-                <h4>New Registration Requests</h4>
-                <table class="table table-bordered">
-                  <tr>
-                    <th>#</th>
-                    <th>School ID</th>
-                    <th>Reg. No.</th>
-                    <th>School Name</th>
-                    <th>Action</th>
-                  </tr>
-                  <?php
-                  $count = 1;
-                  foreach ($new_registrations as $requests) { ?>
-                    <td><?php echo $count; ?></td>
-                    <td><?php echo $requests->schoolId ?></td>
-                    <td><?php echo $requests->registrationNumber ?></td>
-                    <td><?php echo $requests->schoolName ?></td>
-                  <?php } ?>
-
-                </table>
+              <div class="block_div" id="inspection_requests">
+                <h5 style="text-align: center;" class="linear-background"></h5>
               </div>
-
-
-
+            </div>
+            <div class="col-md-4">
+              <div class="block_div" id="completed_request">
+                <h5 style="text-align: center;" class="linear-background"></h5>
+              </div>
             </div>
           </div>
         </div>
@@ -114,3 +131,40 @@
     </section>
 
   </div>
+
+  <script>
+    function get_new_requests() {
+      $.ajax({
+          method: "POST",
+          url: "<?php echo site_url('registration_section/get_new_requests'); ?>"
+        })
+        .done(function(respose) {
+          $('#new_request').html(respose);
+        });
+    }
+
+    function completed_requests() {
+      $.ajax({
+          method: "POST",
+          url: "<?php echo site_url('registration_section/completed_requests'); ?>"
+        })
+        .done(function(respose) {
+          $('#completed_request').html(respose);
+        });
+    }
+
+    function inspection_requests() {
+      $.ajax({
+          method: "POST",
+          url: "<?php echo site_url('registration_section/inspection_requests'); ?>"
+        })
+        .done(function(respose) {
+          $('#inspection_requests').html(respose);
+        });
+    }
+    $(document).ready(function() {
+      get_new_requests();
+      completed_requests();
+      inspection_requests();
+    });
+  </script>

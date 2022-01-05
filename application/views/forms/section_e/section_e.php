@@ -35,7 +35,8 @@
         <?php echo ucwords(strtolower($school->schoolName)); ?>
       </h2>
       <br />
-      <h4>S-ID: <?php echo $school->schools_id; ?> - REG No: <?php echo $school->registrationNumber ?></h4>
+      <h4>S-ID: <?php echo $school->schools_id; ?>
+        <?php if ($school->registrationNumber) { ?> - REG No: <?php echo $school->registrationNumber ?> <?php } ?></h4>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <!-- <li><a href="#">Examples</a></li> -->

@@ -29,6 +29,17 @@
     </div>
   </div>
 
+  <style>
+    .table>tbody>tr>td,
+    .table>tbody>tr>th,
+    .table>tfoot>tr>td,
+    .table>tfoot>tr>th,
+    .table>thead>tr>td,
+    .table>thead>tr>th {
+      padding: 1px !important;
+    }
+  </style>
+
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -37,7 +48,9 @@
         <?php echo ucwords(strtolower($school->schoolName)); ?>
       </h2>
       <br />
-      <h4>S-ID: <?php echo $school->schools_id; ?> - REG No: <?php echo $school->registrationNumber ?></h4>
+      <h4>S-ID: <?php echo $school->schools_id; ?>
+
+        <?php if ($school->registrationNumber) { ?> - REG No: <?php echo $school->registrationNumber ?> <?php } ?></h4>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <!-- <li><a href="#">Examples</a></li> -->
@@ -59,76 +72,132 @@
 
 
             <div class="col-md-12">
-              <style>
-                .table>tbody>tr>td,
-                .table>tbody>tr>th,
-                .table>tfoot>tr>td,
-                .table>tfoot>tr>th,
-                .table>thead>tr>td,
-                .table>thead>tr>th {
-                  padding: 1px !important;
-                }
-              </style>
 
+              <?php if ($school->gender_type_id == 3) {
+                $boys = 1;
+                $girls = 1;
+              }
+              if ($school->gender_type_id == 1) {
+                $boys = 1;
+                $girls = 0;
+              }
+              if ($school->gender_type_id == 2) {
+                $boys = 2;
+                $girls = 1;
+              }
+              ?>
 
+              <?php if ($boys) { ?>
+                <h4 style="border-left: 20px solid #9FC8E8; padding-left:5px"><strong>Boys</strong> Enrolment Class and Age wise.<br />
+                  <small style="color: red;">
+                    Note: For example age 3+ means “equal to or greater than 3 but less than 4 years”, similarly for 4+ , 5+ and so on
+                  </small>
+                </h4>
+                <table class="table table-bordered">
+                  <tr>
+                    <th rowspan="2" style="text-align: center; vertical-align: middle;">Classes</th>
+                    <th colspan="19" style="text-align: center;">Age Categories</th>
+                    <th colspan="4"></th>
+                  </tr>
+                  <tr>
 
-              <p>
-              <h4 style="border-left: 20px solid #9FC8E8; padding-left:5px"><strong>Boys</strong> Enrolment Class and Age wise.<br />
-                <small style="color: red;">
-                  Note: For example age 3+ means “equal to or greater than 3 but less than 4 years”, similarly for 4+ , 5+ and so on
-                </small>
-              </h4>
+                    <?php
+                    $count = 1;
+                    foreach ($ages  as $age) { ?>
+                      <th style="text-align: center;"><?php echo $age->ageTitle; ?></th>
+                    <?php } ?>
+                    <th style="text-align: center;">Total</th>
+                    <th style="text-align: center;">Non-Muslims</th>
+                    <th style="text-align: center;">Disabled</th>
 
-              </small>
-              </p>
-              <table class="table table-bordered">
-                <tr>
-                  <th rowspan="2" style="text-align: center; vertical-align: middle;">Classes</th>
-                  <th colspan="19" style="text-align: center;">Age Categories</th>
-                  <th colspan="4"></th>
-                </tr>
-                <tr>
+                    <td style="text-align: center;"></td>
+                  </tr>
 
                   <?php
-                  $count = 1;
-                  foreach ($ages  as $age) { ?>
-                    <th style="text-align: center;"><?php echo $age->ageTitle; ?></th>
-                  <?php } ?>
-                  <th style="text-align: center;">Total</th>
-                  <th style="text-align: center;">Non-Muslims</th>
-                  <th style="text-align: center;">Disabled</th>
-
-                  <td style="text-align: center;"></td>
-                </tr>
-
-                <?php
-                $form_complete = 1;
-                foreach ($classes  as $class) { ?>
-                  <tr>
-                    <th><?php echo $class->classTitle ?></th>
-                    <?php
-                    $total_class_enrollment = 0;
-                    foreach ($ages  as $age) { ?>
-                      <td style="text-align: center; background-color: bcd9ef;"><?php
-                                                                                $query = "SELECT `enrolled` FROM `age_and_class` 
+                  $form_complete = 1;
+                  foreach ($classes  as $class) { ?>
+                    <tr>
+                      <th><?php echo $class->classTitle ?></th>
+                      <?php
+                      $total_class_enrollment = 0;
+                      foreach ($ages  as $age) { ?>
+                        <td style="text-align: center; background-color: bcd9ef;"><?php
+                                                                                  $query = "SELECT `enrolled` FROM `age_and_class` 
                                             WHERE age_id ='" . $age->ageId . "' 
                                             AND class_id ='" . $class->classId . "'
                                             AND school_id = '" . $school_id . "'
                                             AND gender_id ='1'";
-                                                                                $query_result = $this->db->query($query)->result();
-                                                                                if ($query_result) {
-                                                                                  $total_class_enrollment += $query_result[0]->enrolled;
-                                                                                  echo $query_result[0]->enrolled;
-                                                                                }
-                                                                                ?></td>
-                    <?php
-                      $total_school_entrollment += $total_class_enrollment;
-                    } ?>
-                    <th style="text-align: center;"><?php echo $total_class_enrollment; ?></th>
-                    <?php $query = "SELECT `non_muslim`,`disabled` FROM `school_enrolments`  
+                                                                                  $query_result = $this->db->query($query)->result();
+                                                                                  if ($query_result) {
+                                                                                    $total_class_enrollment += $query_result[0]->enrolled;
+                                                                                    echo $query_result[0]->enrolled;
+                                                                                  }
+                                                                                  ?></td>
+                      <?php
+                        $total_school_entrollment += $total_class_enrollment;
+                      } ?>
+                      <th style="text-align: center;"><?php echo $total_class_enrollment; ?></th>
+                      <?php $query = "SELECT `non_muslim`,`disabled` FROM `school_enrolments`  
                                   WHERE  school_id ='" . $school_id . "'
                                   AND session_id =  '" . $session_id . "'
                                   AND class_id ='" . $class->classId . "' 
+                                  AND gender_id ='1' ";
+                      $query_result = $this->db->query($query)->result();
+                      ?>
+                      <th style="text-align: center;"><?php if ($query_result) {
+                                                        echo $query_result[0]->non_muslim;
+                                                      } ?> </th>
+                      <th style="text-align: center;"> <?php if ($query_result) {
+                                                          echo $query_result[0]->disabled;
+                                                        } ?> </th>
+
+                      <td style="text-align: center;">
+                        <?php
+
+                        $query = "SELECT `enrolled` FROM `age_and_class`  
+                      WHERE class_id ='" . $class->classId . "'
+                      AND school_id = '" . $school_id . "'
+                      AND gender_id ='1'";
+                        $query_result_b = $this->db->query($query)->result();
+                        if ($query_result_b) { ?>
+                          <button type="button" class="btn btn-success btn-sm" style="padding: 1px !important; width: 100%;" onclick="update_class_ages_from(1, <?php echo $class->classId ?>)">
+                            Edit
+                          </button>
+
+                        <?php  } else { ?>
+                          <button type="button" class="btn btn-danger btn-sm" style="padding: 1px !important; width: 100%;" onclick="update_class_ages_from(1, <?php echo $class->classId ?>)">
+                            Add
+                          </button>
+                        <?php
+                          $form_complete = 0;
+                        } ?>
+                      </td>
+                    </tr>
+                  <?php } ?>
+
+                  <tr>
+                    <th style="text-align: right; text-align: center;">Total</th>
+                    <?php
+                    $total_school_entrollment  = 0;
+                    foreach ($ages  as $age) { ?>
+                      <th style="text-align: center;"><?php $query = "SELECT SUM(`enrolled`) as enrolled FROM `age_and_class` 
+                                            WHERE age_id ='" . $age->ageId . "' 
+                                            AND school_id = '" . $school_id . "'
+                                            AND gender_id ='1'";
+                                                      $query_result = $this->db->query($query)->result();
+                                                      if ($query_result) {
+                                                        $total_school_entrollment += $query_result[0]->enrolled;
+                                                        echo $query_result[0]->enrolled;
+                                                      }
+                                                      ?></th>
+                    <?php } ?>
+
+
+                    <th style="text-align: center;"><?php echo $total_school_entrollment; ?></th>
+                    <?php $query = "SELECT SUM(`non_muslim`) as non_muslim, SUM(`disabled`) as disabled
+                                  FROM `school_enrolments`  
+                                  WHERE  school_id ='" . $school_id . "'
+                                  AND session_id =  '" . $session_id . "'
                                   AND gender_id ='1' ";
                     $query_result = $this->db->query($query)->result();
                     ?>
@@ -138,195 +207,140 @@
                     <th style="text-align: center;"> <?php if ($query_result) {
                                                         echo $query_result[0]->disabled;
                                                       } ?> </th>
-
-                    <td style="text-align: center;">
-                      <?php
-
-                      $query = "SELECT `enrolled` FROM `age_and_class`  
-                      WHERE class_id ='" . $class->classId . "'
-                      AND school_id = '" . $school_id . "'
-                      AND gender_id ='1'";
-                      $query_result_b = $this->db->query($query)->result();
-                      if ($query_result_b) { ?>
-                        <button type="button" class="btn btn-success btn-sm" style="padding: 1px !important; width: 100%;" onclick="update_class_ages_from(1, <?php echo $class->classId ?>)">
-                          Edit
-                        </button>
-
-                      <?php  } else { ?>
-                        <button type="button" class="btn btn-danger btn-sm" style="padding: 1px !important; width: 100%;" onclick="update_class_ages_from(1, <?php echo $class->classId ?>)">
-                          Add
-                        </button>
-                      <?php
-                        $form_complete = 0;
-                      } ?>
-                    </td>
+                    <td></td>
                   </tr>
-                <?php } ?>
+                </table>
+              <?php } ?>
 
-                <tr>
-                  <th style="text-align: right; text-align: center;">Total</th>
-                  <?php
-                  $total_school_entrollment  = 0;
-                  foreach ($ages  as $age) { ?>
-                    <th style="text-align: center;"><?php $query = "SELECT SUM(`enrolled`) as enrolled FROM `age_and_class` 
-                                            WHERE age_id ='" . $age->ageId . "' 
-                                            AND school_id = '" . $school_id . "'
-                                            AND gender_id ='1'";
-                                                    $query_result = $this->db->query($query)->result();
-                                                    if ($query_result) {
-                                                      $total_school_entrollment += $query_result[0]->enrolled;
-                                                      echo $query_result[0]->enrolled;
-                                                    }
-                                                    ?></th>
-                  <?php } ?>
-
-
-                  <th style="text-align: center;"><?php echo $total_school_entrollment; ?></th>
-                  <?php $query = "SELECT SUM(`non_muslim`) as non_muslim, SUM(`disabled`) as disabled
-                                  FROM `school_enrolments`  
-                                  WHERE  school_id ='" . $school_id . "'
-                                  AND session_id =  '" . $session_id . "'
-                                  AND gender_id ='1' ";
-                  $query_result = $this->db->query($query)->result();
-                  ?>
-                  <th style="text-align: center;"><?php if ($query_result) {
-                                                    echo $query_result[0]->non_muslim;
-                                                  } ?> </th>
-                  <th style="text-align: center;"> <?php if ($query_result) {
-                                                      echo $query_result[0]->disabled;
-                                                    } ?> </th>
-                  <td></td>
-                </tr>
-              </table>
-
-
-
-              <h4 style="border-left: 20px solid #FFC0CB; padding-left:5px"><strong> Grils</strong> Enrolment Class and Age wise.<br />
-                <small style="color: red;">
-                  Note: For example age 3+ means “equal to or greater than 3 but less than 4 years”, similarly for 4+ , 5+ and so on
-                </small>
-              </h4>
-              <table class="table table-bordered">
-                <tr style="text-align: center; background-color: #FFC0CB;">
-                  <th rowspan="2" style="text-align: center; vertical-align: middle; background-color: #FFC0CB;">Classes</th>
-                  <th colspan="19" style="text-align: center; background-color: #FFC0CB;">Age Categories</th>
-                  <th colspan="4" style="background-color: #FFC0CB;"></th>
-                </tr>
-                <tr>
-                  <?php
-                  $count = 1;
-                  foreach ($ages  as $age) { ?>
-                    <th style="text-align: center; background-color: #FFC0CB;"><?php echo $age->ageTitle; ?></th>
-                  <?php } ?>
-                  <th style="background-color: #FFC0CB; text-align: center;">Total</th>
-                  <th style="background-color: #FFC0CB; text-align: center;">Non-Muslims</th>
-                  <th style="background-color: #FFC0CB; text-align: center;">Disabled</th>
-
-                  <td style="text-align: center;"></td>
-                </tr>
-
-                <?php foreach ($classes  as $class) { ?>
+              <?php if ($girls) { ?>
+                <h4 style="border-left: 20px solid #FFC0CB; padding-left:5px"><strong> Grils</strong> Enrolment Class and Age wise.<br />
+                  <small style="color: red;">
+                    Note: For example age 3+ means “equal to or greater than 3 but less than 4 years”, similarly for 4+ , 5+ and so on
+                  </small>
+                </h4>
+                <table class="table table-bordered">
+                  <tr style="text-align: center; background-color: #FFC0CB;">
+                    <th rowspan="2" style="text-align: center; vertical-align: middle; background-color: #FFC0CB;">Classes</th>
+                    <th colspan="19" style="text-align: center; background-color: #FFC0CB;">Age Categories</th>
+                    <th colspan="4" style="background-color: #FFC0CB;"></th>
+                  </tr>
                   <tr>
-                    <th style="background-color: #FFC0CB;"><?php echo $class->classTitle ?></th>
                     <?php
-                    $total_class_enrollment = 0;
+                    $count = 1;
                     foreach ($ages  as $age) { ?>
-                      <td style="text-align: center; background-color: #ffd3db;"><?php $query = "SELECT `enrolled` FROM `age_and_class` 
+                      <th style="text-align: center; background-color: #FFC0CB;"><?php echo $age->ageTitle; ?></th>
+                    <?php } ?>
+                    <th style="background-color: #FFC0CB; text-align: center;">Total</th>
+                    <th style="background-color: #FFC0CB; text-align: center;">Non-Muslims</th>
+                    <th style="background-color: #FFC0CB; text-align: center;">Disabled</th>
+
+                    <td style="text-align: center;"></td>
+                  </tr>
+
+                  <?php foreach ($classes  as $class) { ?>
+                    <tr>
+                      <th style="background-color: #FFC0CB;"><?php echo $class->classTitle ?></th>
+                      <?php
+                      $total_class_enrollment = 0;
+                      foreach ($ages  as $age) { ?>
+                        <td style="text-align: center; background-color: #ffd3db;"><?php $query = "SELECT `enrolled` FROM `age_and_class` 
                                             WHERE age_id ='" . $age->ageId . "' 
                                             AND class_id ='" . $class->classId . "'
                                             AND school_id = '" . $school_id . "'
                                             AND gender_id = '2'";
-                                                                                  $query_result = $this->db->query($query)->result();
-                                                                                  if ($query_result) {
-                                                                                    $total_class_enrollment += $query_result[0]->enrolled;
-                                                                                    echo $query_result[0]->enrolled;
-                                                                                  }
-                                                                                  ?></td>
-                    <?php
-                      $total_school_entrollment += $total_class_enrollment;
-                    } ?>
-                    <th style="text-align: center; background-color: #FFC0CB;"><?php echo $total_class_enrollment; ?></th>
-                    <?php $query = "SELECT `non_muslim`,`disabled` FROM `school_enrolments`  
+                                                                                    $query_result = $this->db->query($query)->result();
+                                                                                    if ($query_result) {
+                                                                                      $total_class_enrollment += $query_result[0]->enrolled;
+                                                                                      echo $query_result[0]->enrolled;
+                                                                                    }
+                                                                                    ?></td>
+                      <?php
+                        $total_school_entrollment += $total_class_enrollment;
+                      } ?>
+                      <th style="text-align: center; background-color: #FFC0CB;"><?php echo $total_class_enrollment; ?></th>
+                      <?php $query = "SELECT `non_muslim`,`disabled` FROM `school_enrolments`  
                                   WHERE  school_id ='" . $school_id . "'
                                   AND session_id =  '" . $session_id . "'
                                   AND class_id ='" . $class->classId . "' 
                                   AND gender_id ='2' ";
-                    $query_result = $this->db->query($query)->result();
-                    ?>
-                    <th style="background-color: #FFC0CB; text-align: center;"><?php if ($query_result) {
-                                                                                  echo $query_result[0]->non_muslim;
-                                                                                } ?> </th>
-                    <th style="background-color: #FFC0CB; text-align: center;"> <?php if ($query_result) {
-                                                                                  echo $query_result[0]->disabled;
-                                                                                } ?> </th>
+                      $query_result = $this->db->query($query)->result();
+                      ?>
+                      <th style="background-color: #FFC0CB; text-align: center;"><?php if ($query_result) {
+                                                                                    echo $query_result[0]->non_muslim;
+                                                                                  } ?> </th>
+                      <th style="background-color: #FFC0CB; text-align: center;"> <?php if ($query_result) {
+                                                                                    echo $query_result[0]->disabled;
+                                                                                  } ?> </th>
 
-                    <td style="text-align: center;">
-                      <?php
+                      <td style="text-align: center;">
+                        <?php
 
-                      $query = "SELECT `enrolled` FROM `age_and_class`  
+                        $query = "SELECT `enrolled` FROM `age_and_class`  
                       WHERE class_id ='" . $class->classId . "'
                       AND school_id = '" . $school_id . "'
                       AND gender_id ='2'";
-                      $query_result_g = $this->db->query($query)->result();
+                        $query_result_g = $this->db->query($query)->result();
 
 
-                      if ($query_result_g) { ?>
-                        <button type="button" class="btn btn-success btn-sm" style="padding: 1px !important; width: 100%;" onclick="update_class_ages_from(2, <?php echo $class->classId ?>)">
-                          Edit
-                        </button>
+                        if ($query_result_g) { ?>
+                          <button type="button" class="btn btn-success btn-sm" style="padding: 1px !important; width: 100%;" onclick="update_class_ages_from(2, <?php echo $class->classId ?>)">
+                            Edit
+                          </button>
 
-                      <?php  } else { ?>
-                        <button type="button" class="btn btn-danger btn-sm" style="padding: 1px !important; width: 100%;" onclick="update_class_ages_from(2, <?php echo $class->classId ?>)">
-                          Add
-                        </button>
-                      <?php
-                        $form_complete = 0;
-                      } ?>
-                    </td>
-                  </tr>
-                <?php } ?>
+                        <?php  } else { ?>
+                          <button type="button" class="btn btn-danger btn-sm" style="padding: 1px !important; width: 100%;" onclick="update_class_ages_from(2, <?php echo $class->classId ?>)">
+                            Add
+                          </button>
+                        <?php
+                          $form_complete = 0;
+                        } ?>
+                      </td>
+                    </tr>
+                  <?php } ?>
 
-                <tr>
-                  <th style="text-align: right; background-color: #FFC0CB;">Total</th>
-                  <?php
-                  $total_school_entrollment  = 0;
-                  foreach ($ages  as $age) { ?>
-                    <th style="text-align: center; background-color: #FFC0CB;"><?php $query = "SELECT SUM(`enrolled`) as enrolled FROM `age_and_class` 
+                  <tr>
+                    <th style="text-align: right; background-color: #FFC0CB;">Total</th>
+                    <?php
+                    $total_school_entrollment  = 0;
+                    foreach ($ages  as $age) { ?>
+                      <th style="text-align: center; background-color: #FFC0CB;"><?php $query = "SELECT SUM(`enrolled`) as enrolled FROM `age_and_class` 
                                             WHERE age_id ='" . $age->ageId . "' 
                                             AND school_id = '" . $school_id . "'
                                             AND gender_id = '2'";
-                                                                                $query_result = $this->db->query($query)->result();
-                                                                                if ($query_result) {
-                                                                                  $total_school_entrollment += $query_result[0]->enrolled;
-                                                                                  echo $query_result[0]->enrolled;
-                                                                                }
-                                                                                ?></th>
-                  <?php } ?>
+                                                                                  $query_result = $this->db->query($query)->result();
+                                                                                  if ($query_result) {
+                                                                                    $total_school_entrollment += $query_result[0]->enrolled;
+                                                                                    echo $query_result[0]->enrolled;
+                                                                                  }
+                                                                                  ?></th>
+                    <?php } ?>
 
 
-                  <th style="text-align: center; background-color: #FFC0CB;"><?php echo $total_school_entrollment; ?></th>
-                  <?php $query = "SELECT SUM(`non_muslim`) as non_muslim, SUM(`disabled`) as disabled
+                    <th style="text-align: center; background-color: #FFC0CB;"><?php echo $total_school_entrollment; ?></th>
+                    <?php $query = "SELECT SUM(`non_muslim`) as non_muslim, SUM(`disabled`) as disabled
                                   FROM `school_enrolments`  
                                   WHERE  school_id ='" . $school_id . "'
                                   AND session_id =  '" . $session_id . "'
                                   AND gender_id ='2' ";
-                  $query_result = $this->db->query($query)->result();
-                  ?>
-                  <th style="text-align: center; background-color: #FFC0CB;"><?php if ($query_result) {
-                                                                                echo $query_result[0]->non_muslim;
-                                                                              } ?> </th>
-                  <th style="text-align: center; background-color: #FFC0CB;"> <?php if ($query_result) {
-                                                                                echo $query_result[0]->disabled;
-                                                                              } ?> </th>
-                  <td></td>
-                </tr>
-              </table>
+                    $query_result = $this->db->query($query)->result();
+                    ?>
+                    <th style="text-align: center; background-color: #FFC0CB;"><?php if ($query_result) {
+                                                                                  echo $query_result[0]->non_muslim;
+                                                                                } ?> </th>
+                    <th style="text-align: center; background-color: #FFC0CB;"> <?php if ($query_result) {
+                                                                                  echo $query_result[0]->disabled;
+                                                                                } ?> </th>
+                    <td></td>
+                  </tr>
+                </table>
 
 
-
+              <?php } ?>
 
 
             </div>
+
+
             <div class="col-md-12">
               <table class="table table-bordered">
                 <tr style="text-align: center; background-color: #8CAE12;">

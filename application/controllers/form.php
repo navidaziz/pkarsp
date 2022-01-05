@@ -12,14 +12,7 @@ class Form extends MY_Controller
 
 	public function index()
 	{
-		// 	$query = $this->db->query("SELECT * FROM schools 
-		// left join users on schools.owner_id = users.userId 
-		// left join district on schools.district_id = district.districtId 
-		// where owner_id = '" . $_SESSION['userId'] . "'");
-		// 	$data['data'] = $query->result_array();
-		// 	// echo "<pre>"; print_r($data);exit();
-		// 	$this->load->view('school/bankReceipt', $data);
-		echo "We are working on it";
+		echo "Welcome to PSRA...";
 	}
 
 
@@ -381,9 +374,6 @@ class Form extends MY_Controller
 		}
 	}
 
-
-
-
 	public function update_class_fee_from()
 	{
 		$this->data['schools_id'] = (int) trim($this->input->post("schools_id"));
@@ -442,7 +432,8 @@ class Form extends MY_Controller
 					, `schools`.`schoolName`
 					, `schools`.`yearOfEstiblishment`
 					, `schools`.`level_of_school_id`
-					, `schools`.`gender_type_id` , `school`.`reg_type_id`
+					, `schools`.`gender_type_id` , 
+					`school`.`reg_type_id`
 				FROM
 					`schools`
 					INNER JOIN `school` 
@@ -867,6 +858,175 @@ class Form extends MY_Controller
 					, `schools`.`schoolName`
 					, `schools`.`yearOfEstiblishment`
 					, `schools`.`school_type_id`
+					, `schools`.`gender_type_id` , 
+					`school`.`reg_type_id`
+					, `school`.`level_of_school_id`
+					, `schools`.`yearOfEstiblishment`
+				FROM
+					`schools`
+					INNER JOIN `school` 
+						ON (`schools`.`schoolId` = `school`.`schools_id`)
+						WHERE `school`.`session_year_id`='" . $session_id . "'
+						AND `schools`.`owner_id`='" . $userId . "'";
+
+
+		$this->data['school'] =  $this->db->query($query)->result()[0];
+		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
+		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
+
+		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
+		$this->data['form_status'] = $this->db->query($query)->result()[0];
+
+		$query = "SELECT session_id, last_date, fine_percentage FROM `session_fee_submission_dates` 
+		               WHERE session_id= $session_id AND last_date >='" . date('Y-m-d') . "' 
+					   ORDER BY last_date ASC LIMIT 1";
+		$this->data['late_fee'] = $this->db->query($query)->result()[0];
+
+		$query = "SELECT * FROM `session_fee_submission_dates` WHERE session_id = '" . $session_id . "'";
+		$this->data['session_fee_submission_dates'] = $this->db->query($query)->result();
+
+		$query = "SELECT MAX(tuitionFee) as max_tution_fee  FROM `fee` WHERE school_id= '" . $school_id . "'";
+		$this->data['max_tuition_fee'] = $max_tuition_fee = preg_replace(
+			'/[^0-9.]/',
+			'',
+			$this->db->query($query)->result()[0]->max_tution_fee
+		);
+
+		$query = "SELECT fee_min, fee_max, renewal_app_processsing_fee, renewal_app_inspection_fee, renewal_fee 
+		FROM `fee_structure` WHERE fee_min <= '" . $max_tuition_fee . "' ORDER BY fee_min DESC LIMIT 1";
+		$this->data['fee_sturucture'] = $this->db->query($query)->result()[0];
+
+
+		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
+		$this->data['description'] = '';
+		if ($this->data['school']->reg_type_id == 1) {
+			$this->data['view'] = 'forms/submit_bank_challan/registration';
+		}
+		if ($this->data['school']->reg_type_id == 2) {
+			$this->data['view'] = 'forms/submit_bank_challan/renewal';
+		}
+		$this->load->view('layout', $this->data);
+	}
+
+	private  function check_school_session_entry($session_id, $school_id)
+	{
+		$query = "SELECT * FROM school 
+		          WHERE schools_id = '" . $school_id . "' 
+				  AND session_year_id= '" . $session_id . "'";
+		$school_session_entry = $this->db->query($query)->result();
+
+
+		if (!$school_session_entry) {
+			$this->session->set_flashdata('msg_error', 'You are not applied for this session.');
+			redirect('school_dashboard');
+		} else {
+			$school_session_detail = $school_session_entry[0];
+			if ($school_session_detail->status != 0) {
+				redirect("online_application/status/$session_id");
+			}
+		}
+	}
+
+	public function complete_section_d($session_id)
+	{
+		$session_id = (int) $session_id;
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT 
+		`school`.`schoolId` AS `school_id`,
+		`school`.`schools_id` FROM
+					`schools`
+					INNER JOIN `school` 
+						ON (`schools`.`schoolId` = `school`.`schools_id`)
+						WHERE `school`.`session_year_id`='" . $session_id . "'
+						AND `schools`.`owner_id`='" . $userId . "'";
+
+
+		$this->data['school'] =  $this->db->query($query)->result()[0];
+		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
+
+		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
+
+		$form_input['form_d_status'] = 1;
+		$this->db->where('school_id', $school_id);
+		$this->db->update('forms_process', $form_input);
+		$this->session->set_flashdata('msg_success', 'Section D Data Submit Successfully.');
+		redirect("form/section_d/$session_id");
+	}
+	public function complete_section_e($session_id)
+	{
+		$session_id = (int) $session_id;
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT 
+		`school`.`schoolId` AS `school_id`,
+		`school`.`schools_id` FROM
+					`schools`
+					INNER JOIN `school` 
+						ON (`schools`.`schoolId` = `school`.`schools_id`)
+						WHERE `school`.`session_year_id`='" . $session_id . "'
+						AND `schools`.`owner_id`='" . $userId . "'";
+		$this->data['school'] =  $this->db->query($query)->result()[0];
+		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
+
+		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
+
+		$form_input['form_e_status'] = 1;
+		$this->db->where('school_id', $school_id);
+		$this->db->update('forms_process', $form_input);
+		$this->session->set_flashdata('msg_success', 'Section D Data Submit Successfully.');
+		redirect("form/section_e/$session_id");
+	}
+
+
+	public function add_bank_challan()
+	{
+		$session_id = (int) $this->input->post('session_id');
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT 
+		`school`.`schoolId` AS `school_id`,
+		`school`.`schools_id` FROM
+					`schools`
+					INNER JOIN `school` 
+						ON (`schools`.`schoolId` = `school`.`schools_id`)
+						WHERE `school`.`session_year_id`='" . $session_id . "'
+						AND `schools`.`owner_id`='" . $userId . "'";
+
+		$this->data['school'] =  $this->db->query($query)->result()[0];
+
+		$schools_id = $this->data['school']->schools_id;
+		$school_id = $this->data['school']->school_id;
+
+		$challan_detail['challan_for'] = $this->input->post('challan_for');
+		$challan_detail['challan_no'] = $this->input->post('challan_no');
+		$challan_detail['challan_date'] = $this->input->post('challan_date');
+		$challan_detail['session_id'] = $session_id;
+		$challan_detail['schools_id'] = $schools_id;
+		$challan_detail['school_id'] = $school_id;
+		$challan_detail['created_by'] = $userId;
+
+		$this->db->insert('bank_challans', $challan_detail);
+		$this->db->where('schoolId', $school_id);
+		$input['status'] = 2;
+		$this->db->update('school', $input);
+		$this->session->set_flashdata('msg_success', 'Bank Challan Submit Successfully.');
+		redirect("form/submit_bank_challan/$session_id");
+	}
+
+	public function print_registration_bank_challan($session_id)
+	{
+		$this->data['session_id'] = $session_id = (int) $session_id;
+
+		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
+		                                                  WHERE sessionYearId = $session_id")->result()[0];
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT 
+		`school`.`schoolId` AS `school_id`
+					, `schools`.`schoolId` AS `schools_id`
+					, `school`.`session_year_id`
+					, `schools`.`registrationNumber`
+					, `schools`.`schoolName`
+					, `schools`.`district_id`
+					, `schools`.`yearOfEstiblishment`
+					, `schools`.`school_type_id`
 					, `schools`.`gender_type_id` , `school`.`reg_type_id`
 					, `schools`.`level_of_school_id`
 					, `schools`.`yearOfEstiblishment`
@@ -905,108 +1065,132 @@ class Form extends MY_Controller
 		$this->data['fee_sturucture'] = $this->db->query($query)->result()[0];
 
 
-		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
+		$this->data['title'] = "Registration";
 		$this->data['description'] = '';
-		$this->data['view'] = 'forms/submit_bank_challan/registration';
-		$this->load->view('layout', $this->data);
+		$this->load->view('forms/submit_bank_challan/registration_bank_challan_print', $this->data);
 	}
 
-	private  function check_school_session_entry($session_id, $school_id)
+	public function update_test_date()
 	{
-		$query = "SELECT * FROM school 
-		          WHERE schools_id = '" . $school_id . "' 
-				  AND session_year_id= '" . $session_id . "'";
-		$school_session_entry = $this->db->query($query)->result();
+
+		$school_id = (int) $this->input->post("school_id");
+		$schools_id = (int) $this->input->post("schools_id");
 
 
-		if (!$school_session_entry) {
-			$this->session->set_flashdata('msg_error', 'You are not applied for this session.');
-			redirect('school_dashboard');
-		} else {
-			$school_session_detail = $school_session_entry[0];
-			if ($school_session_detail->status != 0) {
-				redirect("online_application/status/$session_id");
-			}
+		if ($this->input->post('level')) {
+			$this->db->where('schoolId', $school_id);
+			$school_update['level_of_school_id'] = $this->input->post('level');
+			$this->db->update('school', $school_update);
 		}
-	}
 
-	public function complete_section_d($session_id)
-	{
-		$session_id = (int) $session_id;
-		$userId = $this->session->userdata('userId');
-		$query = "SELECT 
-		`school`.`schoolId` AS `school_id` FROM
-					`schools`
-					INNER JOIN `school` 
-						ON (`schools`.`schoolId` = `school`.`schools_id`)
-						WHERE `school`.`session_year_id`='" . $session_id . "'
-						AND `schools`.`owner_id`='" . $userId . "'";
+		if ($this->input->post('max_fee') >= 0) {
+			$this->db->where('school_id', $school_id);
+			$fee['tuitionFee'] = $this->input->post('max_fee');
+			$this->db->update('fee', $fee);
+		}
 
-
-		$this->data['school'] =  $this->db->query($query)->result()[0];
-		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
-
-		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
-
-		$form_input['form_d_status'] = 1;
-		$this->db->where('school_id', $school_id);
-		$this->db->update('forms_process', $form_input);
-		$this->session->set_flashdata('msg_success', 'Section D Data Submit Successfully.');
-		redirect("form/section_d/$session_id");
-	}
-	public function complete_section_e($session_id)
-	{
-		$session_id = (int) $session_id;
-		$userId = $this->session->userdata('userId');
-		$query = "SELECT 
-		`school`.`schoolId` AS `school_id` FROM
-					`schools`
-					INNER JOIN `school` 
-						ON (`schools`.`schoolId` = `school`.`schools_id`)
-						WHERE `school`.`session_year_id`='" . $session_id . "'
-						AND `schools`.`owner_id`='" . $userId . "'";
+		if ($this->input->post('year_of_es')) {
+			$est_date = $this->input->post('year_of_es');
+			$est_year = date('Y', strtotime($est_date));
+			$est_month = date('m', strtotime($est_date));
+			if ($est_month >= 4) {
+				$session_year = $est_year;
+			} else {
+				$session_year = $est_year - 1;
+			}
 
 
-		$this->data['school'] =  $this->db->query($query)->result()[0];
-		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
 
-		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
+			$query = "SELECT `sessionYearId` FROM `session_year` WHERE YEAR(`session_start`) >= '" . $session_year . "'";
+			$session_id = $this->db->query($query)->result()[0]->sessionYearId;
 
-		$form_input['form_e_status'] = 1;
-		$this->db->where('school_id', $school_id);
-		$this->db->update('forms_process', $form_input);
-		$this->session->set_flashdata('msg_success', 'Section D Data Submit Successfully.');
-		redirect("form/section_e/$session_id");
-	}
+			$this->db->where('schoolId', $school_id);
+			$school_update['session_year_id'] = $session_id;
+			$this->db->update('school', $school_update);
 
 
-	public function add_bank_challan()
-	{
-		$session_id = (int) $this->input->post('session_id');
-		$userId = $this->session->userdata('userId');
-		$query = "SELECT 
-		`school`.`schoolId` AS `school_id` FROM
-					`schools`
-					INNER JOIN `school` 
-						ON (`schools`.`schoolId` = `school`.`schools_id`)
-						WHERE `school`.`session_year_id`='" . $session_id . "'
-						AND `schools`.`owner_id`='" . $userId . "'";
-
-
-		$this->data['school'] =  $this->db->query($query)->result()[0];
-		$school_id = $this->data['school']->school_id;
-		$challan_detail['challan_for'] = $this->input->post('challan_for');
-		$challan_detail['challan_no'] = $this->input->post('challan_no');
-		$challan_detail['challan_date'] = $this->input->post('challan_date');
-		$challan_detail['session_id'] = $session_id;
-		$challan_detail['school_id'] = $school_id;
-		$challan_detail['created_by'] = $userId;
-
-		$this->db->insert('bank_challans', $challan_detail);
-		$this->db->where('schoolId', $school_id);
-		$input['status'] = 2;
-		$this->db->update('school', $input);
-		$this->session->set_flashdata('msg_success', 'Bank Challan Submit Successfully.');
+			$this->db->where('schoolId', $schools_id);
+			$schools_update['yearOfEstiblishment'] = $this->input->post('year_of_es');
+			$this->db->update('schools', $schools_update);
+		}
 		redirect("form/submit_bank_challan/$session_id");
+	}
+
+	public function update_test_renewal($session_id)
+	{
+
+		$school_id = (int) $this->input->post("school_id");
+		$schools_id = (int) $this->input->post("schools_id");
+
+
+
+		if ($this->input->post('max_fee') >= 0) {
+			$this->db->where('school_id', $school_id);
+			$fee['tuitionFee'] = $this->input->post('max_fee');
+			$this->db->update('fee', $fee);
+		}
+
+
+		redirect("form/submit_bank_challan/$session_id");
+	}
+
+
+	public function print_renewal_bank_challan($session_id)
+	{
+		$this->data['session_id'] = $session_id = (int) $session_id;
+
+		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
+		                                                  WHERE sessionYearId = $session_id")->result()[0];
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT 
+		`school`.`schoolId` AS `school_id`
+					, `schools`.`schoolId` AS `schools_id`
+					, `school`.`session_year_id`
+					, `schools`.`registrationNumber`
+					, `schools`.`schoolName`
+					, `schools`.`district_id`
+					, `schools`.`yearOfEstiblishment`
+					, `schools`.`school_type_id`
+					, `schools`.`gender_type_id` , `school`.`reg_type_id`
+					, `schools`.`level_of_school_id`
+					, `schools`.`yearOfEstiblishment`
+				FROM
+					`schools`
+					INNER JOIN `school` 
+						ON (`schools`.`schoolId` = `school`.`schools_id`)
+						WHERE `school`.`session_year_id`='" . $session_id . "'
+						AND `schools`.`owner_id`='" . $userId . "'";
+
+
+		$this->data['school'] =  $this->db->query($query)->result()[0];
+		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
+
+		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
+
+		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
+		$this->data['form_status'] = $this->db->query($query)->result()[0];
+
+		$query = "SELECT session_id, last_date, fine_percentage FROM `session_fee_submission_dates` 
+		               WHERE session_id= $session_id AND last_date >='" . date('Y-m-d') . "' 
+					   ORDER BY last_date ASC LIMIT 1";
+		$this->data['late_fee'] = $this->db->query($query)->result()[0];
+
+		$query = "SELECT * FROM `session_fee_submission_dates` WHERE session_id = '" . $session_id . "'";
+		$this->data['session_fee_submission_dates'] = $this->db->query($query)->result();
+
+		$query = "SELECT MAX(tuitionFee) as max_tution_fee  FROM `fee` WHERE school_id= '" . $school_id . "'";
+		$this->data['max_tuition_fee'] = $max_tuition_fee = preg_replace(
+			'/[^0-9.]/',
+			'',
+			$this->db->query($query)->result()[0]->max_tution_fee
+		);
+
+		$query = "SELECT fee_min, fee_max, renewal_app_processsing_fee, renewal_app_inspection_fee, renewal_fee FROM `fee_structure` WHERE fee_min <= $max_tuition_fee ORDER BY fee_min DESC LIMIT 1";
+		$this->data['fee_sturucture'] = $this->db->query($query)->result()[0];
+
+
+		$this->data['title'] = "Renewal";
+		$this->data['description'] = '';
+		$this->load->view('forms/submit_bank_challan/renewal_bank_challan_print', $this->data);
 	}
 }
