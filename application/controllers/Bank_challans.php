@@ -82,20 +82,8 @@ class Bank_challans extends MY_Controller
 						WHERE bank_challan_id = '" . $bank_challan_id . "'";
 				$bank_challan_detail = $this->db->query($query)->result()[0];
 				//here we need to change the status of renew/ registration/ and upgradation and renewal upgradation.
-				if ($bank_challan_detail->challan_for == 'Registration' or $bank_challan_detail->challan_for == 'Renewal') {
+				if ($bank_challan_detail->challan_for == 'Registration' or $bank_challan_detail->challan_for == 'Renewal' or $bank_challan_detail->challan_for == 'Renewal Upgradation') {
 
-					$where['schoolId'] = $bank_challan_detail->school_id;
-					$where['session_year_id'] = $bank_challan_detail->session_id;
-					$this->db->where($where);
-					$update['status'] = '3';
-					// if (
-					// 	$bank_challan_detail->challan_for == 'Registration'
-					// 	and $this->input->post("bise_verified")
-					// ) {
-					// 	$update['reg_type_id'] = '2';
-					// }
-
-					$this->db->update('school', $update);
 
 					if ($this->input->post("bise_verified")) {
 						$where = array();
@@ -104,6 +92,23 @@ class Bank_challans extends MY_Controller
 						$this->db->where($where);
 						$update['bise_verified'] = $this->input->post("bise_verified");
 						$this->db->update('schools', $update);
+					} else {
+						if ($bank_challan_detail->challan_for == 'Registration') {
+							$where['schoolId'] = $bank_challan_detail->school_id;
+							$where['session_year_id'] = $bank_challan_detail->session_id;
+							$this->db->where($where);
+							$update['inspection'] = '0';
+							$update['status'] = '3';
+							$this->db->update('school', $update);
+						}
+						if ($bank_challan_detail->challan_for == 'Renewal Upgradation') {
+							$where['schoolId'] = $bank_challan_detail->school_id;
+							$where['session_year_id'] = $bank_challan_detail->session_id;
+							$this->db->where($where);
+							$update['inspection'] = '0';
+							$update['status'] = '3';
+							$this->db->update('school', $update);
+						}
 					}
 				}
 

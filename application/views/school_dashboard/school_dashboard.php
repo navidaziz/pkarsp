@@ -300,7 +300,9 @@
                         <td colspan="4">
                           <?php if ($stop_appy) { ?>
                             <a class="btn btn-success" href="<?php echo site_url("apply/renewal/$session->sessionYearId"); ?>">Apply for Renewal</a>
-                            <a class="btn btn-warning" href="">Apply for Upgradation</a>
+                            <?php if ($session->status == 1) {  ?>
+                              <a class="btn btn-warning" href="<?php echo site_url("apply/renewal_upgradation/$session->sessionYearId"); ?>">Apply for Renewal + Upgradation</a>
+                            <?php } ?>
                           <?php } else { ?>
 
                           <?php } ?>

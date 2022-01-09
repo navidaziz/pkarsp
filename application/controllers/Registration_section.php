@@ -6,57 +6,21 @@ class Registration_section extends MY_Controller
 
 	public function index()
 	{
-
-
 		$this->data['title'] = 'Registration Section';
 		$this->data['description'] = 'List of All Requests';
 		$this->data['view'] = 'registration_section/request_list';
 		$this->load->view('layout', $this->data);
 	}
 
-	public function get_new_requests()
+	public function inspections()
 	{
-		$query = "SELECT
-		`schools`.schoolId as schools_id,
-		`schools`.schoolName,
-		`schools`.registrationNumber,
-		`schools`.biseRegister,
-		`session_year`.`sessionYearTitle`,
-		`session_year`.`sessionYearId`,
-		`school`.`status`,
-		`school`.`schoolId` as school_id
-		FROM
-		`school`,
-		`schools`,
-		`session_year`
-		WHERE  `session_year`.`sessionYearId` = `school`.`session_year_id`
-		AND `school`.`schools_id` = `schools`.`schoolId`
-		AND `school`.`status`=3
-		AND `school`.`reg_type_id`=1";
-		$this->data['new_registrations'] = $this->db->query($query)->result();
-
-		$query = "SELECT
-		`schools`.schoolId as schools_id,
-		`schools`.schoolName,
-		`schools`.registrationNumber,
-		`schools`.biseRegister,
-		`session_year`.`sessionYearTitle`,
-		`session_year`.`sessionYearId`,
-		`school`.`status`,
-		`school`.`schoolId` as school_id
-		FROM
-		`school`,
-		`schools`,
-		`session_year`
-		WHERE  `session_year`.`sessionYearId` = `school`.`session_year_id`
-		AND `school`.`schools_id` = `schools`.`schoolId`
-		AND `school`.`status`=3
-		AND `school`.`reg_type_id`=2";
-		$this->data['new_renewals'] = $this->db->query($query)->result();
-		$this->load->view('registration_section/new_requests', $this->data);
+		$this->data['title'] = 'Inspections';
+		$this->data['description'] = 'List of All Inspections';
+		$this->data['view'] = 'registration_section/inspections';
+		$this->load->view('layout', $this->data);
 	}
 
-	public function completed_requests()
+	private function get_request_list($status, $request_type = NULL, $title = NULL)
 	{
 		$query = "SELECT
 		`schools`.schoolId as schools_id,
@@ -66,20 +30,54 @@ class Registration_section extends MY_Controller
 		`session_year`.`sessionYearTitle`,
 		`session_year`.`sessionYearId`,
 		`school`.`status`,
-		`school`.`schoolId` as school_id,
-		`reg_type`.`regTypeTitle`
+		`reg_type`.`regTypeTitle`,
+		`school`.`schoolId` as school_id
 		FROM
 		`school`,
 		`schools`,
 		`session_year`,
 		`reg_type`
+		
 		WHERE  `session_year`.`sessionYearId` = `school`.`session_year_id`
 		AND `school`.`schools_id` = `schools`.`schoolId`
 		AND `school`.`reg_type_id` = `reg_type`.`regTypeId`
-		AND `school`.`status`=1";
-		$this->data['completed_requests'] = $this->db->query($query)->result();
+		AND `school`.`status`= '" . $status . "'";
+		if ($request_type) {
+			$query .= "AND `school`.`reg_type_id`= $request_type";
+		}
+		if ($title) {
+			$this->data['title'] = $status . " - " . $title;
+		}
 
-		$this->load->view('registration_section/completed_requests', $this->data);
+		$this->data['requests'] = $this->db->query($query)->result();
+
+		$this->load->view('registration_section/requests', $this->data);
+	}
+
+	public function get_new_requests()
+	{
+
+		$this->get_request_list(3, 1, 'New Registration');
+		$this->get_request_list(3, 2, 'New Renewal');
+		$this->get_request_list(3, 4, 'New Renewal-Upgradation');
+		$this->get_request_list(3, 3, 'Upgradation');
+	}
+
+	public function new_inspection_requests()
+	{
+		$this->get_request_list(4, NULL, 'New Inspection');
+	}
+	public function awating_inspection_requests()
+	{
+		$this->get_request_list(5, NULL, 'Inspection Inprogress');
+	}
+	public function completed_inspection_requests()
+	{
+		$this->get_request_list(6, NULL, 'Inspection Completed');
+	}
+	public function completed_requests()
+	{
+		$this->get_request_list(1, NULL, 'Completed Requests');
 	}
 	public function inspection_requests()
 	{
@@ -173,19 +171,16 @@ class Registration_section extends MY_Controller
 				$this->db->update('registration_code', $update_increament);
 				$affected_rows = $this->db->affected_rows();
 
-				echo "<h2 style='margin-top:150px; margin-bottom:70px;' class='text-center'><strong class='text text-success'>Successfully Alloted Registration Number \" $codeCombined \" .</strong></h2>";
-				echo "<div class='row'><div class='col-md-offset-2 col-md-8' style='margin-bottom:35px;'>";
-				echo "
-					<input type='hidden' name='schools_id_for_message' id='schools_id_for_message' value='" . $school_session_id . "'></input>
-	
-	
-					<button id='send_message' class='btn btn-primary'><i class='fa fa-envelope-o'></i> Send Registration Certificate</button><a class='btn btn-success btn-flat pull-right' onclick='(function(){ location.reload(); })
-			  ();'>Close</a>";
-				echo "</div></div>";
+				$reponse['status'] = 1;
+				$message = "<h2 class='text-center'><strong class='text text-success'>Successfully Alloted Registration Number \" $codeCombined \" .</strong></h2>";
+
+				$reponse['message'] = $message;
 			}
 		} else {
-			echo "Sorry! Account password incorrect.";
+			$reponse['status'] = 0;
+			$reponse['message'] = "Sorry! Account password incorrect.";
 		}
+		echo json_encode($reponse);
 	}
 
 	public function grant_renewal()
@@ -218,7 +213,9 @@ class Registration_section extends MY_Controller
 				$this->db->where('schoolId', $school_id);
 				if ($this->db->update('school', $update_data)) {
 					$reponse['status'] = 1;
-					$reponse['message'] = "Renewal Successfully";
+					$message = "<h2 class='text-center'><strong class='text text-success'>Successfully Alloted Renewal Number \" $renewal_code \"</strong></h2>
+					";
+					$reponse['message'] = $message;
 				} else {
 					$reponse['status'] = 0;
 					$reponse['message'] = "Sorry! Some thing went wrong try again.";
@@ -234,6 +231,91 @@ class Registration_section extends MY_Controller
 
 		echo json_encode($reponse);
 	}
+
+	public function grant_renewal_and_upgrade()
+	{
+
+		//var_dump($_POST);
+		//echo max($_POST['upgrade_levels']);
+
+
+		$account_password = $this->input->post('account_password');
+		$schools_id = (int) $this->input->post('schools_id');
+		$school_id = (int) $this->input->post('school_id');
+		$session_id = (int) $this->input->post('session_id');
+		$upgrade = $this->input->post('upgrade');
+
+		$selected_levels = array_merge((array) $_POST['renewal_levels'], (array) $_POST['upgrade_levels']);
+		$school_level = array();
+		foreach ($selected_levels as $levels_id) {
+			if ($levels_id == 1) {
+				$school_level['primary_level'] = 1;
+			}
+			if ($levels_id == 2) {
+				$school_level['middle_level'] = 1;
+			}
+			if ($levels_id == 3) {
+				$school_level['high_level'] = 1;
+			}
+			if ($levels_id == 4) {
+				$school_level['h_sec_college_level'] = 1;
+			}
+		}
+
+
+
+		$this->db->where('userPassword', $account_password);
+		$this->db->where('userId', $this->session->userdata('userId'));
+		$user_detail = $this->db->get('users')->row();
+		if ($user_detail) {
+			date_default_timezone_set("Asia/Karachi");
+			$dated = date("Y-m-d h:i:sa");
+
+			$renewal_code = "2-" . $school_id . "-" . $session_id;
+			//echo $renewal_code;exit;
+			$arr = array();
+			if ($renewal_code != "") {
+				$update_data = array(
+					'renewal_code' => $renewal_code,
+					'status' => 1,
+					'updatedDate' => $dated,
+					'updatedBy' => $this->session->userdata('userId')
+				);
+
+				if ($upgrade == 'Yes') {
+					$update_data['level_of_school_id'] = max($selected_levels);
+					$update_data['upgrade'] = 1;
+				}
+				$this->db->where('schoolId', $school_id);
+				if ($this->db->update('school', $update_data)) {
+
+					if ($school_level) {
+						// Upgrade school date....
+						$this->db->where('schoolId', $schools_id);
+						$this->db->update('schools', $school_level);
+					}
+
+					$reponse['status'] = 1;
+					$message = "<h2 class='text-center'><strong class='text text-success'>Successfully Alloted Renewal Number \" $renewal_code \"</strong></h2>
+					";
+					$reponse['message'] = $message;
+				} else {
+					$reponse['status'] = 0;
+					$reponse['message'] = "Sorry! Some thing went wrong try again.";
+				}
+			} else {
+				$reponse['status'] = 0;
+				$reponse['message'] = "Erro in renewal code creation, try again.";
+			}
+		} else {
+			$reponse['status'] = 0;
+			$reponse['message'] = "Sorry! Account password incorrect.";
+		}
+
+		echo json_encode($reponse);
+	}
+
+
 	public function get_request_detail()
 	{
 		$this->data['school_id'] = $school_id = (int) $this->input->post('school_id');
@@ -265,6 +347,7 @@ class Registration_section extends MY_Controller
 		  WHERE  `school`.`schoolId` = '" . $school_id . "'
 		  AND `school`.`session_year_id` = '" . $session_id . "'";
 		$session_request_detail = $this->db->query($query)->result()[0];
+		$this->data['schools_id'] = $session_request_detail->schools_id;
 		$this->data['school'] = $this->school_detail($session_request_detail->schools_id);
 		$this->data['session_request_detail'] = $session_request_detail;
 
@@ -365,6 +448,46 @@ class Registration_section extends MY_Controller
 		echo 1;
 	}
 
+	public function forward_for_inspection()
+	{
+		$session_id = (int) $this->input->post('session_id');
+		$school_id = (int) $this->input->post('school_id');
+		$schools_id = (int) $this->input->post('schools_id');
+		$this->db->where('schoolId', $school_id);
+		$input['status'] = 4;
+		$this->db->update('school', $input);
+		redirect("registration_section/");
+	}
+
+	public function inspection_assignment()
+	{
+		$session_id = (int) $this->input->post('session_id');
+		$school_id = (int) $this->input->post('school_id');
+		$schools_id = (int) $this->input->post('schools_id');
+		$inspection_by = (int) $this->input->post('inspection_by');
+		$this->db->where('schoolId', $school_id);
+		$input['status'] = 5;
+		$input['inspection_by'] = $inspection_by;
+
+		$this->db->update('school', $input);
+		redirect("registration_section/inspections");
+	}
+
+	public function submit_inspection_report()
+	{
+		$session_id = (int) $this->input->post('session_id');
+		$school_id = (int) $this->input->post('school_id');
+		$schools_id = (int) $this->input->post('schools_id');
+		$inspection_report = $this->input->post('inspection_report');
+		$this->db->where('schoolId', $school_id);
+		$input['status'] = 6;
+		$input['inspection'] = 1;
+		$input['inspection_report'] = $inspection_report;
+		$this->db->update('school', $input);
+		redirect("registration_section/inspections");
+	}
+
+
 
 
 	private function school_detail($schools_id)
@@ -436,5 +559,14 @@ class Registration_section extends MY_Controller
 							";
 
 		return $this->db->query($query)->result()[0];
+	}
+
+	public function renewal_fee_sturucture()
+	{
+
+
+		$query = "SELECT * FROM `fee_structure`";
+		$this->data['fee_structures'] = $this->db->query($query)->result();
+		$this->load->view('forms/fee_structures/renewal_fee_sturucture', $this->data);
 	}
 }

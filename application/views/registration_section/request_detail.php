@@ -235,7 +235,7 @@
           </ol>
         <?php } ?>
 
-        <?php if ($session_request_detail->reg_type_id == 2) {
+        <?php if ($session_request_detail->reg_type_id == 2 or $session_request_detail->reg_type_id == 3 or $session_request_detail->reg_type_id == 4) {
           $query = "SELECT
           `reg_type`.`regTypeTitle`,
           `school_type`.`typeTitle`,
@@ -406,7 +406,6 @@
         </table>
         <!-- </div> -->
         <div style=" overflow-y: scroll; border:1px solid #9FC8E8; border-radius: 10px; height: 280px;  margin: 5px; padding: 5px; background-color: white;">
-
           <ul class="chat" id="all_comments"> </ul>
         </div>
         <?php if ($session_request_detail->status != 1) { ?>
@@ -422,93 +421,223 @@
 
               </li>
             </ul>
+            <?php if ($session_request_detail->inspection == 1) { ?>
+              <div>
+                <?php $user_id = $this->session->userdata('userId');
+                $query = "SELECT user_id FROM `tagged_users`
+                  WHERE `created_by` ='" . $user_id . "'
+                  AND school_id = '" . $school_id . "'
+                  AND schools_id = '" . $school->schools_id . "'";
+                $user_taggs = $this->db->query($query)->result();
+                $taggged_user_ids = array();
+                foreach ($user_taggs as $user_tag) {
+                  $taggged_user_ids[] = $user_tag->user_id;
+                }
+                ?>
+                Forward To:<select onchange="tage_users()" multiple id="users" style="width: 100%;">
+                  <?php
 
-            <div>
-              <?php $user_id = $this->session->userdata('userId');
-              $query = "SELECT user_id FROM `tagged_users`
-              WHERE `created_by` ='" . $user_id . "'
-              AND school_id = '" . $school_id . "'
-              AND schools_id = '" . $school->schools_id . "'";
-              $user_taggs = $this->db->query($query)->result();
-              $taggged_user_ids = array();
-              foreach ($user_taggs as $user_tag) {
-                $taggged_user_ids[] = $user_tag->user_id;
-              }
-              ?>
-              Forward To:<select onchange="tage_users()" multiple id="users" style="width: 100%;">
-                <?php
-
-                $query = "SELECT  `users`.`userId`, `users`.`userTitle`, `roles`.`role_title` 
+                  $query = "SELECT  `users`.`userId`, `users`.`userTitle`, `roles`.`role_title` 
                            FROM
                            `roles`
                            INNER JOIN `users`
                            ON ( `roles`.`role_id` = `users`.`role_id` );";
-                $users = $this->db->query($query)->result();
+                  $users = $this->db->query($query)->result();
 
-                foreach ($users as $user) { ?>
-                  <option <?php if (in_array($user->userId, $taggged_user_ids)) { ?> selected <?php } ?> value="<?php echo $user->userId; ?>"><?php echo $user->userTitle . " - " . $user->role_title; ?></option>
+                  foreach ($users as $user) { ?>
+                    <option <?php if (in_array($user->userId, $taggged_user_ids)) { ?> selected <?php } ?> value="<?php echo $user->userId; ?>"><?php echo $user->userTitle . " - " . $user->role_title; ?></option>
 
-                <?php } ?>
-              </select>
-              <p id="tag_users_message"></p>
-            </div>
+                  <?php } ?>
+                </select>
+                <p id="tag_users_message"></p>
+              </div>
+            <?php } ?>
           </div>
         <?php } ?>
-        <?php if ($session_request_detail->reg_type_id == 1 and $session_request_detail->status != 1) { ?>
-          <div class="col-md-5">
-            <div style=" text-align:center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 5px; padding: 5px; background-color: white;">
-              <h4>
-                Do you want allot registration number?
-                <input onclick="show_registration_form()" style="margin-left: 10px;" type="checkbox" name="i_want" id="i_want" />
-              </h4>
-            </div>
-          </div>
-          <div class="col-md-7">
-            <div id="registration_form" style="display: none; text-align:center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 5px; padding: 5px; background-color: white;">
 
-              <h4>
+        <?php if ($session_request_detail->status != 1 and $session_request_detail->inspection == 1) { ?>
+          <div class="col-md-12">
+            <div id="renewal_option" style=" text-align:center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 5px; padding: 5px; background-color: white;">
+              <?php if ($session_request_detail->inspection_report) { ?>
+                <p>
+                <h5>Inspection Report:</h5>:
+                <?php echo $session_request_detail->inspection_report;   ?>
+                </p>
+              <?php } ?>
+              <?php if ($session_request_detail->reg_type_id == 1) { ?>
 
-                Please Enter Account Password:
-                <input class="form-control" style="width:150px;" type="text" onclick="$('#account_password').prop('type','password')" id="account_password" name="account_password" value="" autocomplete="off" />
-                <br />
-                <br />
-                <button class="btn btn-success " onclick="allot_registration_number()">Allot Registration No.</button>
-                <p id="allotment_error"></p>
-              </h4>
+                <div id="registration_section">
+                  <div class="col-md-5">
+                    <div style=" text-align:center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 5px; padding: 5px; background-color: white;">
+                      <h4>
+                        Do you want allot registration number?
+                        <input onclick="show_registration_form()" style="margin-left: 10px;" type="checkbox" name="i_want" id="i_want" />
+                      </h4>
+                    </div>
+                  </div>
+                  <div class="col-md-7">
+                    <div id="registration_form" style="display: none; text-align:center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 5px; padding: 5px; background-color: white;">
 
-            </div>
-          </div>
-        <?php } ?>
-        <?php if ($session_request_detail->reg_type_id == 2 and $session_request_detail->status != 1) { ?>
-          <div>
-            <div class="col-md-12">
-              <div id="renewal_option" style=" text-align:center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 5px; padding: 5px; background-color: white;">
+                      <h4>
+
+                        Please Enter Account Password:
+                        <input class="form-control" style="width:150px;" type="text" onclick="$('#account_password').prop('type','password')" id="account_password" name="account_password" value="" autocomplete="off" />
+                        <br />
+                        <br />
+                        <button class="btn btn-success " onclick="allot_registration_number()">Allot Registration No.</button>
+                        <p id="allotment_error"></p>
+                      </h4>
+
+                    </div>
+                  </div>
+                </div>
+              <?php } ?>
+              <?php if ($session_request_detail->reg_type_id == 2) { ?>
+                <div>
+                  <div class="col-md-12">
+
+                    <div id="renewal_option" style=" text-align:center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 5px; padding: 5px; background-color: white;">
+                      <h4>
+                        Do you want to Grant Renewal?
+                        <input onclick="show_registration_form()" style="margin-left: 10px;" type="checkbox" name="i_want" id="i_want" />
+                      </h4>
+
+                      <h4 id="registration_form" style="display: none;">
+
+                        Please Enter Account Password:
+                        <input class="form-control" style="width:150px;" type="text" onclick="$('#account_password').prop('type','password')" id="account_password" name="account_password" value="" autocomplete="off" />
+                        <button class="btn btn-success " onclick="grant_renewal()">Grant Renewal</button>
+                        <p id="allotment_error"></p>
+                      </h4>
+
+                    </div>
+                  </div>
+                </div>
+              <?php } ?>
+              <?php if ($session_request_detail->reg_type_id == 4) { ?>
                 <h4>
-                  Do you want to Grant Renewal?
+                  Do you want to Grant Renewal and Upgradation?
                   <input onclick="show_registration_form()" style="margin-left: 10px;" type="checkbox" name="i_want" id="i_want" />
                 </h4>
 
                 <h4 id="registration_form" style="display: none;">
+                  <table class="table" style="text-align: center;">
+                    <tr>
+                      <th style="text-align: center;">Renewal</th>
+                      <th style="text-align: center;">Upgradation</th>
+                    </tr>
+                    <tr>
+                      <td>
+                        <?php
+                        $query = "SELECT * FROM `levelofinstitute` 
+                            WHERE `levelofinstitute`.`levelofInstituteId` <= '" . $session_request_detail->level_of_school_id . "'
+                            ORDER BY `levelofinstitute`.`levelofInstituteId` ASC";
+                        $levelofinstitutes = $this->db->query($query)->result();
+                        foreach ($levelofinstitutes as $levelofinstitute) { ?>
+                          <input class="renewal_levels" name="renewal_levels[]" value="<?php echo $levelofinstitute->levelofInstituteId;  ?>" type="checkbox" checked /> <?php echo $levelofinstitute->levelofInstituteTitle ?>
+                          <span style="margin-right: 15px;"></span>
+                        <?php } ?>
+                      </td>
+                      <td><strong>
+                          Do you want to Upgrade?
+                          <input required onclick="$('#upgrade_list').show();" type="radio" class="is_upgrade" name="is_upgrade" value="1" /> Yes <span style="margin-right: 15px;"></span>
+                          <input required onclick="$('#upgrade_list').hide();" type="radio" class="is_upgrade" name="is_upgrade" value="0" /> No <span style="margin-right: 25px;"></span> </strong>
+                        <span id="upgrade_list" style="display: none;">
+                          <?php
+                          $query = "SELECT * FROM `levelofinstitute` 
+                            WHERE `levelofinstitute`.`levelofInstituteId` > '" . $session_request_detail->level_of_school_id . "'
+                            ORDER BY `levelofinstitute`.`levelofInstituteId` ASC";
+                          $levelofinstitutes = $this->db->query($query)->result();
+                          foreach ($levelofinstitutes as $levelofinstitute) { ?>
+                            <input class="upgrade_levels" type="checkbox" name="upgrade_levels[]" value="<?php echo $levelofinstitute->levelofInstituteId;  ?>" /> <?php echo $levelofinstitute->levelofInstituteTitle ?>
+                            <span style="margin-right: 15px;"></span>
+                          <?php } ?>
+                        </span>
+                      </td>
+                    </tr>
+                  </table>
 
                   Please Enter Account Password:
                   <input class="form-control" style="width:150px;" type="text" onclick="$('#account_password').prop('type','password')" id="account_password" name="account_password" value="" autocomplete="off" />
-                  <button class="btn btn-success " onclick="grant_renewal()">Grant Renewal</button>
+                  <button class="btn btn-success " onclick="grant_renewal_upgradation()">Grant Renewal</button>
                   <p id="allotment_error"></p>
                 </h4>
 
-              </div>
+              <?php } ?>
+
             </div>
           </div>
         <?php } ?>
-        <?php if ($session_request_detail->status == 1) { ?>
+
+        <?php if ($session_request_detail->status == 1 and  $session_request_detail->inspection == 1) { ?>
           <div class="block_div" style="text-align: center;">
             <h4>
               <?php if ($session_request_detail->reg_type_id == 1) { ?> Registered Successfully. <?php } ?>
               <?php if ($session_request_detail->reg_type_id == 2) { ?> Registration Renew Successfully. <?php } ?>
             </h4>
-          <?php } ?>
           </div>
+        <?php } ?>
+        <?php if ($session_request_detail->inspection == 0 and $session_request_detail->status == 3) { ?>
+          <div class="block_div" style="text-align: center;">
+            <h4>
+              Please Forward Request for inspection.
+              <form method="post" onSubmit="return confirm('Are you sure you want to forward?');" action="<?php echo site_url("registration_section/forward_for_inspection"); ?>">
+                <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
+                <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
+                <input type="hidden" name="schools_id" value="<?php echo $schools_id; ?>" />
+                <input class="btn btn-warning" type="submit" value="Forward" name="Forward" />
+              </form>
+            </h4>
+          </div>
+        <?php } ?>
+
+        <?php if ($session_request_detail->inspection == 0 and $session_request_detail->status == 4) { ?>
+          <div class="block_div" style="text-align: center;">
+            <h4>
+              Assign Inspection To:
+              <form method="post" onSubmit="return confirm('Are you sure you want to assign?');" action="<?php echo site_url("registration_section/inspection_assignment"); ?>">
+                <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
+                <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
+                <input type="hidden" name="schools_id" value="<?php echo $schools_id; ?>" />
+                <select style="width: 200px;" class="form-control" name="inspection_by">
+                  <?php
+
+                  $query = "SELECT  `users`.`userId`, `users`.`userTitle`, `roles`.`role_title` 
+                           FROM
+                           `roles`
+                           INNER JOIN `users`
+                           ON ( `roles`.`role_id` = `users`.`role_id` );";
+                  $users = $this->db->query($query)->result();
+
+                  foreach ($users as $user) { ?>
+                    <option value="<?php echo $user->userId; ?>"><?php echo $user->userTitle . " - " . $user->role_title; ?></option>
+
+                  <?php } ?>
+                </select>
+                <input class="btn btn-warning" type="submit" value="Assign" name="Assign" />
+              </form>
+            </h4>
+          </div>
+        <?php } ?>
+
+        <?php if ($session_request_detail->inspection == 0 and $session_request_detail->status == 5) { ?>
+          <div class="block_div" style="text-align: center;">
+            <h4>
+              Submit inspection report
+              <form method="post" onSubmit="return confirm('Are you sure you want to submit inspection report?');" action="<?php echo site_url("registration_section/submit_inspection_report"); ?>">
+                <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
+                <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
+                <input type="hidden" name="schools_id" value="<?php echo $schools_id; ?>" />
+                <textarea class="form-control comment_textarea" style="width: 100% !important; min-height:50px" name="inspection_report"></textarea>
+                <input class="btn btn-warning" type="submit" value="Submit Inspection Report" name="Submit Inspection Report" />
+              </form>
+            </h4>
+          </div>
+        <?php } ?>
       </div>
+
+
+
     </div>
 
   </div>
@@ -548,13 +677,85 @@
             //$('#allotment_error').html(respose);
             respose = JSON.parse(respose);
             if (respose.status == '1') {
-              $('#renewal_option').html(respose.message);
+              $('#registration_section').html(respose.message);
               get_new_requests();
               completed_requests();
             }
             if (respose.status == '0') {
               $('#allotment_error').html(respose.message);
             }
+          });
+
+
+      } else {
+        alert("Please click on i want registration number.");
+      }
+    }
+
+
+    function grant_renewal_upgradation() {
+
+      if ($('#i_want').prop('checked') == true) {
+
+        if ($('#account_password').val() == "") {
+          alert("Account Password Required.");
+          return false;
+        }
+
+        if ($(".is_upgrade").is(":checked") == false) {
+          alert('Please check on "Do you want to upgrade Yes or Not"');
+          return false;
+        }
+        var upgrade = '';
+        var upgrade_levels = [];
+        if ($(".is_upgrade").prop("checked")) {
+          upgrade = 'Yes';
+          $('.upgrade_levels:checked').each(function(i, e) {
+            upgrade_levels.push($(this).val());
+          });
+          if (upgrade_levels.length === 0) {
+            console.log("Array Empty.");
+            alert("If you want to upgrade Please select recommended levels.");
+            return false;
+          }
+        } else {
+          upgrade = 'No';
+        }
+
+        var renewal_levels = [];
+        $('.renewal_levels:checked').each(function(i, e) {
+          renewal_levels.push($(this).val());
+        });
+
+        $.ajax({
+            method: "POST",
+            url: "<?php echo site_url('registration_section/grant_renewal_and_upgrade'); ?>",
+            data: {
+              session_id: <?php echo $session_id; ?>,
+              school_id: <?php echo $school_id; ?>,
+              schools_id: <?php echo $school->schools_id; ?>,
+              account_password: $('#account_password').val(),
+              upgrade: upgrade,
+              renewal_levels: renewal_levels,
+              upgrade_levels: upgrade_levels
+
+            }
+          })
+          .done(function(respose) {
+            $('#allotment_error').html(respose);
+            return false;
+            respose = JSON.parse(respose);
+            if (respose.status == '1') {
+              //$('#renewal_option').html(respose.message);
+
+
+              get_new_requests();
+              completed_requests();
+            }
+            if (respose.status == '0') {
+              $('#allotment_error').html(respose.message);
+            }
+
           });
 
 

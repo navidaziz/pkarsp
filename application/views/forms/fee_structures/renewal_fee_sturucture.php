@@ -18,8 +18,18 @@
 
   <table class="table table-bordered">
     <tr>
+      <th></th>
+      <th></th>
+      <th colspan="3" style="text-align: center;">Renewal</th>
+      <th colspan="3" style="text-align: center;">Renewal+Upgradation</th>
+    </tr>
+    <tr>
       <th>S/No</th>
       <th>Max Fee Range</th>
+      <th>Processsing Fee</th>
+      <th>Inspection Fee</th>
+      <th>Renewal Fee</th>
+
       <th>Processsing Fee</th>
       <th>Inspection Fee</th>
       <th>Renewal Fee</th>
@@ -33,6 +43,10 @@
         <td>Rs. <?php echo $fee_structure->renewal_app_processsing_fee ?></td>
         <td>Rs. <?php echo $fee_structure->renewal_app_inspection_fee ?></td>
         <td>Rs. <?php echo $fee_structure->renewal_fee ?></td>
+
+        <td>Rs. <?php echo $fee_structure->up_grad_app_processing_fee ?></td>
+        <td>Rs. <?php echo $fee_structure->up_grad_inspection_fee ?></td>
+        <td>Rs. <?php echo $fee_structure->up_grad_renewal_fee ?></td>
       </tr>
     <?php  } ?>
   </table>

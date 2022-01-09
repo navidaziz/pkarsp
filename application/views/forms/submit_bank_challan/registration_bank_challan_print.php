@@ -196,59 +196,129 @@
                 </strong>
               </td>
             </tr>
-
             <tr>
-              <td>Late Fee Fine <br /><small><?php
-                                              if ($late_fee->fine_percentage) {
-                                                echo  $late_fee->fine_percentage;
-                                              } else {
-                                                echo 100;
-                                              }
-                                              ?>% on
-                  (Application Processing+Inspection Fee)</small>
-              </td>
-              <td><?php
-                  if ($late_fee->fine_percentage) {
-                    $fine = ($late_fee->fine_percentage * $total) / 100;
-                  } else {
-                    $fine =  (100 * $total) / 100;
-                  }
-                  echo number_format($fine);
-                  ?>
-                Rs.</td>
-            </tr>
-            <tr>
-              <?php
-              $query = "SELECT * FROM `levelofinstitute` WHERE `levelofinstitute`.`levelofInstituteId` = $school->level_of_school_id";
-              $level_securities = $this->db->query($query)->result()[0];
 
-              ?>
-              <td>Security Fee (<?php echo $level_securities->levelofInstituteTitle; ?>)</td>
-              <td>
-                <?php echo number_format($level_securities->security_fee); ?> Rs.
+              <?php if ($session_detail->status == 1) { ?>
+                <td colspan="2">
+                  <style>
+                    .table_reg>tbody>tr>td,
+                    .table_reg>tbody>tr>th,
+                    .table_reg>tfoot>tr>td,
+                    .table_reg>tfoot>tr>th,
+                    .table_reg>thead>tr>td,
+                    .table_reg>thead>tr>th {
+                      padding: 3px;
+                      line-height: 1.42857143;
+                      vertical-align: top;
+                      border-top: 1px solid #ddd;
+                      text-align: center;
+                    }
+                  </style>
+                  <table class="table table_reg">
+                    <tr>
+                      <th> Due's Date </th>
+                      <th> Late Fee % </th>
+                      <th> Late Fee </th>
+                      <th> Total </th>
 
-              </td>
+                      <?php
+                      $query = "SELECT * FROM `levelofinstitute` 
+          WHERE `levelofinstitute`.`levelofInstituteId` = $school->level_of_school_id";
+                      $level_securities = $this->db->query($query)->result()[0];
+
+                      ?>
+                      <th>Security Fee <br /><small>(<?php echo $level_securities->levelofInstituteTitle; ?>)</small></th>
+                      <th>Total</th>
+                    </tr>
+                    <?php
+                    $count = 1;
+                    foreach ($session_fee_submission_dates as $session_fee_submission_date) { ?>
+
+                      <tr>
+                        <th>
+                          <?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?>
+                        </th>
+                        <td><?php echo $session_fee_submission_date->fine_percentage; ?> %</td>
+                        <td>
+                          <?php
+                          $fine = 0;
+                          $fine = ($session_fee_submission_date->fine_percentage * $total) / 100;
+                          echo number_format($fine);
+                          ?>
+                          Rs.
+                        </td>
+                        <td>
+                          <?php echo number_format($fine + $total);  ?>
+                        </td>
+                        <td>
+                          <?php echo number_format($level_securities->security_fee); ?> Rs.
+
+                        </td>
+                        <td>
+                          <?php echo number_format($fine + $total + $level_securities->security_fee); ?> Rs.
+
+                        </td>
+                      </tr>
+
+
+
+                    <?php } ?>
+                  </table>
+                </td>
+              <?php } else { ?>
+
+                <td>Late Fee Fine <br /><small><?php
+                                                if ($late_fee->fine_percentage) {
+                                                  echo  $late_fee->fine_percentage;
+                                                } else {
+                                                  echo 100;
+                                                }
+                                                ?>% on
+                    (Application Processing+Inspection Fee)</small>
+                </td>
+                <td><?php
+                    if ($late_fee->fine_percentage) {
+                      $fine = ($late_fee->fine_percentage * $total) / 100;
+                    } else {
+                      $fine =  (100 * $total) / 100;
+                    }
+                    echo number_format($fine);
+                    ?>
+                  Rs.</td>
+              <?php } ?>
             </tr>
-            <?php if ($session_id == 1) { ?>
+
+            <?php if ($session_detail->status != 1) { ?>
               <tr>
-                <td>2018-19 Special Fine (<?php echo $level_securities->levelofInstituteTitle; ?>)</td>
+                <?php
+                $query = "SELECT * FROM `levelofinstitute` 
+          WHERE `levelofinstitute`.`levelofInstituteId` = $school->level_of_school_id";
+                $level_securities = $this->db->query($query)->result()[0];
+
+                ?>
+                <td>Security Fee (<?php echo $level_securities->levelofInstituteTitle; ?>)</td>
                 <td>
-                  <?php echo number_format($special_fine); ?> Rs.
+                  <?php echo number_format($level_securities->security_fee); ?> Rs.
 
                 </td>
               </tr>
+              <?php if ($session_id == 1) { ?>
+                <tr>
+                  <td>2018-19 Special Fine (<?php echo $level_securities->levelofInstituteTitle; ?>)</td>
+                  <td>
+                    <?php echo number_format($special_fine); ?> Rs.
+
+                  </td>
+                </tr>
+              <?php } ?>
+              <tr>
+
+                <td colspan="2" style="text-align: right;">
+                  <h4>Total <?php echo number_format($total + $fine + $level_securities->security_fee + $special_fine); ?> Rs.</h4>
+                </td>
+
+              </tr>
             <?php } ?>
-            <tr>
-
-              <td style="text-align: right;">
-                <h4>Total</h4>
-              </td>
-              <td>
-                <h4><?php echo number_format($total + $fine + $level_securities->security_fee + $special_fine); ?> Rs.</h4>
-              </td>
-
-            </tr>
-
           </tbody>
         </table>
         <br /><br />

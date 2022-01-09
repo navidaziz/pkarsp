@@ -3,7 +3,7 @@
     function renewal_fee_sturucture() {
       $.ajax({
         type: "POST",
-        url: "<?php echo site_url("apply/renewal_fee_sturucture"); ?>",
+        url: "<?php echo site_url("registration_section/renewal_fee_sturucture"); ?>",
         data: {}
       }).done(function(data) {
 
@@ -31,7 +31,7 @@
       </h2>
       <br />
       <small>
-        <h4>S-ID: <?php echo $school->school_id; ?> <?php if ($school->registrationNumber) { ?> - REG No: <?php echo $school->registrationNumber ?> <?php } ?></h4>
+        <h4>S-ID: <?php echo $school->schools_id; ?> <?php if ($school->registrationNumber) { ?> - REG No: <?php echo $school->registrationNumber ?> <?php } ?></h4>
       </small>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -156,45 +156,86 @@
                       </td>
                     </tr>
 
+                    <?php if ($session_detail->status == 1) { ?>
 
+                      <tr>
+                        <td colspan="2">Late Fee Fine
+                          <small>(Application Processing+Inspection Fee+Renewal)</small>
+                        </td>
+
+                      </tr>
+
+                    <?php } ?>
 
                     <tr>
-                      <td>Late Fee Fine <br /><small><?php
-                                                      if ($late_fee->fine_percentage) {
-                                                        echo  $late_fee->fine_percentage;
-                                                      } else {
-                                                        echo 100;
-                                                      }
-                                                      ?>% on
-                          (Application Processing+Inspection Fee+Renewal)</small>
-                      </td>
-                      <td><?php
-                          if ($late_fee->fine_percentage) {
-                            $fine = ($late_fee->fine_percentage * $total) / 100;
-                          } else {
-                            $fine =  (100 * $total) / 100;
-                          }
-                          echo number_format($fine);
-                          ?>
-                        Rs.</td>
+                      <?php if ($session_detail->status == 1) { ?>
+                        <td colspan="2">
+                          <table class="table">
+                            <tr>
+                              <th> Due's Date </th>
+                              <th> Late Fee % </th>
+                              <th> Late Fee Amount </th>
+                              <th> Total </th>
+                            </tr>
+                            <?php
+                            $count = 1;
+                            foreach ($session_fee_submission_dates as $session_fee_submission_date) { ?>
+
+                              <tr>
+                                <th>
+                                  <?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?>
+                                </th>
+                                <td><?php echo $session_fee_submission_date->fine_percentage; ?> %</td>
+                                <td>
+                                  <?php
+                                  $fine = 0;
+                                  $fine = ($session_fee_submission_date->fine_percentage * $total) / 100;
+                                  echo number_format($fine);
+                                  ?>
+                                  Rs.
+                                </td>
+                                <td>
+                                  <?php echo number_format($fine + $total);  ?>
+                                </td>
+                              </tr>
+
+
+
+                            <?php } ?>
+                          </table>
+                        </td>
+                      <?php } else { ?>
+                        <td>Late Fee Fine <br /><small><?php
+                                                        if ($late_fee->fine_percentage) {
+                                                          echo  $late_fee->fine_percentage;
+                                                        } else {
+                                                          echo 100;
+                                                        }
+                                                        ?>% on
+                            (Application Processing+Inspection Fee+Renewal)</small>
+                        </td>
+                        <td><?php
+                            if ($late_fee->fine_percentage) {
+                              $fine = ($late_fee->fine_percentage * $total) / 100;
+                            } else {
+                              $fine =  (100 * $total) / 100;
+                            }
+                            echo number_format($fine);
+                            ?>
+                          Rs.</td>
+                      <?php } ?>
                     </tr>
+                    <?php if ($session_detail->status == 0) { ?>
+                      <tr>
+                        <td colspan="2" style="text-align: right;">
+                          <h4>Total <?php echo number_format($total + $fine); ?> Rs.</h4>
+                        </td>
 
-
-
-
-                    <td colspan="2" style="text-align: right;">
-                      <h4>Total <?php echo number_format($total + $fine); ?> Rs.</h4>
-                    </td>
-
-                    </tr>
-                    <!-- <tr>
-                      <td>Last Date</td>
-                      <td><?php echo date('d M, Y', strtotime($late_fee->last_date)); ?></td>
-
-                    </tr> -->
+                      </tr>
+                    <?php } ?>
                     <tr>
                       <td colspan="2" style="text-align:center;">
-                        <a target="new" class="btn btn-primary" href="<?php echo site_url("form/print_renewal_bank_challan/$session_id") ?>"> <i class="fa fa-print" aria-hidden="true"></i> Print PSRA Renewal Bank Challan From</a>
+                        <a target="new" class="btn btn-primary" href="<?php echo site_url("form/print_renewal_upgradation_bank_challan/$session_id") ?>"> <i class="fa fa-print" aria-hidden="true"></i> Print PSRA Renewal Bank Challan From</a>
                       </td>
                     </tr>
                   </tbody>
@@ -231,7 +272,7 @@
                 <h4>Submit bank challan for renewal session <?php echo $session_detail->sessionYearTitle; ?></h4>
                 <form action="<?php echo site_url("form/add_bank_challan"); ?>" method="post">
                   <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
-                  <input type="hidden" name="challan_for" value="Renewal" />
+                  <input type="hidden" name="challan_for" value="Renewal Upgradation" />
                   <table class="table table-bordered">
                     <tr>
                       <td>Bank Transaction No (STAN)</td>

@@ -103,22 +103,20 @@
     <section class="content" style="padding-top: 0px !important;">
 
       <div class="box box-primary box-solid">
-
-
         <div class="box-body">
           <div class="row">
             <div class="col-md-4" style="padding-right:1px">
-              <div class="block_div" id="new_request">
+              <div class="block_div" id="new_inspection_requests">
                 <h5 style="text-align: center;" class="linear-background"></h5>
               </div>
             </div>
             <div class="col-md-4" style="padding-left:1px; padding-right:1px">
-              <div class="block_div" id="inspection_requests">
+              <div class="block_div" id="awating_inspection_requests">
                 <h5 style="text-align: center;" class="linear-background"></h5>
               </div>
             </div>
             <div class="col-md-4" style="padding-left:1px">
-              <div class="block_div" id="completed_request">
+              <div class="block_div" id="completed_inspection_requests">
                 <h5 style="text-align: center;" class="linear-background"></h5>
               </div>
             </div>
@@ -133,38 +131,38 @@
   </div>
 
   <script>
-    function get_new_requests() {
+    function new_inspection_requests() {
       $.ajax({
           method: "POST",
-          url: "<?php echo site_url('registration_section/get_new_requests'); ?>"
+          url: "<?php echo site_url('registration_section/new_inspection_requests'); ?>"
         })
         .done(function(respose) {
-          $('#new_request').html(respose);
+          $('#new_inspection_requests').html(respose);
         });
     }
 
-    function completed_requests() {
+    function awating_inspection_requests() {
       $.ajax({
           method: "POST",
-          url: "<?php echo site_url('registration_section/completed_requests'); ?>"
+          url: "<?php echo site_url('registration_section/awating_inspection_requests'); ?>"
         })
         .done(function(respose) {
-          $('#completed_request').html(respose);
+          $('#awating_inspection_requests').html(respose);
         });
     }
 
-    function inspection_requests() {
+    function completed_inspection_requests() {
       $.ajax({
           method: "POST",
           url: "<?php echo site_url('registration_section/completed_inspection_requests'); ?>"
         })
         .done(function(respose) {
-          $('#inspection_requests').html(respose);
+          $('#completed_inspection_requests').html(respose);
         });
     }
     $(document).ready(function() {
-      get_new_requests();
-      completed_requests();
-      inspection_requests();
+      new_inspection_requests();
+      awating_inspection_requests();
+      completed_inspection_requests();
     });
   </script>
