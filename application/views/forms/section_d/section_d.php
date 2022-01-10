@@ -6,7 +6,7 @@
         url: "<?php echo site_url("form/get_employee_edit_form"); ?>",
         data: {
           employee_id: employee_id,
-          schools_id: <?php echo $school->schoolId; ?>,
+          schools_id: <?php echo $school->schools_id; ?>,
           school_id: <?php echo $school_id; ?>,
           session_id: <?php echo $session_id; ?>
 
@@ -81,7 +81,7 @@
                 }
               </style>
 
-              <form action="<?php echo site_url("form/add_employee_date"); ?>" method="post">
+              <form action="<?php echo site_url("form/add_employee_data"); ?>" method="post">
                 <input type="hidden" name="schools_id" value="<?php echo $school->schoolId; ?>" />
                 <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
                 <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
@@ -125,7 +125,7 @@
                       <td><input type="text" id="schoolStaffCnic" name="schoolStaffCnic" style="width: 110px;" required /> </td>
                       <td> <select class="sele ct2" id="schoolStaffGender" name="schoolStaffGender" required="required">
                           <?php if (!empty($gender)) : ?>
-                            <option>Gender</option>
+                            <option value="">Gender</option>
                             <?php foreach ($gender as $gen) : ?>
                               <option value="<?php echo $gen->genderId ?>"><?php echo $gen->genderTitle; ?></option>
                             <?php endforeach; ?>
@@ -135,7 +135,7 @@
                         </select></td>
                       <td> <select style="width: 70px;" class="sele ct2" id="schoolStaffType" name="schoolStaffType" required="required">
                           <?php if (!empty($staff_type)) : ?>
-                            <option>Type</option>
+                            <option value="">Type</option>
                             <?php foreach ($staff_type as $s_type) : ?>
                               <option value="<?php echo $s_type->staffTypeId ?>"><?php echo $s_type->staffTtitle; ?></option>
                             <?php endforeach; ?>

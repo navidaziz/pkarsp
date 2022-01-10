@@ -112,6 +112,27 @@ class Registration_section extends MY_Controller
 		$school_id = (int) $this->input->post('school_id');
 		$session_id = (int) $this->input->post('session_id');
 
+		$selected_levels = $this->input->post('reg_levels');
+		$school_level = array();
+		$school_level['primary_level'] = NULL;
+		$school_level['middle_level'] = NULL;
+		$school_level['high_level'] = NULL;
+		$school_level['h_sec_college_level'] = NULL;
+		foreach ($selected_levels as $levels_id) {
+			if ($levels_id == 1) {
+				$school_level['primary_level'] = 1;
+			}
+			if ($levels_id == 2) {
+				$school_level['middle_level'] = 1;
+			}
+			if ($levels_id == 3) {
+				$school_level['high_level'] = 1;
+			}
+			if ($levels_id == 4) {
+				$school_level['h_sec_college_level'] = 1;
+			}
+		}
+
 		$this->db->where('userPassword', $account_password);
 		$this->db->where('userId', $this->session->userdata('userId'));
 		$user_detail = $this->db->get('users')->row();
@@ -149,6 +170,8 @@ class Registration_section extends MY_Controller
 				'updatedBy' => $this->session->userdata('userId')
 			);
 
+
+
 			$this->db->where('schoolId', $schools_id);
 			$this->db->update('schools', $update_data);
 			$affected_rows = $this->db->affected_rows();
@@ -158,7 +181,8 @@ class Registration_section extends MY_Controller
 				$update_session_data = array(
 					'status' => 1,
 					'updatedDate' => $dated,
-					'updatedBy' => $this->session->userdata('userId')
+					'updatedBy' => $this->session->userdata('userId'),
+					'level_of_school_id' => max($selected_levels)
 				);
 				$this->db->where('schoolId', $school_id);
 				$this->db->where('session_year_id', $session_id);
@@ -170,6 +194,12 @@ class Registration_section extends MY_Controller
 				$this->db->where($where1);
 				$this->db->update('registration_code', $update_increament);
 				$affected_rows = $this->db->affected_rows();
+
+				if ($school_level) {
+					// Upgrade school date....
+					$this->db->where('schoolId', $schools_id);
+					$this->db->update('schools', $school_level);
+				}
 
 				$reponse['status'] = 1;
 				$message = "<h2 class='text-center'><strong class='text text-success'>Successfully Alloted Registration Number \" $codeCombined \" .</strong></h2>";
@@ -192,6 +222,28 @@ class Registration_section extends MY_Controller
 		$school_id = (int) $this->input->post('school_id');
 		$session_id = (int) $this->input->post('session_id');
 
+		$selected_levels = $this->input->post('renewal_levels');
+
+		$school_level = array();
+		$school_level['primary_level'] = NULL;
+		$school_level['middle_level'] = NULL;
+		$school_level['high_level'] = NULL;
+		$school_level['h_sec_college_level'] = NULL;
+		foreach ($selected_levels as $levels_id) {
+			if ($levels_id == 1) {
+				$school_level['primary_level'] = 1;
+			}
+			if ($levels_id == 2) {
+				$school_level['middle_level'] = 1;
+			}
+			if ($levels_id == 3) {
+				$school_level['high_level'] = 1;
+			}
+			if ($levels_id == 4) {
+				$school_level['h_sec_college_level'] = 1;
+			}
+		}
+
 		$this->db->where('userPassword', $account_password);
 		$this->db->where('userId', $this->session->userdata('userId'));
 		$user_detail = $this->db->get('users')->row();
@@ -212,6 +264,11 @@ class Registration_section extends MY_Controller
 
 				$this->db->where('schoolId', $school_id);
 				if ($this->db->update('school', $update_data)) {
+					if ($school_level) {
+						// update levels....
+						$this->db->where('schoolId', $schools_id);
+						$this->db->update('schools', $school_level);
+					}
 					$reponse['status'] = 1;
 					$message = "<h2 class='text-center'><strong class='text text-success'>Successfully Alloted Renewal Number \" $renewal_code \"</strong></h2>
 					";
@@ -247,6 +304,10 @@ class Registration_section extends MY_Controller
 
 		$selected_levels = array_merge((array) $_POST['renewal_levels'], (array) $_POST['upgrade_levels']);
 		$school_level = array();
+		$school_level['primary_level'] = NULL;
+		$school_level['middle_level'] = NULL;
+		$school_level['high_level'] = NULL;
+		$school_level['h_sec_college_level'] = NULL;
 		foreach ($selected_levels as $levels_id) {
 			if ($levels_id == 1) {
 				$school_level['primary_level'] = 1;
@@ -315,6 +376,95 @@ class Registration_section extends MY_Controller
 		echo json_encode($reponse);
 	}
 
+	public function grant_upgradation()
+	{
+
+		//var_dump($_POST);
+		//echo max($_POST['upgrade_levels']);
+
+
+		$account_password = $this->input->post('account_password');
+		$schools_id = (int) $this->input->post('schools_id');
+		$school_id = (int) $this->input->post('school_id');
+		$session_id = (int) $this->input->post('session_id');
+		$upgrade = $this->input->post('upgrade');
+
+		$selected_levels = array_merge((array) $_POST['renewal_levels'], (array) $_POST['upgrade_levels']);
+		$school_level = array();
+		$school_level['primary_level'] = NULL;
+		$school_level['middle_level'] = NULL;
+		$school_level['high_level'] = NULL;
+		$school_level['h_sec_college_level'] = NULL;
+		foreach ($selected_levels as $levels_id) {
+			if ($levels_id == 1) {
+				$school_level['primary_level'] = 1;
+			}
+			if ($levels_id == 2) {
+				$school_level['middle_level'] = 1;
+			}
+			if ($levels_id == 3) {
+				$school_level['high_level'] = 1;
+			}
+			if ($levels_id == 4) {
+				$school_level['h_sec_college_level'] = 1;
+			}
+		}
+
+
+
+		$this->db->where('userPassword', $account_password);
+		$this->db->where('userId', $this->session->userdata('userId'));
+		$user_detail = $this->db->get('users')->row();
+		if ($user_detail) {
+			date_default_timezone_set("Asia/Karachi");
+			$dated = date("Y-m-d h:i:sa");
+
+			$renewal_code = "2-" . $school_id . "-" . $session_id;
+			//echo $renewal_code;exit;
+			$arr = array();
+			if ($renewal_code != "") {
+				$update_data = array(
+					'renewal_code' => $renewal_code,
+					'status' => 1,
+					'updatedDate' => $dated,
+					'updatedBy' => $this->session->userdata('userId')
+				);
+
+				if ($upgrade == 'Yes') {
+					$update_data['level_of_school_id'] = max($selected_levels);
+					$update_data['upgrade'] = 1;
+				} else {
+					$update_data['upgrade'] = 0;
+					$update_data['isRejected'] = 1;
+				}
+				$this->db->where('schoolId', $school_id);
+				if ($this->db->update('school', $update_data)) {
+
+					if ($school_level) {
+						// Upgrade school date....
+						$this->db->where('schoolId', $schools_id);
+						$this->db->update('schools', $school_level);
+					}
+
+					$reponse['status'] = 1;
+					$message = "<h2 class='text-center'><strong class='text text-success'>Successfully Alloted Renewal Number \" $renewal_code \"</strong></h2>
+					";
+					$reponse['message'] = $message;
+				} else {
+					$reponse['status'] = 0;
+					$reponse['message'] = "Sorry! Some thing went wrong try again.";
+				}
+			} else {
+				$reponse['status'] = 0;
+				$reponse['message'] = "Erro in renewal code creation, try again.";
+			}
+		} else {
+			$reponse['status'] = 0;
+			$reponse['message'] = "Sorry! Account password incorrect.";
+		}
+
+		echo json_encode($reponse);
+	}
 
 	public function get_request_detail()
 	{
@@ -520,7 +670,11 @@ class Registration_section extends MY_Controller
 					`school_type`.`typeTitle`,
 					`bise`.`biseName`,
 					`district`.`districtTitle`,
-					`uc`.`ucTitle`
+					`uc`.`ucTitle`,
+					`schools`.`primary_level`,
+					`schools`.`middle_level`,
+					`schools`.`high_level`,
+					`schools`.`h_sec_college_level`
 					FROM
 					`district`
 					INNER JOIN `schools`

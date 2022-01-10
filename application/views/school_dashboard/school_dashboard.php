@@ -243,7 +243,20 @@
                   <?php
                   $count = 1;
                   $stop_appy = TRUE;
-                  $query = "SELECT * FROM session_year WHERE sessionYearTitle >= '" . $school->yearOfEstiblishment . "-" . ($school->yearOfEstiblishment + 1) . "' ORDER BY sessionYearId ASC";
+                  // echo  $query = "SELECT * FROM session_year WHERE sessionYearTitle >= '" . date('Y', strtotime($school->yearOfEstiblishment)) . "-" . (date('Y', strtotime($school->yearOfEstiblishment)) + 1) . "' ORDER BY sessionYearId ASC";
+                  //$sessions = $this->db->query($query)->result();
+                  $est_date = $this->input->post('year_of_es');
+                  $est_year = date('Y', strtotime($school->yearOfEstiblishment));
+                  $est_month = date('m', strtotime($school->yearOfEstiblishment));
+                  if ($est_month >= 4) {
+                    $session_year = $est_year;
+                  } else {
+                    $session_year = $est_year - 1;
+                  }
+
+
+
+                  $query = "SELECT * FROM `session_year` WHERE YEAR(`session_start`) >= '" . $session_year . "'";
                   $sessions = $this->db->query($query)->result();
                   foreach ($sessions as $session) {
                     $query = "SELECT
@@ -297,11 +310,13 @@
                       <tr>
                         <td><?php echo $count++; ?></td>
                         <td><?php echo $session->sessionYearTitle; ?></td>
-                        <td colspan="4">
+                        <td colspan="4" style="text-align: center;">
                           <?php if ($stop_appy) { ?>
-                            <a class="btn btn-success" href="<?php echo site_url("apply/renewal/$session->sessionYearId"); ?>">Apply for Renewal</a>
+                            <a class="btn btn-success" style="margin: 1px;" href="<?php echo site_url("apply/renewal/$session->sessionYearId"); ?>">Apply for Renewal</a>
                             <?php if ($session->status == 1) {  ?>
-                              <a class="btn btn-warning" href="<?php echo site_url("apply/renewal_upgradation/$session->sessionYearId"); ?>">Apply for Renewal + Upgradation</a>
+                              <a class="btn btn-warning" style="margin: 1px;" href="<?php echo site_url("apply/upgradation/$session->sessionYearId"); ?>">Upgradation</a>
+
+                              <a class="btn btn-warning" style="margin: 1px;" href="<?php echo site_url("apply/renewal_upgradation/$session->sessionYearId"); ?>">Apply for Upgradation + Renewal</a>
                             <?php } ?>
                           <?php } else { ?>
 
@@ -318,10 +333,26 @@
                 <div style="text-align: center;">
                   <h4>Apply for PSRA institute Registration</h4>
                   <?php
-                  $query = "SELECT * FROM session_year 
-                          WHERE sessionYearTitle >= '" . date('Y', strtotime($school->yearOfEstiblishment)) . "-" . (date('Y', strtotime($school->yearOfEstiblishment)) + 1) . "' 
-                          ORDER BY sessionYearId ASC LIMIT 1";
+
+                  $est_date = $this->input->post('year_of_es');
+                  $est_year = date('Y', strtotime($school->yearOfEstiblishment));
+                  $est_month = date('m', strtotime($school->yearOfEstiblishment));
+                  if ($est_month >= 4) {
+                    $session_year = $est_year;
+                  } else {
+                    $session_year = $est_year - 1;
+                  }
+
+
+
+                  $query = "SELECT * FROM `session_year` WHERE YEAR(`session_start`) >= '" . $session_year . "'";
                   $session = $this->db->query($query)->result()[0];
+
+
+                  // $query = "SELECT * FROM session_year 
+                  //         WHERE sessionYearTitle >= '" . date('Y', strtotime($school->yearOfEstiblishment)) . "-" . (date('Y', strtotime($school->yearOfEstiblishment)) + 1) . "' 
+                  //         ORDER BY sessionYearId ASC LIMIT 1";
+                  // $session = $this->db->query($query)->result()[0];
 
                   $query = "SELECT * FROM school 
                   WHERE schools_id = '" . $school_id . "' ";

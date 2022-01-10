@@ -82,10 +82,15 @@ class Bank_challans extends MY_Controller
 						WHERE bank_challan_id = '" . $bank_challan_id . "'";
 				$bank_challan_detail = $this->db->query($query)->result()[0];
 				//here we need to change the status of renew/ registration/ and upgradation and renewal upgradation.
-				if ($bank_challan_detail->challan_for == 'Registration' or $bank_challan_detail->challan_for == 'Renewal' or $bank_challan_detail->challan_for == 'Renewal Upgradation') {
+				if (
+					$bank_challan_detail->challan_for == 'Registration'
+					or $bank_challan_detail->challan_for == 'Renewal'
+					or $bank_challan_detail->challan_for == 'Renewal Upgradation'
+					or $bank_challan_detail->challan_for == 'Upgradation'
+				) {
 
 
-					if ($this->input->post("bise_verified")) {
+					if ($this->input->post("bise_verified") and $bank_challan_detail->challan_for == 'Registration') {
 						$where = array();
 						$update = array();
 						$where['schoolId'] = $bank_challan_detail->schools_id;
@@ -106,6 +111,24 @@ class Bank_challans extends MY_Controller
 							$where['session_year_id'] = $bank_challan_detail->session_id;
 							$this->db->where($where);
 							$update['inspection'] = '0';
+							$update['status'] = '3';
+							$this->db->update('school', $update);
+						}
+
+						if ($bank_challan_detail->challan_for == 'Upgradation') {
+							$where['schoolId'] = $bank_challan_detail->school_id;
+							$where['session_year_id'] = $bank_challan_detail->session_id;
+							$this->db->where($where);
+							$update['inspection'] = '0';
+							$update['status'] = '3';
+							$this->db->update('school', $update);
+						}
+
+						if ($bank_challan_detail->challan_for == 'Renewal') {
+							$where['schoolId'] = $bank_challan_detail->school_id;
+							$where['session_year_id'] = $bank_challan_detail->session_id;
+							$this->db->where($where);
+							$update['inspection'] = '1';
 							$update['status'] = '3';
 							$this->db->update('school', $update);
 						}

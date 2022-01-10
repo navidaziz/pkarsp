@@ -79,7 +79,6 @@
     font-weight: bold !important;
   }
 </style>
-
 <div class="modal-header">
   <h4 style="border-left: 20px solid #9FC8E8;  padding-left:5px;" class="pull-left">
     Request for <strong><?php echo $session_request_detail->regTypeTitle ?></strong>
@@ -456,117 +455,234 @@
         <?php } ?>
 
         <?php if ($session_request_detail->status != 1 and $session_request_detail->inspection == 1) { ?>
-          <div class="col-md-12">
-            <div id="renewal_option" style=" text-align:center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 5px; padding: 5px; background-color: white;">
-              <?php if ($session_request_detail->inspection_report) { ?>
-                <p>
-                <h5>Inspection Report:</h5>:
-                <?php echo $session_request_detail->inspection_report;   ?>
-                </p>
-              <?php } ?>
-              <?php if ($session_request_detail->reg_type_id == 1) { ?>
 
-                <div id="registration_section">
-                  <div class="col-md-5">
-                    <div style=" text-align:center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 5px; padding: 5px; background-color: white;">
-                      <h4>
-                        Do you want allot registration number?
-                        <input onclick="show_registration_form()" style="margin-left: 10px;" type="checkbox" name="i_want" id="i_want" />
-                      </h4>
-                    </div>
-                  </div>
-                  <div class="col-md-7">
-                    <div id="registration_form" style="display: none; text-align:center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 5px; padding: 5px; background-color: white;">
+          <!-- inspection report -->
+          <?php if ($session_request_detail->inspection_report) { ?>
+            <p>
+            <h5>Inspection Report:</h5>:
+            <?php echo $session_request_detail->inspection_report;   ?>
+            </p>
+          <?php } ?>
+          <div id="renewal_option" style=" text-align:center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 5px; padding: 5px; background-color: white;">
 
-                      <h4>
+            <!-- Registration section -->
+            <?php if ($session_request_detail->reg_type_id == 1) { ?>
+              <h4>
+                Do you want allot registration number?
+                <input onclick="show_registration_form()" style="margin-left: 10px;" type="checkbox" name="i_want" id="i_want" />
+              </h4>
 
-                        Please Enter Account Password:
-                        <input class="form-control" style="width:150px;" type="text" onclick="$('#account_password').prop('type','password')" id="account_password" name="account_password" value="" autocomplete="off" />
-                        <br />
-                        <br />
-                        <button class="btn btn-success " onclick="allot_registration_number()">Allot Registration No.</button>
-                        <p id="allotment_error"></p>
-                      </h4>
+              <h4 id="registration_form" style="display: none;">
+                <table class="table" style="text-align: center;">
+                  <tr>
+                    <th style="text-align: center;">Allot Registration levels</th>
+                  </tr>
+                  <tr>
+                    <td>
+                      <?php
+                      $query = "SELECT * FROM `levelofinstitute` 
+                            WHERE `levelofinstitute`.`levelofInstituteId` <= '" . $session_request_detail->level_of_school_id . "'
+                            ORDER BY `levelofinstitute`.`levelofInstituteId` ASC";
+                      $levelofinstitutes = $this->db->query($query)->result();
+                      foreach ($levelofinstitutes as $levelofinstitute) { ?>
+                        <input <?php if ($session_request_detail->level_of_school_id == $levelofinstitute->levelofInstituteId) {
+                                  echo 'checked';
+                                } ?> class="reg_levels" name="reg_levels[]" value="<?php echo $levelofinstitute->levelofInstituteId;  ?>" type="checkbox" /> <?php echo $levelofinstitute->levelofInstituteTitle ?>
+                        <span style="margin-right: 15px;"></span>
+                      <?php } ?>
+                    </td>
 
-                    </div>
-                  </div>
-                </div>
-              <?php } ?>
-              <?php if ($session_request_detail->reg_type_id == 2) { ?>
-                <div>
-                  <div class="col-md-12">
+                  </tr>
+                </table>
 
-                    <div id="renewal_option" style=" text-align:center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 5px; padding: 5px; background-color: white;">
-                      <h4>
-                        Do you want to Grant Renewal?
-                        <input onclick="show_registration_form()" style="margin-left: 10px;" type="checkbox" name="i_want" id="i_want" />
-                      </h4>
+                Please Enter Account Password:
+                <input class="form-control" style="width:150px;" type="text" onclick="$('#account_password').prop('type','password')" id="account_password" name="account_password" value="" autocomplete="off" />
+                <br />
+                <br />
+                <button class="btn btn-success " onclick="allot_registration_number()">Allot Registration No.</button>
+                <p id="allotment_error"></p>
+              </h4>
 
-                      <h4 id="registration_form" style="display: none;">
 
-                        Please Enter Account Password:
-                        <input class="form-control" style="width:150px;" type="text" onclick="$('#account_password').prop('type','password')" id="account_password" name="account_password" value="" autocomplete="off" />
-                        <button class="btn btn-success " onclick="grant_renewal()">Grant Renewal</button>
-                        <p id="allotment_error"></p>
-                      </h4>
+            <?php } ?>
+            <!-- Renewal Section -->
+            <?php if ($session_request_detail->reg_type_id == 2) { ?>
 
-                    </div>
-                  </div>
-                </div>
-              <?php } ?>
-              <?php if ($session_request_detail->reg_type_id == 4) { ?>
-                <h4>
-                  Do you want to Grant Renewal and Upgradation?
-                  <input onclick="show_registration_form()" style="margin-left: 10px;" type="checkbox" name="i_want" id="i_want" />
-                </h4>
+              <h4>
+                Do you want to Grant Renewal?
+                <input onclick="show_registration_form()" style="margin-left: 10px;" type="checkbox" name="i_want" id="i_want" />
+              </h4>
 
-                <h4 id="registration_form" style="display: none;">
-                  <table class="table" style="text-align: center;">
-                    <tr>
-                      <th style="text-align: center;">Renewal</th>
-                      <th style="text-align: center;">Upgradation</th>
-                    </tr>
-                    <tr>
-                      <td>
+              <h4 id="registration_form" style="display: none;">
+                <table class="table" style="text-align: center;">
+                  <tr>
+                    <th style="text-align: center;">Mention Renewal levels</th>
+                  </tr>
+                  <tr>
+                    <td>
+                      <?php
+                      $query = "SELECT * FROM `levelofinstitute` 
+                            WHERE `levelofinstitute`.`levelofInstituteId` <= '" . $session_request_detail->level_of_school_id . "'
+                            ORDER BY `levelofinstitute`.`levelofInstituteId` ASC";
+                      $levelofinstitutes = $this->db->query($query)->result();
+
+                      foreach ($levelofinstitutes as $levelofinstitute) { ?>
+                        <input <?php if ($session_request_detail->level_of_school_id == $levelofinstitute->levelofInstituteId) {
+                                  echo 'checked';
+                                } else {
+                                  if ($school->primary_level == 1 and $levelofinstitute->levelofInstituteId == 1) {
+                                    echo 'checked';
+                                  }
+                                  if ($school->middle_level == 1 and $levelofinstitute->levelofInstituteId == 2) {
+                                    echo 'checked';
+                                  }
+                                  if ($school->high_level == 1 and $levelofinstitute->levelofInstituteId == 3) {
+                                    echo 'checked';
+                                  }
+                                  if ($school->h_sec_college_level == 1 and $levelofinstitute->levelofInstituteId == 4) {
+                                    echo 'checked';
+                                  }
+                                }
+
+                                ?> class="renewal_levels" name="renewal_levels[]" value="<?php echo $levelofinstitute->levelofInstituteId;  ?>" type="checkbox" /> <?php echo $levelofinstitute->levelofInstituteTitle ?>
+                        <span style="margin-right: 15px;"></span>
+                      <?php } ?>
+                    </td>
+
+                  </tr>
+                </table>
+
+                Please Enter Account Password:
+                <input class="form-control" style="width:150px;" type="text" onclick="$('#account_password').prop('type','password')" id="account_password" name="account_password" value="" autocomplete="off" />
+                <button class="btn btn-success " onclick="grant_renewal()">Grant Renewal</button>
+                <p id="allotment_error"></p>
+              </h4>
+
+            <?php } ?>
+
+            <!-- UpgradationSection -->
+            <?php if ($session_request_detail->reg_type_id == 3) { ?>
+              <h4>
+                Do you want to process the Upgradation?
+                <input onclick="show_registration_form()" style="margin-left: 10px;" type="checkbox" name="i_want" id="i_want" />
+              </h4>
+
+              <h4 id="registration_form" style="display: none;">
+                <table class="table" style="text-align: center;">
+                  <tr>
+                    <th style="text-align: center;">Other Levels</th>
+                    <th style="text-align: center;">Upgradation</th>
+                  </tr>
+                  <tr>
+                    <td>
+                      <?php
+                      $query = "SELECT * FROM `levelofinstitute` 
+                            WHERE `levelofinstitute`.`levelofInstituteId` <= '" . $session_request_detail->level_of_school_id . "'
+                            ORDER BY `levelofinstitute`.`levelofInstituteId` ASC";
+                      $levelofinstitutes = $this->db->query($query)->result();
+
+                      foreach ($levelofinstitutes as $levelofinstitute) { ?>
+                        <input <?php if ($session_request_detail->level_of_school_id == $levelofinstitute->levelofInstituteId) {
+                                  echo 'checked';
+                                } else {
+                                  if ($school->primary_level == 1 and $levelofinstitute->levelofInstituteId == 1) {
+                                    echo 'checked';
+                                  }
+                                  if ($school->middle_level == 1 and $levelofinstitute->levelofInstituteId == 2) {
+                                    echo 'checked';
+                                  }
+                                  if ($school->high_level == 1 and $levelofinstitute->levelofInstituteId == 3) {
+                                    echo 'checked';
+                                  }
+                                  if ($school->h_sec_college_level == 1 and $levelofinstitute->levelofInstituteId == 4) {
+                                    echo 'checked';
+                                  }
+                                }
+
+                                ?> class="renewal_levels" name="renewal_levels[]" value="<?php echo $levelofinstitute->levelofInstituteId;  ?>" type="checkbox" /> <?php echo $levelofinstitute->levelofInstituteTitle ?>
+                        <span style="margin-right: 15px;"></span>
+                      <?php } ?>
+                    </td>
+                    <td><strong>
+                        Is the inspection report recommended the upgradation?
+                        <input required onclick="$('#upgrade_list').show();" type="radio" class="is_upgrade" name="is_upgrade" value="1" /> Yes <span style="margin-right: 15px;"></span>
+                        <input required onclick="$('#upgrade_list').hide();" type="radio" class="is_upgrade" name="is_upgrade" value="0" /> No <span style="margin-right: 25px;"></span> </strong>
+                      <span id="upgrade_list" style="display: none;">
                         <?php
                         $query = "SELECT * FROM `levelofinstitute` 
-                            WHERE `levelofinstitute`.`levelofInstituteId` <= '" . $session_request_detail->level_of_school_id . "'
+                            WHERE `levelofinstitute`.`levelofInstituteId` > '" . $session_request_detail->level_of_school_id . "'
                             ORDER BY `levelofinstitute`.`levelofInstituteId` ASC";
                         $levelofinstitutes = $this->db->query($query)->result();
                         foreach ($levelofinstitutes as $levelofinstitute) { ?>
-                          <input class="renewal_levels" name="renewal_levels[]" value="<?php echo $levelofinstitute->levelofInstituteId;  ?>" type="checkbox" checked /> <?php echo $levelofinstitute->levelofInstituteTitle ?>
+                          <input class="upgrade_levels" type="checkbox" name="upgrade_levels[]" value="<?php echo $levelofinstitute->levelofInstituteId;  ?>" /> <?php echo $levelofinstitute->levelofInstituteTitle ?>
                           <span style="margin-right: 15px;"></span>
                         <?php } ?>
-                      </td>
-                      <td><strong>
-                          Do you want to Upgrade?
-                          <input required onclick="$('#upgrade_list').show();" type="radio" class="is_upgrade" name="is_upgrade" value="1" /> Yes <span style="margin-right: 15px;"></span>
-                          <input required onclick="$('#upgrade_list').hide();" type="radio" class="is_upgrade" name="is_upgrade" value="0" /> No <span style="margin-right: 25px;"></span> </strong>
-                        <span id="upgrade_list" style="display: none;">
-                          <?php
-                          $query = "SELECT * FROM `levelofinstitute` 
+                      </span>
+                    </td>
+                  </tr>
+                </table>
+                Please Enter Account Password:
+                <input class="form-control" style="width:150px;" type="text" onclick="$('#account_password').prop('type','password')" id="account_password" name="account_password" value="" autocomplete="off" />
+                <button class="btn btn-success " onclick="grant_upgradation()">Complete Upgradation</button>
+                <p id="allotment_error"></p>
+              </h4>
+
+            <?php } ?>
+
+            <!-- Upgradation and Renewal Section -->
+            <?php if ($session_request_detail->reg_type_id == 4) { ?>
+              <h4>
+                Do you want to process the Upgradation?
+                <input onclick="show_registration_form()" style="margin-left: 10px;" type="checkbox" name="i_want" id="i_want" />
+              </h4>
+
+              <h4 id="registration_form" style="display: none;">
+                <table class="table" style="text-align: center;">
+                  <tr>
+                    <th style="text-align: center;">Other Levels</th>
+                    <th style="text-align: center;">Upgradation</th>
+                  </tr>
+                  <tr>
+                    <td>
+                      <?php
+                      $query = "SELECT * FROM `levelofinstitute` 
+                            WHERE `levelofinstitute`.`levelofInstituteId` <= '" . $session_request_detail->level_of_school_id . "'
+                            ORDER BY `levelofinstitute`.`levelofInstituteId` ASC";
+                      $levelofinstitutes = $this->db->query($query)->result();
+                      foreach ($levelofinstitutes as $levelofinstitute) { ?>
+                        <input class="renewal_levels" name="renewal_levels[]" value="<?php echo $levelofinstitute->levelofInstituteId;  ?>" type="checkbox" checked /> <?php echo $levelofinstitute->levelofInstituteTitle ?>
+                        <span style="margin-right: 15px;"></span>
+                      <?php } ?>
+                    </td>
+                    <td><strong>
+                        Is the inspection report recommended the upgradation?
+                        <input required onclick="$('#upgrade_list').show();" type="radio" class="is_upgrade" name="is_upgrade" value="1" /> Yes <span style="margin-right: 15px;"></span>
+                        <input required onclick="$('#upgrade_list').hide();" type="radio" class="is_upgrade" name="is_upgrade" value="0" /> No <span style="margin-right: 25px;"></span> </strong>
+                      <span id="upgrade_list" style="display: none;">
+                        <?php
+                        $query = "SELECT * FROM `levelofinstitute` 
                             WHERE `levelofinstitute`.`levelofInstituteId` > '" . $session_request_detail->level_of_school_id . "'
                             ORDER BY `levelofinstitute`.`levelofInstituteId` ASC";
-                          $levelofinstitutes = $this->db->query($query)->result();
-                          foreach ($levelofinstitutes as $levelofinstitute) { ?>
-                            <input class="upgrade_levels" type="checkbox" name="upgrade_levels[]" value="<?php echo $levelofinstitute->levelofInstituteId;  ?>" /> <?php echo $levelofinstitute->levelofInstituteTitle ?>
-                            <span style="margin-right: 15px;"></span>
-                          <?php } ?>
-                        </span>
-                      </td>
-                    </tr>
-                  </table>
+                        $levelofinstitutes = $this->db->query($query)->result();
+                        foreach ($levelofinstitutes as $levelofinstitute) { ?>
+                          <input class="upgrade_levels" type="checkbox" name="upgrade_levels[]" value="<?php echo $levelofinstitute->levelofInstituteId;  ?>" /> <?php echo $levelofinstitute->levelofInstituteTitle ?>
+                          <span style="margin-right: 15px;"></span>
+                        <?php } ?>
+                      </span>
+                    </td>
+                  </tr>
+                </table>
 
-                  Please Enter Account Password:
-                  <input class="form-control" style="width:150px;" type="text" onclick="$('#account_password').prop('type','password')" id="account_password" name="account_password" value="" autocomplete="off" />
-                  <button class="btn btn-success " onclick="grant_renewal_upgradation()">Grant Renewal</button>
-                  <p id="allotment_error"></p>
-                </h4>
+                Please Enter Account Password:
+                <input class="form-control" style="width:150px;" type="text" onclick="$('#account_password').prop('type','password')" id="account_password" name="account_password" value="" autocomplete="off" />
+                <button class="btn btn-success " onclick="grant_renewal_upgradation()">Grant Renewal</button>
+                <p id="allotment_error"></p>
+              </h4>
 
-              <?php } ?>
+            <?php } ?>
 
-            </div>
           </div>
+
         <?php } ?>
 
         <?php if ($session_request_detail->status == 1 and  $session_request_detail->inspection == 1) { ?>
@@ -662,6 +778,15 @@
           alert("Account Password Required.");
           return false;
         }
+        var reg_levels = [];
+        $('.reg_levels:checked').each(function(i, e) {
+          reg_levels.push($(this).val());
+        });
+        if (reg_levels.length === 0) {
+          alert("Please select atleast one level for registration.");
+          return false;
+        }
+
 
         $.ajax({
             method: "POST",
@@ -670,16 +795,18 @@
               session_id: <?php echo $session_id; ?>,
               school_id: <?php echo $school_id; ?>,
               schools_id: <?php echo $school->schools_id; ?>,
-              account_password: $('#account_password').val()
+              account_password: $('#account_password').val(),
+              reg_levels: reg_levels
             }
           })
           .done(function(respose) {
             //$('#allotment_error').html(respose);
             respose = JSON.parse(respose);
             if (respose.status == '1') {
-              $('#registration_section').html(respose.message);
+              $('#renewal_option').html(respose.message);
               get_new_requests();
               completed_requests();
+              inspection_requests();
             }
             if (respose.status == '0') {
               $('#allotment_error').html(respose.message);
@@ -742,15 +869,82 @@
             }
           })
           .done(function(respose) {
-            $('#allotment_error').html(respose);
-            return false;
+
             respose = JSON.parse(respose);
             if (respose.status == '1') {
-              //$('#renewal_option').html(respose.message);
-
-
+              $('#renewal_option').html(respose.message);
               get_new_requests();
               completed_requests();
+              inspection_requests();
+            }
+            if (respose.status == '0') {
+              $('#allotment_error').html(respose.message);
+            }
+
+          });
+
+
+      } else {
+        alert("Please click on i want registration number.");
+      }
+    }
+
+    function grant_upgradation() {
+
+      if ($('#i_want').prop('checked') == true) {
+
+        if ($('#account_password').val() == "") {
+          alert("Account Password Required.");
+          return false;
+        }
+
+        if ($(".is_upgrade").is(":checked") == false) {
+          alert('Please check on "Do you want to upgrade Yes or Not"');
+          return false;
+        }
+        var upgrade = '';
+        var upgrade_levels = [];
+        if ($(".is_upgrade").prop("checked")) {
+          upgrade = 'Yes';
+          $('.upgrade_levels:checked').each(function(i, e) {
+            upgrade_levels.push($(this).val());
+          });
+          if (upgrade_levels.length === 0) {
+            console.log("Array Empty.");
+            alert("If you want to upgrade Please select recommended levels.");
+            return false;
+          }
+        } else {
+          upgrade = 'No';
+        }
+
+        var renewal_levels = [];
+        $('.renewal_levels:checked').each(function(i, e) {
+          renewal_levels.push($(this).val());
+        });
+
+        $.ajax({
+            method: "POST",
+            url: "<?php echo site_url('registration_section/grant_upgradation'); ?>",
+            data: {
+              session_id: <?php echo $session_id; ?>,
+              school_id: <?php echo $school_id; ?>,
+              schools_id: <?php echo $school->schools_id; ?>,
+              account_password: $('#account_password').val(),
+              upgrade: upgrade,
+              renewal_levels: renewal_levels,
+              upgrade_levels: upgrade_levels
+
+            }
+          })
+          .done(function(respose) {
+
+            respose = JSON.parse(respose);
+            if (respose.status == '1') {
+              $('#renewal_option').html(respose.message);
+              get_new_requests();
+              completed_requests();
+              inspection_requests();
             }
             if (respose.status == '0') {
               $('#allotment_error').html(respose.message);
@@ -773,6 +967,16 @@
           return false;
         }
 
+
+        var renewal_levels = [];
+        $('.renewal_levels:checked').each(function(i, e) {
+          renewal_levels.push($(this).val());
+        });
+        if (renewal_levels.length === 0) {
+          alert("Please select atleast one level for Renewal.");
+          return false;
+        }
+
         $.ajax({
             method: "POST",
             url: "<?php echo site_url('registration_section/grant_renewal'); ?>",
@@ -780,10 +984,12 @@
               session_id: <?php echo $session_id; ?>,
               school_id: <?php echo $school_id; ?>,
               schools_id: <?php echo $school->schools_id; ?>,
-              account_password: $('#account_password').val()
+              account_password: $('#account_password').val(),
+              renewal_levels: renewal_levels
             }
           })
           .done(function(respose) {
+
             respose = JSON.parse(respose);
             if (respose.status == '1') {
               $('#renewal_option').html(respose.message);
