@@ -48,12 +48,6 @@ class Login extends Admin_Controller
 			$homepage_path = $this->session->userdata('role_homepage_uri');
 			redirect($homepage_path);
 		}
-
-
-
-
-
-
 		//load other models
 		$this->load->model("role_m");
 		$this->load->model("module_m");

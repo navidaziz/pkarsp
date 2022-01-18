@@ -73,24 +73,33 @@ class Admin_Controller extends MY_Controller
         if (!in_array(uri_string(), $exception_uri)) {
 
 
-            if ($this->uri->segment(2) != "receive_sms") {
-
-                //check if the user is logged in or not
-                if (!$this->session->userdata('userId') && empty($this->session->userdata('userId'))) {
-                    // echo "problem is here too many redirections here...";
-                    // exit();
-                    redirect("user/login");
-                }
-
-                //now we will check if the current module is assigned to the user or not
-                $this->data['current_action_id'] = $current_action_id = $this->module_m->actionIdFromName($this->controller_name, $this->method_name);
-                $allowed_modules = $this->mr_m->rightsByRole($this->session->userdata("role_id"));
 
 
-                //add role homepage to allowed modules
-                $allowed_modules[] = $this->session->userdata("role_homepage_id");
+            //check if the user is logged in or not
+            if (!$this->session->userdata('userId') && empty($this->session->userdata('userId'))) {
+                // echo "problem is here too many redirections here...";
+                // exit();
+                redirect("user/login");
+            }
 
-                if (!in_array($current_action_id, $allowed_modules)) {
+            //now we will check if the current module is assigned to the user or not
+            $this->data['current_action_id'] = $current_action_id = $this->module_m->actionIdFromName($this->controller_name, $this->method_name);
+
+            $allowed_modules = $this->mr_m->rightsByRole($this->session->userdata("role_id"));
+
+            //add role homepage to allowed modules
+            $allowed_modules[] = $this->session->userdata("role_homepage_id");
+
+            if (!in_array($current_action_id, $allowed_modules)) {
+                $is_ajax = 'xmlhttprequest' == strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '');
+                if ($is_ajax) {
+                    echo '<div class="alert alert-danger">
+                    <strong>Error!</strong> You are not allowed to access this module.
+                    ' . $this->controller_name . ' - ' . $this->method_name . '
+                </div>
+                ';
+                    exit();
+                } else {
                     $this->session->set_flashdata('msg_error', 'You are not allowed to access this module');
                     // redirect($_SERVER['HTTP_REFERER']);
                     // session_destroy();

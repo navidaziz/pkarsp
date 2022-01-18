@@ -1,8 +1,12 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Bank_challans extends MY_Controller
+class Bank_challans extends Admin_Controller
 {
+	public function __construct()
+	{
+		parent::__construct();
+	}
 
 	public function index()
 	{
@@ -74,8 +78,6 @@ class Bank_challans extends MY_Controller
 			}
 			$this->db->where('bank_challan_id', $bank_challan_id);
 			$query_result = $this->db->update('bank_challans', $input);
-
-
 			if ($query_result) {
 				$query = "SELECT `session_id`, `school_id`, `schools_id`, `challan_for` 
 						FROM bank_challans 
@@ -89,49 +91,52 @@ class Bank_challans extends MY_Controller
 					or $bank_challan_detail->challan_for == 'Upgradation'
 				) {
 
+					$where = array();
+					$update = array();
+					if ($bank_challan_detail->challan_for == 'Registration') {
 
-					if ($this->input->post("bise_verified") and $bank_challan_detail->challan_for == 'Registration') {
-						$where = array();
-						$update = array();
-						$where['schoolId'] = $bank_challan_detail->schools_id;
-						$this->db->where($where);
-						$update['bise_verified'] = $this->input->post("bise_verified");
-						$this->db->update('schools', $update);
-					} else {
-						if ($bank_challan_detail->challan_for == 'Registration') {
-							$where['schoolId'] = $bank_challan_detail->school_id;
-							$where['session_year_id'] = $bank_challan_detail->session_id;
-							$this->db->where($where);
-							$update['inspection'] = '0';
-							$update['status'] = '3';
-							$this->db->update('school', $update);
-						}
-						if ($bank_challan_detail->challan_for == 'Renewal Upgradation') {
-							$where['schoolId'] = $bank_challan_detail->school_id;
-							$where['session_year_id'] = $bank_challan_detail->session_id;
-							$this->db->where($where);
-							$update['inspection'] = '0';
-							$update['status'] = '3';
-							$this->db->update('school', $update);
-						}
 
-						if ($bank_challan_detail->challan_for == 'Upgradation') {
-							$where['schoolId'] = $bank_challan_detail->school_id;
-							$where['session_year_id'] = $bank_challan_detail->session_id;
-							$this->db->where($where);
-							$update['inspection'] = '0';
-							$update['status'] = '3';
-							$this->db->update('school', $update);
-						}
-
-						if ($bank_challan_detail->challan_for == 'Renewal') {
-							$where['schoolId'] = $bank_challan_detail->school_id;
-							$where['session_year_id'] = $bank_challan_detail->session_id;
+						if ($this->input->post("bise_verified") == 'Yes' and $bank_challan_detail->challan_for == 'Registration') {
+							$where['schoolId'] = $bank_challan_detail->schools_id;
 							$this->db->where($where);
 							$update['inspection'] = '1';
 							$update['status'] = '3';
+							$update['bise_verified'] = $this->input->post("bise_verified");
+							$this->db->update('schools', $update);
+						} else {
+							$where['schoolId'] = $bank_challan_detail->school_id;
+							$where['session_year_id'] = $bank_challan_detail->session_id;
+							$this->db->where($where);
+							$update['inspection'] = '0';
+							$update['status'] = '3';
 							$this->db->update('school', $update);
 						}
+					}
+					if ($bank_challan_detail->challan_for == 'Renewal Upgradation') {
+						$where['schoolId'] = $bank_challan_detail->school_id;
+						$where['session_year_id'] = $bank_challan_detail->session_id;
+						$this->db->where($where);
+						$update['inspection'] = '0';
+						$update['status'] = '3';
+						$this->db->update('school', $update);
+					}
+
+					if ($bank_challan_detail->challan_for == 'Upgradation') {
+						$where['schoolId'] = $bank_challan_detail->school_id;
+						$where['session_year_id'] = $bank_challan_detail->session_id;
+						$this->db->where($where);
+						$update['inspection'] = '0';
+						$update['status'] = '3';
+						$this->db->update('school', $update);
+					}
+
+					if ($bank_challan_detail->challan_for == 'Renewal') {
+						$where['schoolId'] = $bank_challan_detail->school_id;
+						$where['session_year_id'] = $bank_challan_detail->session_id;
+						$this->db->where($where);
+						$update['inspection'] = '1';
+						$update['status'] = '3';
+						$this->db->update('school', $update);
 					}
 				}
 

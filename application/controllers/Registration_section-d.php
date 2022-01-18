@@ -12,13 +12,7 @@ class Registration_section extends Admin_Controller
 		$this->load->view('layout', $this->data);
 	}
 
-	public function inspections()
-	{
-		$this->data['title'] = 'Inspections';
-		$this->data['description'] = 'List of All Inspections';
-		$this->data['view'] = 'registration_section/inspections';
-		$this->load->view('layout', $this->data);
-	}
+
 
 	private function get_request_list($status, $request_type = NULL, $title = NULL)
 	{
@@ -63,47 +57,36 @@ class Registration_section extends Admin_Controller
 		$this->get_request_list(3, 3, 'Upgradation');
 	}
 
-	public function new_inspection_requests()
-	{
-		$this->get_request_list(4, NULL, 'New Inspection');
-	}
-	public function awating_inspection_requests()
-	{
-		$this->get_request_list(5, NULL, 'Inspection Inprogress');
-	}
-	public function completed_inspection_requests()
-	{
-		$this->get_request_list(6, NULL, 'Inspection Completed');
-	}
+
 	public function completed_requests()
 	{
 		$this->get_request_list(1, NULL, 'Completed Requests');
 	}
-	public function inspection_requests()
-	{
-		$query = "SELECT
-		`schools`.schoolId as schools_id,
-		`schools`.schoolName,
-		`schools`.registrationNumber,
-		`schools`.biseRegister,
-		`session_year`.`sessionYearTitle`,
-		`session_year`.`sessionYearId`,
-		`school`.`status`,
-		`school`.`schoolId` as school_id,
-		`reg_type`.`regTypeTitle`
-		FROM
-		`school`,
-		`schools`,
-		`session_year`,
-		`reg_type`
-		WHERE  `session_year`.`sessionYearId` = `school`.`session_year_id`
-		AND `school`.`schools_id` = `schools`.`schoolId`
-		AND `school`.`reg_type_id` = `reg_type`.`regTypeId`
-		AND `school`.`reg_type_id`=6";
-		$this->data['completed_requests'] = $this->db->query($query)->result();
+	// public function inspection_requests()
+	// {
+	// 	$query = "SELECT
+	// 	`schools`.schoolId as schools_id,
+	// 	`schools`.schoolName,
+	// 	`schools`.registrationNumber,
+	// 	`schools`.biseRegister,
+	// 	`session_year`.`sessionYearTitle`,
+	// 	`session_year`.`sessionYearId`,
+	// 	`school`.`status`,
+	// 	`school`.`schoolId` as school_id,
+	// 	`reg_type`.`regTypeTitle`
+	// 	FROM
+	// 	`school`,
+	// 	`schools`,
+	// 	`session_year`,
+	// 	`reg_type`
+	// 	WHERE  `session_year`.`sessionYearId` = `school`.`session_year_id`
+	// 	AND `school`.`schools_id` = `schools`.`schoolId`
+	// 	AND `school`.`reg_type_id` = `reg_type`.`regTypeId`
+	// 	AND `school`.`reg_type_id`=6";
+	// 	$this->data['completed_requests'] = $this->db->query($query)->result();
 
-		$this->load->view('registration_section/inspection_requests', $this->data);
-	}
+	// 	$this->load->view('registration_section/inspection_requests', $this->data);
+	// }
 
 	public function allot_registration_number()
 	{
