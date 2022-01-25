@@ -35,7 +35,7 @@
       <br />
       <small><?php echo ucwords(strtolower($description)); ?></small>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> Home </a></li>
         <!-- <li><a href="#">Examples</a></li> -->
         <li class="active"><?php echo @ucfirst($title); ?></li>
       </ol>
@@ -66,6 +66,7 @@
                   </tr>
                   <?php
                   $count = 1;
+                  $previous_school_id = 0;
                   $query = "SELECT
                   `bank_challans`.*,
                   `session_year`.`sessionYearTitle`,
@@ -80,14 +81,21 @@
                   $session_bank_challans = $this->db->query($query)->result(); ?>
                   <?php foreach ($session_bank_challans as $session_bank_challan) { ?>
                     <tr>
-                      <td><?php echo $count++; ?></td>
-                      <td><?php echo $session_bank_challan->schools_id; ?></td>
+                      <?php if ($previous_school_id != $session_bank_challan->schools_id) { ?>
+                        <td><?php echo $count++; ?></td>
+                        <td><?php echo $session_bank_challan->schools_id; ?></td>
+
+                      <?php } else { ?>
+                        <td colspan="2"></td>
+                      <?php } ?>
                       <td><?php echo $session_bank_challan->challan_for; ?> - <?php echo $session_bank_challan->sessionYearTitle; ?></td>
                       <td><?php echo $session_bank_challan->challan_no; ?></td>
                       <td><?php echo date('d M, Y', strtotime($session_bank_challan->challan_date)); ?></td>
                       <td><button class="btn btn-success btn-sm" onclick="verifiy_bank_challan('<?php echo $session_bank_challan->bank_challan_id; ?>')">Verifiy Challan</button></td>
                     </tr>
-                  <?php } ?>
+                  <?php
+                    $previous_school_id = $session_bank_challan->schools_id;
+                  } ?>
                 </table>
               </div>
 

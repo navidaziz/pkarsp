@@ -93,6 +93,7 @@
                 </div>
               <?php } ?>
 
+
               <!-- /SOCIAL REGISTER -->
               <div class="login-helpers" style="text-align: center;">
                 <a class="btn btn-danger" href="<?php echo site_url('login'); ?>"> <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Login</a>

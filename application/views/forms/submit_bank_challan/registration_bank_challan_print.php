@@ -134,11 +134,15 @@
         <div style="border: 1px solid #ddd; border-radius: 10px; margin-top: 5px; margin-bottom: 10px;  padding: 10px; font-size: 20px;">
           <table class="table">
             <tr>
-              <td>School ID: <span style="text-decoration: underline; ">
+              <td style="text-align: left;">School ID: <span style="text-decoration: underline; ">
                   <strong><?php echo $school->schools_id; ?><strong></span></td>
-              <td>Registration ID: <span style="text-decoration: underline; ">
-                  <strong><?php echo $school->registrationNumber; ?><strong></span></td>
-              <td>Session: <span style="text-decoration: underline; ">
+              <td style="text-align: center;">
+                <?php if ($school->registrationNumber) { ?>
+                  Registration ID: <span style="text-decoration: underline; ">
+                    <strong><?php echo $school->registrationNumber; ?><strong></span>
+                <?php } ?>
+              </td>
+              <td style="text-align: right;">Session: <span style="text-decoration: underline; ">
                   <strong><?php echo $session_detail->sessionYearTitle; ?><strong></span></td>
             </tr>
           </table>

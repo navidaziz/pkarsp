@@ -90,7 +90,23 @@
               </form>
               <!-- SOCIAL LOGIN -->
               <div class="divide-20"></div>
+              <?php
+              if ($this->session->flashdata("msg") || $this->session->flashdata("msg_error") || $this->session->flashdata("msg_success")) {
 
+                $type = "";
+                if ($this->session->flashdata("msg_success")) {
+                  $type = "success";
+                  $msg = $this->session->flashdata("msg_success");
+                } elseif ($this->session->flashdata("msg_error")) {
+                  $type = "danger";
+                  $msg = $this->session->flashdata("msg_error");
+                } else {
+                  $type = "info";
+                  $msg = $this->session->flashdata("msg");
+                }
+                echo '<div class="alert alert-' . $type . '" role="alert"> <i class="fa fa-info-circle" aria-hidden="true"></i>  ' . $msg . '</div>';
+              }
+              ?>
 
               <?php if (validation_errors()) { ?>
                 <div class="alert alert-block alert-danger fade in">

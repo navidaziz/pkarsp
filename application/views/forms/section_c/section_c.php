@@ -52,7 +52,7 @@
 
         <?php if ($school->registrationNumber) { ?> - REG No: <?php echo $school->registrationNumber ?> <?php } ?></h4>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> Home </a></li>
         <!-- <li><a href="#">Examples</a></li> -->
         <li class="active"><?php echo @ucfirst($title); ?>s Session: <?php echo $session_detail->sessionYearTitle; ?></li>
       </ol>
@@ -437,7 +437,7 @@
 
             <div class="col-md-12">
               <div style="font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 20px;  margin: 10px; padding: 10px; background-color: white;">
-                <a class="btn btn-link pull-left" href="<?php echo site_url("form/section_d/$session_id"); ?>">
+                <a class="btn btn-link pull-left" href="<?php echo site_url("form/section_b/$school_id"); ?>">
                   <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Section B ( Physical Facilities ) </a>
                 <?php if ($form_complete) {
                   $form_input['form_c_status'] = 1;
@@ -446,7 +446,7 @@
                   $form_status->form_c_status = 1;
                 } ?>
                 <?php if ($form_status->form_c_status == 1) { ?>
-                  <a class="btn btn-link pull-right" href="<?php echo site_url("form/section_d/$session_id"); ?>">
+                  <a class="btn btn-link pull-right" href="<?php echo site_url("form/section_d/$school_id"); ?>">
                     Section D ( Employees Detail )<i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
                   <br />
                 <?php } else { ?>

@@ -79,7 +79,7 @@ class Admin_Controller extends MY_Controller
             if (!$this->session->userdata('userId') && empty($this->session->userdata('userId'))) {
                 // echo "problem is here too many redirections here...";
                 // exit();
-                redirect("user/login");
+                redirect("login");
             }
 
             //now we will check if the current module is assigned to the user or not

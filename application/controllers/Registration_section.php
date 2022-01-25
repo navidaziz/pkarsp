@@ -49,6 +49,8 @@ class Registration_section extends Admin_Controller
 			$this->data['title'] = $status . " - " . $title;
 		}
 
+		$query .= " ORDER BY `school`.`created_date` ASC,  `school`.`schools_id`, `school`.`session_year_id` ASC ";
+
 		$this->data['requests'] = $this->db->query($query)->result();
 
 		$this->load->view('registration_section/requests', $this->data);
@@ -537,6 +539,9 @@ class Registration_section extends Admin_Controller
 		$input['school_id'] = (int) $this->input->post('school_id');
 		$input['schools_id'] = (int) $this->input->post('schools_id');
 		$input['created_by'] = $this->session->userdata('userId');
+		if ($this->input->post('mark_to')) {
+			$input['mark_to'] = (int) $this->input->post('mark_to');
+		}
 		if ($this->db->insert('comments', $input)) {
 			echo 1;
 		} else {
@@ -552,7 +557,7 @@ class Registration_section extends Admin_Controller
 		$where['session_id'] = (int) $this->input->post('session_id');
 		$where['school_id'] = (int) $this->input->post('school_id');
 		$where['schools_id'] = (int) $this->input->post('schools_id');
-		$where['status'] = 1;
+		$where['deleted'] = 0;
 		$this->db->where($where);
 		$this->db->select('`comments`.*, `users`.`userTitle`, `roles`.`role_title`');
 		$this->db->from('comments');
@@ -571,7 +576,7 @@ class Registration_section extends Admin_Controller
 		$where['comment_id'] = (int) $this->input->post('comment_id');
 		$where['created_by'] = $this->session->userdata('userId');
 		$this->db->where($where);
-		$input['status'] = 0;
+		$input['deleted'] = 1;
 		if ($this->db->update('comments', $input)) {
 			echo 1;
 		} else {
@@ -722,5 +727,45 @@ class Registration_section extends Admin_Controller
 		$query = "SELECT * FROM `fee_structure`";
 		$this->data['fee_structures'] = $this->db->query($query)->result();
 		$this->load->view('forms/fee_structures/renewal_fee_sturucture', $this->data);
+	}
+
+	public function send_deficiency()
+	{
+		$session_id = (int) $this->input->post('session_id');
+		$school_id = (int) $this->input->post('school_id');
+		$schools_id = (int) $this->input->post('schools_id');
+
+		$input["session_id"] = $session_id;
+		$input["school_id"] = $school_id;
+		$input["schools_id"] = $schools_id;
+
+		$input["deficiency_title"] = $this->input->post("deficiency_title");
+		$input["deficiency_detail"] = $this->input->post("deficiency_detail");
+
+		$input["application_processing_fee"] = (float) $this->input->post("application_processing_fee");
+		$input["renewal_fee"] = (float) $this->input->post("renewal_fee");
+		$input["upgradation_fee"] = (float) $this->input->post("upgradation_fee");
+		$input["inspection_fee"] = (float) $this->input->post("inspection_fee");
+		$input["fine"] = (float) $this->input->post("fine");
+		$input["security_fee"] = (float) $this->input->post("security_fee");
+		$input["renewal_and_upgradation_fee"] = (float) $this->input->post("renewal_and_upgradation_fee");
+
+		$input["late_fee"] = (float) $this->input->post("late_fee");
+		$query = "SELECT `status` FROM `school` WHERE schoolId = '" . $school_id . "'";
+		$last_status = $this->db->query($query)->result()[0]->status;
+		$input['last_status'] = $last_status;
+
+		$input["total_deposit_fee"] = (float) $this->input->post("total_deposit_fee");
+
+		$query_result = $this->db->insert('deficiencies', $input);
+		if ($query_result) {
+			$where['schoolId'] = $school_id;
+			$this->db->where($where);
+			$update['status'] = '7';
+
+			$update['deficiency'] = 1;
+			$this->db->update('school', $update);
+			redirect("registration_section/");
+		}
 	}
 }

@@ -19,7 +19,7 @@
         echo " / Unionconsil: <strong>" . $school->ucTitle . "</strong>";
       } ?></small>
     <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> Home </a></li>
       <li><a href="#">School Dashboard</a></li>
     </ol>
   </section>

@@ -9,11 +9,9 @@ class Online_application extends MY_Controller
 		echo "We are working on it";
 	}
 
-	public function status($session_id)
+	public function status($school_session_id)
 	{
-		$this->data['session_id'] = $session_id = (int) $session_id;
-		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
-		                                                  WHERE sessionYearId = $session_id")->result()[0];
+
 		$userId = $this->session->userdata('userId');
 		$query = "SELECT 
 		`school`.`schoolId` AS `school_id`
@@ -39,19 +37,18 @@ class Online_application extends MY_Controller
 				AND `gender`.`genderId` = `school`.`gender_type_id`
 				AND `reg_type`.`regTypeId` = `school`.`reg_type_id`
 				AND `schools`.`schoolId` = `school`.`schools_id`
-				AND  `school`.`session_year_id`='" . $session_id . "'
+				AND  `school`.`schoolId`='" . $school_session_id . "'
 				AND `schools`.`owner_id`='" . $userId . "'";
+
+
 
 
 		$this->data['school'] =  $this->db->query($query)->result()[0];
 		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
 
-
-
-		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
-		$this->data['form_status'] = $this->db->query($query)->result()[0];
-
-
+		$this->data['session_id'] = $session_id = (int) $this->data['school']->session_year_id;
+		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
+		                                                  WHERE sessionYearId = $session_id")->result()[0];
 
 		$this->data['title'] = 'Applied For';
 		$this->data['description'] = '';

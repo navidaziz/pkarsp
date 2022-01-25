@@ -93,7 +93,7 @@
       <br />
       <small><?php echo ucwords(strtolower($description)); ?></small>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> Home </a></li>
         <!-- <li><a href="#">Examples</a></li> -->
         <li class="active"><?php echo @ucfirst($title); ?></li>
       </ol>

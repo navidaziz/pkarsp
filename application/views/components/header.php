@@ -79,7 +79,7 @@ $menu_list .= "</ul>";
   <!-- Select2 -->
   <link rel="stylesheet" href="<?php echo base_url('assets/lib'); ?>/select2/dist/css/select2.min.css">
   <link href="<?php echo base_url('assets/datatables/dataTables.bootstrap.css'); ?>" rel="stylesheet">
-
+  <link rel="stylesheet" href="<?php echo base_url('assets/datatables/buttons.dataTables.min.css'); ?>">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -339,14 +339,6 @@ $menu_list .= "</ul>";
     .modal-content {
       background-color: #dfeffc;
     }
-
-    .content-header>.breadcrumb>li>a {
-      color: #444;
-      text-decoration: none;
-      display: inline-block;
-      font-size: larger !important;
-      color: #5C9CCC !important;
-    }
   </style>
 
   <!-- google code ends -->
@@ -468,17 +460,19 @@ $menu_list .= "</ul>";
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <!-- <img src="../../dist/img/user2-160x160.jpg" class="user-image" alt="User Image"> -->
                 <span class="hidden-xss" style="font-weight: bolder;font-size: 13px;text-transform: uppercase;"><?php echo @ucfirst($this->session->userdata('userTitle')); ?>
-                  <span style="font-size:16px;">|</span><b><?php echo date("D M d Y"); ?></b> <b id="time"></b></span>
+                  <span style="font-size:16px;">|</span><b><?php echo date("D M d Y"); ?></b> <b id="time"></b>
+                  <i class="fa fa-angle-down" style="font-size:17px; margin-left:10px"></i></span>
               </a>
               <ul class="dropdown-menu">
                 <!-- User image -->
-                <li class="user-header" style="background-color: #5c9ccc !important;">
+                <li class="user-header" style="background-color: #5c9ccc !important; height: 80px !important;">
                   <!-- <img src="../../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image"> -->
 
                   <p>
                     <?php echo @ucfirst($this->session->userdata('userTitle')); ?>
                     <small>Member since <?php $date = date("d-M-Y", strtotime($this->session->userdata('createdDate'))); ?> <?php echo @$date; ?></small>
                   </p>
+
                 </li>
                 <!-- Menu Body -->
                 <li class="user-body">
@@ -497,10 +491,13 @@ $menu_list .= "</ul>";
                 </li>
                 <!-- Menu Footer-->
                 <li class="user-footer">
-                  <div class="pull-left">
-                    <a href="<?php echo base_url('user/edit/') ?><?php echo $this->session->userdata('userId'); ?>" class="btn btn-primary btn-flat">Change Password</a>
+                  <div style="text-align: center;">
+                    <a href="<?php echo base_url('user_account/change_password/') ?>" class="btn btn-danger btn-sm">Change Password</a>
+                    <a href="<?php echo base_url('user_account/change_user_name/') ?>" class="btn btn-success btn-sm">Change User Name</a>
+
                   </div>
-                  <div class="pull-right">
+                  <br />
+                  <div style="text-align: center;">
                     <a href="<?php echo base_url('user/logout') ?>" class="btn btn-danger btn-flat">Log out</a>
                   </div>
                 </li>

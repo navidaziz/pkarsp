@@ -9,44 +9,53 @@ class Form extends MY_Controller
 		parent::__construct();
 	}
 
-
-	public function index()
+	private function school_detail($school_session_id)
 	{
-		echo "Welcome to PSRA...";
-	}
-
-
-
-	public function section_b($session_id)
-	{
-		$this->data['session_id'] = $session_id = (int) $session_id;
-		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
-		                                                  WHERE sessionYearId = $session_id")->result()[0];
 		$userId = $this->session->userdata('userId');
 		$query = "SELECT 
-		`school`.`schoolId` AS `school_id`
+					`school`.`schoolId` AS `school_id`
 					, `schools`.`schoolId` AS `schools_id`
-					, `school`.`session_year_id`
+					, `school`.`session_year_id` as `session_id`
 					, `schools`.`registrationNumber`
 					, `schools`.`schoolName`
 					, `schools`.`yearOfEstiblishment`
 					, `schools`.`school_type_id`
-					, `schools`.`gender_type_id` , `school`.`reg_type_id`
+					, `schools`.`level_of_school_id`
+					, `schools`.`gender_type_id` 
 					, `school`.`reg_type_id`
 				FROM
 					`schools`
 					INNER JOIN `school` 
 						ON (`schools`.`schoolId` = `school`.`schools_id`)
-						WHERE `school`.`session_year_id`='" . $session_id . "'
+						WHERE `school`.`schoolId`='" . $school_session_id . "'
 						AND `schools`.`owner_id`='" . $userId . "'";
+		return $this->db->query($query)->result()[0];
+	}
 
+	private function get_session_detail($session_id)
+	{
+		return $this->db->query("SELECT * FROM `session_year` WHERE sessionYearId = $session_id")->result()[0];
+	}
 
-		$this->data['school'] =  $this->db->query($query)->result()[0];
-		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
-		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
-
+	private function get_form_status($school_id)
+	{
 		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
-		$this->data['form_status'] = $this->db->query($query)->result()[0];
+		return $this->db->query($query)->result()[0];
+	}
+
+
+	public function section_b($school_session_id)
+	{
+		$this->check_school_session_entry($school_session_id);
+
+		$userId = $this->session->userdata('userId');
+		$this->data['school'] = $school = $this->school_detail($school_session_id);
+		$this->data['school_id'] =  $school_id = $school->school_id;
+		$this->data['schools_id'] =  $school->schools_id;
+		$this->data['session_id']  = $session_id = $school->session_id;
+
+		$this->data['session_detail'] = $this->get_session_detail($session_id);
+		$this->data['form_status'] = $this->get_form_status($school_id);
 
 
 		$this->load->model("general_modal");
@@ -98,35 +107,20 @@ class Form extends MY_Controller
 		$this->load->view('layout', $this->data);
 	}
 
-	public function section_d($session_id)
+	public function section_d($school_session_id)
 	{
 
+		$this->check_school_session_entry($school_session_id);
 
-		$this->data['session_id'] = $session_id = (int) $session_id;
-		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
-		                                                  WHERE sessionYearId = $session_id")->result()[0];
 		$userId = $this->session->userdata('userId');
-		$query = "SELECT 
-		`school`.`schoolId` AS `school_id`
-					, `schools`.`schoolId` AS `schools_id`
-					, `school`.`session_year_id`
-					, `schools`.`registrationNumber`
-					, `schools`.`schoolName`
-					, `schools`.`yearOfEstiblishment`
-					, `schools`.`school_type_id`
-					, `schools`.`gender_type_id` , `school`.`reg_type_id`
-				FROM
-					`schools`
-					INNER JOIN `school` 
-						ON (`schools`.`schoolId` = `school`.`schools_id`)
-						WHERE `school`.`session_year_id`='" . $session_id . "'
-						AND `schools`.`owner_id`='" . $userId . "'";
+		$this->data['school'] = $school = $this->school_detail($school_session_id);
+		$this->data['school_id'] =  $school_id = $school->school_id;
+		$this->data['schools_id'] =  $school->schools_id;
+		$this->data['session_id']  = $session_id = $school->session_id;
 
+		$this->data['session_detail'] = $this->get_session_detail($session_id);
+		$this->data['form_status'] = $this->get_form_status($school_id);
 
-		$this->data['school'] =  $this->db->query($query)->result()[0];
-		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
-		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
-		$this->data['form_status'] = $this->db->query($query)->result()[0];
 
 		$query = "SELECT *, gender.genderTitle, staff_type.staffTtitle  FROM school_staff, gender, staff_type 
 				  WHERE school_staff.schoolStaffType = staff_type.staffTypeId
@@ -142,35 +136,19 @@ class Form extends MY_Controller
 		$this->load->view('layout', $this->data);
 	}
 
-	public function section_e($session_id)
+	public function section_e($school_session_id)
 	{
 
-		$this->data['session_id'] = $session_id = (int) $session_id;
-		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
-		                                                  WHERE sessionYearId = $session_id")->result()[0];
+		$this->check_school_session_entry($school_session_id);
+
 		$userId = $this->session->userdata('userId');
-		$query = "SELECT 
-		`school`.`schoolId` AS `school_id`
-					, `schools`.`schoolId` AS `schools_id`
-					, `school`.`session_year_id`
-					, `schools`.`registrationNumber`
-					, `schools`.`schoolName`
-					, `schools`.`yearOfEstiblishment`
-					, `schools`.`level_of_school_id`
-					, `schools`.`gender_type_id` , `school`.`reg_type_id`
-					, `schools`.`level_of_school_id`
-				FROM
-					`schools`
-					INNER JOIN `school` 
-						ON (`schools`.`schoolId` = `school`.`schools_id`)
-						WHERE `school`.`session_year_id`='" . $session_id . "'
-						AND `schools`.`owner_id`='" . $userId . "'";
+		$this->data['school'] = $school = $this->school_detail($school_session_id);
+		$this->data['school_id'] =  $school_id = $school->school_id;
+		$this->data['schools_id'] =  $school->schools_id;
+		$this->data['session_id']  = $session_id = $school->session_id;
 
-
-		$this->data['school'] =  $this->db->query($query)->result()[0];
-		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
-		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
-		$this->data['form_status'] = $this->db->query($query)->result()[0];
+		$this->data['session_detail'] = $this->get_session_detail($session_id);
+		$this->data['form_status'] = $this->get_form_status($school_id);
 
 		$query = "SELECT classes_ids FROM `levelofinstitute`  WHERE levelofInstituteId='" . $this->data['school']->level_of_school_id . "'";
 		$classes_ids = $this->db->query($query)->result()[0]->classes_ids;
@@ -267,7 +245,7 @@ class Form extends MY_Controller
 
 		$this->session->set_flashdata('msg', 'Facility Detail Added Successfully.');
 		$session_id = (int) $this->input->post('session_id');
-		redirect("form/section_b/$session_id");
+		redirect("form/section_b/$school_id");
 	}
 
 
@@ -281,7 +259,7 @@ class Form extends MY_Controller
 		// }
 		//$input["schools_id"] = $this->input->post("schools_id");
 		$session_id = (int) $this->input->post("session_id");
-		$input["school_id"] = (int) $this->input->post("school_id");
+		$input["school_id"] = $school_id =  (int) $this->input->post("school_id");
 
 		$input["schoolStaffName"] = $this->input->post("schoolStaffName");
 		$input["schoolStaffFatherOrHusband"] = $this->input->post("schoolStaffFatherOrHusband");
@@ -301,10 +279,10 @@ class Form extends MY_Controller
 		$insert_id = $this->db->insert_id();
 		if ($insert_id) {
 			$this->session->set_flashdata('msg', 'Employee Detail Added Successfully.');
-			redirect("form/section_d/$session_id");
+			redirect("form/section_d/$school_id");
 		} else {
 			$this->session->set_flashdata('msg', 'Error Try Again');
-			redirect("form/section_d/$session_id");
+			redirect("form/section_d/$school_id");
 		}
 	}
 
@@ -328,7 +306,7 @@ class Form extends MY_Controller
 	public function update_employee_detail()
 	{
 		$session_id = (int) $this->input->post("session_id");
-		//$school_id = (int) $this->input->post("school_id");
+		$school_id = (int) $this->input->post("school_id");
 		//$input["schools_id"] = (int) $this->input->post("schools_id");
 		$schoolStaffId = (int) $this->input->post("schoolStaffId");
 
@@ -351,10 +329,10 @@ class Form extends MY_Controller
 		$this->db->where('schoolStaffId', $schoolStaffId);;
 		if ($this->db->update('school_staff', $input)) {
 			$this->session->set_flashdata('msg', 'Employee Detail Update Successfully.');
-			redirect("form/section_d/$session_id");
+			redirect("form/section_d/$school_id");
 		} else {
 			$this->session->set_flashdata('msg', 'Error Try Again');
-			redirect("form/section_d/$session_id");
+			redirect("form/section_d/$school_id");
 		}
 	}
 
@@ -369,10 +347,10 @@ class Form extends MY_Controller
 		$this->db->where('school_id', $school_id);
 		if ($this->db->delete('school_staff')) {
 			$this->session->set_flashdata('msg', 'Employee Detail Delete Successfully.');
-			redirect("form/section_d/$session_id");
+			redirect("form/section_d/$school_id");
 		} else {
 			$this->session->set_flashdata('msg', 'Error Try Again');
-			redirect("form/section_d/$session_id");
+			redirect("form/section_d/$school_id");
 		}
 	}
 
@@ -413,44 +391,22 @@ class Form extends MY_Controller
 		$this->db->insert('fee', $input);
 
 		$this->session->set_flashdata('msg', 'Class Fee Detail Add Successfully.');
-		redirect("form/section_e/$session_id");
+		redirect("form/section_e/$school_id");
 	}
 
-	public function section_c($session_id)
+	public function section_c($school_session_id)
 	{
+		$this->check_school_session_entry($school_session_id);
 
-		//new here 
-
-
-		$this->data['session_id'] = $session_id = (int) $session_id;
-		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
-		                                                  WHERE sessionYearId = $session_id")->result()[0];
 		$userId = $this->session->userdata('userId');
-		$query = "SELECT 
-		`school`.`schoolId` AS `school_id`
-					, `schools`.`schoolId` AS `schools_id`
-					, `school`.`session_year_id`
-					, `schools`.`registrationNumber`
-					, `schools`.`schoolName`
-					, `schools`.`yearOfEstiblishment`
-					, `schools`.`level_of_school_id`
-					, `schools`.`gender_type_id` , 
-					`school`.`reg_type_id`
-				FROM
-					`schools`
-					INNER JOIN `school` 
-						ON (`schools`.`schoolId` = `school`.`schools_id`)
-						WHERE `school`.`session_year_id`='" . $session_id . "'
-						AND `schools`.`owner_id`='" . $userId . "'";
+		$this->data['school'] = $school = $this->school_detail($school_session_id);
+		$this->data['school_id'] =  $school_id = $school->school_id;
+		$this->data['schools_id'] =  $school->schools_id;
+		$this->data['session_id']  = $session_id = $school->session_id;
 
+		$this->data['session_detail'] = $this->get_session_detail($session_id);
+		$this->data['form_status'] = $this->get_form_status($school_id);
 
-		$this->data['school'] =  $this->db->query($query)->result()[0];
-		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
-
-		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
-
-		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
-		$this->data['form_status'] = $this->db->query($query)->result()[0];
 		$level_of_school_id = $this->data['school']->level_of_school_id;
 		$query = "SELECT classes_ids FROM `levelofinstitute` 
 		          WHERE levelofInstituteId='" . $level_of_school_id . "'";
@@ -552,45 +508,24 @@ class Form extends MY_Controller
 		$this->db->insert('school_enrolments', $enrolment);
 
 		$this->session->set_flashdata('msg', 'Class Age Wise Data For Boys Add Successfully');
-		redirect("form/section_c/$session_id");
+		redirect("form/section_c/$school_id");
 	}
 
 
 
-	public function section_f($session_id)
+	public function section_f($school_session_id)
 	{
 
-		//new here 
+		$this->check_school_session_entry($school_session_id);
 
-
-		$this->data['session_id'] = $session_id = (int) $session_id;
-		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
-		                                                  WHERE sessionYearId = $session_id")->result()[0];
 		$userId = $this->session->userdata('userId');
-		$query = "SELECT 
-		`school`.`schoolId` AS `school_id`
-					, `schools`.`schoolId` AS `schools_id`
-					, `school`.`session_year_id`
-					, `schools`.`registrationNumber`
-					, `schools`.`schoolName`
-					, `schools`.`yearOfEstiblishment`
-					, `schools`.`school_type_id`
-					, `schools`.`gender_type_id` , `school`.`reg_type_id`
-				FROM
-					`schools`
-					INNER JOIN `school` 
-						ON (`schools`.`schoolId` = `school`.`schools_id`)
-						WHERE `school`.`session_year_id`='" . $session_id . "'
-						AND `schools`.`owner_id`='" . $userId . "'";
+		$this->data['school'] = $school = $this->school_detail($school_session_id);
+		$this->data['school_id'] =  $school_id = $school->school_id;
+		$this->data['schools_id'] =  $school->schools_id;
+		$this->data['session_id']  = $session_id = $school->session_id;
 
-
-		$this->data['school'] =  $this->db->query($query)->result()[0];
-		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
-
-		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
-
-		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
-		$this->data['form_status'] = $this->db->query($query)->result()[0];
+		$this->data['session_detail'] = $this->get_session_detail($session_id);
+		$this->data['form_status'] = $this->get_form_status($school_id);
 
 		$this->load->model("school_m");
 		$this->data['security_status'] = $this->school_m->get_security_status();
@@ -631,49 +566,28 @@ class Form extends MY_Controller
 
 			$this->session->set_flashdata('msg', 'Security Measures Successfully Changed.');
 			$session_id = (int) $this->input->post('session_id');
-			redirect("form/section_f/$session_id");
+			redirect("form/section_f/$school_id");
 		} else {
 			$this->session->set_flashdata('msg', 'Error Try Again');
 			$session_id = (int) $this->input->post('session_id');
-			redirect("form/section_f/$session_id");
+			redirect("form/section_f/$school_id");
 		}
 	}
 
 
-	public function section_g($session_id)
+	public function section_g($school_session_id)
 	{
+		$this->check_school_session_entry($school_session_id);
 
-		//new here 
-
-
-		$this->data['session_id'] = $session_id = (int) $session_id;
-		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
-		                                                  WHERE sessionYearId = $session_id")->result()[0];
 		$userId = $this->session->userdata('userId');
-		$query = "SELECT 
-		`school`.`schoolId` AS `school_id`
-					, `schools`.`schoolId` AS `schools_id`
-					, `school`.`session_year_id`
-					, `schools`.`registrationNumber`
-					, `schools`.`schoolName`
-					, `schools`.`yearOfEstiblishment`
-					, `schools`.`school_type_id`
-					, `schools`.`gender_type_id` , `school`.`reg_type_id`
-				FROM
-					`schools`
-					INNER JOIN `school` 
-						ON (`schools`.`schoolId` = `school`.`schools_id`)
-						WHERE `school`.`session_year_id`='" . $session_id . "'
-						AND `schools`.`owner_id`='" . $userId . "'";
+		$this->data['school'] = $school = $this->school_detail($school_session_id);
+		$this->data['school_id'] =  $school_id = $school->school_id;
+		$this->data['schools_id'] =  $school->schools_id;
+		$this->data['session_id']  = $session_id = $school->session_id;
 
+		$this->data['session_detail'] = $this->get_session_detail($session_id);
+		$this->data['form_status'] = $this->get_form_status($school_id);
 
-		$this->data['school'] =  $this->db->query($query)->result()[0];
-		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
-
-		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
-
-		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
-		$this->data['form_status'] = $this->db->query($query)->result()[0];
 
 		$this->load->model("school_m");
 		$this->data['building_structure'] = $this->school_m->get_building_structure();
@@ -744,48 +658,26 @@ class Form extends MY_Controller
 
 			$this->session->set_flashdata('msg', 'Hazards with Associated Risks.');
 			$session_id = (int) $this->input->post('session_id');
-			redirect("form/section_g/$session_id");
+			redirect("form/section_g/$school_id");
 		} else {
 			$this->session->set_flashdata('msg', 'Hazards with Associated Risks.');
 			$session_id = (int) $this->input->post('session_id');
-			redirect("form/section_g/$session_id");
+			redirect("form/section_g/$school_id");
 		}
 	}
 
-	public function section_h($session_id)
+	public function section_h($school_session_id)
 	{
+		$this->check_school_session_entry($school_session_id);
 
-		//new here 
-
-
-		$this->data['session_id'] = $session_id = (int) $session_id;
-		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
-		                                                  WHERE sessionYearId = $session_id")->result()[0];
 		$userId = $this->session->userdata('userId');
-		$query = "SELECT 
-		`school`.`schoolId` AS `school_id`
-					, `schools`.`schoolId` AS `schools_id`
-					, `school`.`session_year_id`
-					, `schools`.`registrationNumber`
-					, `schools`.`schoolName`
-					, `schools`.`yearOfEstiblishment`
-					, `schools`.`school_type_id`
-					, `schools`.`gender_type_id` , `school`.`reg_type_id`
-				FROM
-					`schools`
-					INNER JOIN `school` 
-						ON (`schools`.`schoolId` = `school`.`schools_id`)
-						WHERE `school`.`session_year_id`='" . $session_id . "'
-						AND `schools`.`owner_id`='" . $userId . "'";
+		$this->data['school'] = $school = $this->school_detail($school_session_id);
+		$this->data['school_id'] =  $school_id = $school->school_id;
+		$this->data['schools_id'] =  $school->schools_id;
+		$this->data['session_id']  = $session_id = $school->session_id;
 
-
-		$this->data['school'] =  $this->db->query($query)->result()[0];
-		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
-
-		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
-
-		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
-		$this->data['form_status'] = $this->db->query($query)->result()[0];
+		$this->data['session_detail'] = $this->get_session_detail($session_id);
+		$this->data['form_status'] = $this->get_form_status($school_id);
 
 		$this->load->model("school_m");
 		$this->data['school_fee_concession'] = $this->school_m->fee_concession_by_school_id($school_id);
@@ -826,7 +718,7 @@ class Form extends MY_Controller
 
 		$this->session->set_flashdata('msg', 'Hazards with Associated Risks.');
 		$session_id = (int) $this->input->post('session_id');
-		redirect("form/section_h/$session_id");
+		redirect("form/section_h/$school_id");
 	}
 
 	private function registaion_type($type_id)
@@ -845,39 +737,19 @@ class Form extends MY_Controller
 		}
 	}
 
-	public function submit_bank_challan($session_id)
+	public function submit_bank_challan($school_session_id)
 	{
-		$this->data['session_id'] = $session_id = (int) $session_id;
 
-		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
-		                                                  WHERE sessionYearId = $session_id")->result()[0];
+		$this->check_school_session_entry($school_session_id);
+
 		$userId = $this->session->userdata('userId');
-		$query = "SELECT 
-		`school`.`schoolId` AS `school_id`
-					, `schools`.`schoolId` AS `schools_id`
-					, `school`.`session_year_id`
-					, `schools`.`registrationNumber`
-					, `schools`.`schoolName`
-					, `schools`.`yearOfEstiblishment`
-					, `schools`.`school_type_id`
-					, `schools`.`gender_type_id` , 
-					`school`.`reg_type_id`
-					, `school`.`level_of_school_id`
-					, `schools`.`yearOfEstiblishment`
-				FROM
-					`schools`
-					INNER JOIN `school` 
-						ON (`schools`.`schoolId` = `school`.`schools_id`)
-						WHERE `school`.`session_year_id`='" . $session_id . "'
-						AND `schools`.`owner_id`='" . $userId . "'";
+		$this->data['school'] = $school = $this->school_detail($school_session_id);
+		$this->data['school_id'] =  $school_id = $school->school_id;
+		$this->data['schools_id'] =  $school->schools_id;
+		$this->data['session_id']  = $session_id = $school->session_id;
 
-
-		$this->data['school'] =  $this->db->query($query)->result()[0];
-		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
-		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
-
-		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
-		$this->data['form_status'] = $this->db->query($query)->result()[0];
+		$this->data['session_detail'] = $this->get_session_detail($session_id);
+		$this->data['form_status'] = $this->get_form_status($school_id);
 
 		$query = "SELECT session_id, last_date, fine_percentage FROM `session_fee_submission_dates` 
 		               WHERE session_id= $session_id AND last_date >='" . date('Y-m-d') . "' 
@@ -916,72 +788,45 @@ class Form extends MY_Controller
 		$this->load->view('layout', $this->data);
 	}
 
-	private  function check_school_session_entry($session_id, $school_id)
+	private  function check_school_session_entry($school_id)
 	{
-		$query = "SELECT * FROM school 
-		          WHERE schools_id = '" . $school_id . "' 
-				  AND session_year_id= '" . $session_id . "'";
+		$query = "SELECT * FROM school  WHERE schoolId = '" . $school_id . "'  ";
 		$school_session_entry = $this->db->query($query)->result();
-
 
 		if (!$school_session_entry) {
 			$this->session->set_flashdata('msg_error', 'You are not applied for this session.');
 			redirect('school_dashboard');
 		} else {
 			$school_session_detail = $school_session_entry[0];
+
+
 			if ($school_session_detail->status != 0) {
-				redirect("online_application/status/$session_id");
+				$this->session->set_flashdata('msg_error', 'You are already applied for this session.');
+				redirect("online_application/status/$school_id");
 			}
 		}
 	}
 
-	public function complete_section_d($session_id)
+	public function complete_section_d($school_id)
 	{
-		$session_id = (int) $session_id;
-		$userId = $this->session->userdata('userId');
-		$query = "SELECT 
-		`school`.`schoolId` AS `school_id`,
-		`school`.`schools_id` FROM
-					`schools`
-					INNER JOIN `school` 
-						ON (`schools`.`schoolId` = `school`.`schools_id`)
-						WHERE `school`.`session_year_id`='" . $session_id . "'
-						AND `schools`.`owner_id`='" . $userId . "'";
 
-
-		$this->data['school'] =  $this->db->query($query)->result()[0];
-		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
-
-		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
 
 		$form_input['form_d_status'] = 1;
 		$this->db->where('school_id', $school_id);
 		$this->db->update('forms_process', $form_input);
 		$this->session->set_flashdata('msg_success', 'Section D Data Submit Successfully.');
-		redirect("form/section_d/$session_id");
+		redirect("form/section_d/$school_id");
 	}
-	public function complete_section_e($session_id)
+	public function complete_section_e($school_id)
 	{
-		$session_id = (int) $session_id;
-		$userId = $this->session->userdata('userId');
-		$query = "SELECT 
-		`school`.`schoolId` AS `school_id`,
-		`school`.`schools_id` FROM
-					`schools`
-					INNER JOIN `school` 
-						ON (`schools`.`schoolId` = `school`.`schools_id`)
-						WHERE `school`.`session_year_id`='" . $session_id . "'
-						AND `schools`.`owner_id`='" . $userId . "'";
-		$this->data['school'] =  $this->db->query($query)->result()[0];
-		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
+		$school_id = (int) $school_id;
 
-		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
 
 		$form_input['form_e_status'] = 1;
 		$this->db->where('school_id', $school_id);
 		$this->db->update('forms_process', $form_input);
 		$this->session->set_flashdata('msg_success', 'Section D Data Submit Successfully.');
-		redirect("form/section_e/$session_id");
+		redirect("form/section_e/$school_id");
 	}
 
 
@@ -989,19 +834,9 @@ class Form extends MY_Controller
 	{
 		$session_id = (int) $this->input->post('session_id');
 		$userId = $this->session->userdata('userId');
-		$query = "SELECT 
-		`school`.`schoolId` AS `school_id`,
-		`school`.`schools_id` FROM
-					`schools`
-					INNER JOIN `school` 
-						ON (`schools`.`schoolId` = `school`.`schools_id`)
-						WHERE `school`.`session_year_id`='" . $session_id . "'
-						AND `schools`.`owner_id`='" . $userId . "'";
 
-		$this->data['school'] =  $this->db->query($query)->result()[0];
-
-		$schools_id = $this->data['school']->schools_id;
-		$school_id = $this->data['school']->school_id;
+		$schools_id = (int) $this->input->post('schools_id');
+		$school_id = (int) $this->input->post('school_id');
 
 		$challan_detail['challan_for'] = $this->input->post('challan_for');
 		$challan_detail['challan_no'] = $this->input->post('challan_no');
@@ -1010,49 +845,31 @@ class Form extends MY_Controller
 		$challan_detail['schools_id'] = $schools_id;
 		$challan_detail['school_id'] = $school_id;
 		$challan_detail['created_by'] = $userId;
+		if ($this->input->post('challan_for') == 'Deficiency') {
+			$challan_detail['deficiency_id'] = $this->input->post('deficiency_id');
+			$challan_detail['last_status'] = $this->input->post('last_status');
+		}
 
 		$this->db->insert('bank_challans', $challan_detail);
 		$this->db->where('schoolId', $school_id);
 		$input['status'] = 2;
 		$this->db->update('school', $input);
 		$this->session->set_flashdata('msg_success', 'Bank Challan Submit Successfully.');
-		redirect("form/submit_bank_challan/$session_id");
+		redirect("form/submit_bank_challan/$school_id");
 	}
 
-	public function print_registration_bank_challan($session_id)
+	public function print_registration_bank_challan($school_session_id)
 	{
-		$this->data['session_id'] = $session_id = (int) $session_id;
+		$this->check_school_session_entry($school_session_id);
 
-		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
-		                                                  WHERE sessionYearId = $session_id")->result()[0];
 		$userId = $this->session->userdata('userId');
-		$query = "SELECT 
-		`school`.`schoolId` AS `school_id`
-					, `schools`.`schoolId` AS `schools_id`
-					, `school`.`session_year_id`
-					, `schools`.`registrationNumber`
-					, `schools`.`schoolName`
-					, `schools`.`district_id`
-					, `schools`.`yearOfEstiblishment`
-					, `schools`.`school_type_id`
-					, `schools`.`gender_type_id` , `school`.`reg_type_id`
-					, `schools`.`level_of_school_id`
-					, `schools`.`yearOfEstiblishment`
-				FROM
-					`schools`
-					INNER JOIN `school` 
-						ON (`schools`.`schoolId` = `school`.`schools_id`)
-						WHERE `school`.`session_year_id`='" . $session_id . "'
-						AND `schools`.`owner_id`='" . $userId . "'";
+		$this->data['school'] = $school = $this->school_detail($school_session_id);
+		$this->data['school_id'] =  $school_id = $school->school_id;
+		$this->data['schools_id'] =  $school->schools_id;
+		$this->data['session_id']  = $session_id = $school->session_id;
 
-
-		$this->data['school'] =  $this->db->query($query)->result()[0];
-		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
-
-		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
-
-		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
-		$this->data['form_status'] = $this->db->query($query)->result()[0];
+		$this->data['session_detail'] = $this->get_session_detail($session_id);
+		$this->data['form_status'] = $this->get_form_status($school_id);
 
 		$query = "SELECT session_id, last_date, fine_percentage FROM `session_fee_submission_dates` 
 		               WHERE session_id= $session_id AND last_date >='" . date('Y-m-d') . "' 
@@ -1121,7 +938,7 @@ class Form extends MY_Controller
 			$schools_update['yearOfEstiblishment'] = $this->input->post('year_of_es');
 			$this->db->update('schools', $schools_update);
 		}
-		redirect("form/submit_bank_challan/$session_id");
+		redirect("form/submit_bank_challan/$school_id");
 	}
 
 	public function update_test_renewal($session_id)
@@ -1139,45 +956,23 @@ class Form extends MY_Controller
 		}
 
 
-		redirect("form/submit_bank_challan/$session_id");
+		redirect("form/submit_bank_challan/$school_id");
 	}
 
 
 
-	public function print_renewal_bank_challan($session_id)
+	public function print_renewal_bank_challan($school_session_id)
 	{
-		$this->data['session_id'] = $session_id = (int) $session_id;
+		$this->check_school_session_entry($school_session_id);
 
-		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
-		                                                  WHERE sessionYearId = $session_id")->result()[0];
 		$userId = $this->session->userdata('userId');
-		$query = "SELECT 
-		`school`.`schoolId` AS `school_id`
-					, `schools`.`schoolId` AS `schools_id`
-					, `school`.`session_year_id`
-					, `schools`.`registrationNumber`
-					, `schools`.`schoolName`
-					, `schools`.`district_id`
-					, `schools`.`yearOfEstiblishment`
-					, `schools`.`school_type_id`
-					, `schools`.`gender_type_id` , `school`.`reg_type_id`
-					, `schools`.`level_of_school_id`
-					, `schools`.`yearOfEstiblishment`
-				FROM
-					`schools`
-					INNER JOIN `school` 
-						ON (`schools`.`schoolId` = `school`.`schools_id`)
-						WHERE `school`.`session_year_id`='" . $session_id . "'
-						AND `schools`.`owner_id`='" . $userId . "'";
+		$this->data['school'] = $school = $this->school_detail($school_session_id);
+		$this->data['school_id'] =  $school_id = $school->school_id;
+		$this->data['schools_id'] =  $school->schools_id;
+		$this->data['session_id']  = $session_id = $school->session_id;
 
-
-		$this->data['school'] =  $this->db->query($query)->result()[0];
-		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
-
-		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
-
-		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
-		$this->data['form_status'] = $this->db->query($query)->result()[0];
+		$this->data['session_detail'] = $this->get_session_detail($session_id);
+		$this->data['form_status'] = $this->get_form_status($school_id);
 
 		$query = "SELECT session_id, last_date, fine_percentage FROM `session_fee_submission_dates` 
 		               WHERE session_id= $session_id AND last_date >='" . date('Y-m-d') . "' 
@@ -1203,40 +998,18 @@ class Form extends MY_Controller
 		$this->load->view('forms/submit_bank_challan/renewal_bank_challan_print', $this->data);
 	}
 
-	public function print_renewal_upgradation_bank_challan($session_id)
+	public function print_renewal_upgradation_bank_challan($school_session_id)
 	{
-		$this->data['session_id'] = $session_id = (int) $session_id;
+		$this->check_school_session_entry($school_session_id);
 
-		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
-		                                                  WHERE sessionYearId = $session_id")->result()[0];
 		$userId = $this->session->userdata('userId');
-		$query = "SELECT 
-		`school`.`schoolId` AS `school_id`
-					, `schools`.`schoolId` AS `schools_id`
-					, `school`.`session_year_id`
-					, `schools`.`registrationNumber`
-					, `schools`.`schoolName`
-					, `schools`.`district_id`
-					, `schools`.`yearOfEstiblishment`
-					, `schools`.`school_type_id`
-					, `schools`.`gender_type_id` , `school`.`reg_type_id`
-					, `schools`.`level_of_school_id`
-					, `schools`.`yearOfEstiblishment`
-				FROM
-					`schools`
-					INNER JOIN `school` 
-						ON (`schools`.`schoolId` = `school`.`schools_id`)
-						WHERE `school`.`session_year_id`='" . $session_id . "'
-						AND `schools`.`owner_id`='" . $userId . "'";
+		$this->data['school'] = $school = $this->school_detail($school_session_id);
+		$this->data['school_id'] =  $school_id = $school->school_id;
+		$this->data['schools_id'] =  $school->schools_id;
+		$this->data['session_id']  = $session_id = $school->session_id;
 
-
-		$this->data['school'] =  $this->db->query($query)->result()[0];
-		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
-
-		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
-
-		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
-		$this->data['form_status'] = $this->db->query($query)->result()[0];
+		$this->data['session_detail'] = $this->get_session_detail($session_id);
+		$this->data['form_status'] = $this->get_form_status($school_id);
 
 		$query = "SELECT session_id, last_date, fine_percentage FROM `session_fee_submission_dates` 
 		               WHERE session_id= $session_id AND last_date >='" . date('Y-m-d') . "' 
@@ -1262,40 +1035,18 @@ class Form extends MY_Controller
 		$this->load->view('forms/submit_bank_challan/renewal_bank_challan_print', $this->data);
 	}
 
-	public function print_upgradation_bank_challan($session_id)
+	public function print_upgradation_bank_challan($school_session_id)
 	{
-		$this->data['session_id'] = $session_id = (int) $session_id;
+		$this->check_school_session_entry($school_session_id);
 
-		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 
-		                                                  WHERE sessionYearId = $session_id")->result()[0];
 		$userId = $this->session->userdata('userId');
-		$query = "SELECT 
-		`school`.`schoolId` AS `school_id`
-					, `schools`.`schoolId` AS `schools_id`
-					, `school`.`session_year_id`
-					, `schools`.`registrationNumber`
-					, `schools`.`schoolName`
-					, `schools`.`district_id`
-					, `schools`.`yearOfEstiblishment`
-					, `schools`.`school_type_id`
-					, `schools`.`gender_type_id` , `school`.`reg_type_id`
-					, `schools`.`level_of_school_id`
-					, `schools`.`yearOfEstiblishment`
-				FROM
-					`schools`
-					INNER JOIN `school` 
-						ON (`schools`.`schoolId` = `school`.`schools_id`)
-						WHERE `school`.`session_year_id`='" . $session_id . "'
-						AND `schools`.`owner_id`='" . $userId . "'";
+		$this->data['school'] = $school = $this->school_detail($school_session_id);
+		$this->data['school_id'] =  $school_id = $school->school_id;
+		$this->data['schools_id'] =  $school->schools_id;
+		$this->data['session_id']  = $session_id = $school->session_id;
 
-
-		$this->data['school'] =  $this->db->query($query)->result()[0];
-		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
-
-		$this->check_school_session_entry($session_id, $this->data['school']->schools_id);
-
-		$query = "SELECT * FROM `forms_process` WHERE school_id = '" . $school_id . "'";
-		$this->data['form_status'] = $this->db->query($query)->result()[0];
+		$this->data['session_detail'] = $this->get_session_detail($session_id);
+		$this->data['form_status'] = $this->get_form_status($school_id);
 
 		$query = "SELECT session_id, last_date, fine_percentage FROM `session_fee_submission_dates` 
 		               WHERE session_id= $session_id AND last_date >='" . date('Y-m-d') . "' 

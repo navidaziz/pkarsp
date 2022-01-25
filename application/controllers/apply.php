@@ -740,6 +740,7 @@ class Apply extends MY_Controller
 	public function upgradation($session_id)
 	{
 
+
 		$this->data['session_id'] = $session_id = (int) $session_id;
 		$userId = $this->session->userdata('userId');
 		$query = "SELECT schoolId, level_of_school_id, gender_type_id, school_type_id,owner_id, reg_type_id 
@@ -752,7 +753,7 @@ class Apply extends MY_Controller
 
 		//insert new session...
 		$new_session['schools_id'] = $schools_id;
-		$new_session['reg_type_id'] = 4;
+		$new_session['reg_type_id'] = 3;
 		$new_session['gender_type_id'] = $last_session_detail->gender_type_id;
 		$new_session['school_type_id'] = $last_session_detail->school_type_id;
 		$new_session['level_of_school_id'] = $last_session_detail->level_of_school_id;
@@ -1051,7 +1052,7 @@ class Apply extends MY_Controller
 		} else {
 			$this->db->trans_commit();
 			$school_data_to_update = array(
-				'reg_type_id' => 4,
+				'reg_type_id' => 3,
 				'updatedDate' => date('Y-m-d H:i:s', time()),
 				'updatedBy' => $this->session->userdata('userId'),
 				'created_date' => date('Y-m-d H:i:s', time()),

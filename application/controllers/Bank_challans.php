@@ -39,14 +39,22 @@ class Bank_challans extends Admin_Controller
 			$this->db->where('bank_challan_id', $bank_challan_id);
 			$query_result = $this->db->update('bank_challans', $input);
 			if ($query_result) {
-				$query = "SELECT session_id, school_id, schools_id 
+				$query = "SELECT challan_for,session_id, school_id, schools_id 
 		          FROM bank_challans 
 				  WHERE bank_challan_id = '" . $bank_challan_id . "'";
-				$school_session_detail = $this->db->query($query)->result()[0];
-				$where['schoolId'] = $school_session_detail->school_id;
-				$where['session_year_id'] = $school_session_detail->session_id;
+				$bank_challan = $this->db->query($query)->result()[0];
+
+
+				$where['schoolId'] = $bank_challan->school_id;
+				$where['session_year_id'] = $bank_challan->session_id;
 				$this->db->where($where);
-				$update['status'] = '0';
+				$update = array();
+				if ($bank_challan->challan_for == 'Deficiency') {
+					$update['status'] = '7';
+				} else {
+					$update['status'] = '0';
+				}
+
 				$this->db->update('school', $update);
 				$this->session->set_flashdata('msg_error', 'Bank Challan Not Verified.');
 				redirect("bank_challans");
@@ -79,9 +87,13 @@ class Bank_challans extends Admin_Controller
 			$this->db->where('bank_challan_id', $bank_challan_id);
 			$query_result = $this->db->update('bank_challans', $input);
 			if ($query_result) {
-				$query = "SELECT `session_id`, `school_id`, `schools_id`, `challan_for` 
-						FROM bank_challans 
-						WHERE bank_challan_id = '" . $bank_challan_id . "'";
+				$query = "SELECT bank_challans.*,
+				 `session_year`.sessionYearTitle
+						FROM bank_challans,
+						`session_year` 
+						WHERE 
+						bank_challans.session_id = `session_year`.sessionYearId
+						AND bank_challan_id = '" . $bank_challan_id . "'";
 				$bank_challan_detail = $this->db->query($query)->result()[0];
 				//here we need to change the status of renew/ registration/ and upgradation and renewal upgradation.
 				if (
@@ -89,6 +101,7 @@ class Bank_challans extends Admin_Controller
 					or $bank_challan_detail->challan_for == 'Renewal'
 					or $bank_challan_detail->challan_for == 'Renewal Upgradation'
 					or $bank_challan_detail->challan_for == 'Upgradation'
+					or $bank_challan_detail->challan_for == 'Deficiency'
 				) {
 
 					$where = array();
@@ -96,21 +109,20 @@ class Bank_challans extends Admin_Controller
 					if ($bank_challan_detail->challan_for == 'Registration') {
 
 
-						if ($this->input->post("bise_verified") == 'Yes' and $bank_challan_detail->challan_for == 'Registration') {
+						if ($this->input->post("bise_verified") == 'Yes') {
 							$where['schoolId'] = $bank_challan_detail->schools_id;
 							$this->db->where($where);
-							$update['inspection'] = '1';
-							$update['status'] = '3';
 							$update['bise_verified'] = $this->input->post("bise_verified");
 							$this->db->update('schools', $update);
-						} else {
-							$where['schoolId'] = $bank_challan_detail->school_id;
-							$where['session_year_id'] = $bank_challan_detail->session_id;
-							$this->db->where($where);
-							$update['inspection'] = '0';
-							$update['status'] = '3';
-							$this->db->update('school', $update);
 						}
+
+						$update = array();
+						$where['schoolId'] = $bank_challan_detail->school_id;
+						$where['session_year_id'] = $bank_challan_detail->session_id;
+						$this->db->where($where);
+						$update['inspection'] = '0';
+						$update['status'] = '3';
+						$this->db->update('school', $update);
 					}
 					if ($bank_challan_detail->challan_for == 'Renewal Upgradation') {
 						$where['schoolId'] = $bank_challan_detail->school_id;
@@ -138,6 +150,24 @@ class Bank_challans extends Admin_Controller
 						$update['status'] = '3';
 						$this->db->update('school', $update);
 					}
+
+					if ($bank_challan_detail->challan_for == 'Deficiency') {
+						$where['schoolId'] = $bank_challan_detail->school_id;
+						$where['session_year_id'] = $bank_challan_detail->session_id;
+						$this->db->where($where);
+						$last_session = $bank_challan_detail->last_status;
+						$update['status'] = $last_session;
+						$this->db->update('school', $update);
+					}
+
+					$auto_comment = 'It is verified that STAN# ' . $bank_challan_detail->challan_no . ' on Dated: ' . date('d M, Y', strtotime($bank_challan_detail->challan_date)) . ' Total Rs: ' . $bank_challan_detail->total_deposit_fee . ' for challan ' . $bank_challan_detail->challan_for . ' Session ' . $bank_challan_detail->sessionYearTitle . ', reflected in Cash Mangement System Bank Statement. ';
+					$input = array();
+					$input['comment'] = $auto_comment;
+					$input['session_id'] = $bank_challan_detail->session_id;
+					$input['school_id'] = $bank_challan_detail->school_id;
+					$input['schools_id'] = $bank_challan_detail->schools_id;
+					$input['created_by'] = $this->session->userdata('userId');
+					$this->db->insert('comments', $input);
 				}
 
 

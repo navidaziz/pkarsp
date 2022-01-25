@@ -35,7 +35,7 @@
           <?php if ($school->registrationNumber) { ?> - REG No: <?php echo $school->registrationNumber ?> <?php } ?></h4>
       </small>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> Home </a></li>
         <!-- <li><a href="#">Examples</a></li> -->
         <li class="active"><?php echo @ucfirst($title); ?>s Session: <?php echo $session_detail->sessionYearTitle; ?></li>
       </ol>
@@ -316,7 +316,7 @@
                     </tr> -->
                     <tr>
                       <td colspan="2" style="text-align:center;">
-                        <a target="new" class="btn btn-primary" href="<?php echo site_url("form/print_registration_bank_challan/$session_id") ?>"> <i class="fa fa-print" aria-hidden="true"></i> Print PSRA Registration Bank Challan From</a>
+                        <a target="new" class="btn btn-primary" href="<?php echo site_url("form/print_registration_bank_challan/$school_id") ?>"> <i class="fa fa-print" aria-hidden="true"></i> Print PSRA Registration Bank Challan From</a>
                       </td>
                     </tr>
                   </tbody>
@@ -353,6 +353,8 @@
                 <h4>Submit Registration Challan for session <?php echo $session_detail->sessionYearTitle; ?></h4>
                 <form action="<?php echo site_url("form/add_bank_challan"); ?>" method="post">
                   <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
+                  <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
+                  <input type="hidden" name="schools_id" value="<?php echo $schools_id; ?>" />
                   <input type="hidden" name="challan_for" value="Registration" />
                   <table class="table table-bordered">
                     <tr>

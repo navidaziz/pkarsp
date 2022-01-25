@@ -19,7 +19,7 @@
         echo " / Unionconsil: <strong>" . $school->ucTitle . "</strong>";
       } ?></small>
     <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> Home </a></li>
       <li><a href="#">School Dashboard</a></li>
     </ol>
   </section>
@@ -320,12 +320,12 @@
                           <td><?php echo $upgradation_and_renewal->levelofInstituteTitle; ?></td>
                           <td>
                             <?php if ($upgradation_and_renewal->status == 0) { ?>
-                              <a class="btn btn-success" href="<?php echo site_url("form/section_b/$upgradation_and_renewal->session_year_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Renewal Process</a>
+                              <a class="btn btn-success" href="<?php echo site_url("form/section_b/$upgradation_and_renewal->school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Renewal Process</a>
                             <?php } else {   ?>
                               <?php if ($upgradation_and_renewal->status == 1) { ?>
                                 <a target="_new" href="<?php echo site_url("school_dashboard/certificate/" . $upgradation_and_renewal->schools_id . "/" . $upgradation_and_renewal->school_id . "/" . $upgradation_and_renewal->session_year_id); ?>">Print Certificate<a>
                                   <?php } else { ?>
-                                    <a class="btn btn-success" href="<?php echo site_url("online_application/status/$upgradation_and_renewal->session_year_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Application Inprogress</a>
+                                    <a class="btn btn-success" href="<?php echo site_url("online_application/status/$upgradation_and_renewal->school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Application Inprogress</a>
 
                                 <?php }
                               } ?>
@@ -394,12 +394,12 @@
                       <td><?php echo $renewal->levelofInstituteTitle; ?></td>
                       <td>
                         <?php if ($renewal->status == 0) { ?>
-                          <a class="btn btn-success" href="<?php echo site_url("form/section_b/$renewal->session_year_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Renewal Process</a>
+                          <a class="btn btn-success" href="<?php echo site_url("form/section_b/$renewal->school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Renewal Process</a>
                         <?php } else {   ?>
                           <?php if ($renewal->status == 1) { ?>
                             <a target="_new" href="<?php echo site_url("school_dashboard/certificate/" . $renewal->schools_id . "/" . $renewal->school_id . "/" . $renewal->session_year_id); ?>">Print Certificate<a>
                               <?php } else { ?>
-                                <a class="btn btn-success" href="<?php echo site_url("online_application/status/$renewal->session_year_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Application Inprogress</a>
+                                <a class="btn btn-success" href="<?php echo site_url("online_application/status/$renewal->school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Application Inprogress</a>
 
                             <?php }
                           } ?>
@@ -455,16 +455,28 @@
                       <td><?php echo $upgradation->sessionYearTitle; ?></td>
                       <td><?php echo $upgradation->regTypeTitle; ?></td>
                       <td><?php echo $upgradation->levelofInstituteTitle; ?></td>
-                      <td> <a target="_new" href="<?php echo site_url("school_dashboard/certificate/" . $upgradation->schools_id . "/" . $upgradation->school_id . "/" . $upgradation->session_year_id); ?>">Print <?php echo $upgradation->regTypeTitle; ?> Certificate</a>
+                      <td>
+                        <?php if ($upgradation->status == 0) { ?>
+                          <a class="btn btn-success" href="<?php echo site_url("form/section_b/$upgradation->school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Upgradation Process</a>
+                        <?php } else {   ?>
+                          <?php if ($upgradation->status == 1) { ?>
+                            <a target="_new" href="<?php echo site_url("school_dashboard/certificate/" . $upgradation->schools_id . "/" . $upgradation->school_id . "/" . $upgradation->session_year_id); ?>">Print Certificate<a>
+                              <?php } else { ?>
+                                <a class="btn btn-success" href="<?php echo site_url("online_application/status/$upgradation->school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Application Inprogress</a>
+
+                            <?php }
+                          } ?>
                       </td>
+
                     </tr>
 
                   <?php } else { ?>
                     <tr>
                       <td><?php echo $count++; ?></td>
                       <td><?php echo $session->sessionYearTitle; ?></td>
-                      <td>
-                        Apply for Upgradation
+                      <td colspan="3" style="text-align: center;">
+                        <a class="btn btn-warning" style="margin: 1px;" href="<?php echo site_url("apply/upgradation/$session->sessionYearId"); ?>">Apply for Upgradation</a>
+
                       </td>
                     </tr>
                   <?php } ?>
@@ -538,12 +550,12 @@
 
                         <td>
                           <?php if ($registaion_and_renewal->status == 0) { ?>
-                            <a class="btn btn-success" href="<?php echo site_url("form/section_b/$registaion_and_renewal->session_year_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Renewal Process</a>
+                            <a class="btn btn-success" href="<?php echo site_url("form/section_b/$registaion_and_renewal->school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Renewal Process</a>
                           <?php } else {   ?>
                             <?php if ($registaion_and_renewal->status == 1) { ?>
                               <a target="_new" href="<?php echo site_url("school_dashboard/certificate/" . $registaion_and_renewal->schools_id . "/" . $registaion_and_renewal->school_id . "/" . $registaion_and_renewal->session_year_id); ?>">Print Certificate<a>
                                 <?php } else { ?>
-                                  <a class="btn btn-success" href="<?php echo site_url("online_application/status/$registaion_and_renewal->session_year_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i>Inprogress View Status</a>
+                                  <a class="btn btn-success" href="<?php echo site_url("online_application/status/$registaion_and_renewal->school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i>Inprogress View Status</a>
 
                               <?php }
                             } ?>
@@ -606,9 +618,8 @@
                   <?php if ($registration) { ?>
                     <?php if ($registration[0]->status == 0) { ?>
                       <a class="btn btn-success" href="<?php echo site_url("form/section_b/$registration_session_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Registration Process <?php echo $session->sessionYearTitle; ?></a>
-                    <?php }   ?>
-                    <?php if ($registration[0]->status == 2) { ?>
-                      <a class="btn btn-success" href="<?php echo site_url("online_application/status/$registration_session_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Bank Challan Verification Session <?php echo $session->sessionYearTitle; ?></a>
+                    <?php } else { ?>
+                      <a class="btn btn-success" href="<?php echo site_url("online_application/status/$registration_session_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i>Application Status <?php echo $session->sessionYearTitle; ?></a>
                     <?php } ?>
                   <?php } else { ?>
                     <a class="btn btn-primary" href="<?php echo site_url("apply/registration/$session->sessionYearId"); ?>">Apply for Registraion. <?php echo $session->sessionYearTitle; ?></a>

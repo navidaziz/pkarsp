@@ -14,7 +14,7 @@ $section_id = $students[0]->section_id;
         </h2><br />
         <small> Students Profile Detail</small>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> Home </a></li>
             <li><a href="<?php echo site_url("admin/admission"); ?>">Admission</a></li>
             <li><a href="<?php echo site_url("admin/admission/view_students/$class_id"); ?>"><?php echo $student->class_title; ?> Students List</a></li>
             <li><a href="#">Student Profile</a></li>

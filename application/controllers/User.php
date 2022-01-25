@@ -540,7 +540,7 @@ class User extends Admin_Controller
 	public function logout()
 	{
 		$this->user_m->logout();
-		redirect("user/login");
+		redirect("login");
 	}
 
 	public function edit($userId)

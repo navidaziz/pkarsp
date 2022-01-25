@@ -7,7 +7,7 @@
     </h2><br />
     <small> <?php echo $students[0]->Class_title . ""; ?> Students list</a></small>
     <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> Home </a></li>
       <li><a href="<?php echo site_url("admin/admission"); ?>">Admission</a></li>
       <li><a href=""><?php echo $students[0]->Class_title . ""; ?> Students list</a></li>
     </ol>

@@ -1,5 +1,6 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
 <style>
   .chat {
     list-style: none;
@@ -68,7 +69,7 @@
     border-radius: 5px;
     padding: 2px;
     width: 86%;
-    height: 40px !important;
+    min-height: 40px !important;
   }
 
   .select2-container--default .select2-selection--multiple .select2-selection__choice__display {
@@ -366,49 +367,216 @@
 
         <!-- <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;"> -->
 
-        <table class="table table-bordered">
+        <table class="table table-bordered table2" style="font-size: 13px;">
           <thead>
             <tr>
               <th>#</th>
+              <th>Type</th>
               <th>STAN</th>
               <th>Date</th>
-              <th>Application Processing Fee</th>
-              <th>Inspection Fee</th>
-              <th>Late Fee Fine </th>
+              <th>App. Pro. Fee</th>
+              <th>Ins. Fee</th>
+              <th>Ren. Fee</th>
+              <th>Late Fee </th>
+              <th>Secu. Fee:</th>
+              <th>Upgra. Fee:</th>
+              <th>Ren. & Upgra. Fee:</th>
+
               <th>Fine</th>
               <th>Total</th>
-              <th>Verified</th>
               <th>Verified By</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <?php $count = 1;
-              foreach ($bank_challans as $bank_challan) { ?>
+
+            <?php $count = 1;
+            foreach ($bank_challans as $bank_challan) { ?>
+              <tr>
                 <td><?php echo $count; ?></td>
+                <td><?php echo $bank_challan->challan_for; ?></td>
                 <td><?php echo $bank_challan->challan_no; ?></td>
                 <td><?php echo date('d M, Y', strtotime($bank_challan->challan_date)); ?></td>
                 <td><?php echo $bank_challan->application_processing_fee; ?></td>
                 <td><?php echo $bank_challan->inspection_fee; ?></td>
+                <td><?php echo $bank_challan->renewal_fee; ?></td>
                 <td><?php echo $bank_challan->late_fee; ?></td>
+
+                <td><?php echo $bank_challan->security_fee; ?></td>
+                <td><?php echo $bank_challan->upgradation_fee; ?></td>
+                <td><?php echo $bank_challan->renewal_and_upgradation_fee; ?></td>
+
+
                 <td><?php echo $bank_challan->fine; ?></td>
                 <td><?php echo $bank_challan->total_deposit_fee; ?></td>
-                <td><?php if ($bank_challan->verified) { ?> <i class="fa fa-check" aria-hidden="true"></i> <?php } else { ?> <i class="fa fa-check" aria-hidden="true"></i> <?php } ?></td>
                 <td><?php
                     $query = "SELECT * FROM users WHERE userId = '" . $bank_challan->verified_by . "'";
                     $verified_by = $this->db->query($query)->result()[0]->userTitle;
                     echo $verified_by;
                     ?></td>
-              <?php  } ?>
-            </tr>
+              </tr>
+            <?php  } ?>
+
           </tbody>
         </table>
-        <!-- </div> -->
-        <div style=" overflow-y: scroll; border:1px solid #9FC8E8; border-radius: 10px; height: 280px;  margin: 5px; padding: 5px; background-color: white;">
-          <ul class="chat" id="all_comments"> </ul>
+
+        <div style="border:1px solid #9FC8E8; border-radius: 10px;  margin: 5px; padding: 5px; background-color: white;">
+          <strong> Is There Any Deficiency:
+            <span style="margin-left: 10px;"></span>
+            <input id="deficiency_yes" name="deficiency" type="radio" onclick="$('#deficiency_body').show()" value="1" /> Yes
+            <span style="margin-left: 5px;"></span>
+            <input id="deficiency_no" name="deficiency" type="radio" onclick="$('#deficiency_body').hide()" value="0" checked /> No
+          </strong>
+          <div id="deficiency_body" style="display: none;">
+            <form method="post" action="<?php echo site_url("registration_section/send_deficiency"); ?>">
+
+              <input type="hidden" value="<?php echo $session_id; ?>" name="session_id" />
+              <input type="hidden" value="<?php echo $school_id; ?>" name="school_id" />
+              <input type="hidden" value="<?php echo $school->schools_id; ?>" name="schools_id" />
+              <table class="table">
+                <tr>
+                  <td>Deficiency Title: <input required name="deficiency_title" class="form-control" type="text" /><br />
+                    Deficiency Detail:<br />
+                    <textarea name="deficiency_detail" required rows="16" class="form-control"></textarea>
+                  </td>
+                  <td>
+                    Bank Challan
+                    <table class="table" style="width: 100%;">
+
+                      <tr>
+                        <td style="width: 200px;">
+                          Application Processing Fee:</td>
+                        <td><input class="deficiency_value" type="number" name="application_processing_fee" min="0" required /> </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          Inspection Fee:
+                        </td>
+                        <td><input class="deficiency_value" type="number" name="inspection_fee" required min="0" /> </td>
+                      </tr>
+
+
+                      <tr>
+                        <td> Renewal Fee:</td>
+                        <td><input class="deficiency_value" type="number" name="renewal_fee" required min="0" /> </td>
+                      </tr>
+
+
+                      <tr>
+                        <td>
+                          Late Fee:
+                        </td>
+                        <td><input class="deficiency_value" type="number" name="late_fee" required min="0" /> </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          Security Fee:
+                        </td>
+                        <td><input class="deficiency_value" type="number" name="security_fee" required min="0" /> </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          Up-Gradation Fee:</td>
+                        <td><input class="deficiency_value" type="number" name="upgradation_fee" required min="0" /> </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          Renewal and Up-Gradation Fee:
+                        </td>
+                        <td><input class="deficiency_value" type="number" name="renewal_and_upgradation_fee" required min="0" /> </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          Fine:
+                        </td>
+                        <td><input class="deficiency_value" type="number" name="fine" required min="0" /> </td>
+                      </tr>
+
+                      <tr>
+                        <td>
+                          Total Fee:
+                        </td>
+                        <td>
+                          <strong id="totaldepositfee"></strong>
+                          <input type="hidden" id="total_deposit_fee" name="total_deposit_fee" value="yes" required min="0" />
+                        </td>
+                      </tr>
+
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2" style="text-align: center;">
+                    <input onclick="return confirm('Are you sure you want to submit?');" class="btn btn-danger" type="submit" value="Send Deficiency" name="Send_Deficiency" />
+                  </td>
+                </tr>
+              </table>
+
+            </form>
+            <script>
+              $(document).on("keyup", ".deficiency_value", function() {
+                var sum = 0;
+                $(".deficiency_value").each(function() {
+                  sum += +$(this).val();
+                });
+                $("#total_deposit_fee").val(sum);
+                $("#totaldepositfee").html(sum);
+
+              });
+            </script>
+          </div>
         </div>
+
+        <!-- </div> -->
+        <div id="all_comments"> </div>
+        <!-- inspection report -->
+        <?php if ($session_request_detail->inspection_report) { ?>
+          <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
+            <h4>Inspection Report:</h4>
+            <?php echo $session_request_detail->inspection_report;   ?>
+          </div>
+        <?php } ?>
         <?php if ($session_request_detail->status != 1) { ?>
           <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
+            <div style="padding: 5px;">
+              <?php $user_id = $this->session->userdata('userId');
+              $query = "SELECT user_id FROM `tagged_users`
+                  WHERE `created_by` ='" . $user_id . "'
+                  AND school_id = '" . $school_id . "'
+                  AND schools_id = '" . $school->schools_id . "'";
+              $user_taggs = $this->db->query($query)->result();
+              $taggged_user_ids = array();
+              foreach ($user_taggs as $user_tag) {
+                $taggged_user_ids[] = $user_tag->user_id;
+              }
+              ?>
+
+              <strong> Do you want Mark To:
+                <span style="margin-left: 10px;"></span>
+                <input id="marked_yes" name="marked" type="radio" onclick="$('#mark_to').show()" value="1" /> Yes
+                <span style="margin-left: 5px;"></span>
+                <input id="marked_no" name="marked" type="radio" onclick="$('#mark_to').hide()" value="0" checked /> No
+              </strong>
+              <span style="margin-left: 10px;"></span>
+              <select class="form-control" style="display: inline; width: 200px; display:none" id="mark_to">
+                <option value="">General Remark</option>
+                <?php
+
+                $query = "SELECT  `users`.`userId`, `users`.`userTitle`, `roles`.`role_title` 
+                           FROM
+                           `roles`
+                           INNER JOIN `users`
+                           ON ( `roles`.`role_id` = `users`.`role_id` )
+                           WHERE `roles`.`role_id` !=15
+                            ORDER BY `roles`.`role_id`;";
+                $users = $this->db->query($query)->result();
+
+                foreach ($users as $user) { ?>
+                  <option value="<?php echo $user->userId; ?>"><?php echo $user->userTitle . " - " . $user->role_title; ?></option>
+
+                <?php } ?>
+              </select>
+            </div>
+
             <ul class="chat">
               <li class="left clearfix">
                 <span class="chat-img pull-left">
@@ -420,49 +588,13 @@
 
               </li>
             </ul>
-            <?php if ($session_request_detail->inspection == 1) { ?>
-              <div>
-                <?php $user_id = $this->session->userdata('userId');
-                $query = "SELECT user_id FROM `tagged_users`
-                  WHERE `created_by` ='" . $user_id . "'
-                  AND school_id = '" . $school_id . "'
-                  AND schools_id = '" . $school->schools_id . "'";
-                $user_taggs = $this->db->query($query)->result();
-                $taggged_user_ids = array();
-                foreach ($user_taggs as $user_tag) {
-                  $taggged_user_ids[] = $user_tag->user_id;
-                }
-                ?>
-                Forward To:<select onchange="tage_users()" multiple id="users" style="width: 100%;">
-                  <?php
 
-                  $query = "SELECT  `users`.`userId`, `users`.`userTitle`, `roles`.`role_title` 
-                           FROM
-                           `roles`
-                           INNER JOIN `users`
-                           ON ( `roles`.`role_id` = `users`.`role_id` );";
-                  $users = $this->db->query($query)->result();
-
-                  foreach ($users as $user) { ?>
-                    <option <?php if (in_array($user->userId, $taggged_user_ids)) { ?> selected <?php } ?> value="<?php echo $user->userId; ?>"><?php echo $user->userTitle . " - " . $user->role_title; ?></option>
-
-                  <?php } ?>
-                </select>
-                <p id="tag_users_message"></p>
-              </div>
-            <?php } ?>
           </div>
         <?php } ?>
 
         <?php if ($session_request_detail->status != 1 and $session_request_detail->inspection == 1) { ?>
 
-          <!-- inspection report -->
-          <?php if ($session_request_detail->inspection_report) { ?>
-            <p>
-            <h5>Inspection Report:</h5>:
-            <?php echo $session_request_detail->inspection_report;   ?>
-            </p>
-          <?php } ?>
+
           <div id="renewal_option" style=" text-align:center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 5px; padding: 5px; background-color: white;">
 
             <!-- Registration section -->
@@ -740,11 +872,11 @@
           <div class="block_div" style="text-align: center;">
             <h4>
               Submit inspection report
-              <form method="post" onSubmit="return confirm('Are you sure you want to submit inspection report?');" action="<?php echo site_url("registration_section/submit_inspection_report"); ?>">
+              <form method="post" onSubmit="return confirm('Are you sure you want to submit inspection report?');" onkeyup="autoheight(this)" action="<?php echo site_url("registration_section/submit_inspection_report"); ?>">
                 <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
                 <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
                 <input type="hidden" name="schools_id" value="<?php echo $schools_id; ?>" />
-                <textarea class="form-control comment_textarea" style="width: 100% !important; min-height:50px" name="inspection_report"></textarea>
+                <textarea class="form-control comment_textarea" onkeyup="autoheight(this)" style="width: 100% !important; min-height:50px" name="inspection_report"></textarea>
                 <input class="btn btn-warning" type="submit" value="Submit Inspection Report" name="Submit Inspection Report" />
               </form>
             </h4>
@@ -1012,6 +1144,14 @@
     function submit_comment() {
       var comment = $('#comment').val();
       if (comment != "") {
+
+        var mark_to = '';
+        var marked = $("input[name='marked']:checked").val();
+
+        if (marked == '1') {
+          mark_to = $("#mark_to option:selected").val();
+        }
+
         $.ajax({
             method: "POST",
             url: "<?php echo site_url('registration_section/add_comment'); ?>",
@@ -1019,14 +1159,18 @@
               session_id: <?php echo $session_id; ?>,
               school_id: <?php echo $school_id; ?>,
               schools_id: <?php echo $school->schools_id; ?>,
-              comment: comment
+              comment: comment,
+              mark_to: mark_to
             }
           })
           .done(function(respose) {
             if (respose == 1) {
               get_comments();
               $('#comment').val("");
-
+              $('#mark_to').val('');
+              $("#marked_yes").prop("checked", false);
+              $("#marked_no").prop("checked", true);
+              $('#mark_to').hide()
             }
           });
       } else {
@@ -1081,5 +1225,10 @@
     }
 
     get_comments();
-    $("#users").select2();
+    $("#users").select2({
+      placeholder: "Please Select User"
+    });
+    $("#tag_user").select2({
+      placeholder: "Please Select User"
+    });
   </script>
