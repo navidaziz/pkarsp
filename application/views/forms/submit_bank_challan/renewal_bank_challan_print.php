@@ -190,7 +190,7 @@
             </tr>
 
             <tr>
-              <td><strong>Total Session <?php echo $session_detail->sessionYearTitle; ?> Registration Fee </strong></td>
+              <td><strong>Total Session <?php echo $session_detail->sessionYearTitle; ?> Renewal Fee </strong></td>
               <td>
                 <strong>
                   <?php $total = $fee_sturucture->renewal_app_processsing_fee + $fee_sturucture->renewal_app_inspection_fee + $fee_sturucture->renewal_fee;

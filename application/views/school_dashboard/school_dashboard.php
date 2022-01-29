@@ -267,17 +267,19 @@
                        AND `session_year`.`sessionYearId` = `school`.`session_year_id`
                        AND school.`schools_id`= '" . $school_id . "'
                        AND `school`.`reg_type_id` = 1";
-                  $registration_detail = $this->db->query($query)->result()[0]; ?>
-                  <tr>
-                    <td><?php echo $count++; ?></td>
-                    <td><?php echo $registration_detail->sessionYearTitle; ?></td>
-                    <td><?php echo $registration_detail->regTypeTitle; ?></td>
-                    <td><?php echo $registration_detail->levelofInstituteTitle; ?></td>
-                    <td>
-                      <a target="_new" href="<?php echo site_url("school_dashboard/certificate/" . $registration_detail->schools_id . "/" . $registration_detail->school_id . "/" . $registration_detail->session_year_id); ?>">Print Certificate<a>
-                    </td>
-                  </tr>
-
+                  $registration_detail = $this->db->query($query)->result()[0];
+                  if ($registration_detail) {
+                  ?>
+                    <tr>
+                      <td><?php echo $count++; ?></td>
+                      <td><?php echo $registration_detail->sessionYearTitle; ?></td>
+                      <td><?php echo $registration_detail->regTypeTitle; ?></td>
+                      <td><?php echo $registration_detail->levelofInstituteTitle; ?></td>
+                      <td>
+                        <a target="_new" href="<?php echo site_url("school_dashboard/certificate/" . $registration_detail->schools_id . "/" . $registration_detail->school_id . "/" . $registration_detail->session_year_id); ?>">Print Certificate<a>
+                      </td>
+                    </tr>
+                  <?php } ?>
                   <?php
                   $query = "SELECT * FROM `session_year` 
                             WHERE `session_year`.`sessionYearId` > '" . $registration_detail->session_year_id . "'

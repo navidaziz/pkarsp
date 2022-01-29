@@ -53,8 +53,9 @@ class Apply extends MY_Controller
 			redirect("form/section_b/$session_id");
 		}
 	}
-	public function renewal($session_id)
+	public function renewal($session_id, $session_school_id = NULL)
 	{
+
 
 		$this->data['session_id'] = $session_id = (int) $session_id;
 		$userId = $this->session->userdata('userId');
@@ -63,35 +64,37 @@ class Apply extends MY_Controller
 		$school_detail = $this->db->query($query)->result()[0];
 		$schools_id = $school_detail->schoolId;
 
-		$query = "SELECT *  FROM `school` WHERE `schools_id` = '" . $schools_id . "' AND status=1 ORDER BY `session_year_id` DESC";
+		$query = "SELECT *  FROM `school` WHERE `schools_id` = '" . $schools_id . "' 
+		 AND status=1 ORDER BY `session_year_id` DESC";
 		$last_session_detail = $this->db->query($query)->result()[0];
-
-		//insert new session...
-		$new_session['schools_id'] = $schools_id;
-		$new_session['reg_type_id'] = 2;
-		$new_session['gender_type_id'] = $last_session_detail->gender_type_id;
-		$new_session['school_type_id'] = $last_session_detail->school_type_id;
-		$new_session['level_of_school_id'] = $last_session_detail->level_of_school_id;
-		$new_session['session_year_id'] = $session_id;
-		date_default_timezone_set("Asia/Karachi");
-		$dated = date("d-m-Y h:i:sa");
-		$new_session['created_date'] = $dated;
-		$this->db->insert('school', $new_session);
-
-
-		$school_inserted_id = $this->db->insert_id();
 		$school_id = $last_session_detail->schoolId;
 
+		if (is_null($school_id)) {
+			//insert new session...
+			$new_session['schools_id'] = $schools_id;
+			$new_session['reg_type_id'] = 2;
+			$new_session['gender_type_id'] = $last_session_detail->gender_type_id;
+			$new_session['school_type_id'] = $last_session_detail->school_type_id;
+			$new_session['level_of_school_id'] = $last_session_detail->level_of_school_id;
+			$new_session['session_year_id'] = $session_id;
+			date_default_timezone_set("Asia/Karachi");
+			$dated = date("d-m-Y h:i:sa");
+			$new_session['created_date'] = $dated;
+			$this->db->insert('school', $new_session);
 
-		$this->db->insert('forms_process', array(
-			'user_id' => $userId,
-			'reg_type_id' => 2,
-			'form_a_status' => 1,
-			'school_id' => $school_inserted_id
-		));
 
-		$this->db->where('userId', $userId)->update('users', array('school_renewed' => 1));
+			$school_inserted_id = $this->db->insert_id();
+			$this->db->insert('forms_process', array(
+				'user_id' => $userId,
+				'reg_type_id' => 2,
+				'form_a_status' => 1,
+				'school_id' => $school_inserted_id
+			));
 
+			$this->db->where('userId', $userId)->update('users', array('school_renewed' => 1));
+		} else {
+			$school_inserted_id = $session_school_id;
+		}
 
 		$this->db->trans_begin();
 		$physical_facilities =  $this->db->where('school_id', $school_id)->get('physical_facilities')->row();

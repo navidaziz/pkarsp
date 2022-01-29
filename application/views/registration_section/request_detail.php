@@ -159,31 +159,67 @@
         </style>
         <table class="table table2">
           <tr>
-            <th>Level</th>
-            <th>Type</th>
-            <th>Gender Education</th>
-          </tr>
-          <tr>
             <td>
-              <?php if (!empty($school->levelofInstituteTitle)) : ?>
+              Level: <?php if (!empty($school->levelofInstituteTitle)) : ?>
                 <?php echo $school->levelofInstituteTitle; ?>
               <?php endif; ?>
-            </td>
-            <td>
-              <?php if (!empty($school->typeTitle)) : ?>
-                <?php echo $school->typeTitle; ?>
+              <br />
+              Type: <?php if (!empty($school->typeTitle)) : ?>
+                <strong><?php echo $school->typeTitle; ?></strong>
                 <?php if (!empty($school->schoolTypeOther)) : ?>
-                  <?php echo $school->schoolTypeOther; ?>
+                  <strong><?php echo $school->schoolTypeOther; ?></strong>
                 <?php endif; ?>
               <?php endif; ?>
+              <br />Gen. Edu. <?php if (!empty($school->genderOfSchoolTitle)) : ?>
+                <strong><?php echo $school->genderOfSchoolTitle; ?></strong>
+              <?php endif; ?>
+
             </td>
 
             <td>
-              <?php if (!empty($school->genderOfSchoolTitle)) : ?>
-                <?php echo $school->genderOfSchoolTitle; ?>
-              <?php endif; ?>
+              <ol>
+                <li>Institute established: <strong>
+                    <?php echo date('M Y', strtotime($school->yearOfEstiblishment)); ?></strong></li>
+                <li>
+                  <?php if (!empty($school->biseregistrationNumber)) { ?>
+                    <?php echo "BISE Registration No: " . $school->biseregistrationNumber; ?>
+                    <?php if ($school->bise_verified == "Yes") { ?>
+                      <strong style="color:green"> Verified </strong>
+                      <br />
+                      <?php if (!empty($school->primaryRegDate)) : ?>
+                        <?php echo "Primary Registeration Date: " . $school->primaryRegDate; ?>
+                        <br>
+                      <?php endif; ?>
+                      <?php if (!empty($school->middleRegDate)) : ?>
+                        <?php echo "Middle Registeration Date: " . $school->middleRegDate; ?>
+                        <br>
+                      <?php endif; ?>
+                      <?php if (!empty($school->highRegDate)) : ?>
+                        <?php echo "High Registeration Date: " . $school->highRegDate; ?>
+                        <br>
+                      <?php endif; ?>
+                      <?php if (!empty($school->interRegDate)) : ?>
+                        <?php echo "H.Secy/Inter College Registeration Date: " . $school->interRegDate; ?>
+                        <br>
+                      <?php endif; ?>
+                    <?php } else { ?>
+                      <strong style="color:red"> Not Verified </strong>
+                    <?php } ?>
+                  <?php } else { ?>
+                    BISE Rregistration: <strong>No</strong>
+                  <?php } ?>
+                </li>
+                <li>First Appointment: <strong><?php echo date('d M, Y', strtotime($first_appointment_staff->appoinment_date)); ?></strong>
+                  ( <?php echo $first_appointment_staff->name ?> )
+
+                </li><?php if ($session_request_detail->reg_type_id == 1) {  ?>
+                  <li>Institute Max Fee:
+                    <strong><?php echo $max_tuition_fee; ?> Rs. </strong> per month.
+                  </li>
+                <?php } ?>
+              </ol>
             </td>
-          </tr>
+
         </table>
 
       </div>
@@ -192,48 +228,11 @@
         <h4> <i class="fa fa-info-circle" aria-hidden="true"></i>
           Previous Session's Detail
         </h4>
-        <?php if ($session_request_detail->reg_type_id == 1) { ?>
-          <ol>
-            <li>Institute established: <strong>
-                <?php echo date('M Y', strtotime($school->yearOfEstiblishment)); ?></strong></li>
-            <li>
-              <?php if (!empty($school->biseregistrationNumber)) { ?>
-                <?php echo "BISE Registration No: " . $school->biseregistrationNumber; ?>
-                <?php if ($school->bise_verified == "Yes") { ?>
-                  <strong style="color:green"> Verified </strong>
-                  <br />
-                  <?php if (!empty($school->primaryRegDate)) : ?>
-                    <?php echo "Primary Registeration Date: " . $school->primaryRegDate; ?>
-                    <br>
-                  <?php endif; ?>
-                  <?php if (!empty($school->middleRegDate)) : ?>
-                    <?php echo "Middle Registeration Date: " . $school->middleRegDate; ?>
-                    <br>
-                  <?php endif; ?>
-                  <?php if (!empty($school->highRegDate)) : ?>
-                    <?php echo "High Registeration Date: " . $school->highRegDate; ?>
-                    <br>
-                  <?php endif; ?>
-                  <?php if (!empty($school->interRegDate)) : ?>
-                    <?php echo "H.Secy/Inter College Registeration Date: " . $school->interRegDate; ?>
-                    <br>
-                  <?php endif; ?>
-                <?php } else { ?>
-                  <strong style="color:red"> Not Verified </strong>
-                <?php } ?>
-              <?php } else { ?>
-                BISE Rregistration: <strong>No</strong>
-              <?php } ?>
-            </li>
-            <li>First Appointment: <strong><?php echo date('d M, Y', strtotime($first_appointment_staff->appoinment_date)); ?></strong>
-              ( <?php echo $first_appointment_staff->name ?> )
+        <?php //if ($session_request_detail->reg_type_id == 1) { 
+        ?>
 
-            </li>
-            <li>Institute Max Fee:
-              <strong><?php echo $max_tuition_fee; ?> Rs. </strong> per month.
-            </li>
-          </ol>
-        <?php } ?>
+        <?php //} 
+        ?>
 
         <?php if ($session_request_detail->reg_type_id == 2 or $session_request_detail->reg_type_id == 3 or $session_request_detail->reg_type_id == 4) {
           $query = "SELECT
@@ -243,8 +242,10 @@
           `session_year`.`sessionYearTitle`,
           `school`.`renewal_code`,
           `school`.`status`,
-          `school`.`created_date`
-          ,  `school`.`schoolId`
+          `school`.`created_date`,
+          `school`.`updatedBy`, 
+          `school`.`updatedDate`, 
+          `school`.`schoolId`
           FROM
           `school`,
           `reg_type`,
@@ -277,8 +278,9 @@
                 <td><?php echo $school_session->levelofInstituteTitle; ?></td>
                 <td><?php echo $school_session->sessionYearTitle; ?></td>
                 <td><?php
-                    $query = "SELECT MAX(tuitionFee) as max_tution_fee  
+                    $query = "SELECT max(CONVERT(tuitionFee, SIGNED INTEGER)) as max_tution_fee  
                               FROM `fee` WHERE school_id= '" . $school_session->schoolId . "'";
+                    $max_tuition_fee = $this->db->query($query)->result()[0]->max_tution_fee;
                     $max_tuition_fee = preg_replace(
                       '/[^0-9.]/',
                       '',
@@ -290,7 +292,10 @@
                     $query = "SELECT SUM(`enrolled`) as total FROM `age_and_class`
                     WHERE `age_and_class`.`school_id`= '" . $school_session->schoolId . "'";
                     echo $this->db->query($query)->result()[0]->total; ?></td>
-                <td><?php echo date('d M, Y', strtotime($school_session->created_date)); ?></td>
+                <td><?php
+                    //echo $school_session->updatedDate;
+                    echo date('d M, Y', strtotime($school_session->updatedDate));
+                    ?></td>
               </tr>
             <?php   } ?>
           </table>
@@ -538,17 +543,7 @@
         <?php if ($session_request_detail->status != 1) { ?>
           <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
             <div style="padding: 5px;">
-              <?php $user_id = $this->session->userdata('userId');
-              $query = "SELECT user_id FROM `tagged_users`
-                  WHERE `created_by` ='" . $user_id . "'
-                  AND school_id = '" . $school_id . "'
-                  AND schools_id = '" . $school->schools_id . "'";
-              $user_taggs = $this->db->query($query)->result();
-              $taggged_user_ids = array();
-              foreach ($user_taggs as $user_tag) {
-                $taggged_user_ids[] = $user_tag->user_id;
-              }
-              ?>
+              <?php $user_id = $this->session->userdata('userId'); ?>
 
               <strong> Do you want Mark To:
                 <span style="margin-left: 10px;"></span>

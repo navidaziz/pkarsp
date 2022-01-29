@@ -160,7 +160,7 @@ class Bank_challans extends Admin_Controller
 						$this->db->update('school', $update);
 					}
 
-					$auto_comment = 'It is verified that STAN# ' . $bank_challan_detail->challan_no . ' on Dated: ' . date('d M, Y', strtotime($bank_challan_detail->challan_date)) . ' Total Rs: ' . $bank_challan_detail->total_deposit_fee . ' for challan ' . $bank_challan_detail->challan_for . ' Session ' . $bank_challan_detail->sessionYearTitle . ', reflected in Cash Mangement System Bank Statement. ';
+					$auto_comment = 'It is verified that STAN# ' . $bank_challan_detail->challan_no . ' on Dated: ' . date('d M, Y', strtotime($bank_challan_detail->challan_date)) . ' Total ' . $bank_challan_detail->total_deposit_fee . ' Rs. for ' . $bank_challan_detail->challan_for . ' Session ' . $bank_challan_detail->sessionYearTitle . ', reflected in Cash Mangement System Bank Statement. ';
 					$input = array();
 					$input['comment'] = $auto_comment;
 					$input['session_id'] = $bank_challan_detail->session_id;

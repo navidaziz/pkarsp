@@ -376,7 +376,7 @@ LEFT JOIN `reg_type`
         //     $schools_id_colummn = 'school.schools_id';
         // }
 
-        echo $query = "SELECT
+        $query = "SELECT
             `schools`.`schoolId`
             , `school`.`schools_id`
             , `school`.`status`

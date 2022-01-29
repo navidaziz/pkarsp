@@ -61,7 +61,8 @@
                 <h3> <?php echo $school->regTypeTitle ?> for <?php echo $school->levelofInstituteTitle; ?> Session: <?php echo $session_detail->sessionYearTitle; ?></h3>
 
                 <?php
-                echo  $query = "SELECT
+                $bank_challan_button = 0;
+                $query = "SELECT
                 `bank_challans`.*,
                 `session_year`.`sessionYearTitle`,
                 `school`.`schools_id`,
@@ -96,23 +97,28 @@
                       echo "Not verified";
                     } ?>
 
-                    <?php if ($session_bank_challan->verified == 2 and $session_bank_challan->status == 0) { ?>
+                    <?php if ($session_bank_challan->verified == 2 and $session_bank_challan->status == 0) {
+                      $bank_challan_button = 1;
+                    ?>
                       Not Verified.
                       <br />
                       <p><?php echo $session_bank_challan->remarks; ?><br />
-                        <?php if ($session_bank_challan->challan_for != 'Deficiency') { ?>
-                          <a class="btn btn-danger btn-sm" href="<?php echo site_url("form/submit_bank_challan/$session_id"); ?>">
-                            Re Submit Bank Challan</a>
-                        <?php } ?>
+
                       </p>
                     <?php } else { ?>
 
                     <?php } ?>
 
+
                   </h5>
 
                 <?php  }
                 ?>
+
+                <?php if ($bank_challan_button = 1 and $session_bank_challan->verified == 2 and $session_bank_challan->status == 0 and $session_bank_challan->challan_for != 'Deficiency') { ?>
+                  <a class="btn btn-danger btn-sm" href="<?php echo site_url("form/submit_bank_challan/$school->school_id"); ?>">
+                    Re Submit Bank Challan</a>
+                <?php } ?>
 
 
 

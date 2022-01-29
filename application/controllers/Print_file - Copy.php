@@ -1,12 +1,52 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Form extends MY_Controller
+class Print_file extends MY_Controller
 {
 	public function __construct()
 	{
 
 		parent::__construct();
+		$this->load->model("school_m");
+	}
+	public function  school_session_detail($school_id)
+	{
+
+		$this->data['school'] = $this->school_m->explore_schools_by_school_id_m($school_id);
+		$this->data['school_bank'] = $this->school_m->get_bank_by_school_id($school_id);
+
+		$this->data['school_physical_facilities'] = $this->school_m->physical_facilities_by_school_id($school_id);
+		$this->data['school_physical_facilities_physical'] = $this->school_m->physical_facilities_physical_by_school_id($school_id);
+		$this->data['school_physical_facilities_academic'] = $this->school_m->physical_facilities_academic_by_school_id($school_id);
+		$this->data['school_physical_facilities_co_curricular'] = $this->school_m->physical_facilities_co_curricular_by_school_id($school_id);
+		$this->data['school_physical_facilities_other'] = $this->school_m->physical_facilities_other_by_school_id($school_id);
+		$this->data['school_library'] = $this->school_m->get_library_books_by_school_id($school_id);
+
+
+		$this->data['age_and_class'] = $this->school_m->get_age_and_class_by_school_id($school_id);
+		// $school_bank = $this->school_m->get_bank_by_school_id($school_id);
+
+		$this->data['school_staff'] = $this->school_m->staff_by_school_id($school_id);
+
+		$this->data['school_fee'] = $this->school_m->fee_by_school_id($school_id);
+		$this->data['school_fee_mentioned_in_form'] = $this->school_m->fee_mentioned_in_form_by_school_id($school_id);
+		//var_dump($this->data['school_fee_mentioned_in_form']);exit;
+
+		$this->data['school_security_measures'] = $this->school_m->security_measures_by_school_id($school_id);
+
+		$this->data['school_hazards_with_associated_risks'] = $this->school_m->hazards_with_associated_risks_by_school_id($school_id);
+		$this->data['hazards_with_associated_risks_unsafe_list'] = $this->school_m->hazards_with_associated_risks_unsafe_list_by_school_id($school_id);
+
+		$this->data['school_fee_concession'] = $this->school_m->fee_concession_by_school_id($school_id);
+		$this->data['schoolId'] = $school_id;
+		$this->data['title'] = 'school details';
+		$query = $this->db->query("SELECT * FROM bank_transaction where school_id = '" . $school_id . "'");
+		$this->data['bank_transaction'] = $query->result_array();
+
+		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
+		$this->data['description'] = 'Section B (Physical Facilities)';
+
+		$this->load->view('print/school_session_detail', $this->data);
 	}
 
 	private function school_detail($school_session_id)

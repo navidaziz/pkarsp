@@ -34,6 +34,7 @@ class Profile_update extends My_Controller
 		$this->db->update('schools', $school_input);
 
 		$user_input['userEmail'] = $this->input->post('userEmail');
+		$user_input['profile_update'] = 1;
 		$this->db->where('userId', $userId);
 		$this->db->update('users', $user_input);
 

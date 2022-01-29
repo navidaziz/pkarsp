@@ -79,7 +79,7 @@ class Registration_section extends Admin_Controller
 	}
 	public function completed_requests()
 	{
-		$this->get_request_list(1, NULL, 'Completed Requests');
+		//$this->get_request_list(1, NULL, 'Completed Requests');
 	}
 	public function inspection_requests()
 	{
