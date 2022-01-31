@@ -233,6 +233,7 @@
                 <table class="table table-bordered">
                   <tr>
                     <th>S/No.</th>
+                    <th>Print</th>
                     <th>Session</th>
                     <th>Applied</th>
                     <th>Level</th>
@@ -272,6 +273,7 @@
                   ?>
                     <tr>
                       <td><?php echo $count++; ?></td>
+                      <td><a href="<?php echo site_url("print_file/school_session_detail/" . $registration_detail->school_id); ?>" target="new">Print</a></td>
                       <td><?php echo $registration_detail->sessionYearTitle; ?></td>
                       <td><?php echo $registration_detail->regTypeTitle; ?></td>
                       <td><?php echo $registration_detail->levelofInstituteTitle; ?></td>
@@ -317,6 +319,7 @@
                       foreach ($upgradation_and_renewals as $upgradation_and_renewal) { ?>
                         <tr>
                           <td><?php echo $count++; ?></td>
+                          <td><a href="<?php echo site_url("print_file/school_session_detail/" . $upgradation_and_renewal->school_id); ?>" target="new">Print</a></td>
                           <td><?php echo $upgradation_and_renewal->sessionYearTitle; ?></td>
                           <td><?php echo $upgradation_and_renewal->regTypeTitle; ?></td>
                           <td><?php echo $upgradation_and_renewal->levelofInstituteTitle; ?></td>
@@ -391,6 +394,8 @@
                   if ($renewal) { ?>
                     <tr>
                       <td><?php echo $count++; ?></td>
+                      <td><a href="<?php echo site_url("print_file/school_session_detail/" . $upgradation_and_renewal->school_id); ?>" target="new">Print</a></td>
+
                       <td><?php echo $renewal->sessionYearTitle; ?></td>
                       <td><?php echo $renewal->regTypeTitle; ?></td>
                       <td><?php echo $renewal->levelofInstituteTitle; ?></td>
@@ -454,6 +459,8 @@
                   if ($upgradation) { ?>
                     <tr>
                       <td><?php echo $count++; ?></td>
+                      <td><a href="<?php echo site_url("print_file/school_session_detail/" . $upgradation_and_renewal->school_id); ?>" target="new">Print</a></td>
+
                       <td><?php echo $upgradation->sessionYearTitle; ?></td>
                       <td><?php echo $upgradation->regTypeTitle; ?></td>
                       <td><?php echo $upgradation->levelofInstituteTitle; ?></td>
@@ -488,166 +495,25 @@
               <?php }  ?>
 
 
-              <?php if ($school->registrationNumber) { ?>
-                <h3>Registration and renewal detail</h3>
-                <table class="table table-bordered">
-                  <tr>
-                    <th>S/No.</th>
-                    <th>Session</th>
-                    <th>Applied</th>
-                    <th>Level</th>
-                    <th>Status</th>
-                  </tr>
-                  <?php
-                  $count = 1;
-                  $stop_appy = TRUE;
-                  // echo  $query = "SELECT * FROM session_year WHERE sessionYearTitle >= '" . date('Y', strtotime($school->yearOfEstiblishment)) . "-" . (date('Y', strtotime($school->yearOfEstiblishment)) + 1) . "' ORDER BY sessionYearId ASC";
-                  //$sessions = $this->db->query($query)->result();
-                  $est_date = $this->input->post('year_of_es');
-                  $est_year = date('Y', strtotime($school->yearOfEstiblishment));
-                  $est_month = date('m', strtotime($school->yearOfEstiblishment));
-                  if ($est_month >= 4) {
-                    $session_year = $est_year;
-                  } else {
-                    $session_year = $est_year - 1;
-                  }
-
-
-
-                  $query = "SELECT * FROM `session_year` WHERE YEAR(`session_start`) >= '" . $session_year . "'";
-                  $sessions = $this->db->query($query)->result();
-                  foreach ($sessions as $session) {
-                    $query = "SELECT
-                      `reg_type`.`regTypeTitle`
-                      , `school_type`.`typeTitle`
-                      , `levelofinstitute`.`levelofInstituteTitle`
-                      , `gender`.`genderTitle`
-                      , `school`.`status`
-                      , `school`.`status_type`
-                      , `school`.`session_year_id`
-                      , `school`.`schoolId` as school_id
-                      , `school`.`schools_id`
-                      , `school`.`status`
-
-                  FROM `reg_type`,
-                  `school`,
-                  `school_type`,
-                  `levelofinstitute`,
-                  `gender`  
-                  WHERE `reg_type`.`regTypeId` = `school`.`reg_type_id`
-                  AND `school_type`.`typeId` = `school`.`school_type_id`
-                  AND `levelofinstitute`.`levelofInstituteId` = `school`.`level_of_school_id`
-                  AND `gender`.`genderId` = `school`.`gender_type_id`
-                  AND school.`schools_id`= '" . $school_id . "'
-                  AND `school`.`session_year_id` = '" . $session->sessionYearId . "'";
-                    $registaion_and_renewals = $this->db->query($query)->result();
-
-                    if ($registaion_and_renewals) {
-                      $registaion_and_renewal = $registaion_and_renewals[0]; ?>
-                      <tr>
-                        <td><?php echo $count++; ?></td>
-                        <td><?php echo $session->sessionYearTitle; ?></td>
-                        <td><?php echo $registaion_and_renewal->regTypeTitle; ?></td>
-                        <td><?php echo $registaion_and_renewal->levelofInstituteTitle; ?></td>
-
-                        <td>
-                          <?php if ($registaion_and_renewal->status == 0) { ?>
-                            <a class="btn btn-success" href="<?php echo site_url("form/section_b/$registaion_and_renewal->school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Renewal Process</a>
-                          <?php } else {   ?>
-                            <?php if ($registaion_and_renewal->status == 1) { ?>
-                              <a target="_new" href="<?php echo site_url("school_dashboard/certificate/" . $registaion_and_renewal->schools_id . "/" . $registaion_and_renewal->school_id . "/" . $registaion_and_renewal->session_year_id); ?>">Print Certificate<a>
-                                <?php } else { ?>
-                                  <a class="btn btn-success" href="<?php echo site_url("online_application/status/$registaion_and_renewal->school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i>Inprogress View Status</a>
-
-                              <?php }
-                            } ?>
-                        </td>
-
-                      </tr>
-                    <?php   } else { ?>
-                      <tr>
-                        <td><?php echo $count++; ?></td>
-                        <td><?php echo $session->sessionYearTitle; ?></td>
-                        <td colspan="4" style="text-align: center;">
-                          <?php if ($stop_appy) { ?>
-                            <a class="btn btn-success" style="margin: 1px;" href="<?php echo site_url("apply/renewal/$session->sessionYearId"); ?>">Apply for Renewal</a>
-                            <?php if ($session->status == 1) {  ?>
-                              <a class="btn btn-warning" style="margin: 1px;" href="<?php echo site_url("apply/upgradation/$session->sessionYearId"); ?>">Upgradation</a>
-
-                              <a class="btn btn-warning" style="margin: 1px;" href="<?php echo site_url("apply/renewal_upgradation/$session->sessionYearId"); ?>">Apply for Upgradation + Renewal</a>
-                            <?php } ?>
-                          <?php } else { ?>
-
-                          <?php } ?>
-                        </td>
-
-                      </tr>
-                  <?php
-                      $stop_appy = FALSE;
-                    }
-                  } ?>
-                </table>
-              <?php } else { ?>
-                <div style="text-align: center;">
-                  <h4>Apply for PSRA institute Registration</h4>
-                  <?php
-
-                  $est_date = $this->input->post('year_of_es');
-                  $est_year = date('Y', strtotime($school->yearOfEstiblishment));
-                  $est_month = date('m', strtotime($school->yearOfEstiblishment));
-                  if ($est_month >= 4) {
-                    $session_year = $est_year;
-                  } else {
-                    $session_year = $est_year - 1;
-                  }
-
-
-
-                  $query = "SELECT * FROM `session_year` WHERE YEAR(`session_start`) >= '" . $session_year . "'";
-                  $session = $this->db->query($query)->result()[0];
-
-
-                  // $query = "SELECT * FROM session_year 
-                  //         WHERE sessionYearTitle >= '" . date('Y', strtotime($school->yearOfEstiblishment)) . "-" . (date('Y', strtotime($school->yearOfEstiblishment)) + 1) . "' 
-                  //         ORDER BY sessionYearId ASC LIMIT 1";
-                  // $session = $this->db->query($query)->result()[0];
-
-                  $query = "SELECT * FROM school 
-                  WHERE schools_id = '" . $school_id . "' ";
-                  $registration = $this->db->query($query)->result();
-                  $registration_session_id = $registration[0]->session_year_id;
-                  ?>
-                  <?php if ($registration) { ?>
-                    <?php if ($registration[0]->status == 0) { ?>
-                      <a class="btn btn-success" href="<?php echo site_url("form/section_b/$registration_session_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Registration Process <?php echo $session->sessionYearTitle; ?></a>
-                    <?php } else { ?>
-                      <a class="btn btn-success" href="<?php echo site_url("online_application/status/$registration_session_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i>Application Status <?php echo $session->sessionYearTitle; ?></a>
-                    <?php } ?>
-                  <?php } else { ?>
-                    <a class="btn btn-primary" href="<?php echo site_url("apply/registration/$session->sessionYearId"); ?>">Apply for Registraion. <?php echo $session->sessionYearTitle; ?></a>
-                  <?php } ?>
-
-                </div>
-              <?php  } ?>
-
 
             </div>
+            <?php if (1 == 2) { ?>
+              <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
+                <h4>Other Online Requests</h4>
+                <a class="btn btn-primary" href="<?php echo site_url('change/of_name'); ?>">
+                  <i class="fa fa-edit"></i>
+                  Change of Name</a>
+                <a class="btn btn-success" href="<?php echo site_url('change/of_building'); ?>">
+                  <i class="fa fa-building"></i>
+                  Change of Building</a>
 
-            <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
-              <h4>Other Online Requests</h4>
-              <a class="btn btn-primary" href="<?php echo site_url('change/of_name'); ?>">
-                <i class="fa fa-edit"></i>
-                Change of Name</a>
-              <a class="btn btn-success" href="<?php echo site_url('change/of_building'); ?>">
-                <i class="fa fa-building"></i>
-                Change of Building</a>
+                <a class="btn btn-warning" href="<?php echo site_url('change/of_ownership'); ?>">
+                  <i class="fa fa-user" aria-hidden="true"></i>
+                  Change of Ownership</a>
 
-              <a class="btn btn-warning" href="<?php echo site_url('change/of_ownership'); ?>">
-                <i class="fa fa-user" aria-hidden="true"></i>
-                Change of Ownership</a>
-
-            </div>
+              </div>
           </div>
+        <?php } ?>
 
 
         </div>

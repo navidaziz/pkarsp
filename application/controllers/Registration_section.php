@@ -272,8 +272,16 @@ class Registration_section extends Admin_Controller
 						$this->db->update('schools', $school_level);
 					}
 					$reponse['status'] = 1;
-					$message = "<h2 class='text-center'><strong class='text text-success'>Successfully Alloted Renewal Number \" $renewal_code \"</strong></h2>
-					";
+					$message = "<h2 class='text-center'><strong class='text text-success'>
+					            Successfully Alloted Renewal Number \" $renewal_code \"</strong></h2>";
+					$auto_comment = "Renewal granted with renewal No#  " . $renewal_code;
+					$input = array();
+					$input['comment'] = $auto_comment;
+					$input['session_id'] = $session_id;
+					$input['school_id'] = $school_id;
+					$input['schools_id'] = $schools_id;
+					$input['created_by'] = $this->session->userdata('userId');
+					$this->db->insert('comments', $input);
 					$reponse['message'] = $message;
 				} else {
 					$reponse['status'] = 0;
@@ -449,8 +457,16 @@ class Registration_section extends Admin_Controller
 					}
 
 					$reponse['status'] = 1;
-					$message = "<h2 class='text-center'><strong class='text text-success'>Successfully Alloted Renewal Number \" $renewal_code \"</strong></h2>
+					$message = "<h2 class='text-center'><strong class='text text-success'>Successfully Alloted Upgradaiton Number \" $renewal_code \"</strong></h2>
 					";
+					$auto_comment = "Upgradaiton granted with Upgradaiton No#  " . $renewal_code;
+					$input = array();
+					$input['comment'] = $auto_comment;
+					$input['session_id'] = $session_id;
+					$input['school_id'] = $school_id;
+					$input['schools_id'] = $schools_id;
+					$input['created_by'] = $this->session->userdata('userId');
+					$this->db->insert('comments', $input);
 					$reponse['message'] = $message;
 				} else {
 					$reponse['status'] = 0;
@@ -611,6 +627,14 @@ class Registration_section extends Admin_Controller
 		$this->db->where('schoolId', $school_id);
 		$input['status'] = 4;
 		$this->db->update('school', $input);
+		$auto_comment = "Forwarded for inpection Assignment.";
+		$input = array();
+		$input['comment'] = $auto_comment;
+		$input['session_id'] = $session_id;
+		$input['school_id'] = $school_id;
+		$input['schools_id'] = $schools_id;
+		$input['created_by'] = $this->session->userdata('userId');
+		$this->db->insert('comments', $input);
 		redirect("registration_section/");
 	}
 
@@ -624,7 +648,25 @@ class Registration_section extends Admin_Controller
 		$input['status'] = 5;
 		$input['inspection_by'] = $inspection_by;
 
+
 		$this->db->update('school', $input);
+
+		$query = "SELECT  `users`.`userId`, `users`.`userTitle`, `roles`.`role_title` 
+		FROM
+		`roles`
+		INNER JOIN `users`
+		ON ( `roles`.`role_id` = `users`.`role_id` )
+		AND  `users`.`userId` !=$inspection_by;";
+		$user = $this->db->query($query)->result()[0];
+		$innspector_name = $user->userTitle . " - " . $user->role_title;
+		$auto_comment = "Inspection Assign to " . $innspector_name;
+		$input = array();
+		$input['comment'] = $auto_comment;
+		$input['session_id'] = $session_id;
+		$input['school_id'] = $school_id;
+		$input['schools_id'] = $schools_id;
+		$input['created_by'] = $this->session->userdata('userId');
+		$this->db->insert('comments', $input);
 		redirect("registration_section/inspections");
 	}
 
@@ -639,6 +681,15 @@ class Registration_section extends Admin_Controller
 		$input['inspection'] = 1;
 		$input['inspection_report'] = $inspection_report;
 		$this->db->update('school', $input);
+
+		$auto_comment = "Inspection Report: " . $inspection_report;
+		$input = array();
+		$input['comment'] = $auto_comment;
+		$input['session_id'] = $session_id;
+		$input['school_id'] = $school_id;
+		$input['schools_id'] = $schools_id;
+		$input['created_by'] = $this->session->userdata('userId');
+		$this->db->insert('comments', $input);
 		redirect("registration_section/inspections");
 	}
 

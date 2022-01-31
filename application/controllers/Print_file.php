@@ -49,7 +49,73 @@ class Print_file extends MY_Controller
 
 		$this->load->view('print/school_session_detail', $this->data);
 	}
+	public function  note_sheet($school_id)
+	{
+		$this->data['school_id'] = $school_id = (int) $school_id;
+		$this->data['session_id'] = $session_id = (int) $this->input->post('session_id');
 
+		$query = "SELECT `school`.*,
+		`reg_type`.`regTypeTitle`,
+		`school_type`.`typeTitle`,
+		`levelofinstitute`.`levelofInstituteTitle`,
+		`session_year`.`sessionYearTitle`
+	  FROM
+		`reg_type`
+		INNER JOIN `school`
+		  ON (
+			`reg_type`.`regTypeId` = `school`.`reg_type_id`
+		  )
+		INNER JOIN `school_type`
+		  ON (
+			`school_type`.`typeId` = `school`.`school_type_id`
+		  )
+		INNER JOIN `levelofinstitute`
+		  ON (
+			`levelofinstitute`.`levelofInstituteId` = `school`.`level_of_school_id`
+		  )
+		INNER JOIN `session_year`
+		  ON (
+			`session_year`.`sessionYearId` = `school`.`session_year_id`
+		  )
+		  WHERE  `school`.`schoolId` = '" . $school_id . "'";
+		$session_request_detail = $this->db->query($query)->result()[0];
+		$this->data['schools_id'] = $session_request_detail->schools_id;
+		$this->data['school'] = $this->school_detail($session_request_detail->schools_id);
+		$this->data['session_request_detail'] = $session_request_detail;
+
+		$query = "SELECT MAX(tuitionFee) as max_tution_fee 
+		 FROM `fee` WHERE school_id= '" . $school_id . "'";
+		$this->data['max_tuition_fee'] = $max_tuition_fee = preg_replace(
+			'/[^0-9.]/',
+			'',
+			$this->db->query($query)->result()[0]->max_tution_fee
+		);
+
+
+		$query = "SELECT * FROM `bank_challans` 
+		          WHERE school_id = '" . $session_request_detail->schoolId . "'
+				  AND verified ='1' ";
+		$this->data['bank_challans'] = $this->db->query($query)->result();
+
+		$query = "SELECT `schoolStaffName`as `name`, MIN(DATE(`schoolStaffAppointmentDate`)) as appoinment_date 
+		FROM `school_staff` WHERE school_id= '" . $school_id . "'";
+		$this->data['first_appointment_staff'] = $this->db->query($query)->result()[0];
+
+
+		$where['school_id'] = (int) $school_id;
+		$where['deleted'] = 0;
+		$this->db->where($where);
+		$this->db->select('`comments`.*, `users`.`userTitle`, `roles`.`role_title`');
+		$this->db->from('comments');
+		$this->db->join('users', 'users.userId = comments.created_by');
+		$this->db->join('roles', 'roles.role_id  = users.role_id');
+		$query = $this->db->get();
+
+		$this->data['comments'] =  $query->result();
+		$this->load->helper('my_functions_helper');
+
+		$this->load->view('print/note_sheet', $this->data);
+	}
 	private function school_detail($school_session_id)
 	{
 		$userId = $this->session->userdata('userId');

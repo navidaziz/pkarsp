@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>School Session Detail: <?php $school_id; ?></title>
+  <title>Session Detail: <?php echo $school->schoolId; ?>-<?php echo $school_id; ?></title>
   <link rel="stylesheet" href="style.css">
   <link rel="license" href="http://www.opensource.org/licenses/mit-license/">
   <script src="script.js"></script>
