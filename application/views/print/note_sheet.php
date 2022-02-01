@@ -20,7 +20,7 @@
   <style type="text/css">
     body {
       background: rgb(204, 204, 204);
-      font-family: 'Source Sans Pro', 'Regular' !important;
+      /* //font-family: 'Source Sans Pro', 'Regular' !important; */
 
     }
 
@@ -36,6 +36,7 @@
       width: 70%;
       min-height: 29.7cm;
       /* height: auto; */
+      font-size: 16px !important;
 
     }
 
@@ -43,9 +44,10 @@
       page[size="A4"] {
         width: 95%;
         margin: 0 auto;
-        margin-top: 30px;
+        margin-top: 10px;
         /* height: 29.7cm;  */
         height: auto;
+        font-size: 22px !important;
       }
     }
 
@@ -95,7 +97,7 @@
       padding: 8px;
       line-height: 1;
       vertical-align: top;
-      font-size: 12px !important;
+
 
     }
 
@@ -154,8 +156,9 @@
             <strong><?php echo date("d M, Y", strtotime($session_request_detail->created_date)); ?></strong>
 
           </p>
+          <br />
 
-          <table class="table table-bordered table2" style="font-size: 13px;">
+          <table class="table table-bordered table2" style="font-size: 16px;">
             <thead>
               <tr>
                 <th>#</th>

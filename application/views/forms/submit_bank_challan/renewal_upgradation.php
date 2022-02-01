@@ -14,7 +14,7 @@
     }
   </script>
   <div class="modal fade" id="renewal_sturucture_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document" style="width: 70%;">
       <div class="modal-content" id="renewal_sturucture_body">
 
         ...
@@ -66,12 +66,13 @@
                   <li>According to data you entered, your institute established <strong><?php echo date('M Y', strtotime($school->yearOfEstiblishment)); ?></strong>, charged max tuition fee
                     <strong><?php echo $max_tuition_fee; ?> Rs. </strong> per month for Session: <strong><?php echo $session_detail->sessionYearTitle; ?></strong>.
                   </li>
-                  <li>As per PSRA Registration and Renewal Fee Structure, Institute charged monthly fee between
+                  <li>As per PSRA Fee Structure, Institute charged monthly fee between
                     <strong><?php echo $fee_sturucture->fee_min; ?> Rs. </strong> and <strong> <?php echo $fee_sturucture->fee_max; ?> Rs. </strong>
                     Must Deposit
                     <ol>
                       <li> Application Processing Fee: <strong><?php echo $fee_sturucture->renewal_app_processsing_fee; ?> Rs. </strong></li>
                       <li> Inspection Fee: <strong><?php echo $fee_sturucture->renewal_app_inspection_fee; ?> Rs.</strong></li>
+                      <li> Upgradation Fee: <strong><?php echo $fee_sturucture->up_grad_fee; ?> Rs.</strong></li>
                       <li> Renewal Fee: <strong><?php echo $fee_sturucture->renewal_fee; ?> Rs.</strong></li>
 
 
@@ -121,7 +122,7 @@
             </div>
             <div class="col-md-4">
               <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
-                <h4>Session: <?php echo $session_detail->sessionYearTitle; ?> Renewal Fee Detail</h4>
+                <h4>Session: <?php echo $session_detail->sessionYearTitle; ?> Upgradateion + Renewal Fee Detail</h4>
                 <table class="table" style="font-size: 13px;">
                   <thead>
                     <tr>
@@ -138,17 +139,20 @@
                       <td>Inspection Fee</td>
                       <td><?php echo number_format($fee_sturucture->renewal_app_inspection_fee); ?> Rs.</td>
                     </tr>
-
+                    <tr>
+                      <td>Upgradation Fee</td>
+                      <td><?php echo $fee_sturucture->up_grad_fee; ?> Rs.</td>
+                    </tr>
                     <tr>
                       <td>Renewal Fee</td>
                       <td><?php echo $fee_sturucture->renewal_fee; ?> Rs.</td>
                     </tr>
 
                     <tr>
-                      <td><strong>Total Session <?php echo $session_detail->sessionYearTitle; ?> Renewal Fee </strong></td>
+                      <td><strong>Total Session <?php echo $session_detail->sessionYearTitle; ?> Upgradation + Renewal Fee </strong></td>
                       <td>
                         <strong>
-                          <?php $total = $fee_sturucture->renewal_app_processsing_fee + $fee_sturucture->renewal_app_inspection_fee + $fee_sturucture->renewal_fee;
+                          <?php $total = $fee_sturucture->renewal_app_processsing_fee + $fee_sturucture->renewal_app_inspection_fee + $fee_sturucture->up_grad_fee +  $fee_sturucture->renewal_fee;
 
                           echo number_format($total);
                           ?> Rs.
@@ -160,7 +164,7 @@
 
                       <tr>
                         <td colspan="2">Late Fee Fine
-                          <small>(Application Processing+Inspection Fee+Renewal)</small>
+                          <small>(Application Processing + Inspection Fee + Upgradation + Renewal)</small>
                         </td>
 
                       </tr>
@@ -212,7 +216,7 @@
                                                           echo 100;
                                                         }
                                                         ?>% on
-                            (Application Processing+Inspection Fee+Renewal)</small>
+                            (Application Processing + Inspection Fee + Upgradation + Renewal)</small>
                         </td>
                         <td><?php
                             if ($late_fee->fine_percentage) {
@@ -235,7 +239,7 @@
                     <?php } ?>
                     <tr>
                       <td colspan="2" style="text-align:center;">
-                        <a target="new" class="btn btn-primary" href="<?php echo site_url("form/print_renewal_upgradation_bank_challan/$school_id") ?>"> <i class="fa fa-print" aria-hidden="true"></i> Print PSRA Renewal Bank Challan From</a>
+                        <a target="new" class="btn btn-primary" href="<?php echo site_url("form/print_renewal_upgradation_bank_challan/$school_id") ?>"> <i class="fa fa-print" aria-hidden="true"></i> Print PSRA Upgradation + Renewal Bank Challan From</a>
                       </td>
                     </tr>
                   </tbody>
@@ -252,14 +256,14 @@
           <div class="row">
             <div class="col-md-6">
               <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px;">
-                <h3> <i class="fa fa-info-circle" aria-hidden="true"></i> How to apply for Renewal online ?</h3>
+                <h3> <i class="fa fa-info-circle" aria-hidden="true"></i> How to apply for Upgradation + Renewal online ?</h3>
                 <p>
                 <ol>
-                  <li>Click Print PSRA Renewal Bank Challan From</li>
+                  <li>Click Print PSRA Upgradation + Renewal Bank Challan From</li>
                   <li>Deposit challan within due date.</li>
                   <li>Submit <strong>Bank STAN</strong> number and Transaction date</li>
                   <li>Click Submit Bank Challan button</li>
-                  <li>View Renewal application status on school dashboard</li>
+                  <li>View Upgradation + Renewal application status on school dashboard</li>
                   </ul>
                 </ol>
                 </p>
@@ -269,7 +273,7 @@
             </div>
             <div class="col-md-6">
               <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px;">
-                <h4>Submit bank challan for renewal session <?php echo $session_detail->sessionYearTitle; ?></h4>
+                <h4>Submit bank challan for upgradation + renewal session <?php echo $session_detail->sessionYearTitle; ?></h4>
                 <form action="<?php echo site_url("form/add_bank_challan"); ?>" method="post">
                   <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
                   <input type="hidden" name="challan_for" value="Renewal Upgradation" />

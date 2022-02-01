@@ -46,7 +46,7 @@
         margin-top: 30px;
         /* height: 29.7cm;  */
         height: auto;
-        font-size: 22px !important;
+
       }
     }
 
@@ -97,6 +97,7 @@
       line-height: 1;
       vertical-align: top;
 
+
     }
   </style>
 </head>
@@ -130,7 +131,7 @@
               (for bank use only)</th>
           </tr>
         </table>
-        <div style="border: 1px solid #ddd; border-radius: 10px; margin-top: 5px; margin-bottom: 10px;  padding: 10px;">
+        <div style="border: 1px solid #ddd; border-radius: 10px; margin-top: 5px; margin-bottom: 10px;  padding: 10px; ">
           <table class="table">
             <tr>
               <td>School ID: <span style="text-decoration: underline; ">
@@ -155,7 +156,18 @@
           </table>
         </div>
 
+        <?php
+        $pecial_fine = 0;
+        if ($session_id == 1) { ?>
 
+        <?php
+          if ($school->level_of_school_id == 1  or  $school->level_of_school_id == 2) {
+            $special_fine = 50000;
+          }
+          if ($school->level_of_school_id == 3  or  $school->level_of_school_id == 4) {
+            $special_fine = 200000;
+          }
+        } ?>
         <table class="table table-bordered">
           <thead>
             <tr>
@@ -164,17 +176,28 @@
             </tr>
           </thead>
           <tbody>
-
+            <tr>
+              <td>Application Processing Fee</td>
+              <td><?php echo number_format($fee_sturucture->renewal_app_processsing_fee); ?> Rs.</td>
+            </tr>
+            <tr>
+              <td>Inspection Fee</td>
+              <td><?php echo number_format($fee_sturucture->renewal_app_inspection_fee); ?> Rs.</td>
+            </tr>
             <tr>
               <td>Upgradation Fee</td>
               <td><?php echo $fee_sturucture->up_grad_fee; ?> Rs.</td>
             </tr>
+            <tr>
+              <td>Renewal Fee</td>
+              <td><?php echo $fee_sturucture->renewal_fee; ?> Rs.</td>
+            </tr>
 
             <tr>
-              <td><strong>Total Session <?php echo $session_detail->sessionYearTitle; ?> Upgradation Fee </strong></td>
+              <td><strong>Total Session <?php echo $session_detail->sessionYearTitle; ?> Renewal Fee </strong></td>
               <td>
                 <strong>
-                  <?php $total = $fee_sturucture->up_grad_fee;
+                  <?php $total = $fee_sturucture->renewal_app_processsing_fee + $fee_sturucture->renewal_app_inspection_fee + $fee_sturucture->up_grad_fee + $fee_sturucture->renewal_fee;
 
                   echo number_format($total);
                   ?> Rs.
@@ -187,7 +210,7 @@
 
               <tr>
                 <td colspan="2">Late Fee Fine
-                  <small>(Upgradation fee)</small>
+                  <small>(Application Processing + Inspection Fee + Upgradation + Renewal)</small>
                 </td>
 
               </tr>

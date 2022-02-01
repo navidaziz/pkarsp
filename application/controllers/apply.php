@@ -1078,7 +1078,7 @@ class Apply extends MY_Controller
 					"Sorry Something went wrong!."
 				);
 				//echo $school_id;exit;
-				redirect("form/section_b/$session_id");
+				redirect("form/section_b/$school_id");
 			}
 		}
 	}

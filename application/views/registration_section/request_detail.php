@@ -127,7 +127,7 @@
             } ?></small>
         </div>
 
-        <table class="table2">
+        <table class="table table2">
           <tr>
             <td><strong>Contact Detail </strong><br />
               <?php if ($school->telePhoneNumber) { ?>Telephone: <?php echo $school->telePhoneNumber ?> <?php } ?><br />
@@ -152,47 +152,47 @@
               <?php if ($school->userTitle) { ?>Name: <?php echo $school->userTitle ?> <?php } ?><br />
             <?php if ($school->cnic) { ?>CNIC: <?php echo $school->cnic ?> <?php } ?><br />
           <?php if ($school->contactNumber) { ?>Contact No: <?php echo $school->contactNumber ?> <?php } ?><br />
-        <ol>
-          <li>Institute established: <strong>
-              <?php echo date('M Y', strtotime($school->yearOfEstiblishment)); ?></strong></li>
-          <li>
-            <?php if (!empty($school->biseregistrationNumber)) { ?>
-              <?php echo "BISE Registration No: " . $school->biseregistrationNumber; ?>
-              <?php if ($school->bise_verified == "Yes") { ?>
-                <strong style="color:green"> Verified </strong>
-                <br />
-                <?php if (!empty($school->primaryRegDate)) : ?>
-                  <?php echo "Primary Registeration Date: " . $school->primaryRegDate; ?>
-                  <br>
-                <?php endif; ?>
-                <?php if (!empty($school->middleRegDate)) : ?>
-                  <?php echo "Middle Registeration Date: " . $school->middleRegDate; ?>
-                  <br>
-                <?php endif; ?>
-                <?php if (!empty($school->highRegDate)) : ?>
-                  <?php echo "High Registeration Date: " . $school->highRegDate; ?>
-                  <br>
-                <?php endif; ?>
-                <?php if (!empty($school->interRegDate)) : ?>
-                  <?php echo "H.Secy/Inter College Registeration Date: " . $school->interRegDate; ?>
-                  <br>
-                <?php endif; ?>
-              <?php } else { ?>
-                <strong style="color:red"> Not Verified </strong>
-              <?php } ?>
-            <?php } else { ?>
-              BISE Rregistration: <strong>No</strong>
-            <?php } ?>
-          </li>
-          <li>First Appointment: <strong><?php echo date('d M, Y', strtotime($first_appointment_staff->appoinment_date)); ?></strong>
-            <br />( <?php echo $first_appointment_staff->name ?> )
 
-          </li><?php if ($session_request_detail->reg_type_id == 1) {  ?>
-            <li>Institute Max Fee:
-              <strong><?php echo $max_tuition_fee; ?> Rs. </strong> per month.
-            </li>
+        Institute established: <strong>
+          <?php echo date('M Y', strtotime($school->yearOfEstiblishment)); ?></strong><br />
+
+        <?php if (!empty($school->biseregistrationNumber)) { ?>
+          <?php echo "BISE Registration No: " . $school->biseregistrationNumber; ?>
+          <?php if ($school->bise_verified == "Yes") { ?>
+            <strong style="color:green"> Verified </strong>
+            <br />
+            <?php if (!empty($school->primaryRegDate)) : ?>
+              <?php echo "Primary Registeration Date: " . $school->primaryRegDate; ?>
+              <br>
+            <?php endif; ?>
+            <?php if (!empty($school->middleRegDate)) : ?>
+              <?php echo "Middle Registeration Date: " . $school->middleRegDate; ?>
+              <br>
+            <?php endif; ?>
+            <?php if (!empty($school->highRegDate)) : ?>
+              <?php echo "High Registeration Date: " . $school->highRegDate; ?>
+              <br>
+            <?php endif; ?>
+            <?php if (!empty($school->interRegDate)) : ?>
+              <?php echo "H.Secy/Inter College Registeration Date: " . $school->interRegDate; ?>
+              <br>
+            <?php endif; ?>
+          <?php } else { ?>
+            <strong style="color:red"> Not Verified </strong>
           <?php } ?>
-        </ol>
+        <?php } else { ?>
+          BISE Rregistration: <strong>No</strong>
+        <?php } ?>
+        <br />
+        First Appointment: <strong><?php echo date('d M, Y', strtotime($first_appointment_staff->appoinment_date)); ?></strong>
+        ( <?php echo $first_appointment_staff->name ?> )<br />
+
+        <?php if ($session_request_detail->reg_type_id == 1) {  ?>
+          <li>Institute Max Fee:
+            <?php echo $max_tuition_fee; ?> Rs. </strong> per month.
+
+          <?php } ?>
+
             </td>
           </tr>
         </table>
@@ -239,8 +239,9 @@
             <th>Session</th>
             <th>Max Fee</th>
             <th style="color:red"><i class="fa fa-line-chart" aria-hidden="true"></i></th>
-            <th>Enrolled</th>
+            <th>S-T</th>
             <th>Date</th>
+            <th>N-S.</th>
             <th></th>
           </tr>
           <?php
@@ -248,7 +249,7 @@
           foreach ($school_sessions as $school_session) { ?>
             <?php if ($school_session->schoolId == $school_id and $school_session->schoolId != 1) { ?>
               <tr style="background-color: white !important; font-weight: bold;">
-                <td colspan="8">Current Session</td>
+                <td colspan="9">Current Session</td>
               </tr>
             <?php } ?>
             <tr <?php if ($school_session->schoolId == $school_id) { ?> style="background-color: white !important; font-weight: bold;" <?php } ?> title="<?php echo  $school_session->schoolId; ?>">
@@ -300,9 +301,11 @@
                   echo $this->db->query($query)->result()[0]->total; ?></td>
               <td><?php
                   if ($school_session->updatedDate) {
-                    echo date('d M, Y', strtotime($school_session->updatedDate));
+                    echo date('d M, y', strtotime($school_session->updatedDate));
                   }
                   ?></td>
+              <td><a href="<?php echo site_url("print_file/note_sheet/" . $school_session->schoolId); ?>" target="new">
+                  <i class="fa fa-print" aria-hidden="true"></i></a></td>
               <td>
                 <?php if ($school_session->status == 1) { ?>
                   <i class="fa fa-check" aria-hidden="true"></i>

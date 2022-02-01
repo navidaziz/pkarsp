@@ -18,6 +18,7 @@ class Form extends MY_Controller
 					, `school`.`session_year_id` as `session_id`
 					, `schools`.`registrationNumber`
 					, `schools`.`schoolName`
+					, `schools`.`district_id`
 					, `schools`.`yearOfEstiblishment`
 					, `schools`.`school_type_id`
 					, `schools`.`level_of_school_id`
@@ -766,7 +767,7 @@ class Form extends MY_Controller
 			$this->db->query($query)->result()[0]->max_tution_fee
 		);
 
-		$query = "SELECT fee_min, fee_max, renewal_app_processsing_fee, renewal_app_inspection_fee, renewal_fee 
+		$query = "SELECT fee_min, fee_max, renewal_app_processsing_fee, renewal_app_inspection_fee, renewal_fee, up_grad_fee 
 		FROM `fee_structure` WHERE fee_min <= '" . $max_tuition_fee . "' ORDER BY fee_min DESC LIMIT 1";
 		$this->data['fee_sturucture'] = $this->db->query($query)->result()[0];
 
@@ -1034,13 +1035,14 @@ class Form extends MY_Controller
 			$this->db->query($query)->result()[0]->max_tution_fee
 		);
 
-		$query = "SELECT fee_min, fee_max, renewal_app_processsing_fee, renewal_app_inspection_fee, renewal_fee FROM `fee_structure` WHERE fee_min <= $max_tuition_fee ORDER BY fee_min DESC LIMIT 1";
+		$query = "SELECT fee_min, fee_max, renewal_app_processsing_fee, renewal_app_inspection_fee, renewal_fee , up_grad_fee
+		FROM `fee_structure` WHERE fee_min <= $max_tuition_fee ORDER BY fee_min DESC LIMIT 1";
 		$this->data['fee_sturucture'] = $this->db->query($query)->result()[0];
 
 
 		$this->data['title'] = "Renewal + Upgradataion";
 		$this->data['description'] = '';
-		$this->load->view('forms/submit_bank_challan/renewal_bank_challan_print', $this->data);
+		$this->load->view('forms/submit_bank_challan/renewal_upgradation_bank_challan_print', $this->data);
 	}
 
 	public function print_upgradation_bank_challan($school_session_id)
@@ -1071,12 +1073,22 @@ class Form extends MY_Controller
 			$this->db->query($query)->result()[0]->max_tution_fee
 		);
 
-		$query = "SELECT fee_min, fee_max, renewal_app_processsing_fee, renewal_app_inspection_fee, renewal_fee FROM `fee_structure` WHERE fee_min <= $max_tuition_fee ORDER BY fee_min DESC LIMIT 1";
+		$query = "SELECT fee_min, fee_max, renewal_app_processsing_fee, renewal_app_inspection_fee, renewal_fee, up_grad_fee 
+		FROM `fee_structure` WHERE fee_min <= $max_tuition_fee ORDER BY fee_min DESC LIMIT 1";
 		$this->data['fee_sturucture'] = $this->db->query($query)->result()[0];
 
 
-		$this->data['title'] = "Renewal + Upgradataion";
+		$this->data['title'] = "Upgradataion";
 		$this->data['description'] = '';
 		$this->load->view('forms/submit_bank_challan/upgradation_bank_challan_print', $this->data);
+	}
+
+	public function renewal_fee_sturucture()
+	{
+
+
+		$query = "SELECT * FROM `fee_structure` ORDER BY fee_max ASC";
+		$this->data['fee_structures'] = $this->db->query($query)->result();
+		$this->load->view('forms/fee_structures/renewal_fee_sturucture', $this->data);
 	}
 }
