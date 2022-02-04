@@ -205,7 +205,23 @@
 
               </table>
 
+              <div class="col-sm-8">
+                <?php
+                $query = "SELECT * FROM `fee_mentioned_in_form_or_prospectus` WHERE school_id = '" . $school_id . "'";
+                $fee_mention = $this->db->query($query)->result()[0];
 
+                ?>
+                <form method="post" action="<?php echo site_url("form/complete_section_e/"); ?>">
+                  <input type="hidden" value="<?php echo $school_id; ?>" name="school_id" />
+                  <input type="hidden" value="<?php echo $fee_mention->feeMentionedInFormId; ?>" name="feeMentionedInFormId" />
+                  Whether the above fees are mentioned in the prospectus/admission form ? <span style="margin-left: 15px;"></span>
+                  <input value="Yes" required <?php if ($fee_mention->feeMentionedInForm == 'Yes') { ?> checked <?php } ?> type="radio" name="pro"> Yes <span style="margin-left: 15px;"></span>
+                  <input value="No" required <?php if ($fee_mention->feeMentionedInForm == 'No') { ?> checked <?php } ?> type="radio" name="pro"> No <br>
+                  Whether the fee structure is displayed both inside and outside school at a prominent place? <span style="margin-left: 15px;"></span>
+                  <input value="Yes" required <?php if ($fee_mention->FeeMentionOutside == 'Yes') { ?> checked <?php } ?> type="radio" name="outside"> Yes <span style="margin-left: 15px;"></span>
+                  <input value="No" required <?php if ($fee_mention->FeeMentionOutside == 'No') { ?> checked <?php } ?> type="radio" name="outside"> No
+
+              </div>
 
 
 
@@ -217,12 +233,22 @@
                 <a class="btn btn-link pull-left" href="<?php echo site_url("form/section_d/$school_id"); ?>">
 
                   <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Section D ( School Fee Detail ) </a>
-                <?php if ($form_complete) { ?>
-                  <a href="<?php echo site_url("form/complete_section_e/$school_id"); ?>" class="btn btn-primary">Add Section E Data</a>
-                <?php } else { ?> <br /> <?php } ?>
+                <?php if ($form_complete and $form_status->form_e_status == 0) { ?>
+                  <input class="btn btn-danger" type="submit" name="Add Section E Data" value="Add Section E Data" />
+                  <!-- <a href="<?php echo site_url("form/complete_section_e/$school_id"); ?>" class="btn btn-primary">Add Section E Data</a> -->
+                <?php } else {
+                  echo "<br />";
+                }  ?>
+
+                <?php if ($form_complete and $form_status->form_e_status == 1) { ?>
+                  <input class="btn btn-primary" type="submit" name="Add Section E Data" value="Update Section E Data" />
+                  <!-- <a href="<?php echo site_url("form/complete_section_e/$school_id"); ?>" class="btn btn-primary">Add Section E Data</a> -->
+                <?php }  ?>
+                </form>
                 <?php if ($form_status->form_e_status == 1) { ?>
                   <a class="btn btn-link pull-right" href="<?php echo site_url("form/section_f/$school_id"); ?>">
                     Section F ( Security Measures )<i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
+                  <br />
                 <?php } ?>
               </div>
             </div>

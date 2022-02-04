@@ -86,6 +86,139 @@
             <?php if ($schooldata->registrationNumber != '' && $schooldata->registrationNumber != 0) : ?>
 
               <!-- Modal MrVaccinated -->
+
+
+              <div class="modal fade" id="vehicles" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title pull-left" id="exampleModalLabel">School Vehicle Report</h5>
+                      <button type="button" class="close pull-right" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <input type="hidden" name="school_id" value="<?= $schooldata->schoolId ?>">
+
+                      <h4>School Vehicle Report</h4>
+
+                      <table class="table">
+                        <tr>
+                          <th>Vehicle No</th>
+                          <th>Model Year</th>
+                          <th>Total No of Seats</th>
+                        </tr>
+                        <tr>
+                          <th>
+                            <input class="form-control" style="width: 100% !important;" type="text" id="vehicle_number" name="vehicle_number" required>
+                          </th>
+                          <th>
+                            <select name="vehicle_model_year" id="vehicle_model_year" required>
+                              <option value="0">Select Year</option>
+                              <?php for ($years = 2021; $years >= 1950; $years--) { ?>
+                                <option value="<?php echo $years; ?>"><?php echo $years; ?></option>
+                              <?php } ?>
+                            </select>
+                          </th>
+                          <th><input class="form-control" min="5" max="100" style="width: 100% !important;" title="10" type="number" id="total_seats" name="total_seats" required></th>
+                          <td>
+                            <script>
+                              function delete_vehicle_date(vehicle_id) {
+                                $.ajax({
+                                    method: "POST",
+                                    url: "<?php echo site_url('Temp_controller/delete_vehicle_data'); ?>",
+                                    data: {
+                                      vehicle_id: vehicle_id,
+                                      school_id: <?php echo $schooldata->schoolId ?>
+                                    }
+                                  })
+                                  .done(function(msg) {
+                                    $('#vehicle_list').html(msg);
+                                  });
+                              }
+
+                              function add_vehicle_info() {
+                                var vehicle_number = $('#vehicle_number').val();
+                                if (vehicle_number == '') {
+                                  alert('Vehicle No Required');
+                                  return false;
+                                }
+                                var vehicle_model_year = $('#vehicle_model_year').val();
+                                if (vehicle_model_year == '') {
+                                  alert('Vehicle Model Year Required');
+                                  return false;
+                                }
+
+                                var total_seats = $('#total_seats').val();
+                                if (total_seats == '') {
+                                  alert('Total Seats Required');
+                                  return false;
+                                }
+                                $.ajax({
+                                    method: "POST",
+                                    url: "<?php echo site_url('Temp_controller/temp_vehicle'); ?>",
+                                    data: {
+                                      vehicle_number: vehicle_number,
+                                      vehicle_model_year: vehicle_model_year,
+                                      total_seats: total_seats,
+                                      school_id: <?php echo $schooldata->schoolId ?>
+                                    }
+                                  })
+                                  .done(function(msg) {
+                                    $('#vehicle_list').html(msg);
+                                  });
+                              }
+                            </script>
+                            <input onclick="add_vehicle_info()" type="button" class="btn btn-primary btn-sm" value="Add Vehicle">
+                          </td>
+                        </tr>
+
+                        </tr>
+
+                      </table>
+                      <div id="vehicle_list">
+                        <table class="table">
+                          <tr>
+                            <th>S/No</td>
+                            <th>Vehicle No.</th>
+                            <th>Model Year</th>
+                            <th>Total Seats</th>
+                            <th>Action</th>
+                          </tr>
+                          <?php $query = "SELECT * FROM school_vehicles WHERE school_id = '" . $schooldata->schoolId . "'";
+                          $school_vehicles = $this->db->query($query)->result();
+                          if ($school_vehicles) {
+                            $count = 1;
+                            foreach ($school_vehicles as $school_vehicle) { ?>
+                              <tr>
+                                <td><?php echo $count++; ?></td>
+                                <td><?php echo $school_vehicle->vehicle_number; ?></td>
+                                <td><?php echo $school_vehicle->vehicle_model_year; ?></td>
+                                <td><?php echo $school_vehicle->total_seats; ?></td>
+                                <td>
+                                <td><a href="#" onclick="delete_vehicle_date(<?php echo $school_vehicle->vehicle_id ?>)">delete</a></td>
+                                </td>
+                              </tr>
+                            <?php } ?>
+                          <?php } ?>
+                        </table>
+                      </div>
+
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+
+              <div style="text-align: center;">
+                <button class="btn btn-success" style="margin:5px" data-toggle="modal" data-target="#vehicles">Please Submit School Vehicles Data</button>
+              </div>
+
+
               <div class="modal fade" id="MrVaccinated" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
@@ -155,6 +288,9 @@
                   </div>
                 </div>
               </div>
+
+
+
               <div style="text-align: center;">
                 <button class="btn btn-success" style="margin:5px" data-toggle="modal" data-target="#MrVaccinated">Please Submit MR Vaccination Report of Students Age less than 15</button>
               </div>

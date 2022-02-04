@@ -90,15 +90,15 @@
 
                   <br />
                   <strong> Total Number Of Class Rooms: </strong>
-                  <input type="number" required name="numberOfClassRoom" placeholder="No. of Classroom(s)" class="form-control" id="numberOfClassRoom" value="<?php echo $school_physical_facilities->numberOfClassRoom; ?>" />
+                  <input min="0" type="number" required name="numberOfClassRoom" placeholder="No. of Classroom(s)" class="form-control" id="numberOfClassRoom" value="<?php echo $school_physical_facilities->numberOfClassRoom; ?>" />
                   <strong>Others Rooms </strong>
-                  <input type="number" required name="numberOfOtherRoom" placeholder="Office/Staff room/ Store etc." class="form-control" id="numberOfOtherRoom" value="<?php echo $school_physical_facilities->numberOfOtherRoom; ?>" />
+                  <input min="0" type="number" required name="numberOfOtherRoom" placeholder="Office/Staff room/ Store etc." class="form-control" id="numberOfOtherRoom" value="<?php echo $school_physical_facilities->numberOfOtherRoom; ?>" />
 
                   <strong> Total Area (in marlas): </strong>
-                  <input type="number" required name="totalArea" placeholder="Enter total Area" class="form-control" id="totalArea" value="<?php echo $school_physical_facilities->totalArea; ?>" />
+                  <input min="0" type="number" required name="totalArea" placeholder="Enter total Area" class="form-control" id="totalArea" value="<?php echo $school_physical_facilities->totalArea; ?>" />
                   <strong>Covered Area (in Marlas): </strong>
-                  <input type="number" required name="coveredArea" placeholder="Enter Covered Area" class="form-control" id="coveredArea" value="<?php echo $school_physical_facilities->coveredArea; ?>" />
-
+                  <input onkeyup="check_total_area()" min="0" type="number" required name="coveredArea" placeholder="Enter Covered Area" class="form-control" id="coveredArea" value="<?php echo $school_physical_facilities->coveredArea; ?>" />
+                  <small style="color:red" id="coveredAreaError"></small>
 
 
 
@@ -310,10 +310,30 @@
 
                 </div>
               </div>
+              <script>
+                function check_total_area() {
+                  coveredArea = parseInt($('#coveredArea').val());
+                  totalArea = parseInt($('#totalArea').val());
+
+                  if (coveredArea > totalArea) {
+                    //alert("Coverd Area not greater than, Total Area.");
+                    $('#coveredArea').val('');
+                    $('#coveredAreaError').html("Coverd Area not greater than, Total Area.");
+                    return false;
+                  } else {
+                    $('#coveredAreaError').html("");
+                  }
+
+                }
+              </script>
 
               <div class="col-md-12">
-                <div style=" font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
-                  <input class="btn btn-primary" type="submit" name="" value="Update Section B Data" />
+                <div style="font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
+                  <?php if ($form_status->form_b_status == 1) { ?>
+                    <input onclick="check_total_area()" class="btn btn-primary" type="submit" name="" value="Update Section B Data" />
+                  <?php } else { ?>
+                    <input onclick="check_total_area()" class="btn btn-danger" type="submit" name="" value="Add Section B Data" />
+                  <?php } ?>
                   <?php if ($form_status->form_b_status == 1) { ?>
                     <a class="btn btn-link pull-right" href="<?php echo site_url("form/section_c/$school_id"); ?>"> Section C (Students Enrolment) <i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
 

@@ -1,6 +1,7 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Add_school extends Admin_Controller
+//class Add_school extends Admin_Controller
+class Add_school extends MY_Controller
 {
 
 	/**
@@ -63,6 +64,8 @@ class Add_school extends Admin_Controller
 	public function process_data()
 	{
 
+
+
 		$userId = $this->session->userdata('userId');
 		$woner_data['userTitle'] = $this->input->post('userTitle');
 		$woner_data['contactNumber'] = $this->input->post('contactNumber');
@@ -73,47 +76,51 @@ class Add_school extends Admin_Controller
 		$this->db->where('userId', $userId);
 		$this->db->update('users', $woner_data);
 
-		$school_date = $this->input->post();
-		$school_date['owner_id'] = $userId;
-		unset($school_date['userTitle']);
-		unset($school_date['contactNumber']);
-		unset($school_date['cnic']);
-		unset($school_date['gender']);
-		unset($school_date['woner_address']);
+		$school_data = $this->input->post();
+		$school_data['owner_id'] = $userId;
+		unset($school_data['userTitle']);
+		unset($school_data['contactNumber']);
+		unset($school_data['cnic']);
+		unset($school_data['gender']);
+		unset($school_data['woner_address']);
 
-		unset($school_date['type_of_institute_id']);
+		unset($school_data['type_of_institute_id']);
 
-		unset($school_date['banka_acount_details']);
-		unset($school_date['accountTitle']);
-		unset($school_date['bankAccountNumber']);
-		unset($school_date['bankBranchAddress']);
-		unset($school_date['bankBranchCode']);
-		unset($school_date['bankAccountName']);
+		unset($school_data['banka_acount_details']);
+		unset($school_data['accountTitle']);
+		unset($school_data['bankAccountNumber']);
+		unset($school_data['bankBranchAddress']);
+		unset($school_data['bankBranchCode']);
+		unset($school_data['bankAccountName']);
 
-		if ($school_date['uc_id'] != 0) {
-			unset($school_date['uc_text']);
+		if ($school_data['uc_id'] != 0) {
+			unset($school_data['uc_text']);
 		}
-		if ($school_date['biseRegister'] == 'No') {
-			unset($school_date['biseregistrationNumber']);
-			unset($school_date['primaryRegDate']);
-			unset($school_date['middleRegDate']);
-			unset($school_date['highRegDate']);
-			unset($school_date['interRegDate']);
+		if ($school_data['biseRegister'] == 'No') {
+			unset($school_data['biseregistrationNumber']);
+			unset($school_data['primaryRegDate']);
+			unset($school_data['middleRegDate']);
+			unset($school_data['highRegDate']);
+			unset($school_data['interRegDate']);
 		}
 
-		if ($school_date['biseAffiliated'] == 'No') {
-			unset($school_date['bise_id']);
-			unset($school_date['otherBiseName']);
+		if ($school_data['biseAffiliated'] == 'No') {
+			unset($school_data['bise_id']);
+			unset($school_data['otherBiseName']);
 		} else {
-			if ($school_date['bise_id'] != 10) {
-				unset($school_date['otherBiseName']);
+			if ($school_data['bise_id'] != 10) {
+				unset($school_data['otherBiseName']);
 			}
 		}
-
-		$this->db->insert('schools', $school_date);
+		$year = $this->input->post('e_year');
+		unset($school_data['e_year']);
+		$month =  $this->input->post('e_month');
+		unset($school_data['e_month']);
+		$school_data['yearOfEstiblishment'] = $year . "-" . $month;
+		$this->db->insert('schools', $school_data);
 		$school_id = $this->db->insert_id();
 
-		if ($school_date['banka_acount_details'] == 'Yes') {
+		if ($school_data['banka_acount_details'] == 'Yes') {
 			$bank_data['accountTitle'] = $this->input->post('accountTitle');
 			$bank_data['bankAccountNumber'] = $this->input->post('bankAccountNumber');
 			$bank_data['bankBranchAddress'] = $this->input->post('bankBranchAddress');

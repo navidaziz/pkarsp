@@ -57,7 +57,7 @@
                   <br />
 
 
-                  <i class="fa fa-map-marker" aria-hidden="true"></i> 18-E Jamaluddi Ud Din Afghani Road, University Town, Peshawar
+                  <i class="fa fa-map-marker" aria-hidden="true"></i> 18-E Jamal Ud Din Afghani Road, University Town, Peshawar
                 </address>
 
               </div>
@@ -66,7 +66,7 @@
             </div>
           </div>
           <div class="col-md-4">
-            <div class="login-box" style="background-color:#5C9CCC; opacity:.9; margin: 5px auto; padding-top:10px !important;">
+            <div class="login-box" style="background-color:#5C9CCC; opacity:.9; margin: 5px auto; padding-top:10px !important; padding: 55px 40px 40px;">
               <h2 class="bigintro">Sign In</h2>
               <div class="divide-40"></div>
               <form role="form" method="post" action="<?php echo site_url("login/validate_user"); ?>">
@@ -113,12 +113,16 @@
                   <?php echo validation_errors(); ?>
                 </div>
               <?php } ?>
-              <!-- /SOCIAL LOGIN -->
-              <div class="login-helpers"> <a href="<?php echo site_url(); ?>register/password_reset">Forgot Password?</a> <br>
-                Don't have an account with us? <a href="<?php echo site_url(); ?>register/signup">Register
-                  now!</a><br>
+
+
+
+              <div class="login-helpe rs">
+                <a class="btn btn-warning btn-s m pull-left" style="text-shadow: 1px 1px gray;" href="<?php echo site_url(); ?>register/password_reset">Forgot Password?</a>
+                <!-- Don't have an account with us? <br /> -->
+                <a class="btn btn-success btn-s m pull-right" style="text-shadow: 1px 1px gray;" href="<?php echo site_url(); ?>register/signup">Create School Account</a><br>
 
               </div>
+
             </div>
 
           </div>

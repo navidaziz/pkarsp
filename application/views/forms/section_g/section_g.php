@@ -452,9 +452,12 @@
                   <div style=" font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
                     <a class="btn btn-link pull-left" href="<?php echo site_url("form/section_f/$school_id"); ?>">
                       <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Section F ( Security Measures ) </a>
+                    <?php if ($form_status->form_g_status == 1) { ?>
+                      <span style="margin-left: 20px;"></span> <input class="btn btn-primary" type="submit" name="" value="Update Section G Data" />
+                    <?php } else { ?>
+                      <span style="margin-left: 20px;"></span> <input class="btn btn-danger" type="submit" name="" value="Add Section G Data" />
 
-                    <span style="margin-left: 20px;"></span> <input class="btn btn-primary" type="submit" name="" value="Update Section G Data" />
-
+                    <?php } ?>
                     <?php if ($form_status->form_g_status == 1) { ?>
                       <a class="btn btn-link pull-right" href="<?php echo site_url("form/section_h/$school_id"); ?>"> Section H ( Fee Concession ) <i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
                     <?php } ?>

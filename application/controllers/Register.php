@@ -28,33 +28,73 @@ class Register extends Admin_Controller
         $this->load->view("register/signup_form", $this->data);
     }
 
+    public function is_unique_email()
+    {
+        $email_address = $this->input->post('email_address');
+        $check = $this->db->get_where('users', array('userEmail' => $email_address), 1);
+
+        if ($check->num_rows() > 0) {
+
+            $this->form_validation->set_message('is_unique_email', 'The email address "' . $email_address . '" is already registered with PSRA. Try with differnt email address.');
+
+            return FALSE;
+        }
+
+        return TRUE;
+    }
+
+    public function check_user_name()
+    {
+        $user_name = $this->input->post('userName');
+        if (preg_match('/^\S.*\s.*\S$/', $user_name)) {
+            $this->form_validation->set_message('check_user_name', 'User Name contain space. Spaces are not allowed.');
+            return FALSE;
+        }
+
+        return TRUE;
+    }
+    public function check_password()
+    {
+        $userPassword = $this->input->post('userPassword');
+        if (preg_match('/^\S.*\s.*\S$/', $userPassword)) {
+            $this->form_validation->set_message('check_password', 'Password contain space. Spaces are not allowed.');
+            return FALSE;
+        }
+
+        return TRUE;
+    }
+
     public function signup()
     {
-        $this->form_validation->set_message('is_unique_email', $this->input->post('userEmail') . 'The email address is already registered. Try with differnt email address.');
-        $this->form_validation->set_message('is_unique_user_name', 'User Name is already registered.');
+
+        // var_dump($_POST);
+        // $this->form_validation->set_message('is_unique_email', 'The email address is already registered with PSRA. Try with differnt email address.');
+        $this->form_validation->set_message('is_unique', 'User Name is already registered with PSRA.');
 
         $validation_config = array(
 
             array(
                 "field"  =>  "userName",
                 "label"  =>  "User Name",
-                "rules"  =>  "trim|required|min_length[6]|is_unique[users.userName]"
+                //"rules"  =>  "trim|required|min_length[6]|is_unique[users.userName]"
+                "rules"  =>  "trim|required|min_length[6]|callback_check_user_name|is_unique[users.userName]"
             ),
             array(
                 "field"  =>  "userPassword",
                 "label"  =>  "User Password",
-                "rules"  =>  "trim|required|min_length[6]|matches[c_userPassword]"
+                "rules"  =>  "trim|required|min_length[6]|callback_check_password|matches[c_userPassword]"
             ),
             array(
                 "field"  =>  "c_userPassword",
                 "label"  =>  "Confirm Passowrd",
                 "rules"  =>  "trim|required|min_length[6]"
             ),
-            // array(
-            //     "field"  =>  "userEmail",
-            //     "label"  =>  "User Email Address",
-            //     "rules"  =>  "trim|required|email|is_unique_email|is_unique[users.userEmail]"
-            // ),
+            array(
+                "field"  =>  "email_address",
+                "label"  =>  "email_address",
+                //"rules"  =>  "trim|required|email|is_unique_email|is_unique[users.userEmail]"
+                "rules"  =>  "required|callback_is_unique_email"
+            )
 
         );
 
@@ -69,12 +109,9 @@ class Register extends Admin_Controller
             $inputs["role_id"]  = 15;
             $inputs["userName"]  = $this->input->post('userName');
             $inputs["userPassword"]  = $this->input->post('userPassword');
-            $inputs["userEmail"]  = $this->input->post('userEmail');
+            $inputs["userEmail"]  = $this->input->post('email_address');
             $inputs["createdDate"]  =  date('Y-m-d H:i:s');
             $inputs["userStatus"]  =  1;
-
-
-
 
             if ($this->user_model->save($inputs)) {
                 $this->session->set_flashdata("msg_success", "Registered Successfully.");

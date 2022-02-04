@@ -275,7 +275,11 @@
                                                 if ($late_fee->fine_percentage) {
                                                   echo  $late_fee->fine_percentage;
                                                 } else {
-                                                  echo 100;
+                                                  if ($session_id == 1) {
+                                                    echo 45;
+                                                  } else {
+                                                    echo 100;
+                                                  }
                                                 }
                                                 ?>% on
                     (Application Processing+Inspection Fee)</small>
@@ -284,7 +288,11 @@
                     if ($late_fee->fine_percentage) {
                       $fine = ($late_fee->fine_percentage * $total) / 100;
                     } else {
-                      $fine =  (100 * $total) / 100;
+                      if ($session_id == 1) {
+                        $fine =  (45 * $total) / 100;
+                      } else {
+                        $fine =  (100 * $total) / 100;
+                      }
                     }
                     echo number_format($fine);
                     ?>

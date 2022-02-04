@@ -1,97 +1,3 @@
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
-
-<style>
-  .chat {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .chat li {
-    margin-bottom: 5px;
-    padding-bottom: 5px;
-    border-bottom: 1px dotted #B3A9A9;
-  }
-
-  .chat li.left .chat-body {
-    margin-left: 10px;
-  }
-
-  .chat li.right .chat-body {
-    margin-right: 60px;
-  }
-
-
-  .chat li .chat-body p {
-    margin: 0;
-    color: #777777;
-  }
-
-  .panel .slidedown .glyphicon,
-  .chat .glyphicon {
-    margin-right: 5px;
-  }
-
-  .panel-body {
-    overflow-y: scroll;
-    height: 250px;
-  }
-
-  ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background-color: #F5F5F5;
-  }
-
-  ::-webkit-scrollbar {
-    width: 12px;
-    background-color: #F5F5F5;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
-    background-color: #555;
-  }
-
-  .comment_image_left {
-    width: 36px;
-    margin-right: 10px;
-  }
-
-  .comment_image_right {
-    width: 36px;
-    margin-left: 10px;
-  }
-
-  .comment_textarea {
-    overflow: hidden;
-    border: 1px solid blue;
-    border-radius: 5px;
-    padding: 2px;
-    width: 86%;
-    min-height: 40px !important;
-  }
-
-  .select2-container--default .select2-selection--multiple .select2-selection__choice__display {
-    cursor: default;
-    padding-left: 2px;
-    padding-right: 5px;
-    color: black !important;
-    font-weight: bold !important;
-  }
-</style>
-<style>
-  .table2>tbody>tr>td,
-  .table2>tbody>tr>th,
-  .table2>tfoot>tr>td,
-  .table2>tfoot>tr>th,
-  .table2>thead>tr>td,
-  .table2>thead>tr>th {
-    padding: 2px;
-    line-height: 1.42857143;
-    vertical-align: top;
-  }
-</style>
 <div class="modal-header">
   <h4 style="border-left: 20px solid #9FC8E8;  padding-left:5px;" class="pull-left">
     School Detail - <?php echo $school->schools_id ?>
@@ -104,6 +10,7 @@
 
   <div class="row">
     <div class="col-md-12" style="padding-right: 1px; padding-left: 1px;">
+
 
       <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 5px; padding: 5px; background-color: white;">
         <div style="text-align:center">
@@ -132,7 +39,7 @@
             } ?></small>
         </div>
 
-        <table class="table2" style="width: 100%;">
+        <table class="table table2">
           <tr>
             <td><strong>Contact Detail </strong><br />
               <?php if ($school->telePhoneNumber) { ?>Telephone: <?php echo $school->telePhoneNumber ?> <?php } ?><br />
@@ -159,8 +66,9 @@
           <?php if ($school->contactNumber) { ?>Contact No: <?php echo $school->contactNumber ?> <?php } ?><br />
 
         Institute established: <strong>
-          <?php echo date('M Y', strtotime($school->yearOfEstiblishment)); ?></strong>
-        <br /> <?php if (!empty($school->biseregistrationNumber)) { ?>
+          <?php echo date('M Y', strtotime($school->yearOfEstiblishment)); ?></strong><br />
+
+        <?php if (!empty($school->biseregistrationNumber)) { ?>
           <?php echo "BISE Registration No: " . $school->biseregistrationNumber; ?>
           <?php if ($school->bise_verified == "Yes") { ?>
             <strong style="color:green"> Verified </strong>
@@ -188,11 +96,14 @@
           BISE Rregistration: <strong>No</strong>
         <?php } ?>
         <br />
-
         First Appointment: <strong><?php echo date('d M, Y', strtotime($first_appointment_staff->appoinment_date)); ?></strong>
         ( <?php echo $first_appointment_staff->name ?> )<br />
 
+        <?php if ($session_request_detail->reg_type_id == 1) {  ?>
+          <li>Institute Max Fee:
+            <?php echo $max_tuition_fee; ?> Rs. </strong> per month.
 
+          <?php } ?>
 
             </td>
           </tr>
@@ -216,7 +127,8 @@
         `school`.`created_date`,
         `school`.`updatedBy`,
         `school`.`updatedDate`,
-        `school`.`schoolId`
+        `school`.`schoolId`,
+        `school`.`session_year_id`
         FROM
         `school`,
         `reg_type`,
@@ -240,28 +152,25 @@
             <th>Session</th>
             <th>Max Fee</th>
             <th style="color:red"><i class="fa fa-line-chart" aria-hidden="true"></i></th>
-            <th>Enrolled</th>
+            <th>Student Enrollment</th>
             <th>Date</th>
-            <th></th>
+            <th>Note Sheet</th>
+            <th>Status</th>
+            <th>Cerificate</th>
           </tr>
           <?php
           $previous_max = NULL;
+          //var_dump($school_sessions);
           foreach ($school_sessions as $school_session) { ?>
             <?php if ($school_session->schoolId == $school_id and $school_session->schoolId != 1) { ?>
               <tr style="background-color: white !important; font-weight: bold;">
-                <td colspan="8">Current Session</td>
+                <td colspan="9">Current Session</td>
               </tr>
             <?php } ?>
             <tr <?php if ($school_session->schoolId == $school_id) { ?> style="background-color: white !important; font-weight: bold;" <?php } ?> title="<?php echo  $school_session->schoolId; ?>">
               <td>
-                <?php
-                $words = explode(" ", $school_session->regTypeTitle);
-                $acronym = "";
-
-                foreach ($words as $w) {
-                  echo strtoupper($w[0]);
-                }
-                ?></td>
+                <?php echo $school_session->regTypeTitle ?>
+              </td>
               <td><?php echo substr($school_session->levelofInstituteTitle, 0, 15); ?></td>
               <td>
                 <a href="<?php echo site_url("print_file/school_session_detail/" . $school_session->schoolId); ?>" target="new">
@@ -301,10 +210,11 @@
                   echo $this->db->query($query)->result()[0]->total; ?></td>
               <td><?php
                   if ($school_session->updatedDate) {
-                    echo date('d M, Y', strtotime($school_session->updatedDate));
+                    echo date('d M, y', strtotime($school_session->updatedDate));
                   }
                   ?></td>
-
+              <td><a href="<?php echo site_url("print_file/note_sheet/" . $school_session->schoolId); ?>" target="new">
+                  <i class="fa fa-print" aria-hidden="true"></i></a></td>
               <td>
                 <?php if ($school_session->status == 1) { ?>
                   <i class="fa fa-check" aria-hidden="true"></i>
@@ -312,10 +222,41 @@
                   <i class="fa fa-spinner" aria-hidden="true"></i>
                 <?php } ?>
               </td>
+              <td> <a target="_new" href="<?php echo site_url("print_file/certificate/" .  $school->schools_id . "/" . $school_session->schoolId . "/" . $school_session->session_year_id); ?>">
+                  <i class="fa fa-print" aria-hidden="true"></i></a></td>
+              <td>
             </tr>
           <?php
             $previous_max = $max_tuition_fee;
           } ?>
+        </table>
+
+      </div>
+
+
+      <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
+        <h4> <i class="fa fa-info-circle" aria-hidden="true"></i>
+          Fine's
+        </h4>
+        <?php $query = "SELECT `fine_amount`, `remarks`, `created_date`, `is_fined` FROM `school_fine_history` WHERE school_id = '" . $schools_id . "'";
+        $fines = $this->db->query($query)->result(); ?>
+        <table class="table">
+          <tr>
+            <th>#</th>
+            <th>Remarks</th>
+            <th>Fine(Rs.)</th>
+            <th>Status</th>
+          </tr>
+          <?php
+          $count = 1;
+          foreach ($fines as $fine) { ?>
+            <tr>
+              <td><?php echo $count++; ?></td>
+              <td><?php echo $fine->remarks ?></td>
+              <td><?php echo $fine->fine_amount ?></td>
+              <td><?php echo $fine->is_fined ?></td>
+            </tr>
+          <?php } ?>
         </table>
 
       </div>

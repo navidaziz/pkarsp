@@ -16,7 +16,7 @@
         echo " / Pk: <strong>" . $school->pkNo . "</strong>";
       } ?>
       <?php if ($school->uc_id) {
-        echo " / Unionconsil: <strong>" . $school->ucTitle . "</strong>";
+        echo " / Union Council: <strong>" . $school->ucTitle . "</strong>";
       } ?></small>
     <ol class="breadcrumb">
       <li><a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> Home </a></li>
@@ -33,10 +33,12 @@
           <div class="col-md-3">
             <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
               <h2>School ID: <?php echo $school->schoolId ?></h2>
-              <h3>Reg. ID: <?php echo $school->registrationNumber ?></h3>
-              <br />
+              <?php if ($school->registrationNumber > 0) { ?>
+                <h3>Reg. ID: <?php echo $school->registrationNumber ?></h3>
+                <br />
+              <?php } ?>
               <?php if (!empty($school->yearOfEstiblishment)) : ?>
-                <?php echo "Established In: " . $school->yearOfEstiblishment; ?>
+                <?php echo "Established In: " . date("M, Y", strtotime($school->yearOfEstiblishment)); ?>
                 <br>
               <?php endif; ?>
               <?php if (!empty($school->levelofInstituteTitle)) : ?>
@@ -51,6 +53,10 @@
 
               <?php if (!empty($school->telePhoneNumber)) : ?>
                 <?php echo "Tele-Phone #: " . $school->telePhoneNumber; ?>
+                <br>
+              <?php endif; ?>
+              <?php if (!empty($school->schoolMobileNumber)) : ?>
+                <?php echo "Mobile #: " . $school->schoolMobileNumber; ?>
                 <br>
               <?php endif; ?>
 
@@ -72,7 +78,7 @@
                 <?php echo "Management: " . $school->managementTitle; ?>
                 <br>
               <?php endif; ?>
-              <b>Bise Information</b><br>
+              <b>BISE Information</b><br>
               <?php if (!empty($school->biseregistrationNumber)) : ?>
                 <?php echo "Bise Register: " . $school->biseregistrationNumber; ?>
                 <br>
@@ -115,7 +121,7 @@
               <?php endif; ?>
 
               <address>
-                <strong>Adress</strong><br>
+                <strong>Address</strong><br>
 
                 <?php if (!empty($school->address)) : ?>
                   <?php echo $school->address; ?>
@@ -492,6 +498,50 @@
 
 
                 </table>
+              <?php } else { ?>
+
+                <div style="text-align: center;">
+                  <h4>Now Apply for Registration with PSRA</h4>
+                  <?php
+
+                  $est_date = $this->input->post('year_of_es');
+                  $est_year = date('Y', strtotime($school->yearOfEstiblishment));
+                  $est_month = date('m', strtotime($school->yearOfEstiblishment));
+                  if ($est_month >= 4) {
+                    $session_year = $est_year;
+                  } else {
+                    $session_year = $est_year - 1;
+                  }
+
+
+
+                  $query = "SELECT * FROM `session_year` WHERE YEAR(`session_start`) >= '" . $session_year . "'";
+                  $session = $this->db->query($query)->result()[0];
+
+
+                  // $query = "SELECT * FROM session_year 
+                  //         WHERE sessionYearTitle >= '" . date('Y', strtotime($school->yearOfEstiblishment)) . "-" . (date('Y', strtotime($school->yearOfEstiblishment)) + 1) . "' 
+                  //         ORDER BY sessionYearId ASC LIMIT 1";
+                  // $session = $this->db->query($query)->result()[0];
+
+                  $query = "SELECT * FROM school 
+                  WHERE schools_id = '" . $school_id . "' ";
+                  $registration = $this->db->query($query)->result();
+                  $registration_session_id = $registration[0]->session_year_id;
+                  $session_school_id = $registration[0]->schoolId;
+                  ?>
+                  <?php if ($registration) { ?>
+                    <?php if ($registration[0]->status == 0) { ?>
+                      <a class="btn btn-success" href="<?php echo site_url("form/section_b/$session_school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Registration Process <?php echo $session->sessionYearTitle; ?></a>
+                    <?php }   ?>
+                    <?php if ($registration[0]->status == 2) { ?>
+                      <a class="btn btn-success" href="<?php echo site_url("online_application/status/$session_school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Bank Challan Verification Session <?php echo $session->sessionYearTitle; ?></a>
+                    <?php } ?>
+                  <?php } else { ?>
+                    <a class="btn btn-primary" href="<?php echo site_url("apply/registration/$session->sessionYearId"); ?>">Apply for Registraion. <?php echo $session->sessionYearTitle; ?></a>
+                  <?php } ?>
+
+                </div>
               <?php }  ?>
 
 

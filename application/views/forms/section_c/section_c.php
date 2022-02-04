@@ -63,7 +63,7 @@
       <?php $this->load->view('forms/navigation_bar');   ?>
       <div class="box box-primary box-solid">
         <div class="box-header with-border">
-          <h3 class="box-title">Section-C: Class & Age Wise Enrolment</h3>
+          <h3 class="box-title">Section-C: Class & Age Wise Enrollment</h3>
           <!-- /.box-tools -->
         </div>
         <!-- /.box-header -->
@@ -88,7 +88,7 @@
               ?>
 
               <?php if ($boys) { ?>
-                <h4 style="border-left: 20px solid #9FC8E8; padding-left:5px"><strong>Boys</strong> Enrolment Class and Age wise.<br />
+                <h4 style="border-left: 20px solid #9FC8E8; padding-left:5px"><strong>Boys</strong> Enrollment Class and Age wise.<br />
                   <small style="color: red;">
                     Note: For example age 3+ means “equal to or greater than 3 but less than 4 years”, similarly for 4+ , 5+ and so on
                   </small>
@@ -213,7 +213,7 @@
               <?php } ?>
 
               <?php if ($girls) { ?>
-                <h4 style="border-left: 20px solid #FFC0CB; padding-left:5px"><strong> Grils</strong> Enrolment Class and Age wise.<br />
+                <h4 style="border-left: 20px solid #FFC0CB; padding-left:5px"><strong> Grils</strong> Enrollment Class and Age wise.<br />
                   <small style="color: red;">
                     Note: For example age 3+ means “equal to or greater than 3 but less than 4 years”, similarly for 4+ , 5+ and so on
                   </small>
@@ -344,7 +344,7 @@
             <div class="col-md-12">
               <table class="table table-bordered">
                 <tr style="text-align: center; background-color: #8CAE12;">
-                  <th rowspan="2" style="text-align: center; vertical-align: middle; background-color: #337AB7; color:white">Total School Enrolment<br />
+                  <th rowspan="2" style="text-align: center; vertical-align: middle; background-color: #337AB7; color:white">Total School Enrollment<br />
                     Session: <?php echo $session_detail->sessionYearTitle; ?></th>
                   <th colspan="19" style="text-align: center; background-color: #337AB7; color:white">Age Categories</th>
                   <th colspan="3" style="background-color: #337AB7; color:white"></th>

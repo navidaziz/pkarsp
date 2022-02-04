@@ -104,8 +104,8 @@
                       <td>CNIC</th>
                       <td>Gender</th>
                       <td>Type</th>
-                      <td>Academic</th>
-                      <td>Professional</th>
+                      <td>Academic Qualification</th>
+                      <td>Professional Qualification</th>
                       <td>Training In Months</th>
                       <td>Experience In Months</th>
                       <td>Designation</th>
@@ -144,13 +144,13 @@
                           <?php endif; ?>
                         </select></td>
                       <td><input type="text" name="schoolStaffQaulificationAcademic" style="width: 70px;" required /></td>
-                      <td><input type="text" name="schoolStaffQaulificationProfessional" style="width: 70px;" required /></td>
-                      <td><input type="number" name="TeacherTraining" style="width: 70px;" required /></td>
-                      <td><input type="number" name="TeacherExperience" style="width: 70px;" required /></td>
+                      <td><input type="text" name="schoolStaffQaulificationProfessional" style="width: 70px;" /></td>
+                      <td><input type="number" name="TeacherTraining" style="width: 70px;" /></td>
+                      <td><input type="number" name="TeacherExperience" style="width: 70px;" /></td>
                       <td><input <?php if ($total_pricipal == 0) { ?> readonly value="Principal" <?php } ?> type="text" name="schoolStaffDesignition" style="width: 70px;" required /></td>
                       <td><input type="date" name="schoolStaffAppointmentDate" style="width: 122px;" required /></td>
                       <td><input type="number" name="schoolStaffNetPay" style="width: 70px;" required /></td>
-                      <td><input placeholder="" type="number" name="schoolStaffAnnualIncreament" style="width: 50px;" required /> <strong>%</strong></td>
+                      <td><input min="0" max="100" placeholder="" type="number" name="schoolStaffAnnualIncreament" style="width: 50px;" required /> <strong>%</strong></td>
 
                       <td>
 
@@ -201,17 +201,19 @@
             </div>
 
             <div class="col-md-12">
-              <div style=" font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
+              <div style="font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 20px;  margin: 10px; padding: 10px; background-color: white;">
                 <a class="btn btn-link pull-left" href="<?php echo site_url("form/section_c/$school_id"); ?>">
-                  <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Section C ( Students Enrolment ) </a>
-                <?php if (count($school_staff) >= 5) { ?>
+                  <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Section C ( Students Enrollment ) </a>
+                <?php if (count($school_staff) >= 3 and $form_status->form_d_status == 0) { ?>
                   <a href="<?php echo site_url("form/complete_section_d/$school_id"); ?>" class="btn btn-primary">Add Section D Data</a>
-                <?php } else { ?> <br /> <?php } ?>
-
+                <?php } else { ?>
+                <?php } ?>
                 <?php if ($form_status->form_d_status == 1) { ?>
                   <a class="btn btn-link pull-right" href="<?php echo site_url("form/section_e/$school_id"); ?>">
                     Section E ( School Fee Detail )<i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
+                  <br />
                 <?php } ?>
+
               </div>
             </div>
 

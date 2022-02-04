@@ -18,12 +18,12 @@
 
                 </li>
                 <li <?php if ($this->uri->segment(2) == 'section_e') { ?> class="active" <?php  } ?> style="text-align: center;">
-                    <a href="<?php if ($form_status->form_c_status == 1) { ?> <?php echo site_url("form/section_e/$school_id"); ?> <?php } else { ?> # <?php } ?>" data-toggle="tooltip" data-placement="top" title="Please Complete Section D.">
+                    <a href="<?php if ($form_status->form_d_status == 1) { ?> <?php echo site_url("form/section_e/$school_id"); ?> <?php } else { ?> # <?php } ?>" data-toggle="tooltip" data-placement="top" title="Please Complete Section D.">
                         <?php if ($form_status->form_e_status == 1) { ?> <i class="fa fa-check" aria-hidden="true"></i> <?php } else { ?> <i class="fa fa-spinner" aria-hidden="true"></i> <?php } ?> SECTION E
                     </a>
                 </li>
                 <li <?php if ($this->uri->segment(2) == 'section_f') { ?> class="active" <?php  } ?> style="text-align: center;">
-                    <a href="<?php if ($form_status->form_d_status == 1) { ?> <?php echo site_url("form/section_f/$school_id"); ?> <?php } else { ?> # <?php } ?>" data-toggle="tooltip" data-placement="top" title="Please Complete Section E.">
+                    <a href="<?php if ($form_status->form_e_status == 1) { ?> <?php echo site_url("form/section_f/$school_id"); ?> <?php } else { ?> # <?php } ?>" data-toggle="tooltip" data-placement="top" title="Please Complete Section E.">
                         <?php if ($form_status->form_f_status == 1) { ?> <i class="fa fa-check" aria-hidden="true"></i> <?php } else { ?> <i class="fa fa-spinner" aria-hidden="true"></i> <?php } ?> SECTION F
                     </a>
                 </li>

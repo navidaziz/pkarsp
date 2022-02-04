@@ -423,29 +423,30 @@ class Form extends MY_Controller
 		$this->load->view('layout', $this->data);
 	}
 
-	public function add_classes_ages()
-	{
+	// public function add_classes_ages()
+	// {
 
-		$session_id = $this->input->post("session_id");
-		$class_id = $this->input->post("classId");
-		$gender_id = $this->input->post("gender_id");
-		$schools_id = (int) $this->db->query("SELECT schoolId FROM `school` WHERE `schools_id` = 4 AND `session_year_id` = 4")->result()[0]->schoolId;
+	// 	$session_id = $this->input->post("session_id");
+	// 	$class_id = $this->input->post("classId");
+	// 	$gender_id = $this->input->post("gender_id");
+	// 	$schools_id = (int) $this->db->query("SELECT schoolId FROM `school` WHERE `schools_id` = 4 AND `session_year_id` = 4")->result()[0]->schoolId;
 
-		$class_ages = array_filter($this->input->post("class_age"));
+	// 	$class_ages = array_filter($this->input->post("class_age"));
 
-		foreach ($class_ages as $age_id => $enrolled) {
-			$inputs['age_id'] = $age_id;
-			$inputs['class_id'] = $class_id;
-			$inputs['age_id'] = $age_id;
-			$inputs['gender_id'] = $gender_id;
-			$inputs['school_id'] = $schools_id;
-			$inputs['enrolled'] = $enrolled;
-			var_dump($inputs);
-			$this->db->insert('age_and_class', $inputs);
-		}
-		$this->session->set_flashdata('msg', 'Class Age Wise Data For Boys Add Successfully');
-		redirect("form/section_c");
-	}
+	// 	foreach ($class_ages as $age_id => $enrolled) {
+	// 		$inputs['age_id'] = $age_id;
+	// 		$inputs['class_id'] = $class_id;
+	// 		$inputs['age_id'] = $age_id;
+	// 		$inputs['gender_id'] = $gender_id;
+	// 		$inputs['school_id'] = $schools_id;
+	// 		$inputs['enrolled'] = $enrolled;
+	// 		var_dump($inputs);
+	// 		$this->db->insert('age_and_class', $inputs);
+	// 	}
+
+	// 	$this->session->set_flashdata('msg', "Class Age Wise Data For $gender Add Successfully");
+	// 	redirect("form/section_c");
+	// }
 
 	public function update_class_ages_from()
 	{
@@ -508,7 +509,15 @@ class Form extends MY_Controller
 		$enrolment['disabled']  = (int)  $this->input->post('disabled');
 		$this->db->insert('school_enrolments', $enrolment);
 
-		$this->session->set_flashdata('msg', 'Class Age Wise Data For Boys Add Successfully');
+		$gender = '';
+		if ($gender_id == 1) {
+			$gender = 'Boys';
+		}
+		if ($gender_id == 2) {
+			$gender = 'Girls';
+		}
+
+		$this->session->set_flashdata('msg', "Class Age Wise Data For $gender Add Successfully");
 		redirect("form/section_c/$school_id");
 	}
 
@@ -801,13 +810,14 @@ class Form extends MY_Controller
 			$school_session_detail = $school_session_entry[0];
 
 
+
 			if ($school_session_detail->status != 0) {
 				$this->session->set_flashdata('msg_error', 'You are already applied for this session.');
 				redirect("online_application/status/$school_id");
 			}
 			if ($school_session_detail->status == 0) {
 				$physical_facilities =  $this->db->where('school_id', $school_id)->get('physical_facilities')->row();
-				if (is_null($physical_facilities)) {
+				if (is_null($physical_facilities) and $school_session_detail->reg_type_id != 1) {
 					$session_id = $school_session_detail->session_year_id;
 					redirect("apply/renewal/$session_id/$school_id");
 					exit();
@@ -826,9 +836,34 @@ class Form extends MY_Controller
 		$this->session->set_flashdata('msg_success', 'Section D Data Submit Successfully.');
 		redirect("form/section_d/$school_id");
 	}
-	public function complete_section_e($school_id)
+	public function complete_section_e()
 	{
-		$school_id = (int) $school_id;
+
+		$school_id = (int) $this->input->post('school_id');
+		$feeMentionedInFormId = (int) $this->input->post('feeMentionedInFormId');
+		$pro = $this->input->post('pro');
+		$outside = $this->input->post('outside');
+		//var_dump($_POST);
+		//exit();
+
+		if ($feeMentionedInFormId == "") {
+
+			$this->db->insert(
+				'fee_mentioned_in_form_or_prospectus',
+				array(
+					'school_id' => $school_id,
+					'feeMentionedInForm' => $pro,
+					'FeeMentionOutside' => $outside
+				)
+			);
+		} else {
+
+			$this->db->where('feeMentionedInFormId', $feeMentionedInFormId);
+			$update_data['feeMentionedInForm'] = $pro;
+			$update_data['FeeMentionOutside'] = $outside;
+			$this->db->update('fee_mentioned_in_form_or_prospectus', $update_data);
+		}
+
 
 
 		$form_input['form_e_status'] = 1;
@@ -841,6 +876,7 @@ class Form extends MY_Controller
 
 	public function add_bank_challan()
 	{
+
 		$session_id = (int) $this->input->post('session_id');
 		$userId = $this->session->userdata('userId');
 
@@ -858,6 +894,7 @@ class Form extends MY_Controller
 			$challan_detail['deficiency_id'] = $this->input->post('deficiency_id');
 			$challan_detail['last_status'] = $this->input->post('last_status');
 		}
+
 
 		$this->db->insert('bank_challans', $challan_detail);
 		$this->db->where('schoolId', $school_id);
@@ -912,10 +949,16 @@ class Form extends MY_Controller
 
 
 		if ($this->input->post('level')) {
+			$this->db->where('schoolId', $schools_id);
+			$school_update['level_of_school_id'] = $this->input->post('level');
+			$this->db->update('schools', $school_update);
+
 			$this->db->where('schoolId', $school_id);
 			$school_update['level_of_school_id'] = $this->input->post('level');
 			$this->db->update('school', $school_update);
 		}
+
+
 
 		if ($this->input->post('max_fee') >= 0) {
 			$this->db->where('school_id', $school_id);
@@ -955,6 +998,7 @@ class Form extends MY_Controller
 
 		$school_id = (int) $this->input->post("school_id");
 		$schools_id = (int) $this->input->post("schools_id");
+
 
 
 

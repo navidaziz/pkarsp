@@ -58,7 +58,36 @@
                     </tr>
                     <tr>
                       <td>Year of Establishment:</td>
-                      <td><input type="month" title="2021-07" max="<?php echo date('Y-m') ?>" id="yearOfEstiblishment" required name="yearOfEstiblishment" value="" /> </td>
+                      <td>
+                        <select name="e_month" require>
+                          <option value="0">Select Month</option>
+                          <?php
+                          $months = array(
+                            '01' => 'Jan',
+                            '02' => 'Feb',
+                            '03' => 'Mar',
+                            '04' => 'Apr',
+                            '05' => 'May',
+                            '06' => 'Jun',
+                            '07' => 'Jul',
+                            '08' => 'Aug',
+                            '09' => 'Sep',
+                            '10' => 'Oct',
+                            '11' => 'Nov',
+                            '12' => 'Dec'
+                          );
+                          foreach ($months as $index => $month) { ?>
+                            <option value="<?php echo $index; ?>"><?php echo $month; ?></option>
+                          <?php }  ?>
+                        </select>
+                        <select name="e_year" required>
+                          <option value="0">Select Year</option>
+                          <?php for ($years = 2021; $years >= 1950; $years--) { ?>
+                            <option value="<?php echo $years; ?>"><?php echo $years; ?></option>
+                          <?php } ?>
+                        </select>
+                        <!-- <input type="year" title="2021" max="<?php echo date('Y-m') ?>" id="yearOfEstiblishment" required name="yearOfEstiblishment" value="" /> -->
+                      </td>
                     </tr>
 
                     <tr>
@@ -393,7 +422,7 @@
                         <td>
                           <input type="radio" class="bankDetail" name="accountTitle" value="Individual" class="flat-red" checked="checked"> Individual
                           <input type="radio" class="bankDetail" name="accountTitle" value="Designated" class="flat-red"> Designated
-                          <input type="radio" name="bankDetail" value="Joint" class="flat-red"> Joint
+                          <input type="radio" class="bankDetail" name="accountTitle" value="Joint" class="flat-red"> Joint
                         </td>
                       </tr>
                       <tr>

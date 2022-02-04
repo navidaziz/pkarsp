@@ -54,7 +54,7 @@
 
         <div class="box-body">
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-12">
               <div style="text-align:center">
 
                 <h4> Online Applicaiton Status</h4>
@@ -150,6 +150,8 @@
                           <input type="hidden" name="deficiency_id" value="<?php echo $deficiency->deficiency_id; ?>" />
                           <input type="hidden" name="last_status" value="<?php echo $deficiency->last_status; ?>" />
                           <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
+                          <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
+                          <input type="hidden" name="schools_id" value="<?php echo $school->schools_id; ?>" />
                           <input type="hidden" name="challan_for" value="Deficiency" />
                           <table class="table table-bordered">
                             <tr>

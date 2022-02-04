@@ -46,7 +46,7 @@
                   <br />
 
 
-                  <i class="fa fa-map-marker" aria-hidden="true"></i> 18-E Jamaluddi Ud Din Afghani Road, University Town, Peshawar
+                  <i class="fa fa-map-marker" aria-hidden="true"></i> 18-E Jamal Ud Din Afghani Road, University Town, Peshawar
                 </address>
 
               </div>
@@ -56,28 +56,28 @@
           </div>
           <div class="col-md-4">
             <div class="login-box" style="background-color:#5C9CCC; opacity:.9; margin: 5px auto; padding-top:10px !important;">
-              <h2 class="bigintro">Register</h2>
-              <div class="divide-40"></div>
+              <h2 class="bigintro" style="font-size: 25px;">Create School Account</h2>
+              <div class="divide-10"></div>
               <form role="form" method="post" action="<?php echo site_url("register/signup"); ?>">
                 <div class="form-group">
                   <label for="username">User Name</label>
                   <i class="fa fa-user"></i>
-                  <input type="text" class="form-control" id="userName" name="userName">
+                  <input type="text" class="form-control" id="userName" name="userName" value="<?php echo set_value('userName', $userName); ?>" />
                 </div>
                 <div class="form-group">
                   <label for="exampleInputPassword1">Password</label>
                   <i class="fa fa-lock"></i>
-                  <input type="password" class="form-control" id="userPassword" name="userPassword">
+                  <input type="password" class="form-control" id="userPassword" name="userPassword" />
                 </div>
                 <div class="form-group">
-                  <label for="exampleInputPassword2">Repeat Password</label>
+                  <label for="exampleInputPassword2">Confirm Password</label>
                   <i class="fa fa-check-square-o"></i>
-                  <input type="password" class="form-control" id="c_userPassword" name="c_userPassword">
+                  <input type="password" class="form-control" id="c_userPassword" name="c_userPassword" />
                 </div>
                 <div class="form-group">
                   <label for="email">Email Address</label>
                   <i class="fa fa-envelope"></i>
-                  <input type="email" class="form-control" id="userEmail" name="userEmail">
+                  <input type="email" class="form-control" id="email_address" name="email_address" value="<?php echo set_value('email_address', $email_address); ?>">
                 </div>
                 <div>
 
@@ -97,7 +97,7 @@
               <!-- /SOCIAL REGISTER -->
               <div class="login-helpers" style="text-align: center;">
                 <a class="btn btn-danger" href="<?php echo site_url('login'); ?>"> <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Login</a>
-                <a class="btn btn-warning" href="<?php echo site_url('register/password_reset'); ?>"> <i class="fa fa-undo" aria-hidden="true"></i> Recover Password</a>
+                <a class="btn btn-warning" href="<?php echo site_url('register/password_reset'); ?>"> <i class="fa fa-undo" aria-hidden="true"></i> Forget Password</a>
 
               </div>
             </div>

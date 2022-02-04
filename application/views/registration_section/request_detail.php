@@ -322,6 +322,33 @@
       </div>
 
 
+      <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
+        <h4> <i class="fa fa-info-circle" aria-hidden="true"></i>
+          Fine's
+        </h4>
+        <?php $query = "SELECT `fine_amount`, `remarks`, `created_date`, `is_fined` FROM `school_fine_history` WHERE school_id = '" . $schools_id . "'";
+        $fines = $this->db->query($query)->result(); ?>
+        <table class="table">
+          <tr>
+            <th>#</th>
+            <th>Remarks</th>
+            <th>Fine(Rs.)</th>
+            <th>Status</th>
+          </tr>
+          <?php
+          $count = 1;
+          foreach ($fines as $fine) { ?>
+            <tr>
+              <td><?php echo $count++; ?></td>
+              <td><?php echo $fine->remarks ?></td>
+              <td><?php echo $fine->fine_amount ?></td>
+              <td><?php echo $fine->is_fined ?></td>
+            </tr>
+          <?php } ?>
+        </table>
+
+      </div>
+
     </div>
 
 

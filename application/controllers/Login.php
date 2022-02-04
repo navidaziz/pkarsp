@@ -66,6 +66,7 @@ class Login extends Admin_Controller
 				'rules' =>  'required'
 			),
 
+
 			// array(
 			// 	'field' =>  'g-recaptcha-response',
 			// 	'label' =>  'g-recaptcha-response',

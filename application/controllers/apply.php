@@ -48,9 +48,9 @@ class Apply extends MY_Controller
 				'school_id' => $school_new_session_id
 			));
 
-			redirect("form/section_b/$session_id");
+			redirect("form/section_b/$school_new_session_id");
 		} else {
-			redirect("form/section_b/$session_id");
+			redirect("form/section_b/$school_new_session_id");
 		}
 	}
 	public function renewal($session_id, $session_school_id = NULL)
@@ -69,7 +69,7 @@ class Apply extends MY_Controller
 		$last_session_detail = $this->db->query($query)->result()[0];
 		$school_id = $last_session_detail->schoolId;
 
-		if (is_null($school_id)) {
+		if (is_null($session_school_id)) {
 			//insert new session...
 			$new_session['schools_id'] = $schools_id;
 			$new_session['reg_type_id'] = 2;
@@ -366,7 +366,7 @@ class Apply extends MY_Controller
 				'msg_error',
 				"Sorry Something went wrong!."
 			);
-			redirect("form/section_b/$session_id");
+			redirect("form/section_b/$school_inserted_id");
 		} else {
 			$this->db->trans_commit();
 			$school_data_to_update = array(
@@ -386,14 +386,14 @@ class Apply extends MY_Controller
 					"You have successfully applied for renewal, kindly update your current school data."
 				);
 				//echo $school_id;exit;
-				redirect("form/section_b/$session_id");
+				redirect("form/section_b/$school_inserted_id");
 			} else {
 				$this->session->set_flashdata(
 					'msg_error',
 					"Sorry Something went wrong!."
 				);
 				//echo $school_id;exit;
-				redirect("form/section_b/$session_id");
+				redirect("form/section_b/$school_inserted_id");
 			}
 		}
 	}

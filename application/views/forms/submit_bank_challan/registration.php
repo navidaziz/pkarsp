@@ -57,11 +57,11 @@
               <?php $query = "SELECT * FROM `levelofinstitute`";
               $levels = $this->db->query($query)->result();
               foreach ($levels as $level) { ?>
-                <option value="<?php echo $level->levelofInstituteId; ?>"><?php echo $level->levelofInstituteTitle; ?></option>
+                <option <?php if ($level->levelofInstituteId == $school->level_of_school_id) { ?> selected <?php } ?> value="<?php echo $level->levelofInstituteId; ?>"><?php echo $level->levelofInstituteTitle; ?></option>
               <?php  } ?>
             </select>
             year of establishment: <input name="year_of_es" type="month" value="<?php echo $school->yearOfEstiblishment ?>" />
-            Max Fee: <input name="max_fee" type="number" />
+            Max Fee: <input name="max_fee" type="number" value="<?php echo $max_tuition_fee; ?>" />
             <input type="submit" name="update" />
           </form>
 
@@ -257,11 +257,18 @@
                         </td>
                       <?php } else { ?>
 
+                        <?php
+                        //var_dump($late_fee);
+                        ?>
                         <td>Late Fee Fine <br /><small><?php
                                                         if ($late_fee->fine_percentage) {
                                                           echo  $late_fee->fine_percentage;
                                                         } else {
-                                                          echo 100;
+                                                          if ($session_id == 1) {
+                                                            echo 45;
+                                                          } else {
+                                                            echo 100;
+                                                          }
                                                         }
                                                         ?>% on
                             (Application Processing+Inspection Fee)</small>
@@ -270,7 +277,11 @@
                             if ($late_fee->fine_percentage) {
                               $fine = ($late_fee->fine_percentage * $total) / 100;
                             } else {
-                              $fine =  (100 * $total) / 100;
+                              if ($session_id == 1) {
+                                $fine =  (45 * $total) / 100;
+                              } else {
+                                $fine =  (100 * $total) / 100;
+                              }
                             }
                             echo number_format($fine);
                             ?>

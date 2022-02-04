@@ -298,11 +298,11 @@
 
                     <strong>License No(s):</strong>
                     <span style="margin-left: 10px;"></span>
-                    <input style="display: inline; width: 150px;" type="text" required name="licenseNumber" placeholder="Enter License Number" class="form-control" id="licenseNumber" value="<?php echo $school_security_measures->licenseNumber; ?>" />
+                    <input min="0" style="display: inline; width: 150px;" type="text" required name="licenseNumber" placeholder="Enter License Number" class="form-control" id="licenseNumber" value="<?php echo $school_security_measures->licenseNumber; ?>" />
                     <br />
                     <br />
                     <strong>Ammunition Status (In Nos.):</strong>
-                    <input style="display: inline; width: 150px;" type="number" required name="ammunitionStatus" placeholder="Enter License Number" class="form-control" id="ammunitionStatus" value="<?php echo $school_security_measures->ammunitionStatus; ?>" />
+                    <input min="0" style="display: inline; width: 100px;" type="number" required name="ammunitionStatus" placeholder="0" class="form-control" id="ammunitionStatus" value="<?php echo $school_security_measures->ammunitionStatus; ?>" />
                     <br />
                     <br />
                     <strong>Metal Detector:</strong>
@@ -354,8 +354,12 @@
               <div style=" font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
                 <a class="btn btn-link pull-left" href="<?php echo site_url("form/section_e/$school_id"); ?>">
                   <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Section E ( School Fee Detail ) </a>
+                <?php if ($form_status->form_f_status == 1) { ?>
+                  <input class="btn btn-primary" type="submit" name="" value="Update Section F Data" />
+                <?php } else { ?>
+                  <input class="btn btn-danger" type="submit" name="" value="Add Section F Data" />
+                <?php } ?>
 
-                <input class="btn btn-primary" type="submit" name="" value="Update Section F Data" />
                 <?php if ($form_status->form_f_status == 1) { ?>
                   <a class="btn btn-link pull-right" href="<?php echo site_url("form/section_g/$school_id"); ?>"> Section G ( Hazards With Associated Risk's ) <i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
                 <?php } ?>
