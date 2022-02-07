@@ -112,6 +112,8 @@ class Messages extends Admin_Controller
       $query = "  SELECT * FROM `message_for_all_attachment` where message_id=$message_info->message_id ";
       $query = $this->db->query($query);
 
+
+
       $this->data['message_info'] = $message_info;
       //////////////////////////////////////////
       $query1 = " SELECT count(`message_school`.`message_id`) as selectedschools,
@@ -134,6 +136,10 @@ class Messages extends Admin_Controller
     order by `message_for_all`.`message_id` DESC";
       ///////////////////////////////////////////
       $this->data['attachments'] = $query->result();
+
+
+
+
       //var_dump($this->data['attachments']);exit;
       $this->data['title'] = 'Message Details';
       $this->data['description'] = 'info about Message ';

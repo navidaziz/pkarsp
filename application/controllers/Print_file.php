@@ -204,6 +204,22 @@ class Print_file extends MY_Controller
 		return $this->db->query($query)->result()[0];
 	}
 
+	private function registaion_type($type_id)
+	{
+		if ($type_id == 1) {
+			return 'Registration';
+		}
+		if ($type_id == 2) {
+			return 'Renewal';
+		}
+		if ($type_id == 3) {
+			return 'Up-Gradation';
+		}
+		if ($type_id == 4) {
+			return 'Up-Gradation And Renewal';
+		}
+	}
+
 	// private function get_session_detail($session_id)
 	// {
 	// 	return $this->db->query("SELECT * FROM `session_year` WHERE sessionYearId = $session_id")->result()[0];

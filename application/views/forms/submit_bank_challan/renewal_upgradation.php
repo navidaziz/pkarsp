@@ -276,6 +276,8 @@
                 <h4>Submit bank challan for upgradation + renewal session <?php echo $session_detail->sessionYearTitle; ?></h4>
                 <form action="<?php echo site_url("form/add_bank_challan"); ?>" method="post">
                   <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
+                  <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
+                  <input type="hidden" name="schools_id" value="<?php echo $schools_id; ?>" />
                   <input type="hidden" name="challan_for" value="Renewal Upgradation" />
                   <table class="table table-bordered">
                     <tr>

@@ -52,7 +52,7 @@ class Bank_challans extends Admin_Controller
 				if ($bank_challan->challan_for == 'Deficiency') {
 					$update['status'] = '7';
 				} else {
-					$update['status'] = '0';
+					$update['status'] = '8';
 				}
 
 				$this->db->update('school', $update);

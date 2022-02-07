@@ -3,7 +3,7 @@
     function renewal_fee_sturucture() {
       $.ajax({
         type: "POST",
-        url: "<?php echo site_url("apply/renewal_fee_sturucture"); ?>",
+        url: "<?php echo site_url("form/renewal_fee_sturucture"); ?>",
         data: {}
       }).done(function(data) {
 
@@ -14,7 +14,7 @@
     }
   </script>
   <div class="modal fade" id="renewal_sturucture_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document" style="width: 70%;">
       <div class="modal-content" id="renewal_sturucture_body">
 
         ...
@@ -70,12 +70,14 @@
             <div class="col-md-4" style="padding-right: 1px;  padding-left: 10px;">
 
               <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
-                <h4> <i class="fa fa-info-circle" aria-hidden="true"></i> How system calculate deposit fee challan?</h4>
+                <h4> <i class="fa fa-info-circle" aria-hidden="true"></i> How system calculates <i>"Deposit Fee Challan" ?</i></h4>
                 <ol>
-                  <li>According to data you entered, your institute established <strong><?php echo date('M Y', strtotime($school->yearOfEstiblishment)); ?></strong>, charged max tuition fee
+                  <li>According to the data you have entered, your institute was established in <strong><?php echo date('M Y', strtotime($school->yearOfEstiblishment)); ?></strong>.
+                    For session <strong><?php echo $session_detail->sessionYearTitle; ?></strong> your institute
+                    charged Max Tuition Fee
                     <strong><?php echo $max_tuition_fee; ?> Rs. </strong> per month.
                   </li>
-                  <li>As per PSRA Registration and Renewal Fee Structure, Institute charged monthly fee between
+                  <li>As per PSRA Registration and Renewal Fee Structure, Institute charging monthly fee between
                     <strong><?php echo $fee_sturucture->fee_min; ?> Rs. </strong> and <strong> <?php echo $fee_sturucture->fee_max; ?> Rs. </strong>
                     Must Deposit
                     <ol>
@@ -106,13 +108,13 @@
 
             <div class="col-md-3" style="padding-right: 1px;  padding-left: 1px;">
               <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
-                <h4>Session: <?php echo $session_detail->sessionYearTitle; ?> Due Date's</h4>
+                <h4>Session: <?php echo $session_detail->sessionYearTitle; ?> Due Dates</h4>
                 <table class="table table-bordered">
 
                   <tr>
-                    <th>S/No</th>
+                    <th>S.No.</th>
                     <th>Last Date</th>
-                    <th>Fine's</th>
+                    <th>Fines</th>
                   </tr>
                   <?php
                   $count = 1;
@@ -327,7 +329,7 @@
                     </tr> -->
                     <tr>
                       <td colspan="2" style="text-align:center;">
-                        <a target="new" class="btn btn-primary" href="<?php echo site_url("form/print_registration_bank_challan/$school_id") ?>"> <i class="fa fa-print" aria-hidden="true"></i> Print PSRA Registration Bank Challan From</a>
+                        <a target="new" class="btn btn-primary" href="<?php echo site_url("form/print_registration_bank_challan/$school_id") ?>"> <i class="fa fa-print" aria-hidden="true"></i> Print PSRA Deposit Slip / Bank Challan</a>
                       </td>
                     </tr>
                   </tbody>
@@ -344,13 +346,14 @@
           <div class="row">
             <div class="col-md-6">
               <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px;">
-                <h3> <i class="fa fa-info-circle" aria-hidden="true"></i> How to apply for Registration online ?</h3>
+                <h3> <i class="fa fa-info-circle" aria-hidden="true"></i> How to submit bank challan online ?</h3>
                 <p>
                 <ol>
-                  <li>Print bank filled challan.</li>
-                  <li>Deposit challan within due date.</li>
+                  <li>Print PSRA Deposit Slip / Bank Challan</li>
+                  <li>Deposit Fee as per due dates</li>
+                  <li>Take computerized bank challan haveing STAB No. from the bank</li>
                   <li>Submit <strong>Bank STAN</strong> number and Transaction date</li>
-                  <li>Click apply for online Registration button</li>
+                  <li>Click on Submit bank challan</li>
                   <li>View Registration application status on school dashboard</li>
                   </ul>
                 </ol>
@@ -361,7 +364,7 @@
             </div>
             <div class="col-md-6">
               <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px;">
-                <h4>Submit Registration Challan for session <?php echo $session_detail->sessionYearTitle; ?></h4>
+                <h4>Submit Bank Challan for session <?php echo $session_detail->sessionYearTitle; ?></h4>
                 <form action="<?php echo site_url("form/add_bank_challan"); ?>" method="post">
                   <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
                   <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
@@ -374,7 +377,7 @@
                     </tr>
                     <tr>
                       <td><input required maxlength="6" name="challan_no" type="number" autocomplete="off" class="form-control" />
-                        <small>"STAN can be found on the upper right corner of bank generated receipt"</small>
+                        <p>"STAN can be found on the upper right corner of bank generated receipt"</p>
                       </td>
                       <td><input required name="challan_date" type="date" class="form-control" />
                       </td>

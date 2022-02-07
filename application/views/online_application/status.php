@@ -55,11 +55,43 @@
         <div class="box-body">
           <div class="row">
             <div class="col-md-12">
-              <div style="text-align:center">
+              <div style="text-align:center; margin:0px auto; width:70%; border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;   padding: 5px; background-color: white;">
 
                 <h4> Online Applicaiton Status</h4>
                 <h3> <?php echo $school->regTypeTitle ?> for <?php echo $school->levelofInstituteTitle; ?> Session: <?php echo $session_detail->sessionYearTitle; ?></h3>
+                <h4>
+                  <?php
 
+                  switch ($school->status) {
+                    case 0:
+                      echo "Data Entery In Progress";
+                      break;
+                    case 2:
+                      echo "Bank Challan Verification In Progress";
+                      break;
+                    case 3:
+                      echo "Data Verification";
+                      break;
+                    case 4:
+                      echo "Fowarded for Inspection Assignment";
+                      break;
+                    case 4:
+                      echo "Inspection pending";
+                      break;
+                    case 5:
+                      echo "Inspection Completed";
+                      break;
+
+                    case 8:
+                      echo "Challan Not Verified";
+                      break;
+                    case 1:
+                      echo "completed";
+                      break;
+                  }
+                  ?>
+
+                </h4>
                 <?php
                 $bank_challan_button = 0;
                 $query = "SELECT
@@ -77,118 +109,159 @@
                       AND   `bank_challans`.`school_id` = '" . $school->school_id . "'
                 ORDER BY bank_challan_id ASC";
                 $session_bank_challans = $this->db->query($query)->result(); ?>
-                <h3>Bank Deposit Challan Detail</h3>
-                <?php foreach ($session_bank_challans as $session_bank_challan) { ?>
 
-                  <h5>
-                    <span <?php if ($session_bank_challan->verified == 2) { ?> style="text-decoration: line-through;" <?php } ?>><?php echo $session_bank_challan->challan_for; ?> -
-                      <?php echo $session_bank_challan->challan_no; ?> -
-                      <?php echo date('F d m, Y', strtotime($session_bank_challan->challan_date)); ?>
-                    </span>
-                    -
-                    <?php if ($session_bank_challan->verified == 0) { ?>
-                      Bank Challan Verification Inprogress
-                    <?php } ?>
+                <table class="table">
+                  <tr>
+                    <th colspan="6">Bank Challan Detail</th>
+                  </tr>
+                  <tr>
+                    <th>#</th>
+                    <th>Challan Type</th>
+                    <th>STAN No</th>
+                    <th>Deposit Date</th>
+                    <th>Status</th>
+                    <th>Remarks</th>
+                  </tr>
+                  <?php
+                  $count = 1;
+                  $bank_challan_button = 0;
+                  foreach ($session_bank_challans as $session_bank_challan) { ?>
+                    <tr>
+                      <td><?php echo $count++; ?></td>
+                      <td><?php echo $session_bank_challan->challan_for; ?></td>
+                      <td><?php echo $session_bank_challan->challan_no; ?></td>
+                      <td> <?php echo date('d M, Y', strtotime($session_bank_challan->challan_date)); ?></td>
+                      <td>
 
-                    <?php if ($session_bank_challan->verified == 1) { ?>
-                      <?php echo $session_bank_challan->amount_deposit; ?> Verified.<br />
+                        <?php if ($session_bank_challan->verified == 0) { ?>
+                          Verification Pending
+                        <?php } ?>
 
-                    <?php } else {
-                      echo "Not verified";
-                    } ?>
+                        <?php if ($session_bank_challan->verified == 1) { ?>
+                          <?php echo $session_bank_challan->amount_deposit; ?> Verified.<br />
 
-                    <?php if ($session_bank_challan->verified == 2 and $session_bank_challan->status == 0) {
-                      $bank_challan_button = 1;
-                    ?>
-                      Not Verified.
-                      <br />
-                      <p><?php echo $session_bank_challan->remarks; ?><br />
+                        <?php } ?>
 
-                      </p>
-                    <?php } else { ?>
-
-                    <?php } ?>
-
-
-                  </h5>
-
-                <?php  }
-                ?>
-
-                <?php if ($bank_challan_button = 1 and $session_bank_challan->verified == 2 and $session_bank_challan->status == 0 and $session_bank_challan->challan_for != 'Deficiency') { ?>
-                  <a class="btn btn-danger btn-sm" href="<?php echo site_url("form/submit_bank_challan/$school->school_id"); ?>">
-                    Re Submit Bank Challan</a>
-                <?php } ?>
-
+                        <?php if ($session_bank_challan->verified == 2) {
+                          echo "Not Verified";
+                          $bank_challan_button++;
+                        } ?>
+                      </td>
+                      <td style="width: 40%; text-align: left;">
+                        <strong>
+                          <?php if ($session_bank_challan->verified == 2) {
+                            echo $session_bank_challan->remarks;
+                          } ?>
+                        </strong>
+                      </td>
+                    </tr>
+                  <?php  }  ?>
+                  <?php if ($bank_challan_button >= 1 and $session_bank_challan->verified == 2 and $session_bank_challan->status == 8 and $session_bank_challan->challan_for != 'Deficiency') { ?>
+                    <tr>
+                      <td colspan="7">
+                        <!-- <a class="btn btn-danger btn-sm" href="<?php echo site_url("form/submit_bank_challan/$school->school_id"); ?>">
+                          Re Submit Bank Challan</a> -->
 
 
+                        <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
+                          <h4>Re Submit Bank Challan for session <?php echo $session_detail->sessionYearTitle; ?></h4>
+                          <form action="<?php echo site_url("form/add_bank_challan"); ?>" method="post">
+
+                            <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
+                            <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
+                            <input type="hidden" name="schools_id" value="<?php echo $school->schools_id; ?>" />
+                            <input type="hidden" name="challan_for" value="<?php echo $session_bank_challan->challan_for ?>" />
+                            <table class="table table-bordered">
+                              <tr>
+                                <td>Bank Transaction No (STAN)</td>
+                                <td>Bank Transaction Date</td>
+                              </tr>
+                              <tr>
+                                <td><input required maxlength="6" name="challan_no" type="number" autocomplete="off" class="form-control" />
+                                  <small>"STAN can be found on the upper right corner of bank generated receipt"</small>
+                                </td>
+                                <td><input required name="challan_date" type="date" class="form-control" />
+                                </td>
+                                <td><input type="submit" class="btn btn-danger " name="submit" value="Re Submit Bank Challan" />
+                                </td>
+                              </tr>
+                            </table>
+                          </form>
+                        </div>
+                      </td>
+                    </tr>
+                  <?php } ?>
+                </table>
               </div>
-              <div>
-                <?php
-                if ($school->status == 7) { ?>
-                  <h3 style="text-align: center;">Deficiency</h3>
-                  <?php $query = "SELECT * FROM deficiencies 
+
+
+            </div>
+            <div>
+              <?php
+              if ($school->status == 7) { ?>
+                <h3 style="text-align: center;">Deficiency</h3>
+                <?php $query = "SELECT * FROM deficiencies 
                                   WHERE status =0
                                   AND school_id = '" . $school->school_id . "'";
-                  $deficiencies =  $this->db->query($query)->result();
-                  foreach ($deficiencies as $deficiency) { ?>
-                    <div class="col-md-6">
-                      <p><strong><?php echo $deficiency->deficiency_title; ?>
-                          <?php //echo $deficiency->deficiency_type; 
-                          ?></strong><br />
-                        <?php echo $deficiency->deficiency_detail; ?></p>
-                      <br />
-                      <p style="text-align: center;">
-                        <strong>Please print deficiency bank challan </strong><br />
-                        <a target="_new" class="btn btn-danger" href="<?php echo site_url("deficiency/bank_challan/" . $deficiency->deficiency_id); ?>">Pint Bank Challan</a>
-                      </p>
+                $deficiencies =  $this->db->query($query)->result();
+                foreach ($deficiencies as $deficiency) { ?>
+                  <div class="col-md-6">
+                    <p><strong><?php echo $deficiency->deficiency_title; ?>
+                        <?php //echo $deficiency->deficiency_type; 
+                        ?></strong><br />
+                      <?php echo $deficiency->deficiency_detail; ?></p>
+                    <br />
+                    <p style="text-align: center;">
+                      <strong>Please print deficiency bank challan </strong><br />
+                      <a target="_new" class="btn btn-danger" href="<?php echo site_url("deficiency/bank_challan/" . $deficiency->deficiency_id); ?>">Pint Bank Challan</a>
+                    </p>
+                  </div>
+                  <div class="col-md-6">
+                    <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px;">
+                      <h4>Submit Deficiency Challan for session <?php echo $session_detail->sessionYearTitle; ?></h4>
+                      <form action="<?php echo site_url("form/add_bank_challan"); ?>" method="post">
+                        <input type="hidden" name="deficiency_id" value="<?php echo $deficiency->deficiency_id; ?>" />
+                        <input type="hidden" name="last_status" value="<?php echo $deficiency->last_status; ?>" />
+                        <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
+                        <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
+                        <input type="hidden" name="schools_id" value="<?php echo $school->schools_id; ?>" />
+                        <input type="hidden" name="challan_for" value="Deficiency" />
+                        <table class="table table-bordered">
+                          <tr>
+                            <td>Bank Transaction No (STAN)</td>
+                            <td>Bank Transaction Date</td>
+                          </tr>
+                          <tr>
+                            <td><input required maxlength="6" name="challan_no" type="number" autocomplete="off" class="form-control" />
+                              <small>"STAN can be found on the upper right corner of bank generated receipt"</small>
+                            </td>
+                            <td><input required name="challan_date" type="date" class="form-control" />
+                            </td>
+                            <td><input type="submit" class="btn btn-success" name="submit" value="Submit Bank Challan" />
+                            </td>
+                          </tr>
+                        </table>
+                      </form>
                     </div>
-                    <div class="col-md-6">
-                      <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px;">
-                        <h4>Submit Deficiency Challan for session <?php echo $session_detail->sessionYearTitle; ?></h4>
-                        <form action="<?php echo site_url("form/add_bank_challan"); ?>" method="post">
-                          <input type="hidden" name="deficiency_id" value="<?php echo $deficiency->deficiency_id; ?>" />
-                          <input type="hidden" name="last_status" value="<?php echo $deficiency->last_status; ?>" />
-                          <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
-                          <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
-                          <input type="hidden" name="schools_id" value="<?php echo $school->schools_id; ?>" />
-                          <input type="hidden" name="challan_for" value="Deficiency" />
-                          <table class="table table-bordered">
-                            <tr>
-                              <td>Bank Transaction No (STAN)</td>
-                              <td>Bank Transaction Date</td>
-                            </tr>
-                            <tr>
-                              <td><input required maxlength="6" name="challan_no" type="number" autocomplete="off" class="form-control" />
-                                <small>"STAN can be found on the upper right corner of bank generated receipt"</small>
-                              </td>
-                              <td><input required name="challan_date" type="date" class="form-control" />
-                              </td>
-                              <td><input type="submit" class="btn btn-success" name="submit" value="Submit Bank Challan" />
-                              </td>
-                            </tr>
-                          </table>
-                        </form>
-                      </div>
-                    </div>
-                  <?php } ?>
-                  <h4></h4>
+                  </div>
                 <?php } ?>
-              </div>
+                <h4></h4>
+              <?php } ?>
             </div>
-
-
-
-
-
-
-
           </div>
+
+
+
+
+
+
+
         </div>
-
-
       </div>
 
-    </section>
+
+  </div>
+
+  </section>
 
   </div>

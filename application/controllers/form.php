@@ -804,7 +804,7 @@ class Form extends MY_Controller
 		$school_session_entry = $this->db->query($query)->result();
 
 		if (!$school_session_entry) {
-			$this->session->set_flashdata('msg_error', 'You are not applied for this session.');
+			//$this->session->set_flashdata('msg_error', 'You are not applied for this session.');
 			redirect('school_dashboard');
 		} else {
 			$school_session_detail = $school_session_entry[0];
@@ -812,7 +812,7 @@ class Form extends MY_Controller
 
 
 			if ($school_session_detail->status != 0) {
-				$this->session->set_flashdata('msg_error', 'You are already applied for this session.');
+				//$this->session->set_flashdata('msg_error', 'You are already applied for this session.');
 				redirect("online_application/status/$school_id");
 			}
 			if ($school_session_detail->status == 0) {
@@ -894,7 +894,6 @@ class Form extends MY_Controller
 			$challan_detail['deficiency_id'] = $this->input->post('deficiency_id');
 			$challan_detail['last_status'] = $this->input->post('last_status');
 		}
-
 
 		$this->db->insert('bank_challans', $challan_detail);
 		$this->db->where('schoolId', $school_id);
