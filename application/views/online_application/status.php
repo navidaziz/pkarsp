@@ -134,7 +134,7 @@
                       <td>
 
                         <?php if ($session_bank_challan->verified == 0) { ?>
-                          Verification Pending
+                          Verification In Progress
                         <?php } ?>
 
                         <?php if ($session_bank_challan->verified == 1) { ?>

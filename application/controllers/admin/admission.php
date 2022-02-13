@@ -192,6 +192,8 @@ class Admission extends Admin_Controller
 		, `student_leaving_certificates`.`academic_record`
 		, `student_leaving_certificates`.`character_and_conduct`
 		, `student_leaving_certificates`.`remarks`
+		, `student_leaving_certificates`.school_leaving_date
+		, `student_leaving_certificates`.slc_issue_date
 	FROM
 		`students`
 		INNER JOIN `student_leaving_certificates` 

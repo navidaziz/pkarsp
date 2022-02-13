@@ -143,13 +143,17 @@
                             No Staff Type Found.
                           <?php endif; ?>
                         </select></td>
-                      <td><input type="text" name="schoolStaffQaulificationAcademic" style="width: 70px;" required /></td>
-                      <td><input type="text" name="schoolStaffQaulificationProfessional" style="width: 70px;" /></td>
-                      <td><input type="number" name="TeacherTraining" style="width: 70px;" /></td>
-                      <td><input type="number" name="TeacherExperience" style="width: 70px;" /></td>
+                      <td><input placeholder="MSc Math, MA urdu etc" type="text" name="schoolStaffQaulificationAcademic" style="width: 70px;" required />
+
+                      </td>
+                      <td><input min="0" placeholder="PST, CT, B.Ed, M.Ed, TT etc" type="text" name="schoolStaffQaulificationProfessional" style="width: 70px;" />
+
+                      </td>
+                      <td><input min="0" type="number" name="TeacherTraining" style="width: 70px;" /></td>
+                      <td><input min="0" type="number" name="TeacherExperience" style="width: 70px;" /></td>
                       <td><input <?php if ($total_pricipal == 0) { ?> readonly value="Principal" <?php } ?> type="text" name="schoolStaffDesignition" style="width: 70px;" required /></td>
                       <td><input type="date" name="schoolStaffAppointmentDate" style="width: 122px;" required /></td>
-                      <td><input type="number" name="schoolStaffNetPay" style="width: 70px;" required /></td>
+                      <td><input min="0" type="number" name="schoolStaffNetPay" style="width: 70px;" required /></td>
                       <td><input min="0" max="100" placeholder="" type="number" name="schoolStaffAnnualIncreament" style="width: 50px;" required /> <strong>%</strong></td>
 
                       <td>
@@ -188,7 +192,7 @@
                       <?php endforeach; ?>
                     <?php else : ?>
                       <td colspan="15" id="empty_td_staff">
-                        <h5 style="color:red;">Record Not Found.</h5>
+
                       </td>
                     <?php endif; ?>
                   </tbody>
@@ -207,12 +211,15 @@
                 <?php if (count($school_staff) >= 3 and $form_status->form_d_status == 0) { ?>
                   <a href="<?php echo site_url("form/complete_section_d/$school_id"); ?>" class="btn btn-primary">Add Section D Data</a>
                 <?php } else { ?>
+
                 <?php } ?>
                 <?php if ($form_status->form_d_status == 1) { ?>
                   <a class="btn btn-link pull-right" href="<?php echo site_url("form/section_e/$school_id"); ?>">
                     Section E ( School Fee Detail )<i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
                   <br />
-                <?php } ?>
+                <?php } else {
+                  echo "<br />";
+                } ?>
 
               </div>
             </div>

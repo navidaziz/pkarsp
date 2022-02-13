@@ -171,8 +171,20 @@
           if ($school->level_of_school_id == 3  or  $school->level_of_school_id == 4) {
             $special_fine = 200000;
           }
-        } ?>
-        <table class="table table-bordered">
+        }
+        $bise_tdr = 0;
+        $query = "SELECT * FROM `bise_verification_requests` WHERE school_id = '" . $school->schools_id . "' AND status IN(1,2,0)";
+        $bise_verification = $this->db->query($query)->result();
+        if ($bise_verification and $bise_verification[0]->status == 1 or $bise_verification[0]->status == 2) {
+          $bise_tdr = $bise_verification[0]->tdr_amount;
+        } else {
+          $bise_tdr = 0;
+        }
+
+
+        ?>
+
+        <table class="table" style="font-size: 13px;">
           <thead>
             <tr>
               <th>Fee Category</th>
@@ -200,9 +212,10 @@
                 </strong>
               </td>
             </tr>
+
             <tr>
 
-              <?php if ($session_detail->status == 1) { ?>
+              <?php if ($session_detail->status == 1 or 1 == 1) { ?>
                 <td colspan="2">
                   <style>
                     .table_reg>tbody>tr>td,
@@ -227,11 +240,14 @@
 
                       <?php
                       $query = "SELECT * FROM `levelofinstitute` 
-          WHERE `levelofinstitute`.`levelofInstituteId` = $school->level_of_school_id";
+                                WHERE `levelofinstitute`.`levelofInstituteId` = $school->level_of_school_id";
                       $level_securities = $this->db->query($query)->result()[0];
 
                       ?>
                       <th>Security Fee <br /><small>(<?php echo $level_securities->levelofInstituteTitle; ?>)</small></th>
+                      <?php if ($session_id == 1) { ?>
+                        <th>2018-19 Special Fine (<?php echo $level_securities->levelofInstituteTitle; ?>)</th>
+                      <?php } ?>
                       <th>Total</th>
                     </tr>
                     <?php
@@ -242,26 +258,57 @@
                         <th>
                           <?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?>
                         </th>
-                        <td><?php echo $session_fee_submission_date->fine_percentage; ?> %</td>
-                        <td>
-                          <?php
-                          $fine = 0;
-                          $fine = ($session_fee_submission_date->fine_percentage * $total) / 100;
-                          echo number_format($fine);
-                          ?>
-                          Rs.
-                        </td>
+                        <?php if ($session_fee_submission_date->fine_percentage == 0) { ?>
+                          <td colspan="2"> <strong> Normal Fee </strong></td>
+                        <?php } else { ?>
+                          <td>
+
+                            <?php echo $session_fee_submission_date->fine_percentage; ?> %</td>
+                          <td>
+                            <?php
+                            $fine = 0;
+                            $fine = ($session_fee_submission_date->fine_percentage * $total) / 100;
+                            echo number_format($fine);
+                            ?>
+
+                          </td>
+                        <?php } ?>
                         <td>
                           <?php echo number_format($fine + $total);  ?>
                         </td>
                         <td>
-                          <?php echo number_format($level_securities->security_fee); ?> Rs.
+                          <?php $security = ($level_securities->security_fee - $bise_tdr);
+
+                          echo number_format($security);
+                          ?>
 
                         </td>
+                        <?php
+                        $specialfine = 0;
+                        if ($session_id == 1 and $session_fee_submission_date->last_date >= '2019-12-01') { ?>
+                          <td><?php
+                              $specialfine = $special_fine;
+                              echo number_format($special_fine); ?></td>
+                        <?php } else {
+                          $specialfine = 0;
+                        ?>
+                          <?php if ($session_id == 1) { ?>
+                            <td></td>
+                          <?php } ?>
+                        <?php } ?>
                         <td>
-                          <?php echo number_format($fine + $total + $level_securities->security_fee); ?> Rs.
+                          <?php if ($session_id == 1) { ?>
+                            <?php
+                            echo number_format($fine + $total + $security + $specialfine);
+                            ?>
+
+                          <?php } else { ?>
+
+                            <?php echo number_format($fine + $total + $security); ?>
+                          <?php } ?>
 
                         </td>
+
                       </tr>
 
 
@@ -300,11 +347,11 @@
               <?php } ?>
             </tr>
 
-            <?php if ($session_detail->status != 1) { ?>
+            <?php if ($session_detail->status != 1 and 2 == 1) { ?>
               <tr>
                 <?php
                 $query = "SELECT * FROM `levelofinstitute` 
-          WHERE `levelofinstitute`.`levelofInstituteId` = $school->level_of_school_id";
+                                WHERE `levelofinstitute`.`levelofInstituteId` = $school->level_of_school_id";
                 $level_securities = $this->db->query($query)->result()[0];
 
                 ?>
@@ -331,8 +378,10 @@
 
               </tr>
             <?php } ?>
+
           </tbody>
         </table>
+
         <br /><br />
         <style>
           .table2 td,

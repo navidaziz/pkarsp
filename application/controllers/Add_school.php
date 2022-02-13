@@ -71,7 +71,7 @@ class Add_school extends MY_Controller
 		$woner_data['contactNumber'] = $this->input->post('contactNumber');
 		$woner_data['cnic'] = $this->input->post('cnic');
 		$woner_data['gender'] = $this->input->post('gender');
-		$woner_data['address'] = $this->input->post('woner_address');
+		$woner_data['address'] = $this->input->post('owner_address');
 
 		$this->db->where('userId', $userId);
 		$this->db->update('users', $woner_data);
@@ -82,7 +82,7 @@ class Add_school extends MY_Controller
 		unset($school_data['contactNumber']);
 		unset($school_data['cnic']);
 		unset($school_data['gender']);
-		unset($school_data['woner_address']);
+		unset($school_data['owner_address']);
 
 		unset($school_data['type_of_institute_id']);
 
@@ -120,6 +120,15 @@ class Add_school extends MY_Controller
 		$this->db->insert('schools', $school_data);
 		$school_id = $this->db->insert_id();
 
+		if ($school_data['biseRegister'] == 'Yes') {
+
+			$bise_verification['school_id'] =  $school_id;
+			$bise_verification['registration_number'] =  $school_data['biseregistrationNumber'];
+			$bise_verification['tdr_amount'] =  0;
+			$bise_verification['bise_id'] =  $school_data['bise_id'];
+			$this->db->insert('bise_verification_requests', $bise_verification);
+		}
+
 		if ($school_data['banka_acount_details'] == 'Yes') {
 			$bank_data['accountTitle'] = $this->input->post('accountTitle');
 			$bank_data['bankAccountNumber'] = $this->input->post('bankAccountNumber');
@@ -129,6 +138,16 @@ class Add_school extends MY_Controller
 			$bank_data['school_id'] = $school_id;
 			$this->db->insert('bank_account', $bank_data);
 		}
+
+		$owner['owner_name'] = $this->input->post('userTitle');
+		$owner['owner_father_name'] = '';
+		$owner['owner_contact_no'] = $this->input->post('contactNumber');
+		$owner['owner_cnic'] = $this->input->post('cnic');
+		$owner['gender'] = $this->input->post('gender');
+		$owner['address'] = $this->input->post('owner_address');
+		$owner['status'] = 1;
+		$owner['school_id'] = $school_id;
+		$this->db->insert('school_owners', $owner);
 
 		$this->session->set_userdata('role_homepage_uri', 'school_dashboard');
 		redirect('school_dashboard');

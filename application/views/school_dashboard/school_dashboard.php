@@ -334,6 +334,7 @@
                           <td><?php echo $upgradation_and_renewal->levelofInstituteTitle; ?></td>
                           <td>
                             <?php if ($upgradation_and_renewal->status == 0) { ?>
+
                               <a class="btn btn-success" href="<?php echo site_url("form/section_b/$upgradation_and_renewal->school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Renewal Process</a>
                             <?php } else {   ?>
                               <?php if ($upgradation_and_renewal->status == 1) { ?>
@@ -536,13 +537,22 @@
                   ?>
                   <?php if ($registration) { ?>
                     <?php if ($registration[0]->status == 0) { ?>
+                      <h4>Registration Application not complete yet !</h4>
+                      <small>
+                        Please complete registration form by filling data in all the sections B,C,D,E,F,G,H forms. Deposit amount shown in bank challan. Submit online STAN and Date.
+                      </small>
                       <a class="btn btn-success" href="<?php echo site_url("form/section_b/$session_school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Registration Process for <?php echo $session->sessionYearTitle; ?></a>
                     <?php } else { ?>
                       <a class="btn btn-success" href="<?php echo site_url("online_application/status/$session_school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> <?php echo $session->sessionYearTitle; ?> Check Application Status</a>
                     <?php } ?>
                   <?php } else { ?>
                     <h4>Now Apply for Registration with PSRA</h4>
-                    <a class="btn btn-primary" href="<?php echo site_url("apply/registration/$session->sessionYearId"); ?>">Apply for Registraion. <?php echo $session->sessionYearTitle; ?></a>
+                    <small>Note:
+
+                      As your school was established in <strong> <?php echo date("M, Y", strtotime($school->yearOfEstiblishment)); ?> </strong> , therefore you should register you school with PSRA for session <strong> <?php echo $session->sessionYearTitle; ?></strong>
+
+                    </small><br />
+                    <a class="btn btn-primary" href="<?php echo site_url("apply/registration/$session->sessionYearId"); ?>">Apply for Registration. <?php echo $session->sessionYearTitle; ?></a>
                   <?php } ?>
 
                 </div>

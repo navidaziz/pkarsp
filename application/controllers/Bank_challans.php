@@ -81,9 +81,10 @@ class Bank_challans extends Admin_Controller
 			$input["total_deposit_fee"] = (float) $this->input->post("total_deposit_fee");
 			$input['verified_by'] = $this->session->userdata('userId');
 			$input['verified_date'] = date("Y-m-d h:i:sa");
-			if ($this->input->post("bise_verified")) {
-				$input['bise_tdr'] = (float) $this->input->post("bise_tdr");
-			}
+			//if ($this->input->post("bise_verified")) {
+			//	$input['bise_tdr'] = (float) $this->input->post("bise_tdr");
+			//}
+			$input['bise_tdr'] = (float) $this->input->post("bise_tdr");
 			$this->db->where('bank_challan_id', $bank_challan_id);
 			$query_result = $this->db->update('bank_challans', $input);
 			if ($query_result) {
@@ -109,12 +110,12 @@ class Bank_challans extends Admin_Controller
 					if ($bank_challan_detail->challan_for == 'Registration') {
 
 
-						if ($this->input->post("bise_verified") == 'Yes') {
-							$where['schoolId'] = $bank_challan_detail->schools_id;
-							$this->db->where($where);
-							$update['bise_verified'] = $this->input->post("bise_verified");
-							$this->db->update('schools', $update);
-						}
+						// if ($this->input->post("bise_verified") == 'Yes') {
+						// 	$where['schoolId'] = $bank_challan_detail->schools_id;
+						// 	$this->db->where($where);
+						// 	$update['bise_verified'] = $this->input->post("bise_verified");
+						// 	$this->db->update('schools', $update);
+						// }
 
 						$update = array();
 						$where['schoolId'] = $bank_challan_detail->school_id;

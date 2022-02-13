@@ -52,7 +52,7 @@
 
             <?php } else { ?>
 
-              <input class="age" value="" id="<?php echo $class->ageId ?>" style="width: 50px;" type="number" min="0" name="class_age[<?php echo $age->ageId ?>]" />
+              <input required class="age" value="" id="<?php echo $class->ageId ?>" style="width: 50px;" type="number" min="0" name="class_age[<?php echo $age->ageId ?>]" />
             <?php }  ?>
           </td>
         </tr>
@@ -74,17 +74,17 @@
 
       <tr>
         <th style="text-align: center; background-color: <?php if ($gender_id == 1) { ?> #9FC8E8 <?php } else { ?> #FFC0CB <?php } ?>;">Non-Muslims <?php if ($gender_id == 1) { ?> Boys <?php } else { ?> Girls <?php } ?> In Class <?php echo $class->classTitle ?></th>
-        <td style="text-align: center;"><input value="<?php if ($query_result) {
-                                                        echo $query_result[0]->non_muslim;
-                                                      } ?>" style="width: 50px;" type="number" min="0" max="<?php echo $total_students; ?>" id="non_muslim" name="non_muslim" />
+        <td style="text-align: center;"><input required value="<?php if ($query_result) {
+                                                                  echo $query_result[0]->non_muslim;
+                                                                } ?>" style="width: 50px;" type="number" min="0" max="<?php echo $total_students; ?>" id="non_muslim" name="non_muslim" />
         </td>
 
       </tr>
       <tr>
         <th style="text-align: center; background-color: <?php if ($gender_id == 1) { ?> #9FC8E8 <?php } else { ?> #FFC0CB <?php } ?>;">Disabled <?php if ($gender_id == 1) { ?> Boys <?php } else { ?> Girls <?php } ?> In Class <?php echo $class->classTitle ?></th>
-        <td style="text-align: center;"><input value="<?php if ($query_result) {
-                                                        echo $query_result[0]->disabled;
-                                                      } ?>" style="width: 50px;" type="number" min="0" max="<?php echo $total_students; ?>" id="disabled" name="disabled" /></td>
+        <td style="text-align: center;"><input required value="<?php if ($query_result) {
+                                                                  echo $query_result[0]->disabled;
+                                                                } ?>" style="width: 50px;" type="number" min="0" max="<?php echo $total_students; ?>" id="disabled" name="disabled" /></td>
       </tr>
       <td colspan="2" style="text-align: center; padding: 5px !important;">
         <input type="submit" class="btn btn-primary" value="Update Class Age Wise Data" />

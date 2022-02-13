@@ -156,7 +156,7 @@ function numToOrdinalWord($num)
           <td colspan="2">
             <h3><?php echo ucwords(strtolower($school->schoolName)); ?></h3>
             <?php if ($school->address) { ?>
-              <h5>Address: <?php echo ucwords(strtolower($school->address)); ?></h5>
+              <h5>Address: <?php echo substr(ucwords(strtolower($school->address)), 0, 30); ?></h5>
             <?php } ?>
             <?php if ($school->telePhoneNumber) { ?>
               <h5>Ph: <?php echo ucwords(strtolower($school->telePhoneNumber)); ?></h5>
@@ -170,7 +170,7 @@ function numToOrdinalWord($num)
           </td>
           <td style="vertical-align: middle;">
             <div class="pull-right">
-              SCL-ID:
+              SLC-ID:
               <strong>
                 <span style="text-decoration: underline; font-weight: bold;">
                   <?php echo $student->slc_id; ?>
@@ -264,7 +264,19 @@ function numToOrdinalWord($num)
               <span style="text-decoration: underline; font-weight: bold;">
                 <?php echo $student->promoted_to_class; ?>
               </span>
+              <br />
+              <br />
+              School Leaving Date:
+              <span style="text-decoration: underline; font-weight: bold;">
+                <?php echo $student->school_leaving_date; ?>
+              </span>
+              <br />
+              SLC Issued Date:
+              <span style="text-decoration: underline; font-weight: bold;">
+                <?php echo $student->slc_issue_date; ?>
+              </span>
             </p>
+
 
 
             <p style="font-size: 16px; padding-left: 20px; padding-right: 20px;">Character and Conduct

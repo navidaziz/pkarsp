@@ -48,7 +48,9 @@ $status = $this->db->query($query)->result()[0]->status; ?>
 
               <small class="pull-right text-muted">
                 <span class="glyphicon glyphicon-time" title="<?php echo $comment->created_date; ?>"></span>
-                <?php echo get_timeago($comment->created_date); ?>
+                <?php //echo get_timeago($comment->created_date); 
+                ?>
+                <?php echo date('d M, Y h:m:s', strtotime($comment->created_date)); ?>
                 <?php if ($user_id == $comment->created_by) { ?>
                   <?php if ($status != 1) { ?>
                     <i onclick="remove_comment('<?php echo $comment->comment_id; ?>')" class="fa fa-close" style="margin-left: 10px; margin-right: 3px; cursor: pointer;"></i>

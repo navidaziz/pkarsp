@@ -54,8 +54,34 @@
         <!-- /.box-header -->
         <div class="box-body">
           <div class="row">
-
             <div class="col-md-12">
+              <h4 style="border-left: 20px solid #9FC8E8; padding-left:5px"><strong>SECTION E</strong> (SCHOOL FEE DETAIL)<br />
+                <small style="color: red;">
+                  Note: Please fill exact tuition fee details as this data will be used in making PSRA fee bank challan for you at the end of this application form.
+                  <br />
+                  <p style="font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif !important; direction: rtl;">
+                    براہ کرم ٹیوشن فیس کی صحیح تفصیلات پُر کریں کیونکہ اس ڈیٹا کو اس درخواست فارم کے آخر میں آپ کے لیے PSRA فیس بینک چالان بنانے میں استعمال کیا جائے گا۔
+                  </p>
+                </small>
+              </h4>
+            </div>
+            <div class="col-md-3">
+              <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
+
+
+                <h4 style="font-weight: bold;"> Warning</h4>
+                <p style="font-size: 16px; line-height: 22px;">No private school can charge admission fee, annual fee and capitation fee under whatever name as per KP-PSRA Regulations Act 2018 and also peshawar high court judgment in a writ petition bearing number WP-NO-1995- of 2020 Dated 14.12.2021</p>
+
+                <br />
+
+                <div style="font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif !important; direction: rtl; line-height: 30px;">
+                  <h4 style="font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif !important; direction: rtl;"> ضروری انتباہ
+                  </h4>
+                  KP-PSRA ریگولیشنز ایکٹ 2018 کے مطابق کوئی بھی پرائیویٹ اسکول داخلہ فیس، سالانہ فیس اور کیپٹیشن فیس کسی بھی نام سے نہیں لے سکتا اور پشاور ہائی کورٹ نے ایک رٹ پٹیشن میں فیصلہ دیا جس کا نمبر WP-NO-1995- 2020 مورخہ 14.12.2021 ہے۔
+                </div>
+              </div>
+            </div>
+            <div class="col-md-9">
               <style>
                 .table>tbody>tr>td,
                 .table>tbody>tr>th,
@@ -70,13 +96,9 @@
 
 
               <p>
-              <h4 style="border-left: 20px solid #9FC8E8; padding-left:5px"><strong>SECTION E</strong> (SCHOOL FEE DETAIL)<br />
-                <small style="color: red;">
-                  Note: please fill fee detail for all classes.
-                </small>
-              </h4>
 
-              </small>
+
+                </small>
               </p>
               <table class="table table-bordered">
                 <tr>
@@ -101,7 +123,7 @@
 
                   asort($sessions);
                   foreach ($sessions  as $session) { ?>
-                    <th colspan="4" style="text-align: center;"><?php echo $session->sessionYearTitle; ?></th>
+                    <th colspan="" style="text-align: center;"><?php echo $session->sessionYearTitle; ?></th>
                   <?php } ?>
 
                 </tr>
@@ -109,10 +131,10 @@
                   <th></th>
                   <?php
                   foreach ($sessions  as $session) { ?>
-                    <th style="text-align: center;">Admision </th>
-                    <th style="text-align: center;">Tuition</th>
-                    <th style="text-align: center;">Security</th>
-                    <th style="text-align: center;">Others</th>
+                    <th style="text-align: center; display: none;">Admision </th>
+                    <th style="text-align: center;">Tuition Fee</th>
+                    <th style="text-align: center; display: none;">Security</th>
+                    <th style="text-align: center; display: none;">Others</th>
                   <?php } ?>
                 </tr>
 
@@ -148,22 +170,22 @@
                       $session_fee->otherFund = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->otherFund));
 
                     ?>
-                      <td style="text-align: center;"><?php //if (is_numeric($session_fee->addmissionFee)) {
-                                                      echo $session_fee->addmissionFee;
-                                                      //} 
-                                                      ?></td>
-                      <td style="text-align: center;"><?php //if (is_numeric($session_fee->tuitionFee)) {
-                                                      echo $session_fee->tuitionFee;
-                                                      //} 
-                                                      ?></td>
-                      <td style="text-align: center;"><?php //if (is_numeric($session_fee->securityFund)) {
-                                                      echo $session_fee->securityFund;
-                                                      //} 
-                                                      ?></td>
-                      <td style="text-align: center;"><?php //if (is_numeric($session_fee->otherFund)) {
-                                                      echo $session_fee->otherFund;
-                                                      //} 
-                                                      ?></td>
+                      <td style="text-align: center; display: none;"><?php //if (is_numeric($session_fee->addmissionFee)) {
+                                                                      echo $session_fee->addmissionFee;
+                                                                      //} 
+                                                                      ?></td>
+                      <td style="text-align: center; "><?php //if (is_numeric($session_fee->tuitionFee)) {
+                                                        echo $session_fee->tuitionFee;
+                                                        //} 
+                                                        ?></td>
+                      <td style="text-align: center; display: none;"><?php //if (is_numeric($session_fee->securityFund)) {
+                                                                      echo $session_fee->securityFund;
+                                                                      //} 
+                                                                      ?></td>
+                      <td style="text-align: center; display: none;"><?php //if (is_numeric($session_fee->otherFund)) {
+                                                                      echo $session_fee->otherFund;
+                                                                      //} 
+                                                                      ?></td>
 
 
 
@@ -205,7 +227,7 @@
 
               </table>
 
-              <div class="col-sm-8">
+              <div class="col-sm-12">
                 <?php
                 $query = "SELECT * FROM `fee_mentioned_in_form_or_prospectus` WHERE school_id = '" . $school_id . "'";
                 $fee_mention = $this->db->query($query)->result()[0];

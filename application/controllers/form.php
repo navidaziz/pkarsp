@@ -24,6 +24,7 @@ class Form extends MY_Controller
 					, `schools`.`level_of_school_id`
 					, `schools`.`gender_type_id` 
 					, `school`.`reg_type_id`
+					, `schools`.`biseRegister`
 				FROM
 					`schools`
 					INNER JOIN `school` 
@@ -769,7 +770,7 @@ class Form extends MY_Controller
 		$query = "SELECT * FROM `session_fee_submission_dates` WHERE session_id = '" . $session_id . "'";
 		$this->data['session_fee_submission_dates'] = $this->db->query($query)->result();
 
-		$query = "SELECT MAX(tuitionFee) as max_tution_fee  FROM `fee` WHERE school_id= '" . $school_id . "'";
+		$query = "SELECT max(CONVERT(tuitionFee, SIGNED INTEGER)) as max_tution_fee  FROM `fee` WHERE school_id= '" . $school_id . "'";
 		$this->data['max_tuition_fee'] = $max_tuition_fee = preg_replace(
 			'/[^0-9.]/',
 			'',
@@ -924,7 +925,7 @@ class Form extends MY_Controller
 		$query = "SELECT * FROM `session_fee_submission_dates` WHERE session_id = '" . $session_id . "'";
 		$this->data['session_fee_submission_dates'] = $this->db->query($query)->result();
 
-		$query = "SELECT MAX(tuitionFee) as max_tution_fee  FROM `fee` WHERE school_id= '" . $school_id . "'";
+		$query = "SELECT max(CONVERT(tuitionFee, SIGNED INTEGER)) as max_tution_fee  FROM `fee` WHERE school_id= '" . $school_id . "'";
 		$this->data['max_tuition_fee'] = $max_tuition_fee = preg_replace(
 			'/[^0-9.]/',
 			'',
@@ -1034,7 +1035,7 @@ class Form extends MY_Controller
 		$query = "SELECT * FROM `session_fee_submission_dates` WHERE session_id = '" . $session_id . "'";
 		$this->data['session_fee_submission_dates'] = $this->db->query($query)->result();
 
-		$query = "SELECT MAX(tuitionFee) as max_tution_fee  FROM `fee` WHERE school_id= '" . $school_id . "'";
+		$query = "SELECT max(CONVERT(tuitionFee, SIGNED INTEGER)) as max_tution_fee  FROM `fee` WHERE school_id= '" . $school_id . "'";
 		$this->data['max_tuition_fee'] = $max_tuition_fee = preg_replace(
 			'/[^0-9.]/',
 			'',
@@ -1071,7 +1072,7 @@ class Form extends MY_Controller
 		$query = "SELECT * FROM `session_fee_submission_dates` WHERE session_id = '" . $session_id . "'";
 		$this->data['session_fee_submission_dates'] = $this->db->query($query)->result();
 
-		$query = "SELECT MAX(tuitionFee) as max_tution_fee  FROM `fee` WHERE school_id= '" . $school_id . "'";
+		$query = "SELECT max(CONVERT(tuitionFee, SIGNED INTEGER)) as max_tution_fee  FROM `fee` WHERE school_id= '" . $school_id . "'";
 		$this->data['max_tuition_fee'] = $max_tuition_fee = preg_replace(
 			'/[^0-9.]/',
 			'',
@@ -1109,7 +1110,7 @@ class Form extends MY_Controller
 		$query = "SELECT * FROM `session_fee_submission_dates` WHERE session_id = '" . $session_id . "'";
 		$this->data['session_fee_submission_dates'] = $this->db->query($query)->result();
 
-		$query = "SELECT MAX(tuitionFee) as max_tution_fee  FROM `fee` WHERE school_id= '" . $school_id . "'";
+		$query = "SELECT max(CONVERT(tuitionFee, SIGNED INTEGER)) as max_tution_fee  FROM `fee` WHERE school_id= '" . $school_id . "'";
 		$this->data['max_tuition_fee'] = $max_tuition_fee = preg_replace(
 			'/[^0-9.]/',
 			'',

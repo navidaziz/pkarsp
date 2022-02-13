@@ -41,13 +41,14 @@
     <section>
       <div class="container">
         <div class="row">
+          <h3 style="text-align: center;">PSRA Institute Registration Section A</h3>
           <form class="" method="post" enctype="multipart/form-data" id="create_form" action="<?php echo base_url('add_school/process_data'); ?>">
 
 
 
             <div class="col-md-4">
               <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 10px; background-color: white;">
-                <h4>Institute Detail</h4>
+                <h4>Institute Details</h4>
                 <div class="box-body">
 
                   <input type="hidden" name="reg_type_id" value="1">
@@ -150,7 +151,7 @@
                       </script>
                     </tr>
                   </table>
-                  <h4>Institute Address Detail</h4>
+                  <h4>Institute Address Details</h4>
                   <table style="width: 100%;">
                     <tr>
                       <td>District</td>
@@ -202,7 +203,12 @@
                       </td>
                     </tr>
                   </table>
-                  <h4>Institute Owner Detail</h4>
+                  <h4>Institute Owner Detail <small class="pull-right"><strong style="color:red"> انسٹی ٹیوٹ کے مالک کی تفصیلات </strong></small></h4>
+                  <p style="text-align: center; color:red; font-family: 'Noto Nastaliq Urdu';">
+
+                    تفصیل وہی ہونی چاہیے جو اسٹامپ پیپر میں لکھی گئی ہو۔
+
+                  </p>
                   <table class="table">
                     <tr>
                       <td>Owner Name</td>
@@ -228,7 +234,7 @@
                     <tr>
                       <td>Address</td>
                       <td>
-                        <input type="text" name="woner_address" value="" required />
+                        <input type="text" name="owner_address" value="" required />
 
 
                       </td>
@@ -243,7 +249,7 @@
             <div class="col-md-4">
               <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height:500px;  margin: 5px; padding: 10px; background-color: white;">
                 <div class="box-body">
-                  <h4>Institute Others Detail</h4>
+                  <h4>Institute Others Details</h4>
                   <table class="table">
                     <tr>
                       <td colspan="2">
@@ -266,9 +272,10 @@
                         <strong>Institute Level (Current)</strong><br />
 
                         <?php foreach ($level_of_institute as $item) : ?>
+                          <span style="margin-left: 10px;"></span>
                           <input type="radio" name="level_of_school_id" value="<?= $item->levelofInstituteId; ?>" required />
                           <?= $item->levelofInstituteTitle; ?>
-                          <br />
+
                         <?php endforeach; ?>
 
                       </td>
@@ -346,45 +353,13 @@
             <div class="col-md-4">
               <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 586px;  margin: 5px; padding: 10px; background-color: white;">
                 <div class="box-body">
-                  <h4>BISE Registration Detail</h4>
-                  <strong>BISE Registered</strong>
-                  <input onclick="$('#bise_registration_date').show(); $('#biseregistrationNumber').prop('required', true);" type="radio" value="Yes" name="biseRegister" required /> Yes
-                  <input onclick="$('#bise_registration_date').hide(); $('#biseregistrationNumber').prop('required', false);" type="radio" value="No" name="biseRegister" required /> No
 
 
-                  <div id="bise_registration_date" style="display: none;">
-                    <p>Write date of last registration as per your level of school.</p>
-                    <table class="table table-bordered">
-                      <tr>
-                        <td>Registration No.</td>
-                        <td> <input type="text" placeholder="Registration Number" name="biseregistrationNumber" id="biseregistrationNumber" />
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td>Primary:</td>
-                        <td> <input type="date" id="primaryRegDate" name="primaryRegDate" /> </td>
-                      </tr>
-                      <tr>
-                        <td>Middle:</td>
-                        <td> <input type="date" id="middleRegDate" name="middleRegDate" /> </td>
-                      </tr>
-                      <tr>
-                        <td>High:</td>
-                        <td> <input type="date" id="highRegDate" name="highRegDate" /> </td>
-                      </tr>
-                      <tr>
-                        <td>H.Secy/Inter College:</td>
-                        <td> <input type="date" id="interRegDate" name="interRegDate" /> </td>
-                      </tr>
-                    </table>
-                  </div>
-
-                  <h4>BISE Affiliation Detail</h4>
+                  <h4>BISE Affiliation / Registration Details</h4>
 
                   <strong>Affiliated with BISE? </strong>
-                  <input onclick="$('#bise_affiliation').show(); $('.bise_id').prop('required', true);" type="radio" value="Yes" name="biseAffiliated" required /> Yes
-                  <input onclick="$('#bise_affiliation').hide(); $('.bise_id').prop('required', false);" type="radio" value="No" name="biseAffiliated" required /> No
+                  <input onclick="$('#bise_affiliation').show(); $('.bise_id').prop('required', true); $('.biseRegister').prop('required', true); " type="radio" value="Yes" name="biseAffiliated" required /> Yes
+                  <input onclick="$('#bise_affiliation').hide(); $('.bise_id').prop('required', false); $('.biseRegister').prop('required', false); " type="radio" value="No" name="biseAffiliated" required /> No
                   <div id="bise_affiliation" style="display: none;">
                     <br />
 
@@ -406,7 +381,39 @@
                       <?php  } ?>
                       <br />
                     <?php endforeach; ?>
+                    <h4>BISE Registration Details</h4>
+                    <strong>BISE Registered</strong>
+                    <input onclick="$('#bise_registration_date').show(); $('#biseregistrationNumber').prop('required', true);" type="radio" value="Yes" name="biseRegister" class="biseRegister" required /> Yes
+                    <input onclick="$('#bise_registration_date').hide(); $('#biseregistrationNumber').prop('required', false);" type="radio" value="No" name="biseRegister" class="biseRegister" required /> No
 
+
+                    <div id="bise_registration_date" style="display: none;">
+                      <p>Write date of last registration as per your level of school.</p>
+                      <table class="table table-bordered">
+                        <tr>
+                          <td>Registration No.</td>
+                          <td> <input type="text" placeholder="Registration Number" name="biseregistrationNumber" id="biseregistrationNumber" />
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td>Primary:</td>
+                          <td> <input type="date" id="primaryRegDate" name="primaryRegDate" /> </td>
+                        </tr>
+                        <tr>
+                          <td>Middle:</td>
+                          <td> <input type="date" id="middleRegDate" name="middleRegDate" /> </td>
+                        </tr>
+                        <tr>
+                          <td>High:</td>
+                          <td> <input type="date" id="highRegDate" name="highRegDate" /> </td>
+                        </tr>
+                        <tr>
+                          <td>H.Secy/Inter College:</td>
+                          <td> <input type="date" id="interRegDate" name="interRegDate" /> </td>
+                        </tr>
+                      </table>
+                    </div>
 
                   </div>
                   <h4>Institute Bank Detail </h4>

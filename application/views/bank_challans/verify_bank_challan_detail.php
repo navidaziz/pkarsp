@@ -155,21 +155,52 @@
               </td>
             </tr>
 
+            <?php
+            $query = "SELECT * FROM `bise_verification_requests` WHERE school_id = '" . $session_bank_challan->schools_id . "' AND status IN(1,2,0)";
+            $bise_verification = $this->db->query($query)->result();
+            if ($bise_verification and $bise_verification[0]->status == 1 or $bise_verification[0]->status == 2) {
+              $bise_tdr = $bise_verification[0]->tdr_amount;
+            } else {
+              $bise_tdr = 0;
+            }
+
+            ?>
+
+
+
             <?php if (strtolower($session_bank_challan->biseRegister) == 'yes' and  $session_bank_challan->challan_for == 'Registration') { ?>
               <tr>
-                <td>
-                  Verifiy BISE Information
-                </td>
-                <td><strong>BISE REG ID: <?php echo $session_bank_challan->biseregistrationNumber; ?></strong><span style="margin-left:10px ;"></span>
-                  <input onclick="$('#bise_tdr_span').show();$('#bise_tdr').prop('required',true);" type="radio" name="bise_verified" value="Yes" required /> Verified
-                  <input onclick="$('#bise_tdr_span').hide();$('#bise_tdr').prop('required',false);" type="radio" name="bise_verified" value="No" required /> Not Verified <br />
-                  <span id="bise_tdr_span" style="display: none;">
-                    TDR Amount: <input min="0" type="number" id="bise_tdr" name="bise_tdr" value="" />
-                  </span>
+                <td colspan="2">
+                  <h5 style="text-align: center;">
+                    BISE Registration No. <?php echo $session_bank_challan->biseregistrationNumber; ?><br />
+                    BISE Affiliation. <?php
+                                      $query = "SELECT `bise`.`biseName` FROM `bise` WHERE `bise`.`biseId` = '" . $bise_verification[0]->bise_id . "'";
+                                      $bise_affiliation_name = $this->db->query($query)->result()[0]->biseName;
 
+                                      echo $bise_affiliation_name; ?><br />
+                    Verification Status:
+                    <?php if ($bise_verification[0]->status == 1) { ?>
+                      <strong style="color:green"> Verified </strong>
+                      <?php if ($bise_verification[0]->tdr_amount) { ?>
+                        <br />
+                        BISE TDR Received: <strong><?php
+                                                    $bise_tdr = $bise_verification[0]->tdr_amount;
+
+                                                    echo $bise_verification[0]->tdr_amount; ?> Rs.</strong>
+                      <?php } ?>
+                    <?php } ?>
+                    <?php if ($bise_verification[0]->status == 2) { ?>
+                      <strong style="color:red">Not Verified</strong> <br />
+                      <small>Remraks: <?php echo $bise_verification[0]->remarks; ?></small>
+                    <?php } ?>
+
+                  </h5>
                 </td>
+
               </tr>
             <?php } ?>
+
+            <input min="0" type="hidden" id="bise_tdr" name="bise_tdr" value="<?php echo $bise_tdr; ?>" />
 
             <tr>
               <td colspan="2" style="text-align: center;">

@@ -72,7 +72,7 @@
               <div class="col-md-3">
 
                 <div style=" font-size: 16px; border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 10px; padding: 10px; background-color: white;">
-                  <h3>Buliding Detail</h3>
+                  <h3>Building Detail</h3>
                   <?php foreach ($buildings as $building) : ?>
                     <input <?php if ($building->physicalBuildingId == 2) { ?> onclick="$('#building_rent').show(); $( '#rent_amount' ).val(''); $( '#rent_amount' ).prop('required',true);" <?php } else { ?> onclick="$('#building_rent').hide(); $( '#rent_amount' ).val(''); $( '#rent_amount' ).prop('required',false);" <?php } ?> type="radio" value="<?php echo $building->physicalBuildingId; ?>" <?php if ($building->physicalBuildingId == $school_physical_facilities->building_id) { ?> checked <?php  } ?> name="building_id" required />
                     <strong> <?php echo $building->physicalBuildingTitle; ?> </strong>
@@ -239,7 +239,7 @@
                         ?>
                         <span id="total_number_of_computer" style="<?php if (!in_array($academic->academicId, $academic_ids)) {  ?>display: none; <?php } ?>">
                           <span style="margin-left: 20px;"></span>
-                          ( Number of Computers: <input style="width: 50px;" type="number" name="numberOfComputer" placeholder="10" id="numberOfComputer" value="<?php echo $school_physical_facilities->numberOfComputer; ?>" />)
+                          ( Number of Computers: <input style="width: 50px;" type="number" name="numberOfComputer" placeholder="0" id="numberOfComputer" value="<?php echo $school_physical_facilities->numberOfComputer; ?>" />)
                         </span>
                         <?php // endif; 
                         ?>

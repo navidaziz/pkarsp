@@ -27,21 +27,21 @@
         <th>Fee Types</th>
         <th>Total</th>
       </tr>
-      <tr>
+      <tr style="display: none;">
         <th>Admission Fee</th>
-        <td><input required min="0" type="number" name="addmissionFee" value="<?php echo $class_fees->addmissionFee; ?>" /> Rs.</td>
+        <td><input min="0" type="number" name="addmissionFee" value="<?php echo $class_fees->addmissionFee; ?>" /> Rs.</td>
       </tr>
       <tr>
         <th>Tuition Fee</th>
         <td><input required min="0" type="number" name="tuitionFee" value="<?php echo $class_fees->tuitionFee; ?>" /> Rs.</td>
       </tr>
-      <tr>
+      <tr style="display: none;">
         <th>Security Fee</th>
-        <td><input required min="0" type="number" name="securityFund" value="<?php echo $class_fees->securityFund; ?>" /> Rs.</td>
+        <td><input min="0" type="number" name="securityFund" value="<?php echo $class_fees->securityFund; ?>" /> Rs.</td>
       </tr>
-      <tr>
+      <tr style="display: none;">
         <th>Others Fee</th>
-        <td><input required min="0" type="number" name="otherFund" value="<?php echo $class_fees->otherFund; ?>" /> Rs.</td>
+        <td><input min="0" type="number" name="otherFund" value="<?php echo $class_fees->otherFund; ?>" /> Rs.</td>
       </tr>
       <tr>
         <th colspan="2" style="text-align: center;">

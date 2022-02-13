@@ -77,7 +77,7 @@
                 <div class="form-group">
                   <label for="email">Email Address</label>
                   <i class="fa fa-envelope"></i>
-                  <input type="email" class="form-control" id="email_address" name="email_address" value="<?php echo set_value('email_address', $email_address); ?>">
+                  <input required type="email" class="form-control" id="email_address" name="email_address" value="<?php echo set_value('email_address', $email_address); ?>">
                 </div>
                 <div>
 
