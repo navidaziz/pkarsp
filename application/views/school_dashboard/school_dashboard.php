@@ -333,9 +333,52 @@
                           <td><?php echo $upgradation_and_renewal->regTypeTitle; ?></td>
                           <td><?php echo $upgradation_and_renewal->levelofInstituteTitle; ?></td>
                           <td>
-                            <?php if ($upgradation_and_renewal->status == 0) { ?>
+                            <?php if ($upgradation_and_renewal->status == 0) {
 
-                              <a class="btn btn-success" href="<?php echo site_url("form/section_b/$upgradation_and_renewal->school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Renewal Process</a>
+                              $query = "SELECT * FROM `forms_process` WHERE  `forms_process`.`school_id` = $upgradation_and_renewal->school_id";
+
+                              $form_stauts = $this->db->query($query)->result()[0];
+                              if (
+                                $form_stauts->form_b_status == 1
+                                and $form_stauts->form_c_status == 1
+                                and $form_stauts->form_d_status == 1
+                                and $form_stauts->form_e_status == 1
+                                and $form_stauts->form_f_status == 1
+                                and $form_stauts->form_g_status == 1
+                                and $form_stauts->form_h_status == 1
+                              ) {
+                                $page_link = 'submit_bank_challan';
+                              } else {
+                                $page_link = 'section_b';
+                              }
+
+                              if ($form_stauts->form_b_status == 1) {
+                                $page_link = 'section_c';
+                              }
+                              if ($form_stauts->form_c_status == 1) {
+                                $page_link = 'section_d';
+                              }
+                              if ($form_stauts->form_d_status == 1) {
+                                $page_link = 'section_e';
+                              }
+                              if ($form_stauts->form_e_status == 1) {
+                                $page_link = 'section_f';
+                              }
+                              if ($form_stauts->form_f_status == 1) {
+                                $page_link = 'section_g';
+                              }
+                              if ($form_stauts->form_g_status == 1) {
+                                $page_link = 'section_h';
+                              }
+                              if ($form_stauts->form_h_status == 1) {
+                                $page_link = 'submit_bank_challan';
+                              }
+
+
+
+                            ?>
+
+                              <a class="btn btn-success" href="<?php echo site_url("form/$page_link/$upgradation_and_renewal->school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Renewal Process</a>
                             <?php } else {   ?>
                               <?php if ($upgradation_and_renewal->status == 1) { ?>
                                 <a target="_new" href="<?php echo site_url("school_dashboard/certificate/" . $upgradation_and_renewal->schools_id . "/" . $upgradation_and_renewal->school_id . "/" . $upgradation_and_renewal->session_year_id); ?>">Print Certificate<a>
@@ -537,21 +580,144 @@
                   ?>
                   <?php if ($registration) { ?>
                     <?php if ($registration[0]->status == 0) { ?>
+
+                      <?php $query = "SELECT * FROM `forms_process` WHERE  `forms_process`.`school_id` = $session_school_id";
+
+                      $form_stauts = $this->db->query($query)->result()[0];
+
+                      $page_link = 'submit_bank_challan';
+                      if ($form_stauts->form_b_status == 0) {
+                        $page_link = 'section_b';
+                      }
+                      if ($form_stauts->form_c_status == 0) {
+                        $page_link = 'section_c';
+                      }
+                      if ($form_stauts->form_d_status == 0) {
+                        $page_link = 'section_d';
+                      }
+                      if ($form_stauts->form_e_status == 0) {
+                        $page_link = 'section_e';
+                      }
+                      if ($form_stauts->form_f_status == 0) {
+                        $page_link = 'section_f';
+                      }
+                      if ($form_stauts->form_g_status == 0) {
+                        $page_link = 'section_g';
+                      }
+                      if ($form_stauts->form_h_status == 0) {
+                        $page_link = 'section_h';
+                      }
+                      ?>
+
+
                       <h4>Registration Application not complete yet !</h4>
-                      <small>
-                        Please complete registration form by filling data in all the sections B,C,D,E,F,G,H forms. Deposit amount shown in bank challan. Submit online STAN and Date.
-                      </small>
-                      <a class="btn btn-success" href="<?php echo site_url("form/section_b/$session_school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Registration Process for <?php echo $session->sessionYearTitle; ?></a>
+                      <?php if ($page_link != 'submit_bank_challan') { ?>
+                        <p>
+                          Please complete registration form by filling data in all the sections B,C,D,E,F,G,H forms.
+                        </p>
+                        <p style="font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif; direction: rtl; line-height: 25px;">
+                          براہ کرم تمام سیکشنز B,C,D,E,F,G,H فارمز میں ڈیٹا بھر کر رجسٹریشن فارم مکمل کریں۔
+                        </p>
+                      <?php } else { ?>
+                        <?php
+                        $biseverification = 0;
+                        // $bise_verificaiton = 0;
+                        if ($school->biseRegister == 'Yes') {
+                          $biseverification = '1';
+                          $query = "SELECT * FROM `bise_verification_requests` WHERE school_id = '" . $school->schoolId . "' AND status IN(1,2,0)";
+                          $bise_verification = $this->db->query($query)->result();
+
+                          if ($bise_verification and $bise_verification[0]->status == 1 or $bise_verification[0]->status == 2) {
+                            $biseverified = 1;
+                          } else {
+                            $biseverified = 0;
+                          }
+                        } else {
+                          $biseverified = 1;
+                        }
+                        if ($biseverified == 1) {
+                        } else { ?>
+
+                          <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 0px auto; width:100%; padding: 5px; background-color: white;">
+                            <h3 style="text-align: center;">BISE Verificaiton In Progress </h3>
+                            <h4 style="text-align: center;">
+                              BISE Registration No. <?php echo $bise_verification[0]->registration_number; ?><br />
+                              BISE Affiliation. <?php
+                                                $query = "SELECT `bise`.`biseName` FROM `bise` WHERE `bise`.`biseId` = '" . $bise_verification[0]->bise_id . "'";
+                                                $bise_affiliation_name = $this->db->query($query)->result()[0]->biseName;
+
+                                                echo $bise_affiliation_name; ?><br />
+                              Verification Status: <strong style="color:red">Pending</strong>
+                              <h2 style="text-align: center;"><i class="fa fa-spinner" aria-hidden="true"></i></h2>
+                              <p style="text-align: center;">
+                                <strong>
+                                  Your case will proceed further, after verification of BISE Registration / Affiliation. Keep visiting school portal. it will take 1,2 working days.
+
+                                  <br />
+                                  <p style="text-align: center; font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif; line-height: 30px; direction: rtl;">
+                                    آپ کا کیس BISE رجسٹریشن / الحاق کی تصدیق کے بعد آگے بڑھے گا۔ اسکول کے پورٹل کو وزٹ کرتے رہیں۔ اس میں 1,2 کام کے دن لگیں گے۔</p>
+                                </strong>
+                              </p>
+                            </h4>
+
+                          </div>
+                          <br />
+
+                        <?php  }  ?>
+
+
+                      <?php } ?>
+
+                      <a class="btn btn-success" href="<?php echo site_url("form/$page_link/$session_school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Registration Process for <?php echo $session->sessionYearTitle; ?></a>
                     <?php } else { ?>
-                      <a class="btn btn-success" href="<?php echo site_url("online_application/status/$session_school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> <?php echo $session->sessionYearTitle; ?> Check Application Status</a>
+                      <h4>Your Application for Registration <?php echo $session->sessionYearTitle; ?> is In Progress </h4>
+                      <strong>
+                        <?php
+
+                        switch ($registration[0]->status) {
+                          case 0:
+                            echo "Data Entery In Progress";
+                            break;
+                          case 2:
+                            echo "Bank Challan Verification In Progress";
+                            break;
+                          case 3:
+                            echo "Data Verification";
+                            break;
+                          case 4:
+                            echo "Fowarded for Inspection Assignment";
+                            break;
+                          case 4:
+                            echo "Inspection pending";
+                            break;
+                          case 5:
+                            echo "Inspection Completed";
+                            break;
+
+                          case 8:
+                            echo "Challan Not Verified";
+                            break;
+                          case 1:
+                            echo "completed";
+                            break;
+                        }
+                        ?>
+
+                      </strong><br />
+                      <br />
+                      <a class="btn btn-success" href="<?php echo site_url("online_application/status/$session_school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Check Application Status </a>
                     <?php } ?>
                   <?php } else { ?>
                     <h4>Now Apply for Registration with PSRA</h4>
-                    <small>Note:
+                    <p>Note:
 
-                      As your school was established in <strong> <?php echo date("M, Y", strtotime($school->yearOfEstiblishment)); ?> </strong> , therefore you should register you school with PSRA for session <strong> <?php echo $session->sessionYearTitle; ?></strong>
+                      As your school was established in <strong> <?php echo date("M, Y", strtotime($school->yearOfEstiblishment)); ?> </strong> , therefore you should register your school with PSRA for session <strong> <?php echo $session->sessionYearTitle; ?></strong>
 
-                    </small><br />
+                    </p><br />
+                    <p style="font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif; direction: rtl; line-height: 25px;">
+                      اب PSRA کے ساتھ رجسٹریشن کے لیے درخواست دیں۔
+                      چونکہ آپ کا اسکول <strong> <?php echo date("M, Y", strtotime($school->yearOfEstiblishment)); ?> </strong> میں قائم ہوا تھا، اس لیے آپ کو اپنے اسکول کو <strong> <?php echo $session->sessionYearTitle; ?></strong> کے سیشن کے لیے PSRA کے ساتھ رجسٹر کرنا چاہیے۔
+                    </p>
                     <a class="btn btn-primary" href="<?php echo site_url("apply/registration/$session->sessionYearId"); ?>">Apply for Registration. <?php echo $session->sessionYearTitle; ?></a>
                   <?php } ?>
 

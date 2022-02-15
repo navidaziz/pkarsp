@@ -68,17 +68,20 @@
             <div class="col-md-3">
               <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
 
-
-                <h4 style="font-weight: bold;"> Warning</h4>
-                <p style="font-size: 16px; line-height: 22px;">No private school can charge admission fee, annual fee and capitation fee under whatever name as per KP-PSRA Regulations Act 2018 and also peshawar high court judgment in a writ petition bearing number WP-NO-1995- of 2020 Dated 14.12.2021</p>
-
-                <br />
-
                 <div style="font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif !important; direction: rtl; line-height: 30px;">
                   <h4 style="font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif !important; direction: rtl;"> ضروری انتباہ
                   </h4>
                   KP-PSRA ریگولیشنز ایکٹ 2018 کے مطابق کوئی بھی پرائیویٹ اسکول داخلہ فیس، سالانہ فیس اور کیپٹیشن فیس کسی بھی نام سے نہیں لے سکتا اور پشاور ہائی کورٹ نے ایک رٹ پٹیشن میں فیصلہ دیا جس کا نمبر WP-NO-1995- 2020 مورخہ 14.12.2021 ہے۔
                 </div>
+
+                <br />
+
+                <h4 style="font-weight: bold;"> Warning</h4>
+                <p style="font-size: 16px; line-height: 22px;">No private school can charge admission fee, annual fee and capitation fee under whatever name as per KP-PSRA Regulations Act 2018 and also peshawar high court judgment in a writ petition bearing number WP-NO-1995- of 2020 Dated 14.12.2021</p>
+
+
+
+
               </div>
             </div>
             <div class="col-md-9">

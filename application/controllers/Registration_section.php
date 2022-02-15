@@ -31,7 +31,13 @@ class Registration_section extends Admin_Controller
 		`session_year`.`sessionYearId`,
 		`school`.`status`,
 		`reg_type`.`regTypeTitle`,
-		`school`.`schoolId` as school_id
+		`school`.`schoolId` as school_id,
+
+		(SELECT s.status
+		FROM school as s WHERE 
+		 s.schools_id = `schools`.`schoolId`
+		AND  s.session_year_id = (`school`.`session_year_id`-1)) as previous_session_status
+
 		FROM
 		`school`,
 		`schools`,
@@ -45,6 +51,8 @@ class Registration_section extends Admin_Controller
 		if ($request_type) {
 			$query .= "AND `school`.`reg_type_id`= $request_type";
 		}
+
+
 		if ($title) {
 			$this->data['title'] = $status . " - " . $title;
 		}
@@ -223,6 +231,41 @@ class Registration_section extends Admin_Controller
 		$schools_id = (int) $this->input->post('schools_id');
 		$school_id = (int) $this->input->post('school_id');
 		$session_id = (int) $this->input->post('session_id');
+
+		$query = "SELECT school.session_year_id, 
+		school.status, 
+		session_year.sessionYearTitle 
+		FROM school, session_year 
+		WHERE 
+		school.session_year_id = session_year.sessionYearId
+		AND schools_id = '" . $schools_id . "' 
+		AND  session_year_id = '" . ($session_id - 1) . "'";
+		$previous_session = $this->db->query($query)->result()[0];
+
+		if ($previous_session->status != 1) {
+			$reponse['status'] = 0;
+			$reponse['message'] = "<span style=\"color:red\">Renewal can not granted because previous session " . $previous_session->sessionYearTitle . " Renewal Pending.</span>";
+			echo json_encode($reponse);
+			exit();
+		}
+
+		$query = "SELECT school.session_year_id, 
+		school.status, 
+		session_year.sessionYearTitle 
+		FROM school, session_year 
+		WHERE 
+		school.session_year_id = session_year.sessionYearId
+		AND schools_id = '" . $schools_id . "' 
+		AND  session_year_id = '" . ($session_id) . "'";
+		$previous_session = $this->db->query($query)->result()[0];
+
+		if ($previous_session->status != 3) {
+			$reponse['status'] = 0;
+			$reponse['message'] = "<span style=\"color:red\">Renewal can not granted beacause the request status is " . $previous_session->status . "</span>";
+			echo json_encode($reponse);
+			exit();
+		}
+
 
 		$selected_levels = $this->input->post('renewal_levels');
 
@@ -526,9 +569,9 @@ class Registration_section extends Admin_Controller
 			'',
 			$this->db->query($query)->result()[0]->max_tution_fee
 		);
-		$query = "SELECT fee_min, fee_max, renewal_app_processsing_fee, renewal_app_inspection_fee, renewal_fee 
-		FROM `fee_structure` WHERE fee_min <= $max_tuition_fee ORDER BY fee_min DESC LIMIT 1";
-		$this->data['fee_sturucture'] = $this->db->query($query)->result()[0];
+		// $query = "SELECT fee_min, fee_max, renewal_app_processsing_fee, renewal_app_inspection_fee, renewal_fee 
+		// FROM `fee_structure` WHERE fee_min <= $max_tuition_fee ORDER BY fee_min DESC LIMIT 1";
+		// $this->data['fee_sturucture'] = $this->db->query($query)->result()[0];
 
 
 
@@ -749,7 +792,7 @@ class Registration_section extends Admin_Controller
 						ON (
 						`genderofschool`.`genderOfSchoolId` = `schools`.`gender_type_id`
 						)
-					INNER JOIN `school_type`
+					LEFT JOIN `school_type`
 						ON (
 						`schools`.`school_type_id` = `school_type`.`typeId`
 						)

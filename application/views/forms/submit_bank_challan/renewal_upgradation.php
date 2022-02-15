@@ -272,30 +272,41 @@
               </div>
             </div>
             <div class="col-md-6">
-              <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px;">
-                <h4>Submit bank challan for upgradation + renewal session <?php echo $session_detail->sessionYearTitle; ?></h4>
-                <form action="<?php echo site_url("form/add_bank_challan"); ?>" method="post">
-                  <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
-                  <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
-                  <input type="hidden" name="schools_id" value="<?php echo $schools_id; ?>" />
-                  <input type="hidden" name="challan_for" value="Renewal Upgradation" />
-                  <table class="table table-bordered">
-                    <tr>
-                      <td>Bank Transaction No (STAN)</td>
-                      <td>Bank Transaction Date</td>
-                    </tr>
-                    <tr>
-                      <td><input required maxlength="6" name="challan_no" type="number" autocomplete="off" class="form-control" />
-                        <small>"STAN can be found on the upper right corner of bank generated receipt"</small>
-                      </td>
-                      <td><input required name="challan_date" type="date" class="form-control" />
-                      </td>
-                      <td><input type="submit" class="btn btn-success" name="submit" value="Submit Bank Challan" />
-                      </td>
-                    </tr>
-                  </table>
-                </form>
-              </div>
+              <?php echo $query = "SELECT session_year_id, status FROM school WHERE reg_type_id = 2 AND  session_year_id = '" . ($session_id - 1) . "'";
+              $previous_session = $this->db->query($query)->result()[0];
+              var_dump($previous_session);
+              if ($previous_session->status == 0) {
+              ?>
+                <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px;">
+                  Session Pending....
+                </div>
+              <?php } else { ?>
+                <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px;">
+                  <h4>Submit bank challan for upgradation + renewal session <?php echo $session_detail->sessionYearTitle; ?></h4>
+                  <form action="<?php echo site_url("form/add_bank_challan"); ?>" method="post">
+                    <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
+                    <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
+                    <input type="hidden" name="schools_id" value="<?php echo $schools_id; ?>" />
+                    <input type="hidden" name="challan_for" value="Renewal Upgradation" />
+                    <table class="table table-bordered">
+                      <tr>
+                        <td>Bank Transaction No (STAN)</td>
+                        <td>Bank Transaction Date</td>
+                      </tr>
+                      <tr>
+                        <td><input required maxlength="6" name="challan_no" type="number" autocomplete="off" class="form-control" />
+                          <small>"STAN can be found on the upper right corner of bank generated receipt"</small>
+                        </td>
+                        <td><input required name="challan_date" type="date" class="form-control" />
+                        </td>
+                        <td><input type="submit" class="btn btn-success" name="submit" value="Submit Bank Challan" />
+                        </td>
+                      </tr>
+                    </table>
+                  </form>
+                </div>
+
+              <?php } ?>
             </div>
           </div>
         </div>

@@ -236,7 +236,7 @@
                       <th> Due's Date </th>
                       <th> Late Fee % </th>
                       <th> Late Fee </th>
-                      <th> Total </th>
+                      <th>Session <?php echo $session_detail->sessionYearTitle; ?> Registration Fee </th>
 
                       <?php
                       $query = "SELECT * FROM `levelofinstitute` 
@@ -297,16 +297,17 @@
                           <?php } ?>
                         <?php } ?>
                         <td>
-                          <?php if ($session_id == 1) { ?>
-                            <?php
-                            echo number_format($fine + $total + $security + $specialfine);
-                            ?>
+                          <strong>
+                            <?php if ($session_id == 1) { ?>
+                              <?php
+                              echo number_format($fine + $total + $security + $specialfine);
+                              ?>
 
-                          <?php } else { ?>
+                            <?php } else { ?>
 
-                            <?php echo number_format($fine + $total + $security); ?>
-                          <?php } ?>
-
+                              <?php echo number_format($fine + $total + $security); ?>
+                            <?php } ?>
+                          </strong>
                         </td>
 
                       </tr>

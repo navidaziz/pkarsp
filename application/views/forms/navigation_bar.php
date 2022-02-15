@@ -59,5 +59,5 @@
         براہ کرم اس بینک چالان کا پرنٹ آؤٹ لیں اور فیس خیبر کی کسی بھی بینک میں جمع کرائیں۔ بینک کے ذریعہ فراہم کردہ STAN نمبر (کمپیوٹرائزڈ بینک چالان کے اوپر دائیں طرف دکھایا گیا ہے) اور لین دین کی تاریخ کے ساتھ کمپیوٹرائزڈ بینک چالان لیں۔ ذیل میں دکھائے گئے فیلڈ میں STAN نمبر اور لین دین کی تاریخ لکھیں اور جمع پر کلک کریں۔
     </p> -->
 <?php } else { ?>
-    <p style="text-align: center; color:green; font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif; ">Next section will be opened after completing this section. اس سیکشن کو مکمل کرنے کے بعد اگلا سیکشن کھولا جائے گا۔</p>
+    <p style="text-align: center; color:green; font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif; ">Next section will be opened after completing this section. اگلے سیکشن میں جانے کے لیے، پہلے اس سیکشن کو پُر کریں۔</p>
 <?php } ?>

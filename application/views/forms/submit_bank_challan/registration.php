@@ -88,124 +88,160 @@
             </form>
 
             <div class="row">
+              <div class="col-md-7" style="padding-right: 1px;  padding-left: 10px;">
+                <div class="col-md-6" style="padding-right: 1px;  padding-left: 10px;">
 
-              <div class="col-md-4" style="padding-right: 1px;  padding-left: 10px;">
+                  <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
+                    <h4> <i class="fa fa-info-circle" aria-hidden="true"></i> How system calculates <i>"Deposit Fee Challan" ?</i></h4>
+                    <ol>
+                      <li>According to the data you have entered, your institute was established in <strong><?php echo date('M Y', strtotime($school->yearOfEstiblishment)); ?></strong>.
+                        For session <strong><?php echo $session_detail->sessionYearTitle; ?></strong> your institute
+                        charged Max Tuition Fee
+                        <strong><?php echo $max_tuition_fee; ?> Rs. </strong> per month.
+                      </li>
+                      <li>As per PSRA Registration and Renewal Fee Structure, Institute charging monthly fee between
+                        <strong><?php echo $fee_sturucture->fee_min; ?> Rs. </strong> and <strong> <?php echo $fee_sturucture->fee_max; ?> Rs. </strong>
+                        Must Deposit
+                        <ol>
+                          <li> Application Processing Fee: <strong><?php echo $fee_sturucture->renewal_app_processsing_fee; ?> Rs. </strong></li>
+                          <li> Inspection Fee: <strong><?php echo $fee_sturucture->renewal_app_inspection_fee; ?> Rs.</strong></li>
+                          <li> Security Fee (1st Time Registration)
+                            <ol>
+                              <?php
+                              $query = "SELECT * FROM `levelofinstitute`";
+                              $level_securities = $this->db->query($query)->result();
+                              foreach ($level_securities as $level_security) {
+                              ?>
+                                <li><?php echo  $level_security->levelofInstituteTitle; ?> <strong> <?php echo  $level_security->security_fee; ?> Rs.</strong> </li>
+                              <?php } ?>
+                            </ol>
+                          </li>
 
-                <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
-                  <h4> <i class="fa fa-info-circle" aria-hidden="true"></i> How system calculates <i>"Deposit Fee Challan" ?</i></h4>
-                  <ol>
-                    <li>According to the data you have entered, your institute was established in <strong><?php echo date('M Y', strtotime($school->yearOfEstiblishment)); ?></strong>.
-                      For session <strong><?php echo $session_detail->sessionYearTitle; ?></strong> your institute
-                      charged Max Tuition Fee
-                      <strong><?php echo $max_tuition_fee; ?> Rs. </strong> per month.
+                      </li>
+
+                    </ol>
+                    <li>In case of confusion and queries, please contact <strong>PSRA MIS Section</strong></li>
                     </li>
-                    <li>As per PSRA Registration and Renewal Fee Structure, Institute charging monthly fee between
-                      <strong><?php echo $fee_sturucture->fee_min; ?> Rs. </strong> and <strong> <?php echo $fee_sturucture->fee_max; ?> Rs. </strong>
-                      Must Deposit
-                      <ol>
-                        <li> Application Processing Fee: <strong><?php echo $fee_sturucture->renewal_app_processsing_fee; ?> Rs. </strong></li>
-                        <li> Inspection Fee: <strong><?php echo $fee_sturucture->renewal_app_inspection_fee; ?> Rs.</strong></li>
-                        <li> Security Fee (1st Time Registration)
-                          <ol>
+                    </ol>
+                    <button onclick="renewal_fee_sturucture()" class="btn btn-link">
+                      <i class="fa fa-info-circle" aria-hidden="true"></i> PSRA Registration Fee Struture Detail</button>
+                  </div>
+                </div>
+
+                <div class="col-md-6" style="padding-right: 1px;  padding-left: 1px; min-height:450px; ">
+                  <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
+                    <h4>Session: <?php echo $session_detail->sessionYearTitle; ?> Due Dates</h4>
+                    <table class="table table-bordered">
+
+                      <tr>
+                        <th>S.No.</th>
+                        <th>Last Date</th>
+                        <th>Fines</th>
+                      </tr>
+                      <?php
+                      $count = 1;
+                      foreach ($session_fee_submission_dates as $session_fee_submission_date) { ?>
+                        <tr>
+                          <td><?php echo $count++; ?></td>
+                          <td>Upto <?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?></td>
+                          <td>
                             <?php
-                            $query = "SELECT * FROM `levelofinstitute`";
-                            $level_securities = $this->db->query($query)->result();
-                            foreach ($level_securities as $level_security) {
-                            ?>
-                              <li><?php echo  $level_security->levelofInstituteTitle; ?> <strong> <?php echo  $level_security->security_fee; ?> Rs.</strong> </li>
+                            if ($session_fee_submission_date->fine_percentage != 'fine') { ?>
+                              <?php echo $session_fee_submission_date->fine_percentage; ?> %
+                            <?php } else { ?>
+                              <?php echo $session_fee_submission_date->detail; ?>
                             <?php } ?>
-                          </ol>
-                        </li>
+                          </td>
+                        </tr>
+                      <?php }
+                      ?>
+                      <?php
+                      $pecial_fine = 0;
+                      if ($session_id == 1) { ?>
+                        <tr>
+                          <td colspan="2" style="text-align: center;">2018-19 Special Fine<br />1 Dec, 2019</td>
+                          <td>
+                            <strong>50,000 Rs.</strong> <br> Primary / Middle Level <br>
+                            <strong>200,000 Rs. </strong> <br> High / Higher Level
+                          </td>
+                        </tr>
 
-                    </li>
+                      <?php
+                        if ($school->level_of_school_id == 1  or  $school->level_of_school_id == 2) {
+                          $special_fine = 50000;
+                        }
+                        if ($school->level_of_school_id == 3  or  $school->level_of_school_id == 4) {
+                          $special_fine = 200000;
+                        }
+                      } ?>
 
-                  </ol>
-                  <li>In case of confusion and queries, please contact <strong>PSRA MIS Section</strong></li>
-                  </li>
-                  </ol>
-                  <button onclick="renewal_fee_sturucture()" class="btn btn-link">
-                    <i class="fa fa-info-circle" aria-hidden="true"></i> PSRA Registration Fee Struture Detail</button>
-                </div>
-              </div>
-
-              <div class="col-md-3" style="padding-right: 1px;  padding-left: 1px;">
-                <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
-                  <h4>Session: <?php echo $session_detail->sessionYearTitle; ?> Due Dates</h4>
-                  <table class="table table-bordered">
-
-                    <tr>
-                      <th>S.No.</th>
-                      <th>Last Date</th>
-                      <th>Fines</th>
-                    </tr>
-                    <?php
-                    $count = 1;
-                    foreach ($session_fee_submission_dates as $session_fee_submission_date) { ?>
-                      <tr>
-                        <td><?php echo $count++; ?></td>
-                        <td><?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?></td>
-                        <td>
-                          <?php
-                          if ($session_fee_submission_date->fine_percentage != 'fine') { ?>
-                            <?php echo $session_fee_submission_date->fine_percentage; ?> %
-                          <?php } else { ?>
-                            <?php echo $session_fee_submission_date->detail; ?>
-                          <?php } ?>
-                        </td>
-                      </tr>
-                    <?php }
+                    </table>
+                    <?php $bise_tdr = 0;
+                    if ($bise_verification) {
                     ?>
-                    <?php
-                    $pecial_fine = 0;
-                    if ($session_id == 1) { ?>
-                      <tr>
-                        <td colspan="2" style="text-align: center;">2018-19 Special Fine<br />1 Dec, 2019</td>
-                        <td>
-                          <strong>50,000 Rs.</strong> <br> Primary / Middle Level <br>
-                          <strong>200,000 Rs. </strong> <br> High / Higher Level
-                        </td>
-                      </tr>
+                      <h4 style="text-align: center;">
+                        BISE Registration No. <?php echo $bise_verification[0]->registration_number; ?><br />
+                        BISE Affiliation. <?php
+                                          $query = "SELECT `bise`.`biseName` FROM `bise` WHERE `bise`.`biseId` = '" . $bise_verification[0]->bise_id . "'";
+                                          $bise_affiliation_name = $this->db->query($query)->result()[0]->biseName;
 
-                    <?php
-                      if ($school->level_of_school_id == 1  or  $school->level_of_school_id == 2) {
-                        $special_fine = 50000;
-                      }
-                      if ($school->level_of_school_id == 3  or  $school->level_of_school_id == 4) {
-                        $special_fine = 200000;
-                      }
-                    } ?>
+                                          echo $bise_affiliation_name; ?><br />
+                        Verification Status:
+                        <?php if ($bise_verification[0]->status == 1) { ?>
+                          <strong style="color:green"> Verified </strong>
+                          <?php if ($bise_verification[0]->tdr_amount) { ?>
+                            <br />
+                            BISE TDR Received: <strong><?php
+                                                        $bise_tdr = $bise_verification[0]->tdr_amount;
 
-                  </table>
-                  <?php $bise_tdr = 0;
-                  if ($bise_verification) {
-                  ?>
-                    <h4 style="text-align: center;">
-                      BISE Registration No. <?php echo $bise_verification[0]->registration_number; ?><br />
-                      BISE Affiliation. <?php
-                                        $query = "SELECT `bise`.`biseName` FROM `bise` WHERE `bise`.`biseId` = '" . $bise_verification[0]->bise_id . "'";
-                                        $bise_affiliation_name = $this->db->query($query)->result()[0]->biseName;
-
-                                        echo $bise_affiliation_name; ?><br />
-                      Verification Status:
-                      <?php if ($bise_verification[0]->status == 1) { ?>
-                        <strong style="color:green"> Verified </strong>
-                        <?php if ($bise_verification[0]->tdr_amount) { ?>
-                          <br />
-                          BISE TDR Received: <strong><?php
-                                                      $bise_tdr = $bise_verification[0]->tdr_amount;
-
-                                                      echo $bise_verification[0]->tdr_amount; ?> Rs.</strong>
+                                                        echo $bise_verification[0]->tdr_amount; ?> Rs.</strong>
+                          <?php } ?>
                         <?php } ?>
-                      <?php } ?>
-                      <?php if ($bise_verification[0]->status == 2) { ?>
-                        <strong style="color:red">Not Verified</strong> <br />
-                        <small>Remraks: <?php echo $bise_verification[0]->remarks; ?></small>
-                      <?php } ?>
+                        <?php if ($bise_verification[0]->status == 2) { ?>
+                          <strong style="color:red">Not Verified</strong> <br />
+                          <small>Remraks: <?php echo $bise_verification[0]->remarks; ?></small>
+                        <?php } ?>
 
-                    </h4>
-                  <?php } ?>
+                      </h4>
+                    <?php } ?>
+                  </div>
                 </div>
+
+                <div class="col-md-6">
+                  <h3> <i class="fa fa-info-circle" aria-hidden="true"></i> How to submit bank challan online ?</h3>
+                  <p>
+                  <ol>
+                    <li>Print PSRA Deposit Slip / Bank Challan</li>
+                    <li>Deposit Fee as per due dates</li>
+                    <li>Take computerized bank challan having STAN No. from the bank</li>
+                    <li>Submit <strong>Bank STAN</strong> number and Transaction date</li>
+                    <li>Click on Submit bank challan</li>
+                    <li>View Registration application status on school dashboard</li>
+                    </ul>
+                  </ol>
+                  </p>
+                </div>
+
+                <div class="col-md-6">
+                  <div style="direction: rtl; font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif; line-height: 30px;">
+                    <h3> <i class="fa fa-info-circle" aria-hidden="true"></i> بینک چالان آن لائن کیسے جمع کریں؟</h3>
+                    <p>
+                    <ol>
+                      <li>PSRA ڈپازٹ سلپ/بینک چالان پرنٹ کریں۔</li>
+                      <li>مقررہ تاریخوں کے مطابق فیس جمع کروائیں۔</li>
+                      <li>بینک سے اسٹین نمبر والا کمپیوٹرائزڈ بینک چالان لیں۔</li>
+                      <li>بینک STAN نمبر اور لین دین کی تاریخ جمع کروائیں۔</li>
+                      <li>بینک چالان جمع کروائیں پر کلک کریں۔</li>
+                      <li>اسکول کے ڈیش بورڈ پر رجسٹریشن کی درخواست کی حیثیت دیکھیں</li>
+                      </ul>
+                    </ol>
+                    </p>
+                  </div>
+                </div>
+
+
               </div>
+
               <div class="col-md-5" style="padding-right: 10px;  padding-left: 1px;">
                 <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
                   <h4>Session: <?php echo $session_detail->sessionYearTitle; ?> Registration Fee Detail</h4>
@@ -227,7 +263,7 @@
                       </tr>
 
                       <tr>
-                        <td><strong>Total Session <?php echo $session_detail->sessionYearTitle; ?> Registration Fee </strong></td>
+                        <td><strong> Session <?php echo $session_detail->sessionYearTitle; ?> Registration Fee </strong></td>
                         <td>
                           <strong>
                             <?php $total = $fee_sturucture->renewal_app_processsing_fee + $fee_sturucture->renewal_app_inspection_fee;
@@ -261,7 +297,7 @@
                                 <th> Due's Date </th>
                                 <th> Late Fee % </th>
                                 <th> Late Fee </th>
-                                <th> Total </th>
+                                <th> Session <?php echo $session_detail->sessionYearTitle; ?> Registration Fee </th>
 
                                 <?php
                                 $query = "SELECT * FROM `levelofinstitute` 
@@ -281,7 +317,7 @@
 
                                 <tr>
                                   <th>
-                                    <?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?>
+                                    Upto <?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?>
                                   </th>
                                   <?php if ($session_fee_submission_date->fine_percentage == 0) { ?>
                                     <td colspan="2"> <strong> Normal Fee </strong></td>
@@ -322,16 +358,17 @@
                                     <?php } ?>
                                   <?php } ?>
                                   <td>
-                                    <?php if ($session_id == 1) { ?>
-                                      <?php
-                                      echo number_format($fine + $total + $security + $specialfine);
-                                      ?>
+                                    <strong>
+                                      <?php if ($session_id == 1) { ?>
+                                        <?php
+                                        echo number_format($fine + $total + $security + $specialfine);
+                                        ?>
 
-                                    <?php } else { ?>
+                                      <?php } else { ?>
 
-                                      <?php echo number_format($fine + $total + $security); ?>
-                                    <?php } ?>
-
+                                        <?php echo number_format($fine + $total + $security); ?>
+                                      <?php } ?>
+                                    </strong>
                                   </td>
 
                                 </tr>
@@ -418,48 +455,6 @@
 
                 </div>
 
-
-
-              </div>
-
-
-            </div>
-
-            <div class="row">
-              <div class="col-md-3">
-                <h3> <i class="fa fa-info-circle" aria-hidden="true"></i> How to submit bank challan online ?</h3>
-                <p>
-                <ol>
-                  <li>Print PSRA Deposit Slip / Bank Challan</li>
-                  <li>Deposit Fee as per due dates</li>
-                  <li>Take computerized bank challan having STAN No. from the bank</li>
-                  <li>Submit <strong>Bank STAN</strong> number and Transaction date</li>
-                  <li>Click on Submit bank challan</li>
-                  <li>View Registration application status on school dashboard</li>
-                  </ul>
-                </ol>
-                </p>
-              </div>
-
-              <div class="col-md-4">
-                <div style="direction: rtl; font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif; line-height: 30px;">
-                  <h3> <i class="fa fa-info-circle" aria-hidden="true"></i> بینک چالان آن لائن کیسے جمع کریں؟</h3>
-                  <p>
-                  <ol>
-                    <li>PSRA ڈپازٹ سلپ/بینک چالان پرنٹ کریں۔</li>
-                    <li>مقررہ تاریخوں کے مطابق فیس جمع کروائیں۔</li>
-                    <li>بینک سے اسٹین نمبر والا کمپیوٹرائزڈ بینک چالان لیں۔</li>
-                    <li>بینک STAN نمبر اور لین دین کی تاریخ جمع کروائیں۔</li>
-                    <li>بینک چالان جمع کروائیں پر کلک کریں۔</li>
-                    <li>اسکول کے ڈیش بورڈ پر رجسٹریشن کی درخواست کی حیثیت دیکھیں</li>
-                    </ul>
-                  </ol>
-                  </p>
-                </div>
-              </div>
-
-
-              <div class="col-md-5">
                 <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px;">
                   <h4>Submit Bank Challan for session <?php echo $session_detail->sessionYearTitle; ?></h4>
                   <form action="<?php echo site_url("form/add_bank_challan"); ?>" method="post">
@@ -489,6 +484,19 @@
                     </table>
                   </form>
                 </div>
+
+              </div>
+
+
+
+            </div>
+
+            <div class="row">
+
+
+
+              <div class="col-md-5">
+
               </div>
             </div>
           <?php } else { ?>

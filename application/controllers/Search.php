@@ -58,6 +58,8 @@ class Search extends MY_Controller
 
 	public function view_school_detail()
 	{
+
+
 		$this->data['schools_id'] = $school_id = (int) $this->input->post('schools_id');
 
 		$this->data['school'] = $this->school_detail($school_id);
@@ -70,10 +72,6 @@ class Search extends MY_Controller
 			'',
 			$this->db->query($query)->result()[0]->max_tution_fee
 		);
-		$query = "SELECT fee_min, fee_max, renewal_app_processsing_fee, renewal_app_inspection_fee, renewal_fee 
-		FROM `fee_structure` WHERE fee_min <= $max_tuition_fee ORDER BY fee_min DESC LIMIT 1";
-		$this->data['fee_sturucture'] = $this->db->query($query)->result()[0];
-
 
 
 		$query = "SELECT `schoolStaffName`as `name`, MIN(DATE(`schoolStaffAppointmentDate`)) as appoinment_date 
@@ -122,8 +120,8 @@ class Search extends MY_Controller
 					`schools`.`high_level`,
 					`schools`.`h_sec_college_level`
 					FROM
-					`district`
-					INNER JOIN `schools`
+					`schools`
+					INNER JOIN `district`
 						ON (
 						`district`.`districtId` = `schools`.`district_id`
 						)
@@ -139,11 +137,11 @@ class Search extends MY_Controller
 						ON (
 						`genderofschool`.`genderOfSchoolId` = `schools`.`gender_type_id`
 						)
-					INNER JOIN `school_type`
+					LEFT JOIN `school_type`
 						ON (
 						`schools`.`school_type_id` = `school_type`.`typeId`
 						)
-					INNER JOIN `users`
+					LEFT JOIN `users`
 						ON (
 						`users`.`userId` = `schools`.`owner_id`
 						)

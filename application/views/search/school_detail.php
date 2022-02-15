@@ -119,7 +119,6 @@
         </h4>
         <?php $query = "SELECT
         `reg_type`.`regTypeTitle`,
-        `school_type`.`typeTitle`,
         `levelofinstitute`.`levelofInstituteTitle`,
         `session_year`.`sessionYearTitle`,
         `school`.`renewal_code`,
@@ -133,12 +132,10 @@
         `school`,
         `reg_type`,
         `gender`,
-        `school_type`,
         `levelofinstitute`,
         `session_year`
         WHERE `reg_type`.`regTypeId` = `school`.`reg_type_id`
         AND `gender`.`genderId` = `school`.`gender_type_id`
-        AND `school_type`.`typeId` = `school`.`school_type_id`
         AND `levelofinstitute`.`levelofInstituteId` = `school`.`level_of_school_id`
         AND `session_year`.`sessionYearId` = `school`.`session_year_id`
         AND schools_id = '" . $school->schools_id . "'";

@@ -120,8 +120,18 @@ class Bank_challans extends Admin_Controller
 						$update = array();
 						$where['schoolId'] = $bank_challan_detail->school_id;
 						$where['session_year_id'] = $bank_challan_detail->session_id;
-						$this->db->where($where);
 						$update['inspection'] = '0';
+						$this->db->where($where);
+						$query = "SELECT bise_verified FROM schools WHERE schoolId = '" . $bank_challan_detail->schools_id . "'";
+						$bise_verified = $this->db->query($query)->result();
+						if ($bise_verified) {
+							if ($bise_verified[0]->bise_verified == 1) {
+								$update['inspection'] = '1';
+							}
+						}
+
+
+
 						$update['status'] = '3';
 						$this->db->update('school', $update);
 					}
