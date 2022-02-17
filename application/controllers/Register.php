@@ -114,7 +114,7 @@ class Register extends Admin_Controller
             $inputs["userStatus"]  =  1;
 
             if ($this->user_model->save($inputs)) {
-                $this->session->set_flashdata("msg_success", "Registered Successfully.");
+                $this->session->set_flashdata("msg_success", "You account has been created successfully with the username and password you entered. please login using your username and password.<br />آپ کا اکاؤنٹ آپ کے درج کردہ یو ز نیم اور پاس ورڈ کے ساتھ کامیابی کے ساتھ بن گیا ہے۔ براہ کرم اپنا یو ز نیم اور پاس ورڈ استعمال کرکے لاگ ان کریں۔");
                 redirect("login");
             } else {
                 $this->session->set_flashdata("msg_error", "Error In Registration Please Try Again.");

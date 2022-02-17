@@ -256,7 +256,7 @@
 
                       <tr>
                         <th>
-                          <?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?>
+                          Upto <?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?>
                         </th>
                         <?php if ($session_fee_submission_date->fine_percentage == 0) { ?>
                           <td colspan="2"> <strong> Normal Fee </strong></td>

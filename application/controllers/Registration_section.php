@@ -214,6 +214,14 @@ class Registration_section extends Admin_Controller
 				$reponse['status'] = 1;
 				$message = "<h2 class='text-center'><strong class='text text-success'>Successfully Alloted Registration Number \" $codeCombined \" .</strong></h2>";
 
+				$auto_comment = "Registration granted with Registration No#  " . $codeCombined;
+				$input = array();
+				$input['comment'] = $auto_comment;
+				$input['session_id'] = $session_id;
+				$input['school_id'] = $school_id;
+				$input['schools_id'] = $schools_id;
+				$input['created_by'] = $this->session->userdata('userId');
+				$this->db->insert('comments', $input);
 				$reponse['message'] = $message;
 			}
 		} else {
@@ -562,13 +570,13 @@ class Registration_section extends Admin_Controller
 		$this->data['school'] = $this->school_detail($session_request_detail->schools_id);
 		$this->data['session_request_detail'] = $session_request_detail;
 
-		$query = "SELECT MAX(tuitionFee) as max_tution_fee 
-		 FROM `fee` WHERE school_id= '" . $school_id . "'";
-		$this->data['max_tuition_fee'] = $max_tuition_fee = preg_replace(
-			'/[^0-9.]/',
-			'',
-			$this->db->query($query)->result()[0]->max_tution_fee
-		);
+		// $query = "SELECT MAX(tuitionFee) as max_tution_fee 
+		//  FROM `fee` WHERE school_id= '" . $school_id . "'";
+		// $this->data['max_tuition_fee'] = $max_tuition_fee = preg_replace(
+		// 	'/[^0-9.]/',
+		// 	'',
+		// 	$this->db->query($query)->result()[0]->max_tution_fee
+		// );
 		// $query = "SELECT fee_min, fee_max, renewal_app_processsing_fee, renewal_app_inspection_fee, renewal_fee 
 		// FROM `fee_structure` WHERE fee_min <= $max_tuition_fee ORDER BY fee_min DESC LIMIT 1";
 		// $this->data['fee_sturucture'] = $this->db->query($query)->result()[0];
@@ -859,6 +867,16 @@ class Registration_section extends Admin_Controller
 
 			$update['deficiency'] = 1;
 			$this->db->update('school', $update);
+
+			$input = array();
+			$input['comment'] = $this->input->post("deficiency_title") . ": " . $this->input->post("deficiency_detail");
+			$input['session_id'] = $session_id;
+			$input['school_id'] = $school_id;
+			$input['schools_id'] = $schools_id;
+			$input['created_by'] = $this->session->userdata('userId');
+			$this->db->insert('comments', $input);
+
+
 			redirect("registration_section/");
 		}
 	}

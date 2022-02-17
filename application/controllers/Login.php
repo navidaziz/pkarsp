@@ -107,7 +107,14 @@ class Login extends Admin_Controller
 			);
 
 			$user = $this->user_m->getBy($input_values, TRUE);
+			//var_dump($input_values);
+			//var_dump($user);
 
+			//	exit();
+			// $query = "SELECT * FROM users WHERE userName='" . $this->input->post("userName") . "' AND '" . trim($this->input->post("userPassword")) . "'";
+			// $user = $this->db->query($query)->result()[0];
+			// var_dump($user);
+			// exit();
 
 			if (count($user) > 0) {
 

@@ -129,7 +129,7 @@
                 </div>
 
                 <div class="col-md-6" style="padding-right: 1px;  padding-left: 1px; min-height:450px; ">
-                  <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
+                  <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 437px !important;  margin: 5px; padding: 5px; background-color: white;">
                     <h4>Session: <?php echo $session_detail->sessionYearTitle; ?> Due Dates</h4>
                     <table class="table table-bordered">
 
@@ -159,12 +159,21 @@
                       $pecial_fine = 0;
                       if ($session_id == 1) { ?>
                         <tr>
-                          <td colspan="2" style="text-align: center;">2018-19 Special Fine<br />1 Dec, 2019</td>
+                          <td colspan="2" style="text-align: center;"> Sattal Areas 2018-19 Special Fine<br />31 Dec, 2019</td>
                           <td>
                             <strong>50,000 Rs.</strong> <br> Primary / Middle Level <br>
                             <strong>200,000 Rs. </strong> <br> High / Higher Level
                           </td>
                         </tr>
+                        <tr>
+                          <td colspan="2" style="text-align: center;"> FATA 2018-19 Special Fine<br />31 Dec, 2019</td>
+                          <td>
+                            <strong>50,000 Rs.</strong> <br> Primary / Middle Level <br>
+                            <strong>200,000 Rs. </strong> <br> High / Higher Level
+                          </td>
+                        </tr>
+
+
 
                       <?php
                         if ($school->level_of_school_id == 1  or  $school->level_of_school_id == 2) {
@@ -215,7 +224,7 @@
                     <li>Deposit Fee as per due dates</li>
                     <li>Take computerized bank challan having STAN No. from the bank</li>
                     <li>Submit <strong>Bank STAN</strong> number and Transaction date</li>
-                    <li>Click on Submit bank challan</li>
+                    <li>Click on <strong>"Submit bank challan"</strong></li>
                     <li>View Registration application status on school dashboard</li>
                     </ul>
                   </ol>
@@ -229,9 +238,9 @@
                     <ol>
                       <li>PSRA ڈپازٹ سلپ/بینک چالان پرنٹ کریں۔</li>
                       <li>مقررہ تاریخوں کے مطابق فیس جمع کروائیں۔</li>
-                      <li>بینک سے اسٹین نمبر والا کمپیوٹرائزڈ بینک چالان لیں۔</li>
+                      <li>بینک سے STAN No والا کمپیوٹرائزڈ بینک چالان لیں۔</li>
                       <li>بینک STAN نمبر اور لین دین کی تاریخ جمع کروائیں۔</li>
-                      <li>بینک چالان جمع کروائیں پر کلک کریں۔</li>
+                      <li style="direction: rtl;"> کلک کریں۔ "Submit bank challan"</li>
                       <li>اسکول کے ڈیش بورڈ پر رجسٹریشن کی درخواست کی حیثیت دیکھیں</li>
                       </ul>
                     </ol>

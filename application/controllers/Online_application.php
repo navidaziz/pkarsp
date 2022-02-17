@@ -12,6 +12,7 @@ class Online_application extends MY_Controller
 	public function status($school_session_id)
 	{
 
+		$this->load->helper('project_helper');
 		$userId = $this->session->userdata('userId');
 		$query = "SELECT 
 		`school`.`schoolId` AS `school_id`

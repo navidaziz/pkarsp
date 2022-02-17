@@ -187,11 +187,7 @@
         First Appointment: <strong><?php echo date('d M, Y', strtotime($first_appointment_staff->appoinment_date)); ?></strong>
         ( <?php echo $first_appointment_staff->name ?> )<br />
 
-        <?php if ($session_request_detail->reg_type_id == 1) {  ?>
-          <li>Institute Max Fee:
-            <?php echo $max_tuition_fee; ?> Rs. </strong> per month.
 
-          <?php } ?>
 
             </td>
           </tr>

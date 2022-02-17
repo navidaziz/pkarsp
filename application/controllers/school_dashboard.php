@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class School_dashboard extends MY_Controller
+class School_dashboard extends Admin_Controller
 {
 	public function __construct()
 	{
@@ -10,6 +10,7 @@ class School_dashboard extends MY_Controller
 		$this->load->model("school_m");
 		$this->load->model("general_modal");
 		$this->load->model("session_m");
+		$this->load->helper('project_helper');
 	}
 
 

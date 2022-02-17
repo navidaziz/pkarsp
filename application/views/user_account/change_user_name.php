@@ -24,7 +24,7 @@
       <div class="box-body">
         <div class="row">
           <div class="col-md-12" style="text-align: center;">
-            <h4>Change Account Password</h4>
+            <h4>Change Account User Name</h4>
 
             <form action="<?php echo site_url("user_account/submit_changed_user_name"); ?>" method="post">
               <table class="table " style="width: 50% !important; margin: 0px auto;">
@@ -65,7 +65,7 @@
                     </td>
                   <?php } ?>
                   <tr>
-                    <td colspan="2"><input type="submit" class="btn btn-danger" value="Change Account Password" /></td>
+                    <td colspan="2"><input type="submit" class="btn btn-danger" value="Change Account User Name" /></td>
                   </tr>
               </table>
             </form>

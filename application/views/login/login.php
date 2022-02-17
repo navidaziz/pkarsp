@@ -21,6 +21,9 @@
   <!-- FONTS -->
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-151551956-1"></script>
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/notonastaliqurdudraft.css">
+
   <script src='https://www.google.com/recaptcha/api.js'></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -66,9 +69,34 @@
             </div>
           </div>
           <div class="col-md-4">
-            <div class="login-box" style="background-color:#5C9CCC; opacity:.9; margin: 5px auto; padding-top:10px !important; padding: 55px 40px 40px;">
+            <div class="login-box" style="background-color:#5C9CCC; margin: 5px auto; padding-top:10px !important; padding: 55px 40px 40px;">
               <h2 class="bigintro">Sign In</h2>
-              <div class="divide-40"></div>
+              <div class="divide-20"></div>
+
+              <?php
+              if ($this->session->flashdata("msg") || $this->session->flashdata("msg_error") || $this->session->flashdata("msg_success")) {
+
+                $type = "";
+                if ($this->session->flashdata("msg_success")) {
+                  $type = "success";
+                  $msg = $this->session->flashdata("msg_success");
+                } elseif ($this->session->flashdata("msg_error")) {
+                  $type = "danger";
+                  $msg = $this->session->flashdata("msg_error");
+                } else {
+                  $type = "info";
+                  $msg = $this->session->flashdata("msg");
+                }
+                echo '<div style="font-family: \'Noto Nastaliq Urdu Draft\', serif; line-height: 22px;" class="alert alert-' . $type . '" role="alert"> <i class="fa fa-info-circle" aria-hidden="true"></i>  ' . $msg . '</div>';
+              }
+              ?>
+
+              <?php if (validation_errors()) { ?>
+                <div class="alert alert-block alert-danger fade in">
+                  <?php echo validation_errors(); ?>
+                </div>
+              <?php } ?>
+
               <form role="form" method="post" action="<?php echo site_url("login/validate_user"); ?>">
                 <div class="form-group">
                   <label for="userName">User Name</label>
@@ -90,36 +118,14 @@
               </form>
               <!-- SOCIAL LOGIN -->
               <div class="divide-20"></div>
-              <?php
-              if ($this->session->flashdata("msg") || $this->session->flashdata("msg_error") || $this->session->flashdata("msg_success")) {
 
-                $type = "";
-                if ($this->session->flashdata("msg_success")) {
-                  $type = "success";
-                  $msg = $this->session->flashdata("msg_success");
-                } elseif ($this->session->flashdata("msg_error")) {
-                  $type = "danger";
-                  $msg = $this->session->flashdata("msg_error");
-                } else {
-                  $type = "info";
-                  $msg = $this->session->flashdata("msg");
-                }
-                echo '<div class="alert alert-' . $type . '" role="alert"> <i class="fa fa-info-circle" aria-hidden="true"></i>  ' . $msg . '</div>';
-              }
-              ?>
-
-              <?php if (validation_errors()) { ?>
-                <div class="alert alert-block alert-danger fade in">
-                  <?php echo validation_errors(); ?>
-                </div>
-              <?php } ?>
 
 
 
               <div class="login-helpe rs">
-                <a class="btn btn-warning btn-s m pull-left" style="text-shadow: 1px 1px gray;" href="<?php echo site_url(); ?>register/password_reset">Forgot Password?</a>
+                <a class="btn btn-warning btn-s active  pull-left" style="text-decoration: none;" href="<?php echo site_url(); ?>register/password_reset">Forgot Password ?</a>
                 <!-- Don't have an account with us? <br /> -->
-                <a class="btn btn-success btn-s m pull-right" style="text-shadow: 1px 1px gray;" href="<?php echo site_url(); ?>register/signup">Create School Account</a><br>
+                <a class="btn btn-primary btn-s active  pull-right" style="text-decoration: none;" href="<?php echo site_url(); ?>register/signup">Create School Account</a><br>
 
               </div>
 

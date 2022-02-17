@@ -166,140 +166,150 @@
           <table class="table table2 table-bordered">
             <tr>
               <td>
-                <h6>
-                  <strong>About School</strong><br>
 
-                  <?php if (!empty($school->yearOfEstiblishment)) : ?>
-                    <?php echo "Established In: " . $school->yearOfEstiblishment; ?>
-                    <br>
-                  <?php endif; ?>
-                  <?php if (!empty($school->telePhoneNumber)) : ?>
-                    <?php echo "Tele-Phone #: " . $school->telePhoneNumber; ?>
-                    <br>
-                  <?php endif; ?>
-                  <?php if (!empty($school->genderOfSchoolTitle)) : ?>
-                    <?php echo "School For: " . $school->genderOfSchoolTitle; ?>
-                    <br>
-                  <?php endif; ?>
-                  <?php if (!empty($school->levelofInstituteTitle)) : ?>
-                    <?php echo "School Level: " . $school->levelofInstituteTitle; ?>
-                    <br>
-                  <?php endif; ?>
-                  <?php if (!empty($school->typeTitle)) : ?>
-                    <?php echo "School System: " . $school->typeTitle; ?>
-                    <br>
-                  <?php endif; ?>
-                  <?php if (!empty($school->schoolTypeOther)) : ?>
-                    <?php echo "School Level: " . $school->schoolTypeOther; ?>
-                    <br>
-                  <?php endif; ?>
-                  <?php if (!empty($school->mediumOfInstruction)) : ?>
-                    <?php echo "Medium Of Instruction: " . $school->mediumOfInstruction; ?>
-                    <br>
-                  <?php endif; ?>
-                  <?php if (!empty($school->managementTitle)) : ?>
-                    <?php echo "Management: " . $school->managementTitle; ?>
-                    <br>
-                  <?php endif; ?>
+                <table class="table">
+                  <tr>
 
-                  <?php if (!empty($school->late)) : ?>
-                    <b>Latitude:</b>
-                    <?php echo @$school->late; ?>
-                    <br />
-                  <?php endif; ?>
-                  <?php if (!empty($school->longitude)) : ?>
-                    <b>Longitude:</b>
-                    <?php echo @$school->longitude; ?>
-                  <?php endif; ?>
-                  <strong>View Location: </strong>
-                  <br />
-                  <a onclick="sendCordinates(<?php echo $school->late; ?>,<?php echo $school->longitude; ?>);" data-toggle="modal" data-target="#viewMap" href="#" class="glyphicon glyphicon-map-marker">View Location</a>
-                  <br />
-                  <b>Bise Information</b><br>
-                  <?php if (!empty($school->biseregistrationNumber)) : ?>
-                    <?php echo "Bise Register: " . $school->biseregistrationNumber; ?>
-                    <br>
-                  <?php endif; ?>
-                  <?php if (!empty($school->primaryRegDate)) : ?>
-                    <?php echo "Primary Registeration Date: " . $school->primaryRegDate; ?>
-                    <br>
-                  <?php endif; ?>
-                  <?php if (!empty($school->middleRegDate)) : ?>
-                    <?php echo "Middle Registeration Date: " . $school->middleRegDate; ?>
-                    <br>
-                  <?php endif; ?>
-                  <?php if (!empty($school->highRegDate)) : ?>
-                    <?php echo "High Registeration Date: " . $school->highRegDate; ?>
-                    <br>
-                  <?php endif; ?>
-                  <?php if (!empty($school->interRegDate)) : ?>
-                    <?php echo "H.Secy/Inter College Registeration Date: " . $school->interRegDate; ?>
-                    <br>
-                  <?php endif; ?>
-                  <?php if (!empty($school->biseAffiliated)) : ?>
-                    <?php echo "Bise Affiliation: " . $school->biseAffiliated; ?>
-                    <br>
-                  <?php endif; ?>
-                  <?php if (!empty($school->biseName) && $school->bise_id != 10) : ?>
-                    <?php echo "Bise Affiliated With: " . $school->biseName; ?>
-                    <br>
-                  <?php endif; ?>
-                  <?php if (!empty($school->otherBiseName)) : ?>
-                    <?php echo "Bise Affiliated With: " . $school->otherBiseName; ?>
-                    <br>
-                  <?php endif; ?>
-                  <?php if (!empty($bank_transaction)) : ?>
-                    <?php $count = 1;
-                    foreach ($bank_transaction as $bt) {
-                      echo "<strong>Transaction</strong> # $count: " . $bt['bt_no'] . ' ' . "<strong> Date</strong>: " . $bt['bt_date'] . "<br>";
-                      $count++;
-                    }  ?>
-                    <br>
-                  <?php endif; ?>
-                  <?php if (!empty($school_bank->bankAccountNumber)) : ?>
-                    <div class="row">
-                      <div class="col-xs-10 col-xs-offset-1">
-                        <p class="lead">Account Information</p>
-                        <div class="table-responsive">
-                          <table class="table table-striped">
-                            <tr>
-                              <th style="width:50%">Account Name:</th>
-                              <td><?php if ($school_bank->bankAccountName) {
-                                    echo $school_bank->bankAccountName;
-                                  } ?></td>
-                            </tr>
-                            <tr>
-                              <th>Account Number:</th>
-                              <td><?php if ($school_bank->bankAccountNumber) {
-                                    echo $school_bank->bankAccountNumber;
-                                  } ?></td>
-                            </tr>
-                            <tr>
-                              <th>Branch Code</th>
-                              <td><?php if ($school_bank->bankBranchCode) {
-                                    echo $school_bank->bankBranchCode;
-                                  } ?></td>
-                            </tr>
-                            <tr>
-                              <th>Account Title:</th>
-                              <td><?php if ($school_bank->accountTitle) {
-                                    echo $school_bank->accountTitle;
-                                  } ?></td>
-                            </tr>
-                            <tr>
-                              <th>Branch Address:</th>
-                              <td><?php if ($school_bank->bankBranchAddress) {
-                                    echo $school_bank->bankBranchAddress;
-                                  } ?></td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
-                      <!-- /.col -->
-                    </div>
-                    <!-- /.row -->
-                  <?php endif; ?>
-                </h6>
+                    <td class="text-center"><strong style="font-size: 20px;">Section-A: Institute Basic Detail</strong></td>
+                  </tr>
+                  <tbody>
+                    <tr>
+                      <td style="font-size: 14px !important; line-height: 18px;">
+                        <?php if (!empty($school->yearOfEstiblishment)) : ?>
+                          <?php echo "Established In: " . $school->yearOfEstiblishment; ?>
+                          <br>
+                        <?php endif; ?>
+                        <?php if (!empty($school->telePhoneNumber)) : ?>
+                          <?php echo "Tele-Phone #: " . $school->telePhoneNumber; ?>
+                          <br>
+                        <?php endif; ?>
+                        <?php if (!empty($school->genderOfSchoolTitle)) : ?>
+                          <?php echo "School For: " . $school->genderOfSchoolTitle; ?>
+                          <br>
+                        <?php endif; ?>
+                        <?php if (!empty($school->levelofInstituteTitle)) : ?>
+                          <?php echo "School Level: " . $school->levelofInstituteTitle; ?>
+                          <br>
+                        <?php endif; ?>
+                        <?php if (!empty($school->typeTitle)) : ?>
+                          <?php echo "School System: " . $school->typeTitle; ?>
+                          <br>
+                        <?php endif; ?>
+                        <?php if (!empty($school->schoolTypeOther)) : ?>
+                          <?php echo "School Level: " . $school->schoolTypeOther; ?>
+                          <br>
+                        <?php endif; ?>
+                        <?php if (!empty($school->mediumOfInstruction)) : ?>
+                          <?php echo "Medium Of Instruction: " . $school->mediumOfInstruction; ?>
+                          <br>
+                        <?php endif; ?>
+                        <?php if (!empty($school->managementTitle)) : ?>
+                          <?php echo "Management: " . $school->managementTitle; ?>
+                          <br>
+                        <?php endif; ?>
+
+                        <?php if (!empty($school->late)) : ?>
+                          <b>Latitude:</b>
+                          <?php echo @$school->late; ?>
+                          <br />
+                        <?php endif; ?>
+                        <?php if (!empty($school->longitude)) : ?>
+                          <b>Longitude:</b>
+                          <?php echo @$school->longitude; ?>
+                        <?php endif; ?>
+                        <strong>View Location: </strong>
+                        <br />
+                        <a onclick="sendCordinates(<?php echo $school->late; ?>,<?php echo $school->longitude; ?>);" data-toggle="modal" data-target="#viewMap" href="#" class="glyphicon glyphicon-map-marker">View Location</a>
+                        <br />
+                        <b>Bise Information</b><br>
+                        <?php if (!empty($school->biseregistrationNumber)) : ?>
+                          <?php echo "Bise Register: " . $school->biseregistrationNumber; ?>
+                          <br>
+                        <?php endif; ?>
+                        <?php if (!empty($school->primaryRegDate)) : ?>
+                          <?php echo "Primary Registeration Date: " . $school->primaryRegDate; ?>
+                          <br>
+                        <?php endif; ?>
+                        <?php if (!empty($school->middleRegDate)) : ?>
+                          <?php echo "Middle Registeration Date: " . $school->middleRegDate; ?>
+                          <br>
+                        <?php endif; ?>
+                        <?php if (!empty($school->highRegDate)) : ?>
+                          <?php echo "High Registeration Date: " . $school->highRegDate; ?>
+                          <br>
+                        <?php endif; ?>
+                        <?php if (!empty($school->interRegDate)) : ?>
+                          <?php echo "H.Secy/Inter College Registeration Date: " . $school->interRegDate; ?>
+                          <br>
+                        <?php endif; ?>
+                        <?php if (!empty($school->biseAffiliated)) : ?>
+                          <?php echo "Bise Affiliation: " . $school->biseAffiliated; ?>
+                          <br>
+                        <?php endif; ?>
+                        <?php if (!empty($school->biseName) && $school->bise_id != 10) : ?>
+                          <?php echo "Bise Affiliated With: " . $school->biseName; ?>
+                          <br>
+                        <?php endif; ?>
+                        <?php if (!empty($school->otherBiseName)) : ?>
+                          <?php echo "Bise Affiliated With: " . $school->otherBiseName; ?>
+                          <br>
+                        <?php endif; ?>
+                        <?php if (!empty($bank_transaction)) : ?>
+                          <?php $count = 1;
+                          foreach ($bank_transaction as $bt) {
+                            echo "<strong>Transaction</strong> # $count: " . $bt['bt_no'] . ' ' . "<strong> Date</strong>: " . $bt['bt_date'] . "<br>";
+                            $count++;
+                          }  ?>
+                          <br>
+                        <?php endif; ?>
+                        <?php if (!empty($school_bank->bankAccountNumber)) : ?>
+                          <div class="row">
+                            <div class="col-xs-10 col-xs-offset-1">
+                              <p class="lead">Account Information</p>
+                              <div class="table-responsive">
+                                <table class="table table-striped">
+                                  <tr>
+                                    <th style="width:50%">Account Name:</th>
+                                    <td><?php if ($school_bank->bankAccountName) {
+                                          echo $school_bank->bankAccountName;
+                                        } ?></td>
+                                  </tr>
+                                  <tr>
+                                    <th>Account Number:</th>
+                                    <td><?php if ($school_bank->bankAccountNumber) {
+                                          echo $school_bank->bankAccountNumber;
+                                        } ?></td>
+                                  </tr>
+                                  <tr>
+                                    <th>Branch Code</th>
+                                    <td><?php if ($school_bank->bankBranchCode) {
+                                          echo $school_bank->bankBranchCode;
+                                        } ?></td>
+                                  </tr>
+                                  <tr>
+                                    <th>Account Title:</th>
+                                    <td><?php if ($school_bank->accountTitle) {
+                                          echo $school_bank->accountTitle;
+                                        } ?></td>
+                                  </tr>
+                                  <tr>
+                                    <th>Branch Address:</th>
+                                    <td><?php if ($school_bank->bankBranchAddress) {
+                                          echo $school_bank->bankBranchAddress;
+                                        } ?></td>
+                                  </tr>
+                                </table>
+                              </div>
+                            </div>
+                            <!-- /.col -->
+                          </div>
+                          <!-- /.row -->
+                        <?php endif; ?>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
               </td>
               <td>
 

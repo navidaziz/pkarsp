@@ -77,7 +77,7 @@
                         `session_year`
                       WHERE `school`.`schoolId` = `bank_challans`.`school_id`
                         AND `session_year`.`sessionYearId` = `bank_challans`.`session_id`
-                        AND  `bank_challans`.`verified` = '0'";
+                        AND  `bank_challans`.`verified` = '0' ORDER BY `bank_challans`.`schools_id`";
                   $session_bank_challans = $this->db->query($query)->result(); ?>
                   <?php foreach ($session_bank_challans as $session_bank_challan) { ?>
                     <tr>

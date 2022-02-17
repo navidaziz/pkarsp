@@ -229,23 +229,29 @@
 
                     <tr>
                       <th>
-                        <?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?>
+                        Upto <?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?>
                       </th>
-                      <td><?php echo $session_fee_submission_date->fine_percentage; ?> %</td>
                       <td>
-                        <?php
-                        $fine = 0;
-                        $fine = ($session_fee_submission_date->fine_percentage * $total) / 100;
-                        echo number_format($fine);
-                        ?>
-                        Rs.
-                      </td>
+                        <?php if ($session_fee_submission_date->fine_percentage == 0) { ?>
+                      <td colspan="2"> <strong> Normal Fee </strong></td>
+                    <?php } else { ?>
+                      <?php echo $session_fee_submission_date->fine_percentage; ?> %
               </td>
-              <td><?php echo number_format($total) ?></td>
-
               <td>
-                <strong> <?php echo number_format($fine + $total);  ?> </strong>
+                <?php
+                          $fine = 0;
+                          $fine = ($session_fee_submission_date->fine_percentage * $total) / 100;
+                          echo number_format($fine);
+                ?>
+                Rs.
               </td>
+            <?php } ?>
+            </td>
+            <td><?php echo number_format($total) ?></td>
+
+            <td>
+              <strong> <?php echo number_format($fine + $total);  ?> </strong>
+            </td>
             </tr>
 
 

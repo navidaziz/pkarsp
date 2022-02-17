@@ -1,4 +1,20 @@
 <!-- Content Wrapper. Contains page content -->
+<style>
+  .btn-outline-primary {
+    color: #007bff;
+    background-color: transparent;
+    background-image: none;
+    border-color: #007bff;
+  }
+
+  .btn-outline-success {
+    color: #007bff;
+    background-color: transparent;
+    background-image: none;
+    border-color: #008d4c;
+  }
+</style>
+
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
@@ -79,7 +95,22 @@
                 <br>
               <?php endif; ?>
               <b>BISE Information</b><br>
-              <?php if (!empty($school->biseregistrationNumber)) : ?>
+              <?php if (!empty($school->biseregistrationNumber)) :
+                $query = "SELECT COUNT(*) as total 
+                        FROM bise_verification_requests
+                        WHERE school_id = '" . $school->schoolId . "'";
+                $bise_verification_record = $this->db->query($query)->result()[0];
+                if ($bise_verification_record->total == 0 and $school->registrationNumber <= 0) {
+
+                  $bise_verification['school_id'] = $school->schoolId;
+                  $bise_verification['registration_number'] = $school->biseregistrationNumber;
+                  $bise_verification['tdr_amount'] = 0;
+                  $bise_verification['bise_id'] = $school->bise_id;
+                  $this->db->insert('bise_verification_requests', $bise_verification);
+                }
+              ?>
+
+
                 <?php echo "Bise Register: " . $school->biseregistrationNumber; ?>
                 <br>
               <?php endif; ?>
@@ -235,14 +266,11 @@
           <div class="col-md-5">
             <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
               <?php
-
-
               if ($school->registrationNumber) { ?>
-                <h3>Registration and renewal detail</h3>
+                <h3>Registration and Renewals Detail</h3>
                 <table class="table table-bordered">
                   <tr>
                     <th>S/No.</th>
-                    <th>Print</th>
                     <th>Session</th>
                     <th>Applied</th>
                     <th>Level</th>
@@ -252,49 +280,27 @@
                   <?php
                   $count = 1;
                   $stop_appy = TRUE;
-                  $query = "SELECT
-                           `reg_type`.`regTypeTitle`
-                           , `school_type`.`typeTitle`
-                           , `levelofinstitute`.`levelofInstituteTitle`
-                           , `gender`.`genderTitle`
-                           , `school`.`status`
-                           , `school`.`status_type`
-                           , `school`.`session_year_id`
-                           , `school`.`schoolId` as school_id
-                           , `school`.`schools_id`
-                           , `school`.`status`
-                           ,`session_year`.`sessionYearTitle`
-                       FROM `reg_type`,
-                       `school`,
-                       `school_type`,
-                       `levelofinstitute`,
-                       `gender`,
-                       `session_year`  
-                       WHERE `reg_type`.`regTypeId` = `school`.`reg_type_id`
-                       AND `school_type`.`typeId` = `school`.`school_type_id`
-                       AND `levelofinstitute`.`levelofInstituteId` = `school`.`level_of_school_id`
-                       AND `gender`.`genderId` = `school`.`gender_type_id`
-                       AND `session_year`.`sessionYearId` = `school`.`session_year_id`
-                       AND school.`schools_id`= '" . $school_id . "'
-                       AND `school`.`reg_type_id` = 1";
-                  $registration_detail = $this->db->query($query)->result()[0];
-                  if ($registration_detail) {
+                  $reg_detail = get_registration_detail($school_id);
+                  if ($reg_detail) {
                   ?>
                     <tr>
                       <td><?php echo $count++; ?></td>
-                      <td><a href="<?php echo site_url("print_file/school_session_detail/" . $registration_detail->school_id); ?>" target="new">Print</a></td>
-                      <td><?php echo $registration_detail->sessionYearTitle; ?></td>
-                      <td><?php echo $registration_detail->regTypeTitle; ?></td>
-                      <td><?php echo $registration_detail->levelofInstituteTitle; ?></td>
+                      <td><a href="<?php echo site_url("print_file/school_session_detail/" . $reg_detail->school_id); ?>" target="new"><?php echo $reg_detail->sessionYearTitle; ?></a></td>
+                      <td><?php echo $reg_detail->regTypeTitle; ?></td>
+                      <td><?php echo $reg_detail->levelofInstituteTitle; ?></td>
                       <td>
-                        <a target="_new" href="<?php echo site_url("school_dashboard/certificate/" . $registration_detail->schools_id . "/" . $registration_detail->school_id . "/" . $registration_detail->session_year_id); ?>">Print Certificate<a>
+                        <a target="_new" href="<?php echo site_url("school_dashboard/certificate/" . $reg_detail->schools_id . "/" . $reg_detail->school_id . "/" . $reg_detail->session_year_id); ?>">Print Certificate<a>
                       </td>
                     </tr>
                   <?php } ?>
+
+
+                  <!-- Renewal -->
+
                   <?php
                   $query = "SELECT * FROM `session_year` 
-                            WHERE `session_year`.`sessionYearId` > '" . $registration_detail->session_year_id . "'
-                            AND status=0";
+                            WHERE `session_year`.`sessionYearId` > '" . $reg_detail->session_year_id . "'";
+                  // AND status=0";
                   $sessions = $this->db->query($query)->result();
                   foreach ($sessions as $session) {
                     $query = "SELECT
@@ -325,78 +331,92 @@
                       AND `school`.`session_year_id` = '" . $session->sessionYearId . "'";
                     $upgradation_and_renewals = $this->db->query($query)->result();
                     if ($upgradation_and_renewals) {
-                      foreach ($upgradation_and_renewals as $upgradation_and_renewal) { ?>
+                      foreach ($upgradation_and_renewals as $upgradation_and_renewal) {
+
+                  ?>
                         <tr>
-                          <td><?php echo $count++; ?></td>
-                          <td><a href="<?php echo site_url("print_file/school_session_detail/" . $upgradation_and_renewal->school_id); ?>" target="new">Print</a></td>
-                          <td><?php echo $upgradation_and_renewal->sessionYearTitle; ?></td>
-                          <td><?php echo $upgradation_and_renewal->regTypeTitle; ?></td>
-                          <td><?php echo $upgradation_and_renewal->levelofInstituteTitle; ?></td>
-                          <td>
-                            <?php if ($upgradation_and_renewal->status == 0) {
-
-                              $query = "SELECT * FROM `forms_process` WHERE  `forms_process`.`school_id` = $upgradation_and_renewal->school_id";
-
-                              $form_stauts = $this->db->query($query)->result()[0];
-                              if (
-                                $form_stauts->form_b_status == 1
-                                and $form_stauts->form_c_status == 1
-                                and $form_stauts->form_d_status == 1
-                                and $form_stauts->form_e_status == 1
-                                and $form_stauts->form_f_status == 1
-                                and $form_stauts->form_g_status == 1
-                                and $form_stauts->form_h_status == 1
-                              ) {
-                                $page_link = 'submit_bank_challan';
-                              } else {
-                                $page_link = 'section_b';
-                              }
-
-                              if ($form_stauts->form_b_status == 1) {
-                                $page_link = 'section_c';
-                              }
-                              if ($form_stauts->form_c_status == 1) {
-                                $page_link = 'section_d';
-                              }
-                              if ($form_stauts->form_d_status == 1) {
-                                $page_link = 'section_e';
-                              }
-                              if ($form_stauts->form_e_status == 1) {
-                                $page_link = 'section_f';
-                              }
-                              if ($form_stauts->form_f_status == 1) {
-                                $page_link = 'section_g';
-                              }
-                              if ($form_stauts->form_g_status == 1) {
-                                $page_link = 'section_h';
-                              }
-                              if ($form_stauts->form_h_status == 1) {
-                                $page_link = 'submit_bank_challan';
-                              }
 
 
 
-                            ?>
+                          <?php if ($upgradation_and_renewal->status == 0) {
+                            $page_link = get_last_link($upgradation_and_renewal->school_id);
+                            if ($page_link != 'submit_bank_challan') { ?>
+                              <td colspan="5" style="text-align: center;">
+                                <small>
+                                  <h4><?php echo $upgradation_and_renewal->regTypeTitle; ?> Application not complete yet !</h4>
+                                  <p>
+                                    Please complete <?php echo $upgradation_and_renewal->regTypeTitle; ?> form by filling data in all the sections B,C,D,E,F,G,H forms.
+                                  </p>
+                                  <p style="font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif; direction: rtl; line-height: 25px;">
+                                    براہ کرم تمام سیکشنز B,C,D,E,F,G,H فارمز میں ڈیٹا بھر کر <?php echo $upgradation_and_renewal->regTypeTitle; ?> فارم مکمل کریں۔
+                                  </p>
+                                </small>
+                                <a class="btn btn-success" href="<?php echo site_url("form/$page_link/$upgradation_and_renewal->school_id"); ?>">
+                                  <i class="fa fa-spinner" aria-hidden="true"></i> Complete <?php echo $upgradation_and_renewal->regTypeTitle; ?> Process for <?php echo $upgradation_and_renewal->sessionYearTitle; ?></a>
 
-                              <a class="btn btn-success" href="<?php echo site_url("form/$page_link/$upgradation_and_renewal->school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Renewal Process</a>
-                            <?php } else {   ?>
-                              <?php if ($upgradation_and_renewal->status == 1) { ?>
+                              </td>
+                            <?php } else { ?>
+                              <td colspan="5" style="text-align: center;">
+                                <small>
+                                  <h4><?php echo $upgradation_and_renewal->regTypeTitle; ?> Application not complete yet !</h4>
+                                  <p>
+                                    To Complete the <?php echo $upgradation_and_renewal->regTypeTitle; ?> Process, Please deposit bank challan and insert STAN Number and Transaction Date written on Computerized Bank Challan to us by clicking on the Button Shown below.
+                                  </p>
+                                  <p style="font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif; direction: rtl; line-height: 25px;">
+
+                                    <?php echo $upgradation_and_renewal->regTypeTitle; ?> کا عمل مکمل کرنے کے لیے، براہ کرم بینک چالان جمع کرائیں اور نیچے دکھائے گئے بٹن پر کلک کرکے کمپیوٹرائزڈ بینک چالان پر لکھا ہوا STAN نمبر اور لین دین کی تاریخ درج کریں۔
+                                  </p>
+                                </small>
+                                <a class="btn btn-success" href="<?php echo site_url("form/$page_link/$upgradation_and_renewal->school_id"); ?>">
+                                  <i class="fa fa-spinner" aria-hidden="true"></i> Complete <?php echo $upgradation_and_renewal->regTypeTitle; ?> Process for <?php echo $upgradation_and_renewal->sessionYearTitle; ?></a>
+
+                              </td>
+                            <?php } ?>
+
+                          <?php } else {   ?>
+                            <?php if ($upgradation_and_renewal->status == 1) { ?>
+
+                              <td><?php echo $count++; ?></td>
+                              <td><a href="<?php echo site_url("print_file/school_session_detail/" . $upgradation_and_renewal->school_id); ?>" target="new"><?php echo $upgradation_and_renewal->sessionYearTitle; ?></a></td>
+                              <td><?php echo $upgradation_and_renewal->regTypeTitle; ?></td>
+                              <td><?php echo $upgradation_and_renewal->levelofInstituteTitle; ?></td>
+                              <td>
+
                                 <a target="_new" href="<?php echo site_url("school_dashboard/certificate/" . $upgradation_and_renewal->schools_id . "/" . $upgradation_and_renewal->school_id . "/" . $upgradation_and_renewal->session_year_id); ?>">Print Certificate<a>
-                                  <?php } else { ?>
-                                    <a class="btn btn-success" href="<?php echo site_url("online_application/status/$upgradation_and_renewal->school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Application Inprogress</a>
+                              </td>
+                            <?php } else { ?>
+                              <td colspan="5">
+                                <h4>Your Application for <?php echo $upgradation_and_renewal->regTypeTitle; ?> <?php echo $session->sessionYearTitle; ?> is In Progress </h4>
 
-                                <?php }
-                              } ?>
+
+                                <a class="btn btn-outline-primary" style="width: 100%;" href="<?php echo site_url("online_application/status/$upgradation_and_renewal->school_id"); ?>">
+                                  <i class="fa fa-spinner" aria-hidden="true"></i> &#160;
+                                  <?php echo get_session_request_status($upgradation_and_renewal->status); ?> &#160;&#160;&#160;&#160;
+                                  <span class="btn btn-primary">
+                                    See Detail
+                                  </span>
+                                </a>
+
+                              </td>
+
+                          <?php }
+                          } ?>
                           </td>
                         </tr>
                       <?php } ?>
                     <?php } else { ?>
                       <tr>
-                        <td><?php echo $count++; ?></td>
-                        <td><?php echo $session->sessionYearTitle; ?></td>
 
-                        <td colspan="3" style="text-align: center;">
-                          <a class="btn btn-success" style="margin: 1px;" href="<?php echo site_url("apply/renewal/$session->sessionYearId"); ?>">Apply for <?php echo $session->sessionYearTitle; ?> Renewal</a>
+                        <td colspan="5" style="text-align: center;">
+                          <?php if ($session->status == 1) { ?>
+                            <p class="btn btn-outline-success">
+                              Apply For <?php echo $session->sessionYearTitle; ?>
+                              <a class="btn btn-success" style="margin: 1px;" href="<?php echo site_url("apply/renewal/$session->sessionYearId"); ?>">Renewal</a>
+                              <a class="btn btn-warning" style="margin: 1px;" href="<?php echo site_url("apply/renewal_upgradation/$session->sessionYearId"); ?>">Upgradation + Renewal</a>
+                            </p>
+                          <?php } else { ?>
+                            <a class="btn btn-success" style="margin: 1px;" href="<?php echo site_url("apply/renewal/$session->sessionYearId"); ?>">Apply for <?php echo $session->sessionYearTitle; ?> Renewal</a>
+                          <?php } ?>
                         </td>
                         </td>
                       </tr>
@@ -407,151 +427,12 @@
 
 
 
-
-                  <?php
-                  $query = "SELECT * FROM `session_year` 
-                            WHERE `session_year`.`sessionYearId` > '" . $registration_detail->session_year_id . "'
-                            AND status=1";
-                  $session = $this->db->query($query)->result()[0];
-                  ?>
-
-                  <?php
-                  $query = "SELECT
-                      `reg_type`.`regTypeTitle`
-                      , `school_type`.`typeTitle`
-                      , `levelofinstitute`.`levelofInstituteTitle`
-                      , `gender`.`genderTitle`
-                      , `school`.`status`
-                      , `school`.`status_type`
-                      , `school`.`session_year_id`
-                      , `school`.`schoolId` as school_id
-                      , `school`.`schools_id`
-                      , `school`.`status`
-                      ,`session_year`.`sessionYearTitle`
-
-                      FROM `reg_type`,
-                      `school`,
-                      `school_type`,
-                      `levelofinstitute`,
-                      `gender`,
-                      `session_year`  
-                      WHERE `reg_type`.`regTypeId` = `school`.`reg_type_id`
-                      AND `school_type`.`typeId` = `school`.`school_type_id`
-                      AND `levelofinstitute`.`levelofInstituteId` = `school`.`level_of_school_id`
-                      AND `gender`.`genderId` = `school`.`gender_type_id`
-                      AND `session_year`.`sessionYearId` = `school`.`session_year_id`
-                      AND school.`schools_id`= '" . $school_id . "'
-                      AND `school`.`session_year_id` = '" . $session->sessionYearId . "'
-                      AND (`school`.`reg_type_id`=2 or `school`.`reg_type_id`=4)";
-                  $renewal = $this->db->query($query)->result()[0];
-                  if ($renewal) { ?>
-                    <tr>
-                      <td><?php echo $count++; ?></td>
-                      <td><a href="<?php echo site_url("print_file/school_session_detail/" . $upgradation_and_renewal->school_id); ?>" target="new">Print</a></td>
-
-                      <td><?php echo $renewal->sessionYearTitle; ?></td>
-                      <td><?php echo $renewal->regTypeTitle; ?></td>
-                      <td><?php echo $renewal->levelofInstituteTitle; ?></td>
-                      <td>
-                        <?php if ($renewal->status == 0) { ?>
-                          <a class="btn btn-success" href="<?php echo site_url("form/section_b/$renewal->school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Renewal Process</a>
-                        <?php } else {   ?>
-                          <?php if ($renewal->status == 1) { ?>
-                            <a target="_new" href="<?php echo site_url("school_dashboard/certificate/" . $renewal->schools_id . "/" . $renewal->school_id . "/" . $renewal->session_year_id); ?>">Print Certificate<a>
-                              <?php } else { ?>
-                                <a class="btn btn-success" href="<?php echo site_url("online_application/status/$renewal->school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Application Inprogress</a>
-
-                            <?php }
-                          } ?>
-                      </td>
-                    </tr>
-
-                  <?php } else { ?>
-                    <tr>
-                      <td><?php echo $count++; ?></td>
-                      <td><?php echo $session->sessionYearTitle; ?></td>
-                      <td colspan="3" style="text-align: center;">
-                        <a class="btn btn-success" style="margin: 1px;" href="<?php echo site_url("apply/renewal/$session->sessionYearId"); ?>">Apply for Renewal</a>
-                        <a class="btn btn-warning" style="margin: 1px;" href="<?php echo site_url("apply/renewal_upgradation/$session->sessionYearId"); ?>">Apply for Upgradation + Renewal</a>
-
-                      </td>
-                    </tr>
-                  <?php } ?>
-
-
-                  <?php
-
-                  $query = "SELECT
-                      `reg_type`.`regTypeTitle`
-                      , `school_type`.`typeTitle`
-                      , `levelofinstitute`.`levelofInstituteTitle`
-                      , `gender`.`genderTitle`
-                      , `school`.`status`
-                      , `school`.`status_type`
-                      , `school`.`session_year_id`
-                      , `school`.`schoolId` as school_id
-                      , `school`.`schools_id`
-                      , `school`.`status`
-                      ,`session_year`.`sessionYearTitle`
-
-                      FROM `reg_type`,
-                      `school`,
-                      `school_type`,
-                      `levelofinstitute`,
-                      `gender`,
-                      `session_year`  
-                      WHERE `reg_type`.`regTypeId` = `school`.`reg_type_id`
-                      AND `school_type`.`typeId` = `school`.`school_type_id`
-                      AND `levelofinstitute`.`levelofInstituteId` = `school`.`level_of_school_id`
-                      AND `gender`.`genderId` = `school`.`gender_type_id`
-                      AND `session_year`.`sessionYearId` = `school`.`session_year_id`
-                      AND school.`schools_id`= '" . $school_id . "'
-                      AND `school`.`session_year_id` = '" . $session->sessionYearId . "'
-                      AND `school`.`reg_type_id`=3";
-                  $upgradation = $this->db->query($query)->result()[0];
-                  if ($upgradation) { ?>
-                    <tr>
-                      <td><?php echo $count++; ?></td>
-                      <td><a href="<?php echo site_url("print_file/school_session_detail/" . $upgradation_and_renewal->school_id); ?>" target="new">Print</a></td>
-
-                      <td><?php echo $upgradation->sessionYearTitle; ?></td>
-                      <td><?php echo $upgradation->regTypeTitle; ?></td>
-                      <td><?php echo $upgradation->levelofInstituteTitle; ?></td>
-                      <td>
-                        <?php if ($upgradation->status == 0) { ?>
-                          <a class="btn btn-success" href="<?php echo site_url("form/section_b/$upgradation->school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Upgradation Process</a>
-                        <?php } else {   ?>
-                          <?php if ($upgradation->status == 1) { ?>
-                            <a target="_new" href="<?php echo site_url("school_dashboard/certificate/" . $upgradation->schools_id . "/" . $upgradation->school_id . "/" . $upgradation->session_year_id); ?>">Print Certificate<a>
-                              <?php } else { ?>
-                                <a class="btn btn-success" href="<?php echo site_url("online_application/status/$upgradation->school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Application Inprogress</a>
-
-                            <?php }
-                          } ?>
-                      </td>
-
-                    </tr>
-
-                  <?php } else { ?>
-                    <tr>
-                      <td><?php echo $count++; ?></td>
-                      <td><?php echo $session->sessionYearTitle; ?></td>
-                      <td colspan="3" style="text-align: center;">
-                        <a class="btn btn-warning" style="margin: 1px;" href="<?php echo site_url("apply/upgradation/$session->sessionYearId"); ?>">Apply for Upgradation</a>
-
-                      </td>
-                    </tr>
-                  <?php } ?>
-
-
                 </table>
               <?php } else { ?>
 
                 <div style="text-align: center;">
 
                   <?php
-
-                  $est_date = $this->input->post('year_of_es');
                   $est_year = date('Y', strtotime($school->yearOfEstiblishment));
                   $est_month = date('m', strtotime($school->yearOfEstiblishment));
                   if ($est_month >= 4) {
@@ -565,12 +446,6 @@
                   $query = "SELECT * FROM `session_year` WHERE YEAR(`session_start`) >= '" . $session_year . "'";
                   $session = $this->db->query($query)->result()[0];
 
-
-                  // $query = "SELECT * FROM session_year 
-                  //         WHERE sessionYearTitle >= '" . date('Y', strtotime($school->yearOfEstiblishment)) . "-" . (date('Y', strtotime($school->yearOfEstiblishment)) + 1) . "' 
-                  //         ORDER BY sessionYearId ASC LIMIT 1";
-                  // $session = $this->db->query($query)->result()[0];
-
                   $query = "SELECT * FROM school 
                   WHERE schools_id = '" . $school_id . "' ";
                   $registration = $this->db->query($query)->result();
@@ -579,36 +454,59 @@
 
                   ?>
                   <?php if ($registration) { ?>
-                    <?php if ($registration[0]->status == 0) { ?>
+                    <?php if ($registration[0]->status == 0) {
+                      $page_link = get_last_link($session_school_id);
+                    ?>
 
-                      <?php $query = "SELECT * FROM `forms_process` WHERE  `forms_process`.`school_id` = $session_school_id";
+                      <?php
+                      $biseverification = 0;
+                      // $bise_verificaiton = 0;
+                      if ($school->biseRegister == 'Yes') {
+                        $biseverification = '1';
+                        $query = "SELECT * FROM `bise_verification_requests` WHERE school_id = '" . $school->schoolId . "' AND status IN(1,2,0)";
+                        $bise_verification = $this->db->query($query)->result();
 
-                      $form_stauts = $this->db->query($query)->result()[0];
+                        if ($bise_verification and $bise_verification[0]->status == 1 or $bise_verification[0]->status == 2) {
+                          $biseverified = 1;
+                        } else {
+                          $biseverified = 0;
+                        }
+                      } else {
+                        $biseverified = 1;
+                      }
+                      if ($biseverified == 1) {
+                      } else {
 
-                      $page_link = 'submit_bank_challan';
-                      if ($form_stauts->form_b_status == 0) {
-                        $page_link = 'section_b';
-                      }
-                      if ($form_stauts->form_c_status == 0) {
-                        $page_link = 'section_c';
-                      }
-                      if ($form_stauts->form_d_status == 0) {
-                        $page_link = 'section_d';
-                      }
-                      if ($form_stauts->form_e_status == 0) {
-                        $page_link = 'section_e';
-                      }
-                      if ($form_stauts->form_f_status == 0) {
-                        $page_link = 'section_f';
-                      }
-                      if ($form_stauts->form_g_status == 0) {
-                        $page_link = 'section_g';
-                      }
-                      if ($form_stauts->form_h_status == 0) {
-                        $page_link = 'section_h';
-                      }
+
+
                       ?>
 
+                        <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 0px auto; width:100%; padding: 5px; background-color: white;">
+                          <h3 style="text-align: center;">BISE Verificaiton Also In Progress </h3>
+                          <h4 style="text-align: center;">
+                            BISE Registration No. <?php echo $bise_verification[0]->registration_number; ?><br />
+                            BISE Affiliation. <?php
+                                              $query = "SELECT `bise`.`biseName` FROM `bise` WHERE `bise`.`biseId` = '" . $bise_verification[0]->bise_id . "'";
+                                              $bise_affiliation_name = $this->db->query($query)->result()[0]->biseName;
+
+                                              echo $bise_affiliation_name; ?><br />
+                            Verification Status: <strong style="color:red">Pending</strong>
+                            <h2 style="text-align: center;"><i class="fa fa-spinner" aria-hidden="true"></i></h2>
+                            <!-- <p style="text-align: center;">
+                              <strong>
+                                Your case will proceed further, after verification of BISE Registration / Affiliation. Keep visiting school portal. it will take 1,2 working days.
+
+                                <br />
+                                <p style="text-align: center; font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif; line-height: 30px; direction: rtl;">
+                                  آپ کا کیس BISE رجسٹریشن / الحاق کی تصدیق کے بعد آگے بڑھے گا۔ اسکول کے پورٹل کو وزٹ کرتے رہیں۔ اس میں 1,2 کام کے دن لگیں گے۔</p>
+                              </strong>
+                            </p> -->
+                          </h4>
+
+                        </div>
+                        <br />
+
+                      <?php  }  ?>
 
                       <h4>Registration Application not complete yet !</h4>
                       <?php if ($page_link != 'submit_bank_challan') { ?>
@@ -618,94 +516,35 @@
                         <p style="font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif; direction: rtl; line-height: 25px;">
                           براہ کرم تمام سیکشنز B,C,D,E,F,G,H فارمز میں ڈیٹا بھر کر رجسٹریشن فارم مکمل کریں۔
                         </p>
-                      <?php } else { ?>
-                        <?php
-                        $biseverification = 0;
-                        // $bise_verificaiton = 0;
-                        if ($school->biseRegister == 'Yes') {
-                          $biseverification = '1';
-                          $query = "SELECT * FROM `bise_verification_requests` WHERE school_id = '" . $school->schoolId . "' AND status IN(1,2,0)";
-                          $bise_verification = $this->db->query($query)->result();
+                        <a class="btn btn-success" href="<?php echo site_url("form/$page_link/$session_school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Registration Process for <?php echo $session->sessionYearTitle; ?></a>
+                      <?php } else {
+                        //if ($biseverified == 1) {
+                      ?>
+                        <p>
+                          To Complete the Registration Process, Please deposit bank challan and insert STAN Number and Transaction Date written on Computerized Bank Challan to us by clicking on the Button Shown below.
+                        </p>
+                        <p style="font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif; direction: rtl; line-height: 25px;">
 
-                          if ($bise_verification and $bise_verification[0]->status == 1 or $bise_verification[0]->status == 2) {
-                            $biseverified = 1;
-                          } else {
-                            $biseverified = 0;
-                          }
-                        } else {
-                          $biseverified = 1;
-                        }
-                        if ($biseverified == 1) {
-                        } else { ?>
-
-                          <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 0px auto; width:100%; padding: 5px; background-color: white;">
-                            <h3 style="text-align: center;">BISE Verificaiton In Progress </h3>
-                            <h4 style="text-align: center;">
-                              BISE Registration No. <?php echo $bise_verification[0]->registration_number; ?><br />
-                              BISE Affiliation. <?php
-                                                $query = "SELECT `bise`.`biseName` FROM `bise` WHERE `bise`.`biseId` = '" . $bise_verification[0]->bise_id . "'";
-                                                $bise_affiliation_name = $this->db->query($query)->result()[0]->biseName;
-
-                                                echo $bise_affiliation_name; ?><br />
-                              Verification Status: <strong style="color:red">Pending</strong>
-                              <h2 style="text-align: center;"><i class="fa fa-spinner" aria-hidden="true"></i></h2>
-                              <p style="text-align: center;">
-                                <strong>
-                                  Your case will proceed further, after verification of BISE Registration / Affiliation. Keep visiting school portal. it will take 1,2 working days.
-
-                                  <br />
-                                  <p style="text-align: center; font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif; line-height: 30px; direction: rtl;">
-                                    آپ کا کیس BISE رجسٹریشن / الحاق کی تصدیق کے بعد آگے بڑھے گا۔ اسکول کے پورٹل کو وزٹ کرتے رہیں۔ اس میں 1,2 کام کے دن لگیں گے۔</p>
-                                </strong>
-                              </p>
-                            </h4>
-
-                          </div>
-                          <br />
-
-                        <?php  }  ?>
+                          رجسٹریشن کا عمل مکمل کرنے کے لیے، براہ کرم بینک چالان جمع کرائیں اور نیچے دکھائے گئے بٹن پر کلک کرکے کمپیوٹرائزڈ بینک چالان پر لکھا ہوا STAN نمبر اور لین دین کی تاریخ درج کریں۔
+                        </p>
 
 
-                      <?php } ?>
-
-                      <a class="btn btn-success" href="<?php echo site_url("form/$page_link/$session_school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Registration Process for <?php echo $session->sessionYearTitle; ?></a>
-                    <?php } else { ?>
-                      <h4>Your Application for Registration <?php echo $session->sessionYearTitle; ?> is In Progress </h4>
-                      <strong>
-                        <?php
-
-                        switch ($registration[0]->status) {
-                          case 0:
-                            echo "Data Entery In Progress";
-                            break;
-                          case 2:
-                            echo "Bank Challan Verification In Progress";
-                            break;
-                          case 3:
-                            echo "Data Verification";
-                            break;
-                          case 4:
-                            echo "Fowarded for Inspection Assignment";
-                            break;
-                          case 4:
-                            echo "Inspection pending";
-                            break;
-                          case 5:
-                            echo "Inspection Completed";
-                            break;
-
-                          case 8:
-                            echo "Challan Not Verified";
-                            break;
-                          case 1:
-                            echo "completed";
-                            break;
-                        }
+                        <a class="btn btn-success" href="<?php echo site_url("form/$page_link/$session_school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Complete Registration Process for <?php echo $session->sessionYearTitle; ?></a>
+                        <?php //} 
                         ?>
 
-                      </strong><br />
-                      <br />
-                      <a class="btn btn-success" href="<?php echo site_url("online_application/status/$session_school_id"); ?>"> <i class="fa fa-spinner" aria-hidden="true"></i> Check Application Status </a>
+                      <?php } ?>
+                    <?php } else { ?>
+                      <h4>Your Application for Registration <?php echo $session->sessionYearTitle; ?> is In Progress </h4>
+
+
+                      <a class="btn btn-outline-primary" href="<?php echo site_url("online_application/status/$session_school_id"); ?>">
+                        <i class="fa fa-spinner" aria-hidden="true"></i> &#160;
+                        <?php echo get_session_request_status($registration[0]->status); ?> &#160;&#160;&#160;&#160;
+                        <span class="btn btn-primary">
+                          See Detail
+                        </span>
+                      </a>
                     <?php } ?>
                   <?php } else { ?>
                     <h4>Now Apply for Registration with PSRA</h4>

@@ -110,7 +110,7 @@
           <th><img style="width: 100px;" src="<?php echo base_url(); ?>assets/logo.png" class="img-responsive img" /></th>
           <th>
             <h3 style="text-align: center;">Public School Regulatory Authority Khyber Pakhtunkhwa</h4>
-              <h4 style="text-align: center;"><?php echo $title;  ?> Challan Form For Session <?php echo $session_detail->sessionYearTitle; ?>
+              <h4 style="text-align: center;">Upgradation + Renewal Challan Form For Session <?php echo $session_detail->sessionYearTitle; ?>
               </h4>
 
 
@@ -194,7 +194,7 @@
             </tr>
 
             <tr>
-              <td><strong>Total Session <?php echo $session_detail->sessionYearTitle; ?> Renewal Fee </strong></td>
+              <td><strong>Total Session <?php echo $session_detail->sessionYearTitle; ?> Upgradation-Renewal Fee </strong></td>
               <td>
                 <strong>
                   <?php $total = $fee_sturucture->renewal_app_processsing_fee + $fee_sturucture->renewal_app_inspection_fee + $fee_sturucture->up_grad_fee + $fee_sturucture->renewal_fee;
@@ -206,35 +206,27 @@
             </tr>
 
 
-            <?php if ($session_detail->status == 1) { ?>
-
-              <tr>
-                <td colspan="2">Late Fee Fine
-                  <small>(Application Processing + Inspection Fee + Upgradation + Renewal)</small>
-                </td>
-
-              </tr>
-
-            <?php } ?>
-
             <tr>
-              <?php if ($session_detail->status == 1) { ?>
-                <td colspan="2">
-                  <table class="table">
-                    <tr>
-                      <th> Due's Date </th>
-                      <th> Late Fee % </th>
-                      <th> Late Fee Amount </th>
-                      <th> Total </th>
-                    </tr>
-                    <?php
-                    $count = 1;
-                    foreach ($session_fee_submission_dates as $session_fee_submission_date) { ?>
 
-                      <tr>
-                        <th>
-                          <?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?>
-                        </th>
+              <td colspan="2">
+                <table class="table">
+                  <tr>
+                    <th> Due's Date </th>
+                    <th> Late Fee % </th>
+                    <th> Late Fee Amount </th>
+                    <th> Total </th>
+                  </tr>
+                  <?php
+                  $count = 1;
+                  foreach ($session_fee_submission_dates as $session_fee_submission_date) { ?>
+
+                    <tr>
+                      <th>
+                        Upto <?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?>
+                      </th>
+                      <?php if ($session_fee_submission_date->fine_percentage == 0) { ?>
+                        <td colspan="2"> <strong> Normal Fee </strong></td>
+                      <?php } else { ?>
                         <td><?php echo $session_fee_submission_date->fine_percentage; ?> %</td>
                         <td>
                           <?php
@@ -244,45 +236,20 @@
                           ?>
                           Rs.
                         </td>
-                        <td>
-                          <?php echo number_format($fine + $total);  ?>
-                        </td>
-                      </tr>
+                      <?php } ?>
+                      <td>
+                        <?php echo number_format($fine + $total);  ?>
+                      </td>
+                    </tr>
 
 
 
-                    <?php } ?>
-                  </table>
-                </td>
-              <?php } else { ?>
-                <td>Late Fee Fine <br /><small><?php
-                                                if ($late_fee->fine_percentage) {
-                                                  echo  $late_fee->fine_percentage;
-                                                } else {
-                                                  echo 100;
-                                                }
-                                                ?>% on
-                    (Application Processing+Inspection Fee+Renewal)</small>
-                </td>
-                <td><?php
-                    if ($late_fee->fine_percentage) {
-                      $fine = ($late_fee->fine_percentage * $total) / 100;
-                    } else {
-                      $fine =  (100 * $total) / 100;
-                    }
-                    echo number_format($fine);
-                    ?>
-                  Rs.</td>
-              <?php } ?>
+                  <?php } ?>
+                </table>
+              </td>
+
             </tr>
-            <?php if ($session_detail->status == 0) { ?>
-              <tr>
-                <td colspan="2" style="text-align: right;">
-                  <h4>Total <?php echo number_format($total + $fine); ?> Rs.</h4>
-                </td>
 
-              </tr>
-            <?php } ?>
 
           </tbody>
         </table>

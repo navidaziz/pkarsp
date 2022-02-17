@@ -18,6 +18,7 @@
   <link rel="stylesheet" type="text/css" href="<?php echo site_url("assets/" . ADMIN_DIR); ?>/js/uniform/css/uniform.default.min.css" />
   <!-- ANIMATE -->
   <link rel="stylesheet" type="text/css" href="<?php echo site_url("assets/" . ADMIN_DIR); ?>/css/animatecss/animate.min.css" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/notonastaliqurdudraft.css">
   <style>
     .table>tbody>tr>td,
     .table>tbody>tr>th,
@@ -203,7 +204,7 @@
                       </td>
                     </tr>
                   </table>
-                  <h4>Institute Owner Detail <small class="pull-right"><strong style="color:red"> انسٹی ٹیوٹ کے مالک کی تفصیلات </strong></small></h4>
+                  <h4>Institute Owner Detail <small class="pull-right"><strong style="color:red; font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif;"> انسٹی ٹیوٹ کے مالک کی تفصیلات </strong></small></h4>
                   <p style="text-align: center; color:red; font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif;">
 
                     تفصیل وہی ہونی چاہیے جو اسٹامپ پیپر میں لکھی گئی ہو۔
