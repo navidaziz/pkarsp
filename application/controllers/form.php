@@ -487,7 +487,7 @@ class Form extends Admin_Controller
 			$inputs['gender_id'] = $gender_id;
 			$inputs['school_id'] = $school_id;
 			$inputs['enrolled'] = $enrolled;
-			//var_dump($inputs);
+
 			$this->db->insert('age_and_class', $inputs);
 		}
 
