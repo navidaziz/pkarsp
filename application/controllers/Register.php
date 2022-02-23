@@ -654,8 +654,8 @@ class Register extends Admin_Controller
 
 
 
-                $message2 = 'Your Account User Name: <strong> ' . $user_password . ' </strong>';
-                $message2 = 'Your Account Password: ' . $user_name . '</strong>
+                $message2 = 'Your Account User Name: <strong> ' . $password . ' </strong>';
+                $message2 .= 'Your Account Password: ' . $user_name . '</strong>
                 
                 ';
                 $send_email = $this->user_model->sendEmail($user_email, $subject, $message2);
