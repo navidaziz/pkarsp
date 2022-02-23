@@ -196,7 +196,7 @@ class User_model extends MY_Model
     //send confirm mail
     public function sendEmail($receiver, $subject, $message)
     {
-        $from = "etransfer.health@gmail.com";    //senders email address
+        $from = "psrakpk@gmail.com";    //senders email address
 
 
         //$verification_code = md5($receiver);
@@ -212,7 +212,7 @@ class User_model extends MY_Model
         $config['smtp_host'] = 'ssl://smtp.gmail.com';
         $config['smtp_port'] = '465';
         $config['smtp_user'] = $from;
-        $config['smtp_pass'] = 'health@email.com';  //sender's password health@email.com
+        $config['smtp_pass'] = '@Psra1234';  //sender's password health@email.com
         $config['mailtype'] = 'html';
         $config['charset'] = 'iso-8859-1';
         $config['wordwrap'] = 'TRUE';
