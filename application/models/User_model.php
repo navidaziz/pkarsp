@@ -196,22 +196,13 @@ class User_model extends MY_Model
     //send confirm mail
     public function sendEmail($receiver, $subject, $message)
     {
-        $from = "psrakpk@gmail.com";    //senders email address
-
-
-        //$verification_code = md5($receiver);
-
-
-        //sending confirmEmail($receiver) function calling link to the user, inside message body
-
-
 
 
         //config email settings https://kp-whm-03.kpdata.gov.pk ssl//103.240.220.37
         $config['protocol'] = 'smtp';
         $config['smtp_host'] = 'ssl://smtp.gmail.com';
         $config['smtp_port'] = '465';
-        $config['smtp_user'] = $from;
+        $config['smtp_user'] = "psrakpk@gmail.com";
         $config['smtp_pass'] = '@Psra1234';  //sender's password health@email.com
         $config['mailtype'] = 'html';
         $config['charset'] = 'iso-8859-1';
@@ -221,7 +212,7 @@ class User_model extends MY_Model
         $this->load->library('email', $config);
         $this->email->initialize($config);
         //send email
-        $this->email->from('etransfer.health@gmail.com', 'Health Department KP');
+        $this->email->from('psrakpk@gmail.com', 'Health Department KP');
         //  $this->email->from($from);
         $this->email->to($receiver);
         $this->email->subject($subject);
