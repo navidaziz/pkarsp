@@ -212,7 +212,7 @@ class User_model extends MY_Model
         $this->load->library('email', $config);
         $this->email->initialize($config);
         //send email
-        $this->email->from('psrakpk@gmail.com', 'Health Department KP');
+        $this->email->from('psrakpk@gmail.com', 'PSRA Account Recovery');
         //  $this->email->from($from);
         $this->email->to($receiver);
         $this->email->subject($subject);
@@ -235,8 +235,7 @@ class User_model extends MY_Model
 
             return true;
         } else {
-            echo $this->email->print_debugger();
-            exit();
+
             return false;
         }
     }

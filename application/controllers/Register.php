@@ -646,22 +646,25 @@ class Register extends Admin_Controller
 
             if ($user) {
                 $verification_code = $user->verification_code;
-                $user_password = $user->user_password;
+                $user_name = $user->userName;
+                $password = $user->userPassword;
 
 
                 $subject = 'Reset your Password';
 
 
 
-                $message2 = 'Dear User !,<br>Your Password is : <strong>' . $user_password . '</strong><br><br><br><br>
-    <a href=\'http://onlineapplication.healthkp.gov.pk/admin/register/confirmEmail/' . $verification_code . '\'>Verify : Click here</a> <br><br>Thanks <br> IT TEAM <br>HEALTH  DEPARTMENT KP<br> 091-9210391';
+                $message2 = 'Your Account User Name: <strong> ' . $user_password . ' </strong>';
+                $message2 = 'Your Account Password: ' . $user_name . '</strong>
+                
+                ';
                 $send_email = $this->user_model->sendEmail($user_email, $subject, $message2);
                 if ($send_email === false) {
                     $this->session->set_flashdata("msg_error", " Error sending Email make sure your email address is correct please !");
                     redirect("login");
                     exit();
                 }
-                $this->session->set_flashdata("msg_success", " Your password has been sent to $user_email");
+                $this->session->set_flashdata("msg_success", " Your password has been sent to your email address:  $user_email");
                 redirect("login");
             }
         }
