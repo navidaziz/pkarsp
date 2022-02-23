@@ -650,14 +650,14 @@ class Register extends Admin_Controller
                 $password = $user->userPassword;
 
 
-                $subject = 'Reset your Password';
+                $subject = 'Account Credentials';
 
 
 
-                $message2 = 'Your Account User Name: <strong> ' . $password . ' </strong>';
-                $message2 .= 'Your Account Password: ' . $user_name . '</strong>
-                
-                ';
+                $message2 = 'Your Account User Name: <strong> ' . $user_name . ' </strong><br />';
+                $message2 .= 'Your Account Password: <strong>' . $password . '</strong>';
+
+
                 $send_email = $this->user_model->sendEmail($user_email, $subject, $message2);
                 if ($send_email === false) {
                     $this->session->set_flashdata("msg_error", " Error sending Email make sure your email address is correct please !");
