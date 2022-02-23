@@ -235,7 +235,8 @@ class User_model extends MY_Model
 
             return true;
         } else {
-
+            echo $this->email->print_debugger();
+            exit();
             return false;
         }
     }
