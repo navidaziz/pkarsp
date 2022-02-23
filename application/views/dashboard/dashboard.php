@@ -199,6 +199,64 @@
               </table>
           </div>
       </div>
+
+      <div>
+          <table>
+              <tr>
+                  <th>School</th>
+                  <th>2018-19</th>
+                  <th>2019-20</th>
+                  <th>2020-21</th>
+                  <th>2021-22</th>
+              </tr>
+
+              <?php $query = 'SELECT 
+                            `schools`.`schoolId`,
+                            `schools`.`registrationNumber`,
+                            `schools`.`schoolName`,
+                            `district`.`districtTitle`,
+                            `reg_type`.`regTypeTitle`,
+                            `levelofinstitute`.`levelofInstituteTitle`,
+                            IF((SELECT COUNT(*) FROM school AS s WHERE s.`session_year_id`=1 AND s.status=1 AND s.schools_id = school.`schools_id`), 1, "" ) AS `a`,
+                            IF((SELECT COUNT(*) FROM school AS s WHERE s.`session_year_id`=2 AND s.status=1 AND s.schools_id = school.`schools_id`), 1, "" ) AS `b`,
+                            IF((SELECT COUNT(*) FROM school AS s WHERE s.`session_year_id`=3 AND s.status=1 AND s.schools_id = school.`schools_id`), 1, "" ) AS `c`,
+                            IF((SELECT COUNT(*) FROM school AS s WHERE s.`session_year_id`=4 AND s.status=1 AND s.schools_id = school.`schools_id`), 1, "" ) AS `d`
+                            FROM
+                            `schools`,
+                            `school`,
+                            `district`,
+                            `levelofinstitute`,
+                            `reg_type` 
+                            WHERE `schools`.`schoolId` = `school`.`schools_id` 
+                            AND `district`.`districtId` = `schools`.`district_id` 
+                            AND `levelofinstitute`.`levelofInstituteId` = `school`.`level_of_school_id` 
+                            AND `reg_type`.`regTypeId` = `school`.`reg_type_id` 
+                            AND schools.`district_id`=13
+                            AND schools.`registrationNumber`>0
+                            GROUP BY schools.`schoolId`';
+                $schools = $this->db->query($query)->result();
+                foreach ($schools as $school) { ?>
+                  <tr>
+                      <td><?php echo $school->schoolName; ?></td>
+                      <td><?php echo $school->a; ?></td>
+                      <td><?php
+                            if ($school->a != 1) {
+                                echo $school->b;
+                            } ?></td>
+                      <td><?php
+                            if ($school->a != 1 and $school->b != 1) {
+                                echo $school->c;
+                            } ?></td>
+                      <td><?php
+                            if ($school->a != 1 and $school->b != 1 and $school->c != 1) {
+                                echo $school->d;
+                            } ?></td>
+
+                  </tr>
+              <?php  }
+                ?>
+          </table>
+      </div>
       </section>
   </div>
   </div>

@@ -268,7 +268,7 @@ class User_model extends MY_Model
 
         $fields = array("*");
         $join_table = array();
-        $where = "users.user_email = $user_email";
+        $where = "users.userEmail = $user_email";
         /*		
 			$query="SELECT * FROM `users` WHERE `users`.`user_email`='".$user_email."'";
 				$query_result = $this->db->query($query);
@@ -278,7 +278,7 @@ class User_model extends MY_Model
         $this->db->select("*");
         $this->db->from($this->table);
         $this->db->where(array(
-            "user_email" => $user_email
+            "userEmail" => $user_email
         ));
         $this->db->limit(1);
         $action_query = $this->db->get();
