@@ -164,7 +164,7 @@
                         <span id="total_toilets" <?php if (!in_array($ph->physicalId, $facilities_physical_ids)) :  ?> style="display: none;" <?php endif; ?>>
 
 
-                          (Number of Latrines
+                          (Number of Toilets
                           <input <?php if (in_array($ph->physicalId, $facilities_physical_ids)) :  ?> required <?php endif; ?> min="1" style="width: 50px;" type="number" name="numberOfLatrines" id="numberOfLatrines" value="<?php echo $school_physical_facilities->numberOfLatrines; ?>">
                           )<span style="margin-left: 20px;"></span>
 
