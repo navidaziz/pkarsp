@@ -8,16 +8,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
   <meta name="description" content="">
   <meta name="author" content="">
-  <!-- STYLESHEETS -->
-  <!--[if lt IE 9]><script src="js/flot/excanvas.min.js"></script><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script><![endif]-->
-  <link rel="stylesheet" type="text/css" href="<?php echo site_url("assets/" . ADMIN_DIR); ?>/css/cloud-admin.css">
-  <link href="<?php echo site_url("assets/" . ADMIN_DIR); ?>/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <!-- DATE RANGE PICKER -->
-  <link rel="stylesheet" type="text/css" href="<?php echo site_url("assets/" . ADMIN_DIR); ?>/js/bootstrap-daterangepicker/daterangepicker-bs3.css" />
-  <!-- UNIFORM -->
-  <link rel="stylesheet" type="text/css" href="<?php echo site_url("assets/" . ADMIN_DIR); ?>/js/uniform/css/uniform.default.min.css" />
-  <!-- ANIMATE -->
-  <link rel="stylesheet" type="text/css" href="<?php echo site_url("assets/" . ADMIN_DIR); ?>/css/animatecss/animate.min.css" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>PSRA</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+  <!--   <meta http-equiv="Cache-Control" content="no-cache">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0"> -->
+  <link rel="shortcut icon" type="image/x-icon" href="<?php echo base_url("assets/images/site_images/favicon.png"); ?>" />
+  <!-- Bootstrap 3.3.7 -->
+  <link rel="stylesheet" href='<?php echo base_url("assets/lib/bootstrap/dist/css/bootstrap.min.css"); ?>'>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href='<?php echo base_url("assets/lib/font-awesome/css/font-awesome.min.css"); ?>'>
+  <!-- Ionicons -->
+  <!-- <link rel="stylesheet" href="../../bower_components/Ionicons/css/ionicons.min.css"> -->
+  <!-- Theme style -->
+  <link rel="stylesheet" href='<?php echo base_url("assets/dist/css/AdminLTE.min.css") ?>'>
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+     folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href='<?php echo base_url("assets/dist/css/skins/skin-blue.min.css"); ?>'>
+  <link rel="stylesheet" href='<?php echo base_url("assets/lib/jquery/dist/jquery-ui.css"); ?>'>
+  <link rel="stylesheet" href='<?php echo base_url("assets/css/styles.css"); ?>'>
+
+  <link rel="stylesheet" href='<?php echo base_url("assets/toastr/build/toastr.css"); ?>'>
+  <!-- jQuery 3 -->
+  <script src='<?php echo base_url("assets/lib/jquery/dist/jquery.min.js"); ?>'></script>
+  <script src='<?php echo base_url("assets/lib/jquery/dist/jquery-ui.js"); ?>'></script>
+
+  <!-- iCheck for checkboxes and radio inputs -->
+  <link rel="stylesheet" href="<?php echo base_url('assets/lib/plugins/iCheck'); ?>/all.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="<?php echo base_url('assets/lib'); ?>/select2/dist/css/select2.min.css">
+  <link href="<?php echo base_url('assets/datatables/dataTables.bootstrap.css'); ?>" rel="stylesheet">
+  <link rel="stylesheet" href="<?php echo base_url('assets/datatables/buttons.dataTables.min.css'); ?>">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/notonastaliqurdudraft.css">
   <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/notonastaliqurdudraft.css">
   <style>
     .table>tbody>tr>td,
@@ -93,12 +131,12 @@
                     </tr>
 
                     <tr>
-                      <td>Institute Contact No. (Landline) </td>
-                      <td><input type="text" id="telePhoneNumber" required name="telePhoneNumber" value="" /> </td>
+                      <td>Institute Contact No. </td>
+                      <td><input data-mask="(999) 999-9999" type="number" id="telePhoneNumber" required name="telePhoneNumber" value="" /> </td>
                     </tr>
                     <tr>
-                      <td>Institute Contact No. (Mobile). </td>
-                      <td><input type="text" id="schoolMobileNumber" required name="schoolMobileNumber" value="" /> </td>
+                      <td>Contact No (Mobile). </td>
+                      <td><input type="number" id="schoolMobileNumber" required name="schoolMobileNumber" value="" /> </td>
                     </tr>
 
                     <tr>
@@ -477,21 +515,51 @@
 
 
     </section>
-    <!--/PAGE -->
-    <!-- JAVASCRIPTS -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <!-- JQUERY -->
-    <script src="<?php echo site_url("assets/" . ADMIN_DIR); ?>/js/jquery/jquery-2.0.3.min.js"></script>
-    <!-- JQUERY UI-->
-    <script src="<?php echo site_url("assets/" . ADMIN_DIR); ?>/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
-    <!-- BOOTSTRAP -->
-    <script src="<?php echo site_url("assets/" . ADMIN_DIR); ?>/bootstrap-dist/js/bootstrap.min.js"></script>
+    <!-- ./wrapper -->
 
-    <!-- UNIFORM -->
-    <script type="text/javascript" src="<?php echo site_url("assets/" . ADMIN_DIR); ?>/js/uniform/jquery.uniform.min.js"></script>
-    <!-- BACKSTRETCH -->
-    <script type="text/javascript" src="<?php echo site_url("assets/" . ADMIN_DIR); ?>/js/backstretch/jquery.backstretch.min.js"></script>
-    <!-- CUSTOM SCRIPT -->
+    <!-- jQuery 3 -->
+    <script src='<?php echo base_url("assets/lib/jquery/dist/jquery.min.js"); ?>'></script>
+    <script type="text/javascript" src="<?php echo base_url('assets/datatables/tools/jquery.dataTables.min.js'); ?>"></script>
+
+
+    <!-- dataTables Tools / -->
+
+    <script type="text/javascript" src="<?php echo base_url('assets/datatables/dataTables.bootstrap.js'); ?>"></script>
+
+    <script type="text/javascript" src='<?php echo base_url("assets/toastr/build/toastr.min.js"); ?>'></script>
+
+    <!-- <script type="text/javascript" src="<?php echo base_url('assets/lib/plugins/input-mask/jquery.inputmask.js'); ?>"></script> -->
+    <!-- App -->
+    <!-- <script type="text/javascript" src="<?php echo base_url('assets/js/app.js'); ?>" ></script>
+<script type="text/javascript" src="<?php echo base_url('assets/js/plugins.js'); ?>" ></script>
+<script type="text/javascript" src="<?php echo base_url('assets/js/plugins.form-components.js'); ?>" ></script> -->
+
+    <!-- <script>
+$(document).ready(function(){
+  "use strict";
+
+ // App.init(); // Init layout and core plugins
+  Plugins.init(); // Init all plugins
+  FormComponents.init(); // Init all form-specific plugins
+});
+</script> -->
+
+    <!-- Bootstrap 3.3.7 -->
+    <script src='<?php echo base_url("assets/lib/bootstrap/dist/js/bootstrap.min.js") ?>'></script>
+    <!-- SlimScroll -->
+    <script src='<?php echo base_url("assets/lib/jquery-slimscroll/jquery.slimscroll.min.js"); ?>'></script>
+    <!-- FastClick -->
+    <script src='<?php echo base_url("assets/lib/fastclick/lib/fastclick.js") ?>'></script>
+    <!-- AdminLTE App -->
+    <script src='<?php echo base_url("assets/dist/js/adminlte.js") ?>'></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src='<?php echo base_url("assets/dist/js/demo.js"); ?>'></script>
+
+
+    <!-- iCheck 1.0.1 -->
+    <script src="<?php echo base_url('assets/lib/plugins/iCheck'); ?>/icheck.min.js"></script>
+    <!-- Select2 -->
+    <script src="<?php echo base_url('assets/lib'); ?>/select2/dist/js/select2.full.min.js"></script>
     <script src="<?php echo base_url('assets/lib/plugins/input-mask/jquery.inputmask.js'); ?>"></script>
 
     <script>
@@ -499,12 +567,11 @@
         $('#telePhoneNumber').inputmask('(9999)-9999999');
         $('#cnic').inputmask('99999-9999999-9');
         $('#contactNumber').inputmask('(9999)-9999999');
-        $('#telePhoneNumber').inputmask('(9999)-9999999');
-        $('#schoolMobileNumber').inputmask('(9999)-9999999');
-
 
       });
     </script>
+
+    <!-- /JAVASCRIPTS -->
 </body>
 
 </html>

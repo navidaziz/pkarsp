@@ -4,7 +4,7 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta charset="utf-8">
-  <title>Login</title>
+  <title>PSRA School Login</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
   <meta name="description" content="">
   <meta name="author" content="">
@@ -12,15 +12,7 @@
   <!--[if lt IE 9]><script src="js/flot/excanvas.min.js"></script><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script><![endif]-->
   <link rel="stylesheet" type="text/css" href="<?php echo site_url("assets/" . ADMIN_DIR); ?>/css/cloud-admin.css">
   <link href="<?php echo site_url("assets/" . ADMIN_DIR); ?>/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <!-- DATE RANGE PICKER -->
-  <link rel="stylesheet" type="text/css" href="<?php echo site_url("assets/" . ADMIN_DIR); ?>/js/bootstrap-daterangepicker/daterangepicker-bs3.css" />
-  <!-- UNIFORM -->
-  <link rel="stylesheet" type="text/css" href="<?php echo site_url("assets/" . ADMIN_DIR); ?>/js/uniform/css/uniform.default.min.css" />
-  <!-- ANIMATE -->
-  <link rel="stylesheet" type="text/css" href="<?php echo site_url("assets/" . ADMIN_DIR); ?>/css/animatecss/animate.min.css" />
-  <!-- FONTS -->
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-151551956-1"></script>
+
 
   <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/notonastaliqurdudraft.css">
 
@@ -106,7 +98,7 @@
                 <div class="form-group">
                   <label for="exampleInputPassword1">Password</label>
                   <i class="fa fa-lock"></i>
-                  <input type="password" name="userPassword" class="form-control" id="userName" value="">
+                  <input type="password" name="userPassword" class="form-control" id="userPassword" value="">
                 </div>
                 <div class="form-group">
                   <div class="g-recaptcha" data-sitekey="6Leuqa4ZAAAAAEBURd3DWqmwV4cdzXi5zzcljMLR" style="height: 100px;">
@@ -183,19 +175,7 @@
   <script type="text/javascript" src="<?php echo site_url("assets/" . ADMIN_DIR); ?>/js/backstretch/jquery.backstretch.min.js"></script>
   <!-- CUSTOM SCRIPT -->
   <script src="<?php echo site_url("assets/" . ADMIN_DIR); ?>/js/script.js"></script>
-  <script>
-    jQuery(document).ready(function() {
-      App.setPage("login_bg"); //Set current page
-      App.init(); //Initialise plugins and elements
-    });
-  </script>
-  <script type="text/javascript">
-    function swapScreen(id) {
-      jQuery('.visible').removeClass('visible animated fadeInUp');
-      jQuery('#' + id).addClass('visible animated fadeInUp');
-    }
-  </script>
-  <!-- /JAVASCRIPTS -->
+
 </body>
 
 </html>
