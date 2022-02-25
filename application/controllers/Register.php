@@ -622,11 +622,17 @@ class Register extends Admin_Controller
 
 
         $validation_config = array(
+            // array(
+            //     "field"  =>  "school_id",
+            //     "label"  =>  "School Id",
+            //     "rules"  =>  "required|callback_school_id_exists"
+            // ),
             array(
                 "field"  =>  "user_email",
                 "label"  =>  "User Email",
                 "rules"  =>  "required|valid_email|callback_email_exists"
             ),
+
 
 
 
@@ -636,6 +642,9 @@ class Register extends Admin_Controller
         //set and run the validation
         $this->form_validation->set_rules($validation_config);
         if ($this->form_validation->run() === TRUE) {
+
+
+
 
 
 
@@ -672,6 +681,21 @@ class Register extends Admin_Controller
         $this->load->view("password_recovery/recover_password_form", $this->data);
     }
 
+
+
+    public function school_id_exists($school_id)
+    {
+
+        $query = "SELECT COUNT(*) as total FROM schools WHERE schools.schoolId = '" . $school_id . "'";
+        $total = $this->db->query($query)->result()[0]->total;
+
+        if ($total) {
+            return true;
+        } else {
+            $this->form_validation->set_message('school_id_exists', 'School ID not found');
+            return false;
+        }
+    }
 
     public function email_exists($email)
     {

@@ -355,7 +355,9 @@
                                   <i class="fa fa-spinner" aria-hidden="true"></i> Complete <?php echo $upgradation_and_renewal->regTypeTitle; ?> Process for <?php echo $upgradation_and_renewal->sessionYearTitle; ?></a>
 
                               </td>
-                            <?php } else { ?>
+                            <?php } else {
+
+                            ?>
                               <td colspan="5" style="text-align: center;">
                                 <small>
                                   <h4><?php echo $upgradation_and_renewal->regTypeTitle; ?> Application not complete yet !</h4>
@@ -408,15 +410,31 @@
                       <tr>
 
                         <td colspan="5" style="text-align: center;">
+                          <?php
+                          $query = "SELECT COUNT(*) as total FROM school WHERE schools_id ='" . $school_id . "' 
+                                    AND session_year_id = '" . ($session->sessionYearId - 1) . "'";
+                          $apply = $this->db->query($query)->result()[0]->total; ?>
+
                           <?php if ($session->status == 1) { ?>
                             <p class="btn btn-outline-success">
                               Apply For <?php echo $session->sessionYearTitle; ?>
-                              <a class="btn btn-success" style="margin: 1px;" href="<?php echo site_url("apply/renewal/$session->sessionYearId"); ?>">Renewal</a>
-                              <a class="btn btn-warning" style="margin: 1px;" href="<?php echo site_url("apply/renewal_upgradation/$session->sessionYearId"); ?>">Upgradation + Renewal</a>
+                              <?php if ($apply > 0) { ?>
+                                <a class="btn btn-success" style="margin: 1px;" href="<?php echo site_url("apply/renewal/$session->sessionYearId"); ?>"> Renewal </a>
+                                <a class="btn btn-warning" style="margin: 1px;" href="<?php echo site_url("apply/renewal_upgradation/$session->sessionYearId"); ?>">Upgradation + Renewal</a>
+                              <?php } else { ?>
+                                <a class="btn btn-success" style="margin: 1px;" data-toggle="tooltip" data-placement="top" title="" href=" # " data-original-title="Please apply and complete previous session data entry."> Renewal </a>
+                                <a class="btn btn-warning" style="margin: 1px;" data-toggle="tooltip" data-placement="top" title="" href=" # " data-original-title="Please apply and complete previous session data entry.">Upgradation + Renewal</a>
+
+                              <?php  } ?>
                             </p>
                           <?php } else { ?>
-                            <a class="btn btn-success" style="margin: 1px;" href="<?php echo site_url("apply/renewal/$session->sessionYearId"); ?>">Apply for <?php echo $session->sessionYearTitle; ?> Renewal</a>
+                            <?php if ($apply > 0) { ?>
+                              <a class="btn btn-success" style="margin: 1px;" href="<?php echo site_url("apply/renewal/$session->sessionYearId"); ?>">Apply for <?php echo $session->sessionYearTitle; ?> Renewal</a>
+                            <?php } else { ?>
+                              <a class="btn btn-success" style="margin: 1px;" data-toggle="tooltip" data-placement="top" title="" href=" # " data-original-title="Please apply and complete previous session data entry.">Apply for <?php echo $session->sessionYearTitle; ?> Renewal</a>
+                            <?php } ?>
                           <?php } ?>
+
                         </td>
                         </td>
                       </tr>

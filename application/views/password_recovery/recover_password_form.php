@@ -30,28 +30,6 @@
 	<!-- PAGE -->
 	<section id="page">
 		<!-- HEADER -->
-		<header>
-			<!-- NAV-BAR -->
-			<div class="container">
-				<div class="row">
-					<div class="col-md-4 col-md-offset-4">
-						<div id="logo" style=" margin-top:20px;">
-							<div style=" width:100%; margin:0px auto; color:#FFF; text-shadow: 2px 4px 3px rgba(0,0,0,0.3);">
-								<img class="pull-left" src="<?php echo site_url("assets/uploads/" . $system_global_settings[0]->sytem_admin_logo); ?>" alt="<?php echo $system_global_settings[0]->system_title ?>" title="<?php echo $system_global_settings[0]->system_title ?>" style="width:70px !important; margin-right:10px; " /> <span class="pull-left">
-									<h3><?php echo $system_global_settings[0]->system_title ?></h3>
-									<h6 style="margin-top:-7px;"><?php echo $system_global_settings[0]->system_sub_title ?></h6>
-								</span>
-							</div>
-							<div style="clear:both;"></div>
-							<hr />
-						</div>
-
-					</div>
-				</div>
-			</div>
-			<!--/NAV-BAR -->
-		</header>
-
 
 		<section id="forgot _bg">
 
@@ -62,19 +40,29 @@
 				<div class="row">
 					<div class="col-md-4 col-md-offset-4">
 						<div class="login-box-plain">
-							<h2 class="bigintro">Reset Password</h2>
+							<h2 class="bigintro">Recover Account Password</h2>
 							<div class="divide-40"></div>
 							<form role="form" method="post" action="<?php echo site_url("register/password_reset_submit"); ?>">
+								<?php if (validation_errors()) { ?>
+									<div class="alert alert-block alert-danger fade in">
+										<?php echo validation_errors(); ?>
+									</div>
+								<?php } ?>
+
+								<!-- <div class="form-group">
+									<label for="user_email">Enter School ID</label>
+
+									<i class="fa fa-id-card"></i>
+									<input type="number" class="form-control" name="school_id" id="school_id">
+								</div> -->
+
 								<div class="form-group">
 									<label for="user_email">Enter your Email address</label>
-									<?php if (validation_errors()) { ?>
-										<div class="alert alert-block alert-danger fade in">
-											<?php echo validation_errors(); ?>
-										</div>
-									<?php } ?>
+
 									<i class="fa fa-envelope"></i>
 									<input type="email" class="form-control" name="user_email" id="user_email">
 								</div>
+
 								<div class="form-ac tions">
 									<button type="submit" class="btn btn-danger">Send Me Reset Instructions</button>
 								</div>
