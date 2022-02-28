@@ -352,7 +352,7 @@
                                   ?>
 
                                 </td>
-                                <td></td>
+
                                 <td>
                                   <strong>
                                     <?php if ($session_id == 1) { ?>

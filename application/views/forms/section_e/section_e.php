@@ -254,16 +254,14 @@
 
 
             <div class="col-md-12">
-              <div style=" font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
-                <a class="btn btn-link pull-left" href="<?php echo site_url("form/section_d/$school_id"); ?>">
+              <div style=" font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 30px;  margin: 10px; padding: 10px; background-color: white;">
+                <a class="btn btn-success pull-left" href="<?php echo site_url("form/section_d/$school_id"); ?>">
 
-                  <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Section D ( School Fee Detail ) </a>
+                  <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Previous Section ( School Fee Detail ) </a>
                 <?php if ($form_complete and $form_status->form_e_status == 0) { ?>
                   <input class="btn btn-danger" type="submit" name="Add Section E Data" value="Add Section E Data" />
                   <!-- <a href="<?php echo site_url("form/complete_section_e/$school_id"); ?>" class="btn btn-primary">Add Section E Data</a> -->
-                <?php } else {
-                  echo "<br />";
-                }  ?>
+                <?php }  ?>
 
                 <?php if ($form_complete and $form_status->form_e_status == 1) { ?>
                   <input class="btn btn-primary" type="submit" name="Add Section E Data" value="Update Section E Data" />
@@ -271,9 +269,9 @@
                 <?php }  ?>
                 </form>
                 <?php if ($form_status->form_e_status == 1) { ?>
-                  <a class="btn btn-link pull-right" href="<?php echo site_url("form/section_f/$school_id"); ?>">
-                    Section F ( Security Measures )<i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
-                  <br />
+                  <a class="btn btn-success pull-right" href="<?php echo site_url("form/section_f/$school_id"); ?>">
+                    Next Section ( Security Measures )<i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
+
                 <?php } ?>
               </div>
             </div>

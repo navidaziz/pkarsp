@@ -81,7 +81,7 @@
                       <span id="building_rent" <?php if ($building->physicalBuildingId != $school_physical_facilities->building_id) { ?>style="display: none;" <?php } ?>>
                         <br />
                         (Monthly Rent Amount (Rs.):
-                        <input <?php if ($building->physicalBuildingId == $school_physical_facilities->building_id) { ?> required <?php  } ?> style="width: 90px;" type="number" name="rent_amount" value="<?php echo $school_physical_facilities->rent_amount; ?>" placeholder="50000" id="rent_amount" />
+                        <input <?php if ($building->physicalBuildingId == $school_physical_facilities->building_id) { ?> required <?php  } ?> style="width: 90px;" type="number" name="rent_amount" value="<?php echo $school_physical_facilities->rent_amount; ?>" placeholder="" id="rent_amount" />
 
                       </span> <?php } ?>
                     <span style="margin-top: 10px; display: block;"> </span>
@@ -335,7 +335,8 @@
                     <input onclick="check_total_area()" class="btn btn-danger" type="submit" name="" value="Add Section B Data" />
                   <?php } ?>
                   <?php if ($form_status->form_b_status == 1) { ?>
-                    <a class="btn btn-link pull-right" href="<?php echo site_url("form/section_c/$school_id"); ?>"> Section C (Students Enrolment) <i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
+                    <a class="btn btn-success pull-right" href="<?php echo site_url("form/section_c/$school_id"); ?>">
+                      Next Section (Students Enrolment) <i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
 
                   <?php } ?>
                 </div>

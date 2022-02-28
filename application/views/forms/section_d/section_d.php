@@ -205,17 +205,17 @@
             </div>
 
             <div class="col-md-12">
-              <div style="font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 20px;  margin: 10px; padding: 10px; background-color: white;">
-                <a class="btn btn-link pull-left" href="<?php echo site_url("form/section_c/$school_id"); ?>">
-                  <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Section C ( Students Enrollment ) </a>
+              <div style="font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 50px;  margin: 10px; padding: 10px; background-color: white;">
+                <a class="btn btn-success pull-left" href="<?php echo site_url("form/section_c/$school_id"); ?>">
+                  <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Previous Section ( Students Enrollment ) </a>
                 <?php if (count($school_staff) >= 3 and $form_status->form_d_status == 0) { ?>
                   <a href="<?php echo site_url("form/complete_section_d/$school_id"); ?>" class="btn btn-primary">Add Section D Data</a>
                 <?php } else { ?>
 
                 <?php } ?>
                 <?php if ($form_status->form_d_status == 1) { ?>
-                  <a class="btn btn-link pull-right" href="<?php echo site_url("form/section_e/$school_id"); ?>">
-                    Section E ( School Fee Detail )<i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
+                  <a class="btn btn-success pull-right" href="<?php echo site_url("form/section_e/$school_id"); ?>">
+                    Next Section ( School Fee Detail )<i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
                   <br />
                 <?php } else {
                   echo "<br />";

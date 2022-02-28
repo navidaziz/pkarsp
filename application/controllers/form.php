@@ -22,7 +22,7 @@ class Form extends Admin_Controller
 					, `schools`.`yearOfEstiblishment`
 					, `schools`.`school_type_id`
 					, `schools`.`level_of_school_id`
-					, `schools`.`gender_type_id` 
+					, `school`.`gender_type_id`  
 					, `school`.`reg_type_id`
 					, `schools`.`biseRegister`
 				FROM
