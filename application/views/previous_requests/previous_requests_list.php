@@ -30,6 +30,27 @@
         }
 
       });
+  }
+
+  function forward_for_challan_verification(school_id, challan_no, chalan_date) {
+    $.ajax({
+        method: "POST",
+        url: "<?php echo site_url('previous_requests/forward_for_challan_verification'); ?>",
+        data: {
+          school_id: school_id,
+          challan_no: challan_no,
+          chalan_date: chalan_date
+        },
+      })
+      .done(function(respose) {
+        //alert(respose);
+        if (respose) {
+          $('#tr_' + school_id).hide();
+        } else {
+          alert("Error try again.");
+        }
+
+      });
 
   }
 </script>
@@ -173,10 +194,13 @@
                         } else {
                           if ($bt and $bt->bt_no != '') { ?>
 
-                          Forward <i class="fa fa-forward" aria-hidden="true"></i>
+                          <button onclick="forward_for_challan_verification('<?php echo $previous_request->school_id; ?>', '<?php echo $bt->bt_no; ?>', '<?php echo $bt->bt_date; ?>')">
+                            Forward <i class="fa fa-forward" aria-hidden="true"></i>
+                          </button>
 
                       <?php }
-                        } ?></td>
+                        } ?>
+                    </td>
                     <td>
                       <button class="btn btn-link btn-sm" onclick="view_school_detail('<?php echo $previous_request->schoolId; ?>')">View</button>
                     </td>
