@@ -151,7 +151,7 @@
                   FROM
                     `bank_challans` 
                   WHERE `bank_challans`.`school_id` = school.`schoolId`) = 0 
-                  ORDER BY `schools`.`schoolId` LIMIT 10
+                  ORDER BY `schools`.`schoolId`
                           ";
                 $previous_requests = $this->db->query($query)->result(); ?>
                 <?php foreach ($previous_requests as $previous_request) { ?>
