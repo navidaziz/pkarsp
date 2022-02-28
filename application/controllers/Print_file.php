@@ -17,6 +17,7 @@ class Print_file extends MY_Controller
 		$this->data['school_bank'] = $this->school_m->get_bank_by_school_id($school_id);
 
 		$this->data['school_physical_facilities'] = $this->school_m->physical_facilities_by_school_id($school_id);
+
 		$this->data['school_physical_facilities_physical'] = $this->school_m->physical_facilities_physical_by_school_id($school_id);
 		$this->data['school_physical_facilities_academic'] = $this->school_m->physical_facilities_academic_by_school_id($school_id);
 		$this->data['school_physical_facilities_co_curricular'] = $this->school_m->physical_facilities_co_curricular_by_school_id($school_id);

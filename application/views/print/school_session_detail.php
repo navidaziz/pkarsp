@@ -382,7 +382,7 @@
                     <?php endif; ?>
                     <?php if (!empty($school_physical_facilities->numberOfLatrines)) : ?>
                       <tr>
-                        <td><b>Number Of Latrines</b></td>
+                        <td><b>Number Of Toilets</b></td>
                         <td>
                           <?php echo $school_physical_facilities->numberOfLatrines; ?>
                         </td>
