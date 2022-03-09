@@ -17,49 +17,151 @@ class Fines extends My_Controller
 		$this->load->view('layout', $this->data);
 	}
 
-
-	public function marked_as_re_submit()
+	public function add_fine()
 	{
-		$where['schoolId'] = (int) $this->input->post('school_id');
-		$where['status'] = 2;
-		$this->db->where($where);
-		$update['status'] = '0';
-		if ($this->db->update('school', $update)) {
+		$school_fine_history = array(
+			'school_id' => (int) $this->input->post('schools_id'),
+			'fine_category' => $this->input->post('fine_category'),
+			'fine_amount' => $this->input->post('amount'),
+			'remarks' => $this->input->post('remarks'),
+			'created_by' => $this->session->userdata('userId'),
+			'file_number' => $this->input->post('file_number'),
+			'file_date' => $this->input->post('file_date')
+		);
+		if ($this->db->insert('school_fine_history', $school_fine_history)) {
 			echo 1;
 		} else {
 			echo 0;
 		}
 	}
 
-	public function forward_for_challan_verification()
+	public function delete_fine()
 	{
-
-		$schoolId = (int) $this->input->post('school_id');
-		$challan_no = $this->input->post('challan_no');
-		$chalan_date =  $this->input->post('chalan_date');
-		$userId = $this->session->userdata('userId');
-
-
-		$query = "SELECT school.*,  `reg_type`.`regTypeTitle`  FROM school 
-		INNER JOIN `reg_type` 
-                    ON (
-                      `reg_type`.`regTypeId` = `school`.`reg_type_id`
-                    )
-		WHERE schoolId = '" . $schoolId . "' and status = 2";
-		$school = $this->db->query($query)->result()[0];
-
-
-		$challan_detail['challan_for'] = $school->regTypeTitle;
-		$challan_detail['challan_no'] = $challan_no;
-		$challan_detail['challan_date'] = $chalan_date;
-		$challan_detail['session_id'] = $school->session_year_id;
-		$challan_detail['schools_id'] = $school->schools_id;
-		$challan_detail['school_id'] = $schoolId;
-		$challan_detail['created_by'] = $userId;
-		if ($this->db->insert('bank_challans', $challan_detail)) {
+		$where['school_id'] = (int) $this->input->post('schools_id');
+		$where['history_id'] = (int) $this->input->post('history_id');
+		$this->db->where($where);
+		$status['is_deleted'] = 1;
+		if ($this->db->update('school_fine_history', $status)) {
 			echo 1;
 		} else {
 			echo 0;
 		}
+	}
+
+	public function delete_fine_payment()
+	{
+		$where['school_id'] = (int) $this->input->post('schools_id');
+		$where['fine_id'] = (int) $this->input->post('history_id');
+		$where['fine_payment_id'] = (int) $this->input->post('fine_payment_id');
+		$this->db->where($where);
+		$status['is_deleted'] = 1;
+		if ($this->db->update('fine_payments', $status)) {
+			echo 1;
+		} else {
+			echo 0;
+		}
+	}
+
+	public function add_fine_payment()
+	{
+
+		$input['school_id'] = (int) $this->input->post('schools_id');
+		$input['fine_id'] = (int) $this->input->post('history_id');
+		$input['stan_no'] = (int) $this->input->post('stan_no');
+		$input['deposit_date'] = $this->input->post('deposit_date');
+		$input['deposit_amount'] = (int) $this->input->post('deposit_amount');
+		if ($this->db->insert('fine_payments', $input)) {
+			echo 1;
+		} else {
+			echo 0;
+		}
+	}
+
+
+	public function view_school_detail()
+	{
+
+
+		$this->data['schools_id'] = $school_id = (int) $this->input->post('schools_id');
+
+
+		$this->data['school'] = $this->school_detail($school_id);
+
+
+		$this->load->view('fines/school_detail', $this->data);
+	}
+	private function school_detail($schools_id)
+	{
+		$query = "SELECT
+		            `schools`.`schoolId` as schools_id,
+					`schools`.`schoolName`,
+					`schools`.`registrationNumber`,
+					`schools`.`yearOfEstiblishment`,
+					`tehsils`.`tehsilTitle`,
+					`district`.`division`,
+					`schools`.`telePhoneNumber`,
+					`schools`.`schoolMobileNumber`,
+					`schools`.`principal_email`,
+					`levelofinstitute`.`levelofInstituteTitle`,
+					`genderofschool`.`genderOfSchoolTitle`,
+					`users`.`userTitle`,
+					`users`.`userEmail`,
+					`users`.`cnic`,
+					`users`.`contactNumber`,
+					`schools`.`mediumOfInstruction`,
+					`schools`.`biseRegister`,
+					`schools`.`biseregistrationNumber`,
+					`schools`.`primaryRegDate`,
+					`schools`.`highRegDate`,
+					`schools`.`interRegDate`,
+					`schools`.`biseAffiliated`,
+					`schools`.`bise_verified`,
+					`schools`.`level_of_school_id`,
+					`school_type`.`typeTitle`,
+					`bise`.`biseName`,
+					`district`.`districtTitle`,
+					`uc`.`ucTitle`,
+					`schools`.`primary_level`,
+					`schools`.`middle_level`,
+					`schools`.`high_level`,
+					`schools`.`h_sec_college_level`
+					FROM
+					`schools`
+					INNER JOIN `district`
+						ON (
+						`district`.`districtId` = `schools`.`district_id`
+						)
+					INNER JOIN `tehsils`
+						ON (
+						`tehsils`.`tehsilId` = `schools`.`tehsil_id`
+						)
+					INNER JOIN `levelofinstitute`
+						ON (
+						`levelofinstitute`.`levelofInstituteId` = `schools`.`level_of_school_id`
+						)
+					INNER JOIN `genderofschool`
+						ON (
+						`genderofschool`.`genderOfSchoolId` = `schools`.`gender_type_id`
+						)
+					LEFT JOIN `school_type`
+						ON (
+						`schools`.`school_type_id` = `school_type`.`typeId`
+						)
+					LEFT JOIN `users`
+						ON (
+						`users`.`userId` = `schools`.`owner_id`
+						)
+					LEFT JOIN `bise`
+						ON (
+						`schools`.`bise_id` = `bise`.`biseId`
+						)
+					LEFT JOIN `uc`
+						ON (
+						`uc`.`ucId` = `schools`.`uc_id`
+						)	
+					WHERE schools.schoolId = '" . $schools_id . "'
+							";
+
+		return $this->db->query($query)->result()[0];
 	}
 }

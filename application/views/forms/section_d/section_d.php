@@ -63,7 +63,7 @@
               <p>
               <h4 style="border-left: 20px solid #9FC8E8; padding-left:5px"><strong><?php echo @$description; ?></strong><br />
                 <small style="color: red;">
-                  Note: Please enter Institute Principal, Vice Principal, All Teaching and Non Teaching Staffs and others detail for session: <?php echo $session_detail->sessionYearTitle; ?>.
+                  Note: Please enter details of Principal, Vice Principal, All Teaching and Non Teaching Staffs for session: <?php echo $session_detail->sessionYearTitle; ?>.
                 </small>
               </h4>
 

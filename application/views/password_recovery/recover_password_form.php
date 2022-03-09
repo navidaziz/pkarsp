@@ -40,7 +40,7 @@
 				<div class="row">
 					<div class="col-md-4 col-md-offset-4">
 						<div class="login-box-plain">
-							<h2 class="bigintro">Recover Account Password</h2>
+							<h2 class="bigintro">Recover Account Detail</h2>
 							<div class="divide-40"></div>
 							<form role="form" method="post" action="<?php echo site_url("register/password_reset_submit"); ?>">
 								<?php if (validation_errors()) { ?>
@@ -64,7 +64,7 @@
 								</div>
 
 								<div class="form-ac tions">
-									<button type="submit" class="btn btn-danger">Send Me Reset Instructions</button>
+									<button type="submit" class="btn btn-danger">Send me Account Detail</button>
 								</div>
 							</form>
 							<div class="login-helpers">

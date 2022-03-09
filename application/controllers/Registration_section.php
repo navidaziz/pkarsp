@@ -149,7 +149,7 @@ class Registration_section extends Admin_Controller
 		if ($user_detail) {
 
 			date_default_timezone_set("Asia/Karachi");
-			$dated = date("d-m-Y h:i:sa");
+			$dated = date('Y-m-d H:i:s');
 
 			$row = $this->db->where('schoolId', $schools_id)->get('schools')->row();
 
@@ -302,7 +302,7 @@ class Registration_section extends Admin_Controller
 		$user_detail = $this->db->get('users')->row();
 		if ($user_detail) {
 			date_default_timezone_set("Asia/Karachi");
-			$dated = date("Y-m-d h:i:sa");
+			$dated = date('Y-m-d H:i:s');
 
 			$renewal_code = "2-" . $school_id . "-" . $session_id;
 			//echo $renewal_code;exit;
@@ -391,7 +391,7 @@ class Registration_section extends Admin_Controller
 		$user_detail = $this->db->get('users')->row();
 		if ($user_detail) {
 			date_default_timezone_set("Asia/Karachi");
-			$dated = date("Y-m-d h:i:sa");
+			$dated = date('Y-m-d H:i:s');
 
 			$renewal_code = "2-" . $school_id . "-" . $session_id;
 			//echo $renewal_code;exit;
@@ -478,7 +478,7 @@ class Registration_section extends Admin_Controller
 		$user_detail = $this->db->get('users')->row();
 		if ($user_detail) {
 			date_default_timezone_set("Asia/Karachi");
-			$dated = date("Y-m-d h:i:sa");
+			$dated = date('Y-m-d H:i:s');
 
 			$renewal_code = "2-" . $school_id . "-" . $session_id;
 			//echo $renewal_code;exit;

@@ -34,7 +34,6 @@ class Apply extends MY_Controller
 				'level_of_school_id' => $school->level_of_school_id,
 				'gender_type_id' => $school->gender_type_id,
 				'school_type_id' => $school->school_type_id,
-				'updatedDate' => 123456,
 				'school_will_be_update_by_school_user' => 1,
 				'updatedBy' => $this->session->userdata('userId')
 			);
@@ -371,7 +370,6 @@ class Apply extends MY_Controller
 			$this->db->trans_commit();
 			$school_data_to_update = array(
 				'reg_type_id' => 2,
-				'updatedDate' => date('Y-m-d H:i:s', time()),
 				'updatedBy' => $this->session->userdata('userId'),
 				'created_date' => date('Y-m-d H:i:s', time()),
 				'status' => 0
@@ -713,7 +711,6 @@ class Apply extends MY_Controller
 			$this->db->trans_commit();
 			$school_data_to_update = array(
 				'reg_type_id' => 4,
-				'updatedDate' => date('Y-m-d H:i:s', time()),
 				'updatedBy' => $this->session->userdata('userId'),
 				'created_date' => date('Y-m-d H:i:s', time()),
 				'status' => 0
@@ -1056,7 +1053,6 @@ class Apply extends MY_Controller
 			$this->db->trans_commit();
 			$school_data_to_update = array(
 				'reg_type_id' => 3,
-				'updatedDate' => date('Y-m-d H:i:s', time()),
 				'updatedBy' => $this->session->userdata('userId'),
 				'created_date' => date('Y-m-d H:i:s', time()),
 				'status' => 0

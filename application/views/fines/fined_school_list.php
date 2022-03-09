@@ -2,7 +2,7 @@
   function view_school_detail(schools_id) {
     $.ajax({
         method: "POST",
-        url: "<?php echo site_url('search/view_school_detail'); ?>",
+        url: "<?php echo site_url('fines/view_school_detail'); ?>",
         data: {
           schools_id: schools_id,
         },
@@ -12,51 +12,10 @@
       });
     $('#view_school_detail').modal('toggle');
   }
-
-  function marked_as_re_submit(school_id) {
-    $.ajax({
-        method: "POST",
-        url: "<?php echo site_url('previous_requests/marked_as_re_submit'); ?>",
-        data: {
-          school_id: school_id,
-        },
-      })
-      .done(function(respose) {
-        //alert(respose);
-        if (respose) {
-          $('#tr_' + school_id).hide();
-        } else {
-          alert("Error try again.");
-        }
-
-      });
-  }
-
-  function forward_for_challan_verification(school_id, challan_no, chalan_date) {
-    $.ajax({
-        method: "POST",
-        url: "<?php echo site_url('previous_requests/forward_for_challan_verification'); ?>",
-        data: {
-          school_id: school_id,
-          challan_no: challan_no,
-          chalan_date: chalan_date
-        },
-      })
-      .done(function(respose) {
-        //alert(respose);
-        if (respose) {
-          $('#tr_' + school_id).hide();
-        } else {
-          alert("Error try again.");
-        }
-
-      });
-
-  }
 </script>
 
 <div class="modal fade" id="view_school_detail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-  <div class="modal-dialog" role="document" style="width: 50% !important;">
+  <div class="modal-dialog" role="document" style="width: 90% !important;">
     <div class="modal-content" id="view_school_detail_body">
 
       ...
@@ -91,7 +50,7 @@
       <div class="box-body">
         <div class="row">
 
-          <div class="col-md-12">
+          <div class="col-md-8">
 
 
             <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
@@ -103,6 +62,7 @@
                   <th>School ID</th>
                   <th>School Name</th>
                   <th>REG No</th>
+                  <th>Total Fine</th>
                   <th>Action</th>
                 </tr>
                 <?php
@@ -135,7 +95,13 @@
                     <td><?php echo $previous_request->schoolId; ?></td>
                     <td><?php echo $previous_request->schoolName; ?></td>
                     <td><?php echo $previous_request->registrationNumber; ?></td>
-
+                    <td><?php
+                        $query = "SELECT SUM(`fine_amount`) as fine_total 
+                                  FROM `school_fine_history` 
+                                  WHERE school_id= '" . $previous_request->schoolId . "'
+                                  AND is_deleted = 0;";
+                        echo $this->db->query($query)->result()[0]->fine_total;
+                        ?></td>
                     <td>
                       <button class="btn btn-link btn-sm" onclick="view_school_detail('<?php echo $previous_request->schoolId; ?>')">View</button>
                     </td>

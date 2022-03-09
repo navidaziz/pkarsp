@@ -136,8 +136,18 @@ class Login extends Admin_Controller
 
 				//get user projects  by role id
 
+				$query = "SELECT schoolId,
+								schoolName,
+								registrationNumber, 
+								district_id, 
+								tehsil_id, 
+								uc_id 
+								FROM schools 
+								WHERE `owner_id`='" . $user->userId . "'";
+				$school =  $this->db->query($query)->result()[0];
 
-
+				$query = "SELECT sessionYearId as session_id FROM `session_year` WHERE status=1 ORDER BY sessionYearId DESC";
+				$current_session_id  = $this->db->query($query)->result()[0]->session_id;
 				$user_data = array(
 					"userId" => $user->userId,
 					"userTitle" => $user->userTitle,
@@ -151,7 +161,13 @@ class Login extends Admin_Controller
 					'cnic' => $user->cnic,
 					'createdDate' => $user->createdDate,
 					'user_type' => $user->user_type,
-					'contactNumber' => $user->contactNumber
+					'school_id' => $school->schoolId,
+					'school_name' =>  $school->schoolName,
+					'school_reg_no' =>  $school->registrationNumber,
+					'district_id' => $school->district_id,
+					'tehsil_id' => $school->tehsil_id,
+					'uc_id' => $school->uc_id,
+					'current_session_id' => $current_session_id
 				);
 
 
