@@ -194,22 +194,22 @@
           <tbody>
             <tr>
               <td>Application Processing Fee</td>
-              <td><?php echo number_format($fee_sturucture->renewal_app_processsing_fee); ?> Rs.</td>
+              <td>Rs. <?php echo number_format($fee_sturucture->renewal_app_processsing_fee); ?>.</td>
             </tr>
             <tr>
               <td>Inspection Fee</td>
-              <td><?php echo number_format($fee_sturucture->renewal_app_inspection_fee); ?> Rs.</td>
+              <td>Rs. <?php echo number_format($fee_sturucture->renewal_app_inspection_fee); ?> </td>
             </tr>
 
             <tr>
-              <td><strong>Total Session <?php echo $session_detail->sessionYearTitle; ?> Registration Fee </strong></td>
+              <td>Total Session <?php echo $session_detail->sessionYearTitle; ?> Registration Fee </td>
               <td>
-                <strong>
-                  <?php $total = $fee_sturucture->renewal_app_processsing_fee + $fee_sturucture->renewal_app_inspection_fee;
+                Rs.
+                <?php $total = $fee_sturucture->renewal_app_processsing_fee + $fee_sturucture->renewal_app_inspection_fee;
 
-                  echo number_format($total);
-                  ?> Rs.
-                </strong>
+                echo number_format($total);
+                ?>
+
               </td>
             </tr>
 
@@ -233,10 +233,10 @@
                   </style>
                   <table class="table table_reg">
                     <tr>
-                      <th> Due's Date </th>
-                      <th> Late Fee % </th>
-                      <th> Late Fee </th>
-                      <th>Session <?php echo $session_detail->sessionYearTitle; ?> Registration Fee </th>
+                      <td> Due's Date </td>
+                      <td> Late Fee % </td>
+                      <td> Late Fee </td>
+                      <td>Session <?php echo $session_detail->sessionYearTitle; ?> Registration Fee </td>
 
                       <?php
                       $query = "SELECT * FROM `levelofinstitute` 
@@ -244,22 +244,23 @@
                       $level_securities = $this->db->query($query)->result()[0];
 
                       ?>
-                      <th>Security Fee <br /><small>(<?php echo $level_securities->levelofInstituteTitle; ?>)</small></th>
+                      <td>Security Fee <br /><small>(<?php echo $level_securities->levelofInstituteTitle; ?>)</small></td>
                       <?php if ($session_id == 1) { ?>
-                        <th>2018-19 Special Fine (<?php echo $level_securities->levelofInstituteTitle; ?>)</th>
+                        <td>2018-19 Special Fine (<?php echo $level_securities->levelofInstituteTitle; ?>)
+                        </td>
                       <?php } ?>
-                      <th>Total</th>
+                      <td>Total</td>
                     </tr>
                     <?php
                     $count = 1;
                     foreach ($session_fee_submission_dates as $session_fee_submission_date) { ?>
 
                       <tr>
-                        <th>
+                        <td>
                           Upto <?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?>
-                        </th>
+                        </td>
                         <?php if ($session_fee_submission_date->fine_percentage == 0) { ?>
-                          <td colspan="2"> <strong> Normal Fee </strong></td>
+                          <td colspan="2"> Normal Fee </td>
                         <?php } else { ?>
                           <td>
 
@@ -314,6 +315,57 @@
 
 
 
+                    <?php } ?>
+
+                    <?php if ($session_id == 1) { ?>
+                      <tr>
+                        <td>
+                          1 Dec, 2019
+                        </td>
+                        <td>
+
+                          <?php echo $session_fee_submission_dates['4']->fine_percentage; ?> %</td>
+                        <td>
+                          <?php
+                          $fine = 0;
+                          $fine = ($session_fee_submission_dates['4']->fine_percentage * $total) / 100;
+                          echo number_format($fine);
+                          ?>
+
+                        </td>
+
+                        <td>
+                          <?php echo number_format($fine + $total);  ?>
+                        </td>
+                        <td>
+                          <?php $security = ($level_securities->security_fee - $bise_tdr);
+
+                          echo number_format($security);
+                          ?>
+
+                        </td>
+                        <?php
+
+                        $specialfine = 0; ?>
+
+                        <td><?php
+                            //echo $school->district_id . " - ";
+                            $specialfine = $special_fine;
+                            echo number_format($special_fine); ?></td>
+
+
+                        <td>
+                          <strong>
+
+                            <?php
+                            // echo "$fine + $total + $security + $specialfine";
+                            echo number_format($fine + $total + $security + $specialfine);
+                            ?>
+
+                          </strong>
+                        </td>
+
+                      </tr>
                     <?php } ?>
                   </table>
                 </td>

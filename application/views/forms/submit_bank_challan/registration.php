@@ -159,7 +159,7 @@
                       $pecial_fine = 0;
                       if ($session_id == 1) { ?>
                         <tr>
-                          <td colspan="2" style="text-align: center;"> Sattal Areas 2018-19 Special Fine<br />1 Dec, 2019</td>
+                          <td colspan="2" style="text-align: center;"> Settle Areas 2018-19 Special Fine<br />1 Dec, 2019</td>
                           <td>
                             <strong>50,000 Rs.</strong> <br> Primary / Middle Level <br>
                             <strong>200,000 Rs. </strong> <br> High / Higher Level
@@ -264,12 +264,13 @@
                     <tbody>
                       <tr>
                         <td>Application Processing Fee</td>
-                        <td><?php echo number_format($fee_sturucture->renewal_app_processsing_fee); ?> Rs.</td>
+                        <td>Rs. <?php echo number_format($fee_sturucture->renewal_app_processsing_fee); ?></td>
                       </tr>
                       <tr>
                         <td>Inspection Fee</td>
-                        <td><?php echo number_format($fee_sturucture->renewal_app_inspection_fee); ?> Rs.</td>
+                        <td>Rs. <?php echo number_format($fee_sturucture->renewal_app_inspection_fee); ?></td>
                       </tr>
+
 
                       <tr>
                         <td><strong> Session <?php echo $session_detail->sessionYearTitle; ?> Registration Fee </strong></td>
@@ -281,6 +282,7 @@
                             ?> Rs.
                           </strong>
                         </td>
+
                       </tr>
 
                       <tr>
@@ -352,7 +354,9 @@
                                   ?>
 
                                 </td>
-
+                                <?php if ($session_id == 1) { ?>
+                                  <td></td>
+                                <?php } ?>
                                 <td>
                                   <strong>
                                     <?php if ($session_id == 1) { ?>
