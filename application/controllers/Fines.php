@@ -11,8 +11,8 @@ class Fines extends My_Controller
 
 	public function index()
 	{
-		$this->data['title'] = 'Fined School List';
-		$this->data['description'] = 'Fined School List';
+		$this->data['title'] = 'Fine Mangement System';
+		$this->data['description'] = 'Fine Management System';
 		$this->data['view'] = 'fines/fined_school_list';
 		$this->load->view('layout', $this->data);
 	}
@@ -29,6 +29,10 @@ class Fines extends My_Controller
 			'file_date' => $this->input->post('file_date')
 		);
 		if ($this->db->insert('school_fine_history', $school_fine_history)) {
+			$where['schoolId'] = (int) $this->input->post('schools_id');
+			$this->db->where($where);
+			$is_fine['isfined'] = 1;
+			$this->db->update('schools', $is_fine);
 			echo 1;
 		} else {
 			echo 0;
@@ -70,7 +74,9 @@ class Fines extends My_Controller
 		$input['stan_no'] = (int) $this->input->post('stan_no');
 		$input['deposit_date'] = $this->input->post('deposit_date');
 		$input['deposit_amount'] = (int) $this->input->post('deposit_amount');
+		$input['created_by'] = $this->session->userdata('userId');
 		if ($this->db->insert('fine_payments', $input)) {
+
 			echo 1;
 		} else {
 			echo 0;
@@ -163,5 +169,53 @@ class Fines extends My_Controller
 							";
 
 		return $this->db->query($query)->result()[0];
+	}
+
+	public function search_detail()
+	{
+		$district_id = (int) $this->input->post('district_id');
+		if ($district_id) {
+			$district_name = $this->input->post('district_name');
+		} else {
+			$district_name = "All Districts";
+		}
+		$search_by = $this->input->post('search_by');
+		$schoolid = $this->db->escape($this->input->post('search'));
+		$reg_no = $this->db->escape($this->input->post('search'));
+		$school_name = $this->db->escape("%" . $this->input->post('search') . "%");
+		$query = "SELECT
+		`schools`.schoolId as schools_id,
+		`schools`.schoolName,
+		`schools`.registrationNumber,
+		`district`.`districtTitle`
+		FROM `schools` INNER JOIN `district` 
+        ON (`schools`.`district_id` = `district`.`districtId`) 
+		WHERE `schools`.registrationNumber > 0
+		";
+
+		if ($search_by == 'school_id') {
+			$searchBy = 'School ID';
+			$query .= " AND `schools`.`schoolId` = " . $schoolid . " ";
+		}
+
+		if ($search_by == 'reg_no') {
+			$searchBy = 'Reg. ID';
+			$query .= " AND `schools`.`registrationNumber` = " . $reg_no . " ";
+		}
+
+		if ($search_by == 'school_name') {
+			$searchBy = 'School Name';
+			$query .= " AND `schools`.`schoolName` LIKE " . $school_name . " ";
+		}
+
+		if ($district_id) {
+			$query .= " AND schools.district_id = '" . $district_id . "' ";
+		}
+		$query .= " ORDER BY schools.schoolName ASC LIMIT 30 ";
+		$this->data['search_list'] = $this->db->query($query)->result();
+		$title = "<small>" . count($this->data['search_list']) . " Records found <i class=\"fa fa-close\" onclick=\"$('#search_result').html('');\"></i> <span class=\"pull-right\"> <i class=\"fa fa-filter\" aria-hidden=\"true\"></i> " . $district_name . " - " . $searchBy . "</span></small>";
+		$this->data['title'] = $title;
+
+		$this->load->view('fines/search_list', $this->data);
 	}
 }
