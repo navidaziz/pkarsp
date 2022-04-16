@@ -49,6 +49,9 @@
 
           <div class="row">
             <div class="col-md-6">
+              <div style="text-align: center;">
+                <a class="btn btn-primary" href="<?php echo site_url("print_file/print_change_of_name_bank_challan") ?>" target="new">Print change of name bank challan </a>
+              </div>
               <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px;">
                 <h3> <i class="fa fa-info-circle" aria-hidden="true"></i> How to apply for Registration online ?</h3>
                 <p>

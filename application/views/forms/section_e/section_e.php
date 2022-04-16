@@ -272,6 +272,8 @@
                   <a class="btn btn-success pull-right" href="<?php echo site_url("form/section_f/$school_id"); ?>">
                     Next Section ( Security Measures )<i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
 
+                <?php } else { ?>
+                  <br />
                 <?php } ?>
               </div>
             </div>

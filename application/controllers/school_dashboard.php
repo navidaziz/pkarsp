@@ -132,11 +132,19 @@ class School_dashboard extends Admin_Controller
 		$session_id = (int) $session_id;
 
 		$query = "SELECT
+					`school`.`primary_level`
+				, `school`.`middle_level`
+				, `school`.`high_level`
+				, `school`.`h_sec_college_level`
+				, `school`.`old_new`
+				, `school`.`upgrade`
+				, `school`.`isRejected`,
                   `school`.`schoolId`
                   ,`school`.`updatedDate`
                   , `schools`.`registrationNumber`
                   , `schools`.`schoolName`
-                  , `schools`.`district_id`
+				  , `schools`.`schoolName`
+                  , `schools`.`schoolId` as school_id
                   , `district`.`districtTitle`
                   , `district`.`bise`
                   , `schools`.`gender_type_id`
@@ -176,11 +184,7 @@ class School_dashboard extends Admin_Controller
                   
               FROM
                   `age_and_class`
-                  
-                 
-                  
-                      
-                      INNER JOIN `class` 
+				   INNER JOIN `class` 
                       ON (`age_and_class`.`class_id` = `class`.`classId`)
                     WHERE `age_and_class`.`school_id` =" . $school_info->schoolId . ";";
 		$this->data['schools_info'] = $school_info;

@@ -209,12 +209,15 @@ class Registration_section extends Admin_Controller
 					// Upgrade school date....
 					$this->db->where('schoolId', $schools_id);
 					$this->db->update('schools', $school_level);
+					$school_level['old_new'] = 1;
+					$this->db->where('schoolId', $school_id);
+					$this->db->update('school', $school_level);
 				}
 
 				$reponse['status'] = 1;
 				$message = "<h2 class='text-center'><strong class='text text-success'>Successfully Alloted Registration Number \" $codeCombined \" .</strong></h2>";
 
-				$auto_comment = "Registration granted with Registration No#  " . $codeCombined;
+				$auto_comment = "Registration Granted With Registration No#  " . $codeCombined;
 				$input = array();
 				$input['comment'] = $auto_comment;
 				$input['session_id'] = $session_id;
@@ -223,6 +226,7 @@ class Registration_section extends Admin_Controller
 				$input['created_by'] = $this->session->userdata('userId');
 				$this->db->insert('comments', $input);
 				$reponse['message'] = $message;
+				$this->send_certificate_to_school($schools_id, $school_id, $session_id, "Registration");
 			}
 		} else {
 			$reponse['status'] = 0;
@@ -239,6 +243,7 @@ class Registration_section extends Admin_Controller
 		$schools_id = (int) $this->input->post('schools_id');
 		$school_id = (int) $this->input->post('school_id');
 		$session_id = (int) $this->input->post('session_id');
+
 
 		$query = "SELECT school.session_year_id, 
 		school.status, 
@@ -257,22 +262,7 @@ class Registration_section extends Admin_Controller
 			exit();
 		}
 
-		$query = "SELECT school.session_year_id, 
-		school.status, 
-		session_year.sessionYearTitle 
-		FROM school, session_year 
-		WHERE 
-		school.session_year_id = session_year.sessionYearId
-		AND schools_id = '" . $schools_id . "' 
-		AND  session_year_id = '" . ($session_id) . "'";
-		$previous_session = $this->db->query($query)->result()[0];
 
-		if ($previous_session->status != 3) {
-			$reponse['status'] = 0;
-			$reponse['message'] = "<span style=\"color:red\">Renewal can not granted beacause the request status is " . $previous_session->status . "</span>";
-			echo json_encode($reponse);
-			exit();
-		}
 
 
 		$selected_levels = $this->input->post('renewal_levels');
@@ -321,11 +311,14 @@ class Registration_section extends Admin_Controller
 						// update levels....
 						$this->db->where('schoolId', $schools_id);
 						$this->db->update('schools', $school_level);
+						$this->db->where('schoolId', $school_id);
+						$school_level['old_new'] = 1;
+						$this->db->update('school', $school_level);
 					}
 					$reponse['status'] = 1;
 					$message = "<h2 class='text-center'><strong class='text text-success'>
-					            Successfully Alloted Renewal Number \" $renewal_code \"</strong></h2>";
-					$auto_comment = "Renewal granted with renewal No#  " . $renewal_code;
+					            Successfully Renewal granted with renewal code \" $renewal_code \"</strong></h2>";
+					$auto_comment = "Renewal granted with renewal code: " . $renewal_code;
 					$input = array();
 					$input['comment'] = $auto_comment;
 					$input['session_id'] = $session_id;
@@ -333,6 +326,7 @@ class Registration_section extends Admin_Controller
 					$input['schools_id'] = $schools_id;
 					$input['created_by'] = $this->session->userdata('userId');
 					$this->db->insert('comments', $input);
+					$this->send_certificate_to_school($schools_id, $school_id, $session_id, "Renewal");
 					$reponse['message'] = $message;
 				} else {
 					$reponse['status'] = 0;
@@ -340,7 +334,7 @@ class Registration_section extends Admin_Controller
 				}
 			} else {
 				$reponse['status'] = 0;
-				$reponse['message'] = "Erro in renewal code creation, try again.";
+				$reponse['message'] = "Error in renewal code creation, try again.";
 			}
 		} else {
 			$reponse['status'] = 0;
@@ -352,16 +346,28 @@ class Registration_section extends Admin_Controller
 
 	public function grant_renewal_and_upgrade()
 	{
-
-		//var_dump($_POST);
-		//echo max($_POST['upgrade_levels']);
-
-
 		$account_password = $this->input->post('account_password');
 		$schools_id = (int) $this->input->post('schools_id');
 		$school_id = (int) $this->input->post('school_id');
 		$session_id = (int) $this->input->post('session_id');
 		$upgrade = $this->input->post('upgrade');
+
+		$query = "SELECT school.session_year_id, 
+		school.status, 
+		session_year.sessionYearTitle 
+		FROM school, session_year 
+		WHERE 
+		school.session_year_id = session_year.sessionYearId
+		AND schools_id = '" . $schools_id . "' 
+		AND  session_year_id = '" . ($session_id - 1) . "'";
+		$previous_session = $this->db->query($query)->result()[0];
+
+		if ($previous_session->status != 1) {
+			$reponse['status'] = 0;
+			$reponse['message'] = "<span style=\"color:red\">Upgradation / Renewal can not granted because previous session " . $previous_session->sessionYearTitle . " Renewal Pending.</span>";
+			echo json_encode($reponse);
+			exit();
+		}
 
 		$selected_levels = array_merge((array) $_POST['renewal_levels'], (array) $_POST['upgrade_levels']);
 		$school_level = array();
@@ -393,7 +399,7 @@ class Registration_section extends Admin_Controller
 			date_default_timezone_set("Asia/Karachi");
 			$dated = date('Y-m-d H:i:s');
 
-			$renewal_code = "2-" . $school_id . "-" . $session_id;
+			$renewal_code = "4-" . $school_id . "-" . $session_id;
 			//echo $renewal_code;exit;
 			$arr = array();
 			if ($renewal_code != "") {
@@ -407,6 +413,10 @@ class Registration_section extends Admin_Controller
 				if ($upgrade == 'Yes') {
 					$update_data['level_of_school_id'] = max($selected_levels);
 					$update_data['upgrade'] = 1;
+					$message = 'Upgradation and Renewal Granted. U&R Code: ';
+				} else {
+					$update_data['upgrade'] = 0;
+					$message = 'Only Renewal Granted. Renewal Code: ';
 				}
 				$this->db->where('schoolId', $school_id);
 				if ($this->db->update('school', $update_data)) {
@@ -415,11 +425,25 @@ class Registration_section extends Admin_Controller
 						// Upgrade school date....
 						$this->db->where('schoolId', $schools_id);
 						$this->db->update('schools', $school_level);
+						$school_level['old_new'] = 1;
+						$this->db->where('schoolId', $school_id);
+						$this->db->update('school', $school_level);
 					}
 
 					$reponse['status'] = 1;
-					$message = "<h2 class='text-center'><strong class='text text-success'>Successfully Alloted Renewal Number \" $renewal_code \"</strong></h2>
-					";
+					$auto_comment = $message . " " . $renewal_code;
+					$message = "<h2 class='text-center'><strong class='text text-success'>" . $message . " \" $renewal_code \"</strong></h2>";
+					$reponse['message'] = $message;
+
+
+					$input = array();
+					$input['comment'] = $auto_comment;
+					$input['session_id'] = $session_id;
+					$input['school_id'] = $school_id;
+					$input['schools_id'] = $schools_id;
+					$input['created_by'] = $this->session->userdata('userId');
+					$this->db->insert('comments', $input);
+					$this->send_certificate_to_school($schools_id, $school_id, $session_id, "Upgradation and Renewal");
 					$reponse['message'] = $message;
 				} else {
 					$reponse['status'] = 0;
@@ -427,7 +451,7 @@ class Registration_section extends Admin_Controller
 				}
 			} else {
 				$reponse['status'] = 0;
-				$reponse['message'] = "Erro in renewal code creation, try again.";
+				$reponse['message'] = "Error in renewal code creation, try again.";
 			}
 		} else {
 			$reponse['status'] = 0;
@@ -440,9 +464,6 @@ class Registration_section extends Admin_Controller
 	public function grant_upgradation()
 	{
 
-		//var_dump($_POST);
-		//echo max($_POST['upgrade_levels']);
-
 
 		$account_password = $this->input->post('account_password');
 		$schools_id = (int) $this->input->post('schools_id');
@@ -480,7 +501,7 @@ class Registration_section extends Admin_Controller
 			date_default_timezone_set("Asia/Karachi");
 			$dated = date('Y-m-d H:i:s');
 
-			$renewal_code = "2-" . $school_id . "-" . $session_id;
+			$renewal_code = "3-" . $school_id . "-" . $session_id;
 			//echo $renewal_code;exit;
 			$arr = array();
 			if ($renewal_code != "") {
@@ -494,23 +515,29 @@ class Registration_section extends Admin_Controller
 				if ($upgrade == 'Yes') {
 					$update_data['level_of_school_id'] = max($selected_levels);
 					$update_data['upgrade'] = 1;
+					$message = 'Upgradation Granted. Upgradation Code: ';
 				} else {
 					$update_data['upgrade'] = 0;
-					$update_data['isRejected'] = 1;
+					$message = 'Upgradation Rejected.';
 				}
+
 				$this->db->where('schoolId', $school_id);
 				if ($this->db->update('school', $update_data)) {
 
 					if ($school_level) {
-						// Upgrade school date....
+						// Upgrade schools table....
 						$this->db->where('schoolId', $schools_id);
 						$this->db->update('schools', $school_level);
+						//update school date
+						$school_level['old_new'] = 1;
+						$this->db->where('schoolId', $school_id);
+						$this->db->update('school', $school_level);
 					}
 
 					$reponse['status'] = 1;
-					$message = "<h2 class='text-center'><strong class='text text-success'>Successfully Alloted Upgradaiton Number \" $renewal_code \"</strong></h2>
+					$message = "<h2 class='text-center'><strong class='text text-success'>Successfully Alloted Upgradaiton Code \" $renewal_code \"</strong></h2>
 					";
-					$auto_comment = "Upgradaiton granted with Upgradaiton No#  " . $renewal_code;
+					$auto_comment = "Upgradaiton granted with Upgradaiton Code#  " . $renewal_code;
 					$input = array();
 					$input['comment'] = $auto_comment;
 					$input['session_id'] = $session_id;
@@ -518,6 +545,7 @@ class Registration_section extends Admin_Controller
 					$input['schools_id'] = $schools_id;
 					$input['created_by'] = $this->session->userdata('userId');
 					$this->db->insert('comments', $input);
+					$this->send_certificate_to_school($schools_id, $school_id, $session_id, "Upgradation");
 					$reponse['message'] = $message;
 				} else {
 					$reponse['status'] = 0;
@@ -878,6 +906,43 @@ class Registration_section extends Admin_Controller
 
 
 			redirect("registration_section/");
+		}
+	}
+
+	private function send_certificate_to_school($schools_id, $school_id, $session_id, $reg_type)
+	{
+		date_default_timezone_set("Asia/Karachi");
+		$query = "SELECT `session_year`.`sessionYearTitle` FROM `session_year` WHERE `session_year`.`sessionYearId`='" . $session_id . "'";
+		$session = $this->db->query($query)->result()[0]->sessionYearTitle;
+		$subject = "Session " . $session . " " . $reg_type . " Certificate";
+		$insert['subject'] = $subject;
+		$insert['discription'] = '
+			<h3>We have sent you ' . strtolower($subject) . '</h3>
+			<h5>Please Download or Print it</h5>
+			<a class="btn btn-primary" href="' . base_url('school_dashboard/certificate/' . $schools_id . '/' . $school_id . '/' . $session_id) . '" target="new" >Download / Print Certificate</a>
+			</div> ';
+		$insert['created_by'] = $this->session->userdata('userId');
+		$insert['created_date'] = date('Y-m-d H:i:s');
+		$insert['select_all'] = "no";
+		$insert['district_id'] = 0;
+		$insert['level_id'] = 0;
+		$insert['like_text'] = "";
+
+		$this->db->set($insert);
+		$this->db->insert("message_for_all");
+		$message_id = $this->db->insert_id();
+		if ($message_id) {
+
+			$data = [
+				'message_id' => $message_id,
+				'school_id' => $schools_id,
+			];
+			$this->db->set($data);
+			$this->db->insert("message_school");
+			$id = $this->db->insert_id();
+			return $id;
+		} else {
+			return 0;
 		}
 	}
 }

@@ -58,7 +58,8 @@
       <tr id="amount_tr" style="display: none;">
         <td colspan="4">
           <table class="table" style="width: 100%;">
-            <?php if ($session_bank_challan->challan_for == 'Renewal' or $session_bank_challan->challan_for == 'Registration' or $session_bank_challan->challan_for == 'Upgradation' or $session_bank_challan->challan_for == 'Renewal Upgradation' or $session_bank_challan->challan_for == 'Deficiency') { ?>
+
+            <?php if ($session_bank_challan->challan_for == 'Renewal') { ?>
               <tr>
                 <td style="width: 200px;">
                   Application Processing Fee:</td>
@@ -70,14 +71,40 @@
                 </td>
                 <td><input class="bank_challan_values" type="number" name="inspection_fee" required min="0" /> </td>
               </tr>
+              <tr>
+                <td> Renewal Fee:</td>
+                <td><input class="bank_challan_values" type="number" name="renewal_fee" required min="0" /> </td>
+              </tr>
+              <tr>
+                <td>
+                  Late Fee:
+                </td>
+                <td><input class="bank_challan_values" type="number" name="late_fee" required min="0" /> </td>
+              </tr>
+            <?php } ?>
 
-              <?php if ($session_bank_challan->challan_for == 'Renewal' or $session_bank_challan->challan_for == 'Deficiency') { ?>
-                <tr>
-                  <td> Renewal Fee:</td>
-                  <td><input class="bank_challan_values" type="number" name="renewal_fee" required min="0" /> </td>
-                </tr>
-              <?php } ?>
-
+            <?php if ($session_bank_challan->challan_for == 'Upgradation Renewal') { ?>
+              <tr>
+                <td style="width: 200px;">
+                  Application Processing Fee:</td>
+                <td><input class="bank_challan_values" type="number" name="application_processing_fee" min="0" required /> </td>
+              </tr>
+              <tr>
+                <td>
+                  Inspection Fee:
+                </td>
+                <td><input class="bank_challan_values" type="number" name="inspection_fee" required min="0" /> </td>
+              </tr>
+              <tr>
+                <td> Renewal Fee:</td>
+                <td><input class="bank_challan_values" type="number" name="renewal_fee" required min="0" /> </td>
+              </tr>
+              <tr>
+              <tr>
+                <td>
+                  Up-Gradation Fee:</td>
+                <td><input class="bank_challan_values" type="number" name="upgradation_fee" required min="0" /> </td>
+              </tr>
               <tr>
                 <td>
                   Late Fee:
@@ -86,34 +113,50 @@
               </tr>
 
             <?php } ?>
-            <?php if ($session_bank_challan->challan_for == 'Registration' or $session_bank_challan->challan_for == 'Deficiency') { ?>
+
+            <?php if ($session_bank_challan->challan_for == 'Upgradation') { ?>
+              <tr>
+                <td>
+                  Up-Gradation Fee:</td>
+                <td><input class="bank_challan_values" type="number" name="upgradation_fee" required min="0" /> </td>
+              </tr>
+              <tr>
+                <td>
+                  Late Fee:
+                </td>
+                <td><input class="bank_challan_values" type="number" name="late_fee" required min="0" /> </td>
+              </tr>
+            <?php } ?>
+
+
+            <?php if ($session_bank_challan->challan_for == 'Registration') { ?>
+              <tr>
+                <td style="width: 200px;">
+                  Application Processing Fee:</td>
+                <td><input class="bank_challan_values" type="number" name="application_processing_fee" min="0" required /> </td>
+              </tr>
+              <tr>
+                <td>
+                  Inspection Fee:
+                </td>
+                <td><input class="bank_challan_values" type="number" name="inspection_fee" required min="0" /> </td>
+              </tr>
+              <tr>
+                <td> Renewal Fee:</td>
+                <td><input class="bank_challan_values" type="number" name="renewal_fee" required min="0" /> </td>
+              </tr>
+              <tr>
+                <td>
+                  Late Fee:
+                </td>
+                <td><input class="bank_challan_values" type="number" name="late_fee" required min="0" /> </td>
+              </tr>
               <tr>
                 <td>
                   Security Fee:
                 </td>
                 <td><input class="bank_challan_values" type="number" name="security_fee" required min="0" /> </td>
               </tr>
-            <?php } ?>
-
-
-
-            <?php if ($session_bank_challan->challan_for == 'Upgradation' or $session_bank_challan->challan_for == 'Deficiency') { ?>
-              <tr>
-                <td>
-                  Up-Gradation Fee:</td>
-                <td><input class="bank_challan_values" type="number" name="upgradation_fee" required min="0" /> </td>
-              </tr>
-            <?php } ?>
-
-            <?php if ($session_bank_challan->challan_for == 'Renewal Upgradation' or $session_bank_challan->challan_for == 'Deficiency') { ?>
-              <tr>
-                <td>
-                  Renewal and Up-Gradation Fee:
-                </td>
-                <td><input class="bank_challan_values" type="number" name="renewal_and_upgradation_fee" required min="0" /> </td>
-              </tr>
-            <?php } ?>
-            <?php if ($session_bank_challan->challan_for == 'Renewal' or $session_bank_challan->challan_for == 'Registration' or $session_bank_challan->challan_for == 'Upgradation' or $session_bank_challan->challan_for == 'Renewal Upgradation' or $session_bank_challan->challan_for == 'Deficiency') { ?>
               <tr>
                 <td>
                   Fine:
@@ -121,6 +164,52 @@
                 <td><input class="bank_challan_values" type="number" name="fine" required min="0" /> </td>
               </tr>
             <?php } ?>
+
+
+            <?php if ($session_bank_challan->challan_for == 'Deficiency') { ?>
+
+              <tr>
+                <td style="width: 200px;">
+                  Application Processing Fee:</td>
+                <td><input class="bank_challan_values" type="number" name="application_processing_fee" min="0" required /> </td>
+              </tr>
+              <tr>
+                <td>
+                  Inspection Fee:
+                </td>
+                <td><input class="bank_challan_values" type="number" name="inspection_fee" required min="0" /> </td>
+              </tr>
+              <tr>
+                <td> Renewal Fee:</td>
+                <td><input class="bank_challan_values" type="number" name="renewal_fee" required min="0" /> </td>
+              </tr>
+              <tr>
+                <td>
+                  Late Fee:
+                </td>
+                <td><input class="bank_challan_values" type="number" name="late_fee" required min="0" /> </td>
+              </tr>
+              <tr>
+                <td>
+                  Security Fee:
+                </td>
+                <td><input class="bank_challan_values" type="number" name="security_fee" required min="0" /> </td>
+              </tr>
+              <tr>
+                <td>
+                  Fine:
+                </td>
+                <td><input class="bank_challan_values" type="number" name="fine" required min="0" /> </td>
+              </tr>
+
+
+
+
+
+            <?php } ?>
+
+
+
             <?php if ($session_bank_challan->challan_for == 'Change Of Name') { ?>
               <tr>
                 <td>

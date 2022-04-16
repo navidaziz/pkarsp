@@ -122,6 +122,10 @@ function get_session_request_status($status)
     case 5:
       return "Inspection Completed";
       break;
+    case 6:
+
+      return "Decision Pending";
+      break;
     case 7:
       return "<strong style=\"Color:red\">Deficiency Found</strong>";
       break;
@@ -214,6 +218,7 @@ function get_registration_detail($school_id)
                            , `school`.`schoolId` as school_id
                            , `school`.`schools_id`
                            , `school`.`status`
+                           , `school`.`isRejected`
                            ,`session_year`.`sessionYearTitle`
                        FROM `reg_type`,
                        `school`,

@@ -725,7 +725,7 @@ class Apply extends MY_Controller
 					"You have successfully applied for renewal, kindly update your current school data."
 				);
 				//echo $school_id;exit;
-				redirect("form/section_b/$session_id");
+				redirect("form/section_b/$school_inserted_id");
 			} else {
 				$this->session->set_flashdata(
 					'msg_error',
@@ -1048,7 +1048,7 @@ class Apply extends MY_Controller
 				'msg_error',
 				"Sorry Something went wrong!."
 			);
-			redirect("form/section_b/$session_id");
+			redirect("form/section_b/$school_inserted_id");
 		} else {
 			$this->db->trans_commit();
 			$school_data_to_update = array(
@@ -1067,14 +1067,14 @@ class Apply extends MY_Controller
 					"You have successfully applied for renewal, kindly update your current school data."
 				);
 				//echo $school_id;exit;
-				redirect("form/section_b/$session_id");
+				redirect("form/section_b/$school_inserted_id");
 			} else {
 				$this->session->set_flashdata(
 					'msg_error',
 					"Sorry Something went wrong!."
 				);
 				//echo $school_id;exit;
-				redirect("form/section_b/$school_id");
+				redirect("form/section_b/$school_inserted_id");
 			}
 		}
 	}

@@ -101,7 +101,35 @@
             </td>
           </tr>
         </table>
-
+        <?php
+        $query = "SELECT SUM(`fine_amount`) as fine_total 
+                                  FROM `school_fine_history` 
+                                  WHERE school_id= '" . $schools_id . "'
+                                  AND is_deleted = 0;";
+        $total_fine = $this->db->query($query)->result()[0]->fine_total;
+        ?>
+        <div class="col-md-6">
+          <div class="thumbnail">
+            <h4>Total Fine: <?php echo $total_fine; ?></h4>
+          </div>
+        </div>
+        <?php
+        $query = "SELECT SUM(`deposit_amount`) as paid 
+                                  FROM `fine_payments` 
+                                  WHERE school_id= '" . $schools_id . "'
+                                  AND is_deleted = 0;";
+        $total_paid = $this->db->query($query)->result()[0]->paid;
+        ?>
+        <div class="col-md-6">
+          <div class="thumbnail">
+            <h4>Total Paid: <?php
+                            if ($total_paid) {
+                              echo "Rs. " . $total_paid;
+                            } else {
+                              echo "Rs. 0.00";
+                            } ?></h4>
+          </div>
+        </div>
         <div class="form-group" style="padding-top:8px;">
 
           <div class="col-md-6">
@@ -249,21 +277,29 @@
               function add_payment(history_id) {
 
 
-                var stan_no = $('#stan_no').val();
+                var stan_no = $('#stan_no_' + history_id).val();
                 if (stan_no == '') {
                   alert("STAN Required.");
                   return false;
                 }
-                var deposit_date = $('#deposit_date').val();
+                var deposit_date = $('#deposit_date_' + history_id).val();
                 if (deposit_date == '') {
                   alert("Deposit Date Required.");
                   return false;
                 }
-                var deposit_amount = $('#deposit_amount').val();
+                var deposit_amount = $('#deposit_amount_' + history_id).val();
                 if (deposit_amount == '') {
                   alert("Deposit Amount Required.");
                   return false;
                 }
+
+                var max = parseInt($('#deposit_amount_' + history_id).attr('max'));
+                if (deposit_amount > max) {
+                  alert("paid amount must be less than or equal fined amount.");
+                  return false;
+                }
+
+
                 if (confirm("Are you sure you want to Add Payment ?")) {
                   $.ajax({
                       method: "POST",
@@ -364,6 +400,77 @@
                   return false;
                 }
               }
+
+              function waive_off_fine(fine_id) {
+                wo_detail = $('#wo_' + fine_id).val();
+                if (wo_detail == '') {
+                  alert("Wavie Off Detail Required");
+                  return false;
+                } else {
+                  $.ajax({
+                      method: "POST",
+                      url: "<?php echo site_url('fines/waive_off_fine'); ?>",
+                      data: {
+                        schools_id: <?php echo $schools_id; ?>,
+                        history_id: fine_id,
+                        wo_detail: wo_detail
+                      },
+                    })
+                    .done(function(respose) {
+                      if (respose == 0) {
+                        alert("Error Try Again");
+
+                      } else {
+                        $.ajax({
+                            method: "POST",
+                            url: "<?php echo site_url('fines/view_school_detail'); ?>",
+                            data: {
+                              schools_id: <?php echo $schools_id; ?>,
+                            },
+                          })
+                          .done(function(respose) {
+                            $('#view_school_detail_body').html(respose);
+                          });
+                      }
+
+                    });
+
+                }
+              }
+
+              function remove_wavid_off(fine_id) {
+
+                if (confirm("Are you sure to remove ?")) {
+
+                  $.ajax({
+                      method: "POST",
+                      url: "<?php echo site_url('fines/remove_waive_off'); ?>",
+                      data: {
+                        schools_id: <?php echo $schools_id; ?>,
+                        history_id: fine_id,
+                      },
+                    })
+                    .done(function(respose) {
+                      if (respose == 0) {
+                        alert("Error Try Again");
+
+                      } else {
+                        $.ajax({
+                            method: "POST",
+                            url: "<?php echo site_url('fines/view_school_detail'); ?>",
+                            data: {
+                              schools_id: <?php echo $schools_id; ?>,
+                            },
+                          })
+                          .done(function(respose) {
+                            $('#view_school_detail_body').html(respose);
+                          });
+                      }
+
+                    });
+                }
+
+              }
             </script>
             Account Password: <input type="password" name="password" id="password" class="form-control" style="width: 150px;" />
             <button class="btn btn-danger" onclick="add_new_fine()">Add New Fine</button>
@@ -395,34 +502,6 @@
           ) as total_payment  
           FROM `school_fine_history` WHERE school_id = '" . $schools_id . "'  AND is_deleted = 0";
           $fines = $this->db->query($query)->result(); ?>
-          <!-- <table class="table">
-          <tr>
-            <th><i class="fa fa-trash" aria-hidden="true"></i></th>
-            <th>#</th>
-            <th>File No</th>
-            <th>Date</th>
-            <th>Remarks</th>
-            <th>Fine(Rs.)</th>
-            <th>Status</th>
-          </tr>
-          <?php
-          $count = 1;
-          foreach ($fines as $fine) { ?>
-            <tr>
-              <td><button class="btn btn-link" onclick="delete_fine(<?php echo $fine->history_id ?>)" aria-hidden="true">×</button></td>
-              <td><?php echo $count++; ?></td>
-              <td><?php echo $fine->file_number ?></td>
-              <td><?php
-                  if ($fine->file_date) {
-                    echo date('d M, Y', strtotime($fine->file_date));
-                  } ?></td>
-              <td><?php echo $fine->remarks ?></td>
-              <td><?php echo $fine->fine_amount ?></td>
-              <td><?php echo $fine->is_fined ?></td>
-
-            </tr>
-          <?php } ?>
-        </table> -->
 
           <?php
           $count = 1;
@@ -433,13 +512,13 @@
                 <div>
                   <span class="pull-left">
                     <?php echo $count++; ?>
-                    <strong>
+                    <strong <?php if ($fine->is_fined == 0) { ?>style="text-decoration: line-through !important;" <?php } ?>>
                       Total Fine: <?php echo $fine->fine_amount ?>
                     </strong>
                   </span>
                   <span class="pull-right">
 
-                    <strong>File No: <?php echo $fine->file_number ?>
+                    <strong <?php if ($fine->is_fined == 0) { ?>style="text-decoration: line-through !important;" <?php } ?>>File No: <?php echo $fine->file_number ?>
                       Date: <?php
                             if ($fine->file_date) {
                               echo date('d M, Y', strtotime($fine->file_date));
@@ -453,48 +532,85 @@
 
                 <div class="clearfix"></div>
 
+                <p <?php if ($fine->is_fined == 0) { ?>style="text-decoration: line-through !important;" <?php } ?>>
+                  <?php echo $fine->remarks ?>
+                </p>
 
-                <?php echo $fine->remarks ?>
+                <?php
+
+                $total_paid = $fine->fine_amount - $fine->total_payment;
+
+                if ($fine->is_fined == 1 and $total_paid != 0) { ?>
+                  <div style="text-align: center; ">
+                    <button onclick="$('#waive_off_form').toggle()" class="btn btn-warning btn-sm"> <span class="fa fa-hand-stop-o"></span> Waive Off</button>
+                  </div>
+                  <div id="waive_off_form" style="display: none;">
+                    <strong>Wavie Off Detail</strong>
+                    <br />
+                    <textarea style="width: 100%; padding:5px" id="wo_<?php echo $fine->history_id ?>"></textarea>
+                    <div style="text-align: center;"><button onclick="waive_off_fine('<?php echo $fine->history_id ?>');" class="btn btn-primary"><span class="fa fa-hand-stop-o"></span> Waive Off Fine</button></div>
+                  </div>
+                <?php } ?>
 
               </div>
               <div class="col-md-6">
-                <table style="width: 100%;">
-                  <tr>
+                <?php
 
-                    <th>STAN No</th>
-                    <th>Date</th>
-                    <th>Amount</th>
-                    <th>Add</th>
-                  </tr>
-                  <?php if ($fine->total_payment != $fine->fine_amount) { ?>
+
+                if ($fine->is_fined == 1) { ?>
+                  <table style="width: 100%;">
                     <tr>
 
-                      <td><input style="width: 100px;" type="number" value="" name="stan_no" id="stan_no" /> </td>
-                      <td><input style="width: 130px;" type="date" value="" name="deposit_date" id="deposit_date" /> </td>
-                      <td><input style="width: 100px;" type="number" value="" name="deposit_amount" id="deposit_amount" /> </td>
-                      <td><button onclick="add_payment(<?php echo $fine->history_id ?>)" class="btn btn-success btn-sm">Add</button> </td>
+                      <th>STAN No</th>
+                      <th>Date</th>
+                      <th>Amount</th>
+                      <th>Add</th>
                     </tr>
-                  <?php } ?>
-                  <?php
-                  $query = "SELECT * FROM fine_payments WHERE is_deleted = 0 AND  fine_id = '" . $fine->history_id . "' and school_id = '" . $schools_id . "'";
-                  $fine_payments = $this->db->query($query)->result();
-                  foreach ($fine_payments as $fine_payment) { ?>
-                    <tr>
-                      <td><?php echo $fine_payment->stan_no ?></td>
-                      <td><?php echo $fine_payment->deposit_date ?></td>
-                      <td><?php echo $fine_payment->deposit_amount ?></td>
-                      <td>
-                        <button class="btn btn-link" style="padding: 0px; margin: 0px;" onclick="delete_payment('<?php echo $fine->history_id ?>','<?php echo $fine_payment->fine_payment_id;  ?>')" aria-hidden="true">×</button>
+                    <?php
 
-                      </td>
+
+
+                    if ($fine->total_payment != $fine->fine_amount) { ?>
+                      <tr>
+
+                        <td><input style="width: 100px;" type="number" value="" name="stan_no" id="stan_no_<?php echo $fine->history_id ?>" /> </td>
+                        <td><input style="width: 130px;" type="date" value="" name="deposit_date" id="deposit_date_<?php echo $fine->history_id ?>" /> </td>
+                        <td><input min="0" max="<?php echo $fine->fine_amount; ?>" style="width: 100px;" type="number" value="" name="deposit_amount" id="deposit_amount_<?php echo $fine->history_id ?>" /> </td>
+                        <td><button onclick="add_payment(<?php echo $fine->history_id ?>)" class="btn btn-success btn-sm">Add</button> </td>
+                      </tr>
+                    <?php } ?>
+                    <?php
+                    $query = "SELECT * FROM fine_payments WHERE is_deleted = 0 AND  fine_id = '" . $fine->history_id . "' and school_id = '" . $schools_id . "'";
+                    $fine_payments = $this->db->query($query)->result();
+                    foreach ($fine_payments as $fine_payment) { ?>
+                      <tr>
+                        <td><?php echo $fine_payment->stan_no ?></td>
+                        <td><?php echo $fine_payment->deposit_date ?></td>
+                        <td><?php echo $fine_payment->deposit_amount ?></td>
+                        <td>
+                          <button class="btn btn-link" style="padding: 0px; margin: 0px;" onclick="delete_payment('<?php echo $fine->history_id ?>','<?php echo $fine_payment->fine_payment_id;  ?>')" aria-hidden="true">×</button>
+
+                        </td>
+                      </tr>
+                    <?php     }
+                    ?>
+                    <tr>
+                      <th>Total Fine: Rs. <?php echo $fine->fine_amount ?></th>
+                      <th>Fine Paid: Rs.<?php echo $fine->total_payment ?></th>
+                      <th>Fine Remained: Rs.<?php echo $fine->fine_amount - $fine->total_payment ?></th>
+                      <th></th>
                     </tr>
-                  <?php     }
-                  ?>
-                  <tr>
-                    <td colspan="2">Total Fine: Rs. <?php echo $fine->fine_amount ?></td>
-                    <td colspan="2">Fine Payment: Rs.<?php echo $fine->total_payment ?></td>
-                  </tr>
-                </table>
+                  </table>
+                <?php  } else { ?>
+                  <div class="alert alert-warning">
+                    <strong> <span class="fa fa-hand-stop-o"></span> Fine Wavied Off Detail</strong>
+                    <br />
+                    <p><?php echo $fine->wo_detail; ?></p>
+                    <div style="text-align: right;">
+                      <button onclick="remove_wavid_off('<?php echo $fine->history_id ?>')" class="btn btn-danger btn-sm">Remove Wavied Off</button>
+                    </div>
+                  </div>
+                <?php  } ?>
               </div>
 
               <div class="clearfix"></div>

@@ -14,14 +14,14 @@
   <meta name="description" content="">
   <meta name="author" content="">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-  <!-- <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700;900&display=swap" rel="stylesheet"> -->
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700;900&display=swap" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
   <style type="text/css">
     body {
       background: rgb(204, 204, 204);
-      /* font-family: 'Source Sans Pro', 'Regular' !important; */
+      font-family: 'Source Sans Pro', 'Regular' !important;
 
     }
 
@@ -46,7 +46,6 @@
         margin-top: 30px;
         /* height: 29.7cm;  */
         height: auto;
-
       }
     }
 
@@ -97,7 +96,6 @@
       line-height: 1;
       vertical-align: top;
 
-
     }
   </style>
 </head>
@@ -110,7 +108,7 @@
           <th><img style="width: 100px;" src="<?php echo base_url(); ?>assets/logo.png" class="img-responsive img" /></th>
           <th>
             <h3 style="text-align: center;">Public School Regulatory Authority Khyber Pakhtunkhwa</h4>
-              <h4 style="text-align: center;">Upgradation + Renewal Challan Form For Session <?php echo $session_detail->sessionYearTitle; ?>
+              <h4 style="text-align: center;"><?php echo $title;  ?> Challan Form For Session <?php echo $session_detail->sessionYearTitle; ?>
               </h4>
 
 
@@ -156,103 +154,46 @@
           </table>
         </div>
 
-        <?php
-        $pecial_fine = 0;
-        if ($session_id == 1) { ?>
-
-        <?php
-          if ($school->level_of_school_id == 1  or  $school->level_of_school_id == 2) {
-            $special_fine = 50000;
-          }
-          if ($school->level_of_school_id == 3  or  $school->level_of_school_id == 4) {
-            $special_fine = 200000;
-          }
-        } ?>
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>Fee Category</th>
-              <th>Amount (Rs.)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Application Processing Fee</td>
-              <td><?php echo number_format($fee_sturucture->renewal_app_processsing_fee); ?> Rs.</td>
-            </tr>
-            <tr>
-              <td>Inspection Fee</td>
-              <td><?php echo number_format($fee_sturucture->renewal_app_inspection_fee); ?> Rs.</td>
-            </tr>
-            <tr>
-              <td>Upgradation Fee</td>
-              <td><?php echo $fee_sturucture->up_grad_fee; ?> Rs.</td>
-            </tr>
-            <tr>
-              <td>Renewal Fee</td>
-              <td><?php echo $fee_sturucture->renewal_fee; ?> Rs.</td>
-            </tr>
+        <table class="table table_reg">
+          <tr>
+            <th style="width: 150px;"> Due's Date </th>
+            <th>Application Processing Fee</th>
+            <th>Inspection Fee</th>
+            <th>Upgradation Fee</th>
+            <th>Renewal Fee</th>
+            <th style="width: 150px;"> Late Fee </th>
+            <th> Total </th>
+          </tr>
+          <?php
+          $count = 1;
+          foreach ($session_fee_submission_dates as $session_fee_submission_date) { ?>
+            <?php $total = $fee_sturucture->renewal_app_processsing_fee + $fee_sturucture->renewal_app_inspection_fee + $fee_sturucture->renewal_fee + $fee_sturucture->up_grad_fee; ?>
 
             <tr>
-              <td><strong>Total Session <?php echo $session_detail->sessionYearTitle; ?> Upgradation-Renewal Fee </strong></td>
+              <th>
+                Upto <?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?>
+              </th>
+              <td><?php echo number_format($fee_sturucture->renewal_app_processsing_fee); ?></td>
+              <td><?php echo number_format($fee_sturucture->renewal_app_inspection_fee); ?></td>
+              <td><?php echo number_format($fee_sturucture->up_grad_fee); ?></td>
+              <td><?php echo number_format($fee_sturucture->renewal_fee); ?></td>
+
+              <td><?php echo $session_fee_submission_date->fine_percentage; ?> % - <?php
+                                                                                    $fine = 0;
+                                                                                    $fine = ($session_fee_submission_date->fine_percentage * $total) / 100;
+                                                                                    echo number_format($fine);
+                                                                                    ?>
+              </td>
               <td>
-                <strong>
-                  <?php $total = $fee_sturucture->renewal_app_processsing_fee + $fee_sturucture->renewal_app_inspection_fee + $fee_sturucture->up_grad_fee + $fee_sturucture->renewal_fee;
-
-                  echo number_format($total);
-                  ?> Rs.
-                </strong>
+                <strong> <?php echo number_format($fine + $total);  ?> </strong>
               </td>
             </tr>
 
 
-            <tr>
 
-              <td colspan="2">
-                <table class="table">
-                  <tr>
-                    <th> Due's Date </th>
-                    <th> Late Fee % </th>
-                    <th> Late Fee Amount </th>
-                    <th> Total </th>
-                  </tr>
-                  <?php
-                  $count = 1;
-                  foreach ($session_fee_submission_dates as $session_fee_submission_date) { ?>
-
-                    <tr>
-                      <th>
-                        Upto <?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?>
-                      </th>
-                      <?php if ($session_fee_submission_date->fine_percentage == 0) { ?>
-                        <td colspan="2"> <strong> Normal Fee </strong></td>
-                      <?php } else { ?>
-                        <td><?php echo $session_fee_submission_date->fine_percentage; ?> %</td>
-                        <td>
-                          <?php
-                          $fine = 0;
-                          $fine = ($session_fee_submission_date->fine_percentage * $total) / 100;
-                          echo number_format($fine);
-                          ?>
-                          Rs.
-                        </td>
-                      <?php } ?>
-                      <td>
-                        <?php echo number_format($fine + $total);  ?>
-                      </td>
-                    </tr>
-
-
-
-                  <?php } ?>
-                </table>
-              </td>
-
-            </tr>
-
-
-          </tbody>
+          <?php } ?>
         </table>
+
         <br /><br />
         <style>
           .table2 td,

@@ -61,7 +61,7 @@
                     <tr>
                       <td>Year of Establishment:</td>
                       <td>
-                        <select name="e_month" require>
+                        <select name="e_month" required>
                           <option value="0">Select Month</option>
                           <?php
                           $months = array(
@@ -83,7 +83,7 @@
                           <?php }  ?>
                         </select>
                         <select name="e_year" required>
-                          <option value="0">Select Year</option>
+                          <option value="">Select Year</option>
                           <?php for ($years = 2021; $years >= 1950; $years--) { ?>
                             <option value="<?php echo $years; ?>"><?php echo $years; ?></option>
                           <?php } ?>

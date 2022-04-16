@@ -100,10 +100,20 @@ class Bank_challans extends Admin_Controller
 				if (
 					$bank_challan_detail->challan_for == 'Registration'
 					or $bank_challan_detail->challan_for == 'Renewal'
-					or $bank_challan_detail->challan_for == 'Renewal Upgradation'
+					or $bank_challan_detail->challan_for == 'Upgradation Renewal'
 					or $bank_challan_detail->challan_for == 'Upgradation'
 					or $bank_challan_detail->challan_for == 'Deficiency'
 				) {
+
+
+					$auto_comment = 'It is verified that STAN# ' . $bank_challan_detail->challan_no . ' on Dated: ' . date('d M, Y', strtotime($bank_challan_detail->challan_date)) . ' Total ' . $bank_challan_detail->total_deposit_fee . ' Rs. for ' . $bank_challan_detail->challan_for . ' Session ' . $bank_challan_detail->sessionYearTitle . ', reflected in Cash Mangement System Bank Statement. ';
+					$input = array();
+					$input['comment'] = $auto_comment;
+					$input['session_id'] = $bank_challan_detail->session_id;
+					$input['school_id'] = $bank_challan_detail->school_id;
+					$input['schools_id'] = $bank_challan_detail->schools_id;
+					$input['created_by'] = $this->session->userdata('userId');
+					$this->db->insert('comments', $input);
 
 					$where = array();
 					$update = array();
@@ -135,13 +145,39 @@ class Bank_challans extends Admin_Controller
 						$update['status'] = '3';
 						$this->db->update('school', $update);
 					}
-					if ($bank_challan_detail->challan_for == 'Renewal Upgradation') {
+					if ($bank_challan_detail->challan_for == 'Upgradation Renewal') {
 						$where['schoolId'] = $bank_challan_detail->school_id;
 						$where['session_year_id'] = $bank_challan_detail->session_id;
 						$this->db->where($where);
 						$update['inspection'] = '0';
 						$update['status'] = '3';
 						$this->db->update('school', $update);
+
+						$query = "SELECT
+						`session_year`.`sessionYearTitle`
+						, `levelofinstitute`.`levelofInstituteTitle`
+						, school.`status`
+						, school.`schoolId`
+						FROM
+						`levelofinstitute`
+						INNER JOIN `school` 
+						ON (`levelofinstitute`.`levelofInstituteId` = `school`.`level_of_school_id`)
+						INNER JOIN `session_year` 
+						ON (`session_year`.`sessionYearId` = `school`.`session_year_id`)
+						WHERE school.`schools_id` = '" . $bank_challan_detail->schools_id . "'
+						AND school.`status`=1
+						ORDER BY school.`schoolId` DESC LIMIT 1";
+						$latest_renewal = $this->db->query($query)->result()[0];
+
+						$auto_comment = 'It is pertinent to mention here that the subject school is already registered with PSRA of 
+						' . $latest_renewal->levelofInstituteTitle . ' Level for the session ' . $latest_renewal->sessionYearTitle;
+						$input = array();
+						$input['comment'] = $auto_comment;
+						$input['session_id'] = $bank_challan_detail->session_id;
+						$input['school_id'] = $bank_challan_detail->school_id;
+						$input['schools_id'] = $bank_challan_detail->schools_id;
+						$input['created_by'] = 1;
+						$this->db->insert('comments', $input);
 					}
 
 					if ($bank_challan_detail->challan_for == 'Upgradation') {
@@ -151,6 +187,31 @@ class Bank_challans extends Admin_Controller
 						$update['inspection'] = '0';
 						$update['status'] = '3';
 						$this->db->update('school', $update);
+						$query = "SELECT
+						`session_year`.`sessionYearTitle`
+						, `levelofinstitute`.`levelofInstituteTitle`
+						, school.`status`
+						, school.`schoolId`
+						FROM
+						`levelofinstitute`
+						INNER JOIN `school` 
+						ON (`levelofinstitute`.`levelofInstituteId` = `school`.`level_of_school_id`)
+						INNER JOIN `session_year` 
+						ON (`session_year`.`sessionYearId` = `school`.`session_year_id`)
+						WHERE school.`schools_id` = '" . $bank_challan_detail->schools_id . "'
+						AND school.`status`=1
+						ORDER BY school.`schoolId` DESC LIMIT 1";
+						$latest_renewal = $this->db->query($query)->result()[0];
+
+						$auto_comment = 'It is pertinent to mention here that the subject school is already registered with PSRA of 
+						' . $latest_renewal->levelofInstituteTitle . ' Level for the session ' . $latest_renewal->sessionYearTitle;
+						$input = array();
+						$input['comment'] = $auto_comment;
+						$input['session_id'] = $bank_challan_detail->session_id;
+						$input['school_id'] = $bank_challan_detail->school_id;
+						$input['schools_id'] = $bank_challan_detail->schools_id;
+						$input['created_by'] = 1;
+						$this->db->insert('comments', $input);
 					}
 
 					if ($bank_challan_detail->challan_for == 'Renewal') {
@@ -160,6 +221,32 @@ class Bank_challans extends Admin_Controller
 						$update['inspection'] = '1';
 						$update['status'] = '3';
 						$this->db->update('school', $update);
+
+						$query = "SELECT
+						`session_year`.`sessionYearTitle`
+						, `levelofinstitute`.`levelofInstituteTitle`
+						, school.`status`
+						, school.`schoolId`
+						FROM
+						`levelofinstitute`
+						INNER JOIN `school` 
+						ON (`levelofinstitute`.`levelofInstituteId` = `school`.`level_of_school_id`)
+						INNER JOIN `session_year` 
+						ON (`session_year`.`sessionYearId` = `school`.`session_year_id`)
+						WHERE school.`schools_id` = '" . $bank_challan_detail->schools_id . "'
+						AND school.`status`=1
+						ORDER BY school.`schoolId` DESC LIMIT 1";
+						$latest_renewal = $this->db->query($query)->result()[0];
+
+						$auto_comment = 'It is pertinent to mention here that the subject school is already registered with PSRA of 
+						' . $latest_renewal->levelofInstituteTitle . ' Level for the session ' . $latest_renewal->sessionYearTitle;
+						$input = array();
+						$input['comment'] = $auto_comment;
+						$input['session_id'] = $bank_challan_detail->session_id;
+						$input['school_id'] = $bank_challan_detail->school_id;
+						$input['schools_id'] = $bank_challan_detail->schools_id;
+						$input['created_by'] = 1;
+						$this->db->insert('comments', $input);
 					}
 
 					if ($bank_challan_detail->challan_for == 'Deficiency') {
@@ -170,15 +257,6 @@ class Bank_challans extends Admin_Controller
 						$update['status'] = $last_session;
 						$this->db->update('school', $update);
 					}
-
-					$auto_comment = 'It is verified that STAN# ' . $bank_challan_detail->challan_no . ' on Dated: ' . date('d M, Y', strtotime($bank_challan_detail->challan_date)) . ' Total ' . $bank_challan_detail->total_deposit_fee . ' Rs. for ' . $bank_challan_detail->challan_for . ' Session ' . $bank_challan_detail->sessionYearTitle . ', reflected in Cash Mangement System Bank Statement. ';
-					$input = array();
-					$input['comment'] = $auto_comment;
-					$input['session_id'] = $bank_challan_detail->session_id;
-					$input['school_id'] = $bank_challan_detail->school_id;
-					$input['schools_id'] = $bank_challan_detail->schools_id;
-					$input['created_by'] = $this->session->userdata('userId');
-					$this->db->insert('comments', $input);
 				}
 
 

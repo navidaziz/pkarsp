@@ -15,7 +15,7 @@
 </script>
 
 <div class="modal fade" id="view_school_detail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-  <div class="modal-dialog" role="document" style="width: 90% !important;">
+  <div class="modal-dialog" role="document" style="width: 97% !important;">
     <div class="modal-content" id="view_school_detail_body">
 
       ...
@@ -180,7 +180,7 @@
                     <td>
                       <?php $remain = $total_fine - $total_paid;
                       if ($remain == 0) { ?>
-                        <button class="btn btn-success btn-sm">Active Account</button>
+                        <a href="<?php echo site_url("fines/activate_account/" . $previous_request->schoolId); ?>" class="btn btn-success btn-sm">Active Account</a>
                       <?php  } else { ?>
                         <?php echo $remain; ?>
                       <?php } ?>

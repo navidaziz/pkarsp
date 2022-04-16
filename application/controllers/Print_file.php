@@ -81,7 +81,7 @@ class Print_file extends MY_Controller
 		  WHERE  `school`.`schoolId` = '" . $school_id . "'";
 		$session_request_detail = $this->db->query($query)->result()[0];
 		$this->data['schools_id'] = $session_request_detail->schools_id;
-		$this->data['school'] = $this->school_detail($session_request_detail->schools_id);
+		$this->data['school'] = $this->schooldetail($session_request_detail->schools_id);
 		$this->data['session_request_detail'] = $session_request_detail;
 
 		$query = "SELECT MAX(tuitionFee) as max_tution_fee 
@@ -182,10 +182,102 @@ class Print_file extends MY_Controller
 		$this->load->view('print/certificate_of_schools', $this->data);
 	}
 
+	public function print_change_of_name_bank_challan()
+	{
+
+		$userId = $this->session->userdata('userId');
+
+		$query = "SELECT
+		`schools`.`schoolId`
+		, `schools`.`registrationNumber`
+		, `schools`.`schoolName`
+		, `schools`.`district_id`
+		, (SELECT level_of_school_id FROM school WHERE schools_id = `schools`.`schoolId` AND status=1 ORDER BY school.schoolId DESC LIMIT 1) as level_of_school_id
+	FROM
+		`schools`
+		WHERE `schools`.`owner_id`='" . $userId . "'";
+		$this->data['school'] = $this->db->query($query)->result()[0];
+		$this->load->view('print/change_of_name_bank_challan_print', $this->data);
+	}
+
+	public function penalty_change_of_name_bank_challan()
+	{
+
+		$userId = $this->session->userdata('userId');
+
+		$query = "SELECT
+		`schools`.`schoolId`
+		, `schools`.`registrationNumber`
+		, `schools`.`schoolName`
+		, `schools`.`district_id`
+		, (SELECT level_of_school_id FROM school WHERE schools_id = `schools`.`schoolId` AND status=1 ORDER BY school.schoolId DESC LIMIT 1) as level_of_school_id
+	FROM
+		`schools`
+		WHERE `schools`.`owner_id`='" . $userId . "'";
+		$this->data['school'] = $this->db->query($query)->result()[0];
+		$this->load->view('print/penalty_bank_challan_print', $this->data);
+	}
+
+	public function print_change_of_building_bank_challan()
+	{
+
+		$userId = $this->session->userdata('userId');
+
+		$query = "SELECT
+		`schools`.`schoolId`
+		, `schools`.`registrationNumber`
+		, `schools`.`schoolName`
+		, `schools`.`district_id`
+		, (SELECT level_of_school_id FROM school WHERE schools_id = `schools`.`schoolId` AND status=1 ORDER BY school.schoolId DESC LIMIT 1) as level_of_school_id
+	FROM
+		`schools`
+		WHERE `schools`.`owner_id`='" . $userId . "'";
+		$this->data['school'] = $this->db->query($query)->result()[0];
+		$this->load->view('print/change_of_building_bank_challan_print', $this->data);
+	}
+
+
+	public function print_change_of_ownership_bank_challan()
+	{
+
+		$userId = $this->session->userdata('userId');
+
+		$query = "SELECT
+		`schools`.`schoolId`
+		, `schools`.`registrationNumber`
+		, `schools`.`schoolName`
+		, `schools`.`district_id`
+		, (SELECT level_of_school_id FROM school WHERE schools_id = `schools`.`schoolId` AND status=1 ORDER BY school.schoolId DESC LIMIT 1) as level_of_school_id
+	FROM
+		`schools`
+		WHERE `schools`.`owner_id`='" . $userId . "'";
+		$this->data['school'] = $this->db->query($query)->result()[0];
+		$this->load->view('print/change_of_ownership_bank_challan_print', $this->data);
+	}
+
+	public function print_change_of_applicant_certificate_bank_challan()
+	{
+
+		$userId = $this->session->userdata('userId');
+
+		$query = "SELECT
+		`schools`.`schoolId`
+		, `schools`.`registrationNumber`
+		, `schools`.`schoolName`
+		, `schools`.`district_id`
+		, (SELECT level_of_school_id FROM school WHERE schools_id = `schools`.`schoolId` AND status=1 ORDER BY school.schoolId DESC LIMIT 1) as level_of_school_id
+	FROM
+		`schools`
+		WHERE `schools`.`owner_id`='" . $userId . "'";
+		$this->data['school'] = $this->db->query($query)->result()[0];
+		$this->load->view('print/applicant_certificate_bank_challan_print', $this->data);
+	}
+
+
 	private function school_detail($school_session_id)
 	{
 		$userId = $this->session->userdata('userId');
-		$query = "SELECT 
+		echo $query = "SELECT 
 					`school`.`schoolId` AS `school_id`
 					, `schools`.`schoolId` AS `schools_id`
 					, `school`.`session_year_id` as `session_id`
@@ -202,6 +294,26 @@ class Print_file extends MY_Controller
 						ON (`schools`.`schoolId` = `school`.`schools_id`)
 						WHERE `school`.`schoolId`='" . $school_session_id . "'
 						AND `schools`.`owner_id`='" . $userId . "'";
+		return $this->db->query($query)->result()[0];
+	}
+	private function schooldetail($schools_id)
+	{
+		$query = "SELECT 
+					`school`.`schoolId` AS `school_id`
+					, `schools`.`schoolId` AS `schools_id`
+					, `school`.`session_year_id` as `session_id`
+					, `schools`.`registrationNumber`
+					, `schools`.`schoolName`
+					, `schools`.`yearOfEstiblishment`
+					, `schools`.`school_type_id`
+					, `schools`.`level_of_school_id`
+					, `schools`.`gender_type_id` 
+					, `school`.`reg_type_id`
+				FROM
+					`schools`
+					INNER JOIN `school` 
+						ON (`schools`.`schoolId` = `school`.`schools_id`)
+						WHERE `schools`.`schoolId`='" . $schools_id . "'";
 		return $this->db->query($query)->result()[0];
 	}
 

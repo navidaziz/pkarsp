@@ -373,17 +373,14 @@
               <th>Type</th>
               <th>STAN</th>
               <th>Date</th>
-              <th>App. Pro. Fee</th>
-              <th>Ins. Fee</th>
-              <th>Ren. Fee</th>
+              <th>Application Processing Fee</th>
+              <th>Inspection Fee</th>
+              <th>Renewal Fee</th>
+              <th>Upgradation Fee:</th>
               <th>Late Fee </th>
-              <th>Secu. Fee:</th>
-              <th>Upgra. Fee:</th>
-              <th>Ren. & Upgra. Fee:</th>
-
+              <th>Security Fee:</th>
               <th>Fine</th>
               <th>Total</th>
-              <th>Verified By</th>
             </tr>
           </thead>
           <tbody>
@@ -398,20 +395,12 @@
                 <td><?php echo $bank_challan->application_processing_fee; ?></td>
                 <td><?php echo $bank_challan->inspection_fee; ?></td>
                 <td><?php echo $bank_challan->renewal_fee; ?></td>
-                <td><?php echo $bank_challan->late_fee; ?></td>
-
-                <td><?php echo $bank_challan->security_fee; ?></td>
                 <td><?php echo $bank_challan->upgradation_fee; ?></td>
-                <td><?php echo $bank_challan->renewal_and_upgradation_fee; ?></td>
-
-
+                <td><?php echo $bank_challan->late_fee; ?></td>
+                <td><?php echo $bank_challan->security_fee; ?></td>
                 <td><?php echo $bank_challan->fine; ?></td>
                 <td><?php echo $bank_challan->total_deposit_fee; ?></td>
-                <td><?php
-                    $query = "SELECT * FROM users WHERE userId = '" . $bank_challan->verified_by . "'";
-                    $verified_by = $this->db->query($query)->result()[0]->userTitle;
-                    echo $verified_by;
-                    ?></td>
+
               </tr>
             <?php  } ?>
 
@@ -589,7 +578,7 @@
             <!-- Registration section -->
             <?php if ($session_request_detail->reg_type_id == 1) { ?>
               <h4>
-                Do you want allot registration number?
+                Do you want to allot a registration number?
                 <input onclick="show_registration_form()" style="margin-left: 10px;" type="checkbox" name="i_want" id="i_want" />
               </h4>
 
@@ -604,6 +593,9 @@
                       $query = "SELECT * FROM `levelofinstitute` 
                             WHERE `levelofinstitute`.`levelofInstituteId` <= '" . $session_request_detail->level_of_school_id . "'
                             ORDER BY `levelofinstitute`.`levelofInstituteId` ASC";
+
+
+
                       $levelofinstitutes = $this->db->query($query)->result();
                       foreach ($levelofinstitutes as $levelofinstitute) { ?>
                         <input <?php if ($session_request_detail->level_of_school_id == $levelofinstitute->levelofInstituteId) {
@@ -684,18 +676,35 @@
             <!-- UpgradationSection -->
             <?php if ($session_request_detail->reg_type_id == 3) { ?>
               <h4>
-                Do you want to process the Upgradation?
+                Do you want to continue the upgradation process?
                 <input onclick="show_registration_form()" style="margin-left: 10px;" type="checkbox" name="i_want" id="i_want" />
               </h4>
 
               <h4 id="registration_form" style="display: none;">
                 <table class="table" style="text-align: center;">
                   <tr>
-                    <th style="text-align: center;">Other Levels</th>
                     <th style="text-align: center;">Upgradation</th>
+                    <th style="text-align: center;">Other Levels</th>
                   </tr>
                   <tr>
-                    <td>
+
+                    <td><strong>
+                        Is the inspection report recommend the upgradation?
+                        <input required onclick="$('.upgradationlist').show();" type="radio" class="is_upgrade" name="is_upgrade" value="1" /> Yes <span style="margin-right: 15px;"></span>
+                        <input required onclick="$('.upgradationlist').hide();" type="radio" class="is_upgrade" name="is_upgrade" value="0" /> No <span style="margin-right: 25px;"></span> </strong>
+                      <span class="upgradationlist" id="upgrade_list" style="display: none;">
+                        <?php
+                        $query = "SELECT * FROM `levelofinstitute` 
+                            WHERE `levelofinstitute`.`levelofInstituteId` > '" . $session_request_detail->level_of_school_id . "'
+                            ORDER BY `levelofinstitute`.`levelofInstituteId` ASC";
+                        $levelofinstitutes = $this->db->query($query)->result();
+                        foreach ($levelofinstitutes as $levelofinstitute) { ?>
+                          <input class="upgrade_levels" type="checkbox" name="upgrade_levels[]" value="<?php echo $levelofinstitute->levelofInstituteId;  ?>" /> <?php echo $levelofinstitute->levelofInstituteTitle ?>
+                          <span style="margin-right: 15px;"></span>
+                        <?php } ?>
+                      </span>
+                    </td>
+                    <td class="upgradationlist" id="upgradationlist" style="display: none;">
                       <?php
                       $query = "SELECT * FROM `levelofinstitute` 
                             WHERE `levelofinstitute`.`levelofInstituteId` <= '" . $session_request_detail->level_of_school_id . "'
@@ -720,25 +729,9 @@
                                   }
                                 }
 
-                                ?> class="renewal_levels" name="renewal_levels[]" value="<?php echo $levelofinstitute->levelofInstituteId;  ?>" type="checkbox" /> <?php echo $levelofinstitute->levelofInstituteTitle ?>
+                                ?> class="upgrade_levels" name="upgrade_levels[]" value="<?php echo $levelofinstitute->levelofInstituteId;  ?>" type="checkbox" /> <?php echo $levelofinstitute->levelofInstituteTitle ?>
                         <span style="margin-right: 15px;"></span>
                       <?php } ?>
-                    </td>
-                    <td><strong>
-                        Is the inspection report recommended the upgradation?
-                        <input required onclick="$('#upgrade_list').show();" type="radio" class="is_upgrade" name="is_upgrade" value="1" /> Yes <span style="margin-right: 15px;"></span>
-                        <input required onclick="$('#upgrade_list').hide();" type="radio" class="is_upgrade" name="is_upgrade" value="0" /> No <span style="margin-right: 25px;"></span> </strong>
-                      <span id="upgrade_list" style="display: none;">
-                        <?php
-                        $query = "SELECT * FROM `levelofinstitute` 
-                            WHERE `levelofinstitute`.`levelofInstituteId` > '" . $session_request_detail->level_of_school_id . "'
-                            ORDER BY `levelofinstitute`.`levelofInstituteId` ASC";
-                        $levelofinstitutes = $this->db->query($query)->result();
-                        foreach ($levelofinstitutes as $levelofinstitute) { ?>
-                          <input class="upgrade_levels" type="checkbox" name="upgrade_levels[]" value="<?php echo $levelofinstitute->levelofInstituteId;  ?>" /> <?php echo $levelofinstitute->levelofInstituteTitle ?>
-                          <span style="margin-right: 15px;"></span>
-                        <?php } ?>
-                      </span>
                     </td>
                   </tr>
                 </table>
@@ -753,7 +746,7 @@
             <!-- Upgradation and Renewal Section -->
             <?php if ($session_request_detail->reg_type_id == 4) { ?>
               <h4>
-                Do you want to process the Upgradation?
+                Do you want to process the Upgradation and Renewal?
                 <input onclick="show_registration_form()" style="margin-left: 10px;" type="checkbox" name="i_want" id="i_want" />
               </h4>
 

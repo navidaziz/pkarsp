@@ -150,11 +150,19 @@
 
         <div class="col-md-12">
           <p>
-            Request for <strong><?php echo $session_request_detail->regTypeTitle ?></strong>
+            <?php //var_dump($school); 
+            ?>
+            <strong> <?php echo $school->schoolName; ?> </strong>
+            S-ID:<strong> <?php echo $school->schools_id; ?> </strong>
+
+            Application for <strong><?php echo $session_request_detail->regTypeTitle ?></strong>
             session <strong><?php echo $session_request_detail->sessionYearTitle ?></strong>
             for level <strong><?php echo $session_request_detail->levelofInstituteTitle ?></strong> on
             <strong><?php echo date("d M, Y", strtotime($session_request_detail->created_date)); ?></strong>
-
+            <br />
+            <br />
+            As per schedule notification the following required fee has been deposit by the school administration, ( <strong> <?php echo $school->schoolName; ?> </strong>
+            S-ID:<strong>: <?php echo $school->schools_id; ?> </strong>), as per schedule and KP-PSRA notification for fee slab and security mentioned against each.
           </p>
           <br />
 
@@ -165,17 +173,14 @@
                 <th>Type</th>
                 <th>STAN</th>
                 <th>Date</th>
-                <th>App. Pro. Fee</th>
-                <th>Ins. Fee</th>
-                <th>Ren. Fee</th>
-                <th>Late Fee </th>
-                <th>Secu. Fee:</th>
-                <th>Upgra. Fee:</th>
-                <th>Ren. & Upgra. Fee:</th>
-
+                <th>Application Processing Fee</th>
+                <th>Inspection Fee</th>
+                <th>Renewal Fee</th>
+                <th>Upgradation Fee</th>
+                <th>Late Fee</th>
+                <th>Security Fee</th>
                 <th>Fine</th>
                 <th>Total</th>
-                <th>Verified By</th>
               </tr>
             </thead>
             <tbody>
@@ -190,20 +195,19 @@
                   <td><?php echo $bank_challan->application_processing_fee; ?></td>
                   <td><?php echo $bank_challan->inspection_fee; ?></td>
                   <td><?php echo $bank_challan->renewal_fee; ?></td>
+                  <td><?php echo $bank_challan->upgradation_fee; ?></td>
                   <td><?php echo $bank_challan->late_fee; ?></td>
 
                   <td><?php echo $bank_challan->security_fee; ?></td>
-                  <td><?php echo $bank_challan->upgradation_fee; ?></td>
-                  <td><?php echo $bank_challan->renewal_and_upgradation_fee; ?></td>
 
 
                   <td><?php echo $bank_challan->fine; ?></td>
                   <td><?php echo $bank_challan->total_deposit_fee; ?></td>
-                  <td><?php
-                      $query = "SELECT * FROM users WHERE userId = '" . $bank_challan->verified_by . "'";
-                      $verified_by = $this->db->query($query)->result()[0]->userTitle;
-                      echo $verified_by;
-                      ?></td>
+                  <!-- <td><?php
+                            $query = "SELECT * FROM users WHERE userId = '" . $bank_challan->verified_by . "'";
+                            $verified_by = $this->db->query($query)->result()[0]->userTitle;
+                            echo $verified_by;
+                            ?></td> -->
                 </tr>
               <?php  } ?>
 

@@ -17,6 +17,35 @@ class Fines extends My_Controller
 		$this->load->view('layout', $this->data);
 	}
 
+	public function activate_account($school_id)
+	{
+
+		$school_id = (int)  $school_id;
+		$query = "SELECT SUM(`fine_amount`) as fine_total 
+		FROM `school_fine_history` 
+		WHERE school_id= '" . $school_id . "'
+		AND is_deleted = 0;";
+		$total_fine = $this->db->query($query)->result()[0]->fine_total;
+
+		$query = "SELECT SUM(`deposit_amount`) as paid 
+		FROM `fine_payments` 
+		WHERE school_id= '" . $school_id . "'
+		AND is_deleted = 0;";
+		$total_paid = $this->db->query($query)->result()[0]->paid;
+
+		$remain = $total_fine - $total_paid;
+		if ($remain == 0) {
+			$where['schoolId'] = $school_id;
+			$this->db->where($where);
+			$is_fine['isfined'] = 0;
+			$this->db->update('schools', $is_fine);
+			$this->session->set_flashdata('msg', 'Account Activated Successfully.');
+		} else {
+			$this->session->set_flashdata('msg', 'Account Not Activated. Try Again');
+		}
+		redirect("fines/index");
+	}
+
 	public function add_fine()
 	{
 		$school_fine_history = array(
@@ -26,7 +55,8 @@ class Fines extends My_Controller
 			'remarks' => $this->input->post('remarks'),
 			'created_by' => $this->session->userdata('userId'),
 			'file_number' => $this->input->post('file_number'),
-			'file_date' => $this->input->post('file_date')
+			'file_date' => $this->input->post('file_date'),
+			'is_fined' => '1'
 		);
 		if ($this->db->insert('school_fine_history', $school_fine_history)) {
 			$where['schoolId'] = (int) $this->input->post('schools_id');
@@ -38,6 +68,36 @@ class Fines extends My_Controller
 			echo 0;
 		}
 	}
+
+	public function waive_off_fine()
+	{
+		$where['school_id'] = (int) $this->input->post('schools_id');
+		$where['history_id'] = (int) $this->input->post('history_id');
+
+		$this->db->where($where);
+		$update['is_fined'] = 0;
+		$update['wo_detail'] = $this->input->post('wo_detail');
+		if ($this->db->update('school_fine_history', $update)) {
+			echo 1;
+		} else {
+			echo 0;
+		}
+	}
+	public function remove_waive_off()
+	{
+		$where['school_id'] = (int) $this->input->post('schools_id');
+		$where['history_id'] = (int) $this->input->post('history_id');
+
+		$this->db->where($where);
+		$update['is_fined'] = 1;
+		$update['wo_detail'] = '';
+		if ($this->db->update('school_fine_history', $update)) {
+			echo 1;
+		} else {
+			echo 0;
+		}
+	}
+
 
 	public function delete_fine()
 	{

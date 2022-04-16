@@ -14,14 +14,14 @@
   <meta name="description" content="">
   <meta name="author" content="">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-  <!-- <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700;900&display=swap" rel="stylesheet"> -->
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700;900&display=swap" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
   <style type="text/css">
     body {
       background: rgb(204, 204, 204);
-      /* font-family: 'Source Sans Pro', 'Regular' !important; */
+      font-family: 'Source Sans Pro', 'Regular' !important;
 
     }
 
@@ -46,7 +46,6 @@
         margin-top: 30px;
         /* height: 29.7cm;  */
         height: auto;
-        font-size: 22px !important;
       }
     }
 
@@ -130,7 +129,7 @@
               (for bank use only)</th>
           </tr>
         </table>
-        <div style="border: 1px solid #ddd; border-radius: 10px; margin-top: 5px; margin-bottom: 10px;  padding: 10px;">
+        <div style="border: 1px solid #ddd; border-radius: 10px; margin-top: 5px; margin-bottom: 10px;  padding: 10px; ">
           <table class="table">
             <tr>
               <td>School ID: <span style="text-decoration: underline; ">
@@ -156,112 +155,50 @@
         </div>
 
 
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>Fee Category</th>
-              <th>Amount (Rs.)</th>
-            </tr>
-          </thead>
-          <tbody>
+        <table class="table">
+          <tr>
+            <th> Due's Date </th>
+            <th>Upgradation Fee</th>
+            <th> Late Fee </th>
+            <th> Total </th>
+          </tr>
+          <?php
+          $count = 1;
+          foreach ($session_fee_submission_dates as $session_fee_submission_date) { ?>
 
             <tr>
-              <td>Upgradation Fee</td>
-              <td><?php echo $fee_sturucture->up_grad_fee; ?> Rs.</td>
-            </tr>
+              <th>
+                <?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?>
+              </th>
+              <td> <?php $total = $fee_sturucture->up_grad_fee;
 
-            <tr>
-              <td><strong>Total Session <?php echo $session_detail->sessionYearTitle; ?> Upgradation Fee </strong></td>
+                    echo number_format($total);
+                    ?></td>
+
+              <td><?php echo $session_fee_submission_date->fine_percentage; ?> % -
+                <?php
+                $fine = 0;
+                $fine = ($session_fee_submission_date->fine_percentage * $total) / 100;
+                echo number_format($fine);
+                ?>
+              </td>
               <td>
-                <strong>
-                  <?php $total = $fee_sturucture->up_grad_fee;
-
-                  echo number_format($total);
-                  ?> Rs.
-                </strong>
+                <?php echo number_format($fine + $total);  ?>
               </td>
             </tr>
 
 
-            <?php if ($session_detail->status == 1) { ?>
 
-              <tr>
-                <td colspan="2">Late Fee Fine
-                  <small>(Upgradation fee)</small>
-                </td>
-
-              </tr>
-
-            <?php } ?>
-
-            <tr>
-              <?php if ($session_detail->status == 1) { ?>
-                <td colspan="2">
-                  <table class="table">
-                    <tr>
-                      <th> Due's Date </th>
-                      <th> Late Fee % </th>
-                      <th> Late Fee Amount </th>
-                      <th> Total </th>
-                    </tr>
-                    <?php
-                    $count = 1;
-                    foreach ($session_fee_submission_dates as $session_fee_submission_date) { ?>
-
-                      <tr>
-                        <th>
-                          <?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?>
-                        </th>
-                        <td><?php echo $session_fee_submission_date->fine_percentage; ?> %</td>
-                        <td>
-                          <?php
-                          $fine = 0;
-                          $fine = ($session_fee_submission_date->fine_percentage * $total) / 100;
-                          echo number_format($fine);
-                          ?>
-                          Rs.
-                        </td>
-                        <td>
-                          <?php echo number_format($fine + $total);  ?>
-                        </td>
-                      </tr>
+          <?php } ?>
+        </table>
 
 
+        </td>
 
-                    <?php } ?>
-                  </table>
-                </td>
-              <?php } else { ?>
-                <td>Late Fee Fine <br /><small><?php
-                                                if ($late_fee->fine_percentage) {
-                                                  echo  $late_fee->fine_percentage;
-                                                } else {
-                                                  echo 100;
-                                                }
-                                                ?>% on
-                    (Application Processing+Inspection Fee+Renewal)</small>
-                </td>
-                <td><?php
-                    if ($late_fee->fine_percentage) {
-                      $fine = ($late_fee->fine_percentage * $total) / 100;
-                    } else {
-                      $fine =  (100 * $total) / 100;
-                    }
-                    echo number_format($fine);
-                    ?>
-                  Rs.</td>
-              <?php } ?>
-            </tr>
-            <?php if ($session_detail->status == 0) { ?>
-              <tr>
-                <td colspan="2" style="text-align: right;">
-                  <h4>Total <?php echo number_format($total + $fine); ?> Rs.</h4>
-                </td>
+        </tr>
 
-              </tr>
-            <?php } ?>
 
-          </tbody>
+        </tbody>
         </table>
         <br /><br />
         <style>
