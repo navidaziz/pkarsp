@@ -300,6 +300,8 @@ class Admission extends Admin_Controller
 		$uc_id = $school->uc_id;
 
 
+
+
 		$data = array(
 			'class_id' => $this->input->post("class_id"),
 			'section_id' => $this->input->post("section_id"),
@@ -348,6 +350,8 @@ class Admission extends Admin_Controller
 	/**
 	 * Default action to be called
 	 */
+
+
 
 	public function index()
 	{
@@ -1054,6 +1058,8 @@ WHERE `tests`.`test_id` = `test_questions`.`test_id`
 	}
 
 
+
+
 	public function students_result($class_id, $section_id)
 	{
 		/*$class_and_section = $this->input->post('class_and_section');
@@ -1164,6 +1170,11 @@ WHERE `tests`.`test_id` = `test_questions`.`test_id`
 		$query = "SELECT * FROM `classes` WHERE status=1 ORDER BY class_id DESC";
 
 		$this->data['class_id']  = $class_id = (int) $class_id;
+
+		$query = "Select class_title FROM classes WHERE classes.class_id = '" . $class_id . "'";
+		$this->data['class_title'] = $this->db->query($query)->result()[0]->class_title;
+
+
 		$where = "`students`.`status` IN (1,2) 
 		AND  `students`.`class_id`='" . $class_id . "' 
 		AND `students`.`school_id`='" . $school_id . "'
@@ -1180,7 +1191,7 @@ WHERE `tests`.`test_id` = `test_questions`.`test_id`
 		$this->data["pagination"] = "";
 		$this->data["title"] = "Students";
 		//var_dump($sections);
-		$this->data["view"] = ADMIN_DIR . "admission/view_student";
+		$this->data["view"] = ADMIN_DIR . "admission/view_students";
 		$this->load->view(ADMIN_DIR . "layout", $this->data);
 	}
 	function update_student_info($student_id)
@@ -1262,5 +1273,264 @@ WHERE `tests`.`test_id` = `test_questions`.`test_id`
 
 		$main_page = base_url() . $this->router->fetch_class() . "/edit_students/" . $class_id . "/" . $section_id;
 		redirect($main_page);
+	}
+
+	public function check_student()
+	{
+
+		$contact_number = str_replace(array('-', '_', '(', ')'), "", $this->input->post('father_mobile_number'));
+
+
+		if (strlen(str_replace("-", "", str_replace("_", "", $this->input->post('father_nic')))) != 13) {
+			$this->form_validation->set_message('check_student', 'Erron in father CNIC. Try again with valid CNIC. CNIC must be 13 character long');
+			return FALSE;
+		}
+		if ($this->input->post('form_b')) {
+			if (strlen(str_replace("-", "", str_replace("_", "", $this->input->post('form_b')))) != 13) {
+				$this->form_validation->set_message('check_student', 'Erron in student Form-B number. Try again with valid Form-B Number. Form-B must be 13 character long');
+				return FALSE;
+			}
+		}
+
+		if (strlen($contact_number) != 11) {
+			$this->form_validation->set_message('check_student', 'Erron in contact number. Try again with valid contact number. Contact number must be 11 character long');
+			return FALSE;
+		} else {
+			if (substr($contact_number, 0, 2) != '03') {
+				$this->form_validation->set_message('check_student', 'Erron in contact number. Mobile number must start with 03....');
+				return FALSE;
+			}
+		}
+
+		$input['student_name'] = $this->input->post('student_name');
+		$input['student_father_name'] = $this->input->post('student_father_name');
+		$input['father_nic'] = $this->input->post('father_nic');
+		$this->db->from('students');
+		$this->db->where($input);
+		if ($this->input->post('student_id')) {
+			$student_id = (int) $this->input->post('student_id');
+			$this->db->where_not_in('student_id', $student_id);
+		}
+		$query_result = $this->db->get();
+		//echo $this->db->last_query();
+		if ($query_result->num_rows()) {
+			if ($query_result->num_rows() == 1) {
+				$message = $query_result->num_rows() . " Student found.<br /> ";
+			} else {
+				$message = $query_result->num_rows() . " Students found.<br /> ";
+			}
+			$message .= 'Student is already registered with us with same student name,father name and having same Father CNIC.
+				Please admit student using student leaving certificate. thanks.';
+
+			$this->form_validation->set_message('check_student', $message);
+			return FALSE;
+		}
+		return TRUE;
+	}
+
+	public function check_student_profile()
+	{
+
+
+		$validation_config = array(
+
+			array("field" => "class_id", "label" => "Class Id", "rules" => "required|trim"),
+			array("field" => "section_id", "label" => "Section Id", "rules" => "required|trim"),
+			array("field" => "student_class_no", "label" => "Student Class No", "rules" => "required|trim"),
+			array("field" => "student_admission_no", "label" => "Student Admission No", "rules" => "required|trim"),
+			array("field" => "student_name", "label" => "Student Name", "rules" => "required|trim"),
+			array("field" => "student_father_name", "label" => "Student Father Name", "rules" => "required|trim"),
+			array("field" => "nationality", "label" => "Nationality", "rules" => "required|trim"),
+			array("field" => "father_nic", "label" => "Father CNIC", "rules" => "required|trim|callback_check_student"),
+			//array("field" => "form_b", "label" => "Form B", "rules" => "required|trim"),
+			array("field" => "father_mobile_number", "label" => "Father Mobile Number", "rules" => "required|trim"),
+			array("field" => "student_data_of_birth", "label" => "Student Data Of Birth", "rules" => "required|trim"),
+			array("field" => "admission_date", "label" => "Admission Date", "rules" => "required|trim"),
+			array("field" => "gender", "label" => "Gender", "rules" => "required|trim"),
+			array("field" => "is_disable", "label" => "Is Disable", "rules" => "required|trim"),
+			array("field" => "orphan", "label" => "Orphan", "rules" => "required|trim"),
+			array("field" => "religion", "label" => "Religion", "rules" => "required|trim"),
+
+			array("field" => "student_address", "label" => "Student Address", "rules" => "required|trim")
+		);
+
+
+		if ($this->input->post('nationality') == 'Pakistani') {
+			$validation_config[] =	array("field" => "province", "label" => "Province", "rules" => "required|trim");
+			$validation_config[] = array("field" => "ditrict_domicile", "label" => "Domicile District", "rules" => "required|trim");
+		} else {
+			$_POST['province'] = '';
+			$_POST['ditrict_domicile'] = '';
+		}
+
+		$this->form_validation->set_rules($validation_config);
+
+		if ($this->form_validation->run() === TRUE) {
+			if ($this->input->post('student_id')) {
+				$this->UpdateStudent();
+			} else {
+				$this->AddNewStudent();
+			}
+		} else {
+			echo validation_errors();
+		}
+	}
+
+	private function UpdateStudent()
+	{
+
+		$data = array(
+			'class_id' => $this->input->post("class_id"),
+			'section_id' => $this->input->post("section_id"),
+			'student_class_no' => $this->input->post("student_class_no"),
+			'student_name' => ucwords(strtolower($this->input->post("student_name"))),
+			'student_father_name' => ucwords(strtolower($this->input->post("student_father_name"))),
+			'student_data_of_birth' => $this->input->post("student_data_of_birth"),
+			'student_address' => ucwords(strtolower($this->input->post("student_address"))),
+			'student_admission_no' => $this->input->post("student_admission_no"),
+			'religion' => $this->input->post("religion"),
+			'father_nic' => $this->input->post("father_nic"),
+			'nationality' => $this->input->post("nationality"),
+			'guardian_occupation' => $this->input->post("guardian_occupation"),
+			'admission_date' => $this->input->post("admission_date"),
+			'private_public_school' => $this->input->post("private_public_school"),
+			'school_name' => $this->input->post("school_name"),
+			'father_mobile_number' => $this->input->post("father_mobile_number"),
+			'orphan' => $this->input->post("orphan"),
+			'gender' => $this->input->post("gender"),
+			'form_b' => $this->input->post("form_b"),
+			'province' => $this->input->post("province"),
+			'domicile' => $this->input->post("ditrict_domicile")
+		);
+		$student_id = (int) $this->input->post('student_id');
+		$this->db->where('student_id', $student_id);
+
+		if ($this->db->update('students', $data)) {
+
+			echo "Student Profile Update Successfully.";
+		} else {
+			echo "Error while updating profile. Try Again.";
+		}
+	}
+
+	private function AddNewStudent()
+	{
+
+		$query = "SELECT sessionYearId as session_id FROM `session_year` WHERE status=1 ORDER BY sessionYearId DESC";
+		$session_id  = $this->db->query($query)->result()[0]->session_id;
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT schoolId,district_id,tehsil_id, uc_id 
+		         FROM schools WHERE `owner_id`='" . $userId . "'";
+		$school = $this->db->query($query)->result()[0];
+		$school_id = $school->schoolId;
+		$district_id = $school->district_id;
+		$tehsil_id = $school->tehsil_id;
+		$uc_id = $school->uc_id;
+		$data = array(
+			'class_id' => $this->input->post("class_id"),
+			'section_id' => $this->input->post("section_id"),
+			'session_id' => $session_id,
+			'student_class_no' => $this->input->post("student_class_no"),
+			'student_name' => ucwords(strtolower($this->input->post("student_name"))),
+			'student_father_name' => ucwords(strtolower($this->input->post("student_father_name"))),
+			'student_data_of_birth' => $this->input->post("student_data_of_birth"),
+			'student_address' => ucwords(strtolower($this->input->post("student_address"))),
+			'student_admission_no' => $this->input->post("student_admission_no"),
+			'religion' => $this->input->post("religion"),
+			'father_nic' => $this->input->post("father_nic"),
+			'nationality' => $this->input->post("nationality"),
+			'guardian_occupation' => $this->input->post("guardian_occupation"),
+			'admission_date' => $this->input->post("admission_date"),
+			'private_public_school' => $this->input->post("private_public_school"),
+			'school_name' => $this->input->post("school_name"),
+			'father_mobile_number' => $this->input->post("father_mobile_number"),
+			'orphan' => $this->input->post("orphan"),
+			'district_id' => $district_id,
+			'tehsil_id' => $tehsil_id,
+			'uc_id' => $uc_id,
+			'gender' => $this->input->post("gender"),
+			'form_b' => $this->input->post("form_b"),
+			'school_id' => $school_id,
+			'province' => $this->input->post("province"),
+			'domicile' => $this->input->post("ditrict_domicile")
+		);
+		if ($this->db->insert('students', $data)) {
+			$student_id = $this->db->insert_id();
+			$SchoolId =  str_pad($school_id, 6, '0', STR_PAD_LEFT);
+			$StudentId = str_pad($student_id, 8, '0', STR_PAD_LEFT);
+			if ($this->input->post("gender") == 'Male') {
+				$Gender_id = "2";
+			} else {
+				$Gender_id = "1";
+			}
+			$StudentID = "P" . $SchoolId . "-" . $StudentId . "-" . $Gender_id;
+
+			$query = "UPDATE students SET psra_student_id = '" . $StudentID . "' WHERE student_id = '" . $student_id . "'";
+			$this->db->query($query);
+			echo "Student Successfully Added.";
+		} else {
+			echo "Error Try Again.";
+		}
+	}
+
+
+	//get school data from form 
+	// insert data into school
+
+
+
+	public function get_class_wise_students_list($class_id)
+	{
+
+		$this->data['class_title']  = $this->input->post('class_title');
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT schoolId,schoolName FROM schools WHERE `owner_id`='" . $userId . "'";
+		$this->data['school'] = $school =  $this->db->query($query)->result()[0];
+		$this->data['school_id']  = $school_id = $school->schoolId;
+		$query = "SELECT * FROM `classes` WHERE status=1 ORDER BY class_id DESC";
+
+		$this->data['class_id']  = $class_id = (int) $class_id;
+		$where = "`students`.`status` IN (1,2) 
+		AND  `students`.`class_id`='" . $class_id . "' 
+		AND `students`.`school_id`='" . $school_id . "'
+		ORDER BY `student_admission_no` ASC";
+		$this->data["students"] = $students =  $this->student_model->get_student_list($where, FALSE);
+		$sections = array();
+
+
+
+		foreach ($students as $student) {
+			$sections[$student->section_title][] = $student;
+		}
+		$this->data["sections"] = $sections;
+		$this->data["pagination"] = "";
+		$this->data["title"] = "Students";
+		$this->load->view(ADMIN_DIR . "admission/get_class_wise_students_list", $this->data);
+	}
+
+	public function get_student_add_form()
+	{
+		$this->data['class_id'] = (int) $this->input->post('class_id');
+		$class_title = $this->input->post('class_title');
+		if ($this->input->post('student_id')) {
+			$student_id = (int) $this->input->post('student_id');
+			$this->data["title"] = "Update Student Profile";
+			$userId = $this->session->userdata('userId');
+			$query = "SELECT schoolId,schoolName FROM schools WHERE `owner_id`='" . $userId . "'";
+			$this->data['school'] = $school =  $this->db->query($query)->result()[0];
+			$this->data['school_id']  = $school->schoolId;
+			$this->data["student"]  = $this->student_model->get_student($student_id)[0];
+		} else {
+			$this->data["title"] = "Add New Student in class $class_title";
+		}
+
+
+		$this->load->view(ADMIN_DIR . "admission/student_add_form", $this->data);
+	}
+
+	public function UpdateStudentProfile()
+	{
+
+		$this->check_student_profile();
 	}
 }

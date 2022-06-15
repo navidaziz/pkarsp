@@ -62,7 +62,7 @@
                       <td>Year of Establishment:</td>
                       <td>
                         <select name="e_month" required>
-                          <option value="0">Select Month</option>
+                          <option value="">Select Month</option>
                           <?php
                           $months = array(
                             '01' => 'Jan',
@@ -197,10 +197,10 @@
 
                     <tr>
                       <td>Latitude:<br />
-                        <input style="width:100%" type="number" required placeholder="(Precision upto 6 decimal)" name="late" id="lat" step="any" />
+                        <input style="width:100%" type="text" required placeholder="(Precision upto 6 decimal)" name="late" id="late" step="any" />
                       </td>
                       <td>longitude:<br />
-                        <input style="width:100%" type="number" required placeholder="(Precision upto 6 decimal)" name="longitude" id="lat" step="any" />
+                        <input style="width:100%" type="text" required placeholder="(Precision upto 6 decimal)" name="longitude" id="long" step="any" />
                       </td>
                     </tr>
                   </table>
@@ -501,6 +501,9 @@
         $('#contactNumber').inputmask('(9999)-9999999');
         $('#telePhoneNumber').inputmask('(9999)-9999999');
         $('#schoolMobileNumber').inputmask('(9999)-9999999');
+
+        $('#late').inputmask('99.9999999');
+        $('#long').inputmask('99.9999999');
 
 
       });

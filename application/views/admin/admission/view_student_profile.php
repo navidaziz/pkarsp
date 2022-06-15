@@ -55,9 +55,8 @@ $section_id = $students[0]->section_id;
                             </h5>
                             <h5 style="font-weight: bold;">
                                 Domicile:
-                                <?php
-                                $query = "SELECT districtTitle FROM district WHERE districtId = '" . $students[0]->domicile_id . "'";
-                                echo $this->db->query($query)->result()[0]->districtTitle; ?>
+                                <?php echo $students[0]->domicile; ?>
+
                             </h5>
                             <hr />
 

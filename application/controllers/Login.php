@@ -116,7 +116,7 @@ class Login extends Admin_Controller
 			// var_dump($user);
 			// exit();
 
-			if (count($user) > 0) {
+			if ($user) {
 
 				//
 				$role_homepage_id = $this->role_m->getCol("role_homepage", $user->role_id);

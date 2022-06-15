@@ -97,27 +97,27 @@ FROM
                 <table class="table" style="">
                   <tr>
                     <td>Institute Contact No. </td>
-                    <td><input data-mask="(999) 999-9999" type="number" id="telePhoneNumber" required="" name="telePhoneNumber" value="<?php echo $school_detail->telePhoneNumber ?>"> </td>
+                    <td><input data-mask="(999) 999-9999" type="text" id="telePhoneNumber" required="required" name="telePhoneNumber" name="telePhoneNumber"  value="<?php echo $school_detail->telePhoneNumber ?>"> </td>
                   </tr>
                   <tr>
                     <td>Institute Contact No (Mobile). </td>
-                    <td><input type="number" id="schoolMobileNumber" required="" name="schoolMobileNumber" value="<?php echo $school_detail->schoolMobileNumber ?>"> </td>
+                    <td><input type="text" id="schoolMobileNumber" required="required" name="schoolMobileNumber" value="<?php echo $school_detail->schoolMobileNumber ?>"> </td>
                   </tr>
 
                   <tr>
                     <td>Institute Email Address. </td>
-                    <td><input type="email" id="principal_email" required="" name="principal_email" value="<?php echo $school_detail->principal_email ?>"> </td>
+                    <td><input type="email" id="principal_email" required="required" name="principal_email" value="<?php echo $school_detail->principal_email ?>"> </td>
                   </tr>
 
                 </table>
 
-                <h4>User Account Contact Detail</h4>
-                <h5>Email address for user account to recover username and password online.</h5>
+                <h4>School Account Email Address</h4>
+                <h5>This email address used to recover username and password of online school account in future. Email address may be same as the above "Institute Email Address"</h5>
                 <table class="table" style="">
 
                   <tr>
                     <td> User Account Email Address. </td>
-                    <td><input type="email" id="userEmail" required="" name="userEmail" value="<?php echo $school_detail->userEmail; ?>"> </td>
+                    <td><input type="email" id="userEmail" required="required" name="userEmail" value="<?php echo $school_detail->userEmail; ?>"> </td>
                   </tr>
 
                 </table>
@@ -148,15 +148,22 @@ FROM
     <!-- BACKSTRETCH -->
     <script type="text/javascript" src="<?php echo site_url("assets/" . ADMIN_DIR); ?>/js/backstretch/jquery.backstretch.min.js"></script>
     <!-- CUSTOM SCRIPT -->
+    <script src="<?php echo base_url('assets/lib/plugins/input-mask/jquery.inputmask.js'); ?>"></script>
 
-    <script>
-      $(document).ready(function() {
-        $('#telePhoneNumber').inputmask('(9999)-9999999');
-        $('#cnic').inputmask('99999-9999999-9');
-        $('#contactNumber').inputmask('(9999)-9999999');
+<script>
+  $(document).ready(function() {
+    $('#telePhoneNumber').inputmask('(9999)-9999999');
+    $('#cnic').inputmask('99999-9999999-9');
+    $('#contactNumber').inputmask('(9999)-9999999');
+    $('#telePhoneNumber').inputmask('(9999)-9999999');
+    $('#schoolMobileNumber').inputmask('(9999)-9999999');
 
-      });
-    </script>
+    $('#late').inputmask('99.9999999');
+    $('#long').inputmask('99.9999999');
+
+
+  });
+</script>
 
     <!-- /JAVASCRIPTS -->
 </body>

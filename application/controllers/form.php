@@ -153,38 +153,10 @@ class Form extends Admin_Controller
 		$this->data['form_status'] = $this->get_form_status($school_id);
 
 		$level_of_school_id = $this->data['school']->level_of_school_id;
-		$query = "SELECT 
-						MIN(`class`.`level_id`) AS min_level_id 
-					FROM
-						`class` 
-						INNER JOIN `age_and_class` 
-						ON (
-							`class`.`classId` = `age_and_class`.`class_id`
-						) 
-						INNER JOIN `school` 
-						ON (
-							`school`.`schoolId` = `age_and_class`.`school_id`
-						) 
-					WHERE  
-					`school`.`status` = 1
-					AND `school`.`schools_id` = $school->schools_id;";
-		$school_min_level = 1;
-		$min_level = $this->db->query($query)->result();
-
-
-		if ($min_level) {
-			$school_min_level = $min_level[0]->min_level_id;
-		} else {
-			$school_min_level = 1;
-		}
-
-
-		// echo $query = "SELECT classes_ids FROM `levelofinstitute` 
-		//           WHERE levelofInstituteId >= '" . $school_min_level . "'
-		// 		  AND levelofInstituteId <= '" . $level_of_school_id . "'";
-		// $classes_ids = $this->db->query($query)->result()[0]->classes_ids;
-		// $query = "SELECT * FROM class WHERE classId IN(" . $classes_ids . ")";
-		$query = "SELECT * FROM class WHERE `level_id` >= '" . $school_min_level . "' AND `level_id` <='" . $level_of_school_id . "'";
+		$query = "SELECT classes_ids FROM `levelofinstitute` 
+		          WHERE levelofInstituteId='" . $level_of_school_id . "'";
+		$classes_ids = $this->db->query($query)->result()[0]->classes_ids;
+		$query = "SELECT * FROM class WHERE classId IN(" . $classes_ids . ")";
 
 		$this->data['classes'] = $this->db->query($query)->result();
 

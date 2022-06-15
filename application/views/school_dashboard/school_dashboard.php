@@ -473,14 +473,14 @@
                           $apply = $this->db->query($query)->result()[0]->total; ?>
 
                           <?php if ($session->status == 1) { ?>
-                            <p class="btn btn-outline-success">
+                            <p class="btn btn-outline-success" <?php if ($apply <= 0) { ?>  style="border-color: #D6D6D6"<?php } ?>>
                               Apply For <?php echo $session->sessionYearTitle; ?>
                               <?php if ($apply > 0) { ?>
                                 <a class="btn btn-success" style="margin: 1px;" href="<?php echo site_url("apply/renewal/$session->sessionYearId"); ?>"> Renewal </a>
                                 <a class="btn btn-warning" style="margin: 1px;" href="<?php echo site_url("apply/renewal_upgradation/$session->sessionYearId"); ?>">Upgradation + Renewal</a>
                               <?php } else { ?>
-                                <a class="btn btn-success" style="margin: 1px;" data-toggle="tooltip" data-placement="top" title="" href=" # " data-original-title="Please apply and complete previous session data entry."> Renewal </a>
-                                <a class="btn btn-warning" style="margin: 1px;" data-toggle="tooltip" data-placement="top" title="" href=" # " data-original-title="Please apply and complete previous session data entry.">Upgradation + Renewal</a>
+                                <a class="btn btn-success" style="margin: 1px; background-color: #E6E6E6; border-color: #D6D6D6" data-toggle="tooltip" data-placement="top" title="" href=" # " data-original-title="Please apply and complete previous session data entry."> Renewal </a>
+                                <a class="btn btn-warning" style="margin: 1px; background-color: #E6E6E6; border-color: #D6D6D6" data-toggle="tooltip" data-placement="top" title="" href=" # " data-original-title="Please apply and complete previous session data entry.">Upgradation + Renewal</a>
 
                               <?php  } ?>
                             </p>
@@ -488,7 +488,7 @@
                             <?php if ($apply > 0) { ?>
                               <a class="btn btn-success" style="margin: 1px;" href="<?php echo site_url("apply/renewal/$session->sessionYearId"); ?>">Apply for <?php echo $session->sessionYearTitle; ?> Renewal</a>
                             <?php } else { ?>
-                              <a class="btn btn-success" style="margin: 1px;" data-toggle="tooltip" data-placement="top" title="" href=" # " data-original-title="Please apply and complete previous session data entry.">Apply for <?php echo $session->sessionYearTitle; ?> Renewal</a>
+                              <a class="btn btn-success" style="margin: 1px; background-color: #E6E6E6; border-color: #D6D6D6" data-toggle="tooltip" data-placement="top" title="" href=" # " data-original-title="Please apply and complete previous session data entry.">Apply for <?php echo $session->sessionYearTitle; ?> Renewal</a>
                             <?php } ?>
                           <?php } ?>
 

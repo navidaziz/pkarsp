@@ -684,13 +684,13 @@
                         AND `fee`.`class_id` ='" . $class->classId . "'";
 
                 $session_fee = $this->db->query($query)->result()[0];
-                $session_fee->addmissionFee = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->addmissionFee));
+               // $session_fee->addmissionFee = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->addmissionFee));
                 $admission_fee_row .= '<td>' . $session_fee->addmissionFee . '</td>';
-                $session_fee->tuitionFee = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->tuitionFee));
+               // $session_fee->tuitionFee = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->tuitionFee));
                 $tuitionFee_row .= '<td>' . $session_fee->tuitionFee . '</td>';
-                $session_fee->securityFund = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->securityFund));
+               // $session_fee->securityFund = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->securityFund));
                 $securityFund_row .= '<td>' . $session_fee->securityFund . '</td>';
-                $session_fee->otherFund = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->otherFund));
+               // $session_fee->otherFund = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->otherFund));
                 $otherFund_row .= '<td>' . $session_fee->otherFund . '</td>';
               } ?>
             </tr>
@@ -723,7 +723,7 @@
                     <td colspan="2"><strong style="font-size: 20px;">Section-F: SECURITY MEASURES</strong></td>
                   </tr>
                   <tbody>
-                    <?php if (count($school_security_measures)) { ?>
+                    <?php if ($school_security_measures) { ?>
 
 
                       <tr>
@@ -906,7 +906,7 @@
                     </td>
                   </tr>
                   <tbody>
-                    <?php if (count($school_hazards_with_associated_risks)) { ?>
+                    <?php if ($school_hazards_with_associated_risks) { ?>
 
                       <tr>
                         <td><b>Exposed to floods</b></td>

@@ -36,7 +36,7 @@ class Registration_section extends Admin_Controller
 		(SELECT s.status
 		FROM school as s WHERE 
 		 s.schools_id = `schools`.`schoolId`
-		AND  s.session_year_id = (`school`.`session_year_id`-1)) as previous_session_status
+		AND  s.session_year_id = (`school`.`session_year_id`-1) and s.schools_id = schools.schoolId LIMIT 1) as previous_session_status
 
 		FROM
 		`school`,
@@ -58,6 +58,8 @@ class Registration_section extends Admin_Controller
 		}
 
 		$query .= " ORDER BY `school`.`created_date` ASC,  `school`.`schools_id`, `school`.`session_year_id` ASC ";
+
+		
 
 		$this->data['requests'] = $this->db->query($query)->result();
 
@@ -192,7 +194,9 @@ class Registration_section extends Admin_Controller
 					'status' => 1,
 					'updatedDate' => $dated,
 					'updatedBy' => $this->session->userdata('userId'),
-					'level_of_school_id' => max($selected_levels)
+					'level_of_school_id' => max($selected_levels),
+					'cer_issue_date' => $dated,
+					'old_new' => 1
 				);
 				$this->db->where('schoolId', $school_id);
 				$this->db->where('session_year_id', $session_id);
@@ -302,7 +306,9 @@ class Registration_section extends Admin_Controller
 					'renewal_code' => $renewal_code,
 					'status' => 1,
 					'updatedDate' => $dated,
-					'updatedBy' => $this->session->userdata('userId')
+					'updatedBy' => $this->session->userdata('userId'),
+					'cer_issue_date' => $dated,
+					'old_new' => 1
 				);
 
 				$this->db->where('schoolId', $school_id);

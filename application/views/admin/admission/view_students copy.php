@@ -32,6 +32,8 @@
             <form action="<?php echo site_url(ADMIN_DIR . "admission/add_new_student"); ?>" method="POST" style="padding: 5px;">
               <input type="hidden" name="class_id" value="<?php echo $class_id ?>" />
               <input type="hidden" name="section_id" value="1" />
+              <input style="width:20px !important" type="hidden" name="student_class_no" value="1" />
+
               <style>
                 .table>thead>tr>th,
                 .table>tbody>tr>th,
@@ -43,14 +45,19 @@
                 }
               </style>
 
+<div class="form-row">
+    <div class="form-group col-md-1">
+      <label for="inputEmail4">Email</label>
+      <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+    </div>
+</div>
               <table class="table">
                 <thead>
 
 
 
                   <tr>
-                    <input style="width:20px !important" type="hidden" name="student_class_no" value="1" />
-
+                   
 
                     <td>
                       <strong> Addmission No: </strong><br />

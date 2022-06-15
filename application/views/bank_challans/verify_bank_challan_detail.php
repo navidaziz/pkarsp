@@ -141,10 +141,7 @@
                 </td>
                 <td><input class="bank_challan_values" type="number" name="inspection_fee" required min="0" /> </td>
               </tr>
-              <tr>
-                <td> Renewal Fee:</td>
-                <td><input class="bank_challan_values" type="number" name="renewal_fee" required min="0" /> </td>
-              </tr>
+              
               <tr>
                 <td>
                   Late Fee:

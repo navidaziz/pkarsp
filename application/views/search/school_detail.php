@@ -117,7 +117,8 @@
         <h4> <i class="fa fa-info-circle" aria-hidden="true"></i>
           Session's History
         </h4>
-        <?php $query = "SELECT
+        <?php 
+        $query = "SELECT
         `reg_type`.`regTypeTitle`,
         `levelofinstitute`.`levelofInstituteTitle`,
         `session_year`.`sessionYearTitle`,
@@ -138,7 +139,7 @@
         AND `gender`.`genderId` = `school`.`gender_type_id`
         AND `levelofinstitute`.`levelofInstituteId` = `school`.`level_of_school_id`
         AND `session_year`.`sessionYearId` = `school`.`session_year_id`
-        AND schools_id = '" . $school->schools_id . "'";
+        AND schools_id = '" . $school->schools_id . "' ORDER  BY `session_year`.`sessionYearId` ASC";
         $school_sessions = $this->db->query($query)->result(); ?>
 
 
@@ -182,13 +183,19 @@
                     '',
                     $this->db->query($query)->result()[0]->max_tution_fee
                   );
+                  $max_tuition_fee = (int) preg_replace("/[^0-9]/", "",  $max_tuition_fee );
                   echo $max_tuition_fee;
+                  
                   ?> Rs.</td>
               <td><?php
-                  if ($previous_max) {
-                    $color = '';
+                 if ($previous_max) {
+                  $color = '';
                     $dec = $max_tuition_fee - $previous_max;
-                    $inc = round(($dec / $max_tuition_fee) * 100, 2);
+                    if($max_tuition_fee){
+                    $inc = @round(($dec / $max_tuition_fee) * 100, 2);
+                    }else{
+                      $inc = 0;
+                    }
                     if ($inc > 10) {
                       $color = 'red';
                     } else {
@@ -197,8 +204,9 @@
                     if ($inc < 0) {
                       $color = 'red';
                     }
+                    
                   ?>
-                  <span style="color:<?php echo $color; ?>"><?php echo  round(($dec / $max_tuition_fee) * 100, 2); ?></span>
+                  <span style="color:<?php echo $color; ?>"><?php echo  $inc; ?></span>
                 <?php   } ?>
               </td>
               <td><?php
