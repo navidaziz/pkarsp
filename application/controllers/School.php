@@ -1,3 +1,4 @@
+text/x-generic School.php ( C++ source, ASCII text, with very long lines, with CRLF line terminators )
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
@@ -377,15 +378,17 @@ class School extends Admin_Controller
   public function get_school_username_password()
   {
     $arr = array();
-    $schools_id = $this->input->post('id');
+    $schools_id = (int) $this->input->post('id');
     if ($schools_id) {
-      $q = "SELECT `schools`.`schoolId`,`schools`.`registrationNumber`,`schools`.`schoolName`,`schools`.`schoolMobileNumber`,`schools`.`yearOfEstiblishment`,`users`.`userTitle`,`users`.`userName`,`users`.`userPassword`,`users`.`contactNumber` FROM `schools` inner join users on `schools`.`owner_id`=`users`.`userId` WHERE `schools`.`schoolId`=$schools_id";
+      $q = "SELECT `schools`.`schoolId`,`schools`.`registrationNumber`,`schools`.`schoolName`,`schools`.`schoolMobileNumber`,`schools`.`yearOfEstiblishment`,`users`.`userTitle`,`users`.`userName`,`users`.`userPassword`,`users`.`contactNumber`, `users`.`cnic`  FROM `schools` inner join users on `schools`.`owner_id`=`users`.`userId` WHERE `schools`.`schoolId`=$schools_id";
       $this->data['school_info'] = $this->db->query($q)->row();
       //var_dump($school_info);exit;
       $arr['school_info'] = $this->load->view('school/school_username_and_password_details_by_ajax', $this->data, true);
       $arr['status'] = true;
       echo json_encode($arr);
       exit;
+    } else {
+      echo "Error in school id";
     }
   }
 
@@ -575,6 +578,7 @@ class School extends Admin_Controller
       $update_session_data = array(
         'status' => 1,
         'updatedDate' => $dated,
+        'cer_issue_date' => date("Y-m-d h:i:s"),
         'updatedBy' => $this->session->userdata('userId')
       );
       $this->db->where('schoolId', $school_session_id);
@@ -600,12 +604,85 @@ class School extends Admin_Controller
 
     // echo json_encode($arr);
     // exit();
+    //  date_default_timezone_set("Asia/Karachi"); 
+    //  $dated = date("d-m-Y h:i:sa");
+
+    //  $school_id = $this->input->post('id');
+
+    //  $row = $this->db->where('schoolId', $school_id)->get('schools')->row();
+
+    //  $yearOfEstiblishment = $row->yearOfEstiblishment;
+    //  $tehsil_id = $row->tehsil_id;
+    //  $district_id = $row->district_id;
+
+    //  $where = array('tehsilId' => $tehsil_id, 'district_id' => $district_id);
+
+
+    //  $this->db->where($where);
+    //  $autoIncreamentNumberRow = $this->db->get('registration_code')->result()[0];
+
+    //  $registrationNumberIncreamentId = $autoIncreamentNumberRow->registrationNumberIncreamentId;
+    //  $registrationNumberIncreament = $autoIncreamentNumberRow->registrationNumberIncreament;
+
+    //  $district_id_with_prefix_zero = sprintf("%02d", $district_id);
+    //  $tehsil_id_with_prefix_zero = sprintf("%03d", $tehsil_id);
+    //  $yearOfEstiblishment = substr($yearOfEstiblishment,2);
+    //  $codeCombined = $district_id_with_prefix_zero.$tehsil_id_with_prefix_zero.$registrationNumberIncreament.$yearOfEstiblishment;
+
+    //   $data["district_id"] = $district_id;
+    //   $data["tehsil_id"] = $tehsil_id;
+    //   $data["school_id"] = $school_id;
+    //   $data["codeCombined"] = $codeCombined;
+
+    //   $update_data = array(
+    //           'registrationNumber' => $codeCombined,
+    //           'updatedDate'=>$dated,
+    //           'cer_issue_date' => date("Y-m-d h:i:s"),
+    //           'updatedBy' => $this->session->userdata('userId')
+    //   );
+
+    //   $this->db->where('schoolId', $school_id);
+    //   $this->db->update('schools', $update_data);
+    //   $affected_rows = $this->db->affected_rows();
+    //   if($affected_rows){
+    //       $school_session_id=$this->db->where('schools_id',$school_id)->order_by('schoolId','asc')->get('school')->row()->schoolId;
+    //       $update_session_data = array(
+    //               'status' => 1,
+    //               'updatedDate'=>$dated,
+    //               'updatedBy' => $this->session->userdata('userId')
+    //       );
+    //       $this->db->where('schoolId',$school_session_id);
+    //       $this->db->update('school', $update_session_data);
+    //       $update_increament = array(
+    //               'registrationNumberIncreament' => $registrationNumberIncreament+1
+    //       );
+    //       $where1 = array('tehsilId' => $tehsil_id, 'district_id' => $district_id);
+    //       $this->db->where($where1);
+    //       $this->db->update('registration_code', $update_increament);
+    //       $affected_rows = $this->db->affected_rows();
+
+    //             echo "<h2 style='margin-top:150px; margin-bottom:70px;' class='text-center'><strong class='text text-success'>Successfully Alloted Registration Number \" $codeCombined \" .</strong></h2>";
+    //             echo "<div class='row'><div class='col-md-offset-2 col-md-8' style='margin-bottom:35px;'>";
+    //             echo "
+    //             <input type='hidden' name='schools_id_for_message' id='schools_id_for_message' value='".$school_session_id."'></input>
+
+
+    //             <button id='send_message' class='btn btn-primary'><i class='fa fa-envelope-o'></i> Send Registration Certificate</button><a class='btn btn-success btn-flat pull-right' onclick='(function(){ location.reload(); })
+    //       ();'>Close</a>";
+    //             echo "</div></div>";
+    //   }
+
+    //   // echo json_encode($arr);
+    //   // exit();
   }
 
   public function generate_renewal_number()
   {
     date_default_timezone_set("Asia/Karachi");
     $dated = date("d-m-Y h:i:sa");
+
+
+
     $school_id = $this->input->post('id');
 
     $row = $this->db->where('schoolId', $school_id)->get('school')->row();
@@ -622,6 +699,7 @@ class School extends Admin_Controller
         'renewal_code' => $renewal_code,
         'status' => 1,
         'updatedDate' => $dated,
+        'cer_issue_date' => date("Y-m-d h:i:s"),
         'updatedBy' => $this->session->userdata('userId')
       );
 
@@ -675,6 +753,7 @@ class School extends Admin_Controller
     // echo "<pre />";
     //echo $userId;exit;
     $this->data['schooldata'] = $this->school_m->get_school_data_for_school_insertion($userId);
+    // var_dump($this->data['schooldata']);
     $tehsil_id = $this->data['schooldata']->tehsil_id;
     $this->data['ucs_list'] = $this->db->where('tehsil_id', $tehsil_id)->get('uc')->result();
     // var_dump($ucs_list);
@@ -3645,6 +3724,7 @@ class School extends Admin_Controller
   public function renewal_as_a_whole_school()
   {
 
+    exit();
 
     $this->load->model("session_m");
     $next = $this->session_m->get_next_session();
@@ -3686,7 +3766,7 @@ class School extends Admin_Controller
                               FROM
                                   school
                                  
-                                      WHERE schools_id = $schools_id and status=1 order by session_year_id  DESC";
+                                      WHERE schools_id = $schools_id and status in (1,2) order by session_year_id  DESC";
       $school = $this->db->query($get_school_for_renewal)->row();
 
       if (count($school) > 0) {
@@ -3722,7 +3802,7 @@ class School extends Admin_Controller
             'school_id' => $school_inserted_id
           ));
 
-          //$this->db->where('userId', $schools->owner_id)->update('users', array('school_renewed' => 1));
+          $this->db->where('userId', $schools->owner_id)->update('users', array('school_renewed' => 1));
           $counter++;
         }
 
@@ -3746,5 +3826,505 @@ class School extends Admin_Controller
     }
     echo $counter;
     exit;
+  }
+
+
+
+  public function add_session_bank_challan()
+  {
+    $school_id = (int) $this->input->post('school_id');
+    if ($this->input->post('bt_date')) {
+      $count = count($this->input->post('bt_date'));
+      for ($i = 0; $i < $count; $i++) {
+        $InserData = array(
+          'school_id' => $school_id,
+          'reg_type_id' => $this->input->post('reg_type_id'),
+          'bt_no' => $_POST['bt_no'][$i],
+          'bt_date' => $_POST['bt_date'][$i],
+        );
+        if ($this->db->insert('bank_transaction', $InserData)) {
+          $this->session->set_flashdata('msg_success', 'Bank Challan Add Successfully.');
+        } else {
+          $this->session->set_flashdata('msg_error', "Something's wrong, Please try again.");
+        }
+        redirect('school/explore_school_by_id/' . $school_id);
+      }
+    }
+  }
+
+  public function remove_bank_challan($school_id, $challan_id)
+  {
+    $school_id = (int) $school_id;
+    $challan_id = (int) $challan_id;
+    $query = "DELETE FROM bank_transaction WHERE bt_id = '" . $challan_id . "' and school_id = '" . $school_id . "'";
+    if ($this->db->query($query)) {
+      $this->session->set_flashdata('msg_success', 'Bank Challan Delete Successfully.');
+    } else {
+      $this->session->set_flashdata('msg_error', "Something's wrong, Please try again.");
+    }
+    redirect('school/explore_school_by_id/' . $school_id);
+  }
+
+  public function submit_application_online($school_id, $schools_id)
+  {
+    $school_id = (int) $school_id;
+    $schools_id = (int) $schools_id;
+    $query = "SELECT owner_id FROM schools WHERE schoolId = '" . $schools_id . "'";
+    $owner_id = $this->db->query($query)->result()[0]->owner_id;
+    $userId = $this->session->userdata('userId');
+    if ($owner_id == $userId) {
+      $date = date('Y-m-d H:i:s');
+      $query = "UPDATE school set status = '2', updatedDate ='" . $date . "' WHERE schoolId = '" . $school_id . "' and schools_id = '" . $schools_id . "'";
+      if ($this->db->query($query)) {
+        $this->session->set_flashdata('msg_success', 'online application request submitted.');
+      } else {
+        $this->session->set_flashdata('msg_error', "Something's wrong, Please try again.");
+      }
+    } else {
+      $this->session->set_flashdata('msg_error', "You are not allowed to submit the application.");
+    }
+    redirect('school/explore_school_by_id/' . $school_id);
+  }
+  public function  print_application($school_id, $schools_id)
+  {
+    $query = "SELECT owner_id FROM schools WHERE schoolId = '" . $schools_id . "'";
+    $owner_id = $this->db->query($query)->result()[0]->owner_id;
+    $userId = $this->session->userdata('userId');
+    if ($owner_id == $userId) {
+      $school_id = (int) $school_id;
+      $schools_id = (int) $schools_id;
+      $this->data['school_id'] = $school_id;
+      $this->data['school'] = $this->school_m->explore_schools_by_school_id_m($school_id);
+      $this->data['school_bank'] = $this->school_m->get_bank_by_school_id($school_id);
+
+      $this->data['school_physical_facilities'] = $this->school_m->physical_facilities_by_school_id($school_id);
+
+      $this->data['school_physical_facilities_physical'] = $this->school_m->physical_facilities_physical_by_school_id($school_id);
+      $this->data['school_physical_facilities_academic'] = $this->school_m->physical_facilities_academic_by_school_id($school_id);
+      $this->data['school_physical_facilities_co_curricular'] = $this->school_m->physical_facilities_co_curricular_by_school_id($school_id);
+      $this->data['school_physical_facilities_other'] = $this->school_m->physical_facilities_other_by_school_id($school_id);
+      $this->data['school_library'] = $this->school_m->get_library_books_by_school_id($school_id);
+
+
+      $this->data['age_and_class'] = $this->school_m->get_age_and_class_by_school_id($school_id);
+      // $school_bank = $this->school_m->get_bank_by_school_id($school_id);
+
+      $this->data['school_staff'] = $this->school_m->staff_by_school_id($school_id);
+
+      $this->data['school_fee'] = $this->school_m->fee_by_school_id($school_id);
+      $this->data['school_fee_mentioned_in_form'] = $this->school_m->fee_mentioned_in_form_by_school_id($school_id);
+      //var_dump($this->data['school_fee_mentioned_in_form']);exit;
+
+      $this->data['school_security_measures'] = $this->school_m->security_measures_by_school_id($school_id);
+
+      $this->data['school_hazards_with_associated_risks'] = $this->school_m->hazards_with_associated_risks_by_school_id($school_id);
+      $this->data['hazards_with_associated_risks_unsafe_list'] = $this->school_m->hazards_with_associated_risks_unsafe_list_by_school_id($school_id);
+
+      $this->data['school_fee_concession'] = $this->school_m->fee_concession_by_school_id($school_id);
+      $this->data['schoolId'] = $school_id;
+      $this->data['title'] = 'school details';
+      $query = $this->db->query("SELECT * FROM bank_transaction where school_id = '" . $school_id . "'");
+      $this->data['bank_transaction'] = $query->result_array();
+
+      $this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
+      $this->data['description'] = 'Section B (Physical Facilities)';
+
+      $this->load->view('print/school_session_detail', $this->data);
+    } else {
+      echo "You are not allowed to print";
+    }
+  }
+
+  private function registaion_type($type_id)
+  {
+    if ($type_id == 1) {
+      return 'Registration';
+    }
+    if ($type_id == 2) {
+      return 'Renewal';
+    }
+    if ($type_id == 3) {
+      return 'Up-Gradation';
+    }
+    if ($type_id == 4) {
+      return 'Up-Gradation And Renewal';
+    }
+  }
+
+  public function apply_for_session()
+  {
+    $session_id = (int) $this->input->post('id');
+    $query = "SELECT * FROM `session_year` WHERE sessionYearId='" . $session_id . "'";
+    $this->data['session'] = $this->db->query($query)->row();
+    $this->data['session_id'] = $session_id;
+    $this->load->view('school/apply_for_session_from', $this->data);
+  }
+
+  public function apply_session()
+  {
+
+    $session_id = (int) $this->input->post('session_id');
+    $reg_type_id = (int) $this->input->post('reg_type_id');
+
+    $userId = $this->session->userdata('userId');
+    $query = "SELECT schoolId FROM schools WHERE owner_id = '.$userId.'";
+    $schools_id = $this->db->query($query)->row()->schoolId;
+
+    //check already applied or not 
+    $query = "SELECT COUNT(*) as total FROM school WHERE session_year_id='" . ($session_id) . "' 
+    AND schools_id = '" . $schools_id . "'";
+    $already_applied = $this->db->query($query)->row()->total;
+
+    if ($already_applied == 0) {
+      //get previous session data...
+      $query = "SELECT * FROM school WHERE session_year_id='" . ($session_id - 1) . "' and schools_id = '" . $schools_id . "'";
+      $school_session = $this->db->query($query)->row();
+
+      $new_school_session = array(
+        'reg_type_id' => $reg_type_id,
+        'schools_id' => $school_session->schools_id,
+        'session_year_id' => $session_id,
+        'level_of_school_id' => $school_session->level_of_school_id,
+        'gender_type_id' => $school_session->gender_type_id,
+        'school_type_id' => $school_session->school_type_id,
+        'updatedDate' => date('Y-m-d H:i:s'),
+        'school_will_be_update_by_school_user' => 1,
+        'updatedBy' => $this->session->userdata('userId')
+      );
+      $this->db->insert('school', $new_school_session);
+      $new_school_session_id = $this->db->insert_id();
+      if ($new_school_session_id) {
+        $this->db->insert('forms_process', array(
+          'user_id' => $userId,
+          'reg_type_id' => $school_session->reg_type_id,
+          'form_a_status' => 1,
+          'school_id' => $new_school_session_id
+        ));
+        $school_inserted_id = $new_school_session_id;
+        $this->db->where('userId', $userId)->update('users', array('school_renewed' => 1));
+      }
+
+      // git the data from previous
+
+
+      $this->db->trans_begin();
+      $school_id = $school_session->schoolId;
+      $physical_facilities =  $this->db->where('school_id', $school_id)->get('physical_facilities')->row();
+
+      if (!empty($physical_facilities)) {
+        $physical_facilities = $physical_facilities;
+        $physical_facilities_array = array(
+          'building_id' => $physical_facilities->building_id,
+          'numberOfClassRoom' => $physical_facilities->numberOfClassRoom,
+          'numberOfOtherRoom' => $physical_facilities->numberOfOtherRoom,
+          'totalArea' => $physical_facilities->totalArea,
+          'coveredArea' => $physical_facilities->coveredArea,
+          'numberOfComputer' => $physical_facilities->numberOfComputer,
+          'numberOfLatrines' => $physical_facilities->numberOfLatrines,
+          'school_id' => $school_inserted_id
+        );
+        $this->db->insert('physical_facilities', $physical_facilities_array);
+      }
+      // get and insert as a batch insertion
+      $school_physical_facilities_physical = $this->school_m->physical_facilities_physical_by_school_id($school_id);
+      $school_physical_facilities_physical_array = array();
+      foreach ($school_physical_facilities_physical as $spfp) {
+        array_push(
+          $school_physical_facilities_physical_array,
+          array(
+            'school_id' => $school_inserted_id,
+            'pf_physical_id' => $spfp->pf_physical_id
+          )
+        );
+      }
+      if (!empty($school_physical_facilities_physical_array)) {
+        $this->db->insert_batch('physical_facilities_physical', $school_physical_facilities_physical_array);
+      }
+
+
+
+      // get "physical_facilities_academic" table data and insert as batch
+      $school_physical_facilities_academic = $this->school_m->physical_facilities_academic_by_school_id($school_id);
+      $school_physical_facilities_academic_array = array();
+      foreach ($school_physical_facilities_academic as $spfa) {
+        array_push(
+          $school_physical_facilities_academic_array,
+          array(
+            'school_id' => $school_inserted_id,
+            'academic_id' => $spfa->academic_id
+          )
+        );
+      }
+      if (!empty($school_physical_facilities_academic_array)) {
+        $this->db->insert_batch('physical_facilities_academic', $school_physical_facilities_academic_array);
+      }
+
+      //  get "physical_facilities_co_curricular" and insert wiht school_id
+      $physical_facilities_co_curricular = $this->school_m->physical_facilities_co_curricular_by_school_id($school_id);
+      $physical_facilities_co_curricular_array = array();
+      foreach ($physical_facilities_co_curricular as $pfcc) {
+        array_push(
+          $physical_facilities_co_curricular_array,
+          array(
+            'school_id' => $school_inserted_id,
+            'co_curricular_id' => $pfcc->co_curricular_id
+          )
+        );
+      }
+      if (!empty($physical_facilities_co_curricular_array)) {
+        $this->db->insert_batch('physical_facilities_co_curricular', $physical_facilities_co_curricular_array);
+      }
+
+      //  get "school_physical_facilities_other" and insert wiht school_id
+      $physical_facilities_others =  $this->school_m->physical_facilities_other_by_school_id($school_id);
+      $physical_facilities_others_array = array();
+      foreach ($physical_facilities_others as $pfo) {
+        array_push(
+          $physical_facilities_others_array,
+          array(
+            'school_id' => $school_inserted_id,
+            'other_id' => $pfo->other_id
+          )
+        );
+      }
+      if (!empty($physical_facilities_others_array)) {
+        $this->db->insert_batch('physical_facilities_others', $physical_facilities_others_array);
+      }
+
+      //  get "school_physical_facilities_other"  and insert wiht school_id
+      $school_library = $this->school_m->get_library_books_by_school_id($school_id);
+      $school_library_array = array();
+      foreach ($school_library as $sl) {
+        array_push(
+          $school_library_array,
+          array(
+            'school_id' => $school_inserted_id,
+            'book_type_id' => $sl->book_type_id,
+            'numberOfBooks' => $sl->numberOfBooks
+          )
+        );
+      }
+      if (!empty($school_library_array)) {
+        $this->db->insert_batch('school_library', $school_library_array);
+      }
+      // $this->db->where('school_id', $school_inserted_id)->update('forms_process', array('form_b_status' => 1));
+
+      //  get "age_and_class"  and insert wiht school_id
+      // $age_and_class = $this->db->where('school_id', $school_id)->get('age_and_class')->result();
+      // $age_and_class_array = array();
+      // foreach ($age_and_class as $ac) {
+      //   array_push($age_and_class_array, array(
+      //                                     'school_id' => $school_inserted_id,
+      //                                     'age_id' => $ac->age_id,
+      //                                     'class_id' => $ac->class_id,
+      //                                     'enrolled' => $ac->enrolled,
+      //                                     'gender_id' => $ac->gender_id,
+      //                                     'total' => $ac->total
+      //                                   )
+      //   );
+      // }
+      // if(!empty($age_and_class_array)){
+      //   $this->db->insert_batch('age_and_class', $age_and_class_array);
+      // }
+      // $this->db->where('school_id', $school_inserted_id)->update('forms_process', array('form_c_status' => 1));
+
+      //  get "age_and_class"  and insert wiht school_id
+      $school_staff = $this->school_m->staff_by_school_id($school_id);
+      $school_staff_array = array();
+      foreach ($school_staff as $ss) {
+        array_push(
+          $school_staff_array,
+          array(
+            'school_id' => $school_inserted_id,
+            'schoolStaffName' => $ss->schoolStaffName,
+            'schoolStaffFatherOrHusband' => $ss->schoolStaffFatherOrHusband,
+            'schoolStaffCnic' => $ss->schoolStaffCnic,
+            'schoolStaffQaulificationProfessional' => $ss->schoolStaffQaulificationProfessional,
+            'schoolStaffQaulificationAcademic' => $ss->schoolStaffQaulificationAcademic,
+            'schoolStaffAppointmentDate' => $ss->schoolStaffAppointmentDate,
+            'schoolStaffDesignition' => $ss->schoolStaffDesignition,
+            'schoolStaffNetPay' => $ss->schoolStaffNetPay,
+            'schoolStaffAnnualIncreament' => $ss->schoolStaffAnnualIncreament,
+            'schoolStaffType' => $ss->schoolStaffType,
+            'schoolStaffGender' => $ss->schoolStaffGender,
+            'TeacherTraining' => $ss->TeacherTraining,
+            'TeacherExperience' => $ss->TeacherExperience
+          )
+
+        );
+      }
+
+      if (!empty($school_staff_array)) {
+        $this->db->insert_batch('school_staff', $school_staff_array);
+      }
+
+
+
+      //get "fee"  and insert wiht school_id
+      // $school_fee = $this->school_m->fee_by_school_id($school_id);
+      // $school_fee_array = array();
+      // foreach ($school_fee as $sf) {
+      //   array_push(
+      //     $school_fee_array,
+      //     array(
+      //       'school_id' => $school_inserted_id,
+      //       'class_id' => $sf->class_id,
+      //       'addmissionFee' => $sf->addmissionFee,
+      //       'tuitionFee' => $sf->tuitionFee,
+      //       'otherFund' => $sf->otherFund,
+      //       'securityFund' => $sf->securityFund
+      //     )
+      //   );
+      // }
+      // if (!empty($school_fee_array)) {
+      //   $this->db->insert_batch('fee', $school_fee_array);
+      // }
+      // $this->db->where('school_id', $school_inserted_id)->update('forms_process', array('form_d_status' => 1));
+
+      //  get "fee_mentioned_in_form_or_prospectus"  and insert wiht school_id
+      $school_fee_mentioned_in_form = $this->school_m->fee_mentioned_in_form_by_school_id($school_id);
+      if (!empty($school_fee_mentioned_in_form)) {
+        $this->db->insert(
+          'fee_mentioned_in_form_or_prospectus',
+          array(
+            'school_id' => $school_inserted_id,
+            'feeMentionedInForm' => $school_fee_mentioned_in_form->feeMentionedInForm
+          )
+        );
+      }
+      // $this->db->where('school_id', $school_inserted_id)->update('forms_process', array('form_e_status' => 1));
+
+
+
+      //  get "security_measures"  and insert wiht school_id
+      $school_security_measures = $this->school_m->security_measures_by_school_id($school_id);
+      if (!empty($school_security_measures)) {
+        $school_security_measures_array = array(
+          'school_id' => $school_inserted_id,
+          'securityStatus' => $school_security_measures->securityStatus,
+          'securityProvided' => $school_security_measures->securityProvided,
+          'securityPersonnel' => $school_security_measures->securityPersonnel,
+          'security_personnel_status_id' => $school_security_measures->security_personnel_status_id,
+          'security_according_to_police_dept' => $school_security_measures->security_according_to_police_dept,
+          'cameraInstallation' => $school_security_measures->cameraInstallation,
+          'camraNumber' => $school_security_measures->camraNumber,
+          'dvrMaintained' => $school_security_measures->dvrMaintained,
+          'cameraOnline' => $school_security_measures->cameraOnline,
+          'exitDoorsNumber' => $school_security_measures->exitDoorsNumber,
+          'emergencyDoorsNumber' => $school_security_measures->emergencyDoorsNumber,
+          'boundryWallHeight' => $school_security_measures->boundryWallHeight,
+          'wiresProvided' => $school_security_measures->wiresProvided,
+          'watchTower' => $school_security_measures->watchTower,
+          'licensedWeapon' => $school_security_measures->licensedWeapon,
+          'licenseNumber' => $school_security_measures->licenseNumber,
+          'ammunitionStatus' => $school_security_measures->ammunitionStatus,
+          'metalDetector' => $school_security_measures->metalDetector,
+          'walkThroughGate' => $school_security_measures->walkThroughGate,
+          'gateBarrier' => $school_security_measures->gateBarrier,
+          'license_issued_by_id' => $school_security_measures->license_issued_by_id
+        );
+        $this->db->insert('security_measures', $school_security_measures_array);
+        $this->db->insert_id();
+      }
+      // $this->db->where('school_id', $school_inserted_id)->update('forms_process', array('form_f_status' => 1));
+
+
+      //  get "security_measures"  and insert wiht school_id
+      $school_hazards_with_associated_risks = $this->school_m->hazards_with_associated_risks_by_school_id($school_id);
+      if (!empty($school_hazards_with_associated_risks)) {
+        $school_hazards_with_associated_risks_array = array(
+          'school_id' => $school_inserted_id,
+          'exposedToFlood' => $school_hazards_with_associated_risks->exposedToFlood,
+          'drowning' => $school_hazards_with_associated_risks->drowning,
+          'buildingCondition' => $school_hazards_with_associated_risks->buildingCondition,
+          'accessRoute' => $school_hazards_with_associated_risks->accessRoute,
+          'adjacentBuilding' => $school_hazards_with_associated_risks->adjacentBuilding,
+          'safeAssemblyPointsAvailable' => $school_hazards_with_associated_risks->safeAssemblyPointsAvailable,
+          'disasterTraining' => $school_hazards_with_associated_risks->disasterTraining,
+          'schoolImprovementPlan' => $school_hazards_with_associated_risks->schoolImprovementPlan,
+          'schoolDisasterManagementPlan' => $school_hazards_with_associated_risks->schoolDisasterManagementPlan,
+          'electrification_condition_id' => $school_hazards_with_associated_risks->electrification_condition_id,
+          'ventilationSystemAvailable' => $school_hazards_with_associated_risks->ventilationSystemAvailable,
+          'chemicalsSchoolLaboratory' => $school_hazards_with_associated_risks->chemicalsSchoolLaboratory,
+          'chemicalsSchoolSurrounding' => $school_hazards_with_associated_risks->chemicalsSchoolSurrounding,
+          'roadAccident' => $school_hazards_with_associated_risks->roadAccident,
+          'safeDrinkingWaterAvailable' => $school_hazards_with_associated_risks->safeDrinkingWaterAvailable,
+          'sanitationFacilities' => $school_hazards_with_associated_risks->sanitationFacilities,
+          'building_structure_id' => $school_hazards_with_associated_risks->building_structure_id,
+          'school_surrounded_by_id' => $school_hazards_with_associated_risks->school_surrounded_by_id
+        );
+        $this->db->insert('hazards_with_associated_risks', $school_hazards_with_associated_risks_array);
+        $this->db->insert_id();
+      }
+      //  get "hazards_with_associated_risks_unsafe_list"  and insert wiht school_id
+      $hazards_with_associated_risks_unsafe_list = $this->school_m->hazards_with_associated_risks_unsafe_list_by_school_id($school_id);
+      $hazards_with_associated_risks_unsafe_list_array = array();
+      foreach ($hazards_with_associated_risks_unsafe_list as $hwaru) {
+        array_push(
+          $hazards_with_associated_risks_unsafe_list_array,
+          array(
+            'school_id' => $school_inserted_id,
+            'unsafe_list_id' => $hwaru->unsafe_list_id
+          )
+        );
+      }
+      if (!empty($hazards_with_associated_risks_unsafe_list_array)) {
+        $this->db->insert_batch('hazards_with_associated_risks_unsafe_list', $hazards_with_associated_risks_unsafe_list_array);
+      }
+      // $this->db->where('school_id', $school_inserted_id)->update('forms_process', array('form_g_status' => 1));
+
+      //  get "school_fee_concession"  and insert wiht school_id
+      $school_fee_concession = $this->school_m->fee_concession_by_school_id($school_id);
+      $school_fee_concession_array = array();
+      foreach ($school_fee_concession as $sfc) {
+        array_push(
+          $school_fee_concession_array,
+          array(
+            'school_id' => $school_inserted_id,
+            'concession_id' => $sfc->concession_id,
+            'percentage' => $sfc->percentage,
+            'numberOfStudent' => $sfc->numberOfStudent
+          )
+        );
+      }
+      if (!empty($school_fee_concession_array)) {
+        $this->db->insert_batch('fee_concession', $school_fee_concession_array);
+      }
+      $this->db->trans_complete();
+      if ($this->db->trans_status() === FALSE) {
+        $this->db->trans_rollback();
+        $this->session->set_flashdata(
+          'msg_error',
+          "Sorry Something went wrong!."
+        );
+        //echo $school_id;exit;
+        redirect("school/create_form");
+      } else {
+        $this->db->trans_commit();
+        $affected_rows = $this->db->affected_rows();
+        if ($affected_rows > 0) {
+          $this->session->set_flashdata(
+            'msg_success',
+            "You have successfully applied for renewal, kindly update your current school data."
+          );
+          //echo $school_id;exit;
+          redirect("school/explore_school_by_id/$school_inserted_id");
+        } else {
+          $this->session->set_flashdata(
+            'msg_error',
+            "Sorry Something went wrong!."
+          );
+          //echo $school_id;exit;
+
+        }
+      }
+
+      redirect('school/explore_school_by_id/' . $new_school_session_id);
+    } else {
+      echo "Already applied for this session.";
+    }
+
+
+    exit();
   }
 }

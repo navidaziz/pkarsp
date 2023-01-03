@@ -660,32 +660,54 @@ class User extends Admin_Controller
 	public function delete($user_id)
 	{
 		$user_id = (int) $user_id;
-		$where = array('userId' => $user_id);
-		$result = $this->user_m->delete($where);
+		$this->user_model->changeStatus($user_id, "3");
+		$this->session->set_flashdata('msg_success', "Move to trash successfully.");
+		redirect('user');
+		// 	$user_id = (int) $user_id;
+		// 	$where = array('userId' => $user_id);
+		// 	$result = $this->user_m->delete($where);
 
-		$schools = $this->db->where('owner_id', $user_id)->get('schools')->result();
+		// 	$schools = $this->db->where('owner_id', $user_id)->get('schools')->result();
 
-		if ($schools) {
-			$schools_id = $schools[0]->schoolId;
-			$this->db->where('schoolId', $schools_id);
-			$this->db->delete('schools');
+		// 	if ($schools) {
+		// 		$schools_id = $schools[0]->schoolId;
+		// 		$this->db->where('schoolId', $schools_id);
+		// 		$this->db->delete('schools');
 
-			$school_list = $this->db->where('schools_id', $schools_id)->get('school')->result();
-			foreach ($school_list as $school) {
-				$this->db->where('schoolId', $school->schoolId);
-				$this->db->delete('school');
-			}
+		// 		$school_list = $this->db->where('schools_id', $schools_id)->get('school')->result();
+		// 		foreach ($school_list as $school) {
+		// 			$this->db->where('schoolId', $school->schoolId);
+		// 			$this->db->delete('school');
+		// 		}
 
-			$this->db->where('user_id', $user_id);
-			$this->db->delete('forms_process');
+		// 		$this->db->where('user_id', $user_id);
+		// 		$this->db->delete('forms_process');
+		// 	}
+
+		// 	if ($result) {
+		// 		$this->session->set_flashdata('msg_success', "User successfully deleted.");
+		// 		redirect('user');
+		// 	} else {
+		// 		$this->session->set_flashdata('msg_error', "Something's wrong, Please try later");
+		// 		redirect('user');
+		// 	}
+	}
+
+	public function assign_district_ids()
+	{
+		$user_id = (int) $this->input->post('user_id');
+		$district_ids = '';
+		$districtids = $this->input->post('district_ids');
+		foreach ($districtids as $districtid) {
+			$id = (int) $districtid;
+			$district_ids .= $id . ',';
 		}
-
-		if ($result) {
-			$this->session->set_flashdata('msg_success', "User successfully deleted.");
-			redirect('user');
+		$district_ids = rtrim($district_ids, ',');
+		$query = "UPDATE users SET district_ids = '$district_ids' WHERE userId = $user_id";
+		if ($this->db->query($query)) {
+			echo "<span style='color:green'>Assigned successfully.</span>";
 		} else {
-			$this->session->set_flashdata('msg_error', "Something's wrong, Please try later");
-			redirect('user');
+			echo "<span style='color:red'>Error try again.</span>";
 		}
 	}
 }

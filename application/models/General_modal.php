@@ -24,7 +24,7 @@ class General_modal extends MY_Model
   public function school_types($id = 0, $list = true)
   {
 
-    $query = "SELECT `typeId`, `typeTitle` FROM `school_type`;";
+    $query = "SELECT `typeId`, `typeTitle` FROM `school_type` WHERE status=1;";
     if ($id != 0) {
       $query = "SELECT `typeId`, `typeTitle` FROM `school_type` where `typeId` = '" . $id . "';";
     }

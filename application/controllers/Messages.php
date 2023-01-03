@@ -437,12 +437,32 @@ class Messages extends Admin_Controller
       if ($_POST) {
          //var_dump($_POST);exit;
          date_default_timezone_set("Asia/Karachi");
-         $dated = date("d-m-Y h:i:s");
+         $dated = date("Y-m-d h:i:s");
          $insert['discription'] = $this->input->post('discription');
          $insert['subject'] = $this->input->post('subject');
 
          $insert['created_by'] = $this->session->userdata('userId');
          $insert['created_date'] = $dated;
+
+         $is_deficiency_message = $this->input->post('is_deficiency_message');
+         if ($is_deficiency_message) {
+            $school_session_id = $this->input->post('school_session_id');
+            if ($school_session_id) {
+               $deficiency = array();
+               $deficiency['pending_type'] = 'Deficiency';
+               $deficiency['pending_date'] = date("Y-m-d");
+               $deficiency['pending_reason'] = $this->input->post('deficiency_reason');
+               $this->db->where('schoolId', $school_session_id);
+               $this->db->update('school', $deficiency);
+               $insert['school_session_id'] = $school_session_id;
+            }
+            $insert['message_type'] = 'Deficiency';
+            $insert['message_reason'] = $this->input->post('deficiency_reason');
+         } else {
+            $insert['message_type'] = 'General';
+            $insert['message_reason'] = $this->input->post('deficiency_reason');
+         }
+
          //var_dump($insert);exit;
          $arr = [];
 
