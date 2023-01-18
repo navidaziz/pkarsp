@@ -518,7 +518,7 @@
                   $query = "SELECT school_type_id FROM schools WHERE schoolId = '" . $school_id . "'";
                   $school_type_id = $this->db->query($query)->row()->school_type_id;
                   if ($school_type_id  == 7) {
-                    $query = "SELECT * FROM `session_year` WHERE ORDER BY session_year_id DESC LIMIT 1";
+                    $query = "SELECT * FROM `session_year`  ORDER BY session_year_id DESC LIMIT 1";
                     $session = $this->db->query($query)->result()[0];
                   } else {
                     $query = "SELECT * FROM `session_year` WHERE YEAR(`session_start`) >= '" . $session_year . "'";
