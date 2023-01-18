@@ -134,7 +134,7 @@
         <div style="border: 1px solid #ddd; border-radius: 10px; margin-top: 5px; margin-bottom: 10px;  padding: 10px; font-size: 20px;">
           <table class="table">
             <tr>
-              <td>School ID: <span style="text-decoration: underline; ">
+              <td>Institute ID: <span style="text-decoration: underline; ">
                   <strong><?php echo $school_detail->schoolId; ?><strong></span></td>
               <td>Registration ID: <span style="text-decoration: underline; ">
                   <strong><?php echo $school_detail->registrationNumber; ?><strong></span></td>

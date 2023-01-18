@@ -51,7 +51,7 @@
           <div class="row">
             <div class="col-md-3">
               <h3><?php echo $school_detail->schoolName; ?></h3>
-              <h4>S-ID: <?php echo $school_detail->schoolId; ?> - REG No: <?php echo $school_detail->registrationNumber ?></h4>
+              <h4>Institute ID: <?php echo $school_detail->schoolId; ?> - REG No: <?php echo $school_detail->registrationNumber ?></h4>
 
             </div>
             <div class="col-md-9">

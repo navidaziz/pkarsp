@@ -153,16 +153,16 @@
             <?php //var_dump($school); 
             ?>
             <i>
-            School Name: <strong> <?php echo $school->schoolName; ?> , </strong>
-            School ID:<strong> <?php echo $school->schools_id; ?> </strong>
-            <br />
+              School Name: <strong> <?php echo $school->schoolName; ?> , </strong>
+              Institute ID:<strong> <?php echo $school->schools_id; ?> </strong>
+              <br />
 
-            Application for <strong><?php echo $session_request_detail->regTypeTitle ?></strong>
-            of  <strong><?php echo $session_request_detail->levelofInstituteTitle ?> level</strong> 
-            for session <strong><?php echo $session_request_detail->sessionYearTitle ?></strong>
-            on date, 
-            <strong><?php echo date("d M, Y", strtotime($session_request_detail->created_date)); ?></strong>
-  </i>
+              Application for <strong><?php echo $session_request_detail->regTypeTitle ?></strong>
+              of <strong><?php echo $session_request_detail->levelofInstituteTitle ?> level</strong>
+              for session <strong><?php echo $session_request_detail->sessionYearTitle ?></strong>
+              on date,
+              <strong><?php echo date("d M, Y", strtotime($session_request_detail->created_date)); ?></strong>
+            </i>
             <br />
             <br />
             As per schedule notification the following required fee has been deposit by the above school administration, as per schedule and KP-PSRA notification for fee slab and security mentioned against each.

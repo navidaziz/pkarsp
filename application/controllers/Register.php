@@ -624,7 +624,7 @@ class Register extends Admin_Controller
         $validation_config = array(
             // array(
             //     "field"  =>  "school_id",
-            //     "label"  =>  "School Id",
+            //     "label"  =>  "Institute ID",
             //     "rules"  =>  "required|callback_school_id_exists"
             // ),
             array(
@@ -692,7 +692,7 @@ class Register extends Admin_Controller
         if ($total) {
             return true;
         } else {
-            $this->form_validation->set_message('school_id_exists', 'School ID not found');
+            $this->form_validation->set_message('school_id_exists', 'Institute ID not found');
             return false;
         }
     }

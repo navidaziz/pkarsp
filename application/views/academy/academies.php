@@ -72,7 +72,7 @@
                     </label>
                   </div>
                 </div>
-                <div class="clearfix"></div> <!-- school Id search form-->
+                <div class="clearfix"></div> <!-- Institute ID search form-->
                 <div id="by_school_id" class="bg-danger">
                   <form class="bg-danger" id="Form2" method="post" enctype="multipart/form-data" action="<?php echo base_url('academy/search_academies_by_criteria'); ?>">
                     <div class="form-group">
@@ -85,7 +85,7 @@
                     </div>
                   </form>
                 </div>
-                <!-- end school id form here... -->
+                <!-- end Institute ID form here... -->
 
                 <!-- end school area search... -->
                 <!-- end searching code here -->

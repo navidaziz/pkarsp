@@ -44,7 +44,7 @@
 			<div class="col-sm-4 invoice-col">
 				<address>
 					<strong>About School</strong><br>
-					<strong>School Id #<?php echo $school->schoolId; ?></strong><br />
+					<strong>Institute ID #<?php echo $school->schoolId; ?></strong><br />
 					<?php if (!empty($school->yearOfEstiblishment)) : ?>
 						<?php echo "Estiblishmented In: " . $school->yearOfEstiblishment; ?>
 						<br>

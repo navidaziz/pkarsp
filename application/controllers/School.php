@@ -388,7 +388,7 @@ class School extends Admin_Controller
       echo json_encode($arr);
       exit;
     } else {
-      echo "Error in school id";
+      echo "Error in Institute ID";
     }
   }
 
@@ -2220,7 +2220,7 @@ class School extends Admin_Controller
     exit();
   }
 
-  // if the school id is set then display only total enrolled students in enrollement section
+  // if the Institute ID is set then display only total enrolled students in enrollement section
   public function get_enrolled_record_by_id($school_id = 0)
   {
     $this->data['enrolled_flag'] = FALSE;
@@ -2230,7 +2230,7 @@ class School extends Admin_Controller
       $this->data['enrolled_flag'] = TRUE;
 
       $id = $this->input->post('id');
-      // below query is used for fetching school id in case of addition else the outer code will conroll the execution and the view will be conntroll the '$this->data['enrolled_flag']' set with true or false flag.
+      // below query is used for fetching Institute ID in case of addition else the outer code will conroll the execution and the view will be conntroll the '$this->data['enrolled_flag']' set with true or false flag.
       $age_and_class_query_result = $this->db->where('ageAndClassId', $id)->get('age_and_class')->result();
       $school_id = $age_and_class_query_result[0]->school_id;
       // print_r($age_and_class_query_result);
@@ -2813,7 +2813,7 @@ class School extends Admin_Controller
       //   $this->db->update('schools', $schools_data_to_update);
       //   $affected_rows = $this->db->affected_rows();
 
-      //   // getting school Id and then get all old data by this school id and updated with renewal school id 
+      //   // getting Institute ID and then get all old data by this Institute ID and updated with renewal Institute ID 
       //   $school_id = $this->db->where('schools_id', $post['schools_id'])->order_by('schoolId', 'desc')->get('school')->result()[0]->schoolId;
 
       //   $school_data_to_insert = array(
@@ -3197,7 +3197,7 @@ class School extends Admin_Controller
       $this->db->update('schools', $schools_data_to_update);
       $affected_rows = $this->db->affected_rows();
 
-      // getting school Id and then get all old data by this school id and updated with renewal school id 
+      // getting Institute ID and then get all old data by this Institute ID and updated with renewal Institute ID 
       $school_id = $this->db->where('schools_id', $post['schools_id'])->order_by('schoolId', 'desc')->get('school')->result()[0]->schoolId;
 
       $school_data_to_insert = array(

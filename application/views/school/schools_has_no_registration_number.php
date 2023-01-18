@@ -56,13 +56,13 @@
                 </div>
               </div>
               <!-- end school area search... -->
-              <!-- school Id search form-->
+              <!-- Institute ID search form-->
               <div class="clearfix"></div>
               <div id="by_school_id">
                 <form id="Form2" method="post" enctype="multipart/form-data" action="<?php echo base_url('school/get_single_school_from_schools_by_id'); ?>">
                   <div class="form-group">
                     <label class="col-sm-4">
-                      <input type="text" class="form-control" name="schools_id" required="required" form="Form2" id="schools_id" placeholder="Enter School Id Examples 1,2,3 etc.">
+                      <input type="text" class="form-control" name="schools_id" required="required" form="Form2" id="schools_id" placeholder="Enter Institute ID Examples 1,2,3 etc.">
                     </label>
                     <label class="col-sm-2">
                       <input type="submit" id="search" class="form-control btn-xs btn-primary btn-flat" form="Form2" value="Search">
@@ -70,7 +70,7 @@
                   </div>
                 </form>
               </div>
-              <!-- end school id form here... -->
+              <!-- end Institute ID form here... -->
               <div class="clearfix"></div>
               <div class="table-responsive">
                 <table width="100%" class="table  table-hover table-bordered table-condensed table-striped">

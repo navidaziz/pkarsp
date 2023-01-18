@@ -61,7 +61,7 @@
       <div class="col-sm-4 invoice-col ">
         <address>
           <strong>About School</strong><br>
-          <strong>School Id #<b style="color:red;font-size: 16px;"><?php echo $school->schoolId; ?></b></strong><br />
+          <strong>Institute ID #<b style="color:red;font-size: 16px;"><?php echo $school->schoolId; ?></b></strong><br />
 
 
           <strong>Session Year: <?php echo @$school->sessionYearTitle; ?></strong><br />

@@ -44,7 +44,7 @@
     </h2>
     <br />
     <small>
-      <h4>S-ID: <?php echo $school->schools_id; ?>
+      <h4>Institute ID: <?php echo $school->schools_id; ?>
         <?php if ($school->registrationNumber) { ?> - REG No: <?php echo $school->registrationNumber ?> <?php } ?></h4>
     </small>
     <ol class="breadcrumb">

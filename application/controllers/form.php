@@ -133,7 +133,7 @@ class Form extends Admin_Controller
 		$this->data['gender'] = $this->school_m->get_gender();
 		$this->data['staff_type'] = $this->school_m->get_staff_type();
 		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
-		$this->data['description'] = 'Section D (School Employees Detail)';
+		$this->data['description'] = 'Section D (Institute Employees Detail)';
 		$this->data['view'] = 'forms/section_d/section_d';
 		$this->load->view('layout', $this->data);
 	}
@@ -162,7 +162,14 @@ class Form extends Admin_Controller
 
 		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
 		$this->data['description'] = 'Section E (School Fee Detail)';
-		$this->data['view'] = 'forms/section_e/section_e';
+		if ($school->school_type_id == 7) {
+			$this->data['view'] = 'forms/section_e/academy_section_e';
+		} else {
+			$this->data['view'] = 'forms/section_e/section_e';
+		}
+
+
+
 		$this->load->view('layout', $this->data);
 	}
 
@@ -190,7 +197,13 @@ class Form extends Admin_Controller
 			'coveredArea' => $posts['coveredArea'],
 			'numberOfComputer' => $posts['numberOfComputer'],
 			'numberOfLatrines' => $posts['numberOfLatrines'],
-			'school_id' => $posts['school_id']
+			'school_id' => $posts['school_id'],
+			'land_type' => $posts['land_type'],
+			'avg_class_room_size' => $posts['avg_class_room_size'],
+			'timing' => $posts['timing'],
+			'female_washrooms' => $posts['female_washrooms'],
+			'male_washrooms' => $posts['male_washrooms']
+
 		);
 
 
@@ -280,6 +293,10 @@ class Form extends Admin_Controller
 		$input["schoolStaffNetPay"] = $this->input->post("schoolStaffNetPay");
 		$input["schoolStaffAnnualIncreament"] = $this->input->post("schoolStaffAnnualIncreament");
 
+		$input["job_nature"] = $this->input->post("job_nature");
+		$input["gov_sector"] = $this->input->post("gov_sector");
+		$input["gov_noc"] = $this->input->post("gov_noc");
+
 		$this->db->insert('school_staff', $input);
 		$insert_id = $this->db->insert_id();
 		if ($insert_id) {
@@ -329,7 +346,9 @@ class Form extends Admin_Controller
 		$input["schoolStaffNetPay"] = $this->input->post("schoolStaffNetPay");
 		$input["schoolStaffAnnualIncreament"] = $this->input->post("schoolStaffAnnualIncreament");
 
-
+		$input["job_nature"] = $this->input->post("job_nature");
+		$input["gov_sector"] = $this->input->post("gov_sector");
+		$input["gov_noc"] = $this->input->post("gov_noc");
 
 		$this->db->where('schoolStaffId', $schoolStaffId);;
 		if ($this->db->update('school_staff', $input)) {
@@ -375,10 +394,36 @@ class Form extends Admin_Controller
 	public function update_class_fee()
 	{
 
+
+
+
 		$class_id = (int) $this->input->post("class_id");
 		$schools_id = (int) $this->input->post("schools_id");
 		$school_id = (int) $this->input->post("school_id");
 		$session_id = (int) $this->input->post("session_id");
+
+		if ($this->input->post('courses')) {
+			$input_courses_array = array();
+			$select_courses = $this->input->post('courses');
+			$courses_columns = array("fcta", "ccpa", "frca", "css_pms", "etea", "language");
+			foreach ($courses_columns as $courses_column) {
+
+				if (in_array($courses_column, $select_courses)) {
+					$input_courses_array[$courses_column] = 1;
+				} else {
+					$input_courses_array[$courses_column] = 0;
+				}
+			}
+			$input_courses_array['schools_id'] = $schools_id;
+			$input_courses_array['school_id'] = $school_id;
+			$input_courses_array['session_id'] = $session_id;
+
+			$query = "DELETE FROM academy_courses 
+		          WHERE school_id ='" . $school_id . "'";
+			$this->db->query($query);
+			$this->db->insert('academy_courses', $input_courses_array);
+		}
+
 
 
 		//remove all data of on schools is for class 
@@ -395,6 +440,19 @@ class Form extends Admin_Controller
 		$input['otherFund'] = (int) $this->input->post('otherFund');
 		$this->db->insert('fee', $input);
 
+
+		//remove all data of on schools is for class 
+		$query = "DELETE FROM fee_mentioned_in_form_or_prospectus 
+		          WHERE school_id ='" . $school_id . "'";
+		$this->db->query($query);
+
+		$fee_mention = array();
+
+		$fee_mention['feeMentionedInForm'] = $this->input->post('pro');
+		$fee_mention['FeeMentionOutside'] = $this->input->post('outside');
+		$fee_mention['school_id'] = $school_id;
+		$this->db->insert('fee_mentioned_in_form_or_prospectus', $fee_mention);
+
 		$this->session->set_flashdata('msg', 'Class Fee Detail Add Successfully.');
 		redirect("form/section_e/$school_id");
 	}
@@ -405,6 +463,7 @@ class Form extends Admin_Controller
 
 		$userId = $this->session->userdata('userId');
 		$this->data['school'] = $school = $this->school_detail($school_session_id);
+
 		$this->data['school_id'] =  $school_id = $school->school_id;
 		$this->data['schools_id'] =  $school->schools_id;
 		$this->data['session_id']  = $session_id = $school->session_id;
@@ -419,12 +478,17 @@ class Form extends Admin_Controller
 		$query = "SELECT * FROM class WHERE classId IN(" . $classes_ids . ")";
 
 		$this->data['classes'] = $this->db->query($query)->result();
-		$this->data['ages'] = $this->db->query("SELECT * FROM age")->result();
+		$query = "SELECT * FROM age WHERE ageId = 20";
+		$this->data['ages'] = $this->db->query($query)->result();
 
 
 		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
 		$this->data['description'] = '';
-		$this->data['view'] = 'forms/section_c/section_c';
+		if ($this->data['school']->school_type_id == 7) {
+			$this->data['view'] = 'forms/section_c/academy_section_c';
+		} else {
+			$this->data['view'] = 'forms/section_c/section_c';
+		}
 		$this->load->view('layout', $this->data);
 	}
 
@@ -496,7 +560,7 @@ class Form extends Admin_Controller
 		}
 
 
-		//remove all data of enrolment of students by school id, class_id, and gender_id
+		//remove all data of enrolment of students by Institute ID, class_id, and gender_id
 		$school_id = $this->input->post("school_id");
 		$session_id = $this->input->post("session_id");
 		$query = "DELETE FROM school_enrolments WHERE 
@@ -526,6 +590,34 @@ class Form extends Admin_Controller
 		redirect("form/section_c/$school_id");
 	}
 
+	public function add_academy_section_c_data()
+	{
+
+		$class_id = 16;
+		$age_id = 20;
+		$school_id = (int) $this->input->post("school_id");
+		$query = "DELETE FROM age_and_class 
+		          WHERE school_id ='" . $school_id . "' 
+				  AND class_id ='" . $class_id . "' AND gender_id IN (1,2)";
+		$this->db->query($query);
+
+		$inputs['age_id'] = $age_id;
+		$inputs['class_id'] = $class_id;
+		$inputs['gender_id'] = 1;
+		$inputs['school_id'] = $school_id;
+		$inputs['enrolled'] = $this->input->post('boys');
+		$this->db->insert('age_and_class', $inputs);
+
+		$inputs['age_id'] = $age_id;
+		$inputs['class_id'] = $class_id;
+		$inputs['gender_id'] = 2;
+		$inputs['school_id'] = $school_id;
+		$inputs['enrolled'] = $this->input->post('girls');
+		$this->db->insert('age_and_class', $inputs);
+
+		$this->session->set_flashdata('msg', "Add Successfully");
+		redirect("form/section_c/$school_id");
+	}
 
 
 	public function section_f($school_session_id)
@@ -766,12 +858,18 @@ class Form extends Admin_Controller
 		$this->data['session_detail'] = $this->get_session_detail($session_id);
 		$this->data['form_status'] = $this->get_form_status($school_id);
 
+
+
 		$query = "SELECT session_id, last_date, fine_percentage FROM `session_fee_submission_dates` 
 		               WHERE session_id= $session_id AND last_date >='" . date('Y-m-d') . "' 
+					   AND school_type_id = '" . $school->school_type_id . "'
 					   ORDER BY last_date ASC LIMIT 1";
 		$this->data['late_fee'] = $this->db->query($query)->result()[0];
 
-		$query = "SELECT * FROM `session_fee_submission_dates` WHERE session_id = '" . $session_id . "'";
+		$query = "SELECT * FROM `session_fee_submission_dates` WHERE session_id = '" . $session_id . "'
+		AND school_type_id = '" . $school->school_type_id . "' 
+	ORDER BY (last_date) ASC
+		";
 		$this->data['session_fee_submission_dates'] = $this->db->query($query)->result();
 
 		$query = "SELECT max(CONVERT(tuitionFee, SIGNED INTEGER)) as max_tution_fee  FROM `fee` WHERE school_id= '" . $school_id . "'";
@@ -781,25 +879,36 @@ class Form extends Admin_Controller
 			$this->db->query($query)->result()[0]->max_tution_fee
 		);
 
-		$query = "SELECT fee_min, fee_max, renewal_app_processsing_fee, renewal_app_inspection_fee, renewal_fee, up_grad_fee 
-		FROM `fee_structure` WHERE fee_min <= '" . $max_tuition_fee . "' ORDER BY fee_min DESC LIMIT 1";
+		$query = "SELECT * FROM `fee_structure` WHERE fee_min <= '" . $max_tuition_fee . "' 
+		AND school_type_id = '" . $school->school_type_id . "'
+		ORDER BY fee_min DESC LIMIT 1";
 		$this->data['fee_sturucture'] = $this->db->query($query)->result()[0];
 
 
 		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
 		$this->data['description'] = '';
-		if ($this->data['school']->reg_type_id == 1) {
-			$this->data['view'] = 'forms/submit_bank_challan/registration';
+
+		if ($school->school_type_id == 1) {
+
+			if ($this->data['school']->reg_type_id == 1) {
+				$this->data['view'] = 'forms/submit_bank_challan/registration';
+			}
+			if ($this->data['school']->reg_type_id == 2) {
+				$this->data['view'] = 'forms/submit_bank_challan/renewal';
+			}
+			if ($this->data['school']->reg_type_id == 4) {
+				$this->data['view'] = 'forms/submit_bank_challan/renewal_upgradation';
+			}
+			if ($this->data['school']->reg_type_id == 3) {
+				$this->data['view'] = 'forms/submit_bank_challan/upgradation';
+			}
 		}
-		if ($this->data['school']->reg_type_id == 2) {
-			$this->data['view'] = 'forms/submit_bank_challan/renewal';
+		if ($school->school_type_id == 7) {
+			if ($this->data['school']->reg_type_id == 1) {
+				$this->data['view'] = 'forms/submit_bank_challan/academy_registration';
+			}
 		}
-		if ($this->data['school']->reg_type_id == 4) {
-			$this->data['view'] = 'forms/submit_bank_challan/renewal_upgradation';
-		}
-		if ($this->data['school']->reg_type_id == 3) {
-			$this->data['view'] = 'forms/submit_bank_challan/upgradation';
-		}
+
 		$this->load->view('layout', $this->data);
 	}
 
@@ -843,14 +952,10 @@ class Form extends Admin_Controller
 	}
 	public function complete_section_e()
 	{
-
 		$school_id = (int) $this->input->post('school_id');
 		$feeMentionedInFormId = (int) $this->input->post('feeMentionedInFormId');
 		$pro = $this->input->post('pro');
 		$outside = $this->input->post('outside');
-		//var_dump($_POST);
-		//exit();
-
 		if ($feeMentionedInFormId == "") {
 
 			$this->db->insert(
@@ -862,7 +967,6 @@ class Form extends Admin_Controller
 				)
 			);
 		} else {
-
 			$this->db->where('feeMentionedInFormId', $feeMentionedInFormId);
 			$update_data['feeMentionedInForm'] = $pro;
 			$update_data['FeeMentionOutside'] = $outside;
@@ -874,7 +978,7 @@ class Form extends Admin_Controller
 		$form_input['form_e_status'] = 1;
 		$this->db->where('school_id', $school_id);
 		$this->db->update('forms_process', $form_input);
-		$this->session->set_flashdata('msg_success', 'Section D Data Submit Successfully.');
+		$this->session->set_flashdata('msg_success', 'Section E Data Submit Successfully.');
 		redirect("form/section_e/$school_id");
 	}
 
@@ -943,6 +1047,54 @@ class Form extends Admin_Controller
 		$this->data['title'] = "Registration";
 		$this->data['description'] = '';
 		$this->load->view('forms/submit_bank_challan/registration_bank_challan_print', $this->data);
+	}
+
+	public function academy_bank_challan_print($school_session_id)
+	{
+
+
+		$this->check_school_session_entry($school_session_id);
+
+		$userId = $this->session->userdata('userId');
+		$this->data['school'] = $school = $this->school_detail($school_session_id);
+		$this->data['school_id'] =  $school_id = $school->school_id;
+		$this->data['schools_id'] =  $school->schools_id;
+		$this->data['session_id']  = $session_id = $school->session_id;
+
+		$this->data['session_detail'] = $this->get_session_detail($session_id);
+		$this->data['form_status'] = $this->get_form_status($school_id);
+
+
+
+		$query = "SELECT session_id, last_date, fine_percentage FROM `session_fee_submission_dates` 
+		               WHERE session_id= $session_id AND last_date >='" . date('Y-m-d') . "' 
+					   AND school_type_id = '" . $school->school_type_id . "'
+					   ORDER BY last_date ASC LIMIT 1";
+		$this->data['late_fee'] = $this->db->query($query)->result()[0];
+
+		$query = "SELECT * FROM `session_fee_submission_dates` WHERE session_id = '" . $session_id . "'
+		AND school_type_id = '" . $school->school_type_id . "' 
+	ORDER BY (last_date) ASC
+		";
+		$this->data['session_fee_submission_dates'] = $this->db->query($query)->result();
+
+		$query = "SELECT max(CONVERT(tuitionFee, SIGNED INTEGER)) as max_tution_fee  FROM `fee` WHERE school_id= '" . $school_id . "'";
+		$this->data['max_tuition_fee'] = $max_tuition_fee = preg_replace(
+			'/[^0-9.]/',
+			'',
+			$this->db->query($query)->result()[0]->max_tution_fee
+		);
+
+		$query = "SELECT * FROM `fee_structure` WHERE fee_min <= '" . $max_tuition_fee . "' 
+		AND school_type_id = '" . $school->school_type_id . "'
+		ORDER BY fee_min DESC LIMIT 1";
+		$this->data['fee_sturucture'] = $this->db->query($query)->result()[0];
+
+
+
+		$this->data['title'] = "Registration";
+		$this->data['description'] = '';
+		$this->load->view('forms/submit_bank_challan/academy_bank_challan_print', $this->data);
 	}
 
 	public function update_test_date()
@@ -1135,7 +1287,11 @@ class Form extends Admin_Controller
 	{
 
 
-		$query = "SELECT * FROM `fee_structure` ORDER BY fee_max ASC";
+		$school_type_id = (int) $this->input->post('school_type_id');
+		$this->data['school_type_id'] = (int) $school_type_id;
+		$query = "SELECT * FROM `fee_structure` 
+		          WHERE school_type_id = '" . $school_type_id . "' 
+				  ORDER BY fee_max ASC";
 		$this->data['fee_structures'] = $this->db->query($query)->result();
 		$this->load->view('forms/fee_structures/renewal_fee_sturucture', $this->data);
 	}

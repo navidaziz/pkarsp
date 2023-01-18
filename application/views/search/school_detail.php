@@ -18,7 +18,7 @@
             <?php echo ucwords(strtolower($school->schoolName)); ?><br />
 
           </h3>
-          <h4> School ID: <?php echo $school->schools_id ?>
+          <h4> Institute ID: <?php echo $school->schools_id ?>
             <?php if ($school->registrationNumber > 0) { ?> <span style="margin-left: 20px;"></span> Reg. ID:
               <?php echo $school->registrationNumber ?>
             <?php } ?>
@@ -117,7 +117,7 @@
         <h4> <i class="fa fa-info-circle" aria-hidden="true"></i>
           Session's History
         </h4>
-        <?php 
+        <?php
         $query = "SELECT
         `reg_type`.`regTypeTitle`,
         `levelofinstitute`.`levelofInstituteTitle`,
@@ -183,17 +183,17 @@
                     '',
                     $this->db->query($query)->result()[0]->max_tution_fee
                   );
-                  $max_tuition_fee = (int) preg_replace("/[^0-9]/", "",  $max_tuition_fee );
+                  $max_tuition_fee = (int) preg_replace("/[^0-9]/", "",  $max_tuition_fee);
                   echo $max_tuition_fee;
-                  
+
                   ?> Rs.</td>
               <td><?php
-                 if ($previous_max) {
-                  $color = '';
+                  if ($previous_max) {
+                    $color = '';
                     $dec = $max_tuition_fee - $previous_max;
-                    if($max_tuition_fee){
-                    $inc = @round(($dec / $max_tuition_fee) * 100, 2);
-                    }else{
+                    if ($max_tuition_fee) {
+                      $inc = @round(($dec / $max_tuition_fee) * 100, 2);
+                    } else {
                       $inc = 0;
                     }
                     if ($inc > 10) {
@@ -204,7 +204,7 @@
                     if ($inc < 0) {
                       $color = 'red';
                     }
-                    
+
                   ?>
                   <span style="color:<?php echo $color; ?>"><?php echo  $inc; ?></span>
                 <?php   } ?>

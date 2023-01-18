@@ -147,7 +147,7 @@
               </td>
               <td>
                 <h6>
-                  School Id # <?php echo $school->schoolId; ?> <br />
+                  Institute ID # <?php echo $school->schoolId; ?> <br />
                   <?php if ($school->registrationNumber != 0) : ?>
                     <?php echo "Registration # " . @$school->registrationNumber; ?><br />
                   <?php endif; ?>
@@ -684,13 +684,13 @@
                         AND `fee`.`class_id` ='" . $class->classId . "'";
 
                 $session_fee = $this->db->query($query)->result()[0];
-               // $session_fee->addmissionFee = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->addmissionFee));
+                // $session_fee->addmissionFee = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->addmissionFee));
                 $admission_fee_row .= '<td>' . $session_fee->addmissionFee . '</td>';
-               // $session_fee->tuitionFee = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->tuitionFee));
+                // $session_fee->tuitionFee = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->tuitionFee));
                 $tuitionFee_row .= '<td>' . $session_fee->tuitionFee . '</td>';
-               // $session_fee->securityFund = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->securityFund));
+                // $session_fee->securityFund = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->securityFund));
                 $securityFund_row .= '<td>' . $session_fee->securityFund . '</td>';
-               // $session_fee->otherFund = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->otherFund));
+                // $session_fee->otherFund = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->otherFund));
                 $otherFund_row .= '<td>' . $session_fee->otherFund . '</td>';
               } ?>
             </tr>

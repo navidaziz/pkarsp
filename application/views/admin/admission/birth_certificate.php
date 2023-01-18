@@ -161,7 +161,7 @@ function numToOrdinalWord($num)
           <td colspan="2" style="text-align: center;">
             <h3><?php echo ucwords(strtolower($school->schoolName)); ?></h3>
             <h5 style="border: 1px solid gray; width: 100%; margin: 0px auto; padding: 4px;">
-              School ID: <strong><?php echo $school->schoolId; ?></strong>
+              Institute ID: <strong><?php echo $school->schoolId; ?></strong>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

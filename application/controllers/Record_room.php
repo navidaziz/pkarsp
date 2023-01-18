@@ -62,7 +62,7 @@ class Record_room extends Admin_Controller
 
          $this->load->view('record_room/school_detail', $this->data);
       } else {
-         echo "School ID not found try again with different School ID.";
+         echo "Institute ID not found try again with different Institute ID.";
          exit();
       }
    }

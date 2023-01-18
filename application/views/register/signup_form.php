@@ -49,7 +49,7 @@
           </div>
           <div class="col-md-4">
             <div class="login-box" style="background-color:#5C9CCC; opacity:.9; margin: 5px auto; padding-top:10px !important;">
-              <h2 class="bigintro" style="font-size: 25px;">Create School Account</h2>
+              <h2 class="bigintro" style="font-size: 25px;">Create Institute Account</h2>
               <div class="divide-10"></div>
               <form role="form" method="post" action="<?php echo site_url("register/signup"); ?>">
                 <div class="form-group">

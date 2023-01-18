@@ -117,7 +117,7 @@
               <div class="login-helpe rs">
                 <a class="btn btn-warning btn-s active  pull-left" style="text-decoration: none;" href="<?php echo site_url(); ?>register/password_reset">Forgot Password ?</a>
                 <!-- Don't have an account with us? <br /> -->
-                <a class="btn btn-primary btn-s active  pull-right" style="text-decoration: none;" href="<?php echo site_url(); ?>register/signup">Create School Account</a><br>
+                <a class="btn btn-primary btn-s active  pull-right" style="text-decoration: none;" href="<?php echo site_url(); ?>register/signup">Create institute Account</a><br>
 
               </div>
 

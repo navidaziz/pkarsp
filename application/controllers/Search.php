@@ -31,7 +31,7 @@ class Search extends MY_Controller
         ON (`schools`.`district_id` = `district`.`districtId`) ";
 
 		if ($search_by == 'school_id') {
-			$searchBy = 'School ID';
+			$searchBy = 'Institute ID';
 			$query .= " WHERE `schools`.`schoolId` = " . $schoolid . " ";
 		}
 
@@ -64,7 +64,7 @@ class Search extends MY_Controller
 
 		$this->data['school'] = $this->school_detail($school_id);
 
-		$query="SELECT schoolId From school WHERE schools_id = '".$school_id."' ORDER BY schoolId DESC LIMIT 1";
+		$query = "SELECT schoolId From school WHERE schools_id = '" . $school_id . "' ORDER BY schoolId DESC LIMIT 1";
 		$school_id = $this->db->query($query)->result()[0]->schoolId;
 
 		$query = "SELECT MAX(tuitionFee) as max_tution_fee 

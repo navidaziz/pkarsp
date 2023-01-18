@@ -58,7 +58,7 @@
                 <table class="table table-bordered">
                   <tr>
                     <th>#</th>
-                    <th>School ID</th>
+                    <th>Institute ID</th>
                     <th>School Name</th>
                     <th>Date</th>
                     <th>BISE</th>
@@ -108,7 +108,7 @@
                 <table class="table table-bordered">
                   <tr>
                     <th>#</th>
-                    <th>School ID</th>
+                    <th>Institute ID</th>
                     <th>School Name</th>
                     <th>Date</th>
                     <th>BISE</th>

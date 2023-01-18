@@ -23,7 +23,7 @@
 
 <table class="table">
     <tr>
-        <td>School ID:
+        <td>Institute ID:
             <strong><?php echo $school->schools_id ?></strong> <br />
             Registration ID: <strong style='color:green'><?php echo $school->registrationNumber  ?> </strong><br />
             File No: <strong><?php

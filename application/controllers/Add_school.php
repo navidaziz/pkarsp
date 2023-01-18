@@ -63,9 +63,6 @@ class Add_school extends MY_Controller
 
 	public function process_data()
 	{
-
-
-
 		$userId = $this->session->userdata('userId');
 		$woner_data['userTitle'] = $this->input->post('userTitle');
 		$woner_data['contactNumber'] = $this->input->post('contactNumber');

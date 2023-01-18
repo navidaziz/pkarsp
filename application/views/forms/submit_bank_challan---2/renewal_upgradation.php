@@ -31,7 +31,7 @@
       </h2>
       <br />
       <small>
-        <h4>S-ID: <?php echo $school->schools_id; ?> <?php if ($school->registrationNumber) { ?> - REG No: <?php echo $school->registrationNumber ?> <?php } ?></h4>
+        <h4>Institute ID: <?php echo $school->schools_id; ?> <?php if ($school->registrationNumber) { ?> - REG No: <?php echo $school->registrationNumber ?> <?php } ?></h4>
       </small>
       <ol class="breadcrumb">
         <li><a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> Home </a></li>
@@ -74,6 +74,7 @@
                       <ol>
                         <li> Application Processing Fee: <strong><?php echo $fee_sturucture->renewal_app_processsing_fee; ?> Rs. </strong></li>
                         <li> Inspection Fee: <strong><?php echo $fee_sturucture->renewal_app_inspection_fee; ?> Rs.</strong></li>
+                        <li> Upgradation Fee: <strong><?php echo $fee_sturucture->up_grad_fee; ?> Rs.</strong></li>
                         <li> Renewal Fee: <strong><?php echo $fee_sturucture->renewal_fee; ?> Rs.</strong></li>
 
 
@@ -173,17 +174,20 @@
                       <td>Inspection Fee</td>
                       <td><?php echo number_format($fee_sturucture->renewal_app_inspection_fee); ?> Rs.</td>
                     </tr>
-
+                    <tr>
+                      <td>Upgradation Fee</td>
+                      <td><?php echo $fee_sturucture->up_grad_fee; ?> Rs.</td>
+                    </tr>
                     <tr>
                       <td>Renewal Fee</td>
                       <td><?php echo $fee_sturucture->renewal_fee; ?> Rs.</td>
                     </tr>
 
                     <tr>
-                      <td><strong>Total Session <?php echo $session_detail->sessionYearTitle; ?> Renewal Fee </strong></td>
+                      <td><strong>Total Session <?php echo $session_detail->sessionYearTitle; ?> Upgradation-Renewal Fee </strong></td>
                       <td>
                         <strong>
-                          <?php $total = $fee_sturucture->renewal_app_processsing_fee + $fee_sturucture->renewal_app_inspection_fee + $fee_sturucture->renewal_fee;
+                          <?php $total = $fee_sturucture->renewal_app_processsing_fee + $fee_sturucture->renewal_app_inspection_fee + $fee_sturucture->renewal_fee + $fee_sturucture->up_grad_fee;
 
                           echo number_format($total);
                           ?> Rs.
@@ -200,7 +204,7 @@
                             <th> Due's Date </th>
                             <th> Late Fee % </th>
                             <th> Late Fee Amount </th>
-                            <th><strong>Session <?php echo $session_detail->sessionYearTitle; ?> Renewal Fee </strong></th>
+                            <th><strong>Session <?php echo $session_detail->sessionYearTitle; ?> Upgradation-Renewal Fee </strong></th>
                             <th> Total </th>
                           </tr>
                           <?php
@@ -238,7 +242,7 @@
 
                     <tr>
                       <td colspan="2" style="text-align:center;">
-                        <a target="new" class="btn btn-primary" href="<?php echo site_url("form/print_renewal_bank_challan/$school_id") ?>"> <i class="fa fa-print" aria-hidden="true"></i> Print PSRA Renewal Bank Challan From</a>
+                        <a target="new" class="btn btn-primary" href="<?php echo site_url("form/print_renewal_upgradation_bank_challan/$school_id") ?>"> <i class="fa fa-print" aria-hidden="true"></i> Print PSRA Upgradation + Renewal Bank Challan From</a>
                       </td>
                     </tr>
                   </tbody>

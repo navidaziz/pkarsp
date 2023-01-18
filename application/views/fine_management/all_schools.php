@@ -72,12 +72,12 @@
                     </label>
                   </div>
                 </div>
-                <div class="clearfix"></div> <!-- school Id search form-->
+                <div class="clearfix"></div> <!-- Institute ID search form-->
                 <div id="by_school_id" class="bg-danger">
                   <form class="bg-danger" id="Form2" method="post" enctype="multipart/form-data" action="<?php echo base_url('fine_management/search_schools_by_creiteria'); ?>">
                     <div class="form-group">
                       <label class="col-sm-4">
-                        <input type="number" class="form-control" name="schools_id" required="required" form="Form2" id="schools_id" placeholder="Enter School Id Examples 1,2,3 etc.">
+                        <input type="number" class="form-control" name="schools_id" required="required" form="Form2" id="schools_id" placeholder="Enter Institute ID Examples 1,2,3 etc.">
                       </label>
                       <label class="col-sm-2">
                         <input type="submit" id="search" class="form-control btn-xs btn-primary btn-flat fa fa-search" form="Form2" value="Search">
@@ -85,7 +85,7 @@
                     </div>
                   </form>
                 </div>
-                <!-- end school id form here... -->
+                <!-- end Institute ID form here... -->
 
                 <!-- end school area search... -->
                 <!-- end searching code here -->

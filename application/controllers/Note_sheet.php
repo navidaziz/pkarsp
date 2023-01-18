@@ -54,7 +54,7 @@ class Note_sheet extends Admin_Controller
 
          $this->load->view('bank_challan_entry/school_session_list', $this->data);
       } else {
-         echo "School ID not found try again with different School ID.";
+         echo "Institute ID not found try again with different Institute ID.";
          exit();
       }
    }

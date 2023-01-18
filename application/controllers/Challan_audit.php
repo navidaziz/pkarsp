@@ -54,7 +54,7 @@ class Challan_audit extends CI_Controller
 
          $this->load->view('challan_audit/school_session_list', $this->data);
       } else {
-         echo "School ID not found try again with different School ID.";
+         echo "Institute ID not found try again with different Institute ID.";
          exit();
       }
    }

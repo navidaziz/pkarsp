@@ -29,9 +29,9 @@
           <div class="col-md-12">
             <!-- radio button for search... -->
 
-            <!-- school Id search form-->
+            <!-- Institute ID search form-->
 
-            <!-- end school id form here... -->
+            <!-- end Institute ID form here... -->
             <!-- <=======        ========> -->
             <!-- school area and name search -->
 
@@ -57,7 +57,7 @@
               <form id="Form2" method="post" enctype="multipart/form-data" action="<?php echo base_url('school/get_single_school_for_renewal_by_id'); ?>">
                 <div class="form-group">
                   <label class="col-sm-4">
-                    <input type="text" class="form-control" name="schools_id" required="required" form="Form2" id="schools_id" placeholder="Enter School Id Examples 1,2,3 etc.">
+                    <input type="text" class="form-control" name="schools_id" required="required" form="Form2" id="schools_id" placeholder="Enter Institute ID Examples 1,2,3 etc.">
                   </label>
                   <label class="col-sm-2">
                     <input type="submit" id="search" class="form-control btn-xs btn-primary btn-flat" form="Form2" value="Search">

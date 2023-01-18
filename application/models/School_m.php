@@ -515,17 +515,7 @@ LEFT JOIN `reg_type`
     public function physical_facilities_by_school_id($school_id)
     {
         $physical_facilities_query = "SELECT
-                            `physical_facilities`.`physicalFacilityId`
-                            , `physical_facilities`.`building_id`
-                            , `physical_building`.`physicalBuildingTitle`
-                            , `physical_facilities`.`numberOfClassRoom`
-                            , `physical_facilities`.`numberOfOtherRoom`
-                            , `physical_facilities`.`totalArea`
-                            , `physical_facilities`.`coveredArea`
-                            , `physical_facilities`.`numberOfComputer`
-                            , `physical_facilities`.`numberOfLatrines`
-                            , `physical_facilities`.`school_id`
-                            , `physical_facilities`.`rent_amount`
+                            `physical_facilities`.*
                         FROM
                             `physical_facilities`
                             LEFT JOIN `physical_building` 

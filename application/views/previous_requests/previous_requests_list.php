@@ -100,7 +100,7 @@
                 <tr>
                   <th>#</th>
                   <th>District</th>
-                  <th>School ID</th>
+                  <th>Institute ID</th>
                   <th>School Name</th>
                   <th>REG No</th>
                   <th>Type</th>

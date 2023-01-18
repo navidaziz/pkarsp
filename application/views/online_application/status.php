@@ -36,7 +36,7 @@
         <?php echo ucwords(strtolower($school->schoolName)); ?>
       </h2>
       <br />
-      <h4>S-ID: <?php echo $school->schools_id; ?> - REG No: <?php echo $school->registrationNumber ?></h4>
+      <h4>Institute ID: <?php echo $school->schools_id; ?> - REG No: <?php echo $school->registrationNumber ?></h4>
       <ol class="breadcrumb">
         <li><a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> Home </a></li>
         <!-- <li><a href="#">Examples</a></li> -->

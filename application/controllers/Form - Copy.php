@@ -551,7 +551,7 @@ class Form extends Admin_Controller
 		}
 
 
-		//remove all data of enrolment of students by school id, class_id, and gender_id
+		//remove all data of enrolment of students by Institute ID, class_id, and gender_id
 		$school_id = $this->input->post("school_id");
 		$session_id = $this->input->post("session_id");
 		$query = "DELETE FROM school_enrolments WHERE 

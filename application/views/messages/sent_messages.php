@@ -93,7 +93,7 @@
                   <form id="Form2" method="post" action="<?php echo base_url('messages/get_messages_by_school_id'); ?>">
                     <div class="form-group">
                       <label class="col-sm-4">
-                        <input type="text" class="form-control" name="schools_id" required="required" form="Form2" id="schools_id" placeholder="Enter School Id Examples 1,2,3 etc.">
+                        <input type="text" class="form-control" name="schools_id" required="required" form="Form2" id="schools_id" placeholder="Enter Institute ID Examples 1,2,3 etc.">
                       </label>
                       <label class="col-sm-2">
                         <input type="submit" id="search" class="form-control btn-xs btn-primary btn-flat" form="Form2" value="Search">

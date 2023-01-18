@@ -43,7 +43,7 @@
                         </div>
                         <div class="col-md-4 col-sm-4 col-xs-12">
                           <div class="form-group has-feedback">
-                            <label for="schoolId" class="control-label">School ID</label>
+                            <label for="schoolId" class="control-label">Institute ID</label>
                             <input maxlength="1050" class="form-control" type="text" value="" name="schoolId" aria-required="true">
                             <span class="form-control-feedback" aria-hidden="true"><span class="icon"></span></span>
                           </div>
@@ -89,14 +89,14 @@
 
               </div>
             </div>
-            <!-- end school id form here... -->
+            <!-- end Institute ID form here... -->
             <div class="clearfix"></div>
             <div class="table-responsive">
               <table width="100%" class="table table-hover table-bordered table-condensed table-striped">
                 <tbody>
                   <tr style="font-size: 12px;">
                     <th style="width: 10px;">Seq</th>
-                    <th style="width: 10px;">School ID</th>
+                    <th style="width: 10px;">Institute ID</th>
                     <th width="">School Name</th>
                     <th>Address</th>
                     <th width="">School Level</th>

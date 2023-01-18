@@ -163,7 +163,7 @@ function numToOrdinalWord($num)
             <?php } ?>
 
             <h5>
-              School ID: <strong><?php echo $school->schoolId; ?></strong>
+              Institute ID: <strong><?php echo $school->schoolId; ?></strong>
               <br />
               Registration No: <strong><?php echo $school->registrationNumber; ?></strong>
             </h5>

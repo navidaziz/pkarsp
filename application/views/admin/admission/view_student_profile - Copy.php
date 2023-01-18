@@ -89,7 +89,7 @@ $section_id = $students[0]->section_id;
                                                 FROM `schools` 
                                                 WHERE schoolId='" . $students[0]->school_id . "'";
                                             echo "School: " . $this->db->query($query)->result()[0]->schoolName; ?><br />
-                                            <?php echo "School ID: " . $this->db->query($query)->result()[0]->schoolId; ?><br />
+                                            <?php echo "Institute ID: " . $this->db->query($query)->result()[0]->schoolId; ?><br />
                                             <?php echo "Registration ID: " . $this->db->query($query)->result()[0]->registrationNumber; ?><br />
 
                                         </h5>

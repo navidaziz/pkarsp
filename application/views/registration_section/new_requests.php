@@ -2,7 +2,7 @@
 <table class="table table-bordered table_small">
   <tr>
     <th>#</th>
-    <th>School ID</th>
+    <th>Institute ID</th>
     <th>School Name</th>
     <th>Session</th>
     <th>Action</th>
@@ -27,7 +27,7 @@
 <table class="table table-bordered table_small">
   <tr>
     <th>#</th>
-    <th>School ID</th>
+    <th>Institute ID</th>
     <th>School Name</th>
     <th>Session</th>
     <th>Action</th>

@@ -58,7 +58,7 @@
                 <table class="table table-bordered">
                   <tr>
                     <th>#</th>
-                    <th>School ID</th>
+                    <th>Institute ID</th>
                     <th>Challan Type</th>
                     <th title="System Trace Audit Number">STAN</th>
                     <th>Deposit Date</th>
@@ -109,7 +109,7 @@
                 <table class="table table-bordered">
                   <tr>
                     <th>#</th>
-                    <th>School ID</th>
+                    <th>Institute ID</th>
                     <th>Challan Type</th>
                     <th title="System Trace Audit Number">STAN</th>
                     <th>Deposit Date</th>

@@ -3,7 +3,7 @@
   <tr>
     <th>#</th>
 
-    <th>School ID</th>
+    <th>Institute ID</th>
     <th>School Name</th>
     <th></th>
     <th>Session</th>

@@ -32,7 +32,7 @@ FROM
   ?>
 
   <h4>School Name: <?php echo $session_bise_verification->schoolName ?></h4>
-  <h4>School ID: <?php echo $session_bise_verification->schoolId ?></h4>
+  <h4>Institute ID: <?php echo $session_bise_verification->schoolId ?></h4>
   <form action="<?php echo site_url("bise_verification/verify_bise_reg") ?>" method="post">
     <input type="hidden" name="id" value="<?php echo $session_bise_verification->id; ?>" />
     <input type="hidden" name="school_id" value="<?php echo $session_bise_verification->schoolId; ?>" />

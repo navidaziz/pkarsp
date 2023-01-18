@@ -77,7 +77,7 @@ FROM
                 <h2 style=""><?php echo ucwords(strtolower($school_detail->schoolName)); ?></h2>
                 <br />
                 <strong>
-                  School ID: <?php echo $school_detail->schoolId; ?>
+                  Institute ID: <?php echo $school_detail->schoolId; ?>
                   <?php if ($school_detail->registrationNumber > 0) { ?>
                     - Registration No: <?php echo $school_detail->registrationNumber; ?>
                   <?php } ?>
@@ -97,7 +97,7 @@ FROM
                 <table class="table" style="">
                   <tr>
                     <td>Institute Contact No. </td>
-                    <td><input data-mask="(999) 999-9999" type="text" id="telePhoneNumber" required="required" name="telePhoneNumber" name="telePhoneNumber"  value="<?php echo $school_detail->telePhoneNumber ?>"> </td>
+                    <td><input data-mask="(999) 999-9999" type="text" id="telePhoneNumber" required="required" name="telePhoneNumber" name="telePhoneNumber" value="<?php echo $school_detail->telePhoneNumber ?>"> </td>
                   </tr>
                   <tr>
                     <td>Institute Contact No (Mobile). </td>
@@ -150,20 +150,20 @@ FROM
     <!-- CUSTOM SCRIPT -->
     <script src="<?php echo base_url('assets/lib/plugins/input-mask/jquery.inputmask.js'); ?>"></script>
 
-<script>
-  $(document).ready(function() {
-    $('#telePhoneNumber').inputmask('(9999)-9999999');
-    $('#cnic').inputmask('99999-9999999-9');
-    $('#contactNumber').inputmask('(9999)-9999999');
-    $('#telePhoneNumber').inputmask('(9999)-9999999');
-    $('#schoolMobileNumber').inputmask('(9999)-9999999');
+    <script>
+      $(document).ready(function() {
+        $('#telePhoneNumber').inputmask('(9999)-9999999');
+        $('#cnic').inputmask('99999-9999999-9');
+        $('#contactNumber').inputmask('(9999)-9999999');
+        $('#telePhoneNumber').inputmask('(9999)-9999999');
+        $('#schoolMobileNumber').inputmask('(9999)-9999999');
 
-    $('#late').inputmask('99.9999999');
-    $('#long').inputmask('99.9999999');
+        $('#late').inputmask('99.9999999');
+        $('#long').inputmask('99.9999999');
 
 
-  });
-</script>
+      });
+    </script>
 
     <!-- /JAVASCRIPTS -->
 </body>

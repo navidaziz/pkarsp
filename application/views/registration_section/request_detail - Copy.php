@@ -14,7 +14,7 @@
 
         <h2 style="display:inline;">
           <?php echo ucwords(strtolower($school->schoolName)); ?><br />
-          <h5 style="display:inline;"> School ID: <?php echo $school->schools_id ?><br />
+          <h5 style="display:inline;"> Institute ID: <?php echo $school->schools_id ?><br />
             <?php if ($school->registrationNumber > 0) { ?> Reg. ID:
               <?php echo $school->registrationNumber ?>
             <?php } ?>

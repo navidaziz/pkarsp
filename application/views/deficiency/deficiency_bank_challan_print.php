@@ -134,7 +134,7 @@
         <div style="border: 1px solid #ddd; border-radius: 10px; margin-top: 5px; margin-bottom: 10px;  padding: 10px; font-size: 20px;">
           <table class="table">
             <tr>
-              <td style="text-align: left;">School ID: <span style="text-decoration: underline; ">
+              <td style="text-align: left;">Institute ID: <span style="text-decoration: underline; ">
                   <strong><?php echo $school->schools_id; ?><strong></span></td>
               <td style="text-align: center;">
                 <?php if ($school->registrationNumber) { ?>

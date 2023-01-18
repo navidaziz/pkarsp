@@ -146,7 +146,7 @@
                 <table class="table">
                   <strong>Search By</strong>
                   <span style="margin-left: 15px;"></span>
-                  <input type="radio" name="search_type" class="search_type" value="school_id" checked /> School ID
+                  <input type="radio" name="search_type" class="search_type" value="school_id" checked /> Institute ID
                   <span style="margin-left: 15px;"></span>
                   <input type="radio" name="search_type" class="search_type" value="reg_no" /> Reg. No
                   <span style="margin-left: 15px;"></span>

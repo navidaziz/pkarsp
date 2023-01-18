@@ -93,7 +93,7 @@
               <thead>
                 <tr>
                   <th>School Name</th>
-                  <th>School ID</th>
+                  <th>Institute ID</th>
                   <th>Registration No.</th>
                   <th>BISE Registration No.</th>
                   <th>Level of Institution</th>

@@ -50,7 +50,7 @@
 								<?php } ?>
 
 								<!-- <div class="form-group">
-									<label for="user_email">Enter School ID</label>
+									<label for="user_email">Enter Institute ID</label>
 
 									<i class="fa fa-id-card"></i>
 									<input type="number" class="form-control" name="school_id" id="school_id">

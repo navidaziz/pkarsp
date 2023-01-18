@@ -56,7 +56,7 @@ class Reception extends Admin_Controller
 
          $this->load->view('reception/school_detail', $this->data);
       } else {
-         echo "School ID not found try again with different School ID.";
+         echo "Institute ID not found try again with different Institute ID.";
          exit();
       }
    }

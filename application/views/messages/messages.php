@@ -226,7 +226,7 @@
                             <label><input type="checkbox" name="select_all" id="select_all" value="">
                               Select All</label>
                           </th>
-                          <th>School ID</th>
+                          <th>Institute ID</th>
                           <th class="text-primary">School Name</th>
                           <th class="text-primary">District</th>
                           <th width="20%" class="text-primary">School Level</th>

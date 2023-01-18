@@ -23,21 +23,24 @@
                         <?php if ($form_status->form_e_status == 1) { ?> <i class="fa fa-check" aria-hidden="true"></i> <?php } else { ?> <i class="fa fa-spinner" aria-hidden="true"></i> <?php } ?> SECTION E
                     </a>
                 </li>
-                <li <?php if ($this->uri->segment(2) == 'section_f') { ?> class="active" <?php  } ?> style="text-align: center;">
-                    <a href="<?php if ($form_status->form_e_status == 1) { ?> <?php echo site_url("form/section_f/$school_id"); ?> <?php } else { ?> # <?php } ?>" data-toggle="tooltip" data-placement="top" <?php if ($form_status->form_e_status == 0) { ?>title="Please Complete Section E." <?php } ?>>
-                        <?php if ($form_status->form_f_status == 1) { ?> <i class="fa fa-check" aria-hidden="true"></i> <?php } else { ?> <i class="fa fa-spinner" aria-hidden="true"></i> <?php } ?> SECTION F
-                    </a>
-                </li>
-                <li <?php if ($this->uri->segment(2) == 'section_g') { ?> class="active" <?php  } ?> style="text-align: center;">
-                    <a href="<?php if ($form_status->form_f_status == 1) { ?> <?php echo site_url("form/section_g/$school_id"); ?> <?php } else { ?> # <?php } ?>" data-toggle="tooltip" data-placement="top" <?php if ($form_status->form_f_status == 0) { ?>title="Please Complete Section F." <?php } ?>>
-                        <?php if ($form_status->form_g_status == 1) { ?> <i class="fa fa-check" aria-hidden="true"></i> <?php } else { ?> <i class="fa fa-spinner" aria-hidden="true"></i> <?php } ?> SECTION G
-                    </a>
-                </li>
-                <li <?php if ($this->uri->segment(2) == 'section_h') { ?> class="active" <?php  } ?> style="text-align: center;">
-                    <a href="<?php if ($form_status->form_g_status == 1) { ?> <?php echo site_url("form/section_h/$school_id"); ?> <?php } else { ?> # <?php } ?>" data-toggle="tooltip" data-placement="top" <?php if ($form_status->form_g_status == 0) { ?> title="Please Complete Section G." <?php } ?>>
-                        <?php if ($form_status->form_h_status == 1) { ?> <i class="fa fa-check" aria-hidden="true"></i> <?php } else { ?> <i class="fa fa-spinner" aria-hidden="true"></i> <?php } ?> SECTION H
-                    </a>
-                </li>
+
+                <?php if ($school->school_type_id != 7) { ?>
+                    <li <?php if ($this->uri->segment(2) == 'section_f') { ?> class="active" <?php  } ?> style="text-align: center;">
+                        <a href="<?php if ($form_status->form_e_status == 1) { ?> <?php echo site_url("form/section_f/$school_id"); ?> <?php } else { ?> # <?php } ?>" data-toggle="tooltip" data-placement="top" <?php if ($form_status->form_e_status == 0) { ?>title="Please Complete Section E." <?php } ?>>
+                            <?php if ($form_status->form_f_status == 1) { ?> <i class="fa fa-check" aria-hidden="true"></i> <?php } else { ?> <i class="fa fa-spinner" aria-hidden="true"></i> <?php } ?> SECTION F
+                        </a>
+                    </li>
+                    <li <?php if ($this->uri->segment(2) == 'section_g') { ?> class="active" <?php  } ?> style="text-align: center;">
+                        <a href="<?php if ($form_status->form_f_status == 1) { ?> <?php echo site_url("form/section_g/$school_id"); ?> <?php } else { ?> # <?php } ?>" data-toggle="tooltip" data-placement="top" <?php if ($form_status->form_f_status == 0) { ?>title="Please Complete Section F." <?php } ?>>
+                            <?php if ($form_status->form_g_status == 1) { ?> <i class="fa fa-check" aria-hidden="true"></i> <?php } else { ?> <i class="fa fa-spinner" aria-hidden="true"></i> <?php } ?> SECTION G
+                        </a>
+                    </li>
+                    <li <?php if ($this->uri->segment(2) == 'section_h') { ?> class="active" <?php  } ?> style="text-align: center;">
+                        <a href="<?php if ($form_status->form_g_status == 1) { ?> <?php echo site_url("form/section_h/$school_id"); ?> <?php } else { ?> # <?php } ?>" data-toggle="tooltip" data-placement="top" <?php if ($form_status->form_g_status == 0) { ?> title="Please Complete Section G." <?php } ?>>
+                            <?php if ($form_status->form_h_status == 1) { ?> <i class="fa fa-check" aria-hidden="true"></i> <?php } else { ?> <i class="fa fa-spinner" aria-hidden="true"></i> <?php } ?> SECTION H
+                        </a>
+                    </li>
+                <?php } ?>
                 <li <?php if ($this->uri->segment(2) == 'submit_bank_challan') { ?> class="active" <?php  } ?> style="text-align: center;">
                     <a href="<?php if ($form_status->form_b_status == 1 and  $form_status->form_c_status == 1 and $form_status->form_d_status == 1 and $form_status->form_e_status == 1 and $form_status->form_f_status == 1 and $form_status->form_g_status == 1 and $form_status->form_h_status == 1) { ?> <?php echo site_url("form/submit_bank_challan/$school_id"); ?> <?php } else { ?> # <?php } ?>" data-toggle="tooltip" data-placement="top" <?php if ($form_status->form_h_status == 0) { ?> title="Please Complete Section H." <?php } ?>>
                         <?php if ($form_status->form_h_status == 1) { ?> <i class="fa fa-spinner" aria-hidden="true"></i> <?php } else { ?> <i class="fa fa-spinner" aria-hidden="true"></i> <?php } ?> Bank Challan

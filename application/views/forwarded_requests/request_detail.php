@@ -103,7 +103,7 @@
             <?php echo ucwords(strtolower($school->schoolName)); ?><br />
 
           </h2>
-          <h4> School ID: <?php echo $school->schools_id ?>
+          <h4> Institute ID: <?php echo $school->schools_id ?>
             <?php if ($school->registrationNumber > 0) { ?> <span style="margin-left: 20px;"></span> Reg. ID:
               <?php echo $school->registrationNumber ?>
             <?php } ?>

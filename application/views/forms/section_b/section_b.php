@@ -38,7 +38,7 @@
       </h2>
       <br />
       <small>
-        <h4>S-ID: <?php echo $school->schools_id; ?> <?php if ($school->registrationNumber) { ?> - REG No: <?php echo $school->registrationNumber ?> <?php } ?></h4>
+        <h4>Institute ID: <?php echo $school->schools_id; ?> <?php if ($school->registrationNumber) { ?> - REG No: <?php echo $school->registrationNumber ?> <?php } ?></h4>
       </small>
       <ol class="breadcrumb">
         <li><a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> Home </a></li>
@@ -87,12 +87,28 @@
                     <span style="margin-top: 10px; display: block;"> </span>
                   <?php endforeach; ?>
 
+                  <h3>Land Type</h3>
+                  <input type="radio" name="land_type" value="commercial" <?php if ($school_physical_facilities->land_type == 'commercial') {
+                                                                            echo 'checked';
+                                                                          } ?> /> Commercial <span style="margin-left: 10px;"></span>
+                  <input type="radio" name="land_type" value="residential" <?php if ($school_physical_facilities->land_type == 'residential') {
+                                                                              echo 'checked';
+                                                                            } ?> /> Residential
+                  <h3>Institute Timing</h3>
+                  <input type="radio" name="timing" value="morning" <?php if ($school_physical_facilities->timing == 'morning') {
+                                                                      echo 'checked';
+                                                                    } ?> /> Morning <span style="margin-left: 10px;"></span>
+                  <input type="radio" name="timing" value="evening" <?php if ($school_physical_facilities->timing == 'evening') {
+                                                                      echo 'checked';
+                                                                    } ?> /> Evening
 
                   <br />
                   <strong> Total Number Of Class Rooms: </strong>
                   <input min="0" type="number" required name="numberOfClassRoom" placeholder="No. of Classroom(s)" class="form-control" id="numberOfClassRoom" value="<?php echo $school_physical_facilities->numberOfClassRoom; ?>" />
                   <strong>Others Rooms </strong>
                   <input min="0" type="number" required name="numberOfOtherRoom" placeholder="Office/Staff room/ Store etc." class="form-control" id="numberOfOtherRoom" value="<?php echo $school_physical_facilities->numberOfOtherRoom; ?>" />
+                  <strong>Average Class Rooms Size (sq feet)</strong>
+                  <input min="0" type="number" required name="avg_class_room_size" placeholder="" class="form-control" id="avg_class_room_size" value="<?php echo $school_physical_facilities->avg_class_room_size; ?>" />
 
                   <strong> Total Area (in marlas): </strong>
                   <input min="0" type="number" required name="totalArea" placeholder="Enter total Area" class="form-control" id="totalArea" value="<?php echo $school_physical_facilities->totalArea; ?>" />
@@ -111,12 +127,15 @@
                 function set_number_of_toilets() {
                   if ($('#toilet').is(":checked")) {
                     $('#total_toilets').show();
-                    $('#numberOfLatrines').val('');
-                    $('#numberOfLatrines').prop('required', true);
+                    //$('#numberOfLatrines').val('');
+                    //$('#numberOfLatrines').prop('required', true);
+                    $('.washrooms').prop('required', false);
+
                   } else {
                     $('#total_toilets').hide();
-                    $('#numberOfLatrines').val('');
-                    $('#numberOfLatrines').prop('required', false);
+                    // $('#numberOfLatrines').val('');
+                    // $('#numberOfLatrines').prop('required', false);
+                    $('.washrooms').prop('required', false);
                   }
                 }
 
@@ -162,11 +181,26 @@
                       <span style="margin-left: 20px;"></span>
                       <?php if ($ph->physicalId == 2) { ?>
                         <span id="total_toilets" <?php if (!in_array($ph->physicalId, $facilities_physical_ids)) :  ?> style="display: none;" <?php endif; ?>>
+                          <table class="table">
+                            <tr>
+                              <th>Male Washrooms</th>
+                              <th>Female Washrooms</th>
+                            </tr>
+                            <tr>
+                              <td>
+                                <input min="0" class="washrooms" type="number" value="<?php echo $school_physical_facilities->female_washrooms ?>" name="female_washrooms" />
+                              </td>
+                              <td>
+                                <input min="0" class="washrooms" type="number" value="<?php echo $school_physical_facilities->male_washrooms ?>" name="male_washrooms" />
+                              </td>
+                            </tr>
 
-
-                          (Number of Toilets
-                          <input <?php if (in_array($ph->physicalId, $facilities_physical_ids)) :  ?> required <?php endif; ?> min="1" style="width: 50px;" type="number" name="numberOfLatrines" id="numberOfLatrines" value="<?php echo $school_physical_facilities->numberOfLatrines; ?>">
-                          )<span style="margin-left: 20px;"></span>
+                          </table>
+                          <span style="display: none;">
+                            (Number of Washrooms
+                            <input <?php if (in_array($ph->physicalId, $facilities_physical_ids)) :  ?> <?php endif; ?> min="0" style="width: 50px;" type="number" name="numberOfLatrines" id="numberOfLatrines" value="<?php echo $school_physical_facilities->numberOfLatrines; ?>" />
+                            )<span style="margin-left: 20px;"></span>
+                          </span>
 
                         </span>
                       <?php } ?>

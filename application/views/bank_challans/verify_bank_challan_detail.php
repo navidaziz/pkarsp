@@ -34,7 +34,7 @@
   ?>
 
   <h4>School Name: <?php echo $session_bank_challan->schoolName ?></h4>
-  <h4>School ID: <?php echo $session_bank_challan->schools_id ?></h4>
+  <h4>Institute ID: <?php echo $session_bank_challan->schools_id ?></h4>
   <form action="<?php echo site_url("bank_challans/verified_bank_challan") ?>" method="post">
     <input type="hidden" name="bank_challan_id" value="<?php echo $session_bank_challan->bank_challan_id; ?>" />
     <table class="table table-bordered">
@@ -141,7 +141,7 @@
                 </td>
                 <td><input class="bank_challan_values" type="number" name="inspection_fee" required min="0" /> </td>
               </tr>
-              
+
               <tr>
                 <td>
                   Late Fee:

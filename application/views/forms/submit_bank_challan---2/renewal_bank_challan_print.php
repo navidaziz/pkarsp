@@ -14,14 +14,14 @@
   <meta name="description" content="">
   <meta name="author" content="">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-  <!-- <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700;900&display=swap" rel="stylesheet"> -->
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700;900&display=swap" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
   <style type="text/css">
     body {
       background: rgb(204, 204, 204);
-      /* font-family: 'Source Sans Pro', 'Regular' !important; */
+      font-family: 'Source Sans Pro', 'Regular' !important;
 
     }
 
@@ -46,7 +46,7 @@
         margin-top: 30px;
         /* height: 29.7cm;  */
         height: auto;
-
+        font-size: 15px !important;
       }
     }
 
@@ -96,7 +96,7 @@
       padding: 8px;
       line-height: 1;
       vertical-align: top;
-
+      font-size: 20px !important;
 
     }
   </style>
@@ -110,7 +110,7 @@
           <th><img style="width: 100px;" src="<?php echo base_url(); ?>assets/logo.png" class="img-responsive img" /></th>
           <th>
             <h3 style="text-align: center;">Public School Regulatory Authority Khyber Pakhtunkhwa</h4>
-              <h4 style="text-align: center;">Upgradation + Renewal Challan Form For Session <?php echo $session_detail->sessionYearTitle; ?>
+              <h4 style="text-align: center;"><?php echo $title;  ?> Challan Form For Session <?php echo $session_detail->sessionYearTitle; ?>
               </h4>
 
 
@@ -131,10 +131,10 @@
               (for bank use only)</th>
           </tr>
         </table>
-        <div style="border: 1px solid #ddd; border-radius: 10px; margin-top: 5px; margin-bottom: 10px;  padding: 10px; ">
+        <div style="border: 1px solid #ddd; border-radius: 10px; margin-top: 5px; margin-bottom: 10px;  padding: 10px; font-size: 20px;">
           <table class="table">
             <tr>
-              <td>School ID: <span style="text-decoration: underline; ">
+              <td>Institute ID: <span style="text-decoration: underline; ">
                   <strong><?php echo $school->schools_id; ?><strong></span></td>
               <td>Registration ID: <span style="text-decoration: underline; ">
                   <strong><?php echo $school->registrationNumber; ?><strong></span></td>
@@ -185,19 +185,15 @@
               <td><?php echo number_format($fee_sturucture->renewal_app_inspection_fee); ?> Rs.</td>
             </tr>
             <tr>
-              <td>Upgradation Fee</td>
-              <td><?php echo $fee_sturucture->up_grad_fee; ?> Rs.</td>
-            </tr>
-            <tr>
               <td>Renewal Fee</td>
               <td><?php echo $fee_sturucture->renewal_fee; ?> Rs.</td>
             </tr>
 
             <tr>
-              <td><strong>Total Session <?php echo $session_detail->sessionYearTitle; ?> Upgradation-Renewal Fee </strong></td>
+              <td><strong>Total Session <?php echo $session_detail->sessionYearTitle; ?> Renewal Fee </strong></td>
               <td>
                 <strong>
-                  <?php $total = $fee_sturucture->renewal_app_processsing_fee + $fee_sturucture->renewal_app_inspection_fee + $fee_sturucture->up_grad_fee + $fee_sturucture->renewal_fee;
+                  <?php $total = $fee_sturucture->renewal_app_processsing_fee + $fee_sturucture->renewal_app_inspection_fee + $fee_sturucture->renewal_fee;
 
                   echo number_format($total);
                   ?> Rs.
@@ -206,14 +202,25 @@
             </tr>
 
 
-            <tr>
+            <?php if ($session_detail->status == 1) { ?>
 
+              <tr>
+                <td colspan="2">Late Fee Fine
+                  <small>(Application Processing+Inspection Fee+Renewal)</small>
+                </td>
+
+              </tr>
+
+            <?php } ?>
+
+            <tr>
               <td colspan="2">
                 <table class="table">
                   <tr>
                     <th> Due's Date </th>
                     <th> Late Fee % </th>
                     <th> Late Fee Amount </th>
+                    <td><strong>Session <?php echo $session_detail->sessionYearTitle; ?> Renewal Fee </strong></td>
                     <th> Total </th>
                   </tr>
                   <?php
@@ -224,34 +231,39 @@
                       <th>
                         Upto <?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?>
                       </th>
-                      <?php if ($session_fee_submission_date->fine_percentage == 0) { ?>
-                        <td colspan="2"> <strong> Normal Fee </strong></td>
-                      <?php } else { ?>
-                        <td><?php echo $session_fee_submission_date->fine_percentage; ?> %</td>
-                        <td>
-                          <?php
+                      <td>
+                        <?php if ($session_fee_submission_date->fine_percentage == 0) { ?>
+                      <td colspan="2"> <strong> Normal Fee </strong></td>
+                    <?php } else { ?>
+                      <?php echo $session_fee_submission_date->fine_percentage; ?> %
+              </td>
+              <td>
+                <?php
                           $fine = 0;
                           $fine = ($session_fee_submission_date->fine_percentage * $total) / 100;
                           echo number_format($fine);
-                          ?>
-                          Rs.
-                        </td>
-                      <?php } ?>
-                      <td>
-                        <?php echo number_format($fine + $total);  ?>
-                      </td>
-                    </tr>
-
-
-
-                  <?php } ?>
-                </table>
+                ?>
+                Rs.
               </td>
+            <?php } ?>
+            </td>
+            <td><?php echo number_format($total) ?></td>
 
+            <td>
+              <strong> <?php echo number_format($fine + $total);  ?> </strong>
+            </td>
             </tr>
 
 
-          </tbody>
+
+          <?php } ?>
+        </table>
+        </td>
+
+        </tr>
+
+
+        </tbody>
         </table>
         <br /><br />
         <style>

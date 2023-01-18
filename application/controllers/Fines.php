@@ -254,7 +254,7 @@ class Fines extends My_Controller
 		";
 
 		if ($search_by == 'school_id') {
-			$searchBy = 'School ID';
+			$searchBy = 'Institute ID';
 			$query .= " AND `schools`.`schoolId` = " . $schoolid . " ";
 		}
 

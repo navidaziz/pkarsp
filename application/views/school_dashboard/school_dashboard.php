@@ -55,7 +55,7 @@
         <div class="row">
           <div class="col-md-3">
             <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
-              <h2>School ID: <?php echo $school->schoolId ?></h2>
+              <h2>Institute ID: <?php echo $school->schoolId ?></h2>
               <?php if ($school->registrationNumber > 0) { ?>
                 <h3>Reg. ID: <?php echo $school->registrationNumber ?></h3>
                 <br />
@@ -473,7 +473,7 @@
                           $apply = $this->db->query($query)->result()[0]->total; ?>
 
                           <?php if ($session->status == 1) { ?>
-                            <p class="btn btn-outline-success" <?php if ($apply <= 0) { ?>  style="border-color: #D6D6D6"<?php } ?>>
+                            <p class="btn btn-outline-success" <?php if ($apply <= 0) { ?> style="border-color: #D6D6D6" <?php } ?>>
                               Apply For <?php echo $session->sessionYearTitle; ?>
                               <?php if ($apply > 0) { ?>
                                 <a class="btn btn-success" style="margin: 1px;" href="<?php echo site_url("apply/renewal/$session->sessionYearId"); ?>"> Renewal </a>
@@ -515,9 +515,17 @@
                   }
 
 
-
-                  $query = "SELECT * FROM `session_year` WHERE YEAR(`session_start`) >= '" . $session_year . "'";
-                  $session = $this->db->query($query)->result()[0];
+                  $query = "SELECT school_type_id FROM schools WHERE schoolId = '" . $school_id . "'";
+                  $school_type_id = $this->db->query($query)->row()->school_type_id;
+                  if ($school_type_id  == 7) {
+                    $query = "SELECT * FROM `session_year` WHERE status =1 LIMIT 1";
+                    $session = $this->db->query($query)->result()[0];
+                  } else {
+                    $query = "SELECT * FROM `session_year` WHERE YEAR(`session_start`) >= '" . $session_year . "'";
+                    $session = $this->db->query($query)->result()[0];
+                  }
+                  // $query = "SELECT * FROM `session_year` WHERE YEAR(`session_start`) >= '" . $session_year . "'";
+                  // $session = $this->db->query($query)->result()[0];
 
                   $query = "SELECT * FROM school 
                   WHERE schools_id = '" . $school_id . "' ";
@@ -620,16 +628,23 @@
                       </a>
                     <?php } ?>
                   <?php } else { ?>
-                    <h4>Now Apply for Registration with PSRA</h4>
-                    <p>Note:
+                    <?php if ($school_type_id == 7) { ?>
+                      <h4>Now Apply for Academy Registration with PSRA</h4>
+                    <?php } else { ?>
+                      <h4>Now Apply for Registration with PSRA</h4>
+                    <?php } ?>
 
-                      As your school was established in <strong> <?php echo date("M, Y", strtotime($school->yearOfEstiblishment)); ?> </strong> , therefore you should register your school with PSRA for session <strong> <?php echo $session->sessionYearTitle; ?></strong>
+                    <?php if ($school_type_id != 7) { ?>
+                      <p>Note:
 
-                    </p><br />
-                    <p style="font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif; direction: rtl; line-height: 25px;">
-                      اب PSRA کے ساتھ رجسٹریشن کے لیے درخواست دیں۔
-                      چونکہ آپ کا اسکول <strong> <?php echo date("M, Y", strtotime($school->yearOfEstiblishment)); ?> </strong> میں قائم ہوا تھا، اس لیے آپ کو اپنے اسکول کو <strong> <?php echo $session->sessionYearTitle; ?></strong> کے سیشن کے لیے PSRA کے ساتھ رجسٹر کرنا چاہیے۔
-                    </p>
+                        As your school was established in <strong> <?php echo date("M, Y", strtotime($school->yearOfEstiblishment)); ?> </strong> , therefore you should register your school with PSRA for session <strong> <?php echo $session->sessionYearTitle; ?></strong>
+
+                      </p><br />
+                      <p style="font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif; direction: rtl; line-height: 25px;">
+                        اب PSRA کے ساتھ رجسٹریشن کے لیے درخواست دیں۔
+                        چونکہ آپ کا اسکول <strong> <?php echo date("M, Y", strtotime($school->yearOfEstiblishment)); ?> </strong> میں قائم ہوا تھا، اس لیے آپ کو اپنے اسکول کو <strong> <?php echo $session->sessionYearTitle; ?></strong> کے سیشن کے لیے PSRA کے ساتھ رجسٹر کرنا چاہیے۔
+                      </p>
+                    <?php } ?>
                     <a class="btn btn-primary" href="<?php echo site_url("apply/registration/$session->sessionYearId"); ?>">Apply for Registration. <?php echo $session->sessionYearTitle; ?></a>
                   <?php } ?>
 

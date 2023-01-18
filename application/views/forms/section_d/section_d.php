@@ -18,13 +18,163 @@
 
       $('#get_employee_edit_form_model').modal('toggle');
     }
+
+    function get_employee_add_form() {
+      $('#get_employee_add_form_model').modal('toggle');
+    }
   </script>
+
   <div class="modal fade" id="get_employee_edit_form_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content" id="get_employee_edit_form_body">
 
         ...
 
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="get_employee_add_form_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" id="">
+        <div class="modal-header">
+          <h4 style="border-left: 20px solid #9FC8E8;  padding-left:5px;" class="pull-left">Add New Employee Detail</h4>
+          <button type="button pull-right" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+
+          <h5 style="color: red;">Note: All fields are mandatory.</h5>
+          <form action="<?php echo site_url("form/add_employee_data"); ?>" method="post">
+            <input type="hidden" name="schools_id" value="<?php echo $school->schoolId; ?>" />
+            <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
+            <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
+            <table class="table table-bordered">
+              <tr>
+                <th>Employee Name</th>
+                <td><input class="form-control" type="text" name="schoolStaffName" required /> </td>
+              </tr>
+              <tr>
+                <th> Father / Hasband Name</th>
+                <td><input class="form-control" type="text" name="schoolStaffFatherOrHusband" required /> </td>
+              </tr>
+              <tr>
+                <th>Employee CNIC</th>
+                <td><input class="form-control" type="text" id="schoolStaffCnic" name="schoolStaffCnic" required /> </td>
+              </tr>
+              <tr>
+                <th>Gender</th>
+                <td> <select class="form-control" id="schoolStaffGender" name="schoolStaffGender" required="required">
+                    <?php if (!empty($gender)) : ?>
+                      <option value="">Gender</option>
+                      <?php foreach ($gender as $gen) : ?>
+                        <option value="<?php echo $gen->genderId ?>"><?php echo $gen->genderTitle; ?></option>
+                      <?php endforeach; ?>
+                    <?php else : ?>
+                      No gender found.
+                    <?php endif; ?>
+                  </select></td>
+              </tr>
+              <tr>
+                <th>Employee Type</th>
+                <td> <select class="form-control" id="schoolStaffType" name="schoolStaffType" required="required">
+                    <?php if (!empty($staff_type)) : ?>
+                      <option value="">Type</option>
+                      <?php foreach ($staff_type as $s_type) : ?>
+                        <option value="<?php echo $s_type->staffTypeId ?>"><?php echo $s_type->staffTtitle; ?></option>
+                      <?php endforeach; ?>
+                    <?php else : ?>
+                      No Employee Type Found.
+                    <?php endif; ?>
+                  </select></td>
+              </tr>
+              <tr>
+                <th>Designation</th>
+                <?php if ($school->school_type_id != 7) { ?>
+                  <?php
+                  $query = "SELECT COUNT(*) total FROM `school_staff` 
+                WHERE  lower(`school_staff`.`schoolStaffDesignition`) = 'principal' 
+                AND school_id = '" . $school_id . "'";
+                  $total_pricipal = $this->db->query($query)->result()[0]->total;
+                  ?>
+                  <td><input class="form-control" <?php if ($total_pricipal == 0) { ?> readonly value="Principal" <?php } ?> type="text" name="schoolStaffDesignition" required /></td>
+                <?php } else { ?>
+                  <?php
+                  $query = "SELECT COUNT(*) total FROM `school_staff` 
+                WHERE  lower(`school_staff`.`schoolStaffDesignition`) = 'director' 
+                AND school_id = '" . $school_id . "'";
+                  $total_pricipal = $this->db->query($query)->result()[0]->total;
+                  ?>
+                  <td><input class="form-control" <?php if ($total_pricipal == 0) { ?> readonly value="Director" <?php } ?> type="text" name="schoolStaffDesignition" required /></td>
+
+                <?php } ?>
+              </tr>
+              <tr>
+                <th>Job Nature</th>
+                <td><input onclick="$('.gov_sector').attr('required', false); $('.gov_sector').prop('checked', false); $('.gov_noc').prop('checked', false); $('#gov_sector_div').hide(); $('#gov_noc_div').hide();" type="radio" name="job_nature" value="permanent" required /> Permanent Staff
+                  <spna style="margin-left: 10px;"></spna>
+                  <input onclick="$('.gov_sector').attr('required', true); $('#gov_sector_div').show();" type="radio" name="job_nature" value="visiting" required /> Visiting Staff
+                  <br />
+                  <div id="gov_sector_div" style="padding: 10px; border:1px solid gray; margin-top: 5px; display:none">
+                    <strong>Govt: Sectot Staff </strong>
+                    <spna style="margin-left: 15px;"></spna>
+                    <input class="gov_sector" onclick="$('.gov_noc').attr('required', true); $('#gov_noc_div').show();" type="radio" name="gov_sector" value="yes" /> Yes
+                    <spna style="margin-left: 10px;"></spna>
+                    <input class="gov_sector" onclick="$('.gov_noc').attr('required', false); $('.gov_noc').prop('checked', false); $('#gov_noc_div').hide();" type="radio" name="gov_sector" value="no" /> No
+                  </div>
+
+                  <div id="gov_noc_div" style="padding: 10px; border:1px solid gray; margin-top: 5px; display:none">
+                    <strong>NOC in Case of Govt: Sector Staff: </strong>
+                    <spna style="margin-left: 15px;"></spna>
+                    <input class="gov_noc" type="radio" name="gov_noc" value="yes" /> Yes
+                    <spna style="margin-left: 10px;"></spna>
+                    <input class="gov_noc" type="radio" name="gov_noc" value="no" /> No
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>Academic Qaulification</th>
+                <td><input class="form-control" placeholder="MSc Math, MA urdu etc" type="text" name="schoolStaffQaulificationAcademic" required />
+              </tr>
+              <tr>
+                <th>Professional Qaulification</th>
+                </td>
+                <td><input class="form-control" min="0" placeholder="PST, CT, B.Ed, M.Ed, TT etc" type="text" name="schoolStaffQaulificationProfessional" />
+
+                </td>
+              </tr>
+              <tr>
+                <th>Professional Training (Months)</th>
+                <td><input class="form-control" min="0" type="number" name="TeacherTraining" /></td>
+              </tr>
+              <tr>
+                <th>Experience (Months)</th>
+                <td><input class="form-control" min="0" type="number" name="TeacherExperience" /></td>
+              </tr>
+
+              <tr>
+                <th>Appointment Date</th>
+                <td><input class="form-control" type="date" name="schoolStaffAppointmentDate" required /></td>
+              </tr>
+              <tr>
+                <th>Monthly Pay</th>
+                <td><input class="form-control" min="0" type="number" name="schoolStaffNetPay" required /></td>
+              </tr>
+              <tr>
+                <th>Annual Increament (%)</th>
+                <td><input class="form-control" min="0" max="100" placeholder="" type="number" name="schoolStaffAnnualIncreament" required /> <strong>%</strong></td>
+              </tr>
+              <tr>
+                <th>Save</th>
+                <td>
+
+                  <input class="btn btn-success btn-sm" type="submit" name="Add" value="Add New Employee" />
+                </td>
+              </tr>
+            </table>
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -37,7 +187,7 @@
         <?php echo ucwords(strtolower($school->schoolName)); ?>
       </h2>
       <br />
-      <h4>S-ID: <?php echo $school->schools_id; ?>
+      <h4>Institute ID: <?php echo $school->schools_id; ?>
         <?php if ($school->registrationNumber) { ?> - REG No: <?php echo $school->registrationNumber ?> <?php } ?></h4>
       <ol class="breadcrumb">
         <li><a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> Home </a></li>
@@ -55,151 +205,164 @@
         <!-- /.box-header -->
         <div class="box-body">
           <div class="row">
-
-            <div class="col-md-12">
-
-
-
-              <p>
+            <div class="col-md-7">
               <h4 style="border-left: 20px solid #9FC8E8; padding-left:5px"><strong><?php echo @$description; ?></strong><br />
-                <small style="color: red;">
+                <small style="color: red; display:inline">
                   Note: Please enter details of the Principal, Vice Principal, Teaching and Non-Teaching Staff (Others) of the session: <?php echo $session_detail->sessionYearTitle; ?>.
                 </small>
+
               </h4>
+            </div>
 
-              </small>
-              </p>
+            <div class="col-md-5">
+              <button onclick="get_employee_add_form()" class="btn btn-danger pull-right">Add New Employee</button>
+            </div>
+          </div>
 
-              <style>
-                .table>tbody>tr>td,
-                .table>tbody>tr>th,
-                .table>tfoot>tr>td,
-                .table>tfoot>tr>th,
-                .table>thead>tr>td,
-                .table>thead>tr>th {
-                  padding: 1px !important;
-                }
-              </style>
+          <div class="row">
+            <div class="col-md-5">
+              <h4>Teaching Staff</h4>
+              <?php
+              $query = "SELECT COUNT(*) as total FROM `school_staff` 
+              WHERE `school_staff`.`schoolStaffType`= 1
+              AND `school_staff`.`schoolStaffGender`=1
+              AND school_id =" . $school_id;
+              $male_teachers = $this->db->query($query)->row()->total;
+              $query = "SELECT COUNT(*) as total FROM `school_staff` 
+              WHERE `school_staff`.`schoolStaffType`= 1
+              AND `school_staff`.`schoolStaffGender`=2
+              AND school_id =" . $school_id;
+              $female_teachers = $this->db->query($query)->row()->total;
+              ?>
+              <table class="table table-bordered" style="text-align: center;">
+                <tr>
+                  <th style="text-align: center;">Male</th>
+                  <th style="text-align: center;">Female</th>
+                  <th style="text-align: center;">Total</th>
+                </tr>
+                <tr>
+                  <td><strong><?php echo $male_teachers; ?></strong></td>
+                  <td><strong><?php echo $female_teachers; ?></strong></td>
+                  <td><strong><?php echo $male_teachers + $female_teachers ?></strong></td>
+                </tr>
+              </table>
+            </div>
+            <div class="col-md-5">
+              <h4>Non Teaching Staff</h4>
+              <?php
+              $query = "SELECT COUNT(*) as total FROM `school_staff` 
+              WHERE `school_staff`.`schoolStaffType`= 2
+              AND `school_staff`.`schoolStaffGender`=1
+              AND school_id =" . $school_id;
+              $male_teachers = $this->db->query($query)->row()->total;
+              $query = "SELECT COUNT(*) as total FROM `school_staff` 
+              WHERE `school_staff`.`schoolStaffType`= 2
+              AND `school_staff`.`schoolStaffGender`=2
+              AND school_id =" . $school_id;
+              $female_teachers = $this->db->query($query)->row()->total;
+              ?>
+              <table class="table table-bordered" style="text-align: center;">
+                <tr>
+                  <th style="text-align: center;">Male</th>
+                  <th style="text-align: center;">Female</th>
+                  <th style="text-align: center;">Total</th>
+                </tr>
+                <tr>
+                  <td><strong><?php echo $male_teachers; ?></strong></td>
+                  <td><strong><?php echo $female_teachers; ?></strong></td>
+                  <td><strong><?php echo $male_teachers + $female_teachers ?></strong></td>
+                </tr>
+              </table>
+            </div>
+            <div class="col-md-2">
+              <h4>Total Staff</h4>
+              <?php
+              $query = "SELECT COUNT(*) as total FROM `school_staff` 
+              WHERE `school_staff`.`schoolStaffType`= 2
+              AND `school_staff`.`schoolStaffGender`=1
+              AND school_id =" . $school_id;
+              $male_teachers = $this->db->query($query)->row()->total;
+              $query = "SELECT COUNT(*) as total FROM `school_staff` 
+              WHERE  school_id =" . $school_id;
+              $total = $this->db->query($query)->row()->total;
+              ?>
+              <table class="table table-bordered" style="text-align: center;">
+                <tr>
+                  <th style="text-align: center;">Total</th>
+                </tr>
+                <tr>
+                  <td><strong><?php echo $total; ?></strong></td>
+                </tr>
+              </table>
+            </div>
 
-              <form action="<?php echo site_url("form/add_employee_data"); ?>" method="post">
-                <input type="hidden" name="schools_id" value="<?php echo $school->schoolId; ?>" />
-                <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
-                <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
-                <?php
-                $query = "SELECT COUNT(*) total FROM `school_staff` 
-                WHERE  lower(`school_staff`.`schoolStaffDesignition`) = 'principal' 
-                AND school_id = '" . $school_id . "'";
-                $total_pricipal = $this->db->query($query)->result()[0]->total;
-                ?>
+          </div>
 
+          <div class="row">
+            <div class="col-md-12">
+              <table class="table" style="font-size: 12px;">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>F/Husband Name</th>
+                    <th>CNIC</th>
+                    <th>Gender</th>
+                    <th>Type</th>
+                    <th>Academic Qualification</th>
+                    <th>Professional Qualification</th>
+                    <th>Training</th>
+                    <th>Experience</th>
+                    <th>Designation</th>
+                    <th>Appointment At</th>
+                    <th>Net.Pay</th>
+                    <th>Annual Increament</th>
+                    <th>Job Nature</th>
+                    <th>Govt: Sectot Staff</th>
+                    <th>Gov: NOC</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="staff_tbody">
+                  <?php $counter = 1; ?>
+                  <?php if (!empty($school_staff)) : ?>
+                    <?php foreach ($school_staff as $st) : ?>
+                      <tr id="staff_row_<?php echo $st->schoolStaffId; ?>">
+                        <td><?php echo $counter; ?></td>
+                        <td><?php echo $st->schoolStaffName; ?></td>
+                        <td><?php echo $st->schoolStaffFatherOrHusband; ?></td>
+                        <td><?php echo $st->schoolStaffCnic; ?></td>
+                        <td><?php echo $st->genderTitle; ?></td>
+                        <td><?php echo $st->staffTtitle; ?></td>
+                        <td><?php echo $st->schoolStaffQaulificationAcademic; ?></td>
+                        <td><?php echo $st->schoolStaffQaulificationProfessional; ?></td>
+                        <td><?php echo $st->TeacherTraining; ?> (M)</td>
+                        <td><?php echo $st->TeacherExperience; ?> (M)</td>
+                        <td><?php echo $st->schoolStaffDesignition; ?></td>
+                        <td><?php echo $st->schoolStaffAppointmentDate; ?></td>
+                        <td><?php echo $st->schoolStaffNetPay; ?></td>
+                        <td><?php echo $st->schoolStaffAnnualIncreament; ?> <strong>%</strong></td>
+                        <td><?php echo $st->job_nature; ?></td>
+                        <td><?php echo $st->gov_sector; ?></td>
+                        <td><?php echo $st->gov_noc; ?></td>
+                        <td>
+                          <?php if ($school->status != 1) { ?>
+                            <a href="javascript:void(0);" onclick="get_employee_edit_form(<?php echo $st->schoolStaffId; ?>)">
+                              &nbsp;<i class="fa fa-edit"></i></a>
+                            <a href="<?php echo site_url("form/delete_employee/$st->schoolStaffId/$school_id/$session_id"); ?>" title="Delete Employee" onclick="return confirm('Are you sure? you want to remove the employee?')"> &nbsp;<i class="fa fa-trash-o text-danger"></i>
+                            </a>
+                          <?php } ?>
+                        </td>
+                      </tr>
+                      <?php $counter++; ?>
+                    <?php endforeach; ?>
+                  <?php else : ?>
+                    <td colspan="15" id="empty_td_staff">
 
-                <table class="table">
-
-                  <thead>
-
-                    <tr>
-                      <td>#</th>
-                      <td>Name</th>
-                      <td>F/Husband Name</th>
-                      <td>CNIC</th>
-                      <td>Gender</th>
-                      <td>Type</th>
-                      <td>Academic Qualification</th>
-                      <td>Professional Qualification</th>
-                      <td>Training In Months</th>
-                      <td>Experience In Months</th>
-                      <td>Designation</th>
-                      <td>Appointment At</th>
-                      <td>Net.Pay</th>
-                      <td>Annual Increament</th>
-                      <td>Action</th>
-                    </tr>
-
-                  </thead>
-                  <tbody id="staff_tbody">
-
-                    <tr>
-                      <td>#</td>
-                      <td><input type="text" name="schoolStaffName" style="width: 130px;" required /> </th>
-                      <td><input type="text" name="schoolStaffFatherOrHusband" style="width: 130px;" required /> </td>
-                      <td><input type="text" id="schoolStaffCnic" name="schoolStaffCnic" style="width: 110px;" required /> </td>
-                      <td> <select class="sele ct2" id="schoolStaffGender" name="schoolStaffGender" required="required">
-                          <?php if (!empty($gender)) : ?>
-                            <option value="">Gender</option>
-                            <?php foreach ($gender as $gen) : ?>
-                              <option value="<?php echo $gen->genderId ?>"><?php echo $gen->genderTitle; ?></option>
-                            <?php endforeach; ?>
-                          <?php else : ?>
-                            No gender found.
-                          <?php endif; ?>
-                        </select></td>
-                      <td> <select style="width: 70px;" class="sele ct2" id="schoolStaffType" name="schoolStaffType" required="required">
-                          <?php if (!empty($staff_type)) : ?>
-                            <option value="">Type</option>
-                            <?php foreach ($staff_type as $s_type) : ?>
-                              <option value="<?php echo $s_type->staffTypeId ?>"><?php echo $s_type->staffTtitle; ?></option>
-                            <?php endforeach; ?>
-                          <?php else : ?>
-                            No Staff Type Found.
-                          <?php endif; ?>
-                        </select></td>
-                      <td><input placeholder="MSc Math, MA urdu etc" type="text" name="schoolStaffQaulificationAcademic" style="width: 70px;" required />
-
-                      </td>
-                      <td><input min="0" placeholder="PST, CT, B.Ed, M.Ed, TT etc" type="text" name="schoolStaffQaulificationProfessional" style="width: 70px;" />
-
-                      </td>
-                      <td><input min="0" type="number" name="TeacherTraining" style="width: 70px;" /></td>
-                      <td><input min="0" type="number" name="TeacherExperience" style="width: 70px;" /></td>
-                      <td><input <?php if ($total_pricipal == 0) { ?> readonly value="Principal" <?php } ?> type="text" name="schoolStaffDesignition" style="width: 70px;" required /></td>
-                      <td><input type="date" name="schoolStaffAppointmentDate" style="width: 122px;" required /></td>
-                      <td><input min="0" type="number" name="schoolStaffNetPay" style="width: 70px;" required /></td>
-                      <td><input min="0" max="100" placeholder="" type="number" name="schoolStaffAnnualIncreament" style="width: 50px;" required /> <strong>%</strong></td>
-
-                      <td>
-
-                        <input class="btn btn-success btn-sm" type="submit" name="Add" value="Add New" />
-                      </td>
-                    </tr>
-                    <?php $counter = 1; ?>
-                    <?php if (!empty($school_staff)) : ?>
-                      <?php foreach ($school_staff as $st) : ?>
-                        <tr id="staff_row_<?php echo $st->schoolStaffId; ?>">
-                          <td><?php echo $counter; ?></td>
-                          <td><?php echo $st->schoolStaffName; ?></td>
-                          <td><?php echo $st->schoolStaffFatherOrHusband; ?></td>
-                          <td><?php echo $st->schoolStaffCnic; ?></td>
-                          <td><?php echo $st->genderTitle; ?></td>
-                          <td><?php echo $st->staffTtitle; ?></td>
-                          <td><?php echo $st->schoolStaffQaulificationAcademic; ?></td>
-                          <td><?php echo $st->schoolStaffQaulificationProfessional; ?></td>
-                          <td><?php echo $st->TeacherTraining; ?></td>
-                          <td><?php echo $st->TeacherExperience; ?></td>
-                          <td><?php echo $st->schoolStaffDesignition; ?></td>
-                          <td><?php echo $st->schoolStaffAppointmentDate; ?></td>
-                          <td><?php echo $st->schoolStaffNetPay; ?></td>
-                          <td><?php echo $st->schoolStaffAnnualIncreament; ?></td>
-                          <td>
-                            <?php if ($school->status != 1) { ?>
-                              <a href="javascript:void(0);" onclick="get_employee_edit_form(<?php echo $st->schoolStaffId; ?>)">
-                                &nbsp;<i class="fa fa-edit"></i></a>
-                              <a href="<?php echo site_url("form/delete_employee/$st->schoolStaffId/$school_id/$session_id"); ?>" title="Delete Staff" onclick="return confirm('Are you sure? you want to remove the employee?')"> &nbsp;<i class="fa fa-trash-o text-danger"></i>
-                              </a>
-                            <?php } ?>
-                          </td>
-                        </tr>
-                        <?php $counter++; ?>
-                      <?php endforeach; ?>
-                    <?php else : ?>
-                      <td colspan="15" id="empty_td_staff">
-
-                      </td>
-                    <?php endif; ?>
-                  </tbody>
-                </table>
-
-              </form>
-
+                    </td>
+                  <?php endif; ?>
+                </tbody>
+              </table>
 
 
             </div>

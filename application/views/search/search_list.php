@@ -29,7 +29,7 @@
   <tr>
     <th>#</th>
 
-    <th>S-ID</th>
+    <th>Institute ID</th>
     <th>School Name</th>
     <th>REG-No.</th>
     <th>District</th>

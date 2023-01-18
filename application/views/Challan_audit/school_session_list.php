@@ -2,7 +2,7 @@
     <h4>
         <table class="table">
             <tr>
-                <td><i class="fa fa-info-circle" aria-hidden="true"></i> School ID:
+                <td><i class="fa fa-info-circle" aria-hidden="true"></i> Institute ID:
                     <strong><?php echo $school->schools_id ?></strong>
                 </td>
                 <td>

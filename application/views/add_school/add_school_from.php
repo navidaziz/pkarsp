@@ -28,6 +28,11 @@
     .table>thead>tr>th {
       padding: 1px !important;
     }
+
+    .required:after {
+      content: " *";
+      color: red;
+    }
   </style>
 </head>
 
@@ -42,26 +47,140 @@
     <section>
       <div class="container">
         <div class="row">
-          <h3 style="text-align: center;">PSRA Institute Registration Section A</h3>
+          <h3 style="text-align: center;">PSRA Institute Registration Form (Section A)</h3>
           <form class="" method="post" enctype="multipart/form-data" id="create_form" action="<?php echo base_url('add_school/process_data'); ?>">
 
+            <div class="col-md-3">
+              <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height:600px;  margin: 5px; padding: 10px; background-color: white;">
+                <div class="box-body">
+                  <h4>Institute Information</h4>
+                  <script>
+                    function hide_and_show(school_type) {
+                      if (school_type == 7) {
+                        $('.p_input').prop('checked', false);
+                        $('.p_div').hide();
+                        $('.a_div').show();
+                        $('#affiliated_no').prop('checked', true);
+                        $('#bise_affiliation').hide();
+                        $('.bise_id').prop('required', false);
+                        $('.biseRegister').prop('required', false);
+                        $('#bise_no').prop('checked', true);
+                        $('#bank_detail').hide();
+                        $('.bankDetail').prop('required', false);
+                      } else {
+                        $('.p_input').prop('checked', false);
+                        $('.a_input').prop('checked', false);
+                        $('.p_div').show();
+                        $('.a_div').hide();
+                      }
+
+                    }
+                  </script>
+                  <table class="table">
+
+                    <tr>
+                      <td colspan="2">
+                        <strong class="required"> Institute Type</strong><br />
+                        <?php foreach ($school_types as $school_type) : ?>
+                          <input onclick="hide_and_show('<?php echo $school_type->typeId; ?>')" type="radio" name="school_type_id" value="<?= $school_type->typeId; ?>" required />
+                          <?php echo $school_type->typeTitle; ?>
+
+                        <?php endforeach; ?>
+
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td colspan="2">
+                        <strong class="required">Institute Level (Current)</strong><br />
+
+                        <?php foreach ($level_of_institute as $item) : ?>
+
+                          <span class="<?php if ($item->levelofInstituteId == 5) {
+                                          echo 'a_div';
+                                        } else {
+                                          echo 'p_div';
+                                        } ?>">
+                            <input class="<?php if ($item->levelofInstituteId == 5) {
+                                            echo 'a_input';
+                                          } else {
+                                            echo 'p_input';
+                                          } ?>" type="radio" name="level_of_school_id" value="<?= $item->levelofInstituteId; ?>" required />
+                            <?php echo $item->levelofInstituteTitle; ?>
+                            <br />
+                          </span>
 
 
-            <div class="col-md-4">
-              <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 10px; background-color: white;">
+                        <?php endforeach; ?>
+
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="2">
+                        <strong class="required">Institute Locality</strong><br />
+                        <?php foreach ($locations as $location) { ?>
+                          <input name="location" type="radio" value="<?= $location->locationTitle; ?>" required />
+                          <?= $location->locationTitle; ?><br />
+                        <?php } ?>
+                      </td>
+                    </tr>
+                    <td colspan="2">
+                      <strong class="required">Institute Gender Education</strong><br />
+                      <?php foreach ($gender_of_school as $gender) : ?>
+                        <input type="radio" name="gender_type_id" value="<?= $gender->genderOfSchoolId; ?>" required /> <?= $gender->genderOfSchoolTitle; ?>
+                        <br />
+                      <?php endforeach; ?>
+                    </td>
+                    </tr>
+
+
+
+                    <tr>
+                      <td colspan="2">
+                        <strong class="required">Medium of Instruction</strong><br />
+                        <input type="radio" name="mediumOfInstruction" required value="Urdu"> Urdu <br />
+                        <input type="radio" name="mediumOfInstruction" required value="English"> English <br />
+
+                        <input type="radio" name="mediumOfInstruction" required value="Both"> Both
+
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td colspan="2">
+                        <strong class="required"> Institute Nature of Management </strong><br />
+                        <input type="radio" name="management_id" value="1" required /> Individual
+                        <br />
+                        <input type="radio" name="management_id" value="2" required /> Registered Body / Firm
+                        <br />
+                        <input type="radio" name="management_id" value="3" required /> Association of Persons
+                        <br />
+                        <input type="radio" name="management_id" value="4" required /> Trust
+
+
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-md-5">
+              <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 600px;  margin: 5px; padding: 10px; background-color: white;">
                 <h4>Institute Details</h4>
                 <div class="box-body">
 
                   <input type="hidden" name="reg_type_id" value="1">
                   <table class="table">
                     <tr>
-                      <td>Institute Name</td>
-                      <td><input type="text" id="name" required name="schoolName" value="" /> </td>
+                      <td class="required">Institute Name</td>
+                      <td><input class="form-control" type="text" id="name" required name="schoolName" value="" /> </td>
                     </tr>
                     <tr>
-                      <td>Year of Establishment:</td>
+                      <td class="required">Year of Establishment:</td>
                       <td>
-                        <select name="e_month" required>
+                        <select class="form-control" style="width:49%; display:inline" name="e_month" required>
                           <option value="">Select Month</option>
                           <?php
                           $months = array(
@@ -82,28 +201,27 @@
                             <option value="<?php echo $index; ?>"><?php echo $month; ?></option>
                           <?php }  ?>
                         </select>
-                        <select name="e_year" required>
+                        <select class="form-control" style="width:49%; display:inline;" name="e_year" required>
                           <option value="">Select Year</option>
-                          <?php for ($years = 2021; $years >= 1950; $years--) { ?>
+                          <?php for ($years = date('Y'); $years >= 1950; $years--) { ?>
                             <option value="<?php echo $years; ?>"><?php echo $years; ?></option>
                           <?php } ?>
                         </select>
-                        <!-- <input type="year" title="2021" max="<?php echo date('Y-m') ?>" id="yearOfEstiblishment" required name="yearOfEstiblishment" value="" /> -->
                       </td>
                     </tr>
 
                     <tr>
-                      <td>Institute Contact No. (Landline) </td>
-                      <td><input type="text" id="telePhoneNumber" required name="telePhoneNumber" value="" /> </td>
+                      <td class="required">Institute Contact No. (Landline) </td>
+                      <td><input class="form-control" type="text" id="telePhoneNumber" required name="telePhoneNumber" value="" /> </td>
                     </tr>
                     <tr>
-                      <td>Institute Contact No. (Mobile). </td>
-                      <td><input type="text" id="schoolMobileNumber" required name="schoolMobileNumber" value="" /> </td>
+                      <td class="required">Institute Contact No. (Mobile)</td>
+                      <td><input class="form-control" type="text" id="schoolMobileNumber" required name="schoolMobileNumber" value="" /> </td>
                     </tr>
 
                     <tr>
                       <td>Institute Email</td>
-                      <td><input type="email" id="principal_email" required name="principal_email" value="" /> </td>
+                      <td><input class="form-control" type="email" id="principal_email" name="principal_email" value="" /> </td>
                     </tr>
                     <tr>
                       <script>
@@ -153,78 +271,99 @@
                     </tr>
                   </table>
                   <h4>Institute Address Details</h4>
-                  <table style="width: 100%;">
-                    <tr>
-                      <td>District</td>
-                      <td>Tehsil</td>
-                      <td>UC/Cantonment</td>
-                    </tr>
-                    <tr>
-                      <td><select style="width: 120px;" onchange="getTehsilsByDistrictId(this);" style="width:100%;" required="required" class="" name="district_id" id="district_id">
-                          <option value="">Select District</option>
-                          <?php foreach ($districts as $district) : ?>
-                            <option value="<?php echo $district->districtId; ?>"><?php echo $district->districtTitle; ?></option>
-                          <?php endforeach; ?>
-                        </select> </td>
 
-                      <td><select style="width: 120px;" required="required" class="" name="tehsil_id" onchange="getUcsByTehsilsId(this);" style="width: 100%;" id="tehsil_id">
-                          <option value="">Select</option>
+                  <div class="form-group col-md-4">
+                    <label class="required" for="district">District</label>
+                    <select class="form-control" onchange="getTehsilsByDistrictId(this);" required="required" name="district_id" id="district_id">
+                      <option value="">Select District</option>
+                      <?php foreach ($districts as $district) : ?>
+                        <option value="<?php echo $district->districtId; ?>"><?php echo $district->districtTitle; ?></option>
+                      <?php endforeach; ?>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label class="required" for="tehsil">Tehsil</label>
+                    <select class="form-control" required="required" name="tehsil_id" onchange="getUcsByTehsilsId(this);" id="tehsil_id">
+                      <option value="">Select</option>
 
-                        </select></td>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label class="required" for="uc">UC / Cantonment</label>
+                    <select class="form-control" required onchange="check_uc();" name="uc_id" id="uc_id">
+                      <option value="">Select</option>
+                    </select>
+                  </div>
 
-                      <td>
-                        <select required onchange="check_uc();" style="width: 130px;" class="" name="uc_id" id="uc_id" style="width: 100%;">
-                          <option value="">Select</option>
-                        </select>
-                      </td>
-                    </tr>
-                  </table>
+
                   <table style="width: 100%;">
                     <tr style="display: none;" id="others_uc">
                       <td>Write UC / Cantonment Name: </td>
-                      <td><input type="text" id="uc_text" required name="uc_text" value="" /> </td>
+                      <td><input class="form-control" type="text" id="uc_text" required name="uc_text" value="" /> </td>
                     </tr>
                     <tr>
-                      <td>Village/City Name:</td>
-                      <td> <input type="text" id="address" required name="address" value="" /> </td>
+                      <td class="required">Village/City Name:</td>
+                      <td> <input class="form-control" type="text" id="address" required name="address" value="" /> </td>
                     </tr>
 
                     <tr>
-                      <td>
+                      <td class="required">
                         Postal Address </td>
-                      <td><input type="text" id="postal_address" required name="postal_address" value="" /> </td>
+                      <td><input class="form-control" type="text" id="postal_address" required name="postal_address" value="" /> </td>
                     </tr>
 
-                    <tr>
-                      <td>Latitude:<br />
-                        <input style="width:100%" type="text" required placeholder="(Precision upto 6 decimal)" name="late" id="late" step="any" />
-                      </td>
-                      <td>longitude:<br />
-                        <input style="width:100%" type="text" required placeholder="(Precision upto 6 decimal)" name="longitude" id="long" step="any" />
-                      </td>
-                    </tr>
                   </table>
-                  <h4>Institute Owner Detail <small class="pull-right"><strong style="color:red; font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif;"> انسٹی ٹیوٹ کے مالک کی تفصیلات </strong></small></h4>
-                  <p style="text-align: center; color:red; font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif;">
+                  <br />
+                  <div style="border: 1px solid lightgray; padding:5px; border-radius:5px">
+                    <h6>GPS Coordinates of institute <small class="pull-right"> e.g (34.952621 , 72.331113) </small>
+                    </h6>
+                    <table style="width: 100%;">
+                      <tr>
+                        <td><strong class="required">Latitude:</strong><br />
+                          <input class="form-control" style="width:100%" type="text" required placeholder="e.g 34.952621" name="late" id="late" step="any" />
+                        </td>
+                        <td><strong class="required">longitude:</strong><br />
+                          <input class="form-control" style="width:100%" type="text" required placeholder="e.g 72.331113" name="longitude" id="long" step="any" />
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
 
-                    تفصیل وہی ہونی چاہیے جو اسٹامپ پیپر میں لکھی گئی ہو۔
+
+                </div>
+
+              </div>
+            </div>
+
+
+
+
+
+            <div class="col-md-4">
+              <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 600px;  margin: 5px; padding: 10px; background-color: white;">
+                <div class="box-body">
+
+                  <h4>Institute Owner Detail <span class="pull-right" style="text-align: center; font-size:9px; color:red;  font-family: 'Noto Nastaliq Urdu Draft', serif;">
+                      تفصیل وہی ہونی چاہیے جو اسٹامپ پیپر میں لکھی گئی ہو۔
+                    </span></h4>
+                  <p style="text-align: center; color:red;  font-family: 'Noto Nastaliq Urdu Draft', serif;">
 
                   </p>
                   <table class="table">
                     <tr>
-                      <td>Owner Name</td>
-                      <td><input type="text" required="required" name="userTitle" value="" id="userTitle" placeholder="Owner Name"></td>
+                      <td class="required">Owner Name</td>
+                      <td><input class="form-control" type="text" required="required" name="userTitle" value="" id="userTitle" placeholder="Owner Name"></td>
                     </tr>
                     <tr>
-                      <td>Owner Contact No.</td>
-                      <td><input type="text" required="required" name="contactNumber" value="" id="contactNumber" placeholder="Mobile No."></td>
+                      <td class="required">Owner Contact No.</td>
+                      <td><input class="form-control" type="text" required="required" name="contactNumber" value="" id="contactNumber" placeholder="Mobile No."></td>
                     </tr>
                     <tr>
-                      <td>Owner CNIC No.</td>
-                      <td><input type="text" required="required" name="cnic" value="" id="cnic" placeholder="CNIC No."></td>
+                      <td class="required">Owner CNIC No.</td>
+                      <td><input class="form-control" type="text" required="required" name="cnic" value="" id="cnic" placeholder="CNIC No."></td>
                     </tr>
                     <tr>
-                      <td>Owner Gender</td>
+                      <td class="required">Owner Gender</td>
                       <td>
                         <input type="radio" name="gender" value="1" required /> Male
                         <input type="radio" name="gender" value="2" required /> Female
@@ -233,228 +372,114 @@
                       </td>
                     </tr>
                     <tr>
-                      <td>Address</td>
+                      <td class="required">Address</td>
                       <td>
-                        <input type="text" name="owner_address" value="" required />
+                        <input class="form-control" type="text" name="owner_address" value="" required />
 
 
                       </td>
                     </tr>
                   </table>
-                </div>
+                  <div class="p_div">
+                    <h4>BISE Affiliation / Registration Details</h4>
 
-              </div>
-            </div>
-
-
-            <div class="col-md-4">
-              <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height:500px;  margin: 5px; padding: 10px; background-color: white;">
-                <div class="box-body">
-                  <h4>Institute Others Details</h4>
-                  <table class="table">
-                    <tr>
-                      <td colspan="2">
-                        <strong>Institute Locality</strong>
-                        <?php foreach ($locations as $location) { ?>
-                          <input name="location" type="radio" value="<?= $location->locationTitle; ?>" required />
-                          <?= $location->locationTitle; ?>
-                        <?php } ?>
-                      </td>
-                    </tr>
-                    <td colspan="2">
-                      <strong>Institute Gender Education</strong>
-                      <?php foreach ($gender_of_school as $gender) : ?>
-                        <input type="radio" name="gender_type_id" value="<?= $gender->genderOfSchoolId; ?>" required /> <?= $gender->genderOfSchoolTitle; ?>
-                      <?php endforeach; ?>
-                    </td>
-                    </tr>
-                    <tr>
-                      <td colspan="2">
-                        <strong>Institute Level (Current)</strong><br />
-
-                        <?php foreach ($level_of_institute as $item) : ?>
-                          <span style="margin-left: 10px;"></span>
-                          <input type="radio" name="level_of_school_id" value="<?= $item->levelofInstituteId; ?>" required />
-                          <?= $item->levelofInstituteTitle; ?>
-
-                        <?php endforeach; ?>
-
-                      </td>
-                    </tr>
-                    <tr>
-
-                      <td colspan="2">
-                        <strong> Institute Type:</strong><br />
-                        <?php foreach ($school_types as $school_type) : ?>
-                          <input <?php if ($school_type->typeId == 11) { ?> onclick="$('#school_type_other').show(); $('#ppcName').prop('required',false); $('#ppcCode').prop('required',false); $('#schoolTypeOther').prop('required',true); $('#ppc_school').hide();" <?php } ?> <?php if ($school_type->typeId == 2) { ?> onclick="$('#ppc_school').show(); $('#ppcName').prop('required',true); $('#ppcCode').prop('required',true); $('#schoolTypeOther').prop('required',false); $('#school_type_other').hide();" <?php } ?> <?php if ($school_type->typeId != 2 and $school_type->typeId != 11) { ?> onclick="$('#ppc_school').hide(); $('#ppcName').prop('required',false); $('#ppcCode').prop('required',false); $('#schoolTypeOther').prop('required',false); $('#school_type_other').hide()" <?php } ?> type="radio" name="school_type_id" value="<?= $school_type->typeId; ?>" required />
-                          <?php echo $school_type->typeTitle; ?>
-
-                          <?php if ($school_type->typeId == 2) { ?>
-                            <div id="ppc_school" style="margin-left: 10px; margin-right: 10px; margin-top: 5px; display: none;">
-
-                              <i>If the school is ppc then write the school name of gov school and EMIS code</i>
-                              <table>
-                                <tr>
-
-
-                                  <td> Name of School: <input type="text" placeholder="Enter name of the gov. School" name="ppcName" class="form-control" id="ppcName" value="" />
-                                  </td>
-                                  <td>
-                                    EMIS Code: <input type="text" placeholder="Enter EMIS Code" name="ppcCode" class="form-control" id="ppcCode" value="" />
-
-                                  </td>
-                                </tr>
-                              </table>
-                            </div>
-                          <?php } ?>
-
-
-                          <?php if ($school_type->typeId == 11) { ?>
-                            <div id="school_type_other" style="margin-left: 10px; margin-right: 10px; margin-top: 5px; display: none;">
-                              <input type="text" value="" name="schoolTypeOther" id="schoolTypeOther" />
-                            </div>
-                          <?php } ?>
-                          <br />
-                        <?php endforeach; ?>
-
-                      </td>
-                    </tr>
-
-
-
-                    <tr>
-                      <td colspan="2">
-                        <strong>Medium of Instruction</strong>
-                        <input type="radio" name="mediumOfInstruction" required value="Urdu"> Urdu
-                        <input type="radio" name="mediumOfInstruction" required value="English"> English
-
-                        <input type="radio" name="mediumOfInstruction" required value="Both"> Both
-
-                      </td>
-                    </tr>
-
-                    <tr>
-                      <td colspan="2">
-                        <strong> Institute Nature of Management: </strong><br />
-                        <input type="radio" name="management_id" value="1" required /> Individual
-                        <input type="radio" name="management_id" value="2" required /> Registered Body/Firm
-                        <input type="radio" name="management_id" value="3" required /> Association of Persons
-                        <input type="radio" name="management_id" value="4" required /> Trust
-
-
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-
-              </div>
-            </div>
-
-
-            <div class="col-md-4">
-              <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 586px;  margin: 5px; padding: 10px; background-color: white;">
-                <div class="box-body">
-
-
-                  <h4>BISE Affiliation / Registration Details</h4>
-
-                  <strong>Affiliated with BISE? </strong>
-                  <input onclick="$('#bise_affiliation').show(); $('.bise_id').prop('required', true); $('.biseRegister').prop('required', true); " type="radio" value="Yes" name="biseAffiliated" required /> Yes
-                  <input onclick="$('#bise_affiliation').hide(); $('.bise_id').prop('required', false); $('.biseRegister').prop('required', false); " type="radio" value="No" name="biseAffiliated" required /> No
-                  <div id="bise_affiliation" style="display: none;">
-                    <br />
-
-                    <strong> BISE Affiliation</strong>
-
-                    <br />
-                    <?php foreach ($bise_list as $bise) : ?>
-                      <input <?php if ($bise->biseName == 'Other') { ?> onclick="$('#BiseOther').show(); $('#otherBiseName').prop('required', true);" <?php } else { ?> onclick="$('#BiseOther').hide(); $('#otherBiseName').prop('required', false);" <?php } ?> type="radio" class="bise_id" name="bise_id" value="<?= $bise->biseId; ?>"><?= $bise->biseName; ?>
-                      <?php if ($bise->biseName == 'Other') { ?>
-
-                        <div id="BiseOther" style="margin-left: 13px; margin-right: 13px; display: none;">
-
-                          Other BISE Name
-
-
-                          <input type="text" placeholder="Enter Other BISE Name" name="otherBiseName" id="otherBiseName" /></td>
-
-                        </div>
-                      <?php  } ?>
+                    <strong>Affiliated with BISE? </strong>
+                    <input class="p_input" id="affiliated_yes" onclick="$('#bise_affiliation').show(); $('.bise_id').prop('required', true); $('.biseRegister').prop('required', true); " type="radio" value="Yes" name="biseAffiliated" required /> Yes
+                    <input class="p_input" id="affiliated_no" onclick="$('#bise_affiliation').hide(); $('.bise_id').prop('required', false); $('.biseRegister').prop('required', false); " type="radio" value="No" name="biseAffiliated" required /> No
+                    <div id="bise_affiliation" style="display: none;">
                       <br />
-                    <?php endforeach; ?>
-                    <h4>BISE Registration Details</h4>
-                    <strong>BISE Registered</strong>
-                    <input onclick="$('#bise_registration_date').show(); $('#biseregistrationNumber').prop('required', true);" type="radio" value="Yes" name="biseRegister" class="biseRegister" required /> Yes
-                    <input onclick="$('#bise_registration_date').hide(); $('#biseregistrationNumber').prop('required', false);" type="radio" value="No" name="biseRegister" class="biseRegister" required /> No
+
+                      <strong> BISE Affiliation</strong>
+
+                      <br />
+                      <?php foreach ($bise_list as $bise) : ?>
+                        <input <?php if ($bise->biseName == 'Other') { ?> onclick="$('#BiseOther').show(); $('#otherBiseName').prop('required', true);" <?php } else { ?> onclick="$('#BiseOther').hide(); $('#otherBiseName').prop('required', false);" <?php } ?> type="radio" class="bise_id" name="bise_id" value="<?= $bise->biseId; ?>"><?= $bise->biseName; ?>
+                        <?php if ($bise->biseName == 'Other') { ?>
+
+                          <div id="BiseOther" style="margin-left: 13px; margin-right: 13px; display: none;">
+
+                            Other BISE Name
 
 
-                    <div id="bise_registration_date" style="display: none;">
-                      <p>Write date of last registration as per your level of school.</p>
+                            <input type="text" placeholder="Enter Other BISE Name" name="otherBiseName" id="otherBiseName" /></td>
+
+                          </div>
+                        <?php  } ?>
+                        <br />
+                      <?php endforeach; ?>
+                      <h4>BISE Registration Details</h4>
+                      <strong>BISE Registered</strong>
+                      <input onclick="$('#bise_registration_date').show(); $('#biseregistrationNumber').prop('required', true);" type="radio" value="Yes" name="biseRegister" class="biseRegister" required /> Yes
+                      <input onclick="$('#bise_registration_date').hide(); $('#biseregistrationNumber').prop('required', false);" type="radio" value="No" name="biseRegister" class="biseRegister" required /> No
+
+
+                      <div id="bise_registration_date" style="display: none;">
+                        <p>Write date of last registration as per your level of school.</p>
+                        <table class="table table-bordered">
+                          <tr>
+                            <td>Registration No.</td>
+                            <td> <input type="text" placeholder="Registration Number" name="biseregistrationNumber" id="biseregistrationNumber" />
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <td>Primary:</td>
+                            <td> <input type="date" id="primaryRegDate" name="primaryRegDate" /> </td>
+                          </tr>
+                          <tr>
+                            <td>Middle:</td>
+                            <td> <input type="date" id="middleRegDate" name="middleRegDate" /> </td>
+                          </tr>
+                          <tr>
+                            <td>High:</td>
+                            <td> <input type="date" id="highRegDate" name="highRegDate" /> </td>
+                          </tr>
+                          <tr>
+                            <td>H.Secy/Inter College:</td>
+                            <td> <input type="date" id="interRegDate" name="interRegDate" /> </td>
+                          </tr>
+                        </table>
+                      </div>
+
+                    </div>
+                    <h4>Institute Bank Detail </h4>
+                    <strong>Bank Account: </strong>
+                    <input class="p_input" id="bise_yes" required onclick="$('#bank_detail').show(); $('.bankDetail').prop('required', true);" type="radio" name="banka_acount_details" value="Yes" /> Yes
+                    <input class="p_input" id="bise_no" required onclick="$('#bank_detail').hide(); $('.bankDetail').prop('required', false);" type="radio" name="banka_acount_details" value="Yes" /> No
+                    <div id="bank_detail" style="display: none;">
+                      <br />
+                      <br />
                       <table class="table table-bordered">
                         <tr>
-                          <td>Registration No.</td>
-                          <td> <input type="text" placeholder="Registration Number" name="biseregistrationNumber" id="biseregistrationNumber" />
+                          <td>Account Type:</td>
+                          <td>
+                            <input type="radio" class="bankDetail" name="accountTitle" value="Individual" class="flat-red" checked="checked"> Individual
+                            <input type="radio" class="bankDetail" name="accountTitle" value="Designated" class="flat-red"> Designated
+                            <input type="radio" class="bankDetail" name="accountTitle" value="Joint" class="flat-red"> Joint
                           </td>
                         </tr>
+                        <tr>
+                          <td>Bank Account No:</td>
+                          <td> <input class="bankDetail" type="text" placeholder="Institution Bank Account No" name="bankAccountNumber" id="BankAccountNumber" /></td>
+                        </tr>
+                        <tr>
+                          <td>Bank Title:</td>
+                          <td> <input class="bankDetail" type="text" placeholder="Institution Bank Account No" name="bankAccountName" id="bankAccountName" /></td>
+                        </tr>
+                        <tr>
+                          <td>Bank Branch Code:</td>
+                          <td> <input class="bankDetail" type="text" name="bankBranchCode" placeholder="Enter Bank Branch Address" id="bankBranchCode" /></td>
+                        </tr>
+                        <tr>
+                          <td>Bank Branch Address:</td>
+                          <td> <input class="bankDetail" type="text" name="bankBranchAddress" placeholder="Enter Bank Branch Address" id="BankBranchAddress" /></td>
+                        </tr>
 
-                        <tr>
-                          <td>Primary:</td>
-                          <td> <input type="date" id="primaryRegDate" name="primaryRegDate" /> </td>
-                        </tr>
-                        <tr>
-                          <td>Middle:</td>
-                          <td> <input type="date" id="middleRegDate" name="middleRegDate" /> </td>
-                        </tr>
-                        <tr>
-                          <td>High:</td>
-                          <td> <input type="date" id="highRegDate" name="highRegDate" /> </td>
-                        </tr>
-                        <tr>
-                          <td>H.Secy/Inter College:</td>
-                          <td> <input type="date" id="interRegDate" name="interRegDate" /> </td>
-                        </tr>
+
+
                       </table>
+
                     </div>
-
-                  </div>
-                  <h4>Institute Bank Detail </h4>
-                  <strong>Bank Account: </strong>
-                  <input required onclick="$('#bank_detail').show(); $('.bankDetail').prop('required', true);" type="radio" name="banka_acount_details" value="Yes" /> Yes
-                  <input required onclick="$('#bank_detail').hide(); $('.bankDetail').prop('required', false);" type="radio" name="banka_acount_details" value="Yes" /> No
-                  <div id="bank_detail" style="display: none;">
-                    <br />
-                    <br />
-                    <table class="table table-bordered">
-                      <tr>
-                        <td>Account Type:</td>
-                        <td>
-                          <input type="radio" class="bankDetail" name="accountTitle" value="Individual" class="flat-red" checked="checked"> Individual
-                          <input type="radio" class="bankDetail" name="accountTitle" value="Designated" class="flat-red"> Designated
-                          <input type="radio" class="bankDetail" name="accountTitle" value="Joint" class="flat-red"> Joint
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Bank Account No:</td>
-                        <td> <input class="bankDetail" type="text" placeholder="Institution Bank Account No" name="bankAccountNumber" id="BankAccountNumber" /></td>
-                      </tr>
-                      <tr>
-                        <td>Bank Title:</td>
-                        <td> <input class="bankDetail" type="text" placeholder="Institution Bank Account No" name="bankAccountName" id="bankAccountName" /></td>
-                      </tr>
-                      <tr>
-                        <td>Bank Branch Code:</td>
-                        <td> <input class="bankDetail" type="text" name="bankBranchCode" placeholder="Enter Bank Branch Address" id="bankBranchCode" /></td>
-                      </tr>
-                      <tr>
-                        <td>Bank Branch Address:</td>
-                        <td> <input class="bankDetail" type="text" name="bankBranchAddress" placeholder="Enter Bank Branch Address" id="BankBranchAddress" /></td>
-                      </tr>
-
-
-
-                    </table>
-
-
                   </div>
 
 
@@ -496,10 +521,10 @@
 
     <script>
       $(document).ready(function() {
-        $('#telePhoneNumber').inputmask('(9999)-9999999');
+        $('#telePhoneNumber').inputmask('99999999999');
         $('#cnic').inputmask('99999-9999999-9');
         $('#contactNumber').inputmask('(9999)-9999999');
-        $('#telePhoneNumber').inputmask('(9999)-9999999');
+        //$('#telePhoneNumber').inputmask('(9999)-9999999');
         $('#schoolMobileNumber').inputmask('(9999)-9999999');
 
         $('#late').inputmask('99.9999999');

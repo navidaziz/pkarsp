@@ -131,12 +131,12 @@
         </div>
         <div class="col-lg-6">
             <div class="block_div">
-                <h1>Search School By School ID</h1>
+                <h1>Search School By Institute ID</h1>
                 <table class="table">
                     <td>
                         <strong>Search By</strong>
                         <span style="margin-left: 15px;"></span>
-                        <input type="radio" name="search_type" class="search_type" value="school_id" checked /> School ID
+                        <input type="radio" name="search_type" class="search_type" value="school_id" checked /> Institute ID
                     </td>
                     <td>
 
