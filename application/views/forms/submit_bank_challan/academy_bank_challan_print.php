@@ -210,7 +210,7 @@
                   <?php
                   $count = 1;
 
-
+                  var_dump($session_fee_submission_dates);
 
                   foreach ($session_fee_submission_dates as $session_fee_submission_date) { ?>
 
