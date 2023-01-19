@@ -124,7 +124,7 @@
                         <th><?php echo $s_no++; ?></th>
                         <th style="width: 210px;">
 
-                          <?php if ($count == 1) { ?> <strong> 01 Apr, <?php echo date('Y', strtotime($session_fee_submission_date->last_date)); ?></strong> to <?php } else { ?>
+                          <?php if ($count == 1) { ?> <strong> 01 January, <?php echo date('Y', strtotime($session_fee_submission_date->last_date)); ?></strong> to <?php } else { ?>
                             <?php if ($count >= sizeof($session_fee_submission_dates)) { ?>
                               After
                             <?php } else { ?>
