@@ -986,29 +986,47 @@ class Form extends Admin_Controller
 	public function add_bank_challan()
 	{
 
-		$session_id = (int) $this->input->post('session_id');
-		$userId = $this->session->userdata('userId');
+		// $session_id = (int) $this->input->post('session_id');
+		// $userId = $this->session->userdata('userId');
+
+		// $schools_id = (int) $this->input->post('schools_id');
+		// $school_id = (int) $this->input->post('school_id');
+
+		// $challan_detail['challan_for'] = $this->input->post('challan_for');
+		// $challan_detail['challan_no'] = $this->input->post('challan_no');
+		// $challan_detail['challan_date'] = $this->input->post('challan_date');
+		// $challan_detail['session_id'] = $session_id;
+		// $challan_detail['schools_id'] = $schools_id;
+		// $challan_detail['school_id'] = $school_id;
+		// $challan_detail['created_by'] = $userId;
+		// if ($this->input->post('challan_for') == 'Deficiency') {
+		// 	$challan_detail['deficiency_id'] = $this->input->post('deficiency_id');
+		// 	$challan_detail['last_status'] = $this->input->post('last_status');
+		// }
+
+		// $this->db->insert('bank_challans', $challan_detail);
+		// $this->db->where('schoolId', $school_id);
+		// $input['status'] = 2;
+		// $this->db->update('school', $input);
+
 
 		$schools_id = (int) $this->input->post('schools_id');
 		$school_id = (int) $this->input->post('school_id');
 
-		$challan_detail['challan_for'] = $this->input->post('challan_for');
-		$challan_detail['challan_no'] = $this->input->post('challan_no');
-		$challan_detail['challan_date'] = $this->input->post('challan_date');
-		$challan_detail['session_id'] = $session_id;
-		$challan_detail['schools_id'] = $schools_id;
-		$challan_detail['school_id'] = $school_id;
-		$challan_detail['created_by'] = $userId;
-		if ($this->input->post('challan_for') == 'Deficiency') {
-			$challan_detail['deficiency_id'] = $this->input->post('deficiency_id');
-			$challan_detail['last_status'] = $this->input->post('last_status');
+		$query = "SELECT owner_id FROM schools WHERE schoolId = '" . $schools_id . "'";
+		$owner_id = $this->db->query($query)->result()[0]->owner_id;
+		$userId = $this->session->userdata('userId');
+		if ($owner_id == $userId) {
+			$date = date('Y-m-d H:i:s');
+			$query = "UPDATE school set status = '2', file_status='1', apply_date ='" . $date . "', updatedDate ='" . $date . "' WHERE schoolId = '" . $school_id . "' and schools_id = '" . $schools_id . "'";
+			if ($this->db->query($query)) {
+				$this->session->set_flashdata('msg_success', 'online application request submitted.');
+			} else {
+				$this->session->set_flashdata('msg_error', "Something's wrong, Please try again.");
+			}
+		} else {
+			$this->session->set_flashdata('msg_error', "You are not allowed to submit the application.");
 		}
-
-		$this->db->insert('bank_challans', $challan_detail);
-		$this->db->where('schoolId', $school_id);
-		$input['status'] = 2;
-		$this->db->update('school', $input);
-		$this->session->set_flashdata('msg_success', 'Bank Challan Submit Successfully.');
 		redirect("form/submit_bank_challan/$school_id");
 	}
 
