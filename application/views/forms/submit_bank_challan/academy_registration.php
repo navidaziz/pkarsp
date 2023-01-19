@@ -261,7 +261,7 @@
                           </tr>
                           <?php
                           $count = 1;
-                          var_dump($session_fee_submission_dates);
+                          //var_dump($session_fee_submission_dates);
                           foreach ($session_fee_submission_dates as $session_fee_submission_date) { ?>
 
                             <tr>
@@ -279,7 +279,11 @@
                                   <?php
                                   $previous_last_date = date('d M, Y', strtotime($session_fee_submission_date->last_date . ' +1 day'));
                                   if ($count >= sizeof($session_fee_submission_dates)) {
-                                    echo date('d M, Y', strtotime($session_fee_submission_date->last_date . '-1 day'));
+                                    if ($count == 1) {
+                                      echo date('d M, Y', strtotime($session_fee_submission_date->last_date));
+                                    } else {
+                                      echo date('d M, Y', strtotime($session_fee_submission_date->last_date . '-1 day'));
+                                    }
                                   } else {
 
                                     echo date('d M, Y', strtotime($session_fee_submission_date->last_date));
