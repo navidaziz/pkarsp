@@ -210,33 +210,34 @@
                   <?php
                   $count = 1;
 
-                  var_dump($session_fee_submission_dates);
+
 
                   foreach ($session_fee_submission_dates as $session_fee_submission_date) { ?>
 
                     <tr>
 
                       <th style="width: 210px;">
-
-                        <?php if ($count == 1) { ?> <strong> 01 Jan, <?php echo date('Y', strtotime($session_fee_submission_date->last_date)); ?></strong> to <?php } else { ?>
-                          <?php if ($count >= sizeof($session_fee_submission_dates)) { ?>
-                            After
-                          <?php } else { ?>
-                            <strong> <?php echo date('d M, Y', strtotime($previous_last_date)); ?> </strong> to
+                        <p style="display: none;">
+                          <?php if ($count == 1) { ?> <strong> 01 Jan, <?php echo date('Y', strtotime($session_fee_submission_date->last_date)); ?></strong> to <?php } else { ?>
+                            <?php if ($count >= sizeof($session_fee_submission_dates)) { ?>
+                              After
+                            <?php } else { ?>
+                              <strong> <?php echo date('d M, Y', strtotime($previous_last_date)); ?> </strong> to
+                            <?php } ?>
                           <?php } ?>
-                        <?php } ?>
-                        <strong>
-                          <?php
-                          $previous_last_date = date('d M, Y', strtotime($session_fee_submission_date->last_date . ' +1 day'));
-                          if ($count >= sizeof($session_fee_submission_dates)) {
-                            echo date('d M, Y', strtotime($session_fee_submission_date->last_date . '-1 day'));
-                          } else {
+                          <strong>
+                            <?php
+                            $previous_last_date = date('d M, Y', strtotime($session_fee_submission_date->last_date . ' +1 day'));
+                            if ($count >= sizeof($session_fee_submission_dates)) {
+                              echo date('d M, Y', strtotime($session_fee_submission_date->last_date . '-1 day'));
+                            } else {
 
-                            echo date('d M, Y', strtotime($session_fee_submission_date->last_date));
-                          }
-                          $count++;
-                          ?>
-                        </strong>
+                              echo date('d M, Y', strtotime($session_fee_submission_date->last_date));
+                            }
+                            $count++;
+                            ?>
+                          </strong>
+                        </p>
                       </th>
 
 
