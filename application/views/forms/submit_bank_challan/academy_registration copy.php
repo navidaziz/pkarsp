@@ -73,12 +73,9 @@
               <div class="col-md-6" style="padding-right: 1px;  padding-left: 10px;">
 
                 <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 500px;  margin: 5px; padding: 5px; background-color: white;">
-                  <h5>
-                    <i class="fa fa-info-circle" aria-hidden="true"></i> How system calculate
-                    <strong>
-                      <i>"Deposit Fee Challan" ?</i>
-                    </strong>
-                  </h5>
+                  <h4>
+                    <i class="fa fa-info-circle" aria-hidden="true"></i> How system calculate <i>"Deposit Fee Challan" ?</i>
+                  </h4>
                   <ol>
                     <li>According to the data you have entered, your institute was established in <strong><?php echo date('M Y', strtotime($school->yearOfEstiblishment)); ?></strong>.
                       For session <strong><?php echo $session_detail->sessionYearTitle; ?></strong> your institute
@@ -115,49 +112,52 @@
                   <table class="table table-bordered">
 
                     <tr>
-                      <th>#</th>
+                      <th>S.No.</th>
                       <th>Last Date</th>
                       <th>Fines</th>
                     </tr>
                     <?php
                     $count = 1;
                     $s_no = 1;
-
-                    if ($session_fee_submission_dates) {
-                      foreach ($session_fee_submission_dates as $session_fee_submission_date) { ?>
-                        <tr>
-                          <th><?php echo $s_no++; ?></th>
-                          <td>
-                            <strong>
-                              <?php echo date('d M, Y', strtotime($session_fee_submission_date->start_date)); ?>
-                            </strong>
-                            <span style="margin-left: 5px; margin-right:5px"> to </span>
-                            <strong>
-                              <?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?>
-                            </strong>
-
-                          </td>
-                          <td>
-                            <?php
-                            if ($session_fee_submission_date->fine_percentage != 'fine') {
-                              if ($session_fee_submission_date->fine_percentage) {
-                            ?>
-                                <?php echo $session_fee_submission_date->fine_percentage; ?> %
-                              <?php
-                              } else {
-                                echo "<small>Normal Fee</small>";
-                              }
-                            } else { ?>
-                              <?php echo $session_fee_submission_date->detail; ?>
-                            <?php } ?>
-                          </td>
-                        </tr>
-                      <?php } ?>
-                    <?php } else { ?>
+                    foreach ($session_fee_submission_dates as $session_fee_submission_date) { ?>
                       <tr>
-                        <td colspan="3" style="text-align: center;">Not yet defined</td>
+                        <th><?php echo $s_no++; ?></th>
+                        <th style="width: 210px;">
+                          <p style="disp lay: none;">
+                            <?php if ($count == 1) { ?> <strong> 01 Jan, <?php echo date('Y', strtotime($session_fee_submission_date->last_date)); ?></strong> to <?php } else { ?>
+                              <?php if ($count >= sizeof($session_fee_submission_dates)) { ?>
+                                After
+                              <?php } else { ?>
+                                <strong> <?php echo date('d M, Y', strtotime($previous_last_date)); ?> </strong> to
+                              <?php } ?>
+                            <?php } ?>
+                            <strong>
+                              <?php
+                              $previous_last_date = date('d M, Y', strtotime($session_fee_submission_date->last_date . ' +1 day'));
+                              if ($count >= sizeof($session_fee_submission_dates)) {
+                                echo date('d M, Y', strtotime($session_fee_submission_date->last_date . '-1 day'));
+                              } else {
+
+                                echo date('d M, Y', strtotime($session_fee_submission_date->last_date));
+                              }
+                              $count++;
+                              ?>
+                            </strong>
+                          </p>
+                        </th>
+                        <td>
+                          <?php
+                          if ($session_fee_submission_date->fine_percentage != 'fine') { ?>
+                            <?php echo $session_fee_submission_date->fine_percentage; ?> %
+                          <?php } else { ?>
+                            <?php echo $session_fee_submission_date->detail; ?>
+                          <?php } ?>
+                        </td>
                       </tr>
-                    <?php } ?>
+                    <?php }
+                    ?>
+
+
                   </table>
 
                 </div>
@@ -251,42 +251,56 @@
                             text-align: center;
                           }
                         </style>
-                        <table class="table table_reg table-bordered">
+                        <table class="table table_reg">
                           <tr>
                             <th> Due's Date </th>
                             <th> Late Fee % </th>
                             <th> Late Fee </th>
-                            <th> Registration Fee </th>
+                            <th> Session <?php echo $session_detail->sessionYearTitle; ?> Registration Fee </th>
                             <th>Security</th>
                             <th>Total</th>
                           </tr>
                           <?php
                           $count = 1;
-                          if (!$session_fee_submission_dates) {
-                            $session_fee_submission_dates[0] = new stdClass();
-                          }
                           //var_dump($session_fee_submission_dates);
-
                           foreach ($session_fee_submission_dates as $session_fee_submission_date) { ?>
 
                             <tr>
-                              <td>
-                                <?php if ($session_fee_submission_date->start_date) { ?>
+
+                              <th style="width: 210px;">
+                                <p style="disp lay: none;">
+                                  <?php if ($count == 1) { ?> <strong> 01 Jan, <?php echo date('Y', strtotime($session_fee_submission_date->last_date)); ?></strong> to <?php } else { ?>
+                                    <?php if ($count >= sizeof($session_fee_submission_dates)) { ?>
+                                      After
+                                    <?php } else { ?>
+                                      <strong> <?php echo date('d M, Y', strtotime($previous_last_date)); ?> </strong> to
+                                    <?php } ?>
+                                  <?php } ?>
                                   <strong>
-                                    <?php echo date('d M, Y', strtotime($session_fee_submission_date->start_date)); ?>
+                                    <?php
+                                    $previous_last_date = date('d M, Y', strtotime($session_fee_submission_date->last_date . ' +1 day'));
+                                    if ($count >= sizeof($session_fee_submission_dates)) {
+                                      if ($count == 1) {
+                                        echo date('d M, Y', strtotime($session_fee_submission_date->last_date));
+                                      } else {
+                                        echo date('d M, Y', strtotime($session_fee_submission_date->last_date . '-1 day'));
+                                      }
+                                    } else {
+
+                                      echo date('d M, Y', strtotime($session_fee_submission_date->last_date));
+                                    }
+                                    $count++;
+                                    ?>
                                   </strong>
-                                <?php } ?>
-                                <?php if ($session_fee_submission_date->last_date) { ?>
-                                  <span style="margin-left: 5px; margin-right:5px"> to </span>
-                                  <strong>
-                                    <?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?>
-                                  </strong>
-                                <?php } ?>
-                              </td>
+                                </p>
+                              </th>
+
+
                               <?php if ($session_fee_submission_date->fine_percentage == 0) { ?>
                                 <td colspan="2"> <strong> Normal Fee </strong></td>
                               <?php } else { ?>
                                 <td>
+
                                   <?php echo $session_fee_submission_date->fine_percentage; ?> %</td>
                                 <td>
                                   <?php
@@ -294,6 +308,7 @@
                                   $fine = ($session_fee_submission_date->fine_percentage * $total) / 100;
                                   echo number_format($fine);
                                   ?>
+
                                 </td>
                               <?php } ?>
                               <td>
@@ -301,13 +316,18 @@
                               </td>
                               <td>
                                 <?php $security = ($security);
+
                                 echo number_format($security);
                                 ?>
 
                               </td>
+                              <?php if ($session_id == 1) { ?>
+                                <td></td>
+                              <?php } ?>
                               <td>
                                 <strong>
                                   <?php echo number_format($fine + $total + $security); ?>
+
                                 </strong>
                               </td>
 

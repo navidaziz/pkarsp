@@ -108,7 +108,7 @@ function get_session_request_status($status)
       return "Data Entery In Progress";
       break;
     case 2:
-      return "Bank Challan Verification In Progress";
+      return "Application In Progress";
       break;
     case 3:
       return "Data Verification";
@@ -123,7 +123,6 @@ function get_session_request_status($status)
       return "Inspection Completed";
       break;
     case 6:
-
       return "Decision Pending";
       break;
     case 7:

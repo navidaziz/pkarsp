@@ -61,6 +61,7 @@ class School_dashboard extends Admin_Controller
 		`management`.`managementTitle`,
 		`schools`.`level_of_school_id`,
 		`levelofinstitute`.`levelofInstituteTitle`,
+		`schools`.`school_type_id`,
 		`schools`.`schoolMobileNumber`
 	  FROM
 		`schools` 

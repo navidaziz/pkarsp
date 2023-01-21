@@ -432,13 +432,18 @@
                                 <h4>Your Application for <?php echo $upgradation_and_renewal->regTypeTitle; ?> <?php echo $session->sessionYearTitle; ?> is In Progress </h4>
 
 
-                                <a class="btn btn-outline-primary" style="width: 100%;" href="<?php echo site_url("online_application/status/$upgradation_and_renewal->school_id"); ?>">
+                                <div class="btn btn-outline-primary" style="width: 100%;">
                                   <i class="fa fa-spinner" aria-hidden="true"></i> &#160;
+
                                   <?php echo get_session_request_status($upgradation_and_renewal->status); ?> &#160;&#160;&#160;&#160;
-                                  <span class="btn btn-primary">
+
+                                  <a target="_blank" class="btn btn-link" href="<?php echo site_url("print_file/school_session_detail/" . $upgradation_and_renewal->school_id); ?>">
+                                    Print Data
+                                  </a>
+                                  <a href="<?php echo site_url("online_application/status/$upgradation_and_renewal->school_id"); ?>" class="btn btn-primary">
                                     See Detail
-                                  </span>
-                                </a>
+                                  </a>
+                                </div>
 
                               </td>
                             </tr>
@@ -477,11 +482,16 @@
                               Apply For <?php echo $session->sessionYearTitle; ?>
                               <?php if ($apply > 0) { ?>
                                 <a class="btn btn-success" style="margin: 1px;" href="<?php echo site_url("apply/renewal/$session->sessionYearId"); ?>"> Renewal </a>
-                                <a class="btn btn-warning" style="margin: 1px;" href="<?php echo site_url("apply/renewal_upgradation/$session->sessionYearId"); ?>">Upgradation + Renewal</a>
+                                <?php
+                                // var_dump($school);
+                                if ($school->school_type_id != 7) { ?>
+                                  <a class="btn btn-warning" style="margin: 1px;" href="<?php echo site_url("apply/renewal_upgradation/$session->sessionYearId"); ?>">Upgradation + Renewal</a>
+                                <?php } ?>
                               <?php } else { ?>
                                 <a class="btn btn-success" style="margin: 1px; background-color: #E6E6E6; border-color: #D6D6D6" data-toggle="tooltip" data-placement="top" title="" href=" # " data-original-title="Please apply and complete previous session data entry."> Renewal </a>
-                                <a class="btn btn-warning" style="margin: 1px; background-color: #E6E6E6; border-color: #D6D6D6" data-toggle="tooltip" data-placement="top" title="" href=" # " data-original-title="Please apply and complete previous session data entry.">Upgradation + Renewal</a>
-
+                                <?php if ($school->school_type_id != 7) { ?>
+                                  <a class="btn btn-warning" style="margin: 1px; background-color: #E6E6E6; border-color: #D6D6D6" data-toggle="tooltip" data-placement="top" title="" href=" # " data-original-title="Please apply and complete previous session data entry.">Upgradation + Renewal</a>
+                                <?php } ?>
                               <?php  } ?>
                             </p>
                           <?php } else { ?>
@@ -619,13 +629,17 @@
                       <h4>Your Application for Registration <?php echo $session->sessionYearTitle; ?> is In Progress </h4>
 
 
-                      <a class="btn btn-outline-primary" href="<?php echo site_url("online_application/status/$session_school_id"); ?>">
+                      <div class="btn btn-outline-primary" style="width: 100%; padding:10px">
                         <i class="fa fa-spinner" aria-hidden="true"></i> &#160;
                         <?php echo get_session_request_status($registration[0]->status); ?> &#160;&#160;&#160;&#160;
-                        <span class="btn btn-primary">
+                        <a target="_blank" class="btn btn-link" href="<?php echo site_url("print_file/school_session_detail/" . $session_school_id); ?>">
+                          Print Data
+                        </a>
+                        <a class="btn btn-primary" href="<?php echo site_url("online_application/status/$session_school_id"); ?>">
                           See Detail
-                        </span>
-                      </a>
+                        </a>
+
+                      </div>
                     <?php } ?>
                   <?php } else { ?>
                     <?php if ($school_type_id == 7) { ?>
@@ -655,7 +669,7 @@
 
 
             </div>
-            <?php if (1 == 1) { ?>
+            <?php if (1 == 2) { ?>
               <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
                 <h4>Other Online Requests</h4>
                 <a class="btn btn-primary" href="<?php echo site_url('change/of_name'); ?>">

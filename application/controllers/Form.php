@@ -907,6 +907,9 @@ class Form extends Admin_Controller
 			if ($this->data['school']->reg_type_id == 1) {
 				$this->data['view'] = 'forms/submit_bank_challan/academy_registration';
 			}
+			if ($this->data['school']->reg_type_id == 2) {
+				$this->data['view'] = 'forms/submit_bank_challan/academy_renewal';
+			}
 		}
 
 		$this->load->view('layout', $this->data);
@@ -1092,7 +1095,7 @@ class Form extends Admin_Controller
 
 		$query = "SELECT * FROM `session_fee_submission_dates` WHERE session_id = '" . $session_id . "'
 		AND school_type_id = '" . $school->school_type_id . "' 
-	ORDER BY (last_date) ASC
+		ORDER BY (last_date) ASC
 		";
 		$this->data['session_fee_submission_dates'] = $this->db->query($query)->result();
 
@@ -1113,6 +1116,54 @@ class Form extends Admin_Controller
 		$this->data['title'] = "Registration";
 		$this->data['description'] = '';
 		$this->load->view('forms/submit_bank_challan/academy_bank_challan_print', $this->data);
+	}
+
+	public function academy_renewal_challan_print($school_session_id)
+	{
+
+
+		$this->check_school_session_entry($school_session_id);
+
+		$userId = $this->session->userdata('userId');
+		$this->data['school'] = $school = $this->school_detail($school_session_id);
+		$this->data['school_id'] =  $school_id = $school->school_id;
+		$this->data['schools_id'] =  $school->schools_id;
+		$this->data['session_id']  = $session_id = $school->session_id;
+
+		$this->data['session_detail'] = $this->get_session_detail($session_id);
+		$this->data['form_status'] = $this->get_form_status($school_id);
+
+
+
+		$query = "SELECT session_id, last_date, fine_percentage FROM `session_fee_submission_dates` 
+		               WHERE session_id= $session_id AND last_date >='" . date('Y-m-d') . "' 
+					   AND school_type_id = '" . $school->school_type_id . "'
+					   ORDER BY last_date ASC LIMIT 1";
+		$this->data['late_fee'] = $this->db->query($query)->result()[0];
+
+		$query = "SELECT * FROM `session_fee_submission_dates` WHERE session_id = '" . $session_id . "'
+		AND school_type_id = '" . $school->school_type_id . "' 
+		ORDER BY (last_date) ASC
+		";
+		$this->data['session_fee_submission_dates'] = $this->db->query($query)->result();
+
+		$query = "SELECT max(CONVERT(tuitionFee, SIGNED INTEGER)) as max_tution_fee  FROM `fee` WHERE school_id= '" . $school_id . "'";
+		$this->data['max_tuition_fee'] = $max_tuition_fee = preg_replace(
+			'/[^0-9.]/',
+			'',
+			$this->db->query($query)->result()[0]->max_tution_fee
+		);
+
+		$query = "SELECT * FROM `fee_structure` WHERE fee_min <= '" . $max_tuition_fee . "' 
+		AND school_type_id = '" . $school->school_type_id . "'
+		ORDER BY fee_min DESC LIMIT 1";
+		$this->data['fee_sturucture'] = $this->db->query($query)->result()[0];
+
+
+
+		$this->data['title'] = "Registration";
+		$this->data['description'] = '';
+		$this->load->view('forms/submit_bank_challan/academy_renewal_challan_print', $this->data);
 	}
 
 	public function update_test_date()

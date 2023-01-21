@@ -203,7 +203,6 @@
                     <th> Late Fee % </th>
                     <th> Late Fee </th>
                     <th> Session <?php echo $session_detail->sessionYearTitle; ?> Registration Fee </th>
-                    <th>Security</th>
                     <th>Total</th>
                   </tr>
                   <?php $security = $fee_sturucture->security; ?>
@@ -247,7 +246,6 @@
                         <td colspan="2"> <strong> Normal Fee </strong></td>
                       <?php } else { ?>
                         <td>
-
                           <?php echo $session_fee_submission_date->fine_percentage; ?> %</td>
                         <td>
                           <?php
@@ -255,27 +253,13 @@
                           $fine = ($session_fee_submission_date->fine_percentage * $total) / 100;
                           echo number_format($fine);
                           ?>
-
                         </td>
                       <?php } ?>
                       <td>
                         <?php echo number_format($fine + $total);  ?>
                       </td>
                       <td>
-                        <?php $security = ($security);
-
-                        echo number_format($security);
-                        ?>
-
-                      </td>
-                      <?php if ($session_id == 1) { ?>
-                        <td></td>
-                      <?php } ?>
-                      <td>
-                        <strong>
-                          <?php echo number_format($fine + $total + $security); ?>
-
-                        </strong>
+                        <strong><?php echo number_format($fine + $total); ?></strong>
                       </td>
 
                     </tr>

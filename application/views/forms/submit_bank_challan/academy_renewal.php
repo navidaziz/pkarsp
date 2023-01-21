@@ -92,11 +92,7 @@
                         <li> Application Processing Fee: <strong><?php echo $fee_sturucture->renewal_app_processsing_fee; ?> Rs. </strong></li>
                         <li> Inspection Fee: <strong><?php echo $fee_sturucture->renewal_app_inspection_fee; ?> Rs.</strong></li>
                         <li>Annual Renewal Fee: <strong><?php echo $fee_sturucture->renewal_fee; ?> Rs.</strong></li>
-                        <li> Security Fee (1st Time Registration)
-                          <ol style="list-style: none;">
-                            <li><strong><?php echo $security = $fee_sturucture->security; ?> Rs.</strong> (Refundable)</li>
-                          </ol>
-                        </li>
+
 
                     </li>
 
@@ -200,7 +196,7 @@
 
             <div class="col-md-6" style="padding-right: 10px;  padding-left: 1px;">
               <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 500px;  margin: 5px; padding: 5px; background-color: white;">
-                <h4>Session: <?php echo $session_detail->sessionYearTitle; ?> Registration Fee Detail</h4>
+                <h4>Session: <?php echo $session_detail->sessionYearTitle; ?> Renewal Fee Detail</h4>
                 <table class="table" style="font-size: 13px;">
                   <thead>
                     <tr>
@@ -257,7 +253,6 @@
                             <th> Late Fee % </th>
                             <th> Late Fee </th>
                             <th> Registration Fee </th>
-                            <th>Security</th>
                             <th>Total</th>
                           </tr>
                           <?php
@@ -299,15 +294,10 @@
                               <td>
                                 <?php echo number_format($fine + $total);  ?>
                               </td>
-                              <td>
-                                <?php $security = ($security);
-                                echo number_format($security);
-                                ?>
 
-                              </td>
                               <td>
                                 <strong>
-                                  <?php echo number_format($fine + $total + $security); ?>
+                                  <?php echo number_format($fine + $total); ?>
                                 </strong>
                               </td>
 
@@ -325,7 +315,7 @@
 
                     <tr>
                       <td colspan="2" style="text-align:center;">
-                        <a target="new" class="btn btn-primary" href="<?php echo site_url("form/academy_bank_challan_print/$school_id") ?>"> <i class="fa fa-print" aria-hidden="true"></i> Print PSRA Deposit Slip / Bank Challan</a>
+                        <a target="new" class="btn btn-primary" href="<?php echo site_url("form/academy_renewal_challan_print/$school_id") ?>"> <i class="fa fa-print" aria-hidden="true"></i> Print PSRA Deposit Slip / Bank Challan</a>
                       </td>
                     </tr>
                   </tbody>

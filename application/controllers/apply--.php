@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Apply extends MY_Controller
+class Apply extends Admin_Controller
 {
 	public function __construct()
 	{
