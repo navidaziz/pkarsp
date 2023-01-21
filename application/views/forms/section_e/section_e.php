@@ -121,7 +121,7 @@
                           ON (`school`.`session_year_id` = `session_year`.`sessionYearId`)
                           WHERE `session_year`.`sessionYearId`<= $session_id
                           AND  `school`.`schools_id` = '" . $school->schools_id . "'
-                          ORDER BY `session_year`.`sessionYearId` DESC LIMIT 3";
+                          ORDER BY `session_year`.`sessionYearId` DESC LIMIT 1";
                   $sessions =  $this->db->query($query)->result();
 
                   asort($sessions);
@@ -229,25 +229,26 @@
 
 
               </table>
+              <?php if ($form_complete) { ?>
+                <div class="col-sm-12">
 
-              <div class="col-sm-12">
-                <?php
-                $query = "SELECT * FROM `fee_mentioned_in_form_or_prospectus` WHERE school_id = '" . $school_id . "'";
-                $fee_mention = $this->db->query($query)->result()[0];
+                  <?php
+                  $query = "SELECT * FROM `fee_mentioned_in_form_or_prospectus` WHERE school_id = '" . $school_id . "'";
+                  $fee_mention = $this->db->query($query)->result()[0];
 
-                ?>
-                <form method="post" action="<?php echo site_url("form/complete_section_e/"); ?>">
-                  <input type="hidden" value="<?php echo $school_id; ?>" name="school_id" />
-                  <input type="hidden" value="<?php echo $fee_mention->feeMentionedInFormId; ?>" name="feeMentionedInFormId" />
-                  Whether the above fees are mentioned in the prospectus/admission form ? <span style="margin-left: 15px;"></span>
-                  <input value="Yes" required <?php if ($fee_mention->feeMentionedInForm == 'Yes') { ?> checked <?php } ?> type="radio" name="pro"> Yes <span style="margin-left: 15px;"></span>
-                  <input value="No" required <?php if ($fee_mention->feeMentionedInForm == 'No') { ?> checked <?php } ?> type="radio" name="pro"> No <br>
-                  Whether the fee structure is displayed both inside and outside school at a prominent place? <span style="margin-left: 15px;"></span>
-                  <input value="Yes" required <?php if ($fee_mention->FeeMentionOutside == 'Yes') { ?> checked <?php } ?> type="radio" name="outside"> Yes <span style="margin-left: 15px;"></span>
-                  <input value="No" required <?php if ($fee_mention->FeeMentionOutside == 'No') { ?> checked <?php } ?> type="radio" name="outside"> No
+                  ?>
+                  <form method="post" action="<?php echo site_url("form/complete_section_e/"); ?>">
+                    <input type="hidden" value="<?php echo $school_id; ?>" name="school_id" />
+                    <input type="hidden" value="<?php echo $fee_mention->feeMentionedInFormId; ?>" name="feeMentionedInFormId" />
+                    Whether the above fees are mentioned in the prospectus/admission form ? <span style="margin-left: 15px;"></span>
+                    <input value="Yes" required <?php if ($fee_mention->feeMentionedInForm == 'Yes') { ?> checked <?php } ?> type="radio" name="pro"> Yes <span style="margin-left: 15px;"></span>
+                    <input value="No" required <?php if ($fee_mention->feeMentionedInForm == 'No') { ?> checked <?php } ?> type="radio" name="pro"> No <br>
+                    Whether the fee structure is displayed both inside and outside school at a prominent place? <span style="margin-left: 15px;"></span>
+                    <input value="Yes" required <?php if ($fee_mention->FeeMentionOutside == 'Yes') { ?> checked <?php } ?> type="radio" name="outside"> Yes <span style="margin-left: 15px;"></span>
+                    <input value="No" required <?php if ($fee_mention->FeeMentionOutside == 'No') { ?> checked <?php } ?> type="radio" name="outside"> No
 
-              </div>
-
+                </div>
+              <?php } ?>
 
 
             </div>

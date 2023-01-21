@@ -441,18 +441,20 @@ class Form extends Admin_Controller
 		$this->db->insert('fee', $input);
 
 
-		//remove all data of on schools is for class 
-		$query = "DELETE FROM fee_mentioned_in_form_or_prospectus 
-		          WHERE school_id ='" . $school_id . "'";
-		$this->db->query($query);
 
-		$fee_mention = array();
 
-		$fee_mention['feeMentionedInForm'] = $this->input->post('pro');
-		$fee_mention['FeeMentionOutside'] = $this->input->post('outside');
-		$fee_mention['school_id'] = $school_id;
-		$this->db->insert('fee_mentioned_in_form_or_prospectus', $fee_mention);
+		if ($this->input->post('pro')) {
+			//remove all data of on schools is for class 
+			$query = "DELETE FROM fee_mentioned_in_form_or_prospectus 
+			WHERE school_id ='" . $school_id . "'";
+			$this->db->query($query);
+			$fee_mention = array();
 
+			$fee_mention['feeMentionedInForm'] = $this->input->post('pro');
+			$fee_mention['FeeMentionOutside'] = $this->input->post('outside');
+			$fee_mention['school_id'] = $school_id;
+			$this->db->insert('fee_mentioned_in_form_or_prospectus', $fee_mention);
+		}
 		$this->session->set_flashdata('msg', 'Class Fee Detail Add Successfully.');
 		redirect("form/section_e/$school_id");
 	}
@@ -478,15 +480,16 @@ class Form extends Admin_Controller
 		$query = "SELECT * FROM class WHERE classId IN(" . $classes_ids . ")";
 
 		$this->data['classes'] = $this->db->query($query)->result();
-		$query = "SELECT * FROM age WHERE ageId = 20";
-		$this->data['ages'] = $this->db->query($query)->result();
-
 
 		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
 		$this->data['description'] = '';
 		if ($this->data['school']->school_type_id == 7) {
+			$query = "SELECT * FROM age WHERE ageId = 20";
+			$this->data['ages'] = $this->db->query($query)->result();
 			$this->data['view'] = 'forms/section_c/academy_section_c';
 		} else {
+			$query = "SELECT * FROM age WHERE ageId < 20";
+			$this->data['ages'] = $this->db->query($query)->result();
 			$this->data['view'] = 'forms/section_c/section_c';
 		}
 		$this->load->view('layout', $this->data);
@@ -959,7 +962,8 @@ class Form extends Admin_Controller
 		$feeMentionedInFormId = (int) $this->input->post('feeMentionedInFormId');
 		$pro = $this->input->post('pro');
 		$outside = $this->input->post('outside');
-		if ($feeMentionedInFormId == "") {
+
+		if (!$feeMentionedInFormId) {
 
 			$this->db->insert(
 				'fee_mentioned_in_form_or_prospectus',
