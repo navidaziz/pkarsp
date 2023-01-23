@@ -111,8 +111,8 @@
                                                           echo end($attach); ?>
                           </td>
                           <td>
-                            <a class="btn btn-link" href="<?php echo 'http://psra.gkp.pk/schoolReg/assets/images/' . $attachment->attachment_name . ''); ?>">
-                            <i class="fa fa-download"></i> Download</a>
+                            <a class="btn btn-link" href="<?php echo 'http://psra.gkp.pk/schoolReg/assets/images/' . $attachment->attachment_name; ?>">
+                              <i class="fa fa-download"></i> Download</a>
                           </td>
                         </tr>
                       <?php  }  ?>
