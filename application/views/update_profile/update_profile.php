@@ -122,6 +122,8 @@ FROM
 
                 </table>
                 <br />
+                <a href="<?php echo site_url('login/logout'); ?>"> Logout </a>
+
                 <input class="btn btn-success" type="submit" name="" value="Update and Continue">
 
               </div>
