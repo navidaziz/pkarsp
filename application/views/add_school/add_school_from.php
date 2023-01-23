@@ -67,11 +67,14 @@
                         $('#bise_no').prop('checked', true);
                         $('#bank_detail').hide();
                         $('.bankDetail').prop('required', false);
+                        $('.a_input').prop('checked', true);
+                        $('#levels').hide();
                       } else {
                         $('.p_input').prop('checked', false);
                         $('.a_input').prop('checked', false);
                         $('.p_div').show();
                         $('.a_div').hide();
+                        $('#levels').show();
                       }
 
                     }
@@ -90,7 +93,7 @@
                       </td>
                     </tr>
 
-                    <tr>
+                    <tr id="levels">
                       <td colspan="2">
                         <strong class="required">Institute Level (Current)</strong><br />
 
@@ -474,16 +477,10 @@
                           <td>Bank Branch Address:</td>
                           <td> <input class="bankDetail" type="text" name="bankBranchAddress" placeholder="Enter Bank Branch Address" id="BankBranchAddress" /></td>
                         </tr>
-
-
-
                       </table>
 
                     </div>
                   </div>
-
-
-
 
                 </div>
               </div>
@@ -491,7 +488,10 @@
             <div style="clear: both;"></div>
             <div class="col-md-12">
               <div style=" font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 5px; padding: 10px; background-color: white;">
-                <input class="btn btn-primary" type="submit" name="" value="Save And Continue With Above Data ">
+
+                <a class="btn btn-danger" href="<?php echo site_url('login/logout'); ?>"> Logout </a>
+                <button class="btn btn-primary">Save And Continue With Above Data <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+
 
               </div>
             </div>
