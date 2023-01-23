@@ -96,11 +96,11 @@ FROM
                 <h4>Institute Contact Detail</h4>
                 <table class="table" style="">
                   <tr>
-                    <td>Institute Contact No. </td>
+                    <td>Institute Landline No. </td>
                     <td><input data-mask="(999) 999-9999" type="text" id="telePhoneNumber" required="required" name="telePhoneNumber" name="telePhoneNumber" value="<?php echo $school_detail->telePhoneNumber ?>"> </td>
                   </tr>
                   <tr>
-                    <td>Institute Contact No (Mobile). </td>
+                    <td>Institute Mobile No. </td>
                     <td><input type="text" id="schoolMobileNumber" required="required" name="schoolMobileNumber" value="<?php echo $school_detail->schoolMobileNumber ?>"> </td>
                   </tr>
 
@@ -111,12 +111,12 @@ FROM
 
                 </table>
 
-                <h4>School Account Email Address</h4>
+                <h4>Institute Account Email Address</h4>
                 <h5>This email address used to recover username and password of online school account in future. Email address may be same as the above "Institute Email Address"</h5>
                 <table class="table" style="">
 
                   <tr>
-                    <td> User Account Email Address. </td>
+                    <td>Account Email Address. </td>
                     <td><input type="email" id="userEmail" required="required" name="userEmail" value="<?php echo $school_detail->userEmail; ?>"> </td>
                   </tr>
 
@@ -152,16 +152,10 @@ FROM
 
     <script>
       $(document).ready(function() {
-        $('#telePhoneNumber').inputmask('(9999)-9999999');
+        $('#telePhoneNumber').inputmask('99999999999');
         $('#cnic').inputmask('99999-9999999-9');
         $('#contactNumber').inputmask('(9999)-9999999');
-        $('#telePhoneNumber').inputmask('(9999)-9999999');
         $('#schoolMobileNumber').inputmask('(9999)-9999999');
-
-        $('#late').inputmask('99.9999999');
-        $('#long').inputmask('99.9999999');
-
-
       });
     </script>
 
