@@ -203,4 +203,10 @@ class Login extends Admin_Controller
 			$this->load->view("login/login", $this->data);
 		}
 	}
+
+	public function logout()
+	{
+		$this->user_m->logout();
+		redirect("login");
+	}
 }

@@ -498,7 +498,7 @@ $menu_list .= "</ul>";
                   </div>
                   <br />
                   <div style="text-align: center;">
-                    <a href="<?php echo base_url('user/logout') ?>" class="btn btn-danger btn-flat">Log out</a>
+                    <a href="<?php echo base_url('login/logout') ?>" class="btn btn-danger btn-flat">Log out</a>
                   </div>
                 </li>
               </ul>
