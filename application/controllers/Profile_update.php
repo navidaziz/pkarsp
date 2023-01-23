@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Profile_update extends My_Controller
+class Profile_update extends Admin_Controller
 {
 
 	/**
