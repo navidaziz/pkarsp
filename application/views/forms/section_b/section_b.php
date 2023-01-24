@@ -169,6 +169,10 @@
                   <h5><strong class="">Whether the following facilities are available in the School?</strong></h5>
                   <strong style="font-size: 15px; margin-top:5px;">Physical:</strong>
                   <br />
+                  <?php $query = "SELECT * FROM physical_facilities_physical_meta 
+                                  WHERE  school_type_id like '%" . $school->school_type_id . "%'";
+                  $physical = $this->db->query($query)->result();
+                  ?>
                   <?php if (!empty($physical)) : ?>
                     <?php foreach ($physical as $ph) : ?>
                       <?php if (in_array($ph->physicalId, $facilities_physical_ids)) :  ?>
@@ -221,7 +225,12 @@
                   <strong style="font-size: 15px; margin-top:5px;">Academic:</strong>
                   <br />
 
-                  <?php if (!empty($academics)) : ?>
+                  <?php
+
+                  $query = "SELECT * FROM physical_facilities_academic_meta WHERE  school_type_id like '%" . $school->school_type_id . "%'";
+                  $academics = $this->db->query($query)->result();
+                  //var_dump($academics);
+                  if (!empty($academics)) : ?>
                     <?php foreach ($academics as $academic) : ?>
 
                       <?php if (in_array($academic->academicId, $academic_ids)) :  ?>
@@ -232,7 +241,7 @@
                       <input <?php if ($academic->academicId == 2) { ?> onclick="books_detail()" id="library" <?php } ?> <?php if ($academic->academicId == 4) { ?> onclick="number_of_computers()" id="computer_lab" <?php } ?> type="checkbox" name="academic_id[]" value="<?php echo $academic->academicId; ?>" <?php echo $check; ?> />
                       <?php echo $academic->academicTitle; ?>
                       <span style="margin-left: 20px;"></span>
-
+                      </span>
                       <?php if ($academic->academicId == 2) { ?>
                         <br />
                         <table id="books_detail" class="table table-bordered" style="margin-top: 10px; <?php if (!in_array($academic->academicId, $academic_ids)) {  ?>display: none; <?php } ?>">
@@ -279,7 +288,6 @@
                         ?>
                       <?php } ?>
 
-
                     <?php endforeach; ?>
                   <?php else : ?>
                     <span class="text-danger">No Academic found.</span>
@@ -296,12 +304,16 @@
               </div>
 
               <div class="col-md-3">
-                <div style="font-size: 16px; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
 
-                  <strong style="font-size: 15px; margin-top:5px;">Co-Curricular:</strong>
 
-                  <?php if (!empty($co_curriculars)) : ?>
+                <?php $query = "SELECT * FROM physical_facilities_co_curricular_meta 
+                                  WHERE  school_type_id like '%" . $school->school_type_id . "%'";
+                $co_curriculars = $this->db->query($query)->result();
+                ?>
+                <?php if (!empty($co_curriculars)) { ?>
+                  <div style="font-size: 16px; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
 
+                    <strong style="font-size: 15px; margin-top:5px;">Co-Curricular:</strong>
                     <?php foreach ($co_curriculars as $co_curricular) : ?>
                       <br />
                       <?php if (in_array($co_curricular->coCurricularId, $curricular_ids)) :  ?>
@@ -313,18 +325,17 @@
                       <?php echo $co_curricular->coCurricularTitle; ?>
                       <span style="margin-left: 20px;"></span>
                     <?php endforeach; ?>
-                  <?php else : ?>
-                    <span class="text-danger">No Co-Curricular found.</span>
-                  <?php endif; ?>
+                  </div>
 
-                </div>
+                <?php } ?>
 
-
-
-                <div style=" font-size: 16px; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
-                  <strong style="font-size: 15px; margin-top:5px;">Others:</strong>
-
-                  <?php if (!empty($other)) : ?>
+                <?php $query = "SELECT * FROM physical_facilities_others_meta 
+                                  WHERE  school_type_id like '%" . $school->school_type_id . "%'";
+                $other = $this->db->query($query)->result();
+                ?>
+                <?php if (!empty($other)) { ?>
+                  <div style=" font-size: 16px; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
+                    <strong style="font-size: 15px; margin-top:5px;">Others:</strong>
                     <?php foreach ($other as $oth) : ?>
                       <br />
                       <?php if (in_array($oth->otherId, $other_ids)) :  ?>
@@ -337,12 +348,11 @@
                       <?php echo $oth->otherTitle; ?>
                       <span style="margin-left: 20px;"></span>
                     <?php endforeach; ?>
-                  <?php else : ?>
-                    <span class="text-danger">No Other found.</span>
-                  <?php endif; ?>
+                  </div>
+                <?php } ?>
 
 
-                </div>
+
               </div>
               <script>
                 function check_total_area() {

@@ -27,7 +27,18 @@
   <section class="content-header">
     <h2 style="display:inline;">
       <?php echo ucwords(strtolower($school->schoolName)); ?>
-    </h2><br />
+      <small style="margin-left: 10px;">
+        <?php if (!empty($school->typeTitle)) : ?>
+          (<?php echo $school->typeTitle; ?>)
+
+        <?php endif; ?>
+      </small>
+    </h2>
+    <h4>Institute ID: <?php echo $school->schoolId ?>
+      <?php if ($school->registrationNumber > 0) { ?>
+        <span>Reg. ID: <?php echo $school->registrationNumber ?></span>
+      <?php } ?>
+    </h4>
     <small>
       <?php if ($school->district_id) {
         echo "District: <strong>" . $school->districtTitle . "</strong>";
@@ -55,11 +66,7 @@
         <div class="row">
           <div class="col-md-3">
             <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
-              <h2>Institute ID: <?php echo $school->schoolId ?></h2>
-              <?php if ($school->registrationNumber > 0) { ?>
-                <h3>Reg. ID: <?php echo $school->registrationNumber ?></h3>
-                <br />
-              <?php } ?>
+              <h4 style="text-align: center;">Other Detail</h4>
               <?php if (!empty($school->yearOfEstiblishment)) : ?>
                 <?php echo "Established In: " . date("M, Y", strtotime($school->yearOfEstiblishment)); ?>
                 <br>
