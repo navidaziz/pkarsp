@@ -10,9 +10,14 @@
   <h5 style="color: red;">Note: All fields are mandatory.</h5>
   <form action="<?php echo site_url("form/update_employee_detail") ?>" method="post">
 
+    <?php
+    $query = "select school_type_id FROM schools WHERE schoolId = '" . $schools_id . "'";
+    $school_type_id = $this->db->query($query)->row()->school_type_id;
+
+    ?>
 
     <input type="hidden" name="schoolStaffId" value="<?php echo $school_staff->schoolStaffId; ?>" />
-    <input type="hidden" name="schools_id" value="<?php echo $school->schoolId; ?>" />
+    <input type="hidden" name="schools_id" value="<?php echo $schools_id; ?>" />
     <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
     <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
     <table class="table table-bordered">
@@ -65,54 +70,55 @@
         <th>Designation</th>
         <td><input class="form-control" type="text" name="schoolStaffDesignition" required value="<?php echo  $school_staff->schoolStaffDesignition; ?>" /></td>
       </tr>
-      <tr>
-      <tr>
-        <th>Job Nature</th>
-        <td><input <?php if ($school_staff->job_nature == 'permanent') {
+      <?php if ($school_type_id == 7) { ?>
+        <tr>
+          <th>Job Nature</th>
+          <td><input <?php if ($school_staff->job_nature == 'permanent') {
+                        echo 'checked';
+                      } ?> onclick="$('.gov_sector2').attr('required', false); $('.gov_sector2').prop('checked', false); $('.gov_noc2').prop('checked', false); $('#gov_sector_div2').hide(); $('#gov_noc_div2').hide();" type="radio" name="job_nature" value="permanent" required /> Permanent Staff
+            <spna style="margin-left: 10px;"></spna>
+            <input <?php if ($school_staff->job_nature == 'visiting') {
                       echo 'checked';
-                    } ?> onclick="$('.gov_sector2').attr('required', false); $('.gov_sector2').prop('checked', false); $('.gov_noc2').prop('checked', false); $('#gov_sector_div2').hide(); $('#gov_noc_div2').hide();" type="radio" name="job_nature" value="permanent" required /> Permanent Staff
-          <spna style="margin-left: 10px;"></spna>
-          <input <?php if ($school_staff->job_nature == 'visiting') {
-                    echo 'checked';
-                  } ?> onclick="$('.gov_sector2').attr('required', true); $('#gov_sector_div2').show();" type="radio" name="job_nature" value="visiting" required /> Visiting Staff
-          <br />
-          <div id="gov_sector_div2" style="padding: 10px; border:1px solid gray; margin-top: 5px; 
+                    } ?> onclick="$('.gov_sector2').attr('required', true); $('#gov_sector_div2').show();" type="radio" name="job_nature" value="visiting" required /> Visiting Staff
+            <br />
+            <div id="gov_sector_div2" style="padding: 10px; border:1px solid gray; margin-top: 5px; 
           <?php if ($school_staff->job_nature == 'visiting') {
             echo 'display:block';
           } else {
             echo 'display:none';
           } ?>
           ">
-            <strong>Govt: Sectot Staff </strong>
-            <spna style="margin-left: 15px;"></spna>
-            <input <?php if ($school_staff->gov_sector == 'yes') {
-                      echo 'checked';
-                    } ?> class="gov_sector2" onclick="$('.gov_noc2').attr('required', true); $('#gov_noc_div2').show();" type="radio" name="gov_sector" value="yes" /> Yes
-            <spna style="margin-left: 10px;"></spna>
-            <input <?php if ($school_staff->gov_sector == 'no') {
-                      echo 'checked';
-                    } ?> class="gov_sector2" onclick="$('.gov_noc2').attr('required', false); $('.gov_noc2').prop('checked', false); $('#gov_noc_div2').hide();" type="radio" name="gov_sector" value="no" /> No
-          </div>
+              <strong>Govt: Sectot Staff </strong>
+              <spna style="margin-left: 15px;"></spna>
+              <input <?php if ($school_staff->gov_sector == 'yes') {
+                        echo 'checked';
+                      } ?> class="gov_sector2" onclick="$('.gov_noc2').attr('required', true); $('#gov_noc_div2').show();" type="radio" name="gov_sector" value="yes" /> Yes
+              <spna style="margin-left: 10px;"></spna>
+              <input <?php if ($school_staff->gov_sector == 'no') {
+                        echo 'checked';
+                      } ?> class="gov_sector2" onclick="$('.gov_noc2').attr('required', false); $('.gov_noc2').prop('checked', false); $('#gov_noc_div2').hide();" type="radio" name="gov_sector" value="no" /> No
+            </div>
 
-          <div id="gov_noc_div2" style="padding: 10px; border:1px solid gray; margin-top: 5px; 
+            <div id="gov_noc_div2" style="padding: 10px; border:1px solid gray; margin-top: 5px; 
           <?php if ($school_staff->gov_sector == 'yes') {
             echo 'display:block';
           } else {
             echo 'display:none';
           } ?>
           ">
-            <strong>NOC in Case of Govt: Sector Staff: </strong>
-            <spna style="margin-left: 15px;"></spna>
-            <input <?php if ($school_staff->gov_noc == 'yes') {
-                      echo 'checked';
-                    } ?> class="gov_noc2" type="radio" name="gov_noc" value="yes" /> Yes
-            <spna style="margin-left: 10px;"></spna>
-            <input <?php if ($school_staff->gov_noc == 'no') {
-                      echo 'checked';
-                    } ?> class="gov_noc2" type="radio" name="gov_noc" value="no" /> No
-          </div>
-        </td>
-      </tr>
+              <strong>NOC in Case of Govt: Sector Staff: </strong>
+              <spna style="margin-left: 15px;"></spna>
+              <input <?php if ($school_staff->gov_noc == 'yes') {
+                        echo 'checked';
+                      } ?> class="gov_noc2" type="radio" name="gov_noc" value="yes" /> Yes
+              <spna style="margin-left: 10px;"></spna>
+              <input <?php if ($school_staff->gov_noc == 'no') {
+                        echo 'checked';
+                      } ?> class="gov_noc2" type="radio" name="gov_noc" value="no" /> No
+            </div>
+          </td>
+        </tr>
+      <?php } ?>
       <th>Academic</th>
       <td><input class="form-control" type="text" name="schoolStaffQaulificationAcademic" required value="<?php echo  $school_staff->schoolStaffQaulificationAcademic; ?>" /></td>
       </tr>
@@ -120,15 +126,19 @@
         <th>Professional</th>
         <td><input class="form-control" type="text" name="schoolStaffQaulificationProfessional" required value="<?php echo  $school_staff->schoolStaffQaulificationProfessional; ?>" /></td>
       </tr>
-      <tr>
-        <th>Training In Months</th>
-        <td><input class="form-control" type="number" name="TeacherTraining" required value="<?php echo  $school_staff->TeacherTraining; ?>" /></td>
-      </tr>
-      <tr>
-        <th>Experience In Months</th>
-        <td><input class="form-control" type="number" name="TeacherExperience" required value="<?php echo  $school_staff->TeacherExperience; ?>" /></td>
-      </tr>
-
+      <?php if ($school_type_id != 7) { ?>
+        <tr>
+          <th>Training In Months</th>
+          <td><input class="form-control" type="number" name="TeacherTraining" required value="<?php echo  $school_staff->TeacherTraining; ?>" /></td>
+        </tr>
+        <tr>
+          <th>Experience In Months</th>
+          <td><input class="form-control" type="number" name="TeacherExperience" required value="<?php echo  $school_staff->TeacherExperience; ?>" /></td>
+        </tr>
+      <?php } else { ?>
+        <input class="form-control" type="hidden" name="TeacherTraining" required value="0" />
+        <input class="form-control" type="hidden" name="TeacherExperience" required value="0" />
+      <?php } ?>
       <tr>
         <th>Appointment At</th>
         <td><input class="form-control" type="date" name="schoolStaffAppointmentDate" required value="<?php echo  $school_staff->schoolStaffAppointmentDate; ?>" /></td>

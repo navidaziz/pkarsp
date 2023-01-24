@@ -110,29 +110,31 @@
 
                 <?php } ?>
               </tr>
-              <tr>
-                <th>Job Nature</th>
-                <td><input onclick="$('.gov_sector').attr('required', false); $('.gov_sector').prop('checked', false); $('.gov_noc').prop('checked', false); $('#gov_sector_div').hide(); $('#gov_noc_div').hide();" type="radio" name="job_nature" value="permanent" required /> Permanent Staff
-                  <spna style="margin-left: 10px;"></spna>
-                  <input onclick="$('.gov_sector').attr('required', true); $('#gov_sector_div').show();" type="radio" name="job_nature" value="visiting" required /> Visiting Staff
-                  <br />
-                  <div id="gov_sector_div" style="padding: 10px; border:1px solid gray; margin-top: 5px; display:none">
-                    <strong>Govt: Sectot Staff </strong>
-                    <spna style="margin-left: 15px;"></spna>
-                    <input class="gov_sector" onclick="$('.gov_noc').attr('required', true); $('#gov_noc_div').show();" type="radio" name="gov_sector" value="yes" /> Yes
+              <?php if ($school->school_type_id == 7) { ?>
+                <tr>
+                  <th>Job Nature</th>
+                  <td><input onclick="$('.gov_sector').attr('required', false); $('.gov_sector').prop('checked', false); $('.gov_noc').prop('checked', false); $('#gov_sector_div').hide(); $('#gov_noc_div').hide();" type="radio" name="job_nature" value="permanent" required /> Permanent Staff
                     <spna style="margin-left: 10px;"></spna>
-                    <input class="gov_sector" onclick="$('.gov_noc').attr('required', false); $('.gov_noc').prop('checked', false); $('#gov_noc_div').hide();" type="radio" name="gov_sector" value="no" /> No
-                  </div>
+                    <input onclick="$('.gov_sector').attr('required', true); $('#gov_sector_div').show();" type="radio" name="job_nature" value="visiting" required /> Visiting Staff
+                    <br />
+                    <div id="gov_sector_div" style="padding: 10px; border:1px solid gray; margin-top: 5px; display:none">
+                      <strong>Govt: Sectot Staff </strong>
+                      <spna style="margin-left: 15px;"></spna>
+                      <input class="gov_sector" onclick="$('.gov_noc').attr('required', true); $('#gov_noc_div').show();" type="radio" name="gov_sector" value="yes" /> Yes
+                      <spna style="margin-left: 10px;"></spna>
+                      <input class="gov_sector" onclick="$('.gov_noc').attr('required', false); $('.gov_noc').prop('checked', false); $('#gov_noc_div').hide();" type="radio" name="gov_sector" value="no" /> No
+                    </div>
 
-                  <div id="gov_noc_div" style="padding: 10px; border:1px solid gray; margin-top: 5px; display:none">
-                    <strong>NOC in Case of Govt: Sector Staff: </strong>
-                    <spna style="margin-left: 15px;"></spna>
-                    <input class="gov_noc" type="radio" name="gov_noc" value="yes" /> Yes
-                    <spna style="margin-left: 10px;"></spna>
-                    <input class="gov_noc" type="radio" name="gov_noc" value="no" /> No
-                  </div>
-                </td>
-              </tr>
+                    <div id="gov_noc_div" style="padding: 10px; border:1px solid gray; margin-top: 5px; display:none">
+                      <strong>NOC in Case of Govt: Sector Staff: </strong>
+                      <spna style="margin-left: 15px;"></spna>
+                      <input class="gov_noc" type="radio" name="gov_noc" value="yes" /> Yes
+                      <spna style="margin-left: 10px;"></spna>
+                      <input class="gov_noc" type="radio" name="gov_noc" value="no" /> No
+                    </div>
+                  </td>
+                </tr>
+              <?php } ?>
               <tr>
                 <th>Academic Qaulification</th>
                 <td><input class="form-control" placeholder="MSc Math, MA urdu etc" type="text" name="schoolStaffQaulificationAcademic" required />
@@ -144,15 +146,19 @@
 
                 </td>
               </tr>
-              <tr>
-                <th>Professional Training (Months)</th>
-                <td><input class="form-control" min="0" type="number" name="TeacherTraining" /></td>
-              </tr>
-              <tr>
-                <th>Experience (Months)</th>
-                <td><input class="form-control" min="0" type="number" name="TeacherExperience" /></td>
-              </tr>
-
+              <?php if ($school->school_type_id != 7) { ?>
+                <tr>
+                  <th>Professional Training (Months)</th>
+                  <td><input class="form-control" min="0" type="number" name="TeacherTraining" /></td>
+                </tr>
+                <tr>
+                  <th>Experience (Months)</th>
+                  <td><input class="form-control" min="0" type="number" name="TeacherExperience" /></td>
+                </tr>
+              <?php } else { ?>
+                <input class="form-control" min="0" type="hidden" value="0" name="TeacherTraining" />
+                <input class="form-control" min="0" type="hidden" value="0" name="TeacherExperience" />
+              <?php } ?>
               <tr>
                 <th>Appointment Date</th>
                 <td><input class="form-control" type="date" name="schoolStaffAppointmentDate" required /></td>
@@ -311,15 +317,19 @@
                     <th>Type</th>
                     <th>Academic Qualification</th>
                     <th>Professional Qualification</th>
-                    <th>Training</th>
-                    <th>Experience</th>
+                    <?php if ($school->school_type_id != 7) { ?>
+                      <th>Training</th>
+                      <th>Experience</th>
+                    <?php } ?>
                     <th>Designation</th>
                     <th>Appointment At</th>
                     <th>Net.Pay</th>
                     <th>Annual Increament</th>
-                    <th>Job Nature</th>
-                    <th>Govt: Sectot Staff</th>
-                    <th>Gov: NOC</th>
+                    <?php if ($school->school_type_id == 7) { ?>
+                      <th>Job Nature</th>
+                      <th>Govt: Sectot Staff</th>
+                      <th>Gov: NOC</th>
+                    <?php } ?>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -336,15 +346,19 @@
                         <td><?php echo $st->staffTtitle; ?></td>
                         <td><?php echo $st->schoolStaffQaulificationAcademic; ?></td>
                         <td><?php echo $st->schoolStaffQaulificationProfessional; ?></td>
-                        <td><?php echo $st->TeacherTraining; ?> (M)</td>
-                        <td><?php echo $st->TeacherExperience; ?> (M)</td>
+                        <?php if ($school->school_type_id != 7) { ?>
+                          <td><?php echo $st->TeacherTraining; ?> (M)</td>
+                          <td><?php echo $st->TeacherExperience; ?> (M)</td>
+                        <?php } ?>
                         <td><?php echo $st->schoolStaffDesignition; ?></td>
                         <td><?php echo $st->schoolStaffAppointmentDate; ?></td>
                         <td><?php echo $st->schoolStaffNetPay; ?></td>
                         <td><?php echo $st->schoolStaffAnnualIncreament; ?> <strong>%</strong></td>
-                        <td><?php echo $st->job_nature; ?></td>
-                        <td><?php echo $st->gov_sector; ?></td>
-                        <td><?php echo $st->gov_noc; ?></td>
+                        <?php if ($school->school_type_id == 7) { ?>
+                          <td><?php echo $st->job_nature; ?></td>
+                          <td><?php echo $st->gov_sector; ?></td>
+                          <td><?php echo $st->gov_noc; ?></td>
+                        <?php } ?>
                         <td>
                           <?php if ($school->status != 1) { ?>
                             <a href="javascript:void(0);" onclick="get_employee_edit_form(<?php echo $st->schoolStaffId; ?>)">
