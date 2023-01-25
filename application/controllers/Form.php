@@ -1368,4 +1368,39 @@ class Form extends Admin_Controller
 		$this->data['fee_structures'] = $this->db->query($query)->result();
 		$this->load->view('forms/fee_structures/renewal_fee_sturucture', $this->data);
 	}
+
+	public function upload_affidavit($school_id)
+	{
+
+		$config = array(
+			"upload_path" => $_SERVER['DOCUMENT_ROOT'] . '/uploads/affidavits/',
+			"allowed_types" => "jpg|jpeg|pdf",
+			"max_size" => 30000,
+			"max_width" => 0,
+			"max_height" => 0,
+			"remove_spaces" => true,
+			"encrypt_name" => true
+		);
+		$upload = $this->upload_file("affidavit", $config);
+		if ($upload === True) {
+			$attchment_file = $this->data["upload_data"]["file_name"];
+			$userId = $this->session->userdata('userId');
+			$query = "SELECT schoolId FROM schools WHERE owner_id = '" . $userId . "'";
+			$schools_id = $this->db->query($query)->row()->schoolId;
+
+			$query = "INSERT INTO `affidavit_attachments`(`folder`, `attachment`, `schools_id`, `school_id`) 
+		          VALUES ('affidavits','" . $attchment_file . "', '" . $schools_id . "', '" . $school_id . "')";
+			if ($this->db->query($query)) {
+				redirect("form/submit_bank_challan/$school_id");
+			} else {
+				redirect("form/submit_bank_challan/$school_id");
+			}
+		} else {
+			//var_dump($upload);
+			//$attchment_file = "";
+			redirect("form/submit_bank_challan/$school_id");
+		}
+
+		exit();
+	}
 }

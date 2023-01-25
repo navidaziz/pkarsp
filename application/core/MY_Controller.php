@@ -1,50 +1,53 @@
-<?php if(!defined('BASEPATH')) exit('Direct access not allowed!');
+<?php if (!defined('BASEPATH')) exit('Direct access not allowed!');
 
 
-class MY_Controller extends CI_Controller{
-    
+class MY_Controller extends CI_Controller
+{
+
     public $data = array();
-    
-    public function __construct(){
-        
+
+    public function __construct()
+    {
+
         parent::__construct();
         $this->data['site_name'] = config_item("site_name");
         $this->data['errors'] = array();
-       // date_default_timezone_set("Asia/karachi");
-       
+        // date_default_timezone_set("Asia/karachi");
+
     }
     //-----------------------------------------------------------------------
-    
-    
-    function send_sms($to, $from, $message){
 
-	$username = 'alhamraedu';
-	$password = 'khan1234';
-	$url = "http://Lifetimesms.com/plain?username=".$username."&password=" .$password.
-	"&to=" .$to. "&from=" .urlencode($from)."&message=" .urlencode($message)."";
-	
-	//Curl Start
-	$ch = curl_init();
-	$timeout = 30;
-	
-	curl_setopt ($ch,CURLOPT_URL, $url) ;
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	$response = curl_exec($ch) ;
-	$response ;
-	
-	//save sms to database 
-	$query="INSERT INTO `sms`( `mobile_number`, `message`,  `sms_status`, `date`) value ( '".$to."', '".$message."', '1', '".date("Y-m-d G:i:s", time())."')";
-	$this->db->query($query);
-	 
-	 
-	 
-	 
-	curl_close($ch);
-	//exit();
-	
-	}
-    
-    
+
+    function send_sms($to, $from, $message)
+    {
+
+        $username = 'alhamraedu';
+        $password = 'khan1234';
+        $url = "http://Lifetimesms.com/plain?username=" . $username . "&password=" . $password .
+            "&to=" . $to . "&from=" . urlencode($from) . "&message=" . urlencode($message) . "";
+
+        //Curl Start
+        $ch = curl_init();
+        $timeout = 30;
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        $response;
+
+        //save sms to database 
+        $query = "INSERT INTO `sms`( `mobile_number`, `message`,  `sms_status`, `date`) value ( '" . $to . "', '" . $message . "', '1', '" . date("Y-m-d G:i:s", time()) . "')";
+        $this->db->query($query);
+
+
+
+
+        curl_close($ch);
+        //exit();
+
+    }
+
+
     /**
      * upload a file
      * @param $field_name name of the form field
@@ -57,103 +60,106 @@ class MY_Controller extends CI_Controller{
      * with _thumbnail.
      * @return always return true
      */
-     public function upload_file($field_name, $config=NULL){
-		 if(is_null($config)){
-		 $config = array(
-                        "upload_path" => "./assets/uploads/".$this->router->fetch_class()."/",
-                        "allowed_types" => "jpg|jpeg|bmp|png|gif|mp3",
-                        "max_size" => 10000,
-                        "max_width" => 0,
-                        "max_height" => 0,
-                        "remove_spaces" => true,
-                        "encrypt_name" => true
-                    );
-		 }
-        
+    public function upload_file($field_name, $config = NULL)
+    {
+        if (is_null($config)) {
+            $config = array(
+                "upload_path" => "./assets/uploads/" . $this->router->fetch_class() . "/",
+                "allowed_types" => "jpg|jpeg|bmp|png|gif|mp3",
+                "max_size" => 10000,
+                "max_width" => 0,
+                "max_height" => 0,
+                "remove_spaces" => true,
+                "encrypt_name" => true
+            );
+        }
+
         $dir = $config["upload_path"];
-        if(!is_dir($dir)){
+        if (!is_dir($dir)) {
             mkdir($dir, 0777);
         }
-        
+
         $this->load->library("upload", $config);
-        
-        if(!$this->upload->do_upload($field_name)){
-            
-			 $this->data['upload_error'] = $this->upload->display_errors();
-			 return false;         
-        }else{
-            
+
+        if (!$this->upload->do_upload($field_name)) {
+
+            $this->data['upload_error'] = $this->upload->display_errors();
+            //var_dump($this->data['upload_error']);
+            return $this->data['upload_error'];
+        } else {
+
             $this->data['upload_data'] = $this->upload->data();
-        
-            
-            //now create image thumbnail
-            //if($this->data['upload_data']['is_image'] == true){
-                
-                $config['image_library'] = 'gd2';
-                $config['source_image']	= $dir.$this->data['upload_data']['file_name'];
-                $config['create_thumb'] = TRUE;
-               //$config['maintain_ratio'] = TRUE;
-                $config['width']	= 100;
-                $config['height']	= 100;
-                
-                //$this->load->library('image_lib', $config); 
-                $this->image_lib->initialize($config);
-                
-                $this->image_lib->resize();
+
+
+            // //now create image thumbnail
+            // //if($this->data['upload_data']['is_image'] == true){
+
+            // $config['image_library'] = 'gd2';
+            // $config['source_image']    = $dir . $this->data['upload_data']['file_name'];
+            // $config['create_thumb'] = TRUE;
+            // //$config['maintain_ratio'] = TRUE;
+            // $config['width']    = 100;
+            // $config['height']    = 100;
+
+            // //$this->load->library('image_lib', $config); 
+            // $this->image_lib->initialize($config);
+
+            // $this->image_lib->resize();
             //}
-            return true;
+            return True;
         }
-        
     }
     //------------------------------------------------------------------------------------
-    
-    
-	
-	
-	
-    
-    
-    
+
+
+
+
+
+
+
+
     /**
      * check allowed file type - custom validation function
      * @param $filename name of the file
      * @return boolean if extension is not allowed
      */
-    public function _filetype_validation($str, $filename){
-        
+    public function _filetype_validation($str, $filename)
+    {
+
         //if the file field is empty
-        if(strlen($filename) < 1){
+        if (strlen($filename) < 1) {
             return true;
         }
-        
+
         $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
         $allowed = array('jpg', 'png', 'jpeg', 'bmp', 'gif');
-        
-        if(!in_array($ext, $allowed)){
+
+        if (!in_array($ext, $allowed)) {
             $this->form_validation->set_message("_filetype_validation", "$ext file type is not allowed");
             return false;
         }
         return true;
     }
     //---------------------------------------------------------------------------------
-    
-    
-    
-    
+
+
+
+
     /**
      * function for required file type validation
      */
-     public function _file_required($str, $filename){
-        
-        if(strlen($filename) < 1){
+    public function _file_required($str, $filename)
+    {
+
+        if (strlen($filename) < 1) {
             $this->form_validation->set_message("_file_required", "%s is a required field");
             return false;
         }
         return true;
-     }
-     //-------------------------------------------------------------------------------
-   
-	
+    }
+    //-------------------------------------------------------------------------------
 
-    
+
+
+
 }

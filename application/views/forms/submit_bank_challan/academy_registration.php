@@ -331,6 +331,25 @@
                   </tbody>
                 </table>
 
+                <div style="text-align: center;">
+                  <form action="<?php echo site_url("form/upload_affidavit/" . $school_id); ?>" method="post" enctype="multipart/form-data">
+                    <h4>Affidavit for ownership of institution</h4>
+                    <input required class="form-control-file" style="display: inline; width:300px; padding:2px" type="file" name="affidavit" value="" />
+                    <button class="btn btn-danger"><i class="fa fa-upload" aria-hidden="true"></i> Upload Affidavit</button>
+                  </form>
+
+                  <?php
+                  $query = "SELECT * FROM affidavit_attachments WHERE schools_id = '" . $schools_id . "'";
+                  $affidavit_attachments = $this->db->query($query)->result();
+                  $count = 1;
+                  foreach ($affidavit_attachments as $affidavit_attachment) { ?>
+                    <a class="btn btn-link" target="_blank" href="https://psra.gkp.pk/uploads/<?php echo $affidavit_attachment->folder; ?>/<?php echo $affidavit_attachment->attachment; ?>">Affidavit</a>
+                    <br />
+                  <?php   }
+                  ?>
+
+                </div>
+
               </div>
 
               <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px;">
@@ -361,6 +380,10 @@
                     </tr>
                   </table>
                 </form>
+
+
+
+
               </div>
 
             </div>
