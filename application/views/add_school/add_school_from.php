@@ -51,7 +51,7 @@
           <form class="" method="post" enctype="multipart/form-data" id="create_form" action="<?php echo base_url('add_school/process_data'); ?>">
 
             <div class="col-md-3">
-              <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height:600px;  margin: 5px; padding: 10px; background-color: white;">
+              <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height:300px;  margin: 5px; padding: 10px; background-color: white;">
                 <div class="box-body">
                   <h4>Institute Information</h4>
                   <script>
@@ -171,7 +171,7 @@
             </div>
 
             <div class="col-md-5">
-              <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 600px;  margin: 5px; padding: 10px; background-color: white;">
+              <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 300px;  margin: 5px; padding: 10px; background-color: white;">
                 <h4>Institute Details</h4>
                 <div class="box-body">
 
@@ -344,7 +344,7 @@
 
 
             <div class="col-md-4">
-              <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 600px;  margin: 5px; padding: 10px; background-color: white;">
+              <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 300px;  margin: 5px; padding: 10px; background-color: white;">
                 <div class="box-body">
 
                   <h4>Institute Owner Detail <span class="pull-right" style="text-align: center; font-size:9px; color:red;  font-family: 'Noto Nastaliq Urdu Draft', serif;">

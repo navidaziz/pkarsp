@@ -82,21 +82,10 @@
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h2 style="display:inline;">
-        <?php echo ucwords(strtolower($school->schoolName)); ?>
-      </h2>
-      <br />
-      <h4>Institute ID: <?php echo $school->schools_id; ?>
 
-        <?php if ($school->registrationNumber) { ?> - REG No: <?php echo $school->registrationNumber ?> <?php } ?></h4>
-      <ol class="breadcrumb">
-        <li><a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> Home </a></li>
-        <!-- <li><a href="#">Examples</a></li> -->
-        <li class="active"><?php echo @ucfirst($title); ?>s Session: <?php echo $session_detail->sessionYearTitle; ?></li>
-      </ol>
-    </section>
+    <?php $this->load->view('forms/form_header');   ?>
+
+
 
     <!-- Main content -->
     <section class="content" style="padding-top: 0px !important;">
@@ -174,36 +163,43 @@
 
 
 
-            <div class="col-md-12">
-              <div style="font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 50px;  margin: 10px; padding: 10px; background-color: white;">
-                <a class="btn btn-success pull-left" href="<?php echo site_url("form/section_b/$school_id"); ?>">
-                  <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Previous Section ( Physical Facilities ) </a>
-                <?php if ($form_complete) {
-                  $form_input['form_c_status'] = 1;
-                  $this->db->where('school_id', $school_id);
-                  $this->db->update('forms_process', $form_input);
-                  $form_status->form_c_status = 1;
-                } else {
-                  $form_input['form_c_status'] = 0;
-                  $this->db->where('school_id', $school_id);
-                  $this->db->update('forms_process', $form_input);
-                  $form_status->form_c_status = 0;
-                } ?>
-                <?php if ($form_status->form_c_status == 1) { ?>
-                  <a class="btn btn-success pull-right" href="<?php echo site_url("form/section_d/$school_id"); ?>">
-                    Next Section ( Employees Detail )<i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
-                  <br />
-                <?php } else { ?>
-                  <br />
-                <?php } ?>
-              </div>
-            </div>
+
 
 
           </div>
         </div>
 
+        <div style="font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
 
+          <div class="row">
+            <div class="col-md-6">
+              <a class="btn btn-success" style="margin: 2px;" href="<?php echo site_url("form/section_b/$school_id"); ?>">
+                <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Previous Section ( Physical Facilities )
+
+              </a>
+
+            </div>
+            <div class="col-md-6">
+              <?php if ($form_complete) {
+                $form_input['form_c_status'] = 1;
+                $this->db->where('school_id', $school_id);
+                $this->db->update('forms_process', $form_input);
+                $form_status->form_c_status = 1;
+              } else {
+                $form_input['form_c_status'] = 0;
+                $this->db->where('school_id', $school_id);
+                $this->db->update('forms_process', $form_input);
+                $form_status->form_c_status = 0;
+              } ?>
+              <?php if ($form_status->form_c_status == 1) { ?>
+                <a class="btn btn-success" style="margin: 2px;" href="<?php echo site_url("form/section_d/$school_id"); ?>">
+                  Next Section ( Employees Detail )<i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i>
+                </a>
+              <?php } ?>
+            </div>
+
+          </div>
+        </div>
 
       </div>
 

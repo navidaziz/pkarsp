@@ -20,6 +20,7 @@
     <input type="hidden" name="schools_id" value="<?php echo $schools_id; ?>" />
     <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
     <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
+
     <table class="table table-bordered">
       <tr>
         <th>Designation</th>

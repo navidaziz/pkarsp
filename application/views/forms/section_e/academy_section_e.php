@@ -29,20 +29,8 @@
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h2 style="display:inline;">
-        <?php echo ucwords(strtolower($school->schoolName)); ?>
-      </h2>
-      <br />
-      <h4>Institute ID: <?php echo $school->schools_id; ?>
-        <?php if ($school->registrationNumber) { ?> - REG No: <?php echo $school->registrationNumber ?> <?php } ?></h4>
-      <ol class="breadcrumb">
-        <li><a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> Home </a></li>
-        <!-- <li><a href="#">Examples</a></li> -->
-        <li class="active"><?php echo @ucfirst($title); ?>s Session: <?php echo $session_detail->sessionYearTitle; ?></li>
-      </ol>
-    </section>
+    <?php $this->load->view('forms/form_header');   ?>
+
 
     <!-- Main content -->
     <section class="content" style="padding-top: 0px !important;">
@@ -59,7 +47,7 @@
                 <small style="color: red;">
                   Note: Please fill exact tuition fee details as this data will be used in making PSRA fee bank challan for you at the end of this application form.
                   <br />
-                  <p style="font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif !important; direction: rtl;">
+                  <p style="font-weight: none; font-family: 'Noto Nastaliq Urdu Draft', serif !important; direction: rtl; line-height: 25px;">
                     براہ کرم ٹیوشن فیس کی صحیح تفصیلات پُر کریں کیونکہ اس ڈیٹا کو اس درخواست فارم کے آخر میں آپ کے لیے PSRA فیس بینک چالان بنانے میں استعمال کیا جائے گا۔
                   </p>
                 </small>
@@ -186,27 +174,26 @@
         </div>
 
 
-        <div class="col-md-12">
-          <div style=" font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 30px;  margin: 10px; padding: 10px; background-color: white;">
-            <a class="btn btn-success pull-left" href="<?php echo site_url("form/section_d/$school_id"); ?>">
-
-              <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Previous Section ( Institute Employees Detail ) </a>
-
-
-
-            <?php if ($form_status->form_e_status == 1) { ?>
-              <a class="btn btn-success pull-right" href="<?php echo site_url("form/submit_bank_challan/$school_id"); ?>"> Next Section (Bank Challan) <i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
-
-              <br />
-              <br />
-            <?php } else { ?>
-              <br />
-              <br />
-            <?php } ?>
-          </div>
-        </div>
 
       </div>
+
+      <div style="font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
+
+        <div class="row">
+          <div class="col-md-6">
+            <a class="btn btn-success" style="margin: 2px;" href="<?php echo site_url("form/section_d/$school_id"); ?>">
+              <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Previous Section ( Institute Employees Detail )
+            </a>
+          </div>
+          <div class="col-md-6">
+            <?php if ($form_status->form_e_status == 1) { ?>
+              <a class="btn btn-success" style="margin: 2px;" href="<?php echo site_url("form/submit_bank_challan/$school_id"); ?>"> Next Section (Bank Challan) <i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
+            <?php } ?>
+          </div>
+
+        </div>
+      </div>
+
   </div>
 
 

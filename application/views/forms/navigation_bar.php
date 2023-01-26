@@ -1,8 +1,22 @@
-<h3 style="border-left: 20px solid #9FC8E8; padding-left:5px; color: #337AB7;"> <?php echo @ucfirst($title); ?> Session: <?php echo $session_detail->sessionYearTitle; ?></h3>
+<style>
+    @media (max-width:629px) {
+        .steps>li>a {
+            display: inline;
+            float: left;
+            padding: 5px;
+            margin: 5px;
+            font-size: 10px;
+        }
 
-
-
-<div class="box" style="border-top: 0px solid #d2d6de !important;">
+        .form_title {
+            display: none;
+        }
+    }
+</style>
+<h3 class="form_title" style="border-left: 20px solid #9FC8E8; padding-left:5px; color: #337AB7;">
+    <?php echo @ucfirst($title); ?> Session: <?php echo $session_detail->sessionYearTitle; ?>
+</h3>
+<div class="box" style="border-top: 0px solid #d2d6de !important; margin-top:2px">
     <div class="row">
         <div class="col-md-12">
 
@@ -62,5 +76,16 @@
         براہ کرم اس بینک چالان کا پرنٹ آؤٹ لیں اور فیس خیبر کی کسی بھی بینک میں جمع کرائیں۔ بینک کے ذریعہ فراہم کردہ STAN نمبر (کمپیوٹرائزڈ بینک چالان کے اوپر دائیں طرف دکھایا گیا ہے) اور لین دین کی تاریخ کے ساتھ کمپیوٹرائزڈ بینک چالان لیں۔ ذیل میں دکھائے گئے فیلڈ میں STAN نمبر اور لین دین کی تاریخ لکھیں اور جمع پر کلک کریں۔
     </p> -->
 <?php } else { ?>
-    <p style="text-align: center; color:green; font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif; ">Next section will be opened after completing this section. اگلے سیکشن میں جانے کے لیے، پہلے اس سیکشن کو پُر کریں۔</p>
+    <div class="row">
+        <div class="col-md-6">
+            <p style="text-align: center; color:green; font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif; ">
+                Next section will be opened after completing this section.
+            </p>
+        </div>
+        <div class="col-md-6">
+            <p style="text-align: center; color:green; font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif; ">
+                اگلے سیکشن میں جانے کے لیے، پہلے اس سیکشن کو پُر کریں۔
+            </p>
+        </div>
+    </div>
 <?php } ?>

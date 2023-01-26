@@ -16,7 +16,7 @@
     }
   </script>
   <div class="modal fade" id="renewal_sturucture_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-    <div class="modal-dialog" role="document" style="width: 70%;">
+    <div class="modal-dialog" role="document">
       <div class="modal-content" id="renewal_sturucture_body">
 
         ...
@@ -26,32 +26,18 @@
   </div>
 
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h2 style="display:inline;"><?php echo ucwords(strtolower($school->schoolName)); ?>
+    <?php $this->load->view('forms/form_header');   ?>
 
-      </h2>
-      <br />
-      <small>
-        <h4>S-ID: <?php echo $school->schools_id; ?>
-          <?php if ($school->registrationNumber) { ?> - REG No: <?php echo $school->registrationNumber ?> <?php } ?></h4>
-      </small>
-      <ol class="breadcrumb">
-        <li><a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> Home </a></li>
-        <!-- <li><a href="#">Examples</a></li> -->
-        <li class="active"><?php echo @ucfirst($title); ?>s Session: <?php echo $session_detail->sessionYearTitle; ?></li>
-      </ol>
-    </section>
 
     <!-- Main content -->
     <section class="content" style="padding-top: 0px !important;">
       <?php $this->load->view('forms/navigation_bar');   ?>
       <div class="box box-primary box-solid">
-        <div class="box-body" style="padding: 3px;">
+        <div class="box-body">
 
 
 
-          <form method="post" action="<?php echo site_url("form/update_test_date"); ?>">
+          <!-- <form method="post" action="<?php echo site_url("form/update_test_date"); ?>">
             <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
             <input type="hidden" name="schools_id" value="<?php echo $school->schools_id; ?>" />
 
@@ -66,13 +52,12 @@
             year of establishment: <input name="year_of_es" type="month" value="<?php echo $school->yearOfEstiblishment ?>" />
             Max Fee: <input name="max_fee" type="number" value="<?php echo $max_tuition_fee; ?>" />
             <input type="submit" name="update" />
-          </form>
+          </form> -->
 
           <div class="row">
-            <div class="col-md-6" style="padding-right: 1px;  padding-left: 10px;">
-              <div class="col-md-6" style="padding-right: 1px;  padding-left: 10px;">
-
-                <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 500px;  margin: 5px; padding: 5px; background-color: white;">
+            <div class="col-md-6">
+              <div class="col-md-6">
+                <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px; margin-bottom: 2px; padding: 5px; background-color: white;">
                   <h5>
                     <i class="fa fa-info-circle" aria-hidden="true"></i> How system calculate
                     <strong>
@@ -105,12 +90,12 @@
                   </li>
                   </ol>
                   <button onclick="renewal_fee_sturucture()" class="btn btn-link">
-                    <i class="fa fa-info-circle" aria-hidden="true"></i> PSRA Academy Registration Fee Struture Detail</button>
+                    <i class="fa fa-info-circle" aria-hidden="true"></i> PSRA Academy Fee Struture Detail</button>
                 </div>
               </div>
 
-              <div class="col-md-6" style="padding-right: 1px;  padding-left: 1px; min-height:450px; ">
-                <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 500px !important;  margin: 5px; padding: 5px; background-color: white;">
+              <div class="col-md-6">
+                <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px !important;  margin-bottom: 2px; padding: 5px; background-color: white;">
                   <h4>Session: <?php echo $session_detail->sessionYearTitle; ?> Due Dates</h4>
                   <table class="table table-bordered">
 
@@ -159,47 +144,42 @@
                       </tr>
                     <?php } ?>
                   </table>
+                  <div style="font-size: 12px;">
+                    <h5> <i class="fa fa-info-circle" aria-hidden="true"></i> How to submit bank challan online ?</h5>
+                    <p>
+                    <ol>
+                      <li>Print PSRA Deposit Slip / Bank Challan</li>
+                      <li>Deposit Fee as per due dates</li>
+                      <li>Take computerized bank challan having STAN No. from the bank</li>
+                      <li>Submit <strong>Bank STAN</strong> number and Transaction date</li>
+                      <li>Click on <strong>"Submit bank challan"</strong></li>
+                      <li>View Registration application status on school dashboard</li>
+                      </ul>
+                    </ol>
+                    </p>
+                    <div style="direction: rtl;">
+                      <p>
+                      <h5 style="direction: rtl;"> <i class="fa fa-info-circle" aria-hidden="true"></i> بینک چالان آن لائن کیسے جمع کریں؟</h5>
+
+                      <ol style="direction: rtl;">
+                        <li>PSRA ڈپازٹ سلپ/بینک چالان پرنٹ کریں۔</li>
+                        <li>مقررہ تاریخوں کے مطابق فیس جمع کروائیں۔</li>
+                        <li>بینک سے STAN No والا کمپیوٹرائزڈ بینک چالان لیں۔</li>
+                        <li>بینک STAN نمبر اور لین دین کی تاریخ جمع کروائیں۔</li>
+                        <li style="direction: rtl;"> کلک کریں۔ "Submit bank challan"</li>
+                        <li>اسکول کے ڈیش بورڈ پر رجسٹریشن کی درخواست کی حیثیت دیکھیں</li>
+                        </ul>
+                      </ol>
+                      </p>
+                    </div>
+                  </div>
 
                 </div>
               </div>
-
-              <div class="col-md-6" style="font-size: 12px;">
-                <h5> <i class="fa fa-info-circle" aria-hidden="true"></i> How to submit bank challan online ?</h5>
-                <p>
-                <ol>
-                  <li>Print PSRA Deposit Slip / Bank Challan</li>
-                  <li>Deposit Fee as per due dates</li>
-                  <li>Take computerized bank challan having STAN No. from the bank</li>
-                  <li>Submit <strong>Bank STAN</strong> number and Transaction date</li>
-                  <li>Click on <strong>"Submit bank challan"</strong></li>
-                  <li>View Registration application status on school dashboard</li>
-                  </ul>
-                </ol>
-                </p>
-              </div>
-
-              <div class="col-md-6" style="font-size: 11px;">
-                <div style="direction: rtl; font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif; line-height: 30px;">
-                  <h5> <i class="fa fa-info-circle" aria-hidden="true"></i> بینک چالان آن لائن کیسے جمع کریں؟</h5>
-                  <p>
-                  <ol>
-                    <li>PSRA ڈپازٹ سلپ/بینک چالان پرنٹ کریں۔</li>
-                    <li>مقررہ تاریخوں کے مطابق فیس جمع کروائیں۔</li>
-                    <li>بینک سے STAN No والا کمپیوٹرائزڈ بینک چالان لیں۔</li>
-                    <li>بینک STAN نمبر اور لین دین کی تاریخ جمع کروائیں۔</li>
-                    <li style="direction: rtl;"> کلک کریں۔ "Submit bank challan"</li>
-                    <li>اسکول کے ڈیش بورڈ پر رجسٹریشن کی درخواست کی حیثیت دیکھیں</li>
-                    </ul>
-                  </ol>
-                  </p>
-                </div>
-              </div>
-
-
             </div>
 
-            <div class="col-md-6" style="padding-right: 10px;  padding-left: 1px;">
-              <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 500px;  margin: 5px; padding: 5px; background-color: white;">
+            <div class="col-md-6">
+              <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px; margin-bottom: 2px; padding: 5px; background-color: white;">
                 <h4>Session: <?php echo $session_detail->sessionYearTitle; ?> Registration Fee Detail</h4>
                 <table class="table" style="font-size: 13px;">
                   <thead>
@@ -352,7 +332,7 @@
 
               </div>
 
-              <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px;">
+              <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  padding: 5px; background-color:white ">
                 <h4>Submit Bank Challan for session <?php echo $session_detail->sessionYearTitle; ?></h4>
                 <form action="<?php echo site_url("form/add_bank_challan"); ?>" method="post">
                   <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
@@ -392,14 +372,7 @@
 
           </div>
 
-          <div class="row">
 
-
-
-            <div class="col-md-5">
-
-            </div>
-          </div>
 
 
 

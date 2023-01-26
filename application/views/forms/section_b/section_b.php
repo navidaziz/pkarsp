@@ -32,20 +32,8 @@
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h2 style="display:inline;"><?php echo ucwords(strtolower($school->schoolName)); ?>
+    <?php $this->load->view('forms/form_header');   ?>
 
-      </h2>
-      <br />
-      <small>
-        <h4>Institute ID: <?php echo $school->schools_id; ?> <?php if ($school->registrationNumber) { ?> - REG No: <?php echo $school->registrationNumber ?> <?php } ?></h4>
-      </small>
-      <ol class="breadcrumb">
-        <li><a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> Home </a></li>
-        <!-- <li><a href="#">Examples</a></li> -->
-        <li class="active"><?php echo @ucfirst($title); ?>s Session: <?php echo $session_detail->sessionYearTitle; ?></li>
-      </ol>
-    </section>
 
     <!-- Main content -->
     <section class="content" style="padding-top: 0px !important;">
@@ -114,9 +102,9 @@
                   <strong>Average Class Rooms Size (sq feet)</strong>
                   <input min="0" type="number" required name="avg_class_room_size" placeholder="" class="form-control" id="avg_class_room_size" value="<?php echo $school_physical_facilities->avg_class_room_size; ?>" />
 
-                  <strong> Total Area (in marlas): </strong>
+                  <strong> Total Area (in Marla): </strong>
                   <input min="0" type="number" required name="totalArea" placeholder="Enter total Area" class="form-control" id="totalArea" value="<?php echo $school_physical_facilities->totalArea; ?>" />
-                  <strong>Covered Area (in Marlas): </strong>
+                  <strong>Covered Area (in Marla): </strong>
                   <input onkeyup="check_total_area()" min="0" type="number" required name="coveredArea" placeholder="Enter Covered Area" class="form-control" id="coveredArea" value="<?php echo $school_physical_facilities->coveredArea; ?>" />
                   <small style="color:red" id="coveredAreaError"></small>
 
@@ -375,23 +363,33 @@
                 }
               </script>
 
-              <div class="col-md-12">
-                <div style="font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
-                  <?php if ($form_status->form_b_status == 1) { ?>
-                    <input onclick="check_total_area()" class="btn btn-primary" type="submit" name="" value="Update Section B Data" />
-                  <?php } else { ?>
-                    <input onclick="check_total_area()" class="btn btn-danger" type="submit" name="" value="Add Section B Data" />
-                  <?php } ?>
-                  <?php if ($form_status->form_b_status == 1) { ?>
-                    <a class="btn btn-success pull-right" href="<?php echo site_url("form/section_c/$school_id"); ?>">
-                      Next Section (Students Enrolment) <i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
 
-                  <?php } ?>
-                </div>
-              </div>
-            </form>
+
 
           </div>
+
+          <div style="font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
+
+            <div class="row">
+              <div class="col-md-6">
+                <?php if ($form_status->form_b_status == 1) { ?>
+                  <input style="margin: 3px;" onclick="check_total_area()" class="btn btn-primary" type="submit" name="" value="Update Section B Data" />
+                <?php } else { ?>
+                  <input style="margin: 3px;" onclick="check_total_area()" class="btn btn-danger" type="submit" name="" value="Add Section B Data" />
+                <?php } ?>
+              </div>
+              <div class="col-md-6">
+                <?php if ($form_status->form_b_status == 1) { ?>
+                  <a class="btn btn-success" style="margin: 5px;" href="<?php echo site_url("form/section_c/$school_id"); ?>">
+                    Next Section (Students Enrolment) <i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i>
+                  </a>
+                <?php } ?>
+              </div>
+
+            </div>
+          </div>
+          </form>
+
         </div>
 
 

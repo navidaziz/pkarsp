@@ -35,24 +35,45 @@
     background-size: cover;
     ">
   <!-- PAGE -->
+  <style>
+    @media (max-width:629px) {
+      img#log {
+        display: none;
+      }
+    }
+
+    @media (max-width: 629px) {
+      #hidden-mobile {
+        margin-top: 0px !important;
+      }
+    }
+  </style>
   <section id="page">
 
     <section id="login_bg" <?php if ($this->input->get('register') != 1) { ?>class="visible" <?php } ?>>
       <div class="container">
-        <div class="row" style="margin: 10px; margin-top: 70px;">
+        <div class="row" id="hidden-mobile" style="margin: 10px; margin-top: 70px;">
           <div class="col-md-7">
             <div id="logo">
               <div style=" width:100%; text-align: center; margin:0px auto; color:black; ">
-                <img src=" <?php echo site_url("assets/" . ADMIN_DIR . "img/psra_log.png"); ?>" alt="PSRA" title="PSRA" style="width:350px !important;" />
+
+
+                <img id="log" src=" <?php echo site_url("assets/" . ADMIN_DIR . "img/psra_log.png"); ?>" alt="PSRA" title="PSRA" style="width:350px !important;" />
 
                 <h2>Private Schools Regulatory Authority</h2>
                 <h4>Government Of Khyber Pakhtunkhwa</h4>
-                <address><i class="fa fa-envelope"></i> psra.pmdu@gmail.com
-                  <span style="margin-left: 10px;"></span> <i class="fa fa-phone" aria-hidden="true"></i> 091-5619512
-                  <br />
+                <!-- <address><i class="fa fa-envelope"></i> psra.pmdu@gmail.com
+                  <span style="margin-left: 10px;"></span>
+                  <br /> -->
+                MIS Section:
+                <a style="font-weight: bold; color:red" href="tel:+92091-9216205">
+                  <i class="fa fa-phone" aria-hidden="true"></i>
+                  091-9216205 </a>
+
+                <br />
 
 
-                  <i class="fa fa-map-marker" aria-hidden="true"></i> 18-E Jamal Ud Din Afghani Road, University Town, Peshawar
+                <i class="fa fa-map-marker" aria-hidden="true"></i> 18-E Jamal Ud Din Afghani Road, University Town, Peshawar
                 </address>
 
               </div>
@@ -106,6 +127,9 @@
                 </div>
                 <div>
                   <button type="submit" class="btn btn-danger">Login</button>
+
+                  <a class="btn btn-link btn-sm" style="text-decoration: none; margin-bottom:5px;" href="<?php echo site_url(); ?>register/password_reset">Forgot Password ?</a>
+
                 </div>
               </form>
               <!-- SOCIAL LOGIN -->
@@ -113,11 +137,11 @@
 
 
 
+              <a class="btn btn-primary" style="text-decoration: none; width:100%" href="<?php echo site_url(); ?>register/signup">Create institute Account</a><br>
+
 
               <div class="login-helpe rs">
-                <a class="btn btn-warning btn-s active  pull-left" style="text-decoration: none;" href="<?php echo site_url(); ?>register/password_reset">Forgot Password ?</a>
                 <!-- Don't have an account with us? <br /> -->
-                <a class="btn btn-primary btn-s active  pull-right" style="text-decoration: none;" href="<?php echo site_url(); ?>register/signup">Create institute Account</a><br>
 
               </div>
 

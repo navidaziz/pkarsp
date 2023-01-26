@@ -187,95 +187,7 @@
             </div>
           </div>
 
-          <div class="col-md-4">
-            <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
-              <?php
-              $query =
-                "SELECT COUNT(`message_for_all`.`message_id`) as total FROM `message_for_all`
-                     left join message_school on `message_for_all`.`message_id`=`message_school`.`message_id`
-                     where `message_school`.`school_id`=$school_id";
-              $query_result = $this->db->query($query);
-              $total_messages = $query_result->result()[0]->total; ?>
 
-              <h4><i class="fa fa-envelope-o"></i> Inbox Messages
-                <span class="label label-primary pull-right"><?php echo $total_messages; ?></span>
-              </h4>
-
-
-              <?php
-              $query =
-                "SELECT message_for_all.*,`message_school`.`school_id` FROM `message_for_all`
-                     left join message_school on `message_for_all`.`message_id`=`message_school`.`message_id`
-                     where `message_school`.`school_id`=$school_id  order by `message_for_all`.`message_id` DESC LIMIT 10";
-              $query_result = $this->db->query($query);
-              $school_messages = $query_result->result(); ?>
-              <table class="table">
-                <?php
-                foreach ($school_messages as $message) : ?>
-                  <tr>
-
-                    <td class=" message">
-                      <a target="_new" href="<?php echo base_url('messages/school_message_details/'); ?><?php echo $message->message_id; ?>">
-                        <strong style="font-size: 14px;"> <?php echo $message->subject; ?></strong>
-                      </a>
-                      <small style="display: block; color:gray" class="pull-right">
-                        <i class="fa fa-clock-o" aria-hidden="true"></i>
-                        <?php echo date("d M, Y", strtotime($message->created_date)); ?>
-                    </td>
-
-                  </tr>
-
-                <?php endforeach; ?>
-
-              </table>
-              <?php if ($total_messages > 6) { ?>
-                <div style="text-align: center;">
-                  <a class="btn btn-primary btn-sm" href="<?php echo site_url('messages/inbox'); ?>"><i class="fa fa-envelope-o"></i> All Inbox Messages</a>
-                </div>
-              <?php } ?>
-            </div>
-            <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
-
-              <?php $query = "SELECT COUNT(*) as total FROM `message_for_all` 
-                     WHERE `message_for_all`.`select_all`='yes'";
-              $query_result = $this->db->query($query);
-              $total_notifications = $query_result->result()[0]->total; ?>
-              <h4><i class="fa fa-bell-o" aria-hidden="true"></i> PSRA Notifications
-                <span class="label label-success pull-right"><?php echo $total_notifications; ?></span>
-              </h4>
-
-              <?php
-              $query =
-                "SELECT message_for_all.*,`message_school`.`school_id` FROM `message_for_all`
-                     left join message_school on `message_for_all`.`message_id`=`message_school`.`message_id`
-                     where`message_for_all`.`select_all`='yes'  order by `message_for_all`.`message_id` DESC LIMIT 6";
-              $query_result = $this->db->query($query);
-              $notifications = $query_result->result(); ?>
-              <table class="table">
-                <?php
-                foreach ($notifications as $message) : ?>
-                  <tr>
-
-                    <td class=" message">
-                      <a target="_new" href="<?php echo base_url('messages/school_message_details/'); ?><?php echo $message->message_id; ?>">
-                        <strong style="font-size: 14px;"> <?php echo $message->subject; ?></strong>
-                      </a>
-                      <small style="display: block; color:gray" class="pull-right">
-                        <i class="fa fa-clock-o" aria-hidden="true"></i>
-                        <?php echo date("d M, Y", strtotime($message->created_date)); ?>
-                    </td>
-
-                  </tr>
-
-                <?php endforeach; ?>
-              </table>
-              <?php if ($total_notifications > 6) { ?>
-                <div style="text-align: center;">
-                  <a class="btn btn-success btn-sm" href="<?php echo site_url('messages/inbox'); ?>"><i class="fa fa-bell-o"></i> All Notifications</a>
-                </div>
-              <?php } ?>
-            </div>
-          </div>
 
           <div class="col-md-5">
             <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
@@ -691,9 +603,98 @@
                   Change of Ownership</a>
 
               </div>
+            <?php } ?>
           </div>
-        <?php } ?>
 
+          <div class="col-md-4">
+            <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
+              <?php
+              $query =
+                "SELECT COUNT(`message_for_all`.`message_id`) as total FROM `message_for_all`
+                     left join message_school on `message_for_all`.`message_id`=`message_school`.`message_id`
+                     where `message_school`.`school_id`=$school_id";
+              $query_result = $this->db->query($query);
+              $total_messages = $query_result->result()[0]->total; ?>
+
+              <h4><i class="fa fa-envelope-o"></i> Inbox Messages
+                <span class="label label-primary pull-right"><?php echo $total_messages; ?></span>
+              </h4>
+
+
+              <?php
+              $query =
+                "SELECT message_for_all.*,`message_school`.`school_id` FROM `message_for_all`
+                     left join message_school on `message_for_all`.`message_id`=`message_school`.`message_id`
+                     where `message_school`.`school_id`=$school_id  order by `message_for_all`.`message_id` DESC LIMIT 10";
+              $query_result = $this->db->query($query);
+              $school_messages = $query_result->result(); ?>
+              <table class="table">
+                <?php
+                foreach ($school_messages as $message) : ?>
+                  <tr>
+
+                    <td class=" message">
+                      <a target="_new" href="<?php echo base_url('messages/school_message_details/'); ?><?php echo $message->message_id; ?>">
+                        <strong style="font-size: 14px;"> <?php echo $message->subject; ?></strong>
+                      </a>
+                      <small style="display: block; color:gray" class="pull-right">
+                        <i class="fa fa-clock-o" aria-hidden="true"></i>
+                        <?php echo date("d M, Y", strtotime($message->created_date)); ?>
+                    </td>
+
+                  </tr>
+
+                <?php endforeach; ?>
+
+              </table>
+              <?php if ($total_messages > 6) { ?>
+                <div style="text-align: center;">
+                  <a class="btn btn-primary btn-sm" href="<?php echo site_url('messages/inbox'); ?>"><i class="fa fa-envelope-o"></i> All Inbox Messages</a>
+                </div>
+              <?php } ?>
+            </div>
+            <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
+
+              <?php $query = "SELECT COUNT(*) as total FROM `message_for_all` 
+                     WHERE `message_for_all`.`select_all`='yes'";
+              $query_result = $this->db->query($query);
+              $total_notifications = $query_result->result()[0]->total; ?>
+              <h4><i class="fa fa-bell-o" aria-hidden="true"></i> PSRA Notifications
+                <span class="label label-success pull-right"><?php echo $total_notifications; ?></span>
+              </h4>
+
+              <?php
+              $query =
+                "SELECT message_for_all.*,`message_school`.`school_id` FROM `message_for_all`
+                     left join message_school on `message_for_all`.`message_id`=`message_school`.`message_id`
+                     where`message_for_all`.`select_all`='yes'  order by `message_for_all`.`message_id` DESC LIMIT 6";
+              $query_result = $this->db->query($query);
+              $notifications = $query_result->result(); ?>
+              <table class="table">
+                <?php
+                foreach ($notifications as $message) : ?>
+                  <tr>
+
+                    <td class=" message">
+                      <a target="_new" href="<?php echo base_url('messages/school_message_details/'); ?><?php echo $message->message_id; ?>">
+                        <strong style="font-size: 14px;"> <?php echo $message->subject; ?></strong>
+                      </a>
+                      <small style="display: block; color:gray" class="pull-right">
+                        <i class="fa fa-clock-o" aria-hidden="true"></i>
+                        <?php echo date("d M, Y", strtotime($message->created_date)); ?>
+                    </td>
+
+                  </tr>
+
+                <?php endforeach; ?>
+              </table>
+              <?php if ($total_notifications > 6) { ?>
+                <div style="text-align: center;">
+                  <a class="btn btn-success btn-sm" href="<?php echo site_url('messages/inbox'); ?>"><i class="fa fa-bell-o"></i> All Notifications</a>
+                </div>
+              <?php } ?>
+            </div>
+          </div>
 
         </div>
       </div>

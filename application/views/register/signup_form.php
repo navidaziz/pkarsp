@@ -22,12 +22,24 @@
     ">
   <!-- PAGE -->
   <section id="page">
+    <style>
+      @media (max-width:629px) {
+        #log {
+          display: none;
+        }
+      }
 
+      @media (max-width: 629px) {
+        #hidden-mobile {
+          margin-top: 0px !important;
+        }
+      }
+    </style>
 
     <section id="registe r_bg" class="font-400" class="font-400 visible animated fadeInUp">
       <div class="container">
         <div class="row" style="margin: 10px; margin-top: 70px;">
-          <div class="col-md-7">
+          <div id="log" class="col-md-7">
             <div id="logo">
               <div style=" width:100%; text-align: center; margin:0px auto; color:black; ">
                 <img src=" <?php echo site_url("assets/" . ADMIN_DIR . "img/psra_log.png"); ?>" alt="PSRA" title="PSRA" style="width:350px !important;" />
@@ -75,6 +87,7 @@
                 <div>
 
                   <button type="submit" class="btn btn-success">Create Account</button>
+
                 </div>
               </form>
               <!-- SOCIAL REGISTER -->
@@ -90,7 +103,6 @@
               <!-- /SOCIAL REGISTER -->
               <div class="login-helpers" style="text-align: center;">
                 <a class="btn btn-danger" href="<?php echo site_url('login'); ?>"> <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Login</a>
-                <a class="btn btn-warning" href="<?php echo site_url('register/password_reset'); ?>"> <i class="fa fa-undo" aria-hidden="true"></i> Forget Password</a>
 
               </div>
             </div>

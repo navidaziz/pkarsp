@@ -197,20 +197,8 @@
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h2 style="display:inline;">
-        <?php echo ucwords(strtolower($school->schoolName)); ?>
-      </h2>
-      <br />
-      <h4>Institute ID: <?php echo $school->schools_id; ?>
-        <?php if ($school->registrationNumber) { ?> - REG No: <?php echo $school->registrationNumber ?> <?php } ?></h4>
-      <ol class="breadcrumb">
-        <li><a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> Home </a></li>
-        <!-- <li><a href="#">Examples</a></li> -->
-        <li class="active"><?php echo @ucfirst($title); ?>s Session: <?php echo $session_detail->sessionYearTitle; ?></li>
-      </ol>
-    </section>
+
+    <?php $this->load->view('forms/form_header');   ?>
 
     <!-- Main content -->
     <section class="content" style="padding-top: 0px !important;">
@@ -316,111 +304,115 @@
 
           <div class="row">
             <div class="col-md-12">
-              <table class="table" style="font-size: 12px;">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Designation</th>
-                    <th>Type</th>
-                    <th>Name</th>
-                    <th>F/Husband Name</th>
-                    <th>CNIC</th>
-                    <th>Gender</th>
+              <div class="table-responsive">
+                <table class="table" style="font-size: 12px;">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Designation</th>
+                      <th>Type</th>
+                      <th>Name</th>
+                      <th>F/Husband Name</th>
+                      <th>CNIC</th>
+                      <th>Gender</th>
 
-                    <th>Academic Qualification</th>
-                    <th>Professional Qualification</th>
-                    <?php if ($school->school_type_id != 7) { ?>
-                      <th>Training</th>
-                      <th>Experience</th>
-                    <?php } ?>
+                      <th>Academic Qualification</th>
+                      <th>Professional Qualification</th>
+                      <?php if ($school->school_type_id != 7) { ?>
+                        <th>Training</th>
+                        <th>Experience</th>
+                      <?php } ?>
 
-                    <th>Appointment At</th>
-                    <th>Net.Pay</th>
-                    <?php if ($school->school_type_id != 7) { ?>
-                      <th>Annual Increament</th>
-                    <?php } ?>
-                    <?php if ($school->school_type_id == 7) { ?>
-                      <th>Job Nature</th>
-                      <th>Govt: Sectot Staff</th>
-                      <th>Gov: NOC</th>
-                    <?php } ?>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody id="staff_tbody">
-                  <?php $counter = 1; ?>
-                  <?php if (!empty($school_staff)) : ?>
-                    <?php foreach ($school_staff as $st) : ?>
-                      <tr id="staff_row_<?php echo $st->schoolStaffId; ?>">
-                        <td><?php echo $counter; ?></td>
-                        <td><?php echo $st->schoolStaffDesignition; ?></td>
-                        <td><?php echo $st->staffTtitle; ?></td>
-                        <td><?php echo $st->schoolStaffName; ?></td>
-                        <td><?php echo $st->schoolStaffFatherOrHusband; ?></td>
-                        <td><?php echo $st->schoolStaffCnic; ?></td>
-                        <td><?php echo $st->genderTitle; ?></td>
+                      <th>Appointment At</th>
+                      <th>Net.Pay</th>
+                      <?php if ($school->school_type_id != 7) { ?>
+                        <th>Annual Increament</th>
+                      <?php } ?>
+                      <?php if ($school->school_type_id == 7) { ?>
+                        <th>Job Nature</th>
+                        <th>Govt: Sectot Staff</th>
+                        <th>Gov: NOC</th>
+                      <?php } ?>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="staff_tbody">
+                    <?php $counter = 1; ?>
+                    <?php if (!empty($school_staff)) : ?>
+                      <?php foreach ($school_staff as $st) : ?>
+                        <tr id="staff_row_<?php echo $st->schoolStaffId; ?>">
+                          <td><?php echo $counter; ?></td>
+                          <td><?php echo $st->schoolStaffDesignition; ?></td>
+                          <td><?php echo $st->staffTtitle; ?></td>
+                          <td><?php echo $st->schoolStaffName; ?></td>
+                          <td><?php echo $st->schoolStaffFatherOrHusband; ?></td>
+                          <td><?php echo $st->schoolStaffCnic; ?></td>
+                          <td><?php echo $st->genderTitle; ?></td>
 
-                        <td><?php echo $st->schoolStaffQaulificationAcademic; ?></td>
-                        <td><?php echo $st->schoolStaffQaulificationProfessional; ?></td>
-                        <?php if ($school->school_type_id != 7) { ?>
-                          <td><?php echo $st->TeacherTraining; ?> (M)</td>
-                          <td><?php echo $st->TeacherExperience; ?> (M)</td>
-                        <?php } ?>
-
-                        <td><?php echo $st->schoolStaffAppointmentDate; ?></td>
-                        <td><?php echo $st->schoolStaffNetPay; ?></td>
-                        <?php if ($school->school_type_id != 7) { ?>
-
-                          <td><?php echo $st->schoolStaffAnnualIncreament; ?> <strong>%</strong></td>
-                        <?php } ?>
-                        <?php if ($school->school_type_id == 7) { ?>
-                          <td><?php echo $st->job_nature; ?></td>
-                          <td><?php echo $st->gov_sector; ?></td>
-                          <td><?php echo $st->gov_noc; ?></td>
-                        <?php } ?>
-                        <td>
-                          <?php if ($school->status != 1) { ?>
-                            <a href="javascript:void(0);" onclick="get_employee_edit_form(<?php echo $st->schoolStaffId; ?>)">
-                              &nbsp;<i class="fa fa-edit"></i></a>
-                            <a href="<?php echo site_url("form/delete_employee/$st->schoolStaffId/$school_id/$session_id"); ?>" title="Delete Employee" onclick="return confirm('Are you sure? you want to remove the employee?')"> &nbsp;<i class="fa fa-trash-o text-danger"></i>
-                            </a>
+                          <td><?php echo $st->schoolStaffQaulificationAcademic; ?></td>
+                          <td><?php echo $st->schoolStaffQaulificationProfessional; ?></td>
+                          <?php if ($school->school_type_id != 7) { ?>
+                            <td><?php echo $st->TeacherTraining; ?> (M)</td>
+                            <td><?php echo $st->TeacherExperience; ?> (M)</td>
                           <?php } ?>
-                        </td>
-                      </tr>
-                      <?php $counter++; ?>
-                    <?php endforeach; ?>
-                  <?php else : ?>
-                    <td colspan="15" id="empty_td_staff">
 
-                    </td>
-                  <?php endif; ?>
-                </tbody>
-              </table>
+                          <td><?php echo $st->schoolStaffAppointmentDate; ?></td>
+                          <td><?php echo $st->schoolStaffNetPay; ?></td>
+                          <?php if ($school->school_type_id != 7) { ?>
 
+                            <td><?php echo $st->schoolStaffAnnualIncreament; ?> <strong>%</strong></td>
+                          <?php } ?>
+                          <?php if ($school->school_type_id == 7) { ?>
+                            <td><?php echo $st->job_nature; ?></td>
+                            <td><?php echo $st->gov_sector; ?></td>
+                            <td><?php echo $st->gov_noc; ?></td>
+                          <?php } ?>
+                          <td>
+                            <?php if ($school->status != 1) { ?>
+                              <a href="javascript:void(0);" onclick="get_employee_edit_form(<?php echo $st->schoolStaffId; ?>)">
+                                &nbsp;<i class="fa fa-edit"></i></a>
+                              <a href="<?php echo site_url("form/delete_employee/$st->schoolStaffId/$school_id/$session_id"); ?>" title="Delete Employee" onclick="return confirm('Are you sure? you want to remove the employee?')"> &nbsp;<i class="fa fa-trash-o text-danger"></i>
+                              </a>
+                            <?php } ?>
+                          </td>
+                        </tr>
+                        <?php $counter++; ?>
+                      <?php endforeach; ?>
+                    <?php else : ?>
+                      <td colspan="15" id="empty_td_staff">
+
+                      </td>
+                    <?php endif; ?>
+                  </tbody>
+                </table>
+              </div>
 
             </div>
 
-            <div class="col-md-12">
-              <div style="font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 50px;  margin: 10px; padding: 10px; background-color: white;">
-                <a class="btn btn-success pull-left" href="<?php echo site_url("form/section_c/$school_id"); ?>">
-                  <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Previous Section ( Students Enrollment ) </a>
-                <?php if (count($school_staff) >= 3 and $form_status->form_d_status == 0) { ?>
-                  <a href="<?php echo site_url("form/complete_section_d/$school_id"); ?>" class="btn btn-primary">Add Section D Data</a>
-                <?php } else { ?>
 
-                <?php } ?>
-                <?php if ($form_status->form_d_status == 1) { ?>
-                  <a class="btn btn-success pull-right" href="<?php echo site_url("form/section_e/$school_id"); ?>">
-                    Next Section ( School Fee Detail )<i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
-                  <br />
-                <?php } else {
-                  echo "<br />";
-                } ?>
+          </div>
+
+          <div style="font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
+
+            <div class="row">
+              <div class="col-md-4">
+                <a class="btn btn-success" style="margin: 2px;" href="<?php echo site_url("form/section_c/$school_id"); ?>">
+                  <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Previous Section ( Students Enrollment ) </a>
 
               </div>
+              <div class="col-md-4">
+                <?php if (count($school_staff) >= 3 and $form_status->form_d_status == 0) { ?>
+                  <a href="<?php echo site_url("form/complete_section_d/$school_id"); ?>" class="btn btn-primary" style="margin: 2px;">Add Section D Data</a>
+                <?php } ?>
+              </div>
+              <div class="col-md-4">
+                <?php if ($form_status->form_d_status == 1) { ?>
+                  <a class="btn btn-success" style="margin: 2px;" href="<?php echo site_url("form/section_e/$school_id"); ?>">
+                    Next Section ( School Fee Detail )<i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
+                <?php } ?>
+              </div>
+
             </div>
-
-
           </div>
         </div>
 
