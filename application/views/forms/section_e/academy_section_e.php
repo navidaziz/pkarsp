@@ -142,7 +142,7 @@
                   <input min="0" type="hidden" name="addmissionFee" value="<?php echo $class_fees->addmissionFee; ?>" />
                   <input min="0" type="hidden" name="securityFund" value="<?php echo $class_fees->securityFund; ?>" />
                   <br />
-                  <h4>Max: Fee charged per student (Per month)
+                  <h4>Maximum fee charged per student (Per Month) / (Per Course)
                     <span style="margin-left: 20px;"></span>
                     <input class="form-control" style="width: 200px;" required min="0" type="number" name="tuitionFee" value="<?php echo $class_fees->tuitionFee; ?>" />
                   </h4>

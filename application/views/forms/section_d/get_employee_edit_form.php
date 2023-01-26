@@ -21,6 +21,27 @@
     <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
     <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
     <table class="table table-bordered">
+      <tr>
+        <th>Designation</th>
+        <td><input class="form-control" type="text" name="schoolStaffDesignition" required value="<?php echo  $school_staff->schoolStaffDesignition; ?>" /></td>
+      </tr>
+      <tr>
+        <th>Employee Type</th>
+        <td>
+          <select class="form-control" required name="schoolStaffType">
+            <option value="">Type</option>
+            <?php if (!empty($staff_type)) : ?>
+              <?php foreach ($staff_type as $s_type) : ?>
+                <option <?php if ($school_staff->schoolStaffType == $s_type->staffTypeId) {
+                          echo "selected";
+                        } ?> value="<?php echo $s_type->staffTypeId ?>"><?php echo $s_type->staffTtitle; ?></option>
+              <?php endforeach; ?>
+            <?php else : ?>
+              No Staff Type Found.
+            <?php endif; ?>
+          </select>
+        </td>
+      </tr>
 
       <tr>
         <th>Name</th>
@@ -49,27 +70,8 @@
             <?php endif; ?>
           </select></td>
       </tr>
-      <tr>
-        <th>Employee Type</th>
-        <td>
-          <select class="form-control" required name="schoolStaffType">
-            <option value="">Type</option>
-            <?php if (!empty($staff_type)) : ?>
-              <?php foreach ($staff_type as $s_type) : ?>
-                <option <?php if ($school_staff->schoolStaffType == $s_type->staffTypeId) {
-                          echo "selected";
-                        } ?> value="<?php echo $s_type->staffTypeId ?>"><?php echo $s_type->staffTtitle; ?></option>
-              <?php endforeach; ?>
-            <?php else : ?>
-              No Staff Type Found.
-            <?php endif; ?>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <th>Designation</th>
-        <td><input class="form-control" type="text" name="schoolStaffDesignition" required value="<?php echo  $school_staff->schoolStaffDesignition; ?>" /></td>
-      </tr>
+
+
       <?php if ($school_type_id == 7) { ?>
         <tr>
           <th>Job Nature</th>
@@ -147,10 +149,14 @@
         <th>Net.Pay</th>
         <td><input class="form-control" type="number" name="schoolStaffNetPay" required value="<?php echo  $school_staff->schoolStaffNetPay; ?>" /></td>
       </tr>
-      <tr>
-        <th>Annual Increament</th>
-        <td><input class="form-control" min="0" max="100" placeholder="10, 20 etc" type="number" name="schoolStaffAnnualIncreament" required value="<?php echo  $school_staff->schoolStaffAnnualIncreament; ?>" /> %</td>
-      </tr>
+      <?php if ($school_type_id != 7) { ?>
+        <tr>
+          <th>Annual Increament</th>
+          <td><input class="form-control" min="0" max="100" placeholder="10, 20 etc" type="number" name="schoolStaffAnnualIncreament" required value="<?php echo  $school_staff->schoolStaffAnnualIncreament; ?>" /> %</td>
+        </tr>
+      <?php } else { ?>
+        <input class="form-control" min="0" max="100" placeholder="10, 20 etc" type="hidden" name="schoolStaffAnnualIncreament" required value="<?php echo  $school_staff->schoolStaffAnnualIncreament; ?>" />
+      <?php } ?>
       <tr>
         <td colspan="2" style="text-align: center;">
           <input class="btn btn-success" type="submit" name="" value="Update Detail" />

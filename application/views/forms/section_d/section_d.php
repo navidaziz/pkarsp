@@ -51,6 +51,43 @@
             <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
             <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
             <table class="table table-bordered">
+
+              <tr>
+                <th>Designation</th>
+                <?php if ($school->school_type_id != 7) { ?>
+                  <?php
+                  $query = "SELECT COUNT(*) total FROM `school_staff` 
+                WHERE  lower(`school_staff`.`schoolStaffDesignition`) = 'principal' 
+                AND school_id = '" . $school_id . "'";
+                  $total_pricipal = $this->db->query($query)->result()[0]->total;
+                  ?>
+                  <td><input class="form-control" <?php if ($total_pricipal == 0) { ?> readonly value="Principal" <?php } ?> type="text" name="schoolStaffDesignition" required /></td>
+                <?php } else { ?>
+                  <?php
+                  $query = "SELECT COUNT(*) total FROM `school_staff` 
+                WHERE  lower(`school_staff`.`schoolStaffDesignition`) = 'director' 
+                AND school_id = '" . $school_id . "'";
+                  $total_pricipal = $this->db->query($query)->result()[0]->total;
+                  ?>
+                  <td><input class="form-control" <?php if ($total_pricipal == 0) { ?> readonly value="Director" <?php } ?> type="text" name="schoolStaffDesignition" required /></td>
+
+                <?php } ?>
+              </tr>
+
+              <tr>
+                <th>Employee Type</th>
+                <td> <select class="form-control" id="schoolStaffType" name="schoolStaffType" required="required">
+                    <?php if (!empty($staff_type)) : ?>
+                      <option value="">Type</option>
+                      <?php foreach ($staff_type as $s_type) : ?>
+                        <option value="<?php echo $s_type->staffTypeId ?>"><?php echo $s_type->staffTtitle; ?></option>
+                      <?php endforeach; ?>
+                    <?php else : ?>
+                      No Employee Type Found.
+                    <?php endif; ?>
+                  </select></td>
+              </tr>
+
               <tr>
                 <th>Employee Name</th>
                 <td><input class="form-control" type="text" name="schoolStaffName" required /> </td>
@@ -76,40 +113,9 @@
                     <?php endif; ?>
                   </select></td>
               </tr>
-              <tr>
-                <th>Employee Type</th>
-                <td> <select class="form-control" id="schoolStaffType" name="schoolStaffType" required="required">
-                    <?php if (!empty($staff_type)) : ?>
-                      <option value="">Type</option>
-                      <?php foreach ($staff_type as $s_type) : ?>
-                        <option value="<?php echo $s_type->staffTypeId ?>"><?php echo $s_type->staffTtitle; ?></option>
-                      <?php endforeach; ?>
-                    <?php else : ?>
-                      No Employee Type Found.
-                    <?php endif; ?>
-                  </select></td>
-              </tr>
-              <tr>
-                <th>Designation</th>
-                <?php if ($school->school_type_id != 7) { ?>
-                  <?php
-                  $query = "SELECT COUNT(*) total FROM `school_staff` 
-                WHERE  lower(`school_staff`.`schoolStaffDesignition`) = 'principal' 
-                AND school_id = '" . $school_id . "'";
-                  $total_pricipal = $this->db->query($query)->result()[0]->total;
-                  ?>
-                  <td><input class="form-control" <?php if ($total_pricipal == 0) { ?> readonly value="Principal" <?php } ?> type="text" name="schoolStaffDesignition" required /></td>
-                <?php } else { ?>
-                  <?php
-                  $query = "SELECT COUNT(*) total FROM `school_staff` 
-                WHERE  lower(`school_staff`.`schoolStaffDesignition`) = 'director' 
-                AND school_id = '" . $school_id . "'";
-                  $total_pricipal = $this->db->query($query)->result()[0]->total;
-                  ?>
-                  <td><input class="form-control" <?php if ($total_pricipal == 0) { ?> readonly value="Director" <?php } ?> type="text" name="schoolStaffDesignition" required /></td>
 
-                <?php } ?>
-              </tr>
+
+
               <?php if ($school->school_type_id == 7) { ?>
                 <tr>
                   <th>Job Nature</th>
@@ -167,10 +173,14 @@
                 <th>Monthly Pay</th>
                 <td><input class="form-control" min="0" type="number" name="schoolStaffNetPay" required /></td>
               </tr>
-              <tr>
-                <th>Annual Increament (%)</th>
-                <td><input class="form-control" min="0" max="100" placeholder="" type="number" name="schoolStaffAnnualIncreament" required /> <strong>%</strong></td>
-              </tr>
+              <?php if ($school->school_type_id != 7) { ?>
+                <tr>
+                  <th>Annual Increament (%)</th>
+                  <td><input class="form-control" min="0" max="100" placeholder="" type="number" name="schoolStaffAnnualIncreament" required /> <strong>%</strong></td>
+                </tr>
+              <?php } else { ?>
+                <input class="form-control" min="0" max="100" placeholder="" type="hidden" value="0" name="schoolStaffAnnualIncreament" required />
+              <?php } ?>
               <tr>
                 <th>Save</th>
                 <td>
@@ -310,21 +320,25 @@
                 <thead>
                   <tr>
                     <th>#</th>
+                    <th>Designation</th>
+                    <th>Type</th>
                     <th>Name</th>
                     <th>F/Husband Name</th>
                     <th>CNIC</th>
                     <th>Gender</th>
-                    <th>Type</th>
+
                     <th>Academic Qualification</th>
                     <th>Professional Qualification</th>
                     <?php if ($school->school_type_id != 7) { ?>
                       <th>Training</th>
                       <th>Experience</th>
                     <?php } ?>
-                    <th>Designation</th>
+
                     <th>Appointment At</th>
                     <th>Net.Pay</th>
-                    <th>Annual Increament</th>
+                    <?php if ($school->school_type_id != 7) { ?>
+                      <th>Annual Increament</th>
+                    <?php } ?>
                     <?php if ($school->school_type_id == 7) { ?>
                       <th>Job Nature</th>
                       <th>Govt: Sectot Staff</th>
@@ -339,21 +353,26 @@
                     <?php foreach ($school_staff as $st) : ?>
                       <tr id="staff_row_<?php echo $st->schoolStaffId; ?>">
                         <td><?php echo $counter; ?></td>
+                        <td><?php echo $st->schoolStaffDesignition; ?></td>
+                        <td><?php echo $st->staffTtitle; ?></td>
                         <td><?php echo $st->schoolStaffName; ?></td>
                         <td><?php echo $st->schoolStaffFatherOrHusband; ?></td>
                         <td><?php echo $st->schoolStaffCnic; ?></td>
                         <td><?php echo $st->genderTitle; ?></td>
-                        <td><?php echo $st->staffTtitle; ?></td>
+
                         <td><?php echo $st->schoolStaffQaulificationAcademic; ?></td>
                         <td><?php echo $st->schoolStaffQaulificationProfessional; ?></td>
                         <?php if ($school->school_type_id != 7) { ?>
                           <td><?php echo $st->TeacherTraining; ?> (M)</td>
                           <td><?php echo $st->TeacherExperience; ?> (M)</td>
                         <?php } ?>
-                        <td><?php echo $st->schoolStaffDesignition; ?></td>
+
                         <td><?php echo $st->schoolStaffAppointmentDate; ?></td>
                         <td><?php echo $st->schoolStaffNetPay; ?></td>
-                        <td><?php echo $st->schoolStaffAnnualIncreament; ?> <strong>%</strong></td>
+                        <?php if ($school->school_type_id != 7) { ?>
+
+                          <td><?php echo $st->schoolStaffAnnualIncreament; ?> <strong>%</strong></td>
+                        <?php } ?>
                         <?php if ($school->school_type_id == 7) { ?>
                           <td><?php echo $st->job_nature; ?></td>
                           <td><?php echo $st->gov_sector; ?></td>

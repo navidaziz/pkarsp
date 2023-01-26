@@ -100,7 +100,11 @@
                                                                     } ?> /> Morning <span style="margin-left: 10px;"></span>
                   <input type="radio" name="timing" value="evening" <?php if ($school_physical_facilities->timing == 'evening') {
                                                                       echo 'checked';
-                                                                    } ?> /> Evening
+                                                                    } ?> /> Evening <span style="margin-left: 10px;"></span>
+
+                  <input type="radio" name="timing" value="both" <?php if ($school_physical_facilities->timing == 'both') {
+                                                                    echo 'checked';
+                                                                  } ?> /> Both
 
                   <br />
                   <strong> Total Number Of Class Rooms: </strong>

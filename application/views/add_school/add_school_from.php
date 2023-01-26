@@ -69,12 +69,14 @@
                         $('.bankDetail').prop('required', false);
                         $('.a_input').prop('checked', true);
                         $('#levels').hide();
+                        $('.mediumOfInstruction').prop('checked', true);
                       } else {
                         $('.p_input').prop('checked', false);
                         $('.a_input').prop('checked', false);
                         $('.p_div').show();
                         $('.a_div').hide();
                         $('#levels').show();
+                        $('.mediumOfInstruction').prop('checked', false);
                       }
 
                     }
@@ -138,13 +140,12 @@
 
 
 
-                    <tr>
+                    <tr class="p_div">
                       <td colspan="2">
                         <strong class="required">Medium of Instruction</strong><br />
-                        <input type="radio" name="mediumOfInstruction" required value="Urdu"> Urdu <br />
-                        <input type="radio" name="mediumOfInstruction" required value="English"> English <br />
-
-                        <input type="radio" name="mediumOfInstruction" required value="Both"> Both
+                        <input class="mediumOfInstruction" type="radio" name="mediumOfInstruction" required value="Urdu"> Urdu <br />
+                        <input class="mediumOfInstruction" type="radio" name="mediumOfInstruction" required value="English"> English <br />
+                        <input class="mediumOfInstruction" type="radio" name="mediumOfInstruction" required value="Both"> Both
 
                       </td>
                     </tr>
