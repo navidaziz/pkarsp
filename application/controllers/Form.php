@@ -425,7 +425,7 @@ class Form extends Admin_Controller
 			if ($input_courses_array['others'] == '1') {
 				$input_courses_array['others_courses'] = $this->input->post('others_courses');
 			}
-			var_dump($input_courses_array);
+			//var_dump($input_courses_array);
 			$this->db->insert('academy_courses', $input_courses_array);
 		}
 
