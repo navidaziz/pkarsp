@@ -90,19 +90,47 @@
                       "frca" => 'Forces Recuitment Coaching Academy / Center',
                       "css_pms" => 'CSS / PMS Coaching Academy / Center',
                       "etea" => 'ETEA Coaching Academy / Center',
-                      "language" => 'Language Academy / Center'
+                      "language" => 'Language Academy / Center',
+                      "others" => 'Others'
                     );
                     foreach ($courses as $index => $course) { ?>
                       <li>
                         <h4>
-                          <input <?php if ($session_courses["$index"] == 1) { ?> checked <?php } ?> type="checkbox" name="courses[]" value="<?php echo $index; ?>" />
+                          <input id="<?php echo $index; ?>" <?php if ($session_courses["$index"] == 1) { ?> checked <?php } ?> type="checkbox" name="courses[]" value="<?php echo $index; ?>" />
                           <span style="margin-left: 20px;"></span>
                           <?php echo $course; ?>
+                          <?php if ($index == 'others') { ?>
+                            <div id="others_courses_div" style="
+                              <?php if ($session_courses['others'] == 1) { ?>
+                              display:block; 
+                              <?php } else { ?>
+                                display:none; 
+                              <?php } ?>
+                              margin: 5px; padding:5px; border:1px solid lightgray; border-radius:5px; ">
+                              Others Detail: <input id="others_courses" type="text" name="others_courses" value="<?php echo $session_courses['others_courses']; ?>" style="width:100%" placeholder="Abc, Xyz etc" />
+                            </div>
+                          <?php } ?>
                         </h4>
                       </li>
                     <?php  } ?>
                   </ul>
+                  <script>
+                    $(document).ready(function() {
+                      $('#others').click(function() {
+                        var checkbox = document.getElementById('others');
+                        if (checkbox.checked == true) {
 
+                          $('#others_courses_div').show();
+                          $('#others_courses').prop('required', true);
+
+                        } else {
+
+                          $('#others_courses_div').hide();
+                          $('#others_courses').prop('required', false);
+                        }
+                      });
+                    });
+                  </script>
 
 
                   <?php $class_id = 16;
@@ -163,12 +191,6 @@
 
             </div>
           </div>
-
-          <div class="col-sm-12">
-
-
-          </div>
-
 
 
         </div>

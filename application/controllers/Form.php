@@ -405,7 +405,7 @@ class Form extends Admin_Controller
 		if ($this->input->post('courses')) {
 			$input_courses_array = array();
 			$select_courses = $this->input->post('courses');
-			$courses_columns = array("fcta", "ccpa", "frca", "css_pms", "etea", "language");
+			$courses_columns = array("fcta", "ccpa", "frca", "css_pms", "etea", "language", "others");
 			foreach ($courses_columns as $courses_column) {
 
 				if (in_array($courses_column, $select_courses)) {
@@ -418,9 +418,14 @@ class Form extends Admin_Controller
 			$input_courses_array['school_id'] = $school_id;
 			$input_courses_array['session_id'] = $session_id;
 
+
 			$query = "DELETE FROM academy_courses 
 		          WHERE school_id ='" . $school_id . "'";
 			$this->db->query($query);
+			if ($input_courses_array['others'] == '1') {
+				$input_courses_array['others_courses'] = $this->input->post('others_courses');
+			}
+			var_dump($input_courses_array);
 			$this->db->insert('academy_courses', $input_courses_array);
 		}
 
