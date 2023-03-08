@@ -1,34 +1,3 @@
-  <!-- Modal -->
-  <script>
-    function get_employee_edit_form(employee_id) {
-      $.ajax({
-        type: "POST",
-        url: "<?php echo site_url("form/get_employee_edit_form"); ?>",
-        data: {
-          employee_id: employee_id,
-          schools_id: <?php echo $school->schoolId; ?>,
-          school_id: <?php echo $school_id; ?>,
-          session_id: <?php echo $session_id; ?>
-
-        }
-      }).done(function(data) {
-
-        $('#get_employee_edit_form_body').html(data);
-      });
-
-      $('#get_employee_edit_form_model').modal('toggle');
-    }
-  </script>
-  <div class="modal fade" id="get_employee_edit_form_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content" id="get_employee_edit_form_body">
-
-        ...
-
-      </div>
-    </div>
-  </div>
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -54,6 +23,7 @@
 
             <form class="form-horizontal" method="post" id="Form1" action="<?php echo base_url('form/update_form_b_data'); ?>">
               <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
+              <input type="hidden" name="schools_id" value="<?php echo $schools_id; ?>" />
               <input type="hidden" name="physicalFacilityId" value="<?php echo $school_physical_facilities->physicalFacilityId; ?>" />
               <input type="hidden" name="session_id" value="<?php echo $session_id; ?>">
 
@@ -75,24 +45,25 @@
                     <span style="margin-top: 10px; display: block;"> </span>
                   <?php endforeach; ?>
 
-                  <h3>Land Type</h3>
-                  <input type="radio" name="land_type" value="commercial" <?php if ($school_physical_facilities->land_type == 'commercial') {
-                                                                            echo 'checked';
-                                                                          } ?> /> Commercial <span style="margin-left: 10px;"></span>
-                  <input type="radio" name="land_type" value="residential" <?php if ($school_physical_facilities->land_type == 'residential') {
-                                                                              echo 'checked';
-                                                                            } ?> /> Residential
-                  <h3>Institute Timing</h3>
-                  <input type="radio" name="timing" value="morning" <?php if ($school_physical_facilities->timing == 'morning') {
-                                                                      echo 'checked';
-                                                                    } ?> /> Morning <span style="margin-left: 10px;"></span>
-                  <input type="radio" name="timing" value="evening" <?php if ($school_physical_facilities->timing == 'evening') {
-                                                                      echo 'checked';
-                                                                    } ?> /> Evening <span style="margin-left: 10px;"></span>
+                  <strong>Land Type</strong><br />
+                  <input required type="radio" name="land_type" value="commercial" <?php if ($school_physical_facilities->land_type == 'commercial') {
+                                                                                      echo 'checked';
+                                                                                    } ?> /> Commercial <span style="margin-left: 10px;"></span>
+                  <input required type="radio" name="land_type" value="residential" <?php if ($school_physical_facilities->land_type == 'residential') {
+                                                                                      echo 'checked';
+                                                                                    } ?> /> Residential
+                  <br />
+                  <strong>Institute Timing</strong><br />
+                  <input required type="radio" name="timing" value="morning" <?php if ($school_physical_facilities->timing == 'morning') {
+                                                                                echo 'checked';
+                                                                              } ?> /> Morning <span style="margin-left: 10px;"></span>
+                  <input required type="radio" name="timing" value="evening" <?php if ($school_physical_facilities->timing == 'evening') {
+                                                                                echo 'checked';
+                                                                              } ?> /> Evening <span style="margin-left: 10px;"></span>
 
-                  <input type="radio" name="timing" value="both" <?php if ($school_physical_facilities->timing == 'both') {
-                                                                    echo 'checked';
-                                                                  } ?> /> Both
+                  <input required type="radio" name="timing" value="both" <?php if ($school_physical_facilities->timing == 'both') {
+                                                                            echo 'checked';
+                                                                          } ?> /> Both
 
                   <br />
                   <strong> Total Number Of Class Rooms: </strong>
@@ -343,6 +314,87 @@
                   </div>
                 <?php } ?>
 
+                <div style=" font-size: 16px; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
+                  <?php if ($school->school_type_id == 1) { ?>
+
+
+                    <strong> Gender of Education <small>(Institute)</small> </strong>
+                    <?php
+                    $query = "select gender_type_id FROM school WHERE schoolId = '" . $school_id . "'";
+                    $school_gender = $this->db->query($query)->row();
+                    //var_dump($a_o_level);
+                    ?>
+
+                    <br />
+                    <input type="radio" name="gender_type_id" value="1" <?php if ($school_gender->gender_type_id === "1") {
+                                                                          echo "checked";
+                                                                        } ?> required /> Boys <span style="margin-left: 10px;"></span>
+                    <input type="radio" name="gender_type_id" value="2" <?php if ($school_gender->gender_type_id === "2") {
+                                                                          echo "checked";
+                                                                        } ?> required /> Girls <span style="margin-left: 10px;"></span>
+
+                    <input type="radio" name="gender_type_id" value="3" <?php if ($school_gender->gender_type_id === "3") {
+                                                                          echo "checked";
+                                                                        } ?> required /> Co-Education
+
+                    <br />
+                    <br />
+
+                    <strong> Do Institute offer O Level and A level </strong>
+                    <?php
+                    $query = "select a_o_level, telePhoneNumber, schoolMobileNumber, principal_email FROM schools WHERE schoolId = '" . $schools_id . "'";
+                    $school_more_info = $this->db->query($query)->row();
+                    //var_dump($a_o_level);
+                    ?>
+                    <br />
+                    <input type="radio" name="a_o_level" value="1" <?php if ($school_more_info->a_o_level === "1") {
+                                                                      echo "checked";
+                                                                    } ?> required /> Yes <span style="margin-left: 10px;"></span>
+                    <input type="radio" name="a_o_level" value="0" <?php if ($school_more_info->a_o_level === "0") {
+                                                                      echo "checked";
+                                                                    } ?> required /> No
+
+                    <br />
+                    <br />
+                  <?php } ?>
+                  <strong> Do you want to change institute contact details </strong> <br />
+                  Telephone No: <input id="telePhoneNumber" class="form-control" required type="text" value="<?php echo $school_more_info->telePhoneNumber; ?>" name="telePhoneNumber" /> <br />
+                  Mobile No: <input id="schoolMobileNumber" class="form-control" required type="text" value="<?php echo $school_more_info->schoolMobileNumber; ?>" name="schoolMobileNumber" />
+                  Email Address: <small>(Optional)</small>
+                  <input class="form-control" type="email" value="<?php echo $school_more_info->principal_email; ?>" name="principal_email" />
+
+                  <br />
+                  <br />
+
+                  <strong> <?php echo $session_detail->sessionYearTitle; ?> session head of institute, Specifically Principal </strong>
+                  <?php
+                  $query = "select principal_cnic,principal,principal_contact_no FROM school WHERE schoolId = '" . $school_id . "'";
+                  $principal = $this->db->query($query)->row();
+                  ?>
+
+                  <table class="table">
+                    <tr>
+                      <td style="width: 10px;"> Name: </td>
+                      <td> <input type="text" name="principal" value="<?php if ($principal->principal) {
+                                                                        echo $principal->principal;
+                                                                      } ?>" style="width: 100%;" required /></td>
+                    </tr>
+                    <tr>
+                      <td> CNIC: </td>
+                      <td> <input maxlength="15" id="principal_cnic" type="text" name="principal_cnic" value="<?php if ($principal->principal_cnic) {
+                                                                                                                echo $principal->principal_cnic;
+                                                                                                              } ?>" style="width: 100%;" required /></td>
+                    </tr>
+                    <tr>
+                      <td> Contact: </td>
+                      <td> <input maxlength="15" id="principal_contact_no" type="text" name="principal_contact_no" value="<?php if ($principal->principal_contact_no) {
+                                                                                                                            echo $principal->principal_contact_no;
+                                                                                                                          } ?>" style="width: 100%;" required /></td>
+                    </tr>
+                  </table>
+
+
+                </div>
 
 
               </div>
@@ -373,16 +425,20 @@
             <div class="row">
               <div class="col-md-6">
                 <?php if ($form_status->form_b_status == 1) { ?>
-                  <input style="margin: 3px;" onclick="check_total_area()" class="btn btn-primary" type="submit" name="" value="Update Section B Data" />
+                  <input style="margin: 3px;" onclick="check_total_area()" class="btn btn-primary" type="submit" name="update" value="Update Section B Data" />
                 <?php } else { ?>
-                  <input style="margin: 3px;" onclick="check_total_area()" class="btn btn-danger" type="submit" name="" value="Add Section B Data" />
+                  <input style="margin: 3px;" onclick="check_total_area()" class="btn btn-danger" type="submit" name="update" value="Add Section B Data" />
                 <?php } ?>
               </div>
               <div class="col-md-6">
                 <?php if ($form_status->form_b_status == 1) { ?>
-                  <a class="btn btn-success" style="margin: 5px;" href="<?php echo site_url("form/section_c/$school_id"); ?>">
+                  <button name="update" value="save_next" class="btn btn-success" onclick="check_total_area()">
+                    Save and Next (Students Enrolment) <i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i>
+                  </button>
+
+                  <!-- <a class="btn btn-success" style="margin: 5px;" href="<?php echo site_url("form/section_c/$school_id"); ?>">
                     Next Section (Students Enrolment) <i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i>
-                  </a>
+                  </a> -->
                 <?php } ?>
               </div>
 
@@ -402,9 +458,23 @@
 
   </div>
 
+  <script src="<?php echo base_url('assets/lib/plugins/input-mask/jquery.inputmask.js'); ?>"></script>
+
   <script>
     $(document).ready(function() {
-      $('#schoolStaffCnic').inputmask('99999-9999999-9');
+      $('#telePhoneNumber').inputmask('99999999999');
+      $('#schoolMobileNumber').inputmask('(9999)-9999999');
+      $('#principal_contact_no').inputmask('(9999)-9999999');
+      $('#principal_cnic').inputmask('99999-9999999-9');
+
+      $("#principal_cnic").inputmask({
+        "mask": "99999-9999999-9"
+      }, {
+        oncomplete: function() {
+          //Do something
+        }
+      });
+
 
     });
   </script>

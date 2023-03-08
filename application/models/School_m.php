@@ -386,6 +386,7 @@ LEFT JOIN `reg_type`
             , `schools`.`yearOfEstiblishment`
             , `schools`.`telePhoneNumber`
             , `schools`.`district_id`
+            , `school`.`apply_date`
             , `district`.`districtTitle`
             , `tehsils`.`tehsilTitle`
             , `uc`.`ucTitle`

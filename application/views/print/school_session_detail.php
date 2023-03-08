@@ -152,7 +152,11 @@
                     <?php echo "Registration # " . @$school->registrationNumber; ?><br />
                   <?php endif; ?>
                   Session Year: <?php echo @$school->sessionYearTitle; ?><br />
-                  Case: <?php echo @$school->regTypeTitle; ?>
+                  Case: <?php echo @$school->regTypeTitle; ?><br />
+                  Online Apply: <?php
+                                if ($school->apply_date) {
+                                  echo date('d M, Y', strtotime($school->apply_date));
+                                } ?>
                 </h6>
 
               </td>

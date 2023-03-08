@@ -1,44 +1,5 @@
-  <!-- Modal -->
-  <script>
-    function renewal_fee_sturucture() {
-      $.ajax({
-        type: "POST",
-        url: "<?php echo site_url("form/renewal_fee_sturucture"); ?>",
-        data: {}
-      }).done(function(data) {
-
-        $('#renewal_sturucture_body').html(data);
-      });
-
-      $('#renewal_sturucture_model').modal('toggle');
-    }
-  </script>
-  <div class="modal fade" id="renewal_sturucture_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-    <div class="modal-dialog" role="document" style="width: 70%;">
-      <div class="modal-content" id="renewal_sturucture_body">
-
-        ...
-
-      </div>
-    </div>
-  </div>
-
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h2 style="display:inline;"><?php echo ucwords(strtolower($school->schoolName)); ?>
-
-      </h2>
-      <br />
-      <small>
-        <h4>S-ID: <?php echo $school->schools_id; ?> <?php if ($school->registrationNumber) { ?> - REG No: <?php echo $school->registrationNumber ?> <?php } ?></h4>
-      </small>
-      <ol class="breadcrumb">
-        <li><a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> Home </a></li>
-        <!-- <li><a href="#">Examples</a></li> -->
-        <li class="active"><?php echo @ucfirst($title); ?>s Session: <?php echo $session_detail->sessionYearTitle; ?></li>
-      </ol>
-    </section>
+    <?php $this->load->view('forms/form_header');   ?>
 
     <!-- Main content -->
     <section class="content" style="padding-top: 0px !important;">
@@ -46,19 +7,9 @@
       <div class="box box-primary box-solid">
 
         <div class="box-body" style="padding: 3px;">
-
-          <form method="post" action="<?php echo site_url("form/update_test_renewal/" . $session_id); ?>">
-            <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
-            <input type="hidden" name="schools_id" value="<?php echo $school->schools_id; ?>" />
-
-
-            Max Fee: <input name="max_fee" type="number" required />
-            <input type="submit" name="update" />
-          </form>
-
           <div class="row">
             <div class="col-md-7" style="padding-right: 1px;  padding-left: 10px;">
-              <div class="col-md-7">
+              <div class="col-md-6">
 
                 <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
                   <h4> <i class="fa fa-info-circle" aria-hidden="true"></i> How system calculates <i>"Deposit Fee Challan" ?</i></h4>
@@ -75,82 +26,22 @@
                         <li> Application Processing Fee: <strong><?php echo $fee_sturucture->renewal_app_processsing_fee; ?> Rs. </strong></li>
                         <li> Inspection Fee: <strong><?php echo $fee_sturucture->renewal_app_inspection_fee; ?> Rs.</strong></li>
                         <li> Renewal Fee: <strong><?php echo $fee_sturucture->renewal_fee; ?> Rs.</strong></li>
-
-
-
                       </ol>
-                      In case of confusion and queries, please contact <strong>PSRA MIS Section</strong>
-                      <button onclick="renewal_fee_sturucture()" class="btn btn-link">
-                        <i class="fa fa-info-circle" aria-hidden="true"></i> PSRA Registration Fee Struture Detail</button>
-                </div>
-
-
-              </div>
-
-              <div class="col-md-5">
-                <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
-                  <h4>Session: <?php echo $session_detail->sessionYearTitle; ?> Due Date's</h4>
-                  <table class="table table-bordered">
-
-                    <tr>
-                      <th>S/No</th>
-                      <th>Last Date</th>
-                      <th>Fine's</th>
-                    </tr>
-                    <?php
-                    $count = 1;
-                    foreach ($session_fee_submission_dates as $session_fee_submission_date) { ?>
-                      <tr>
-                        <td><?php echo $count++; ?></td>
-                        <td>Upto <?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?></td>
-                        <td>
-                          <?php
-                          if ($session_fee_submission_date->fine_percentage != 'fine') { ?>
-                            <?php echo $session_fee_submission_date->fine_percentage; ?> %
-                          <?php } else { ?>
-                            <?php echo $session_fee_submission_date->detail; ?>
-                          <?php } ?>
-                        </td>
-                      </tr>
-                    <?php }
-                    ?>
-                    <?php $pecial_fine = 0; ?>
-
-                  </table>
-                </div>
-              </div>
-
-              <div class="col-md-6">
-                <h3> <i class="fa fa-info-circle" aria-hidden="true"></i> How to submit bank challan online ?</h3>
-                <p>
-                <ol>
-                  <li>Print PSRA Deposit Slip / Bank Challan</li>
-                  <li>Deposit Fee as per due dates</li>
-                  <li>Take computerized bank challan having STAN No. from the bank</li>
-                  <li>Submit <strong>Bank STAN</strong> number and Transaction date</li>
-                  <li>Click on Submit bank challan</li>
-                  <li>View Registration application status on school dashboard</li>
-                  </ul>
-                </ol>
-                </p>
-              </div>
-
-              <div class="col-md-6">
-                <div style="direction: rtl; font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif; line-height: 30px;">
-                  <h3> <i class="fa fa-info-circle" aria-hidden="true"></i> بینک چالان آن لائن کیسے جمع کریں؟</h3>
-                  <p>
-                  <ol>
-                    <li>PSRA ڈپازٹ سلپ/بینک چالان پرنٹ کریں۔</li>
-                    <li>مقررہ تاریخوں کے مطابق فیس جمع کروائیں۔</li>
-                    <li>بینک سے اسٹین نمبر والا کمپیوٹرائزڈ بینک چالان لیں۔</li>
-                    <li>بینک STAN نمبر اور لین دین کی تاریخ جمع کروائیں۔</li>
-                    <li>بینک چالان جمع کروائیں پر کلک کریں۔</li>
-                    <li>اسکول کے ڈیش بورڈ پر رجسٹریشن کی درخواست کی حیثیت دیکھیں</li>
-                    </ul>
+                      In case of confusion and queries, please contact <strong>PSRA MIS Section <a style="font-weight: bold; color:red" href="tel:+92091-9216205">
+                          <i class="fa fa-phone" aria-hidden="true"></i>
+                          091-9216205 </a></strong></strong>
+                    </li>
                   </ol>
-                  </p>
+                  </strong>
+                  <button onclick="renewal_fee_sturucture()" class="btn btn-link">
+                    <i class="fa fa-info-circle" aria-hidden="true"></i> PSRA Renewal Fee Struture Detail</button>
                 </div>
+
+
               </div>
+              <?php $this->load->view('forms/submit_bank_challan/cut_off_dates');   ?>
+
+              <?php $this->load->view('forms/submit_bank_challan/online_apply_instructions');   ?>
 
             </div>
 
@@ -198,33 +89,53 @@
                         <table class="table">
                           <tr>
                             <th> Due's Date </th>
+                            <th> Renewal Fee </th>
                             <th> Late Fee % </th>
                             <th> Late Fee Amount </th>
-                            <th><strong>Session <?php echo $session_detail->sessionYearTitle; ?> Renewal Fee </strong></th>
                             <th> Total </th>
                           </tr>
                           <?php
                           $count = 1;
+                          $previous_last_date = '';
                           foreach ($session_fee_submission_dates as $session_fee_submission_date) { ?>
-
                             <tr>
-                              <th>
-                                Upto <?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?>
-                              </th>
+                              <td style="width: 200px;">
+                                <?php if ($count == 1) { ?>
+
+                                  <!-- <strong> 01 Apr, <?php echo date('Y', strtotime($session_fee_submission_date->last_date)); ?></strong> to  -->
+
+                                <?php } else { ?>
+                                  <?php if ($count >= sizeof($session_fee_submission_dates)) { ?>
+                                    After
+                                  <?php } else { ?>
+                                    <strong> <?php echo date('d M, Y', strtotime($previous_last_date)); ?> </strong> to
+                                  <?php } ?>
+                                <?php } ?>
+                                <?php
+                                $previous_last_date = date('d M, Y', strtotime($session_fee_submission_date->last_date . ' +1 day'));
+                                if ($count >= sizeof($session_fee_submission_dates)) {
+                                  echo "<strong>" . date('d M, Y', strtotime($session_fee_submission_date->last_date . '-1 day')) . "</strong>";
+                                } else {
+                                  echo "<strong>" . date('d M, Y', strtotime($session_fee_submission_date->last_date)) . "</strong>";
+                                }
+                                ?>
+
+
+                              </td>
+                              <td><?php echo number_format($total) ?></td>
                               <?php if ($session_fee_submission_date->fine_percentage == 0) { ?>
                                 <td colspan="2"> <strong> Normal Fee </strong></td>
                               <?php } else { ?>
-                                <td><?php echo $session_fee_submission_date->fine_percentage; ?> %</td>
-                                <td>
+                                <td style="color:red"><?php echo $session_fee_submission_date->fine_percentage; ?> %</td>
+                                <td style="color:red">
                                   <?php
                                   $fine = 0;
                                   $fine = ($session_fee_submission_date->fine_percentage * $total) / 100;
                                   echo number_format($fine);
                                   ?>
-                                  Rs.
                                 </td>
                               <?php } ?>
-                              <td><?php echo number_format($total) ?></td>
+
                               <td>
                                 <strong> <?php echo number_format($fine + $total);  ?> </strong>
                               </td>
@@ -232,7 +143,8 @@
 
 
 
-                          <?php } ?>
+                          <?php $count++;
+                          } ?>
                         </table>
                       </td>
 
@@ -261,37 +173,7 @@
                   Please submit previous session <?php echo $previous_session->sessionYearTitle; ?> STAN No and Date First then you are allow to submit this session STAN No.
                 </div>
               <?php } else { ?>
-
-
-                <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px;">
-                  <h4>Submit Bank Challan for session <?php echo $session_detail->sessionYearTitle; ?></h4>
-                  <form action="<?php echo site_url("form/add_bank_challan"); ?>" method="post">
-                    <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
-                    <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
-                    <input type="hidden" name="schools_id" value="<?php echo $schools_id; ?>" />
-                    <input type="hidden" name="challan_for" value="Renewal" />
-                    <table class="table table-bordered">
-                      <tr>
-                        <td>Bank Transaction No (STAN)</td>
-                        <td>Bank Transaction Date</td>
-                      </tr>
-                      <tr>
-                        <td><input required maxlength="6" name="challan_no" type="number" autocomplete="off" class="form-control" />
-
-                        </td>
-                        <td><input required name="challan_date" type="date" class="form-control" />
-                        </td>
-                        <td><input type="submit" class="btn btn-success" name="submit" value="Submit Bank Challan" />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td colspan="3">
-                          <p>"STAN can be found on the upper right corner of bank generated receipt"</p>
-                        </td>
-                      </tr>
-                    </table>
-                  </form>
-                </div>
+                <?php $this->load->view('forms/submit_bank_challan/online_apply');   ?>
               <?php } ?>
             </div>
 

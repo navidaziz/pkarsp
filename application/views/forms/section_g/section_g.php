@@ -30,21 +30,7 @@
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h2 style="display:inline;">
-        <?php echo ucwords(strtolower($school->schoolName)); ?>
-      </h2>
-      <br />
-      <h4>Institute ID: <?php echo $school->schools_id; ?>
-        <?php if ($school->registrationNumber) { ?> - REG No: <?php echo $school->registrationNumber ?> <?php } ?></h4>
-      <ol class="breadcrumb">
-        <li><a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> Home </a></li>
-        <!-- <li><a href="#">Examples</a></li> -->
-        <li class="active"><?php echo @ucfirst($title); ?>s Session: <?php echo $session_detail->sessionYearTitle; ?></li>
-      </ol>
-    </section>
-
+    <?php $this->load->view('forms/form_header');   ?>
     <!-- Main content -->
     <section class="content" style="padding-top: 0px !important;">
 
@@ -96,7 +82,7 @@
                   <div style=" font-size: 16px; border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 10px; padding: 10px; background-color: white;">
                     <table class="table table-bordered">
                       <tr>
-                        <th style="width: 500px;">Exposed to floods:</th>
+                        <th style="width: 60%;">Exposed to floods:</th>
                         <td>
 
                           <?php foreach ($options as $key => $value) : ?>
@@ -445,42 +431,48 @@
                       </tr>
 
                     </table>
-                  </div>
-                </div>
+                    <div style="text-align: center;">
+                      <?php if ($form_status->form_g_status == 1) { ?>
+                        <span style="margin-left: 20px;"></span> <input class="btn btn-primary" style="margin: 2px;" type="submit" name="" value="Update Section G Data" />
+                      <?php } else { ?>
+                        <span style="margin-left: 20px;"></span> <input class="btn btn-danger" style="margin: 2px;" type="submit" name="" value="Add Section G Data" />
 
-                <div class="col-md-12">
-                  <div style=" font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
-                    <a class="btn btn-success pull-left" href="<?php echo site_url("form/section_f/$school_id"); ?>">
-                      <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Previous Section ( Security Measures ) </a>
-                    <?php if ($form_status->form_g_status == 1) { ?>
-                      <span style="margin-left: 20px;"></span> <input class="btn btn-primary" type="submit" name="" value="Update Section G Data" />
-                    <?php } else { ?>
-                      <span style="margin-left: 20px;"></span> <input class="btn btn-danger" type="submit" name="" value="Add Section G Data" />
-
-                    <?php } ?>
-                    <?php if ($form_status->form_g_status == 1) { ?>
-                      <a class="btn btn-success pull-right" href="<?php echo site_url("form/section_h/$school_id"); ?>"> Next Section ( Fee Concession ) <i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
-                    <?php } ?>
-                  </div>
-                </div>
-
-                <?php
-
-                echo $form_complete;
-
-                ?>
-
-
+                      <?php } ?>
+                    </div>
               </form>
-
             </div>
-
           </div>
+
+
+
+
+
+
         </div>
 
+      </div>
+      <div style="font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
 
+        <div class="row">
+          <div class="col-md-6">
+            <a class="btn btn-success" style="margin: 2px;" href="<?php echo site_url("form/section_f/$school_id"); ?>">
+              <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Previous Section ( Security Measures ) </a>
+
+          </div>
+
+          <div class="col-md-6">
+            <?php if ($form_status->form_g_status == 1) { ?>
+              <a class="btn btn-success" style="margin: 2px;" href="<?php echo site_url("form/section_h/$school_id"); ?>"> Next Section ( Fee Concession ) <i class="fa fa-arrow-right" aria-hidden="true" style="margin-left: 10px;"></i></a>
+            <?php } ?>
+          </div>
+        </div>
       </div>
 
-    </section>
+  </div>
+
+
+  </div>
+
+  </section>
 
   </div>

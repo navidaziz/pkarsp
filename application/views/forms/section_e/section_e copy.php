@@ -1,89 +1,3 @@
-  <?php
-  function convertNumberToWord($num)
-  {
-
-    $ones = array(
-      0 => "ZERO",
-      1 => "ONE",
-      2 => "TWO",
-      3 => "THREE",
-      4 => "FOUR",
-      5 => "FIVE",
-      6 => "SIX",
-      7 => "SEVEN",
-      8 => "EIGHT",
-      9 => "NINE",
-      10 => "TEN",
-      11 => "ELEVEN",
-      12 => "TWELVE",
-      13 => "THIRTEEN",
-      14 => "FOURTEEN",
-      15 => "FIFTEEN",
-      16 => "SIXTEEN",
-      17 => "SEVENTEEN",
-      18 => "EIGHTEEN",
-      19 => "NINETEEN",
-      "014" => "FOURTEEN"
-    );
-    $tens = array(
-      0 => "ZERO",
-      1 => "TEN",
-      2 => "TWENTY",
-      3 => "THIRTY",
-      4 => "FORTY",
-      5 => "FIFTY",
-      6 => "SIXTY",
-      7 => "SEVENTY",
-      8 => "EIGHTY",
-      9 => "NINETY"
-    );
-    $hundreds = array(
-      "HUNDRED",
-      "THOUSAND",
-      "MILLION",
-      "BILLION",
-      "TRILLION",
-      "QUARDRILLION"
-    ); /*limit t quadrillion */
-    $num = number_format($num, 2, ".", ",");
-    $num_arr = explode(".", $num);
-    $wholenum = $num_arr[0];
-    $decnum = $num_arr[1];
-    $whole_arr = array_reverse(explode(",", $wholenum));
-    krsort($whole_arr, 1);
-    $rettxt = "";
-    foreach ($whole_arr as $key => $i) {
-
-      while (substr($i, 0, 1) == "0")
-        $i = substr($i, 1, 5);
-      if ($i < 20) {
-        /* echo "getting:".$i; */
-        $rettxt .= $ones[$i];
-      } elseif ($i < 100) {
-        if (substr($i, 0, 1) != "0")  $rettxt .= $tens[substr($i, 0, 1)];
-        if (substr($i, 1, 1) != "0") $rettxt .= " " . $ones[substr($i, 1, 1)];
-      } else {
-        if (substr($i, 0, 1) != "0") $rettxt .= $ones[substr($i, 0, 1)] . " " . $hundreds[0];
-        if (substr($i, 1, 1) != "0") $rettxt .= " " . $tens[substr($i, 1, 1)];
-        if (substr($i, 2, 1) != "0") $rettxt .= " " . $ones[substr($i, 2, 1)];
-      }
-      if ($key > 0) {
-        $rettxt .= " " . $hundreds[$key] . " ";
-      }
-    }
-    if ($decnum > 0) {
-      $rettxt .= " and ";
-      if ($decnum < 20) {
-        $rettxt .= $ones[$decnum];
-      } elseif ($decnum < 100) {
-        $rettxt .= $tens[substr($decnum, 0, 1)];
-        $rettxt .= " " . $ones[substr($decnum, 1, 1)];
-      }
-    }
-    return $rettxt;
-  }
-
-  ?>
   <!-- Modal -->
   <script>
     function update_class_fee_detail(class_id) {
@@ -191,7 +105,7 @@
                 <tr>
 
                   <?php
-                  $query = "SELECT
+                  echo $query = "SELECT
                           `session_year`.`sessionYearTitle`
                           , `session_year`.`sessionYearId`
                           , `school`.`schoolId`
@@ -199,8 +113,8 @@
                           `school`
                           INNER JOIN `session_year` 
                           ON (`school`.`session_year_id` = `session_year`.`sessionYearId`)
-                          WHERE `session_year`.`sessionYearId`= $session_id
-                          AND  `school`.`schoolId` = '" . $school->school_id . "'
+                          WHERE `session_year`.`sessionYearId`<= $session_id
+                          AND  `school`.`schools_id` = '" . $school->schools_id . "'
                           ORDER BY `session_year`.`sessionYearId` DESC LIMIT 1";
                   $sessions =  $this->db->query($query)->result();
 
@@ -214,7 +128,10 @@
                   <th>Classes</th>
                   <?php
                   foreach ($sessions  as $session) { ?>
+                    <th style="text-align: center; display: none;">Admision </th>
                     <th style="text-align: center;">Maximum tuition fee in class</th>
+                    <th style="text-align: center; display: none;">Security</th>
+                    <th style="text-align: center; display: none;">Others</th>
                   <?php } ?>
                   <th>Action</th>
                 </tr>
@@ -245,27 +162,48 @@
                         $add = 0;
                       }
 
+                      // $session_fee->addmissionFee = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->addmissionFee));
+                      // $session_fee->tuitionFee = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->tuitionFee));
+                      // $session_fee->securityFund = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->securityFund));
+                      // $session_fee->otherFund = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->otherFund));
+
                     ?>
-                      </td>
-                      <td style="text-align: center; ">
-                        <strong><?php echo $session_fee->tuitionFee; ?></strong>
-                        <small style="margin-left: 10px;">
-                          <i>
-                            <?php
-                            //$f = new NumberFormatter("in", NumberFormatter::SPELLOUT);
-                            echo ucwords(strtolower(convertNumberToWord($session_fee->tuitionFee)));
-                            ?>
-                          </i>
-                        </small>
-                      </td>
-                      <?php if ($session->sessionYearId == $session_id and $school_id == $session->schoolId) { ?>
-                        <?php if ($add) {  ?>
+                      <td style="text-align: center; display: none;"><?php //if (is_numeric($session_fee->addmissionFee)) {
+                                                                      echo $session_fee->addmissionFee;
+                                                                      //} 
+                                                                      ?></td>
+                      <td style="text-align: center; "><?php //if (is_numeric($session_fee->tuitionFee)) {
+                                                        echo $session_fee->tuitionFee;
+                                                        //} 
+                                                        ?></td>
+                      <td style="text-align: center; display: none;"><?php //if (is_numeric($session_fee->securityFund)) {
+                                                                      echo $session_fee->securityFund;
+                                                                      //} 
+                                                                      ?></td>
+                      <td style="text-align: center; display: none;"><?php //if (is_numeric($session_fee->otherFund)) {
+                                                                      echo $session_fee->otherFund;
+                                                                      //} 
+                                                                      ?></td>
+
+
+
+
+
+                      <?php
+
+                      if ($session->sessionYearId == $session_id and $school_id == $session->schoolId) {
+                        if ($add) {
+
+                      ?>
                           <td style="text-align: center;">
                             <button type="button" class="btn btn-success btn-sm" style="padding: 1px !important; width: 100%;" onclick="update_class_fee_detail(<?php echo $class->classId ?>)">
                               Edit
                             </button>
+
                           </td>
+
                         <?php  } else {
+
                           $form_complete = 0;
                         ?>
                           <td style="text-align: center;">
@@ -277,7 +215,7 @@
                         <?php } ?>
 
 
-                      <?php  }  ?>
+                      <?php  } ?>
 
                     <?php } ?>
 

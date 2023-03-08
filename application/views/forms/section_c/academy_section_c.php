@@ -173,7 +173,7 @@
 
           <div class="row">
             <div class="col-md-6">
-              <a class="btn btn-success" style="margin: 2px;" href="<?php echo site_url("form/section_b/$school_id"); ?>">
+              <a class="btn btn-success" href="<?php echo site_url("form/section_b/$school_id"); ?>">
                 <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Previous Section ( Physical Facilities )
 
               </a>

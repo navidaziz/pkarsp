@@ -5,16 +5,7 @@
   </button>
 </div>
 <div class="modal-body">
-  <style>
-    .table>tbody>tr>td,
-    .table>tbody>tr>th,
-    .table>tfoot>tr>td,
-    .table>tfoot>tr>th,
-    .table>thead>tr>td,
-    .table>thead>tr>th {
-      padding: 1px !important;
-    }
-  </style>
+
 
   <table class="table table-bordered">
     <tr>

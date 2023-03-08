@@ -63,6 +63,14 @@ class Add_school extends MY_Controller
 
 	public function process_data()
 	{
+
+
+
+
+
+		//var_dump($school_data);
+		//exit();
+
 		$userId = $this->session->userdata('userId');
 		$woner_data['userTitle'] = $this->input->post('userTitle');
 		$woner_data['contactNumber'] = $this->input->post('contactNumber');
@@ -74,6 +82,31 @@ class Add_school extends MY_Controller
 		$this->db->update('users', $woner_data);
 
 		$school_data = $this->input->post();
+
+		// $level_ids = $this->input->post("level_of_school_id");
+		// $school_data['primary_level'] = 0;
+		// $school_data['middle_level'] = 0;
+		// $school_data['high_level'] = 0;
+		// $school_data['h_sec_college_level'] = 0;
+		// foreach ($level_ids as $level_id) {
+		// 	if ($level_id == 1) {
+		// 		$school_data['primary_level'] = 1;
+		// 	}
+		// 	if ($level_id == 2) {
+		// 		$school_data['middle_level'] = 1;
+		// 	}
+		// 	if ($level_id == 3) {
+		// 		$school_data['high_level'] = 1;
+		// 	}
+		// 	if ($level_id == 4) {
+		// 		$school_data['h_sec_college_level'] = 1;
+		// 	}
+		// 	if ($level_id == 5) {
+		// 		$school_data['academy'] = 1;
+		// 	}
+		// }
+
+		//unset($school_data['level_of_school_id']);
 		$school_data['owner_id'] = $userId;
 		unset($school_data['userTitle']);
 		unset($school_data['contactNumber']);
@@ -114,6 +147,7 @@ class Add_school extends MY_Controller
 		$month =  $this->input->post('e_month');
 		unset($school_data['e_month']);
 		$school_data['yearOfEstiblishment'] = $year . "-" . $month;
+		//$school_data['level_of_school_id'] = max($level_ids);
 		$this->db->insert('schools', $school_data);
 		$school_id = $this->db->insert_id();
 

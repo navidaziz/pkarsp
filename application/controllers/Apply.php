@@ -10,10 +10,6 @@ class Apply extends Admin_Controller
 		$this->load->model("school_m");
 	}
 
-	public function index()
-	{
-		echo "We are working on it";
-	}
 
 	public function registration($session_id)
 	{
@@ -92,7 +88,8 @@ class Apply extends Admin_Controller
 			//insert new session...
 			$new_session['schools_id'] = $schools_id;
 			$new_session['reg_type_id'] = 2;
-			$new_session['gender_type_id'] = $last_session_detail->gender_type_id;
+			//$new_session['gender_type_id'] = $last_session_detail->gender_type_id;
+			$new_session['gender_type_id'] = 0;
 			$new_session['school_type_id'] = $last_session_detail->school_type_id;
 			$new_session['level_of_school_id'] = $last_session_detail->level_of_school_id;
 			$new_session['session_year_id'] = $session_id;
@@ -192,7 +189,8 @@ class Apply extends Admin_Controller
 			//insert new session...
 			$new_session['schools_id'] = $schools_id;
 			$new_session['reg_type_id'] = 4;
-			$new_session['gender_type_id'] = $last_session_detail->gender_type_id;
+			//$new_session['gender_type_id'] = $last_session_detail->gender_type_id;
+			$new_session['gender_type_id'] = 0;
 			$new_session['school_type_id'] = $last_session_detail->school_type_id;
 			$new_session['level_of_school_id'] = $last_session_detail->level_of_school_id;
 			$new_session['session_year_id'] = $session_id;
@@ -237,7 +235,106 @@ class Apply extends Admin_Controller
 			if ($affected_rows > 0) {
 				$this->session->set_flashdata(
 					'msg_success',
-					"You have successfully applied for renewal, kindly update your current school data."
+					"You have successfully applied for renewal +  upgradation, kindly update your current school data."
+				);
+				//echo $school_id;exit;
+				redirect("form/section_b/$school_inserted_id");
+			} else {
+				$this->session->set_flashdata(
+					'msg_error',
+					"Sorry Something went wrong!."
+				);
+				//echo $school_id;exit;
+				redirect("school_dashboard/index");
+			}
+		}
+	}
+
+	public function upgradation($session_id, $session_school_id = NULL)
+	{
+		$this->data['session_id'] = $session_id = (int) $session_id;
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT schoolId, 
+		                 level_of_school_id, 
+						 gender_type_id, 
+						 school_type_id,
+						 owner_id, 
+						 reg_type_id 
+		         FROM schools WHERE `owner_id`='" . $userId . "'";
+		$school_detail = $this->db->query($query)->row();
+		$schools_id = $school_detail->schoolId;
+
+		// $query = "SELECT *  FROM `school` WHERE `schools_id` = '" . $schools_id . "' 
+		//  AND status=1 ORDER BY `session_year_id` DESC";
+
+		$query = "SELECT COUNT(*) as total, schoolId FROM school 
+		        WHERE `schools_id` = '" . $schools_id . "'
+				AND session_year_id = '" . $session_id . "'
+				AND reg_type_id = 3";
+		$already_applied  = $this->db->query($query)->row();
+		if ($already_applied->total) {
+			$session_school_id = $already_applied->schoolId;
+		}
+
+		$query = "SELECT * FROM `school` 
+		          WHERE `schools_id` = '" . $schools_id . "'
+				  AND `session_year_id` = '" . ($session_id - 1) . "'
+				  ORDER BY `session_year_id` DESC LIMIT 1";
+		$last_session_detail = $this->db->query($query)->row();
+		$school_id = $last_session_detail->schoolId;
+
+
+		if (is_null($session_school_id)) {
+			//insert new session...
+			$new_session['schools_id'] = $schools_id;
+			$new_session['reg_type_id'] = 4;
+			//$new_session['gender_type_id'] = $last_session_detail->gender_type_id;
+			$new_session['gender_type_id'] = 0;
+			$new_session['school_type_id'] = $last_session_detail->school_type_id;
+			$new_session['level_of_school_id'] = $last_session_detail->level_of_school_id;
+			$new_session['session_year_id'] = $session_id;
+			date_default_timezone_set("Asia/Karachi");
+			$new_session['created_date'] = date('Y-m-d H:i:s', time());
+			$this->db->insert('school', $new_session);
+			$school_inserted_id = $this->db->insert_id();
+			$this->db->insert('forms_process', array(
+				'user_id' => $userId,
+				'reg_type_id' => 2,
+				'form_a_status' => 1,
+				'school_id' => $school_inserted_id
+			));
+
+			$this->db->where('userId', $userId)->update('users', array('school_renewed' => 1));
+		} else {
+			$school_inserted_id = $session_school_id;
+		}
+
+
+		$process_previous_data = $this->process_previous_data($school_id, $school_inserted_id);
+
+		if ($process_previous_data == FALSE) {
+			$this->db->trans_rollback();
+			$this->session->set_flashdata(
+				'msg_error',
+				"Sorry Something went wrong!."
+			);
+			redirect("school_dashboard/index");
+		} else {
+			$this->db->trans_commit();
+			$school_data_to_update = array(
+				'reg_type_id' => 3,
+				'updatedBy' => $this->session->userdata('userId'),
+				'created_date' => date('Y-m-d H:i:s', time()),
+				'status' => 0
+			);
+			// echo "<pre>"; print_r($school_data_to_update);exit();
+			$this->db->where('schoolId', $school_inserted_id);
+			$this->db->update('school', $school_data_to_update);
+			$affected_rows = $this->db->affected_rows();
+			if ($affected_rows > 0) {
+				$this->session->set_flashdata(
+					'msg_success',
+					"You have successfully applied for Upgradation, kindly update your current school data."
 				);
 				//echo $school_id;exit;
 				redirect("form/section_b/$school_inserted_id");

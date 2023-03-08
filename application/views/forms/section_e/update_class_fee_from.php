@@ -9,7 +9,7 @@
 <div class="modal-body">
 
 
-  <h5 style="color: red;">Note: All fields are mandatory. pleas enter only numeric values. eg. 500, 100, 0 etc</h5>
+  <h5 style="color: red;">Note: Tuition Fee field is mandatory. pleas enter only numeric values only. eg. 500, 100, 0 etc</h5>
   <form action="<?php echo site_url("form/update_class_fee") ?>" method="post">
     <table class="table table-bordered">
 
@@ -32,7 +32,7 @@
         <td><input min="0" type="number" name="addmissionFee" value="<?php echo $class_fees->addmissionFee; ?>" /> Rs.</td>
       </tr>
       <tr>
-        <th>Tuition Fee</th>
+        <th>Maximum Tuition Fee In Class <?php echo $class->classTitle ?></th>
         <td><input required min="0" type="number" name="tuitionFee" value="<?php echo $class_fees->tuitionFee; ?>" /> Rs.</td>
       </tr>
       <tr style="display: none;">

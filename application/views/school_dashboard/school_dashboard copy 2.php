@@ -492,7 +492,7 @@
                       } else {
                         $biseverified = 1;
                       }
-                      if ($biseverified == 1 or 1 == 1) {
+                      if ($biseverified == 1) {
                       } else {
 
 

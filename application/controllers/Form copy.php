@@ -152,63 +152,12 @@ class Form extends Admin_Controller
 		$this->data['session_detail'] = $this->get_session_detail($session_id);
 		$this->data['form_status'] = $this->get_form_status($school_id);
 
-		//we use this code for only session 2023-24 howwver next year we get levels from school session 
-
-		$query = "SELECT MAX(schoolId) as pre_school_id FROM school WHERE schools_id = $school->schools_id and status=1";
-		$previous_session = $this->db->query($query)->row();
-		$min_level = array();
-
-		$query = "select SUM(`s`.`enrolled`) as total FROM
-		         `age_and_class` as `s` 
-				 where `s`.`class_id` in (1,2,3,4,5,6,7)
-				 AND `s`.`school_id` = '" . $previous_session->pre_school_id . "'";
-		$primary = $this->db->query($query)->row()->total;
-		if ($primary) {
-			$min_level[] = 1;
-		}
-		$query = "select SUM(`s`.`enrolled`) as total FROM
-		         `age_and_class` as `s` 
-				 where `s`.`class_id` in (9,10,11)
-				 AND `s`.`school_id` = '" . $previous_session->pre_school_id . "'";
-		$middle = $this->db->query($query)->row()->total;
-		if ($middle) {
-			$min_level[] = 2;
-		}
-		$query = "select SUM(`s`.`enrolled`) as total FROM
-		         `age_and_class` as `s` 
-				 where `s`.`class_id` in (9,10,11)
-				 AND `s`.`school_id` = '" . $previous_session->pre_school_id . "'";
-		$high = $this->db->query($query)->row()->total;
-		if ($high) {
-			$min_level[] = 3;
-		}
-
-		$query = "select SUM(`s`.`enrolled`) as total FROM
-		         `age_and_class` as `s` 
-				 where `s`.`class_id` in (14,15)
-				 AND `s`.`school_id` = '" . $previous_session->pre_school_id . "'";
-		$high_sec = $this->db->query($query)->row()->total;
-		if ($high_sec) {
-			$min_level[] = 4;
-		}
-
-		if (!$min_level) {
-			$min_level = 1;
-		} else {
-			$min_level = min($min_level);
-		}
-
-
-		$max_level = $this->data['school']->level_of_school_id;
-
-		// end here 
-		$query = "SELECT classId FROM `class` 
-		          WHERE level_id >= '" . $min_level . "'and level_id<='" . $max_level . "'";
-		$class_Ids = $this->db->query($query)->result_array();
-		foreach ($class_Ids as $class_Id) {
-			$classIds[] = $class_Id['classId'];
-		}
-
+		$level_of_school_id = $this->data['school']->level_of_school_id;
+		$query = "SELECT classes_ids FROM `levelofinstitute` 
+		          WHERE levelofInstituteId='" . $level_of_school_id . "'";
+		$classes_ids = $this->db->query($query)->result()[0]->classes_ids;
+		$classIds = $array = explode(',', $classes_ids);
+		//var_dump($classIds);
 		$query = "select a_o_level FROM schools WHERE schoolId = '" . $school->schools_id . "'";
 		$a_o_level = $this->db->query($query)->row()->a_o_level;
 		if (!$a_o_level) {
@@ -235,10 +184,11 @@ class Form extends Admin_Controller
 		}
 
 		$classes_ids = implode(",", $classIds);
+
+
 		$query = "SELECT * FROM class WHERE classId IN(" . $classes_ids . ")";
 
 		$this->data['classes'] = $this->db->query($query)->result();
-
 
 		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
 		$this->data['description'] = 'Section E (School Fee Detail)';
@@ -353,13 +303,6 @@ class Form extends Admin_Controller
 
 		$form_input = array();
 		$form_input['gender_type_id'] = (int) $this->input->post('gender_type_id');
-		$this->db->where('schoolId', $school_id);
-		$this->db->update('school', $form_input);
-
-		$form_input = array();
-		$form_input['principal'] = $this->input->post('principal');
-		$form_input['principal_cnic'] = $this->input->post('principal_cnic');
-		$form_input['principal_contact_no'] = $this->input->post('principal_contact_no');
 		$this->db->where('schoolId', $school_id);
 		$this->db->update('school', $form_input);
 
@@ -585,9 +528,6 @@ class Form extends Admin_Controller
 		$this->data['session_detail'] = $this->get_session_detail($session_id);
 		$this->data['form_status'] = $this->get_form_status($school_id);
 
-
-		//we use this code for only session 2023-24 howwver next year we get levels from school session 
-
 		$query = "SELECT MAX(schoolId) as pre_school_id FROM school WHERE schools_id = $school->schools_id and status=1";
 		$previous_session = $this->db->query($query)->row();
 		$min_level = array();
@@ -626,16 +566,21 @@ class Form extends Admin_Controller
 			$min_level[] = 4;
 		}
 
-		if (!$min_level) {
-			$min_level = 1;
-		} else {
-			$min_level = min($min_level);
-		}
-
-
+		$min_level = min($min_level);
 		$max_level = $this->data['school']->level_of_school_id;
 
-		// end here 
+
+
+
+
+
+		// $level_of_school_id = $this->data['school']->level_of_school_id;
+		// $query = "SELECT classes_ids FROM `levelofinstitute` 
+		//           WHERE levelofInstituteId='" . $level_of_school_id . "'";
+		// $classes_ids = $this->db->query($query)->result()[0]->classes_ids;
+
+
+		//my new code /....
 		$query = "SELECT classId FROM `class` 
 		          WHERE level_id >= '" . $min_level . "'and level_id<='" . $max_level . "'";
 		$class_Ids = $this->db->query($query)->result_array();
@@ -643,6 +588,13 @@ class Form extends Admin_Controller
 			$classIds[] = $class_Id['classId'];
 		}
 
+		//var_dump($classIds);
+		// //my new code end here ....
+
+
+
+		// $classIds = $array = explode(',', $classes_ids);
+		// var_dump($classIds);
 		$query = "select a_o_level FROM schools WHERE schoolId = '" . $school->schools_id . "'";
 		$a_o_level = $this->db->query($query)->row()->a_o_level;
 		if (!$a_o_level) {
@@ -667,6 +619,9 @@ class Form extends Admin_Controller
 				unset($classIds[$key]);
 			}
 		}
+
+
+
 
 		$classes_ids = implode(",", $classIds);
 		$query = "SELECT * FROM class WHERE classId IN(" . $classes_ids . ")";

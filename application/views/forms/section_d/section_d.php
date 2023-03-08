@@ -204,6 +204,7 @@
     <section class="content" style="padding-top: 0px !important;">
       <?php $this->load->view('forms/navigation_bar');   ?>
 
+
       <div class="box box-primary box-solid">
 
         <!-- /.box-header -->
@@ -304,8 +305,17 @@
 
           <div class="row">
             <div class="col-md-12">
-              <div class="table-responsive">
-                <table class="table" style="font-size: 12px;">
+              <div class="alert alert-warning">
+                <p style="text-align: center; color:black">
+                  The employees data in section E of the institute is automatically retrieved from the previous session. Go through the list and remove any employee who have left the institute and also add new employees.
+                </p>
+                <p style="text-align: center; color:black">
+                  انسٹی ٹیوٹ کے سیکشن (ای) میں ملازمین کا ڈیٹا خود بخود پچھلے سیشن سے حاصل کیا جاتا ہے۔ فہرست کو دیکھیں اور انسٹی ٹیوٹ چھوڑنے والے کسی بھی ملازم کو ہٹا دیں اور نئے ملازمین کو بھی شامل کریں۔
+                </p>
+              </div>
+              <div class="table-responsive" style="background-color: white !important; padding:3px">
+
+                <table class="table" id="employeeTable" style="font-size: 12px; background-color: white; margin-top:5px">
                   <thead>
                     <tr>
                       <th>#</th>
@@ -385,6 +395,22 @@
                     <?php endif; ?>
                   </tbody>
                 </table>
+                <script>
+                  $(document).ready(function() {
+                    $('#employeeTable').DataTable({
+                      "paging": false,
+                      "info": false
+                    });
+
+                  });
+                </script>
+                <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css">
+                <style>
+                  .dataTables_filter {
+                    margin-bottom: 10px;
+                  }
+                </style>
+
               </div>
 
             </div>
