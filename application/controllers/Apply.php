@@ -15,8 +15,7 @@ class Apply extends Admin_Controller
 	{
 		$this->data['session_id'] = $session_id = (int) $session_id;
 		$userId = $this->session->userdata('userId');
-		$query = "SELECT schoolId, level_of_school_id, gender_type_id, school_type_id,owner_id, reg_type_id 
-		         FROM schools WHERE `owner_id`='" . $userId . "'";
+		$query = "SELECT * FROM schools WHERE `owner_id`='" . $userId . "'";
 		$school = $this->db->query($query)->result()[0];
 		$this->data['school_id'] = $school_id = $school->schoolId;
 
@@ -24,6 +23,14 @@ class Apply extends Admin_Controller
 
 		if ($this->db->query($query)->result()[0]->total == 0) {
 			$school_session = array(
+				'school_name' => $school->schoolName,
+				'district_id' => $school->district_id,
+				'tehsil_id' => $school->tehsil_id,
+				'uc_id' => $school->uc_id,
+				'uc_text' => $school->uc_text,
+				'address' => $school->address,
+				'latitude' => $school->late,
+				'longitude' => $school->longitude,
 				'reg_type_id' => 1,
 				'schools_id' => $school_id,
 				'session_year_id' => $session_id,
@@ -95,6 +102,16 @@ class Apply extends Admin_Controller
 			$new_session['session_year_id'] = $session_id;
 			date_default_timezone_set("Asia/Karachi");
 			$new_session['created_date'] = date('Y-m-d H:i:s', time());
+
+			$new_session['school_name'] = $last_session_detail->school_name;
+			$new_session['district_id'] = $last_session_detail->district_id;
+			$new_session['tehsil_id'] = $last_session_detail->tehsil_id;
+			$new_session['uc_id'] = $last_session_detail->uc_id;
+			$new_session['uc_text'] = $last_session_detail->uc_text;
+			$new_session['address'] = $last_session_detail->address;
+			$new_session['latitude'] = $last_session_detail->latitude;
+			$new_session['longitude'] = $last_session_detail->longitude;
+
 			$this->db->insert('school', $new_session);
 			$school_inserted_id = $this->db->insert_id();
 			$this->db->insert('forms_process', array(
@@ -196,6 +213,17 @@ class Apply extends Admin_Controller
 			$new_session['session_year_id'] = $session_id;
 			date_default_timezone_set("Asia/Karachi");
 			$new_session['created_date'] = date('Y-m-d H:i:s', time());
+
+			$new_session['school_name'] = $last_session_detail->school_name;
+			$new_session['district_id'] = $last_session_detail->district_id;
+			$new_session['tehsil_id'] = $last_session_detail->tehsil_id;
+			$new_session['uc_id'] = $last_session_detail->uc_id;
+			$new_session['uc_text'] = $last_session_detail->uc_text;
+			$new_session['address'] = $last_session_detail->address;
+			$new_session['latitude'] = $last_session_detail->latitude;
+			$new_session['longitude'] = $last_session_detail->longitude;
+
+
 			$this->db->insert('school', $new_session);
 			$school_inserted_id = $this->db->insert_id();
 			$this->db->insert('forms_process', array(
@@ -294,6 +322,15 @@ class Apply extends Admin_Controller
 			$new_session['level_of_school_id'] = $last_session_detail->level_of_school_id;
 			$new_session['session_year_id'] = $session_id;
 			date_default_timezone_set("Asia/Karachi");
+			$new_session['school_name'] = $last_session_detail->school_name;
+			$new_session['district_id'] = $last_session_detail->district_id;
+			$new_session['tehsil_id'] = $last_session_detail->tehsil_id;
+			$new_session['uc_id'] = $last_session_detail->uc_id;
+			$new_session['uc_text'] = $last_session_detail->uc_text;
+			$new_session['address'] = $last_session_detail->address;
+			$new_session['latitude'] = $last_session_detail->latitude;
+			$new_session['longitude'] = $last_session_detail->longitude;
+
 			$new_session['created_date'] = date('Y-m-d H:i:s', time());
 			$this->db->insert('school', $new_session);
 			$school_inserted_id = $this->db->insert_id();
