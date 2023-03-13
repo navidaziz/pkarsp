@@ -636,12 +636,13 @@ class Form extends Admin_Controller
 		$max_level = $this->data['school']->level_of_school_id;
 
 		// end here 
-		$query = "SELECT classId FROM `class` 
+		echo $query = "SELECT classId FROM `class` 
 		          WHERE level_id >= '" . $min_level . "'and level_id<='" . $max_level . "'";
 		$class_Ids = $this->db->query($query)->result_array();
 		foreach ($class_Ids as $class_Id) {
 			$classIds[] = $class_Id['classId'];
 		}
+		var_dump($classIds);
 
 		$query = "select a_o_level FROM schools WHERE schoolId = '" . $school->schools_id . "'";
 		$a_o_level = $this->db->query($query)->row()->a_o_level;
