@@ -47,7 +47,11 @@
                 <h2>Private Schools Regulatory Authority</h2>
                 <h4>Government Of Khyber Pakhtunkhwa</h4>
                 <address><i class="fa fa-envelope"></i> psra.pmdu@gmail.com
-                  <span style="margin-left: 10px;"></span> <i class="fa fa-phone" aria-hidden="true"></i> 091-5619512
+                  <span style="margin-left: 10px;"></span>
+                  <a style="font-weight: bold; color:red" href="tel:+92091-9216205">
+                    <i class="fa fa-phone" aria-hidden="true"></i>
+                    091-9216205 </a>
+
                   <br />
 
 
