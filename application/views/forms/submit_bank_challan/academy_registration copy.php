@@ -128,7 +128,7 @@
                               <?php if ($count >= sizeof($session_fee_submission_dates)) { ?>
                                 After
                               <?php } else { ?>
-                                <strong> <?php echo date('d M, Y', strtotime($previous_last_date)); ?> </strong> to
+                                <strong> <?php echo $previous_last_date; ?> </strong> to
                               <?php } ?>
                             <?php } ?>
                             <strong>
@@ -273,7 +273,7 @@
                                     <?php if ($count >= sizeof($session_fee_submission_dates)) { ?>
                                       After
                                     <?php } else { ?>
-                                      <strong> <?php echo date('d M, Y', strtotime($previous_last_date)); ?> </strong> to
+                                      <strong> <?php echo $previous_last_date; ?> </strong> to
                                     <?php } ?>
                                   <?php } ?>
                                   <strong>

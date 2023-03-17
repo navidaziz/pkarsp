@@ -316,30 +316,30 @@
 
                 <div style=" font-size: 16px; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
                   <?php if ($school->school_type_id == 1) { ?>
-
-
-                    <strong> Gender of Education <small>(Institute)</small> </strong>
                     <?php
                     $query = "select gender_type_id FROM school WHERE schoolId = '" . $school_id . "'";
                     $school_gender = $this->db->query($query)->row();
-                    //var_dump($a_o_level);
                     ?>
+                    <?php if ($school->registrationNumber) { ?>
+                      <strong> Gender of Education <small>(Institute)</small> </strong>
 
-                    <br />
-                    <input type="radio" name="gender_type_id" value="1" <?php if ($school_gender->gender_type_id === "1") {
-                                                                          echo "checked";
-                                                                        } ?> required /> Boys <span style="margin-left: 10px;"></span>
-                    <input type="radio" name="gender_type_id" value="2" <?php if ($school_gender->gender_type_id === "2") {
-                                                                          echo "checked";
-                                                                        } ?> required /> Girls <span style="margin-left: 10px;"></span>
+                      <br />
+                      <input type="radio" name="gender_type_id" value="1" <?php if ($school_gender->gender_type_id === "1") {
+                                                                            echo "checked";
+                                                                          } ?> required /> Boys <span style="margin-left: 10px;"></span>
+                      <input type="radio" name="gender_type_id" value="2" <?php if ($school_gender->gender_type_id === "2") {
+                                                                            echo "checked";
+                                                                          } ?> required /> Girls <span style="margin-left: 10px;"></span>
 
-                    <input type="radio" name="gender_type_id" value="3" <?php if ($school_gender->gender_type_id === "3") {
-                                                                          echo "checked";
-                                                                        } ?> required /> Co-Education
+                      <input type="radio" name="gender_type_id" value="3" <?php if ($school_gender->gender_type_id === "3") {
+                                                                            echo "checked";
+                                                                          } ?> required /> Co-Education
 
-                    <br />
-                    <br />
-
+                      <br />
+                      <br />
+                    <?php } else { ?>
+                      <input type="hidden" name="gender_type_id" value="<?php echo $school_gender->gender_type_id ?>" />
+                    <?php  } ?>
                     <strong> Do Institute offer O Level and A level </strong>
                     <?php
                     $query = "select a_o_level, telePhoneNumber, schoolMobileNumber, principal_email FROM schools WHERE schoolId = '" . $schools_id . "'";
@@ -357,16 +357,24 @@
                     <br />
                     <br />
                   <?php } ?>
-                  <strong> Do you want to change institute contact details </strong> <br />
-                  Telephone No: <input id="telePhoneNumber" class="form-control" required type="text" value="<?php echo $school_more_info->telePhoneNumber; ?>" name="telePhoneNumber" /> <br />
-                  Mobile No: <input id="schoolMobileNumber" class="form-control" required type="text" value="<?php echo $school_more_info->schoolMobileNumber; ?>" name="schoolMobileNumber" />
-                  Email Address: <small>(Optional)</small>
-                  <input class="form-control" type="email" value="<?php echo $school_more_info->principal_email; ?>" name="principal_email" />
+                  <?php if ($school->registrationNumber) { ?>
+                    <strong> Do you want to change institute contact details </strong> <br />
+                    Telephone No: <input id="telePhoneNumber" class="form-control" required type="text" value="<?php echo $school_more_info->telePhoneNumber; ?>" name="telePhoneNumber" /> <br />
+                    Mobile No: <input id="schoolMobileNumber" class="form-control" required type="text" value="<?php echo $school_more_info->schoolMobileNumber; ?>" name="schoolMobileNumber" />
+                    Email Address: <small>(Optional)</small>
+                    <input class="form-control" type="email" value="<?php echo $school_more_info->principal_email; ?>" name="principal_email" />
 
-                  <br />
-                  <br />
+                    <br />
+                    <br />
+                  <?php } else { ?>
+                    <input id="telePhoneNumber" type="hidden" value="<?php echo $school_more_info->telePhoneNumber; ?>" name="telePhoneNumber" /> <br />
+                    <input id="schoolMobileNumber" type="hidden" value="<?php echo $school_more_info->schoolMobileNumber; ?>" name="schoolMobileNumber" />
+                    <input class="form-control" type="hidden" value="<?php echo $school_more_info->principal_email; ?>" name="principal_email" />
 
-                  <strong> <?php echo $session_detail->sessionYearTitle; ?> session head of institute, Specifically Principal </strong>
+
+                  <?php } ?>
+
+                  <strong> <?php echo $session_detail->sessionYearTitle; ?> session head of institute, <i>Principal, Head Master etc</i> </strong>
                   <?php
                   $query = "select principal_cnic,principal,principal_contact_no FROM school WHERE schoolId = '" . $school_id . "'";
                   $principal = $this->db->query($query)->row();

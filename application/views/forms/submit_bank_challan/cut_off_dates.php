@@ -3,7 +3,6 @@
         <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 200px;  margin: 5px; padding: 5px; background-color: white;">
             <h4>Session: <?php echo $session_detail->sessionYearTitle; ?> Cutoff Dates</h4>
             <table class="table table-bordered">
-
                 <tr>
                     <th>S/No</th>
                     <th>Last Date</th>
@@ -25,7 +24,7 @@
                                 <?php if ($count >= sizeof($session_fee_submission_dates)) { ?>
                                     After
                                 <?php } else { ?>
-                                    <strong> <?php echo date('d M, Y', strtotime($previous_last_date)); ?> </strong> to
+                                    <strong> <strong> <?php echo $previous_last_date; ?> </strong> to </strong> to
                                 <?php } ?>
                             <?php } ?>
                             <?php

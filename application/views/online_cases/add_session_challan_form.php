@@ -117,32 +117,32 @@
                 <p>School administration apply for session <?php echo $school_session->sessionYearTitle; ?>
                     <?php echo $school_session->regTypeTitle; ?> level <?php echo $school_session->levelofInstituteTitle; ?> and submit the following Challan detail.
                 </p>
-                
+
                 <table class="table">
                     <tr>
                         <td>
                             <h5>School Submitted STAN and Date</h5>
                             <ul>
-                <ol><?php
-                    $query = "SELECT `bt_no`, `bt_date` FROM bank_transaction WHERE school_id='" . $school_session->schoolId . "'";
-                    $challans = $this->db->query($query)->result();
-                    foreach ($challans as $challan) { ?>
-                        <li> STAN: <?php echo $challan->bt_no ?> Date: <?php echo date('d/m/Y', strtotime($challan->bt_date)) ?> </li>
-                    <?php  } ?>
-                </ol>
-                </ul>
+                                <ol><?php
+                                    $query = "SELECT `bt_no`, `bt_date` FROM bank_transaction WHERE school_id='" . $school_session->schoolId . "'";
+                                    $challans = $this->db->query($query)->result();
+                                    foreach ($challans as $challan) { ?>
+                                        <li> STAN: <?php echo $challan->bt_no ?> Date: <?php echo date('d/m/Y', strtotime($challan->bt_date)) ?> </li>
+                                    <?php  } ?>
+                                </ol>
+                            </ul>
                         </td>
                         <td>
-                            
-                            
-                            
+
+
+
                         </td>
                     </tr>
                 </table>
-                
 
-                
-                
+
+
+
             </div>
 
         </div>
@@ -184,25 +184,25 @@
 
                         <tr>
                             <td style="width: 210px;">
-                                
+
                                 <?php if ($count == 1) { ?> <strong> 01 Apr, <?php echo date('Y', strtotime($session_fee_submission_date->last_date)); ?></strong> to <?php } else { ?>
                                     <?php if ($count >= sizeof($session_fee_submission_dates)) { ?>
                                         After
                                     <?php } else { ?>
-                                       <strong> <?php echo date('d M, Y', strtotime($previous_last_date)); ?> </strong> to
+                                        <strong> <?php echo $previous_last_date; ?> </strong> to
                                     <?php } ?>
                                 <?php } ?>
                                 <strong>
-                                 <?php
+                                    <?php
                                     $previous_last_date = date('d M, Y', strtotime($session_fee_submission_date->last_date . ' +1 day'));
                                     if ($count >= sizeof($session_fee_submission_dates)) {
-                                     echo date('d M, Y', strtotime($session_fee_submission_date->last_date.'-1 day')); 
-                                    }else{
-                                       
-                                        echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); 
+                                        echo date('d M, Y', strtotime($session_fee_submission_date->last_date . '-1 day'));
+                                    } else {
+
+                                        echo date('d M, Y', strtotime($session_fee_submission_date->last_date));
                                     }
                                     ?>
-                                    </strong>
+                                </strong>
                             </td>
                             <td><?php echo number_format($fee_sturucture->renewal_app_processsing_fee); ?></td>
                             <td><?php echo number_format($fee_sturucture->renewal_fee); ?></td>
@@ -525,7 +525,8 @@
     </div>
 
     <div class="modal-footer">
-        <a class="btn btn-secondary " href="<?php echo $_SERVER['HTTP_REFERER']; //echo site_url("online_cases/combine_note_sheet/" . $school->schools_id) ?>" class="close" aria-label="Close">Close</a>
+        <a class="btn btn-secondary " href="<?php echo $_SERVER['HTTP_REFERER']; //echo site_url("online_cases/combine_note_sheet/" . $school->schools_id) 
+                                            ?>" class="close" aria-label="Close">Close</a>
 
     </div>
 </section>

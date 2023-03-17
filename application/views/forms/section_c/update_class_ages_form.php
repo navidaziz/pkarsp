@@ -20,7 +20,9 @@
     }
   </style>
 
-  <h5 style="color: red;">Note: For example age 3+ means “equal to or greater than 3 but less than 4 years”, similarly for 4+ , 5+ and so on.</h5>
+  <!-- <h5 style="color: red;">Note: For example age 3+ means “equal to or greater than 3 but less than 4 years”, similarly for 4+ , 5+ and so on.</h5>
+   -->
+
   <form action="<?php echo site_url("form/update_class_ages_data") ?>" method="post">
     <table class="table table-bordered">
 
@@ -81,7 +83,7 @@
 
       </tr>
       <tr>
-        <th style="text-align: center; background-color: <?php if ($gender_id == 1) { ?> #9FC8E8 <?php } else { ?> #FFC0CB <?php } ?>;">Disabled <?php if ($gender_id == 1) { ?> Boys <?php } else { ?> Girls <?php } ?> In Class <?php echo $class->classTitle ?></th>
+        <th style="text-align: center; background-color: <?php if ($gender_id == 1) { ?> #9FC8E8 <?php } else { ?> #FFC0CB <?php } ?>;">Special <?php if ($gender_id == 1) { ?> Boys <?php } else { ?> Girls <?php } ?> In Class <?php echo $class->classTitle ?></th>
         <td style="text-align: center;"><input required value="<?php if ($query_result) {
                                                                   echo $query_result[0]->disabled;
                                                                 } ?>" style="width: 50px;" type="number" min="0" max="<?php echo $total_students; ?>" id="disabled" name="disabled" /></td>

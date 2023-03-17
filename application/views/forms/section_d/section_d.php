@@ -427,7 +427,7 @@
 
               </div>
               <div class="col-md-4">
-                <?php if (count($school_staff) >= 3 and $form_status->form_d_status == 0) { ?>
+                <?php if (count($school_staff) >= 2 and $form_status->form_d_status == 0) { ?>
                   <a href="<?php echo site_url("form/complete_section_d/$school_id"); ?>" class="btn btn-primary" style="margin: 2px;">Add Section D Data</a>
                 <?php } ?>
               </div>

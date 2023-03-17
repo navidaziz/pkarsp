@@ -108,7 +108,7 @@
                       <?php } ?>
                       <th style="text-align: center;">Total</th>
                       <th style="text-align: center;">Non-Muslims</th>
-                      <th style="text-align: center;">Disabled</th>
+                      <th style="text-align: center;">Special Students</th>
 
                       <td style="text-align: center;"></td>
                     </tr>
@@ -236,7 +236,7 @@
                       <?php } ?>
                       <th style="background-color: #FFC0CB; text-align: center;">Total</th>
                       <th style="background-color: #FFC0CB; text-align: center;">Non-Muslims</th>
-                      <th style="background-color: #FFC0CB; text-align: center;">Disabled</th>
+                      <th style="background-color: #FFC0CB; text-align: center;">Special Students</th>
 
                       <td style="text-align: center;"></td>
                     </tr>
@@ -366,7 +366,7 @@
                     <?php } ?>
                     <th style="background-color: #337AB7; color:white; text-align: center;">Total</th>
                     <th style="background-color: #337AB7; color:white; text-align:center;">Non-Muslims</th>
-                    <th style="background-color: #337AB7; color:white; text-align: center;">Disabled</th>
+                    <th style="background-color: #337AB7; color:white; text-align: center;">Special Students</th>
                   </tr>
 
                   <?php foreach ($classes  as $class) { ?>
