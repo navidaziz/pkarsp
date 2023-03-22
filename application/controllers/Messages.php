@@ -17,25 +17,30 @@ class Messages extends Admin_Controller
       $query = "  SELECT * FROM `schools` where owner_id=$user_id";
       $query = $this->db->query($query);
       $school_info = $query->row();
-      $school_name = str_replace("'", "", $school_info->schoolName);
-      $this->data['school_id'] = $school_info->schoolId;
+      if ($school_info) {
+         $school_name = str_replace("'", "", $school_info->schoolName);
+         $this->data['school_id'] = $school_info->schoolId;
 
-      $query1 =
-         "SELECT message_for_all.*,`message_school`.`school_id` FROM `message_for_all`
+         $query1 =
+            "SELECT message_for_all.*,`message_school`.`school_id` FROM `message_for_all`
                      left join message_school on `message_for_all`.`message_id`=`message_school`.`message_id`
                      where (`message_school`.`school_id`=$school_info->schoolId AND 
                      `message_for_all`.`select_all`='no')
-                     OR  (`message_for_all`.`district_id` in($school_info->district_id,0) AND  `message_for_all`.`level_id` in($school_info->level_of_school_id,0) 
+                     OR  (`message_for_all`.`district_id` in($school_info->district_id,0) 
+                     AND  `message_for_all`.`level_id` in($school_info->level_of_school_id,0) 
                       AND 
                      `message_for_all`.`select_all`='yes' AND  LOCATE(`message_for_all`.`like_text`,'" .
-         $school_name .
-         "')> 0)
+            $school_name .
+            "')> 0)
                      order by `message_for_all`.`message_id` DESC";
-      $query1 = $this->db->query($query1);
-      // print_r($this->db->last_query()) ;exit;
-      // var_dump($query1->result());exit;
+         $query1 = $this->db->query($query1);
+         // print_r($this->db->last_query()) ;exit;
+         // var_dump($query1->result());exit;
 
-      $this->data['school_messages'] = $query1->result();
+         $this->data['school_messages'] = $query1->result();
+      } else {
+         $this->data['school_messages'] = NULL;
+      }
       $this->data['title'] = 'Inbox';
       $this->data['description'] = 'info about Inbox Messages';
       $this->data['view'] = 'messages/inbox';
