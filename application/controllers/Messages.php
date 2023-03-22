@@ -17,30 +17,24 @@ class Messages extends Admin_Controller
       $query = "  SELECT * FROM `schools` where owner_id=$user_id";
       $query = $this->db->query($query);
       $school_info = $query->row();
-      if ($school_info) {
-         $school_name = str_replace("'", "", $school_info->schoolName);
-         $this->data['school_id'] = $school_info->schoolId;
-
-         $query1 =
-            "SELECT message_for_all.*,`message_school`.`school_id` FROM `message_for_all`
+      $school_name = str_replace("'", "", $school_info->schoolName);
+      $this->data['school_id'] = $school_info->schoolId;
+      $query1 =
+         "SELECT message_for_all.*,`message_school`.`school_id` FROM `message_for_all`
                      left join message_school on `message_for_all`.`message_id`=`message_school`.`message_id`
                      where (`message_school`.`school_id`=$school_info->schoolId AND 
                      `message_for_all`.`select_all`='no')
-                     OR  (`message_for_all`.`district_id` in($school_info->district_id,0) 
-                     AND  `message_for_all`.`level_id` in($school_info->level_of_school_id,0) 
+                     OR  (`message_for_all`.`district_id` in($school_info->district_id,0) AND  `message_for_all`.`level_id` in($school_info->level_of_school_id,0) 
                       AND 
                      `message_for_all`.`select_all`='yes' AND  LOCATE(`message_for_all`.`like_text`,'" .
-            $school_name .
-            "')> 0)
-                     order by `message_for_all`.`message_id` DESC";
-         $query1 = $this->db->query($query1);
-         // print_r($this->db->last_query()) ;exit;
-         // var_dump($query1->result());exit;
+         $school_name .
+         "')> 0) GROUP BY `message_for_all`.`message_id`
+                     order by `message_for_all`.`message_id` DESC ";
+      $query1 = $this->db->query($query1);
+      // print_r($this->db->last_query()) ;exit;
+      // var_dump($query1->result());exit;
 
-         $this->data['school_messages'] = $query1->result();
-      } else {
-         $this->data['school_messages'] = NULL;
-      }
+      $this->data['school_messages'] = $query1->result();
       $this->data['title'] = 'Inbox';
       $this->data['description'] = 'info about Inbox Messages';
       $this->data['view'] = 'messages/inbox';
@@ -48,11 +42,49 @@ class Messages extends Admin_Controller
    }
    public function school_message_details($message_id)
    {
+
+      $message_id = (int) $message_id;
+
+      if ($this->input->post("deficiency_completed")) {
+         $school_id = (int) $this->input->post('school_id');
+         $query = "UPDATE school SET file_status=1  WHERE schoolId ='" . $school_id . "' and file_status=5";
+
+         if ($this->db->query($query)) {
+            redirect('messages/school_message_details/' . $message_id);
+         } else {
+            redirect('messages/school_message_details/' . $message_id);
+         }
+      }
+
+      if ($this->input->post("deficiency_challan")) {
+         $school_id = (int) $this->input->post('school_id');
+         if ($this->input->post('bt_date')) {
+            $count = count($this->input->post('bt_date'));
+            for ($i = 0; $i < $count; $i++) {
+               $InserData = array(
+                  'school_id' => $school_id,
+                  'reg_type_id' => $this->input->post('reg_type_id'),
+                  'bt_no' => $_POST['bt_no'][$i],
+                  'bt_date' => $_POST['bt_date'][$i],
+               );
+
+               if ($this->db->insert('bank_transaction', $InserData)) {
+                  $this->session->set_flashdata('msg_success', 'Bank Challan Add Successfully.');
+               } else {
+                  $this->session->set_flashdata('msg_error', "Something's wrong, Please try again.");
+               }
+               redirect('messages/school_message_details/' . $message_id);
+            }
+         }
+      }
+
       $query1 = "  SELECT * FROM `message_for_all` where message_id=$message_id ";
       $query1 = $this->db->query($query1);
       $message_info = $query1->row();
       $query = "  SELECT * FROM `message_for_all_attachment` where message_id=$message_info->message_id ";
       $query = $this->db->query($query);
+
+
 
       $this->data['message_info'] = $message_info;
       $this->data['attachments'] = $query->result();
@@ -64,6 +96,9 @@ class Messages extends Admin_Controller
    }
    public function sent_messages()
    {
+
+      ini_set("memory_limit", "512M");
+
       $limit = 25;
 
       $offset = $this->uri->segment(3, 0);
@@ -117,7 +152,13 @@ class Messages extends Admin_Controller
       $query = "  SELECT * FROM `message_for_all_attachment` where message_id=$message_info->message_id ";
       $query = $this->db->query($query);
 
-
+      //   $query="SELECT * FROM `message_school` WHERE `message_school`.`message_id` = '".$message_info->message_id."'";
+      //   $school = $this->db->query($query)->result();
+      //   if($school){
+      //       $this->data['school_id'] = $school->school_id;
+      //   }else{
+      //       $this->data['school_id'] = NULL;
+      //   }
 
       $this->data['message_info'] = $message_info;
       //////////////////////////////////////////
@@ -143,6 +184,14 @@ class Messages extends Admin_Controller
       $this->data['attachments'] = $query->result();
 
 
+      $query = "SELECT * FROM `message_school` WHERE `message_school`.`message_id` = '" . $message_info->message_id . "'";
+      $school = $this->db->query($query)->result();
+      //var_dump($school);
+      if ($school) {
+         $this->data['school_id'] = $school[0]->school_id;
+      } else {
+         $this->data['school_id'] = NULL;
+      }
 
 
       //var_dump($this->data['attachments']);exit;
@@ -202,9 +251,7 @@ class Messages extends Admin_Controller
    }
    public function create_message()
    {
-
       if ($_POST) {
-
          // echo "<pre>"; print_r($_FILES);exit();
          $imgString = '';
          $pdfString = '';
@@ -228,7 +275,6 @@ class Messages extends Admin_Controller
          } else {
             $insert['select_all'] = "yes";
          }
-
 
          $this->db->set($insert);
          $this->db->insert("message_for_all");
@@ -255,10 +301,7 @@ class Messages extends Admin_Controller
             $files = $_FILES;
             if (isset($_FILES['otherimages']) && !empty($_FILES['otherimages']['name'])) {
                $cpt = count($_FILES['otherimages']['name']);
-               //echo "hellow";exit;
-               //var_dump($_FILES['otherimages']['name']);exit;
-               //echo base_url . 'assets/images/';
-               //exit;
+
                $config = [];
                $config['upload_path'] = 'assets/images/';
                $config['allowed_types'] = 'gif|jpeg|jpg|png|doc|docx|pdf';
@@ -354,7 +397,9 @@ class Messages extends Admin_Controller
                     LEFT JOIN `district` 
                         ON (`schools`.`district_id` = `district`.`districtId`)
                         LEFT JOIN `levelofinstitute` 
-                        ON (`schools`.`level_of_school_id` = `levelofinstitute`.`levelofInstituteId`)";
+                        ON (`schools`.`level_of_school_id` = `levelofinstitute`.`levelofInstituteId`) 
+                        WHERE `schools`.`registrationNumber` > 0
+                        ORDER BY `schools`.`schoolId` ASC";
       $query = $this->db->query($query);
 
       $this->data['schools'] = $query->result();
@@ -448,6 +493,7 @@ class Messages extends Admin_Controller
 
          $insert['created_by'] = $this->session->userdata('userId');
          $insert['created_date'] = $dated;
+         //var_dump($insert);exit;
 
          $is_deficiency_message = $this->input->post('is_deficiency_message');
          if ($is_deficiency_message) {
@@ -468,7 +514,7 @@ class Messages extends Admin_Controller
             $insert['message_reason'] = $this->input->post('deficiency_reason');
          }
 
-         //var_dump($insert);exit;
+
          $arr = [];
 
          //////////////////////////////
@@ -671,13 +717,13 @@ class Messages extends Admin_Controller
          //echo $district;exit;
          $level = $this->input->post('level');
          if ($district == '0' && $level == '0') {
-            $condition = "WHERE `schools`.`schoolName` Like '%$string%' ";
+            $condition = "WHERE `schools`.`schoolName` Like '%$string%' OR `schools`.`schoolId` = '$string'";
          } elseif ($district == '0') {
-            $condition = "WHERE  `schools`.`level_of_school_id`= $level AND `schools`.`schoolName` Like '%$string%' ";
+            $condition = "WHERE  `schools`.`level_of_school_id`= $level AND `schools`.`schoolName` Like '%$string%' OR `schools`.`schoolId` = '$string'";
          } elseif ($level == '0') {
-            $condition = "WHERE  `schools`.`district_id`= $district AND `schools`.`schoolName` Like '%$string%'";
+            $condition = "WHERE  `schools`.`district_id`= $district AND `schools`.`schoolName` Like '%$string%' OR `schools`.`schoolId` = '$string'";
          } else {
-            $condition = "WHERE  `schools`.`district_id`= $district AND `schools`.`level_of_school_id`= $level AND `schools`.`schoolName` Like '%$string%'";
+            $condition = "WHERE  `schools`.`district_id`= $district AND `schools`.`level_of_school_id`= $level AND `schools`.`schoolName` Like '%$string%' OR `schools`.`schoolId` = '$string'";
          }
 
          $query = "  SELECT
