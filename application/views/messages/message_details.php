@@ -102,7 +102,7 @@
                       <?php foreach ($attachments as $attachment) {
                         if ($attachment->folder) {
                           $root = (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/';
-                          $attachment_url = $root . "uploads/" . $attachment->folder;
+                          $attachment_url = $root . "uploads/" . $attachment->folder . "/";
                         } else {
                           $attachment_url = 'http://psra.gkp.pk/schoolReg/assets/images/';
                         }
