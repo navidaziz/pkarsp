@@ -252,7 +252,9 @@ class Messages extends Admin_Controller
    public function create_message()
    {
       if ($_POST) {
-         // echo "<pre>"; print_r($_FILES);exit();
+         // echo "<pre>";
+         // print_r($_FILES);
+         // exit();
          $imgString = '';
          $pdfString = '';
          $docString = '';
@@ -300,12 +302,17 @@ class Messages extends Admin_Controller
             //var_dump($_FILES);exit;
             $files = $_FILES;
             if (isset($_FILES['otherimages']) && !empty($_FILES['otherimages']['name'])) {
+
+
+
                $cpt = count($_FILES['otherimages']['name']);
 
                $config = [];
-               $config['upload_path'] = 'assets/images/';
-               $config['allowed_types'] = 'gif|jpeg|jpg|png|doc|docx|pdf';
-               $config['max_size'] = 0;
+               $upload_dir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/notifications/' . date('Y-m-d') . "/";
+               if (!file_exists($upload_dir)) {
+                  mkdir($upload_dir, 0777, true);  //create directory if not exist
+               }
+
                $this->load->library('upload', $config);
                for ($i = 0; $i < $cpt; $i++) {
                   $_FILES['otherimages[]']['name'] = $files['otherimages']['name'][$i];
@@ -313,16 +320,15 @@ class Messages extends Admin_Controller
                   $_FILES['otherimages[]']['tmp_name'] = $files['otherimages']['tmp_name'][$i];
                   $_FILES['otherimages[]']['error'] = $files['otherimages']['error'][$i];
                   $_FILES['otherimages[]']['size'] = $files['otherimages']['size'][$i];
-                  $config['upload_path'] = 'assets/images/';
+                  $config['upload_path'] = $upload_dir;
                   $config['allowed_types'] = 'gif|jpeg|jpg|png|doc|docx|pdf';
                   $config['max_size'] = 0;
-                  $random = rand(1, 1000000000);
-
-                  $makeRandom = hash('sha512', $random . config_item("encryption_key"));
-                  $makeRandom .= "____";
-                  $makeRandom .= $files['otherimages']['name'][$i];
-                  $config['file_name'] = $makeRandom;
-
+                  //$random = rand(1, 1000000000);
+                  // $makeRandom = hash('sha512', $random . config_item("encryption_key"));
+                  // $makeRandom .= "____";
+                  // $makeRandom .= $files['otherimages']['name'][$i];
+                  $file_name = 'PSRA-' . date('Y-m-d') . "-" . time() . "-" . $message_id;
+                  $config['file_name'] = $file_name;
                   $this->upload->initialize($config);
                   if ($this->upload->do_upload("otherimages[]")) {
                      $images_data[] = $this->upload->data();
@@ -338,6 +344,7 @@ class Messages extends Admin_Controller
                   $data = [
                      'message_id' => $message_id,
                      'attachment_name' => $images_data[$i]['file_name'],
+                     'folder' => 'notifications/' . date('Y-m-d'),
                   ];
                   $this->db->set($data);
                   $this->db->insert("message_for_all_attachment");

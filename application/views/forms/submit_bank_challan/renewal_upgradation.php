@@ -108,7 +108,7 @@
                             <td style="width: 200px;">
                               <?php if ($count == 1) { ?>
 
-                                <!-- <strong> 01 Apr, <?php echo date('Y', strtotime($session_fee_submission_date->last_date)); ?></strong> to  -->
+                                <span>Up to </span>
 
                               <?php } else { ?>
                                 <?php if ($count >= sizeof($session_fee_submission_dates)) { ?>

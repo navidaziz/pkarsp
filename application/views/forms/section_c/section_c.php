@@ -216,7 +216,7 @@
               <?php } ?>
 
               <?php if ($girls) { ?>
-                <h4 style="border-left: 20px solid #FFC0CB; padding-left:5px"><strong> Grils</strong> Enrollment Class and Age wise.<br />
+                <h4 style="border-left: 20px solid #FFC0CB; padding-left:5px"><strong>Girls</strong> Enrollment Class and Age wise.<br />
                   <small class="guideline" style="color: red;">
                     Note: For example age 3+ means “equal to or greater than 3 but less than 4 years”, similarly for 4+ , 5+ and so on
                   </small>

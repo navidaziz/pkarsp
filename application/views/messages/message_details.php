@@ -89,8 +89,6 @@
 
 
                   <div class="">
-
-
                     <?php echo $message_info->discription; ?>
                   </div>
 
@@ -101,7 +99,15 @@
 
 
                     <table class="table table-bordered bg-info">
-                      <?php foreach ($attachments as $attachment) { ?>
+                      <?php foreach ($attachments as $attachment) {
+                        if ($attachment->folder) {
+                          $root = (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/';
+                          $attachment_url = $root . "uploads/" . $attachment->folder;
+                        } else {
+                          $attachment_url = 'http://psra.gkp.pk/schoolReg/assets/images/';
+                        }
+                        echo "<br />";
+                      ?>
                         <tr>
                           <td><?php echo $counter++; ?></td>
                           <td><i class="fa fa-file"></i> <?php
@@ -111,7 +117,7 @@
                                                           echo end($attach); ?>
                           </td>
                           <td>
-                            <a class="btn btn-link" href="<?php echo 'http://psra.gkp.pk/schoolReg/assets/images/' . $attachment->attachment_name; ?>">
+                            <a target="_blank" class="btn btn-link" href="<?php echo  $attachment_url . '' . $attachment->attachment_name; ?>">
                               <i class="fa fa-download"></i> Download</a>
                           </td>
                         </tr>
