@@ -1084,6 +1084,12 @@ class Form extends Admin_Controller
 		$this->data['title'] = 'Apply For ' . $this->registaion_type($this->data['school']->reg_type_id);
 		$this->data['description'] = '';
 
+
+
+
+
+
+
 		if ($school->school_type_id == 1) {
 
 			if ($this->data['school']->reg_type_id == 1) {
@@ -1107,6 +1113,8 @@ class Form extends Admin_Controller
 				$this->data['view'] = 'forms/submit_bank_challan/academy_renewal';
 			}
 		}
+
+
 
 		$this->load->view('layout', $this->data);
 	}

@@ -129,4 +129,39 @@ class User_account extends Admin_Controller
 			$this->change_user_name();
 		}
 	}
+
+	public function account_contact_detail()
+	{
+		$this->data['title'] = 'Change Account Contact Detail';
+		$this->data['description'] = 'Change Account Contact Detail (Mobile, landline and email address)';
+		$this->data['view'] = 'user_account/account_contact_detail';
+		$this->load->view('layout', $this->data);
+		//$this->data['view'] = 'update_profile/update_profile';
+		//$this->load->view('layout', $this->data);
+	}
+	public function update_account_contact_details()
+	{
+		$userId = $this->session->userdata('userId');
+		$school_input['telePhoneNumber'] = $this->input->post('telePhoneNumber');
+		$school_input['schoolMobileNumber'] = $this->input->post('schoolMobileNumber');
+		$school_input['principal_email'] = $this->input->post('principal_email');
+		$this->db->where('owner_id', $userId);
+		if ($this->db->update('schools', $school_input)) {
+			$this->session->set_flashdata("msg_success", "Contact Detail Changed Successfully.");
+		}
+		$email_address = $this->db->escape($this->input->post('userEmail'));
+		$query = "SELECT COUNT(*) as total FROM users WHERE userEmail= " . $email_address . " and userId != '" . $userId . "'";
+		$email_duplicate = $this->db->query($query)->row();
+		if ($email_duplicate->total) {
+			$this->session->set_flashdata("msg_error", "Institute Account Email address already used. Try agin with other email address.");
+		} else {
+			$this->session->set_flashdata("msg_success", "Account Email Address Changed Successfully.");
+			$user_input['userEmail'] = $this->input->post('userEmail');
+			$user_input['profile_update'] = 1;
+			$this->db->where('userId', $userId);
+			$this->db->update('users', $user_input);
+		}
+
+		redirect("user_account/account_contact_detail");
+	}
 }

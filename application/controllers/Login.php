@@ -179,11 +179,13 @@ class Login extends Admin_Controller
 					$query = "SELECT `schools`.`schoolId` FROM `schools` WHERE owner_id = '" . $user->userId . "'";
 					$school_result = $this->db->query($query)->result();
 					if ($school_result) {
-						if ($user->profile_update == 1) {
-							redirect($homepage_path);
-						} else {
-							redirect('profile_update');
-						}
+						$this->session->set_userdata('role_homepage_uri', 'add_school');
+						redirect('add_school');
+						// if ($user->profile_update == 1) {
+						// 	redirect($homepage_path);
+						// } else {
+						// 	redirect('profile_update');
+						// }
 					} else {
 						$this->session->set_userdata('role_homepage_uri', 'add_school');
 						redirect('add_school');

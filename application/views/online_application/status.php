@@ -30,20 +30,7 @@
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h2 style="display:inline;">
-        <?php echo ucwords(strtolower($school->schoolName)); ?>
-      </h2>
-      <br />
-      <h4>Institute ID: <?php echo $school->schools_id; ?> - REG No: <?php echo $school->registrationNumber ?></h4>
-      <ol class="breadcrumb">
-        <li><a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> Home </a></li>
-        <!-- <li><a href="#">Examples</a></li> -->
-        <li class="active"><?php echo @ucfirst($title); ?> Session: <?php echo $session_detail->sessionYearTitle; ?></li>
-      </ol>
-    </section>
-
+    <?php $this->load->view('forms/form_header');   ?>
 
 
     <!-- Main content -->
@@ -75,6 +62,140 @@
 
 
                 </h4>
+                <?php
+                $query = "SELECT section_e FROM school WHERE schoolId = '" . $school->school_id . "'";
+                $section_e = $this->db->query($query)->row()->section_e;
+                if ($section_e == 0) { ?>
+                  <form action="<?php echo site_url('online_application/update_section_e') ?>" method="post">
+                    <input type="hidden" value="<?php echo $school->school_id; ?>" name="school_id" />
+                    <table class="table table-bordered">
+
+                      <tr>
+                        <th>Sessions</th>
+                        <?php
+
+                        $query = "SELECT * FROM class WHERE classId IN(SELECT class_id FROM fee WHERE school_id = '" . $school->school_id . "')";
+
+                        $classes = $this->db->query($query)->result();
+                        $query = "SELECT
+                          `session_year`.`sessionYearTitle`
+                          , `session_year`.`sessionYearId`
+                          , `school`.`schoolId`
+                          FROM
+                          `school`
+                          INNER JOIN `session_year` 
+                          ON (`school`.`session_year_id` = `session_year`.`sessionYearId`)
+                          WHERE  `school`.`schoolId` <= '" . $school->school_id . "'
+                          ORDER BY `school`.`schoolId` DESC LIMIT 2";
+                        $sessions =  $this->db->query($query)->result();
+
+                        asort($sessions);
+                        foreach ($sessions  as $session) { ?>
+                          <th style="text-align: center;"><?php echo $session->sessionYearTitle; ?></th>
+                        <?php } ?>
+                      </tr>
+                      <tr>
+                        <th>Classes</th>
+                        <?php
+                        foreach ($sessions  as $session) { ?>
+                          <th style="text-align: center;">Maximum tuition fee in class</th>
+                        <?php } ?>
+                      </tr>
+
+                      <?php
+                      $form_complete = 1;
+                      $previous_session_max_fee = array();
+                      $previous_session_fee = array();
+                      foreach ($classes  as $class) {
+                        $add = 1;
+                      ?>
+                        <tr>
+                          <th><?php echo $class->classTitle ?></th>
+                          <?php
+                          $session_count = 1;
+                          foreach ($sessions  as $session) {
+                            $query = "SELECT 
+                                      `fee`.`addmissionFee`
+                                    ,  `fee`.`feeId`
+                                    , `fee`.`tuitionFee`
+                                    , `fee`.`securityFund`
+                                    , `fee`.`otherFund`
+                                FROM
+                                    `fee`  WHERE `fee`.`school_id` = '" . $session->schoolId . "'
+                                    AND `fee`.`class_id` ='" . $class->classId . "'";
+
+                            $session_fee = $this->db->query($query)->result()[0];
+                            if ($session_fee) {
+                              $add = 1;
+                            } else {
+                              $add = 0;
+                            }
+
+                          ?>
+                            </td>
+                            <td style="text-align: center; ">
+                              <?php if ($session_count == 1) { ?>
+                                <strong><?php echo $session_fee->tuitionFee; ?> </strong>
+                              <?php } ?>
+                              <?php if ($session_count == 1) {
+                                $number = $session_fee->tuitionFee;
+                                $percentage = 10;
+                                $result = $number + ($number * $percentage / 100);
+                                $previous_session_max_fee[$class->classId] = $result;
+                                $previous_session_fee[$class->classId] = $number;
+                              } ?>
+                              <?php if ($session_count == 2) { ?>
+                                <small style="margin-left:15px;">Maximum expected value: <strong><?php echo round($previous_session_max_fee[$class->classId], 2); ?></strong></small>
+
+                                <input required type="number" <?php if ($previous_session_max_fee[$class->classId] > 0) { ?> max="<?php echo round($previous_session_max_fee[$class->classId]); ?>" <?php } ?> name="fee[<?php echo $session_fee->feeId; ?>]" value="<?php echo $session_fee->tuitionFee; ?>" />
+
+                                <span style="margin-left: 5px; color:green">
+                                  <?php
+                                  echo round(((($session_fee->tuitionFee - $previous_session_fee[$class->classId]) / $session_fee->tuitionFee) * 100), 2);
+                                  ?> %
+                                </span>
+                              <?php } ?>
+
+
+                              <small style="margin-left: 10px;">
+                                <i>
+                                  <?php
+                                  //$f = new NumberFormatter("in", NumberFormatter::SPELLOUT);
+                                  //echo ucwords(strtolower(convertNumberToWord($session_fee->tuitionFee)));
+                                  ?>
+                                </i>
+                              </small>
+                            </td>
+
+
+                          <?php
+                            $session_count++;
+                          } ?>
+
+                        </tr>
+                      <?php } ?>
+
+
+                    </table>
+                    <input class="btn btn-success" type="submit" name="update_section_e" value="Update Section E (Fee Data)" />
+                    <br />
+                    <br />
+                    <p style="text-align: ;">
+                      After updating, please remember to submit section E as well.
+                    </p>
+
+                    <input class="btn btn-danger" type="submit" name="update_section_e" value="Submit Section E" />
+
+
+                  </form>
+                <?php }  ?>
+
+
+
+
+
+
+
                 <?php
                 $bank_challan_button = 0;
                 $query = "SELECT

@@ -23,7 +23,7 @@
 
 <table class="table">
     <tr>
-        <td>Institute ID:
+        <td>School ID:
             <strong><?php echo $school->schools_id ?></strong> <br />
             Registration ID: <strong style='color:green'><?php echo $school->registrationNumber  ?> </strong><br />
             File No: <strong><?php
@@ -45,7 +45,7 @@
                 <button onclick="save_file_number('<?php echo $school->schools_id; ?>')">Update</button>
             </span>
             <br />
-            <?php if ($school->isfined) { ?>
+            <?php if ($school->isfined==1) { ?>
                 <button style="color:red">
                     <i class="fa fa-fire" aria-hidden="true"></i> Fine on school
                 </button>
@@ -118,6 +118,7 @@
     <table class="table table2">
         <tr>
             <th>Session</th>
+            <th>Notesheet</th>
             <th>Apply For</th>
             <th>Level</th>
 
@@ -132,17 +133,33 @@
             <th>Cer. Issued</th>
             <th>STAN</th>
             <th>Status</th>
+            <th>Edit</th>
         </tr>
         <?php
         $previous_max = NULL;
+        $missing = 0;
         if ($school_sessions) {
-            foreach ($school_sessions as $school_session) { ?>
+            foreach ($school_sessions as $school_session) { 
+            if($school_session->status==0){
+                $missing =1; 
+            }
+            ?>
 
                 <tr <?php if ($school_session->sessionYearId == $current_session_id or $school_session->status == 2) { ?> style="background-color: #fcd4d4 !important; font-weight: bold;" <?php } ?> title="<?php echo  $school_session->schoolId; ?>">
                     <td>
+                         <?php if ($school_session->status != 0) { ?>
                         <a href="<?php echo site_url("print_file/school_session_detail/" . $school_session->schoolId); ?>" target="new">
-                            <?php echo $school_session->sessionYearTitle; ?></a>
+                            <i class="fa fa-print" aria-hidden="true"></i> <?php echo $school_session->sessionYearTitle; ?></a>
+                            <?php }else{ ?>
+                            <?php echo $school_session->sessionYearTitle; ?>
+                            <?php } ?>
                     </td>
+                    <td>
+                    <?php if ($school_session->status == 2 and $missing==0) { ?>
+                    <a target="new" href="<?php echo site_url("online_cases/single_note_sheet/".$school->schools_id."/".$school_session->schoolId) ?>" >Notesheet</a>
+                    <?php } ?>
+                    </td>
+                    <?php if ($school_session->status != 0) { ?>
                     <td>
                         <?php
                         echo $school_session->regTypeTitle;
@@ -189,7 +206,9 @@
                                 $color = 'red';
                             }
                         ?>
+                        <?php if ($this->session->userdata('role_id') == '34') { ?>
                             <span style="color:<?php echo $color; ?>"><?php echo  $inc; ?></span>
+                            <?php } ?>
                         <?php   } ?>
                     </td>
                     <td style="text-align: center;"><?php
@@ -225,8 +244,13 @@
                     </td>
                     <td style="text-align: center;">
                         <?php if ($school_session->status == 2) { ?>
-                            <a href="<?php echo site_url("print_file/note_sheet/" . $school_session->schoolId); ?>" target="new">
-                                <i class="fa fa-print" aria-hidden="true"> Print</i></a>
+                           Applied
+                        <?php } ?>
+                        <?php if ($school_session->status == 0) { ?>
+                            Not Applied
+                        <?php } ?>
+                         <?php if ($school_session->status == 1) { ?>
+                            Completed
                         <?php } ?>
                     </td>
                     <td><?php
@@ -323,6 +347,19 @@
 
 
                     </td>
+                    <td>
+                        
+                        <?php if ($school_session->status == 0) { ?>
+                        <i class="fa fa-unlock" style="color:green" aria-hidden="true"></i>
+                        <?php } else { ?>
+                         <i class="fa fa-lock" aria-hidden="true"></i>
+                        <?php } ?>
+                        
+                    </td>
+                    <?php }else{ ?>
+                    <td colspan="12">Not applied yet ! <i class="fa fa-unlock pull-right" style="color:green" aria-hidden="true"></i></td>
+                    <?php } ?>
+                    
                 </tr>
                 <?php //if ($school_session->sessionYearId == $current_session_id) {
                 ?>
@@ -345,29 +382,35 @@
 
 
 </div>
+<?php 
+if ($this->session->userdata('role_id') == '34' or $this->session->userdata('role_id') == '26'  or $this->session->userdata('role_id') == '13' or $this->session->userdata('role_id') =='9') { ?>
+<div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
 
-<div class="col-md-12">
     <table class="table table2 table-bordered">
         <tr>
-            <th colspan="15">
-                <strong style="font-size: 20px;">Session Wise Monthly Tuition Fee</strong>
+            <th colspan="21">
+                <h4>Session Wise Monthly Tuition Fee</h4>
             </th>
         </tr>
 
         <tr>
             <th>Session</th>
-            <th>Fee's</th>
+
             <?php
             $classes = $this->db->query("SELECT * FROM class")->result();
             foreach ($classes  as $class) { ?>
                 <th><?php echo $class->classTitle ?></th>
             <?php } ?>
 
-            <?php
-            foreach ($school_sessions as $school_session) {
-                echo '<tr>
-                <td>' . $school_session->sessionYearTitle . '</td>
-                <td>Tuition Fee</td>';
+            <?php foreach ($school_sessions as $school_session) { ?>
+
+        <tr>
+            <td>
+                <a target="new" href="<?php echo site_url("print_file/section_e/" . $school_session->schoolId); ?>">
+                    <i class="fa fa-print" aria-hidden="true"></i> <?php echo $school_session->sessionYearTitle ?>
+                </a>
+            </td>
+        <?php
                 foreach ($classes  as $class) {
 
 
@@ -380,15 +423,59 @@
                         `fee` WHERE `fee`.`school_id` = '" . $school_session->schoolId . "'
                         AND `fee`.`class_id` ='" . $class->classId . "'";
                     $session_fee = $this->db->query($query)->result()[0];
+                    $previous_session_id = $school_session->sessionYearId - 1;
+                    if ($previous_session_id) {
+                        $query = "SELECT schoolId FROM school WHERE session_year_id = $previous_session_id
+                        AND school.schools_id = '" . $school->schools_id . "'
+                        ";
+                        $previous_school_id = $this->db->query($query)->row()->schoolId;
+                    } else {
+                        $previous_school_id = 0;
+                    }
 
-                    echo '<td>' . $session_fee->tuitionFee . '</td>';
+
+                    if ($previous_school_id) {
+                        $query = "SELECT
+                        `fee`.`addmissionFee`
+                        , `fee`.`tuitionFee`
+                        , `fee`.`securityFund`
+                        , `fee`.`otherFund`
+                        FROM
+                        `fee` WHERE `fee`.`school_id` = '" . $previous_school_id . "'
+                        AND `fee`.`class_id` ='" . $class->classId . "'";
+                        $pre_session_tution_fee = preg_replace("/[^0-9.]/", "", $this->db->query($query)->result()[0]->tuitionFee);
+                    }
+                    $current_fee = preg_replace("/[^0-9.]/", "", $session_fee->tuitionFee);
+                    if ($session_fee->tuitionFee == 0) {
+                        echo '<td style="text-align:center">' . $session_fee->tuitionFee . '</td>';
+                    } else {
+                        echo '<td style="text-align:center">' . $session_fee->tuitionFee;
+
+
+                        if ($pre_session_tution_fee) {
+                            $incress = @round(((($current_fee - $pre_session_tution_fee) / $current_fee) * 100), 1);
+                            if ($incress > 10) {
+                                echo @" <small style='color:red'>(" . $incress . " %)</small>";
+                            } else {
+                                echo @" <small style='color:green'>(" . $incress . " %)</small>";
+                            }
+                        }
+                        echo '</td>';
+                    }
                 }
                 echo '</tr>';
             } ?>
 
 
     </table>
-</div>
+    
+     <br />
+    
+        <p style="text-align: center;">
+            <a target="_blank" class="btn btn-success" href="<?php echo site_url("online_cases/combine_note_sheet/" . $school->schools_id) ?>">Process Note Sheet</a>
+        </p>
+    </div>
+<?php } ?>
 
 <script>
     function add_deficiancy(school_id, deficiency_reason) {

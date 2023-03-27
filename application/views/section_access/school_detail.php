@@ -91,7 +91,8 @@
         school.pending_reason,
         school.dairy_type,
         school.dairy_no,
-        school.dairy_date
+        school.dairy_date,
+        school.section_e
         FROM
         `school`,
         `reg_type`,
@@ -265,20 +266,16 @@
                     </td>
                     <td style="text-align: center;">
 
-                        <?php if ($school_session->status == 0) { ?>
+                        <?php if ($school_session->section_e == 0) { ?>
                             <a href="#" onclick="lock_editing('<?php echo $school_session->schoolId; ?>')">
                                 <i class="fa fa-unlock" style="color:green" aria-hidden="true"></i>
                             </a>
-                        <?php } else { ?>
-                            <?php if ($school_session->status == 1) { ?>
-                                <i class="fa fa-lock" aria-hidden="true"></i>
-                            <?php } ?>
+                        <?php } ?>
 
-                            <?php if ($school_session->status == 2) { ?>
-                                <a href="#" onclick="unlock_editing('<?php echo $school_session->schoolId; ?>')">
-                                    <i class="fa fa-lock" style="color:red" aria-hidden="true"></i>
-                                </a>
-                            <?php } ?>
+                        <?php if ($school_session->section_e == 1) { ?>
+                            <a href="#" onclick="unlock_editing('<?php echo $school_session->schoolId; ?>')">
+                                <i class="fa fa-lock" style="color:red" aria-hidden="true"></i>
+                            </a>
                         <?php } ?>
 
                     </td>

@@ -148,6 +148,16 @@
       </div>
     </div>
   </div>
+  <!-- Modal -->
+  <div class="modal fade" id="mark_as_complete_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" id="mark_as_complete_modal_body" style="font-size: 12px;">
+
+
+
+      </div>
+    </div>
+  </div>
 
   <page size='A4'>
     <div class="wrapper">
@@ -314,12 +324,14 @@
                           AND `levelofinstitute`.`levelofInstituteId` = `school`.`level_of_school_id`
                           AND `session_year`.`sessionYearId` = `school`.`session_year_id`
                           AND schools_id = " . $schools_id . "
-                          AND school.status = 1
+                          AND school.schoolId < '" . $school_id . "'
                           ORDER BY `session_year`.`sessionYearId` ASC";
                   $school_sessions = $last_session = $this->db->query($query)->result();
 
                   $query = "select max(sessionYearId) as sessionYearId from session_year";
                   $current_session_id = $query = $this->db->query($query)->row()->sessionYearId;
+
+                  $error = array();
 
 
                   if ($school_sessions) {
@@ -381,10 +393,16 @@
 
                         <td>
                           <?php
-                          if ($school_session->cer_issue_date) {
+                          if ($school_session->status == 1) {
                             echo date('d M, y', strtotime($school_session->cer_issue_date));
-                          } else {
-                            echo '<small>Pending</small>';
+                          }
+                          if ($school_session->status == 0) {
+                            $error[] = 1;
+                            echo "Online Submission Pending";
+                          }
+                          if ($school_session->status == 2) {
+                            $error[] = 1;
+                            echo "Not Issued";
                           }
                           ?></td>
 
@@ -410,43 +428,10 @@
 
 
 
-
-
-
+            <?php  } else { ?>
 
               <?php
               $query = "SELECT
-                    `levelofinstitute`.`levelofInstituteTitle` as school_level,
-                    `session_year`.`sessionYearTitle` as `session`,
-                    `school`.`level_of_school_id` as lates_level_id,
-                    `reg_type`.`regTypeTitle`,
-                    `school`.`apply_date`
-                    FROM
-                    `school`,
-                    `levelofinstitute`,
-                    `session_year`,
-                    reg_type
-                    WHERE  `levelofinstitute`.`levelofInstituteId` = `school`.`level_of_school_id`
-                    AND `session_year`.`sessionYearId` = `school`.`session_year_id`
-                    AND school.reg_type_id = reg_type.regTypeId
-                    AND schools_id = " . $schools_id . "
-                  AND school.status=2 ORDER BY `school`.`session_year_id` ASC";
-              $apply_for_sessions = $this->db->query($query)->result();
-              ?>
-              <li> School Applied for
-                <?php foreach ($apply_for_sessions as $apply_for_session) { ?>
-                  <strong>
-                    <?php echo $apply_for_session->regTypeTitle; ?>
-
-                    <?php echo $apply_for_session->school_level; ?> level</strong> for session <strong><?php echo $apply_for_session->session; ?>,</strong>
-                <?php } ?>
-
-
-
-              <?php  } else { ?>
-
-                <?php
-                $query = "SELECT
                           `reg_type`.`regTypeTitle`,
                           `levelofinstitute`.`levelofInstituteTitle`,
                           `session_year`.`sessionYearTitle`,
@@ -485,13 +470,13 @@
                           AND schools.schoolId = school.schools_id
                           AND `levelofinstitute`.`levelofInstituteId` = `school`.`level_of_school_id`
                           AND `session_year`.`sessionYearId` = `school`.`session_year_id`
-                          AND schools_id = " . $schools_id . "
+                          AND schools.schoolId = " . $school->schools_id . "
                           AND school.status IN (0,2)
                           ORDER BY `session_year`.`sessionYearId` ASC";
-                $school_sessions = $last_session = $this->db->query($query)->row();
+              $school_sessions = $last_session = $this->db->query($query)->row();
 
 
-                ?>
+              ?>
               <li>
                 <p>
                   It is submitted that the school administration has applied for <strong>New Registration</strong> of
@@ -535,27 +520,59 @@
 
             <?php } ?>
 
+            <?php if (in_array("1", $error)) { ?>
+              <p style="text-align:center; color:red">
+                The note sheet for this session cannot be completed due to a pending issue from the previous session.
+              </p>
+            <?php } else { ?>
 
-
-
-            <!-- <p><i>School apply for</i></p> -->
-            <table class="table table-bordered table2" style="">
-              <tr>
-                <th>#</th>
-                <th>Session</th>
-                <th>Applied For</th>
-                <th>Level</th>
-
-                <th>Max Fee</th>
-                <th>Students</th>
-                <th>Teaching Staff</th>
-                <th>Non Teaching Staff</th>
-                <th class="hide_buttons">Status</th>
-                <th>Online Applied</th>
-              </tr>
               <?php
-
               $query = "SELECT
+                    `levelofinstitute`.`levelofInstituteTitle` as school_level,
+                    `session_year`.`sessionYearTitle` as `session`,
+                    `school`.`level_of_school_id` as lates_level_id,
+                    `reg_type`.`regTypeTitle`
+                    FROM
+                    `school`,
+                    `levelofinstitute`,
+                    `session_year`,
+                    reg_type
+                    WHERE  `levelofinstitute`.`levelofInstituteId` = `school`.`level_of_school_id`
+                    AND `session_year`.`sessionYearId` = `school`.`session_year_id`
+                    AND school.reg_type_id = reg_type.regTypeId
+                    AND schoolId = " . $school_id . "
+                  AND school.status=2 ORDER BY `school`.`session_year_id` ASC";
+              $apply_for_sessions = $this->db->query($query)->result();
+              ?>
+              <li> School Applied for
+                <?php foreach ($apply_for_sessions as $apply_for_session) { ?>
+                  <strong>
+                    <?php echo $apply_for_session->regTypeTitle; ?>
+
+                    <?php echo $apply_for_session->school_level; ?> level</strong> for session <strong><?php echo $apply_for_session->session; ?>,</strong>
+                <?php } ?>
+
+
+
+
+                <!-- <p><i>School apply for</i></p> -->
+                <table class="table table-bordered table2" style="">
+                  <tr>
+                    <th>#</th>
+                    <th>Session</th>
+                    <th>Applied For</th>
+                    <th>Level</th>
+
+                    <th>Max Fee</th>
+                    <th>Students</th>
+                    <th>Teaching Staff</th>
+                    <th>Non Teaching Staff</th>
+                    <th class="hide_buttons">Status</th>
+                    <th>Online Applied</th>
+                  </tr>
+                  <?php
+
+                  $query = "SELECT
                           `reg_type`.`regTypeTitle`,
                           `levelofinstitute`.`levelofInstituteTitle`,
                           `session_year`.`sessionYearTitle`,
@@ -591,168 +608,169 @@
                           AND `levelofinstitute`.`levelofInstituteId` = `school`.`level_of_school_id`
                           AND `session_year`.`sessionYearId` = `school`.`session_year_id`
                           AND school.status=2
-                          AND schools_id = " . $schools_id . "
+                          AND school.schoolId = " . $school_id . "
                           ORDER BY `session_year`.`sessionYearId` ASC
                 ";
-              $school_sessions = $this->db->query($query)->result();
+                  $school_sessions = $this->db->query($query)->result();
 
-              $query = "select max(sessionYearId) as sessionYearId from session_year";
-              $current_session_id = $query = $this->db->query($query)->row()->sessionYearId;
+                  $query = "select max(sessionYearId) as sessionYearId from session_year";
+                  $current_session_id = $query = $this->db->query($query)->row()->sessionYearId;
 
 
-              if ($school_sessions) {
-                $count = 1;
-                foreach ($school_sessions as $school_session) { ?>
+                  if ($school_sessions) {
+                    $count = 1;
+                    foreach ($school_sessions as $school_session) { ?>
 
-                  <tr <?php if ($school_session->file_status == 5) { ?> class="alert-warning" <?php } ?>>
-                    <td><?php echo $count++; ?></td>
-                    <td>
-                      <?php echo $school_session->sessionYearTitle; ?>
-                    </td>
-                    <th>
-                      <?php echo $school_session->regTypeTitle; ?>
-                      <small>
-                        <button style="padding: 0px; margin:0px; font-size:9px" class="btn btn-link btn-sm hide_buttons" onclick="update_session_apply(<?php echo $school_session->schoolId ?>)">Edit Apply</button>
-                      </small>
-                    <th><?php echo substr($school_session->levelofInstituteTitle, 0, 15); ?></td>
+                      <tr <?php if ($school_session->file_status == 5) { ?> class="alert-warning" <?php } ?>>
+                        <td><?php echo $count++; ?></td>
+                        <td>
+                          <?php echo $school_session->sessionYearTitle; ?>
+                        </td>
+                        <th>
+                          <?php echo $school_session->regTypeTitle; ?>
+                          <small>
+                            <button style="padding: 0px; margin:0px; font-size:9px" class="btn btn-link btn-sm hide_buttons" onclick="update_session_apply(<?php echo $school_session->schoolId ?>)">Edit Apply</button>
+                          </small>
+                        <th><?php echo substr($school_session->levelofInstituteTitle, 0, 15); ?></td>
 
-                    <td><?php
-                        $query = "SELECT max(CONVERT(tuitionFee, SIGNED INTEGER)) as max_tution_fee  
+                        <td><?php
+                            $query = "SELECT max(CONVERT(tuitionFee, SIGNED INTEGER)) as max_tution_fee  
                               FROM `fee` WHERE school_id= '" . $school_session->schoolId . "'";
-                        $max_tuition_fee = $this->db->query($query)->result()[0]->max_tution_fee;
-                        $max_tuition_fee = (int) preg_replace(
-                          '/[^0-9.]/',
-                          '',
-                          $this->db->query($query)->result()[0]->max_tution_fee
-                        );
-                        echo $max_tuition_fee;
-                        ?> Rs.</td>
+                            $max_tuition_fee = $this->db->query($query)->result()[0]->max_tution_fee;
+                            $max_tuition_fee = (int) preg_replace(
+                              '/[^0-9.]/',
+                              '',
+                              $this->db->query($query)->result()[0]->max_tution_fee
+                            );
+                            echo $max_tuition_fee;
+                            ?> Rs.</td>
 
-                    <td style="text-align: center;"><?php
-                                                    $query = "SELECT SUM(`enrolled`) as total FROM `age_and_class`
+                        <td style="text-align: center;"><?php
+                                                        $query = "SELECT SUM(`enrolled`) as total FROM `age_and_class`
                     WHERE `age_and_class`.`school_id`= '" . $school_session->schoolId . "'";
-                                                    $enrollment = $this->db->query($query)->result()[0]->total;
-                                                    if ($enrollment) {
-                                                      echo $enrollment;
-                                                    } else {
-                                                      echo "Section C Missing";
-                                                    }
+                                                        $enrollment = $this->db->query($query)->result()[0]->total;
+                                                        if ($enrollment) {
+                                                          echo $enrollment;
+                                                        } else {
+                                                          echo "Section C Missing";
+                                                        }
 
-                                                    ?></td>
+                                                        ?></td>
 
-                    <td style="text-align: center;">
-                      <?php
-                      $query = "SELECT COUNT(`schoolStaffId`) as total FROM `school_staff`
+                        <td style="text-align: center;">
+                          <?php
+                          $query = "SELECT COUNT(`schoolStaffId`) as total FROM `school_staff`
                     WHERE `school_staff`.`school_id`= '" . $school_session->schoolId . "'
                     AND `school_staff`.`schoolStaffType` = 1";
-                      echo $this->db->query($query)->row()->total; ?>
-                    </td>
+                          echo $this->db->query($query)->row()->total; ?>
+                        </td>
 
-                    <td style="text-align: center;">
-                      <?php
-                      $query = "SELECT COUNT(`schoolStaffId`) as total FROM `school_staff`
+                        <td style="text-align: center;">
+                          <?php
+                          $query = "SELECT COUNT(`schoolStaffId`) as total FROM `school_staff`
                     WHERE `school_staff`.`school_id`= '" . $school_session->schoolId . "'
                     AND `school_staff`.`schoolStaffType` = 2";
-                      echo $this->db->query($query)->row()->total; ?>
+                          echo $this->db->query($query)->row()->total; ?>
 
-                    </td>
-
-
-                    <td class="hide_buttons"><?php
-
-                                              if (!is_null($school_session->file_status)) {
-                                                echo "New";
-                                                if ($school_session->file_status == 5) {
-                                                  echo " - Deficient";
-                                                }
-                                              } else {
-                                                echo "Old";
-                                              }
-                                              ?>
-                      <small>
-                        <button style="padding: 0px; margin:0px; font-size:9px" class="btn btn-link btn-sm hide_buttons" onclick="add_bank_challan(<?php echo $school_session->schoolId ?>)">Add Challan</button>
-                      </small>
-                    </td>
-                    <td>
-                      <?php
-                      if ($school_session->apply_date) {
-                        echo date('d M, Y', strtotime($school_session->apply_date));
-                      } ?>
-                    </td>
+                        </td>
 
 
-                  </tr>
-                  <?php //if ($school_session->sessionYearId == $current_session_id) {
-                  ?>
+                        <td class="hide_buttons"><?php
 
-                  <?php  //}
-                  ?>
-                <?php
-                  $previous_max = $max_tuition_fee;
-                }
-              } else { ?>
+                                                  if (!is_null($school_session->file_status)) {
+                                                    echo "New";
+                                                    if ($school_session->file_status == 5) {
+                                                      echo " - Deficient";
+                                                    }
+                                                  } else {
+                                                    echo "Old";
+                                                  }
+                                                  ?>
+                          <small>
+                            <button style="padding: 0px; margin:0px; font-size:9px" class="btn btn-link btn-sm hide_buttons" onclick="add_bank_challan(<?php echo $school_session->schoolId ?>)">Add Challan</button>
+                          </small>
+                        </td>
+
+                        <td>
+                          <?php
+                          if ($school_session->apply_date) {
+                            echo date('d M, Y', strtotime($school_session->apply_date));
+                          } ?>
+                        </td>
+
+
+                      </tr>
+                      <?php //if ($school_session->sessionYearId == $current_session_id) {
+                      ?>
+
+                      <?php  //}
+                      ?>
+                    <?php
+                      $previous_max = $max_tuition_fee;
+                    }
+                  } else { ?>
+                    <tr>
+                      <td colspan="12">
+                        Not applied for registartion.
+                      </td>
+                    </tr>
+                  <?php } ?>
+
+                </table>
+
+
+              <li>
+                <p><i>Session / Class wise students enrollment</i></p>
+              </li>
+              <?php $classes = $this->db->query("SELECT * FROM class")->result(); ?>
+              <table class="table table-bordered table2" style="font-size: 11px;">
                 <tr>
-                  <td colspan="12">
-                    Not applied for registartion.
-                  </td>
+                  <th>#</th>
+                  <th>Session</th>
+                  <?php foreach ($classes  as $class) { ?> <td>
+                      <small>
+                        <?php echo $class->classTitle; ?>
+                      </small>
+                    </td> <?php } ?>
                 </tr>
-              <?php } ?>
-
-            </table>
-
-
-            <li>
-              <p><i>Session / Class wise students enrollment</i></p>
-            </li>
-            <?php $classes = $this->db->query("SELECT * FROM class")->result(); ?>
-            <table class="table table-bordered table2" style="font-size: 11px;">
-              <tr>
-                <th>#</th>
-                <th>Session</th>
-                <?php foreach ($classes  as $class) { ?> <td>
-                    <small>
-                      <?php echo $class->classTitle; ?>
-                    </small>
-                  </td> <?php } ?>
-              </tr>
-              <tr>
-                <?php
-                $count = 1;
-                foreach ($school_sessions as $school_session) { ?>
-                  <td><?php echo $count++; ?></td>
-                  <td><?php echo $school_session->sessionYearTitle ?></td>
-                  <?php foreach ($classes  as $class) { ?>
-                    <?php $query = "SELECT SUM(`enrolled`) as total FROM `age_and_class`
+                <tr>
+                  <?php
+                  $count = 1;
+                  foreach ($school_sessions as $school_session) { ?>
+                    <td><?php echo $count++; ?></td>
+                    <td><?php echo $school_session->sessionYearTitle ?></td>
+                    <?php foreach ($classes  as $class) { ?>
+                      <?php $query = "SELECT SUM(`enrolled`) as total FROM `age_and_class`
                     WHERE `age_and_class`.`school_id`= '" . $school_session->schoolId . "'
                     AND `age_and_class`.`class_id` = '" . $class->classId . "'";
-                    $enrollment = $this->db->query($query)->row()->total; ?>
-                    <td>
-                      <?php echo $enrollment; ?>
-                    </td>
+                      $enrollment = $this->db->query($query)->row()->total; ?>
+                      <td>
+                        <?php echo $enrollment; ?>
+                      </td>
+                    <?php } ?>
+                </tr>
+              <?php  } ?>
+              </table>
+
+              <li>
+                <p><i>Session / class wise monthly tuition fee</i></p>
+              </li>
+              <?php $classes = $this->db->query("SELECT * FROM class")->result(); ?>
+              <table class="table table-bordered table2" style="font-size: 11px;">
+                <tr>
+                  <th>#</th>
+                  <th>Session</th>
+                  <?php foreach ($classes  as $class) { ?>
+                    <th>
+                      <small>
+                        <?php echo $class->classTitle; ?>
+                      </small>
+                    </th>
                   <?php } ?>
-              </tr>
-            <?php  } ?>
-            </table>
-
-            <li>
-              <p><i>Session / class wise monthly tuition fee</i></p>
-            </li>
-            <?php $classes = $this->db->query("SELECT * FROM class")->result(); ?>
-            <table class="table table-bordered table2" style="font-size: 11px;">
-              <tr>
-                <th>#</th>
-                <th>Session</th>
-                <?php foreach ($classes  as $class) { ?>
-                  <th>
-                    <small>
-                      <?php echo $class->classTitle; ?>
-                    </small>
-                  </th>
-                <?php } ?>
-              </tr>
+                </tr>
 
 
-              <?php $query = "SELECT
+                <?php $query = "SELECT
                           `reg_type`.`regTypeTitle`,
                           `levelofinstitute`.`levelofInstituteTitle`,
                           `session_year`.`sessionYearTitle`,
@@ -789,56 +807,56 @@
                           AND school.status = 1
                           ORDER BY `session_year`.`sessionYearId` DESC LIMIT 1
                 ";
-              $last_session = $this->db->query($query)->result();  ?>
-              <?php
-              $count = 0;
-              foreach ($last_session as $school_session) { ?>
-                <tr style="background-color: lightgray;">
-                  <td><?php echo $count++; ?></td>
-                  <td><?php echo $school_session->sessionYearTitle ?></td>
-                  <?php
-                  foreach ($classes  as $class) {
-                    $query = "SELECT `fee`.`tuitionFee`  FROM
-                         `fee` WHERE `fee`.`school_id` = '" . $school_session->schoolId . "'
-                         AND `fee`.`class_id` ='" . $class->classId . "'";
-                    $session_fee = $this->db->query($query)->result()[0];
-
-                    if ($session_fee->tuitionFee == 0) { ?>
-                      <td style="text-align:center"> <?php $session_fee->tuitionFee ?> </td>
-                    <?php   } else { ?>
-                      <td style="text-align:center">
-                        <?php echo $session_fee->tuitionFee; ?>
-                      </td>
-                    <?php } ?>
-                  <?php } ?>
-
-                </tr>
-              <?php } ?>
-
-              <tr>
+                $last_session = $this->db->query($query)->result();  ?>
                 <?php
-                $fee_increase = array();
-                foreach ($school_sessions as $school_session) { ?>
-                  <td><?php echo $count++; ?></td>
-                  <td><?php echo $school_session->sessionYearTitle ?></td>
-                  <?php
-                  foreach ($classes  as $class) {
-                    $query = "SELECT `fee`.`tuitionFee`  FROM
+                $count = 0;
+                foreach ($last_session as $school_session) { ?>
+                  <tr style="background-color: lightgray;">
+                    <td><?php echo $count++; ?></td>
+                    <td><?php echo $school_session->sessionYearTitle ?></td>
+                    <?php
+                    foreach ($classes  as $class) {
+                      $query = "SELECT `fee`.`tuitionFee`  FROM
                          `fee` WHERE `fee`.`school_id` = '" . $school_session->schoolId . "'
                          AND `fee`.`class_id` ='" . $class->classId . "'";
-                    $session_fee = $this->db->query($query)->result()[0];
+                      $session_fee = $this->db->query($query)->result()[0];
 
-                    $previous_session_id = $school_session->sessionYearId - 1;
-                    if ($previous_session_id) {
-                      $query = "SELECT schoolId FROM school WHERE session_year_id = $previous_session_id
+                      if ($session_fee->tuitionFee == 0) { ?>
+                        <td style="text-align:center"> <?php $session_fee->tuitionFee ?> </td>
+                      <?php   } else { ?>
+                        <td style="text-align:center">
+                          <?php echo $session_fee->tuitionFee; ?>
+                        </td>
+                      <?php } ?>
+                    <?php } ?>
+
+                  </tr>
+                <?php } ?>
+
+                <tr>
+                  <?php
+                  $fee_increase = array();
+                  foreach ($school_sessions as $school_session) { ?>
+                    <td><?php echo $count++; ?></td>
+                    <td><?php echo $school_session->sessionYearTitle ?></td>
+                    <?php
+                    foreach ($classes  as $class) {
+                      $query = "SELECT `fee`.`tuitionFee`  FROM
+                         `fee` WHERE `fee`.`school_id` = '" . $school_session->schoolId . "'
+                         AND `fee`.`class_id` ='" . $class->classId . "'";
+                      $session_fee = $this->db->query($query)->result()[0];
+
+                      $previous_session_id = $school_session->sessionYearId - 1;
+                      if ($previous_session_id) {
+                        $query = "SELECT schoolId FROM school WHERE session_year_id = $previous_session_id
                         AND school.schools_id = '" . $school->schools_id . "'
                         ";
-                      $previous_school_id = $this->db->query($query)->row()->schoolId;
-                    } else {
-                      $previous_school_id = 0;
-                    }
-                    if ($previous_school_id) {
-                      $query = "SELECT
+                        $previous_school_id = $this->db->query($query)->row()->schoolId;
+                      } else {
+                        $previous_school_id = 0;
+                      }
+                      if ($previous_school_id) {
+                        $query = "SELECT
                         `fee`.`addmissionFee`
                         , `fee`.`tuitionFee`
                         , `fee`.`securityFund`
@@ -846,123 +864,123 @@
                         FROM
                         `fee` WHERE `fee`.`school_id` = '" . $previous_school_id . "'
                         AND `fee`.`class_id` ='" . $class->classId . "'";
-                      $pre_session_tution_fee = preg_replace("/[^0-9.]/", "", $this->db->query($query)->result()[0]->tuitionFee);
-                    }
-                    $current_fee = preg_replace("/[^0-9.]/", "", $session_fee->tuitionFee);
-                    if ($session_fee->tuitionFee == 0) { ?>
-                      <td style="text-align:center"> <?php $session_fee->tuitionFee ?> </td>
-                    <?php   } else { ?>
-                      <td style="text-align:center">
-                        <?php
+                        $pre_session_tution_fee = preg_replace("/[^0-9.]/", "", $this->db->query($query)->result()[0]->tuitionFee);
+                      }
+                      $current_fee = preg_replace("/[^0-9.]/", "", $session_fee->tuitionFee);
+                      if ($session_fee->tuitionFee == 0) { ?>
+                        <td style="text-align:center"> <?php $session_fee->tuitionFee ?> </td>
+                      <?php   } else { ?>
+                        <td style="text-align:center">
+                          <?php
 
-                        if ($pre_session_tution_fee) {
-                          $incress = @round(((($current_fee - $pre_session_tution_fee) / $current_fee) * 100), 1);
-                          if ($incress > 10) {
-                            echo '<strong>';
-                            echo $session_fee->tuitionFee;
-                            echo '</strong>';
-                            $fee_increase[$school_session->sessionYearTitle][$class->classTitle] = round($incress);
-                            echo @" <small style='color:red'>" . $incress . "%</small>";
+                          if ($pre_session_tution_fee) {
+                            $incress = @round(((($current_fee - $pre_session_tution_fee) / $current_fee) * 100), 1);
+                            if ($incress > 10) {
+                              echo '<strong>';
+                              echo $session_fee->tuitionFee;
+                              echo '</strong>';
+                              $fee_increase[$school_session->sessionYearTitle][$class->classTitle] = round($incress);
+                              echo @" <small style='color:red'>" . $incress . "%</small>";
+                            } else {
+
+                              echo $session_fee->tuitionFee;
+                              //echo @" <small style='color:green'>" . $incress . " %</small>";
+                            }
                           } else {
-
                             echo $session_fee->tuitionFee;
-                            //echo @" <small style='color:green'>" . $incress . " %</small>";
-                          }
-                        } else {
-                          echo $session_fee->tuitionFee;
-                        } ?>
-                      </td>
+                          } ?>
+                        </td>
+                      <?php } ?>
                     <?php } ?>
-                  <?php } ?>
-              </tr>
-            <?php  } ?>
-            </table>
-
-            <li>
-              <p>
-                As per schedule notification the following required fee has been deposited by the above school administration.
-              </p>
-            </li>
-
-            <table class="table table-bordered table2" style="font-size: 12px;">
-              <thead>
-                <tr>
-                  <th colspan="2"></th>
-                  <th colspan="2">
-                    STAN/Date
-                  </th>
-                  <th colspan="8">
-                    PSRA Fee Heads
-                  </th>
                 </tr>
-                <tr>
-                  <th>#</th>
-                  <th>Session</th>
-                  <th>Type</th>
-                  <th>STAN</th>
-                  <th>Date</th>
-                  <th>App. Proce.</th>
-                  <th>Inspection</th>
-                  <th>Renewal</th>
-                  <th>Upgradation</th>
-                  <th>Late</th>
-                  <th>Security</th>
-                  <th>Fine</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php
-                $count = 1;
-                foreach ($school_sessions as $school_session) { ?>
+              <?php  } ?>
+              </table>
+
+              <li>
+                <p>
+                  As per schedule notification the following required fee has been deposited by the above school administration.
+                </p>
+              </li>
+
+              <table class="table table-bordered table2" style="font-size: 12px;">
+                <thead>
+                  <tr>
+                    <th colspan="2"></th>
+                    <th colspan="2">
+                      STAN/Date
+                    </th>
+                    <th colspan="8">
+                      PSRA Fee Heads
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>#</th>
+                    <th>Session</th>
+                    <th>Type</th>
+                    <th>STAN</th>
+                    <th>Date</th>
+                    <th>App. Proce.</th>
+                    <th>Inspection</th>
+                    <th>Renewal</th>
+                    <th>Upgradation</th>
+                    <th>Late</th>
+                    <th>Security</th>
+                    <th>Fine</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
                   <?php
-                  $query = "SELECT * FROM `bank_challans` 
+                  $count = 1;
+                  foreach ($school_sessions as $school_session) { ?>
+                    <?php
+                    $query = "SELECT * FROM `bank_challans` 
                             WHERE schools_id = '" . $school->schools_id . "'
                             AND school_id = '" . $school_session->schoolId . "'";
-                  $bank_challans = $this->db->query($query)->result();
-                  if ($bank_challans) {
-                    foreach ($bank_challans as $bank_challan) { ?>
+                    $bank_challans = $this->db->query($query)->result();
+                    if ($bank_challans) {
+                      foreach ($bank_challans as $bank_challan) { ?>
+                        <tr>
+                          <td><?php echo $count++; ?></td>
+                          <td><?php echo $school_session->sessionYearTitle ?></td>
+                          <td><?php echo $bank_challan->challan_for; ?></td>
+                          <td><?php echo $bank_challan->challan_no; ?></td>
+                          <td><?php echo date('d M, Y', strtotime($bank_challan->challan_date)); ?></td>
+                          <td><?php echo number_format($bank_challan->application_processing_fee); ?></td>
+                          <td><?php echo number_format($bank_challan->inspection_fee); ?></td>
+                          <td><?php echo number_format($bank_challan->renewal_fee); ?></td>
+                          <td><?php echo number_format($bank_challan->upgradation_fee); ?></td>
+                          <td><?php echo number_format($bank_challan->late_fee); ?></td>
+                          <td><?php echo number_format($bank_challan->security_fee); ?></td>
+                          <td><?php echo number_format($bank_challan->fine); ?></td>
+                          <td><?php echo number_format($bank_challan->total_deposit_fee); ?></td>
+                          <!-- <td><?php
+                                    $query = "SELECT * FROM users WHERE userId = '" . $bank_challan->verified_by . "'";
+                                    $verified_by = $this->db->query($query)->result()[0]->userTitle;
+                                    echo $verified_by;
+                                    ?></td> -->
+                        </tr>
+                      <?php  } ?>
+                    <?php } else { ?>
                       <tr>
                         <td><?php echo $count++; ?></td>
                         <td><?php echo $school_session->sessionYearTitle ?></td>
-                        <td><?php echo $bank_challan->challan_for; ?></td>
-                        <td><?php echo $bank_challan->challan_no; ?></td>
-                        <td><?php echo date('d M, Y', strtotime($bank_challan->challan_date)); ?></td>
-                        <td><?php echo number_format($bank_challan->application_processing_fee); ?></td>
-                        <td><?php echo number_format($bank_challan->inspection_fee); ?></td>
-                        <td><?php echo number_format($bank_challan->renewal_fee); ?></td>
-                        <td><?php echo number_format($bank_challan->upgradation_fee); ?></td>
-                        <td><?php echo number_format($bank_challan->late_fee); ?></td>
-                        <td><?php echo number_format($bank_challan->security_fee); ?></td>
-                        <td><?php echo number_format($bank_challan->fine); ?></td>
-                        <td><?php echo number_format($bank_challan->total_deposit_fee); ?></td>
-                        <!-- <td><?php
-                                  $query = "SELECT * FROM users WHERE userId = '" . $bank_challan->verified_by . "'";
-                                  $verified_by = $this->db->query($query)->result()[0]->userTitle;
-                                  echo $verified_by;
-                                  ?></td> -->
+                        <td colspan="23" style="text-align: center;">
+                          No bank challan has been entered yet.
+                        </td>
                       </tr>
-                    <?php  } ?>
-                  <?php } else { ?>
-                    <tr>
-                      <td><?php echo $count++; ?></td>
-                      <td><?php echo $school_session->sessionYearTitle ?></td>
-                      <td colspan="23" style="text-align: center;">
-                        No bank challan has been entered yet.
-                      </td>
-                    </tr>
+                    <?php } ?>
                   <?php } ?>
-                <?php } ?>
 
-              </tbody>
-            </table>
+                </tbody>
+              </table>
 
-            <?php
-            //var_dump($fee_increase);
-            if ($fee_increase) {
-              $class_count = 0;
-            ?>
-              <!-- <li>
+              <?php
+              //var_dump($fee_increase);
+              if ($fee_increase) {
+                $class_count = 0;
+              ?>
+                <!-- <li>
                 As per para 3. of notesheet, the school administration increase max tuition fee for
                 <?php foreach ($fee_increase as $session => $classes) { ?>
                   session <?php echo $session  ?>
@@ -974,57 +992,55 @@
                 <?php } ?>
                 which <?php if ($class_count == 1) { ?> is <?php } ?> <?php if ($class_count > 1) { ?> are <?php } ?> beyond the 10%, this voilation of PSRA Act/Regulation.
               </li> -->
-            <?php } ?>
-            <br />
-            <div>
-              <?php $query = "SELECT schoolId, session_year_id FROM school WHERE schools_id = '" . $school->schools_id . "' and status=2 ORDER BY session_year_id DESC LIMIT 1";
-              $last_applied_session = $this->db->query($query)->row();
-
-              $query = "SELECT *, users.userTitle, roles.role_title, DATE(comments.created_date) as created_date FROM comments 
+              <?php } ?>
+              <br />
+              <div>
+                <?php
+                $query = "SELECT *, users.userTitle, roles.role_title, DATE(comments.created_date) as created_date FROM comments 
               INNER JOIN users ON(users.userId = comments.created_by)
               INNER JOIN roles ON(roles.role_id = users.role_id)
-              WHERE schools_id = '" . $school->schools_id . "' 
-              AND school_id ='" . $last_applied_session->schoolId . "'
+              WHERE schools_id = '" . $schools_id . "' 
+              AND school_id ='" . $school_id . "'
               AND deleted =0";
-              $comments = $this->db->query($query)->result();
-              //var_dump($comments);
-              ?>
-              <?php
-              $count = 1;
-              foreach ($comments as $comment) { ?>
-                <li style="margin-bottom:5px;">
+                $comments = $this->db->query($query)->result();
+                //var_dump($comments);
+                ?>
+                <?php
+                $count = 1;
+                foreach ($comments as $comment) { ?>
+                  <li style="margin-bottom:5px;">
 
-                  <?php echo str_replace('\n', "<br />", str_replace('\r', '', $comment->comment)); ?>
-                  <a class="hide_buttons" href="<?php echo site_url("online_cases/delete_comment/" . $comment->comment_id . "/" . $comment->schools_id); ?>"> x </a>
+                    <?php echo str_replace('\n', "<br />", str_replace('\r', '', $comment->comment)); ?>
+                    <a class="hide_buttons" href="<?php echo site_url("online_cases/delete_comment/" . $comment->comment_id . "/" . $comment->schools_id); ?>"> x </a>
 
-                  <small style="float: right;">
-                    <strong> <?php echo $comment->role_title; ?> </strong> (<?php echo $comment->userTitle; ?>)
-                    <strong> <?php echo date("D d M, Y", strtotime($comment->created_date));  ?> </strong>
-                  </small>
+                    <small style="float: right;">
+                      <strong> <?php echo $comment->role_title; ?> </strong> (<?php echo $comment->userTitle; ?>)
+                      <strong> <?php echo date("D d M, Y", strtotime($comment->created_date));  ?> </strong>
+                    </small>
 
-                </li>
-              <?php } ?>
+                  </li>
+                <?php } ?>
 
-            </div>
+              </div>
 
 
-            <!-- <div class="alert alert-warning" role="alert">
+              <!-- <div class="alert alert-warning" role="alert">
               Deficiency in session .......
             </div> -->
 
-            <br />
-            <br />
+              <br />
+              <br />
 
-            <br />
+              <br />
 
-            <br />
+              <br />
 
-            <br />
+              <br />
 
-            <br />
+              <br />
 
-            <br />
-
+              <br />
+            <?php } ?>
 
 
         </div>
@@ -1045,13 +1061,44 @@
     </style>
 
     <div class="footer hide_buttons">
+      <?php
+      $query = "SELECT file_status FROM school WHERE schoolId ='" . $school_id . "'";
+      echo $file_status = $this->db->query($query)->row()->file_status;
+
+      ?>
+      <?php if ($file_status == '10' or $file_status == '4') { ?>
+
+      <?php } else { ?>
+        <style type="text/css" media="print">
+          * {
+            display: none;
+          }
+        </style>
+        <script>
+          $(document).on('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80)) {
+              alert("I'm sorry! \n Note sheet can be printed after they are marked as complete.\nThanks");
+              e.cancelBubble = true;
+              e.preventDefault();
+
+              e.stopImmediatePropagation();
+            }
+          });
+        </script>
+      <?php } ?>
+
       <section style="width: 70%; margin:0px auto; margin-bottom:5px;">
 
         <form action="<?php echo site_url("online_cases/add_comment"); ?>" method="post">
+          <?php
+          $query = "SELECT session_year_id FROM school WHERE schools_id = '" . $school->schools_id . "' AND schoolId = '" . $school_id . "'";
+          $session_year_id = $this->db->query($query)->row()->session_year_id;
+          ?>
 
-          <input type="hidden" name="session_id" value="<?php echo $last_applied_session->session_year_id; ?>" />
-          <input type="hidden" name="school_id" value="<?php echo $last_applied_session->schoolId; ?>" />
-          <input type="hidden" name="schools_id" value="<?php echo $school->schools_id; ?>" />
+
+          <input type="hidden" name="session_id" value="<?php echo $session_year_id; ?>" />
+          <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
+          <input type="hidden" name="schools_id" value="<?php echo $schools_id; ?>" />
 
           <table class="table">
             <tr>
@@ -1064,8 +1111,10 @@
           </table>
         </form>
         <a class="btn btn-warning btn-sm" href="<?php echo site_url("online_cases"); ?>">Back To Dashboard</a>
-        <button class="btn btn-info btn-sm" onclick="window.print();"> <i class="fa fa-print" aria-hidden="true"></i> Print Note Sheet</button>
-        <a class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to mark notesheet complete?');" href="<?php echo site_url("online_cases"); ?>">Mark as completed</a>
+        <?php if ($file_status == 4 or $file_status == 10) { ?>
+          <button class="btn btn-info btn-sm" onclick="window.print();"> <i class="fa fa-print" aria-hidden="true"></i> Print Note Sheet</button>
+        <?php } ?>
+        <button class="btn btn-danger btn-sm" onclick="mark_as_complete('<?php echo $school_id; ?>')">Mark as completed</a>
       </section>
 
 
@@ -1083,8 +1132,8 @@
             method: "POST",
             url: "<?php echo site_url('registration_section/get_comments'); ?>",
             data: {
-              session_id: <?php echo $last_applied_session->session_year_id; ?>,
-              school_id: <?php echo $last_applied_session->schoolId; ?>,
+              session_id: <?php echo $session_year_id; ?>,
+              school_id: <?php echo $school_id; ?>,
               schools_id: <?php echo $school->schools_id; ?>
             }
           })
@@ -1131,6 +1180,23 @@
     });
 
     $('#request_detail').modal('show');
+  }
+
+  function mark_as_complete(school_id) {
+    $('#request_detail_body').html('Please Wait .....');
+    $.ajax({
+      type: "POST",
+      url: "<?php echo site_url("online_cases/mark_as_complete_form"); ?>",
+      data: {
+        school_id: school_id,
+        schools_id: '<?php echo $school->schools_id ?>'
+      }
+    }).done(function(data) {
+
+      $('#mark_as_complete_modal_body').html(data);
+    });
+
+    $('#mark_as_complete_modal').modal('show');
   }
 </script>
 

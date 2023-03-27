@@ -636,24 +636,20 @@
                      where `message_school`.`school_id`=$school_id  order by `message_for_all`.`message_id` DESC LIMIT 10";
               $query_result = $this->db->query($query);
               $school_messages = $query_result->result(); ?>
-              <table class="table">
+              <ul class="list-group">
                 <?php
                 foreach ($school_messages as $message) : ?>
-                  <tr>
-
-                    <td class=" message">
-                      <a target="_new" href="<?php echo base_url('messages/school_message_details/'); ?><?php echo $message->message_id; ?>">
-                        <strong style="font-size: 14px;"> <?php echo $message->subject; ?></strong>
-                      </a>
-                      <small style="display: block; color:gray" class="pull-right">
-                        <i class="fa fa-clock-o" aria-hidden="true"></i>
-                        <?php echo date("d M, Y", strtotime($message->created_date)); ?>
-                    </td>
-
-                  </tr>
-
+                  <li class="list-group-item">
+                    <a target="_new" href="<?php echo base_url('messages/school_message_details/'); ?><?php echo $message->message_id; ?>">
+                      <strong style="font-size: 14px;"> <?php echo $message->subject; ?></strong>
+                    </a>
+                    <small style="display: block; color:gray" class="pull-right">
+                      <i class="fa fa-clock-o" aria-hidden="true"></i>
+                      <?php echo date("d M, Y", strtotime($message->created_date)); ?>
+                    </small>
+                  </li>
                 <?php endforeach; ?>
-
+              </ul>
               </table>
               <?php if ($total_messages > 6) { ?>
                 <div style="text-align: center;">
@@ -678,24 +674,21 @@
                      where`message_for_all`.`select_all`='yes'  order by `message_for_all`.`message_id` DESC LIMIT 6";
               $query_result = $this->db->query($query);
               $notifications = $query_result->result(); ?>
-              <table class="table">
+              <ul class="list-group">
                 <?php
                 foreach ($notifications as $message) : ?>
-                  <tr>
 
-                    <td class=" message">
-                      <a target="_new" href="<?php echo base_url('messages/school_message_details/'); ?><?php echo $message->message_id; ?>">
-                        <strong style="font-size: 14px;"> <?php echo $message->subject; ?></strong>
-                      </a>
-                      <small style="display: block; color:gray" class="pull-right">
-                        <i class="fa fa-clock-o" aria-hidden="true"></i>
-                        <?php echo date("d M, Y", strtotime($message->created_date)); ?>
-                    </td>
-
-                  </tr>
-
+                  <li class="list-group-item">
+                    <a target="_new" href="<?php echo base_url('messages/school_message_details/'); ?><?php echo $message->message_id; ?>">
+                      <strong style="font-size: 14px;"> <?php echo $message->subject; ?></strong>
+                    </a>
+                    <small style="display: block; color:gray" class="pull-right">
+                      <i class="fa fa-clock-o" aria-hidden="true"></i>
+                      <?php echo date("d M, Y", strtotime($message->created_date)); ?>
+                    </small>
+                  </li>
                 <?php endforeach; ?>
-              </table>
+              </ul>
               <?php if ($total_notifications > 6) { ?>
                 <div style="text-align: center;">
                   <a class="btn btn-success btn-sm" href="<?php echo site_url('messages/inbox'); ?>"><i class="fa fa-bell-o"></i> All Notifications</a>

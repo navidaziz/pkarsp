@@ -70,11 +70,11 @@
                         <td>
                             <strong>Search By</strong>
                             <span style="margin-left: 15px;"></span>
-                            <input type="radio" name="search_type" class="search_type" value="school_id" checked /> Institute ID
+                            <input type="radio" name="search_type" class="search_type" value="school_id" checked /> School ID
                         </td>
                         <td>
 
-                            <input type="text" id="search" name="search" placeholder="Institute ID" value="" class="form-control" />
+                            <input type="text" id="search" name="search" placeholder="School ID" value="" class="form-control" />
                         </td>
                         <td><button onclick="search()">Search</button></td>
                         </tr>
@@ -167,7 +167,9 @@
                                         WHERE district.region = '$region->region'
                                         AND district.districtId = '$district->districtId'
                                         AND school.status!=1
-                                        AND school.dairy_type != ''";
+                                        AND school.dairy_type != ''
+                                        AND school.pending_type IS NULL
+                                        ";
                                             echo $this->db->query($query)->row()->total;
 
                                             ?> -
@@ -245,7 +247,8 @@
                                         WHERE district.region = '$region->region'
                                         AND " . $districtId . " 
                                         AND school.status!=1
-                                        AND school.dairy_type != ''";
+                                        AND school.dairy_type != ''
+                                        AND school.pending_type IS NULL";
                                         echo $this->db->query($query)->row()->total;
 
                                         ?> -

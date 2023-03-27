@@ -334,3 +334,8 @@ if ($this->session->flashdata("msg") || $this->session->flashdata("msg_error") |
 </body>
 
 </html>
+<?php
+unset($_SESSION['msg_success']);
+unset($_SESSION['msg_error']);
+unset($_SESSION['msg']);
+?>

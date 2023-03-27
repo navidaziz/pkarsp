@@ -111,6 +111,10 @@ class Apply extends Admin_Controller
 			$new_session['address'] = $last_session_detail->address;
 			$new_session['latitude'] = $last_session_detail->latitude;
 			$new_session['longitude'] = $last_session_detail->longitude;
+			$new_session['primary'] = $last_session_detail->primary;
+			$new_session['middle'] = $last_session_detail->middle;
+			$new_session['high'] = $last_session_detail->high;
+			$new_session['high_sec'] = $last_session_detail->high_sec;
 
 			$this->db->insert('school', $new_session);
 			$school_inserted_id = $this->db->insert_id();
@@ -222,6 +226,10 @@ class Apply extends Admin_Controller
 			$new_session['address'] = $last_session_detail->address;
 			$new_session['latitude'] = $last_session_detail->latitude;
 			$new_session['longitude'] = $last_session_detail->longitude;
+			$new_session['primary'] = $last_session_detail->primary;
+			$new_session['middle'] = $last_session_detail->middle;
+			$new_session['high'] = $last_session_detail->high;
+			$new_session['high_sec'] = $last_session_detail->high_sec;
 
 
 			$this->db->insert('school', $new_session);
@@ -330,6 +338,10 @@ class Apply extends Admin_Controller
 			$new_session['address'] = $last_session_detail->address;
 			$new_session['latitude'] = $last_session_detail->latitude;
 			$new_session['longitude'] = $last_session_detail->longitude;
+			$new_session['primary'] = $last_session_detail->primary;
+			$new_session['middle'] = $last_session_detail->middle;
+			$new_session['high'] = $last_session_detail->high;
+			$new_session['high_sec'] = $last_session_detail->hig_sec;
 
 			$new_session['created_date'] = date('Y-m-d H:i:s', time());
 			$this->db->insert('school', $new_session);

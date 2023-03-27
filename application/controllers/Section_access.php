@@ -65,7 +65,7 @@ class Section_access extends Admin_Controller
    {
       $school_id = (int) $this->input->post('school_id');
       $schools_id = (int) $this->input->post('schools_id');
-      $query = "UPDATE `school` SET status='0' WHERE schoolId = '" . $school_id . "' 
+      $query = "UPDATE `school` SET section_e = 0  WHERE status='2' AND schoolId = '" . $school_id . "' 
       AND schools_id ='" . $schools_id . "' LIMIT 1";
       if ($this->db->query($query)) {
          $userId = $this->session->userdata('userId');
@@ -82,7 +82,7 @@ class Section_access extends Admin_Controller
    {
       $school_id = (int) $this->input->post('school_id');
       $schools_id = (int) $this->input->post('schools_id');
-      $query = "UPDATE `school` SET status='2' WHERE schoolId = '" . $school_id . "' 
+      $query = "UPDATE `school` SET section_e = 1  WHERE status='2' AND schoolId = '" . $school_id . "' 
       AND schools_id ='" . $schools_id . "' LIMIT 1";
       if ($this->db->query($query)) {
          $userId = $this->session->userdata('userId');

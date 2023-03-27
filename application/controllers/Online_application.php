@@ -56,4 +56,39 @@ class Online_application extends MY_Controller
 		$this->data['view'] = 'online_application/status';
 		$this->load->view('layout', $this->data);
 	}
+
+	public function update_section_e()
+	{
+
+		$school_id = (int) $this->input->post('school_id');
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT COUNT(*) as total
+				FROM
+					`schools` , `school` 
+				WHERE `schools`.`schoolId` = `school`.`schools_id`
+				AND  `school`.`schoolId`='" . $school_id . "'
+				AND `schools`.`owner_id`='" . $userId . "'";
+		$school =  $this->db->query($query)->row();
+		if ($school->total == 0) {
+			echo "You are not allow to update.";
+			exit();
+		}
+
+
+
+		$fees = $this->input->post('fee');
+		foreach ($fees as $fee_id => $fee) {
+
+			$query = "UPDATE fee SET tuitionFee = '" . $fee . "' 
+			WHERE school_id = '" . $school_id . "' AND feeId = '" . $fee_id . "'";
+			$this->db->query($query);
+		}
+
+		if ($this->input->post('update_section_e') == 'Submit Section E') {
+			$query = "UPDATE `school` SET section_e = 1  WHERE status='2' AND schoolId = '" . $school_id . "' LIMIT 1";
+			$this->db->query($query);
+		}
+
+		redirect("online_application/status/" . $school_id);
+	}
 }

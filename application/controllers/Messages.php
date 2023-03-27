@@ -14,28 +14,18 @@ class Messages extends Admin_Controller
    public function inbox()
    {
       $user_id = $this->session->userdata('userId');
-      $query = "  SELECT * FROM `schools` where owner_id=$user_id";
-      $query = $this->db->query($query);
-      $school_info = $query->row();
-      $school_name = str_replace("'", "", $school_info->schoolName);
-      $this->data['school_id'] = $school_info->schoolId;
-      $query1 =
-         "SELECT message_for_all.*,`message_school`.`school_id` FROM `message_for_all`
-                     left join message_school on `message_for_all`.`message_id`=`message_school`.`message_id`
-                     where (`message_school`.`school_id`=$school_info->schoolId AND 
-                     `message_for_all`.`select_all`='no')
-                     OR  (`message_for_all`.`district_id` in($school_info->district_id,0) AND  `message_for_all`.`level_id` in($school_info->level_of_school_id,0) 
-                      AND 
-                     `message_for_all`.`select_all`='yes' AND  LOCATE(`message_for_all`.`like_text`,'" .
-         $school_name .
-         "')> 0) GROUP BY `message_for_all`.`message_id`
-                     order by `message_for_all`.`message_id` DESC ";
-      $query1 = $this->db->query($query1);
-      // print_r($this->db->last_query()) ;exit;
-      // var_dump($query1->result());exit;
-
-      $this->data['school_messages'] = $query1->result();
-      $this->data['title'] = 'Inbox';
+      $query = "SELECT 
+					`schools`.`schoolId` AS `schools_id`
+					, `schools`.`registrationNumber`
+					, `schools`.`schoolName`
+					, `schools`.`district_id`
+					, `schools`.`yearOfEstiblishment`
+					, `schools`.`school_type_id`
+				FROM
+					`schools`
+               WHERE `schools`.`owner_id`='" . $user_id . "'";
+      $this->data['school'] = $this->db->query($query)->row();
+      $this->data['title'] = 'Inbox Messages / Notification';
       $this->data['description'] = 'info about Inbox Messages';
       $this->data['view'] = 'messages/inbox';
       $this->load->view('layout', $this->data);
@@ -58,24 +48,19 @@ class Messages extends Admin_Controller
 
       if ($this->input->post("deficiency_challan")) {
          $school_id = (int) $this->input->post('school_id');
-         if ($this->input->post('bt_date')) {
-            $count = count($this->input->post('bt_date'));
-            for ($i = 0; $i < $count; $i++) {
-               $InserData = array(
-                  'school_id' => $school_id,
-                  'reg_type_id' => $this->input->post('reg_type_id'),
-                  'bt_no' => $_POST['bt_no'][$i],
-                  'bt_date' => $_POST['bt_date'][$i],
-               );
+         $InserData = array(
+            'school_id' => $school_id,
+            'reg_type_id' => $this->input->post('reg_type_id'),
+            'bt_no' => $this->input->post('challan_no'),
+            'bt_date' => $this->input->post('challan_date'),
+         );
 
-               if ($this->db->insert('bank_transaction', $InserData)) {
-                  $this->session->set_flashdata('msg_success', 'Bank Challan Add Successfully.');
-               } else {
-                  $this->session->set_flashdata('msg_error', "Something's wrong, Please try again.");
-               }
-               redirect('messages/school_message_details/' . $message_id);
-            }
+         if ($this->db->insert('bank_transaction', $InserData)) {
+            $this->session->set_flashdata('msg_success', 'Bank Challan Add Successfully.');
+         } else {
+            $this->session->set_flashdata('msg_error', "Something's wrong, Please try again.");
          }
+         redirect('messages/school_message_details/' . $message_id);
       }
 
       $query1 = "  SELECT * FROM `message_for_all` where message_id=$message_id ";
@@ -163,23 +148,23 @@ class Messages extends Admin_Controller
       $this->data['message_info'] = $message_info;
       //////////////////////////////////////////
       $query1 = " SELECT count(`message_school`.`message_id`) as selectedschools,
-  (select * from schools where LOCATE($message_info->like_text,`schools`.`schoolName`)>0
- 
-   and (district_id=$message_info->district_id OR $message_info->district_id =0)
-   and (schools.level_of_school_id=message_for_all.level_id OR message_for_all.level_id=0)
-  
+         (select * from schools where LOCATE($message_info->like_text,`schools`.`schoolName`)>0
+         
+            and (district_id=$message_info->district_id OR $message_info->district_id =0)
+            and (schools.level_of_school_id=message_for_all.level_id OR message_for_all.level_id=0)
+         
 
-   
-  ) as totalschools,`message_for_all`.*,`levelofinstitute`.`levelofInstituteTitle`,`district`.`districtTitle`,message_school.school_id
-   FROM `message_for_all`
-    left join levelofinstitute
-   on `message_for_all`.`level_id`=`levelofinstitute`.`levelofInstituteId`
-   left join district
-   on `message_for_all`.`district_id`=`district`.`districtId`
-   left join message_school
-   on `message_for_all`.`message_id`=`message_school`.`message_id`
-   group by `message_for_all`.`message_id`
-    order by `message_for_all`.`message_id` DESC";
+            
+         ) as totalschools,`message_for_all`.*,`levelofinstitute`.`levelofInstituteTitle`,`district`.`districtTitle`,message_school.school_id
+            FROM `message_for_all`
+            left join levelofinstitute
+            on `message_for_all`.`level_id`=`levelofinstitute`.`levelofInstituteId`
+            left join district
+            on `message_for_all`.`district_id`=`district`.`districtId`
+            left join message_school
+            on `message_for_all`.`message_id`=`message_school`.`message_id`
+            group by `message_for_all`.`message_id`
+            order by `message_for_all`.`message_id` DESC";
       ///////////////////////////////////////////
       $this->data['attachments'] = $query->result();
 
@@ -489,6 +474,11 @@ class Messages extends Admin_Controller
    }
    public function send_message_to_single_school()
    {
+
+
+
+
+
       $imgString = '';
       $pdfString = '';
       if ($_POST) {
@@ -544,11 +534,22 @@ class Messages extends Admin_Controller
                'message_id' => $message_id,
                'school_id' => $this->input->post('school_id_for_message'),
             ];
+
+            $school_id = $this->input->post('school_id_for_message');
             $this->db->set($data);
             $this->db->insert("message_school");
             $id = $this->db->insert_id();
             if ($id) {
                $images_data = [];
+
+               $upload_dir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/school/' . $school_id . "/";
+               if (!file_exists($upload_dir)) {
+                  mkdir($upload_dir, 0777, true);  //create directory if not exist
+               }
+
+
+
+
                //var_dump($_FILES);exit;
                $files = $_FILES;
                if (isset($_FILES['otherimages']) && !empty($_FILES['otherimages']['name'])) {
@@ -556,9 +557,7 @@ class Messages extends Admin_Controller
                   //echo "hellow";exit;
                   //var_dump($_FILES['otherimages']['name']);exit;
                   $config = [];
-                  $config['upload_path'] = 'assets/images/';
-                  $config['allowed_types'] = 'gif|jpeg|jpg|png|doc|docx|pdf';
-                  $config['max_size'] = 0;
+
                   $this->load->library('upload', $config);
                   for ($i = 0; $i < $cpt; $i++) {
                      $_FILES['otherimages[]']['name'] = $files['otherimages']['name'][$i];
@@ -566,15 +565,13 @@ class Messages extends Admin_Controller
                      $_FILES['otherimages[]']['tmp_name'] = $files['otherimages']['tmp_name'][$i];
                      $_FILES['otherimages[]']['error'] = $files['otherimages']['error'][$i];
                      $_FILES['otherimages[]']['size'] = $files['otherimages']['size'][$i];
-                     $config['upload_path'] = 'assets/images/';
+                     $config['upload_path'] = $upload_dir;
+
+
                      $config['allowed_types'] = 'gif|jpg|jpeg|png|doc|docx|pdf';
                      $config['max_size'] = 0;
-                     $random = rand(1, 1000000000);
-
-                     $makeRandom = hash('sha512', $random . config_item("encryption_key"));
-                     $makeRandom .= "____";
-                     $makeRandom .= $files['otherimages']['name'][$i];
-                     $config['file_name'] = $makeRandom;
+                     $file_name = 'PSRA-' . date('Y-m-d') . "-" . time() . "-" . $message_id;
+                     $config['file_name'] = $file_name;
 
                      $this->upload->initialize($config);
                      if ($this->upload->do_upload("otherimages[]")) {
@@ -591,6 +588,7 @@ class Messages extends Admin_Controller
                      $data = [
                         'message_id' => $message_id,
                         'attachment_name' => $images_data[$i]['file_name'],
+                        'folder' => 'school/' . $school_id,
                      ];
                      $this->db->set($data);
                      $this->db->insert("message_for_all_attachment");
