@@ -648,9 +648,7 @@ class Messages extends Admin_Controller
             '<h3>We have sent you School Registration Certificate</h3>
              <h5>Please Download or Print it</h5>
              <div class="col-sm-12 bg-info">
-             <form method="post" action="' .
-            base_url('school/certificate') .
-            '">
+             <form method="post" action="https://psra.gkp.pk/schoolReg/school/certificate">
              <input type="hidden" name="school_id" value="' .
             $school_id .
             '">
