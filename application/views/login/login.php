@@ -138,7 +138,7 @@
 
               <h4>New School / Institute Registration</h4>
 
-              <a class="btn btn-primary" style="text-decoration: none; width:100%" href="<?php echo site_url(); ?>register/signup">Create institute Account</a><br>
+              <a class="btn btn-primary" style="text-decoration: none; width:100%" href="<?php echo site_url(); ?>register/index">Create institute Account</a><br>
 
 
               <div class="login-helpe rs">

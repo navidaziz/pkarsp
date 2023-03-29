@@ -11,6 +11,7 @@ class Register extends Admin_Controller
 
         parent::__construct();
         $this->load->model("user_model");
+        $this->load->model("user_m");
     }
     //---------------------------------------------------------------
 
@@ -20,6 +21,13 @@ class Register extends Admin_Controller
      */
     public function index()
     {
+
+        if ($this->user_m->loggedIn() == TRUE) {
+
+            $homepage_path = $this->session->userdata('role_homepage_uri');
+            redirect($homepage_path);
+        }
+
 
         $this->data['title']  = "Sign Up";
         $this->load->view("register/signup_form", $this->data);

@@ -68,14 +68,11 @@ class Admin_Controller extends MY_Controller
             "login/logout",
             "login/validate_user",
             "register/signup",
+            "register/index",
             "register/password_reset",
             "register/password_reset_submit"
         );
         if (!in_array(uri_string(), $exception_uri)) {
-
-
-
-
             //check if the user is logged in or not
             if (!$this->session->userdata('userId') && empty($this->session->userdata('userId'))) {
                 // echo "problem is here too many redirections here...";
