@@ -443,9 +443,12 @@
                 <div style="text-align: center;">
 
                   <?php
+                  // session desions 
+
+                  $est_month = (int) date('m', strtotime($school->yearOfEstiblishment));
                   $est_year = date('Y', strtotime($school->yearOfEstiblishment));
-                  $est_month = date('m', strtotime($school->yearOfEstiblishment));
-                  if ($est_month >= 4) {
+
+                  if ($est_month >= 3) {
                     $session_year = $est_year;
                   } else {
                     $session_year = $est_year - 1;

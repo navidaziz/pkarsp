@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Print_file extends MY_Controller
+class Print_file extends Admin_Controller
 {
 	public function __construct()
 	{
@@ -56,9 +56,9 @@ class Print_file extends MY_Controller
 
 		$school_id = (int) $this->input->post('school_id');
 
-
 		$query = "SELECT
                   `school`.`schoolId`
+				  , `schools`.`schoolId` as schools_id
                   ,`school`.`updatedDate`
                   , `schools`.`registrationNumber`
                   , `schools`.`schoolName`
@@ -72,6 +72,17 @@ class Print_file extends MY_Controller
                   , `schools`.`biseregistrationNumber`
                   ,`session_year`.`sessionYearTitle`
                 ,`tehsils`.`tehsilTitle`
+				, `school`.`new_certificate`
+				, DATE(`school`.`cer_issue_date`) as cer_issue_date
+				, `reg_type`.`regTypeTitle`
+				, `schools`.`address`
+				, school.school_type_id
+				, `school`.`level_of_school_id`
+				, `school`.`primary`
+				, `school`.`middle`
+				, `school`.`high`
+				, `school`.`high_sec`
+				, `school`.`status`
               FROM
                   `schools`
 				  INNER JOIN `district` 
@@ -86,87 +97,45 @@ class Print_file extends MY_Controller
                       ON (`school`.`level_of_school_id` = `levelofinstitute`.`levelofInstituteId`)
                   INNER JOIN `session_year` 
                       ON (`school`.`session_year_id` = `session_year`.`sessionYearId`)
-                  WHERE  `school`.`status`=1 
-						AND school.schoolId = '" . $school_id . "'";
+				INNER JOIN `reg_type` ON(`reg_type`.`regTypeId` = school.reg_type_id)	  
+                  WHERE  school.schoolId = '" . $school_id . "'";
 
 		$school_info = $this->db->query($query)->row();
+		if ($school_info) {
+			if ($school_info->status == 1) {
+				if ($school_info->cer_issue_date >= '2019-10-08') {
+					$this->data['schools_info'] = $school_info;
+					if ($school_info->new_certificate == 0) {
+						$query1 = "SELECT MIN(`age_and_class`.`class_id`),
+					(select classTitle from class where classId= MIN(`age_and_class`.`class_id`)) as classTitle
+					FROM
+					`age_and_class`
+					INNER JOIN `class` 
+					ON (`age_and_class`.`class_id` = `class`.`classId`)
+					WHERE `age_and_class`.`school_id` =" . $school_info->schoolId . ";";
 
-		$query1 = "SELECT MIN(`age_and_class`.`class_id`),
-		(select classTitle from class where classId= MIN(`age_and_class`.`class_id`)) as classTitle
-		FROM
-		`age_and_class`
-		INNER JOIN `class` 
-		ON (`age_and_class`.`class_id` = `class`.`classId`)
-		WHERE `age_and_class`.`school_id` =" . $school_info->schoolId . ";";
-		$this->data['schools_info'] = $school_info;
-		$this->data['lower_class'] = $this->db->query($query1)->row();
-
-		$this->load->view('print/certificate_of_school', $this->data);
+						$this->data['lower_class'] = $this->db->query($query1)->row();
+						$this->load->view('print/certificate_of_school', $this->data);
+					}
+					if ($school_info->new_certificate == 1) {
+						$this->load->view('print/new_certificate_of_school', $this->data);
+					}
+				} else {
+					$this->data['message_title'] = 'Certificate Not Found';
+					$this->data['message'] = 'It appears that the certificate is not available online, and there is a possibility that it needs to be manually addressed as a certificate issue.';
+					$this->load->view('errors/html/certificate_not_found', $this->data);
+				}
+			} else {
+				$this->data['message_title'] = 'Certificate Not Found';
+				$this->data['message'] = 'Certificate not found, it could mean that the institute has not applied for it yet or the case is still in process and has not been completed. Once the process is complete, you will receive your certificate.';
+				$this->load->view('errors/html/certificate_not_found', $this->data);
+			}
+		} else {
+			$this->data['message_title'] = 'Certificate Not Found';
+			$this->data['message'] = 'Error in Institute ID try again with valid institute ID.';
+			$this->load->view('errors/html/certificate_not_found', $this->data);
+		}
 	}
-
-	// public function certificate($schools_id, $school_id, $session_id)
-	// {
-	// 	$schools_id = (int) $schools_id;
-	// 	$school_id = (int) $school_id;
-	// 	$session_id = (int) $session_id;
-
-	// 	$query = "SELECT
-	//               `school`.`schoolId`
-	//               ,`school`.`updatedDate`
-	//               , `schools`.`registrationNumber`
-	//               , `schools`.`schoolName`
-	//               , `schools`.`district_id`
-	//               , `district`.`districtTitle`
-	//               , `district`.`bise`
-	//               , `schools`.`gender_type_id`
-	//               , `genderofschool`.`genderOfSchoolTitle`
-	//               , `levelofinstitute`.`levelofInstituteTitle`
-	//               , `levelofinstitute`.`upper_class`
-	//               , `schools`.`biseregistrationNumber`
-	//               ,`session_year`.`sessionYearTitle`
-	//             ,`tehsils`.`tehsilTitle`
-	//           FROM
-	//               `schools`
-	// 			  INNER JOIN `district` 
-	//                   ON (`schools`.`district_id` = `district`.`districtId`)
-	// 			 INNER JOIN `tehsils` 
-	//                   ON (`schools`.`tehsil_id` = `tehsils`.`tehsilId`)
-	// 			 INNER JOIN `school` 
-	//                   ON (`schools`.`schoolId` = `school`.`schools_id`)
-	//               INNER JOIN `genderofschool` 
-	//                   ON (`school`.`gender_type_id` = `genderofschool`.`genderOfSchoolId`)
-	//               INNER JOIN `levelofinstitute` 
-	//                   ON (`school`.`level_of_school_id` = `levelofinstitute`.`levelofInstituteId`)
-	//               INNER JOIN `session_year` 
-	//                   ON (`school`.`session_year_id` = `session_year`.`sessionYearId`)
-	//               WHERE `schools`.`schoolId` = '" . $schools_id . "' 
-	// 			        AND `school`.`status`=1 
-	// 					AND school.schoolId = '" . $school_id . "'
-	// 					AND `school`.`session_year_id` = '" . $session_id . "'";
-
-	// 	$school_info = $this->db->query($query)->row();
-
-	// 	$query1 = "SELECT
-
-	//               MIN(`age_and_class`.`class_id`)
-
-	//               ,(select classTitle from class where classId= MIN(`age_and_class`.`class_id`)) as classTitle
-
-
-	//           FROM
-	//               `age_and_class`
-
-
-
-
-	//                   INNER JOIN `class` 
-	//                   ON (`age_and_class`.`class_id` = `class`.`classId`)
-	//                 WHERE `age_and_class`.`school_id` =" . $school_info->schoolId . ";";
-	// 	$this->data['schools_info'] = $school_info;
-	// 	$this->data['lower_class'] = $this->db->query($query1)->row();
-
-	// 	$this->load->view('print/certificate_of_schools', $this->data);
-	// }
 
 	public function print_change_of_name_bank_challan()
 	{

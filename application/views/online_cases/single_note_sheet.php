@@ -874,13 +874,13 @@
                           <?php
 
                           if ($pre_session_tution_fee) {
-                            $incress = @round(((($current_fee - $pre_session_tution_fee) / $current_fee) * 100), 1);
+                            $incress =  round((($current_fee - $pre_session_tution_fee) / (($current_fee + $pre_session_tution_fee) / 2)) * 100, 2);
                             if ($incress > 10) {
                               echo '<strong>';
                               echo $session_fee->tuitionFee;
                               echo '</strong>';
                               $fee_increase[$school_session->sessionYearTitle][$class->classTitle] = round($incress);
-                              echo @" <small style='color:red'>" . $incress . "%</small>";
+                              echo @" <small style='color:red; font-weight: bold;'>" . $incress . "%</small>";
                             } else {
 
                               echo $session_fee->tuitionFee;

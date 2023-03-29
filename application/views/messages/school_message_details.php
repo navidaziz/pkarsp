@@ -87,9 +87,14 @@
                   <div class="">
 
 
-                    <?php echo $message_info->discription;
-
-                    //str_replace('http://localhost/pkarsp/school/certificate', site_url("print_file/certificate/"), $message_info->discription);
+                    <?php //echo $message_info->discription;
+                    $url_replace =  array(
+                      'http://psra.gkp.pk/schoolReg/school/certificate',
+                      'https://psra.gkp.pk/schoolReg/school/certificate',
+                      'http://localhost/pkarsp/school/certificate'
+                    );
+                    $url_replace_to = site_url("print_file/certificate");
+                    echo str_replace($url_replace, $url_replace_to, $message_info->discription);
 
                     ?>
                   </div>

@@ -9,22 +9,29 @@
 
   <table class="table table-bordered">
     <tr>
-      <th></th>
-      <th></th>
+      <th colspan="2"></th>
+      <td></td>
+      <th colspan="2" style="text-align: center;">Registration</th>
+      <td></td>
       <th colspan="3" style="text-align: center;">Renewal</th>
+      <td></td>
       <?php if ($school_type_id == 1) { ?>
         <th colspan="4" style="text-align: center;">Renewal+Upgradation</th>
+        <td></td>
         <th style="text-align: center;">Upgradation</th>
+        <td></td>
       <?php } ?>
       <?php if ($school_type_id == 7) { ?>
         <th></th>
       <?php } ?>
     </tr>
     <tr>
-      <th>S/No</th>
-      <th>Max Fee Range</th>
+      <th>#</th>
+      <th style="width: 100px;">Max Fee Range</th>
+      <td></td>
       <th>Processsing Fee</th>
       <th>Inspection Fee</th>
+      <td></td>
       <th>Renewal Fee</th>
       <?php if ($school_type_id == 7) { ?>
         <th>Security</th>
@@ -32,9 +39,13 @@
       <?php if ($school_type_id == 1) { ?>
         <th>Processsing Fee</th>
         <th>Inspection Fee</th>
-        <th>Renewal</th>
-        <th>Upgradation</th>
-        <th>Upgradation</th>
+        <td></td>
+        <th>Processsing Fee</th>
+        <th>Inspection Fee</th>
+        <th>Renewal Fee</th>
+        <th>Upgradation Fee</th>
+        <td></td>
+        <th>Upgradation Fee</th>
       <?php } ?>
     </tr>
     <?php
@@ -47,22 +58,45 @@
                                                     } else {
                                                       echo " and above";
                                                     } ?></td>
-        <td>Rs. <?php echo $fee_structure->renewal_app_processsing_fee ?></td>
-        <td>Rs. <?php echo $fee_structure->renewal_app_inspection_fee ?></td>
-        <td>Rs. <?php echo $fee_structure->renewal_fee ?></td>
+        <td></td>
+        <td> <?php echo $fee_structure->renewal_app_processsing_fee ?></td>
+        <td> <?php echo $fee_structure->renewal_app_inspection_fee ?></td>
+        <td></td>
+        <td> <?php echo $fee_structure->renewal_app_processsing_fee ?></td>
+        <td> <?php echo $fee_structure->renewal_app_inspection_fee ?></td>
+        <td> <?php echo $fee_structure->renewal_fee ?></td>
+        <td></td>
         <?php if ($school_type_id == 7) { ?>
-          <td>Rs. <?php echo $fee_structure->security ?></td>
+          <td> <?php echo $fee_structure->security ?></td>
         <?php } ?>
         <?php if ($school_type_id == 1) { ?>
-          <td>Rs. <?php echo $fee_structure->up_grad_app_processing_fee ?></td>
-          <td>Rs. <?php echo $fee_structure->up_grad_inspection_fee ?></td>
-          <td>Rs. <?php echo $fee_structure->renewal_fee ?></td>
-          <td>Rs. <?php echo $fee_structure->up_grad_fee ?></td>
-          <td>Rs. <?php echo $fee_structure->up_grad_fee ?></td>
+          <td> <?php echo $fee_structure->up_grad_app_processing_fee ?></td>
+          <td> <?php echo $fee_structure->up_grad_inspection_fee ?></td>
+          <td> <?php echo $fee_structure->renewal_fee ?></td>
+          <td> <?php echo $fee_structure->up_grad_fee ?></td>
+          <td></td>
+          <td> <?php echo $fee_structure->up_grad_fee ?></td>
         <?php } ?>
       </tr>
     <?php  } ?>
   </table>
+  <h4>Fee for initial registration for security purposes</h4>
+  <table class="table">
+    <tr>
+      <th>Primary</th>
+      <th>Middle</th>
+      <th>High</th>
+      <th>H.Sec / Inter College</th>
+    </tr>
+    <tr>
+      <td>10,000 Rs.</td>
+      <td>15,000 Rs.</td>
+      <td>15,000 Rs.</td>
+      <td>25,000 Rs.</td>
+    </tr>
+  </table>
+
+
 </div>
 <!-- <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

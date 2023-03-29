@@ -424,9 +424,9 @@
 
 
                             if ($pre_session_tution_fee) {
-                                $incress = @round(((($current_fee - $pre_session_tution_fee) / $current_fee) * 100), 1);
+                                $incress =  round((($current_fee - $pre_session_tution_fee) / (($current_fee + $pre_session_tution_fee) / 2)) * 100, 2);
                                 if ($incress > 10) {
-                                    echo @" <small style='color:red;'><br /> <i class='fa fa-line-chart' aria-hidden='true'></i> (" . $incress . " %)</small>";
+                                    echo @" <small style='color:red; font-weight: bold;'><br /> <i class='fa fa-line-chart' aria-hidden='true'></i> (" . $incress . " %)</small>";
                                 } else {
                                     // echo @" <small style='color:green'>(" . $incress . " %)</small>";
                                 }

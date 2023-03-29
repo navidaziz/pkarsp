@@ -364,11 +364,11 @@
 
 
                         if ($pre_session_tution_fee) {
-                            $incress = @round(((($current_fee - $pre_session_tution_fee) / $current_fee) * 100), 1);
+                            $incress =  round((($current_fee - $pre_session_tution_fee) / (($current_fee + $pre_session_tution_fee) / 2)) * 100, 2);
                             if ($incress > 10) {
-                                echo @" <small style='color:red'>(" . $incress . " %)</small>";
+                                echo @" <small style='color:red;  font-weight: bold;'>(" . $incress . " %)</small>";
                             } else {
-                                echo @" <small style='color:green'>(" . $incress . " %)</small>";
+                                echo @" <small style='color:green;  font-weight: bold;'>(" . $incress . " %)</small>";
                             }
                         }
                         echo '</td>';

@@ -48,6 +48,7 @@
 </head>
 
 <body onload="window.print();" style="line-height: 20px;">
+
   <div class="wrapper">
     <!-- Main content -->
     <section class="invoice">
@@ -69,19 +70,14 @@
       <!-- </div> -->
       <div class="row" style="padding:0">
         <div class="col-xs-12">
-          <p><strong class="pull-right"><u> Dated Peshawar the,
-
-                <?php if ($schools_info->updatedDate == "" || $schools_info->updatedDate == 0 || empty($schools_info->updatedDate)) {
-                  echo date('d.m.Y', time());
-                } else {
-                  echo date('d.m.Y', strtotime($schools_info->updatedDate));
-                }
-
-                ?>
-
-
-              </u></strong></p><br>
-          <u><strong>No. MD(KP-PSRA)/3-1/Registration/<?php echo @$schools_info->districtTitle; ?>/<?php echo date('Y', time()); ?>-<?php echo date('y', strtotime('+1 years'));; ?>:</strong></u> In accordance with the Provision of KP-PSRA Act, 2017, under sub-section (1) and (2) of Section 21, and under sub-clause (5) of Clause 5 and sub clause (1) & (3) of Clause 6, of the KP-PSRA Regulations, 2018, the Competent Authority in KP-PSRA has been pleased to accord approval of Provisional Registration to the Private Institution (s) named below:
+          <p><strong class="pull-right">
+              <u> Dated Peshawar the, <?php echo date('d.m.Y', strtotime($schools_info->cer_issue_date)); ?></u>
+            </strong></p><br>
+          <u><strong>No. MD(KP-PSRA)/3-1/
+              <?php echo $schools_info->regTypeTitle; ?>
+              /<?php echo @$schools_info->districtTitle; ?>/
+              <?php echo date('Y', strtotime($schools_info->cer_issue_date)); ?>-<?php echo date('y', strtotime('+1 year', strtotime($schools_info->cer_issue_date))); ?>/<?php echo $schools_info->schools_id; ?>:</strong>
+          </u> In accordance with the Provision of KP-PSRA Act, 2017, under sub-section (1) and (2) of Section 21 of the KP-PSRA Regulations, 2018, the Competent Authority in KP-PSRA has been pleased to accord approval of Provisional Registration to the Private Institution (s) named below:
 
         </div>
       </div>
@@ -94,25 +90,82 @@
               <tr>
                 <th>School Name</th>
                 <th>Registration No.</th>
-                <th>BISE Registration No.</th>
+                <!-- <th>BISE Registration No.</th> -->
                 <th>Level of Institution</th>
                 <th>Gender of Institution</th>
-                <th>Session of Registration</th>
+                <th>Session</th>
 
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td><?php echo $schools_info->schoolName;
-                    if (!empty($schools_info->tehsilTitle))
-                      echo "," . $schools_info->tehsilTitle;
-                    if (!empty($schools_info->districtTitle))
-                      echo "," . $schools_info->districtTitle; ?></td>
+                <td>
+                  <strong>
+                    <?php echo strtoupper($schools_info->schoolName); ?>
+                  </strong>
+                  <br />
+                  <address>
+                    <i>
+                      <strong> Address: </strong>
+                      <?php
+                      if (!empty($schools_info->districtTitle)) {
+                        echo ucwords(strtolower($schools_info->districtTitle)) . " /";
+                      }
+                      ?>
+                      <?php
+                      if (!empty($schools_info->tehsilTitle))
+                        echo ucwords(strtolower($schools_info->tehsilTitle)) . " /";
+
+                      ?>
+                      <?php
+                      if (!empty($schools_info->address))
+                        echo ucwords(strtolower($schools_info->address));
+
+                      ?>
+                    </i>
+                  </address>
+                </td>
                 <td><?php echo @$schools_info->registrationNumber; ?></td>
-                <td><?php echo @$schools_info->biseregistrationNumber; ?></td>
-                <td><?php echo @$lower_class->classTitle . " To " . @$schools_info->upper_class; ?></td>
+                <!-- <td><?php echo @$schools_info->biseregistrationNumber;
+                          ?></td> -->
+                <td>
+                  <?php
+                  $query = "SELECT * FROM `levelofinstitute` 
+                            WHERE levelofInstituteId <= '" . $schools_info->level_of_school_id . "'
+                            AND school_type_id = '" . $schools_info->school_type_id . "'
+                            ORDER BY `levelofInstituteId` ASC";
+                  $levels = $this->db->query($query)->result();
+                  $session_levels = array();
+                  if ($schools_info->primary == 1) {
+                    $session_levels[1] = 1;
+                  }
+                  if ($schools_info->middle == 1) {
+                    $session_levels[2] = 2;
+                  }
+                  if ($schools_info->high == 1) {
+                    $session_levels[3] = 3;
+                  }
+                  if ($schools_info->high_sec == 1) {
+                    $session_levels[4] = 4;
+                  }
+                  //var_dump($session_levels);
+                  ?>
+                  <ul>
+                    <?php foreach ($levels as $level) {
+                      if (in_array($level->levelofInstituteId, $session_levels) and $level->levelofInstituteId <= $schools_info->level_of_school_id) {
+                        echo '<li><strong>' . $level->levelofInstituteTitle . "</strong></li>";
+                      }
+                    } ?>
+                  </ul>
+
+
+                  <?php //echo @$lower_class->classTitle . " To " . @$schools_info->upper_class; 
+                  ?>
+                </td>
                 <td><?php echo @$schools_info->genderOfSchoolTitle; ?></td>
-                <td><?php echo @$schools_info->sessionYearTitle; ?></td>
+                <td>
+                  <strong><?php echo @$schools_info->sessionYearTitle; ?></strong>
+                </td>
               </tr>
               <tr>
             </tbody>
@@ -139,7 +192,7 @@
           <ol>
             <li>Chairman <?php echo @$schools_info->bise; ?>, Khyber Pakhtunkhwa.</li>
             <li>Director (Registration & Fee Regulations), KP-PSRA.</li>
-            <li>Chairman District Scrutiny Committee concerned.</li>
+            <!-- <li>Chairman District Scrutiny Committee concerned.</li> -->
             <li>Deputy Director (M&E/MIS), KP-PSRA.</li>
             <li>Principal of the school/college concerned.</li>
             <li>PS to Managing Director, KP-PSRA.</li>
@@ -161,7 +214,7 @@
 
       <div class="text-center" style="font-size: 14px;">
         <span>House No. 18 E, Jamal-ud-din Afghani Road, University Town, Peshawar <br />
-          Phone# 091-5700247-8. Fax# 091-5700246.
+          Registration# 091-9216197. MIS# 091-9216205.
 
         </span>
 

@@ -364,7 +364,8 @@ class Mis_dashboard extends Admin_Controller
 
       $district_id_with_prefix_zero = sprintf("%02d", $district_id);
       $tehsil_id_with_prefix_zero = sprintf("%03d", $tehsil_id);
-      $yearOfEstiblishment = substr($yearOfEstiblishment, 2);
+      $year = explode("-", $yearOfEstiblishment);
+      $yearOfEstiblishment = substr($year[0], 2);
       $codeCombined = $district_id_with_prefix_zero . $tehsil_id_with_prefix_zero . $registrationNumberIncreament . $yearOfEstiblishment;
 
       $data["district_id"] = $district_id;
@@ -450,6 +451,22 @@ class Mis_dashboard extends Admin_Controller
    {
       $school_id = (int) $school_id;
       $schools_id = (int) $schools_id;
+
+      //mark school session certificate as new.....
+      $query = "UPDATE `school` SET `new_certificate`=1 
+                WHERE  schoolId='" . $school_id . "' 
+                AND schools_id='" . $schools_id . "'";
+      $this->db->query($query);
+      //end here 
+      // log final status
+      $query = "SELECT `file_status`, `status` FROM school WHERE schoolId = '" . $school_id . "'";
+      $school_status = $this->db->query($query)->row();
+
+      $query = "INSERT INTO file_status_logs(`schools_id`, `school_id`, `status`, `file_status`)
+      VALUES('" . $schools_id . "', '" . $school_id . "', '" . $school_status->status . "', '" . $school_status->file_status . "');";
+      $this->db->query($query);
+      //end here ....
+
       date_default_timezone_set("Asia/Karachi");
       $insert['subject'] = "Institute " . $registration_type . " Certificate";
       $insert['discription'] = '
@@ -457,7 +474,7 @@ class Mis_dashboard extends Admin_Controller
          Once you have received it, please download or print the certificate.
          <br />
          <br />
-         <form target="_blank" method="post" action="' . base_url('school/certificate') . '">
+         <form target="_blank" method="post" action="http://psra.gkp.pk/schoolReg/school/certificate">
          <input type="hidden" name="school_id" value="' . $school_id . '">
          <input type="submit" class="btn btn-primary" value="Download Certificate">
          </form>

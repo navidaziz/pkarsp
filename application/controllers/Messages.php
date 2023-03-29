@@ -25,7 +25,7 @@ class Messages extends Admin_Controller
 					`schools`
                WHERE `schools`.`owner_id`='" . $user_id . "'";
       $this->data['school'] = $this->db->query($query)->row();
-      $this->data['title'] = 'Inbox Messages / Notification';
+      $this->data['title'] = 'Inbox Messages / Notifications';
       $this->data['description'] = 'info about Inbox Messages';
       $this->data['view'] = 'messages/inbox';
       $this->load->view('layout', $this->data);

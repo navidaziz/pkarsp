@@ -1,12 +1,12 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Online_application extends MY_Controller
+class Online_application extends Admin_Controller
 {
 
 	public function index()
 	{
-		echo "We are working on it";
+		redirect('school_dashboard');
 	}
 
 	public function status($school_session_id)

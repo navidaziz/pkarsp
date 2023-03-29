@@ -46,19 +46,32 @@
 
                 <h4> Online Applicaiton Status</h4>
                 <h3> <?php echo $school->regTypeTitle ?> for <?php echo $school->levelofInstituteTitle; ?> Session: <?php echo $session_detail->sessionYearTitle; ?></h3>
+                <p>
+                  Your application has been successfully submitted online, and there is no need to submit any printed documents. PSRA officials will keep you informed about the progress of your application. Keep view PSRA school portal regularly. Make sure to regularly check the PSRA school portal for any updates.
+                </p>
+                <p style="direction: rtl;">
+                  آپ کی درخواست کامیابی کے ساتھ آن لائن جمع کرائی گئی ہے، اور کوئی بھی پرنٹ شدہ دستاویزات جمع کرانے کی ضرورت نہیں ہے۔
+                  <br />
+                  PSRA کے اہلکار آپ کو آپ کی درخواست کی پیشرفت سے آگاہ کرتے رہیں گے۔
+                  <br />
+                  PSRA سکول پورٹل کو باقاعدگی سے دیکھیں۔
+                  <br />
+                  کسی بھی اپ ڈیٹ کے لیے "PSRA" اسکول پورٹل کو باقاعدگی سے چیک کرنا یقینی بنائیں۔
+                </p>
+
                 <h4>
                   <strong>
                     <?php echo get_session_request_status($school->status); ?>
                   </strong><br />
                   <br />
                   <a class="btn btn-warning" href="<?php echo site_url("school_dashboard"); ?>">
-                    <i class="fa fa-arrow-left" aria-hidden="true"></i> Dashboard
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Dashboard
                     <i class="fa fa-dashboard"></i>
                   </a>
-                  <span style="margin-left: 20px;"></span>
+                  <!-- <span style="margin-left: 20px;"></span>
                   <a target="_blank" class="btn btn-primary" href="<?php echo site_url("print_file/school_session_detail/" . $school->school_id); ?>">
                     <i class="fa fa-print" aria-hidden="true"></i> Print Data
-                  </a>
+                  </a> -->
 
 
                 </h4>
@@ -151,7 +164,17 @@
 
                                 <span style="margin-left: 5px; color:green">
                                   <?php
-                                  echo round(((($session_fee->tuitionFee - $previous_session_fee[$class->classId]) / $session_fee->tuitionFee) * 100), 2);
+
+                                  $diff = $session_fee->tuitionFee - $previous_session_fee[$class->classId];
+                                  if ($previous_session_fee[$class->classId]) {
+                                    $percentage = ($diff / $previous_session_fee[$class->classId]) * 100;
+                                  } else {
+                                    $percentage = 0;
+                                  }
+                                  //printf("%2d", $percentage);
+                                  echo round($percentage, 2);
+                                  //$incress =  round((($session_fee->tuitionFee - $previous_session_fee[$class->classId]) / ($diff) * 100, 2);
+                                  //echo round(((($session_fee->tuitionFee - $previous_session_fee[$class->classId]) / $session_fee->tuitionFee) * 100), 2);
                                   ?> %
                                 </span>
                               <?php } ?>
