@@ -13,6 +13,17 @@
   <link rel="stylesheet" type="text/css" href="<?php echo site_url("assets/" . ADMIN_DIR); ?>/css/cloud-admin.css">
   <link href="<?php echo site_url("assets/" . ADMIN_DIR); ?>/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 
+  <script src='https://www.google.com/recaptcha/api.js'></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-151551956-1');
+  </script>
 </head>
 
 <body class="log in" style="position: relative;
@@ -67,26 +78,31 @@
             <div class="login-box" style="background-color:#5C9CCC; opacity:.9; margin: 5px auto; padding-top:10px !important;">
               <h2 class="bigintro" style="font-size: 25px;">Create Institute Account</h2>
               <div class="divide-10"></div>
-              <form role="form" method="post" action="<?php echo site_url("register/signup"); ?>">
+              <form onsubmit="return validate()" role="form" method="post" action="<?php echo site_url("register/signup"); ?>">
                 <div class="form-group">
                   <label for="username">User Name</label>
                   <i class="fa fa-user"></i>
-                  <input type="text" class="form-control" id="userName" name="userName" value="<?php echo set_value('userName', $userName); ?>" />
+                  <input required type="text" class="form-control" id="userName" name="userName" value="<?php echo set_value('userName', $userName); ?>" />
                 </div>
                 <div class="form-group">
                   <label for="exampleInputPassword1">Password</label>
                   <i class="fa fa-lock"></i>
-                  <input type="password" class="form-control" id="userPassword" name="userPassword" />
+                  <input required type="password" class="form-control" id="userPassword" name="userPassword" />
                 </div>
                 <div class="form-group">
                   <label for="exampleInputPassword2">Confirm Password</label>
                   <i class="fa fa-check-square-o"></i>
-                  <input type="password" class="form-control" id="c_userPassword" name="c_userPassword" />
+                  <input required type="password" class="form-control" id="c_userPassword" name="c_userPassword" />
                 </div>
                 <div class="form-group">
                   <label for="email">Email Address</label>
                   <i class="fa fa-envelope"></i>
                   <input required type="email" class="form-control" id="email_address" name="email_address" value="<?php echo set_value('email_address', $email_address); ?>">
+                </div>
+                <div class="form-group">
+                  <div class="g-recaptcha" data-sitekey="6Leuqa4ZAAAAAEBURd3DWqmwV4cdzXi5zzcljMLR" style="height: 100px;">
+                  </div>
+                  <div class="validation_message" style="font-weight: bold;"></div>
                 </div>
                 <div>
 
@@ -126,6 +142,19 @@
   <!-- BOOTSTRAP -->
   <script src="<?php echo site_url("assets/" . ADMIN_DIR); ?>/bootstrap-dist/js/bootstrap.min.js"></script>
 
+  <script>
+    function validate() {
+
+      emp = document.getElementById('g-recaptcha-response').value;
+      if (emp == "") {
+        $('.validation_message').show();
+        $('.validation_message').html('<div style="border:1px solid #D1322C; padding:5px; border-radius:5px;">Please Click on I\'m not a robot<div>');
+        $('.validation_message').delay(1000).fadeOut('slow');
+        return false;
+      }
+
+    }
+  </script>
 
 </body>
 

@@ -4,7 +4,7 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta charset="utf-8">
-  <title>PSRA School Login</title>
+  <title>PSRA Institute Login</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
   <meta name="description" content="">
   <meta name="author" content="">
@@ -110,7 +110,7 @@
                 </div>
               <?php } ?>
 
-              <form role="form" method="post" action="<?php echo site_url("login/validate_user"); ?>">
+              <form onsubmit="return validate()" role="form" method="post" action="<?php echo site_url("login/validate_user"); ?>">
                 <div class="form-group">
                   <label for="userName">User Name</label>
                   <i class="fa fa-user"></i>
@@ -124,6 +124,7 @@
                 <div class="form-group">
                   <div class="g-recaptcha" data-sitekey="6Leuqa4ZAAAAAEBURd3DWqmwV4cdzXi5zzcljMLR" style="height: 100px;">
                   </div>
+                  <div class="validation_message" style="font-weight: bold;"></div>
                 </div>
                 <div>
                   <button type="submit" class="btn btn-danger">Login</button>
@@ -200,6 +201,19 @@
   <!-- CUSTOM SCRIPT -->
   <script src="<?php echo site_url("assets/" . ADMIN_DIR); ?>/js/script.js"></script>
 
+  <script>
+    function validate() {
+
+      emp = document.getElementById('g-recaptcha-response').value;
+      if (emp == "") {
+        $('.validation_message').show();
+        $('.validation_message').html('<div style="border:1px solid #D1322C; padding:5px; border-radius:5px;">Please Click on I\'m not a robot<div>');
+        $('.validation_message').delay(1000).fadeOut('slow');
+        return false;
+      }
+
+    }
+  </script>
 </body>
 
 </html>

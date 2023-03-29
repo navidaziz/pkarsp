@@ -47,7 +47,7 @@ $menu_list .= "</ul>";
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>PSRA</title>
+  <title>KP-PSRA</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
@@ -520,9 +520,11 @@ $menu_list .= "</ul>";
       <section class="sidebar">
         <!-- Sidebar user panel -->
         <div class="user-panel">
-          <div class="imagevb">
+          <div class="imagevb" style="text-align: center;">
+            <h3><strong>KP-PSRA</strong></h3>
+            <small>MIS Version 2.0</small>
             <!-- <img src="../../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image"> -->
-            <img src="<?php echo base_url("assets/images/site_images/logo.png"); ?>" class="img img-responsive " style="max-height:120px; max-width: 120px;margin:0 auto; ">
+            <!-- <img src="<?php echo base_url("assets/images/site_images/logo.png"); ?>" class="img img-responsive " style="max-height:120px; max-width: 120px;margin:0 auto; "> -->
           </div>
           <br />
           <!-- 
@@ -543,7 +545,7 @@ $menu_list .= "</ul>";
       </form> -->
         <!-- /.search form -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
-        <h3 class="text-center" style="color:black;margin-top:-30px;"><strong>PSRA</strong></h3>
+
         <?php echo $menu_list; ?>
         <!--       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>

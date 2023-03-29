@@ -77,29 +77,29 @@ class Login extends Admin_Controller
 		$this->form_validation->set_rules($validations);
 
 		if ($this->form_validation->run() === TRUE) {
-			// $recaptchaResponse = trim($this->input->post('g-recaptcha-response'));
+			$recaptchaResponse = trim($this->input->post('g-recaptcha-response'));
 
-			// $secret = '6Leuqa4ZAAAAACHxncAMn6I8ULX2Rf3R6hT7NhjP';
+			$secret = '6Leuqa4ZAAAAACHxncAMn6I8ULX2Rf3R6hT7NhjP';
 
-			// $credential = array(
-			// 	'secret' => $secret,
-			// 	'response' => $this->input->post('g-recaptcha-response')
-			// );
+			$credential = array(
+				'secret' => $secret,
+				'response' => $this->input->post('g-recaptcha-response')
+			);
 
-			// $verify = curl_init();
-			// curl_setopt($verify, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
-			// curl_setopt($verify, CURLOPT_POST, true);
-			// curl_setopt($verify, CURLOPT_POSTFIELDS, http_build_query($credential));
-			// curl_setopt($verify, CURLOPT_SSL_VERIFYPEER, false);
-			// curl_setopt($verify, CURLOPT_RETURNTRANSFER, true);
-			// $response = curl_exec($verify);
+			$verify = curl_init();
+			curl_setopt($verify, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
+			curl_setopt($verify, CURLOPT_POST, true);
+			curl_setopt($verify, CURLOPT_POSTFIELDS, http_build_query($credential));
+			curl_setopt($verify, CURLOPT_SSL_VERIFYPEER, false);
+			curl_setopt($verify, CURLOPT_RETURNTRANSFER, true);
+			$response = curl_exec($verify);
 
-			// $status = json_decode($response, true);
+			$status = json_decode($response, true);
 
-			// if ($status['success'] != 1) {
-			// 	$this->session->set_flashdata('msg', 'Captcha error, Please try again.');
-			// 	redirect("login");
-			// }
+			if ($status['success'] != 1) {
+				$this->session->set_flashdata('msg', 'Captcha error, Please try again.');
+				redirect("login");
+			}
 
 			$input_values = array(
 				'userName' => $this->input->post("userName"),

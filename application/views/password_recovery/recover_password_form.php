@@ -38,11 +38,11 @@
 
 			<div class="container">
 				<div class="row">
-					<div class="col-md-4 col-md-offset-4">
+					<div class="col-md-5 col-md-offset-3">
 						<div class="login-box-plain">
 							<h2 class="bigintro">Recover Account Detail</h2>
 							<div class="divide-40"></div>
-							<form role="form" method="post" action="<?php echo site_url("register/password_reset_submit"); ?>">
+							<form style="display: none;" role="form" method="post" action="<?php echo site_url("register/password_reset_submit"); ?>">
 								<?php if (validation_errors()) { ?>
 									<div class="alert alert-block alert-danger fade in">
 										<?php echo validation_errors(); ?>
@@ -67,6 +67,12 @@
 									<button type="submit" class="btn btn-danger">Send me Account Detail</button>
 								</div>
 							</form>
+							<div>
+								<p style="">
+									If you need to retrieve your account username or password, please contact the MIS Section at <a style="font-weight: bold; color:red" href="tel:+92091-9216205">
+										<i class="fa fa-phone" aria-hidden="true"></i>
+										091-9216205 </a>. Please keep in mind that account details will only be shared after verification of the institute owner.</p>
+							</div>
 							<div class="login-helpers">
 								<a href="<?php echo site_url(); ?>">Back to Login</a>
 							</div>
