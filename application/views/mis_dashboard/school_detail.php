@@ -294,14 +294,21 @@
                                     ?>
                                 </td> -->
 
-                                <td><?php
-                                    if ($school_session->renewal_code) {
-                                        echo $school_session->renewal_code;
-                                    } else {
-                                        if ($school_session->renewal_code == 0 and $school_session->status == 1) {
-                                            echo '<strong>' . $school->registrationNumber . '</strong>';
-                                        }
-                                    } ?></td>
+                                <td>
+                                    <form target="_blank" method="post" action="<?php echo site_url("print_file/certificate"); ?>">
+                                        <input type="hidden" name="school_id" value="<?php echo $school_session->schoolId ?>" />
+                                        <button class="btn btn-link btn-sm">
+                                            <?php
+                                            if ($school_session->renewal_code) {
+                                                echo $school_session->renewal_code;
+                                            } else {
+                                                if ($school_session->renewal_code == 0 and $school_session->status == 1) {
+                                                    echo '<strong>' . $school->registrationNumber . '</strong>';
+                                                }
+                                            } ?>
+                                        </button>
+                                    </form>
+                                </td>
                             <?php } else { ?>
                                 <td>
                                     <?php if ($school_session->status == 2 and $pending == 0) {

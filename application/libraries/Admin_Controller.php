@@ -111,7 +111,8 @@ class Admin_Controller extends MY_Controller
                     // redirect($_SERVER['HTTP_REFERER']);
                     // session_destroy();
                     //redirect($this->session->userdata("role_homepage_uri"));
-                    redirect(site_url("errors/index"));
+                    $module = $this->controller_name . '-' . $this->method_name;
+                    redirect(site_url("errors/index?module=$module"));
                 }
             }
         }
