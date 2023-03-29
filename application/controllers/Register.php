@@ -72,6 +72,11 @@ class Register extends Admin_Controller
     public function signup()
     {
 
+        if ($this->user_m->loggedIn() == TRUE) {
+
+            $homepage_path = $this->session->userdata('role_homepage_uri');
+            redirect($homepage_path);
+        }
         $recaptchaResponse = trim($this->input->post('g-recaptcha-response'));
 
         $secret = '6Leuqa4ZAAAAACHxncAMn6I8ULX2Rf3R6hT7NhjP';
