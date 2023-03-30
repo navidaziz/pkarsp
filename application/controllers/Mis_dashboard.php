@@ -162,10 +162,16 @@ class Mis_dashboard extends Admin_Controller
       $dated =  date("Y-m-d h:i:s");
       $school_id = (int) $this->input->post('school_id');
       $schools_id = (int) $this->input->post('schools_id');
+      $query = "SELECT level_of_school_id FROM school WHERE schoolId = '" . $school_id . "'";
+      $current_level = $this->db->query($query)->row()->level_of_school_id;
+      $levels = $this->input->post('levels');
+      if ($current_level) {
+         $levels[$current_level] = 1;
+      }
 
       $upgradation = $this->input->post('upgradation');
       if ($upgradation === 'yes') {
-         $levels = $this->input->post('levels');
+
          $selected_levels = array();
          foreach ($levels as $level_id => $level) {
             if ($level_id == 1) {
@@ -180,20 +186,20 @@ class Mis_dashboard extends Admin_Controller
             if ($level_id == 4) {
                $selected_levels[] = $level_id;
             }
-
-            $query = "UPDATE school SET level_of_school_id = '" . max($selected_levels) . "',
-         upgrade=1
-                 WHERE schools_id = '" . $schools_id . "'
-                 AND schoolId = '" . $school_id . "'";
-            $this->db->query($query);
-
-            $query = "UPDATE school SET level_of_school_id = '" . max($selected_levels) . "'
-         WHERE schools_id = '" . $schools_id . "'
-                 AND schoolId > '" . $school_id . "'";
-            $this->db->query($query);
          }
 
 
+
+         $query = "UPDATE school SET level_of_school_id = '" . max($selected_levels) . "',
+         upgrade=1
+                 WHERE schools_id = '" . $schools_id . "'
+                 AND schoolId = '" . $school_id . "'";
+         $this->db->query($query);
+
+         $query = "UPDATE school SET level_of_school_id = '" . max($selected_levels) . "'
+         WHERE schools_id = '" . $schools_id . "'
+                 AND schoolId > '" . $school_id . "'";
+         $this->db->query($query);
 
          // $this->db->where('schoolId', $school_id);
          // $upgrade['level_of_school_id'] = ;
@@ -229,7 +235,6 @@ class Mis_dashboard extends Admin_Controller
          $update_data['middle'] = 0;
          $update_data['high'] = 0;
          $update_data['high_sec'] = 0;
-         $levels = $this->input->post('levels');
          foreach ($levels as $level_id => $level) {
             if ($level_id == 1) {
                $update_data['primary'] = 1;
