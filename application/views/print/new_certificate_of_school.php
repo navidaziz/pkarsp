@@ -24,7 +24,7 @@
   <![endif]-->
 
   <style type="text/css">
-    @media print {
+    /* @media print {
       @page {
         margin: 0;
       }
@@ -40,14 +40,14 @@
       hr {
         border-top: 1px solid black;
       }
-    }
+    } */
   </style>
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 
-<body onload="window.print();" style="line-height: 20px;">
+<body onload="window.print();" style="line-he ight: 20px;">
 
   <div class="wrapper">
     <!-- Main content -->
@@ -85,6 +85,22 @@
       <!-- Table row -->
       <div class="row">
         <div class="col-xs-12 table-responsive">
+          <style>
+            .table {
+              border: 1px solid #000000;
+            }
+
+            .table-bordered>thead>tr>th,
+            .table-bordered>tbody>tr>th,
+            .table-bordered>tfoot>tr>th,
+            .table-bordered>thead>tr>td,
+            .table-bordered>tbody>tr>td,
+            .table-bordered>tfoot>tr>td {
+              border: 1px solid #000000;
+              font-size: 13px !important;
+            }
+          </style>
+
           <table class="table table-condensed table-bordered">
             <thead>
               <tr>
@@ -104,26 +120,28 @@
                     <?php echo strtoupper($schools_info->schoolName); ?>
                   </strong>
                   <br />
-                  <address>
+                  <small>
                     <i>
                       <strong> Address: </strong>
+
+
                       <?php
-                      if (!empty($schools_info->districtTitle)) {
-                        echo ucwords(strtolower($schools_info->districtTitle)) . " /";
-                      }
+                      if (!empty($schools_info->address))
+                        echo ucwords(strtolower($schools_info->address)) . "<strong> , </strong>";
+
                       ?>
                       <?php
                       if (!empty($schools_info->tehsilTitle))
-                        echo ucwords(strtolower($schools_info->tehsilTitle)) . " /";
+                        echo ucwords(strtolower($schools_info->tehsilTitle)) . "<strong> , </strong>";
 
                       ?>
                       <?php
-                      if (!empty($schools_info->address))
-                        echo ucwords(strtolower($schools_info->address));
-
+                      if (!empty($schools_info->districtTitle)) {
+                        echo ucwords(strtolower($schools_info->districtTitle));
+                      }
                       ?>
                     </i>
-                  </address>
+                  </small>
                 </td>
                 <td><?php echo @$schools_info->registrationNumber; ?></td>
                 <!-- <td><?php echo @$schools_info->biseregistrationNumber;

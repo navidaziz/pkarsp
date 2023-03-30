@@ -29,7 +29,7 @@ class Online_cases extends Admin_Controller
       $userId = $this->session->userdata('userId');
       $query = "SELECT region_ids FROM users WHERE userId = '" . $userId . "'";
       $region_ids = $this->db->query($query)->row()->region_ids;
-      
+
       $query = "SELECT
 		`schools`.schoolId as schools_id,
 		`schools`.schoolName,
@@ -103,9 +103,9 @@ class Online_cases extends Admin_Controller
    public function deficient_cases()
    {
 
-      $this->get_request_list(2, 5, 2, 'Financially Deficient Cases');
-      $this->get_request_list(2, 4, 2, 'Forwarded To Operation Wing');
-      $this->get_request_list(2, 10, 2, 'Marked Completed (Issue Pending)');
+      $this->get_request_list(2, 5, NULL, 'Financially Deficient Cases');
+      $this->get_request_list(2, 4, NULL, 'Forwarded To Operation Wing');
+      $this->get_request_list(2, 10, NULL, '(Issue Pending)');
    }
 
 
@@ -456,38 +456,37 @@ class Online_cases extends Admin_Controller
             echo 'error while entering data into the database.';
          }
       } else {
-          echo "<div class='alert alert-danger'>";
-          $query = "SELECT * FROM bank_challans WHERE challan_no = '" . $statn_number . "'";
-          $stan_detail = $this->db->query($query)->row();
-          if($stan_detail->old_challan_id){
-              echo "<strong style='color:red'>
+         echo "<div class='alert alert-danger'>";
+         $query = "SELECT * FROM bank_challans WHERE challan_no = '" . $statn_number . "'";
+         $stan_detail = $this->db->query($query)->row();
+         if ($stan_detail->old_challan_id) {
+            echo "<strong style='color:red'>
               STAN Number already used in Old Challan Data. Try again with different STAN No.</strong><br />";
-              // var_dump($stan_detail);
-               $query="SELECT * FROM `old_challans` WHERE stan_no='".$statn_number."'";
-               $old_challans = $this->db->query($query)->result();
-               foreach($old_challans as $old_challan_detail){
-               echo "STAN: <strong>".$old_challan_detail->stan_no."</strong> - Date: <strong>".$old_challan_detail->date."</strong> - Challan For: <strong>".$challan->remarks."</strong> -  School ID: <strong>".$old_challan_detail->school_id."</strong> - School Name: <strong>".$old_challan_detail->school_name."</strong> - Session: <strong>".$old_challan_detail->session."</strong> - Excel S.No: <strong>".$old_challan_detail->excel_s_no."</strong>" ;
+            // var_dump($stan_detail);
+            $query = "SELECT * FROM `old_challans` WHERE stan_no='" . $statn_number . "'";
+            $old_challans = $this->db->query($query)->result();
+            foreach ($old_challans as $old_challan_detail) {
+               echo "STAN: <strong>" . $old_challan_detail->stan_no . "</strong> - Date: <strong>" . $old_challan_detail->date . "</strong> - Challan For: <strong>" . $challan->remarks . "</strong> -  School ID: <strong>" . $old_challan_detail->school_id . "</strong> - School Name: <strong>" . $old_challan_detail->school_name . "</strong> - Session: <strong>" . $old_challan_detail->session . "</strong> - Excel S.No: <strong>" . $old_challan_detail->excel_s_no . "</strong>";
                echo "<br />";
-               }
-               }else{
-                    echo "<strong style='color:red'>STAN Number already used. try again with different STAN No.</strong><br />";
-                   $query="SELECT bank_challans.challan_no, bank_challans.challan_date, 
+            }
+         } else {
+            echo "<strong style='color:red'>STAN Number already used. try again with different STAN No.</strong><br />";
+            $query = "SELECT bank_challans.challan_no, bank_challans.challan_date, 
                    bank_challans.challan_for,
                    schools.schoolId, schools.schoolName, session_year.sessionYearTitle
                             FROM `bank_challans`
                             INNER JOIN schools ON(schools.schoolId = bank_challans.schools_id)
                             INNER JOIN school ON(school.schoolId = bank_challans.school_id)
                             INNER JOIN session_year ON(session_year.sessionYearId=school.session_year_id)
-                            WHERE bank_challans.challan_no = '".$statn_number."'";
-                    $challans = $this->db->query($query)->result();
-                    foreach($challans as $challan){
-                        echo "STAN: <strong>".$challan->challan_no."</strong> - Date: <strong>".$challan->challan_date."</strong> - Challan For: <strong>".$challan->challan_for."</strong> -  School ID: <strong>".$challan->schoolId."</strong> - 
-                        School Name: <strong>".$challan->schoolName."</strong> - Session: <strong>".$challan->sessionYearTitle."</strong> ";
-               echo "<br />"; 
-                    }
-              
-          }
-          echo "</div>";
+                            WHERE bank_challans.challan_no = '" . $statn_number . "'";
+            $challans = $this->db->query($query)->result();
+            foreach ($challans as $challan) {
+               echo "STAN: <strong>" . $challan->challan_no . "</strong> - Date: <strong>" . $challan->challan_date . "</strong> - Challan For: <strong>" . $challan->challan_for . "</strong> -  School ID: <strong>" . $challan->schoolId . "</strong> - 
+                        School Name: <strong>" . $challan->schoolName . "</strong> - Session: <strong>" . $challan->sessionYearTitle . "</strong> ";
+               echo "<br />";
+            }
+         }
+         echo "</div>";
          //echo "STAN Number already used. try again with different STAN No.";
       }
    }
@@ -580,7 +579,7 @@ class Online_cases extends Admin_Controller
 
    public function add_comment()
    {
-       
+
 
       $input['comment'] = trim($this->db->escape($this->input->post('comment')), "'");
       $input['session_id'] = (int) $this->input->post('session_id');
@@ -599,7 +598,6 @@ class Online_cases extends Admin_Controller
          //redirect("online_cases/combine_note_sheet/" . $schools_id);
          redirect($_SERVER['HTTP_REFERER']);
       }
-      
    }
 
    public function delete_comment($comment_id, $schools_id)
@@ -624,15 +622,15 @@ class Online_cases extends Admin_Controller
       $school_id = (int) $this->input->post('school_id');
       $schools_id = (int) $this->input->post('schools_id');
       $reg_type_id = (int) $this->input->post('reg_type_id');
-      $query="UPDATE school set reg_type_id = '".$reg_type_id."' WHERE schoolId = '".$school_id."' AND schools_id ='".$schools_id."' LIMIT 1";
-      
+      $query = "UPDATE school set reg_type_id = '" . $reg_type_id . "' WHERE schoolId = '" . $school_id . "' AND schools_id ='" . $schools_id . "' LIMIT 1";
+
       if ($this->db->query($query)) {
          redirect("online_cases/combine_note_sheet/" . $schools_id);
       } else {
          redirect("online_cases/combine_note_sheet/" . $schools_id);
       }
    }
-   
+
 
    public function get_session_challan_form()
    {
@@ -710,7 +708,7 @@ class Online_cases extends Admin_Controller
       $query .= " WHERE `schools`.`schoolId` = " . $schoolid . " ";
       $school = $this->db->query($query)->row();
       if ($school) {
-          
+
 
          $this->data['school'] = $school;
 
@@ -721,7 +719,7 @@ class Online_cases extends Admin_Controller
          exit();
       }
    }
-  
+
 
    public function sent_message()
    {
@@ -782,27 +780,25 @@ class Online_cases extends Admin_Controller
       $this->data['school'] = $this->schooldetail($schools_id);
       $this->load->view('online_cases/combine_note_sheet', $this->data);
    }
-   
+
    public function  single_note_sheet($schools_id, $school_id)
    {
       $this->data['schools_id'] = $schools_id = (int) $schools_id;
       $this->data['school_id'] = $school_id = (int) $school_id;
-      
-     $query="SELECT COUNT(*) as total FROM school WHERE school.schoolId = '".$school_id."' and school.schools_id = '".$schools_id."'";
-     $school_count = $this->db->query($query)->row()->total;
-    
-      if($school_count==0){
-          echo "School Case Not Matched.";
-          exit();
-      }else{
-          $this->data['school'] = $this->schooldetail($schools_id);
-      $this->load->view('online_cases/single_note_sheet', $this->data);
+
+      $query = "SELECT COUNT(*) as total FROM school WHERE school.schoolId = '" . $school_id . "' and school.schools_id = '" . $schools_id . "'";
+      $school_count = $this->db->query($query)->row()->total;
+
+      if ($school_count == 0) {
+         echo "School Case Not Matched.";
+         exit();
+      } else {
+         $this->data['school'] = $this->schooldetail($schools_id);
+         $this->load->view('online_cases/single_note_sheet', $this->data);
       }
-      
-      
    }
-   
-   
+
+
 
    private function schooldetail($schools_id)
    {
@@ -828,39 +824,36 @@ class Online_cases extends Admin_Controller
 				WHERE `schools`.`schoolId`='" . $schools_id . "'";
       return $this->db->query($query)->result()[0];
    }
-   
-   
+
+
    public function  mark_as_complete_form()
    {
       $this->data['schools_id'] = $schools_id = (int) $this->input->post('schools_id');
       $this->data['school_id'] = $school_id = (int) $this->input->post('school_id');
       $this->load->view('online_cases/mark_as_complete_form', $this->data);
-      
    }
-   
-    public function  change_file_status($schools_id)
+
+   public function  change_file_status($schools_id)
    {
       $this->data['schools_id'] = $schools_id = (int) $this->input->post('schools_id');
       $this->data['school_id'] = $school_id = (int) $this->input->post('school_id');
       $file_status = (int) $this->input->post('file_status');
       $completed_date = date("Y-m-d H:i:s");
-       $userId = $this->session->userdata('userId');
-      $query="UPDATE `school` SET file_status ='".$file_status."', 
-      `note_sheet_completed_date` = '".$completed_date."',
-              note_sheet_completed='".$userId."' 
-              WHERE status=2 and schoolId= '".$school_id."' 
-              and schools_id = '".$schools_id."'";
-     if($this->db->query($query)){
-           //redirect("online_cases/combine_note_sheet/" . $schools_id);
+      $userId = $this->session->userdata('userId');
+      $query = "UPDATE `school` SET file_status ='" . $file_status . "', 
+      `note_sheet_completed_date` = '" . $completed_date . "',
+              note_sheet_completed='" . $userId . "' 
+              WHERE status=2 and schoolId= '" . $school_id . "' 
+              and schools_id = '" . $schools_id . "'";
+      if ($this->db->query($query)) {
+         //redirect("online_cases/combine_note_sheet/" . $schools_id);
          redirect($_SERVER['HTTP_REFERER']);
       } else {
          //redirect("online_cases/combine_note_sheet/" . $schools_id);
          redirect($_SERVER['HTTP_REFERER']);
-      
-     }
-      
+      }
    }
-   
+
    public function school_summary()
    {
 
@@ -900,5 +893,4 @@ class Online_cases extends Admin_Controller
          exit();
       }
    }
-   
 }
