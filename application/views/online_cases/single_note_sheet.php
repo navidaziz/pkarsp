@@ -332,6 +332,7 @@
                   $current_session_id = $query = $this->db->query($query)->row()->sessionYearId;
 
                   $error = array();
+                  //$error[] = 0;
 
 
                   if ($school_sessions) {
@@ -520,7 +521,7 @@
 
             <?php } ?>
 
-            <?php if (in_array("1", $error)) { ?>
+            <?php if (in_array("1", $error ?? [])) { ?>
               <p style="text-align:center; color:red">
                 The note sheet for this session cannot be completed due to a pending issue from the previous session.
               </p>

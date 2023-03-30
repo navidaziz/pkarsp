@@ -43,6 +43,7 @@ class Online_cases extends Admin_Controller
 		`district`.`districtTitle`,
       `school`.`file_status`,
 `school`.`apply_date`,
+schools.isfined,
 		(SELECT s.status
 		FROM school as s WHERE 
 		 s.schools_id = `schools`.`schoolId`
@@ -82,7 +83,7 @@ class Online_cases extends Admin_Controller
          $this->data['title'] = $title;
       }
 
-      $query .= " ORDER BY `school`.`schools_id` ASC, `school`.`session_year_id` ASC ";
+      $query .= " ORDER BY `school`.`apply_date` ASC, `school`.`schools_id` ASC, `school`.`session_year_id` ASC ";
 
 
       $this->data['list_type'] = $file_status;

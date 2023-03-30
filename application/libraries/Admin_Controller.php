@@ -65,6 +65,7 @@ class Admin_Controller extends MY_Controller
             "user/login",
             "user/logout",
             "login",
+            "login/index",
             "login/logout",
             "login/validate_user",
             "register/signup",
