@@ -1043,6 +1043,9 @@ class Form extends Admin_Controller
 	public function submit_bank_challan($school_session_id)
 	{
 
+
+		exit();
+
 		$this->check_school_session_entry($school_session_id);
 
 		$userId = $this->session->userdata('userId');

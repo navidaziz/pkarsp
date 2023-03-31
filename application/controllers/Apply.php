@@ -40,18 +40,18 @@ class Apply extends Admin_Controller
 				'school_will_be_update_by_school_user' => 1,
 				'updatedBy' => $this->session->userdata('userId')
 			);
-			$new_session['school_name'] = $school->school_name;
-			$new_session['district_id'] = $school->district_id;
-			$new_session['tehsil_id'] = $school->tehsil_id;
-			$new_session['uc_id'] = $school->uc_id;
-			$new_session['uc_text'] = $school->uc_text;
-			$new_session['address'] = $school->address;
-			$new_session['latitude'] = $school->latitude;
-			$new_session['longitude'] = $school->longitude;
-			$new_session['primary'] = $school->primary;
-			$new_session['middle'] = $school->middle;
-			$new_session['high'] = $school->high;
-			$new_session['high_sec'] = $school->high_sec;
+			// $new_session['school_name'] = $school->school_name;
+			// $new_session['district_id'] = $school->district_id;
+			// $new_session['tehsil_id'] = $school->tehsil_id;
+			// $new_session['uc_id'] = $school->uc_id;
+			// $new_session['uc_text'] = $school->uc_text;
+			// $new_session['address'] = $school->address;
+			// $new_session['latitude'] = $school->latitude;
+			// $new_session['longitude'] = $school->longitude;
+			// $new_session['primary'] = $school->primary;
+			// $new_session['middle'] = $school->middle;
+			// $new_session['high'] = $school->high;
+			// $new_session['high_sec'] = $school->high_sec;
 			$this->db->insert('school', $school_session);
 			$school_new_session_id = $this->db->insert_id();
 
