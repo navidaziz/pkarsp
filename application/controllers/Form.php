@@ -1044,7 +1044,6 @@ class Form extends Admin_Controller
 	{
 
 
-		exit();
 
 		$this->check_school_session_entry($school_session_id);
 
