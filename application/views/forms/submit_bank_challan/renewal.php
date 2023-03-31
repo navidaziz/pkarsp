@@ -166,7 +166,7 @@
                               AND schools_id = '" . $schools_id . "' 
                               AND  session_year_id = '" . ($session_id - 1) . "'";
               $previous_session = $this->db->query($query)->result()[0];
-              if ($previous_session->status == 0) {
+              if ($session_id != 1 and $previous_session->status == 0) {
               ?>
 
                 <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px;">
