@@ -165,11 +165,11 @@
             <div class="block_div">
               <h4>Online Cases Summary</h4>
               <div class="table-responsive">
-                <table class="table table-bordered" style="text-align:center" id="test _table">
+                <table class="table table-bordered" style="text-align:center;" id="test _table">
                   <thead>
                     <tr>
-                      <th>Regions</th>
-                      <th>Total Pending</th>
+                      <th style="text-align: center;">Regions</th>
+                      <th style="text-align: center;">Total Pending</th>
                       <td>Registrations</td>
                       <td>Renewals</td>
                       <td>Renewals+Upgradations</td>
@@ -181,12 +181,17 @@
                   </thead>
                   <tbody>
 
-                    <?php $query = "SELECT * FROM pending_file_status";
+                    <?php
+                    $user_id = $this->session->userdata('userId');
+                    $query = "SELECT `users`.`region_ids` FROM `users`
+                            WHERE `users`.`userId` = '" . $user_id . "'";
+                    $region_ids = $this->db->query($query)->row()->region_ids;
+                    $query = "SELECT * FROM pending_file_status WHERE new_region IN(" . $region_ids . ")";
                     $pending_files = $this->db->query($query)->result();
                     foreach ($pending_files as $pending) { ?>
                       <tr>
-                        <th><?php echo $pending->region; ?></th>
-                        <th><?php echo $pending->total_pending; ?></th>
+                        <th style="text-align: center;"><?php echo $pending->region; ?></th>
+                        <th style="text-align: center;"><?php echo $pending->total_pending; ?></th>
                         <td><?php echo $pending->registrations; ?></td>
                         <td><?php echo $pending->renewals; ?></td>
                         <td><?php echo $pending->renewal_pgradations; ?></td>
@@ -199,19 +204,28 @@
 
                   </tbody>
                   <tfoot>
-                    <?php $query = "SELECT * FROM pending_file_status_total";
+                    <?php
+                    $query = "SELECT sum(total_pending) as total_pending
+                    , sum(registrations) as registrations
+                    ,  sum(renewals) as renewals
+                    , sum(renewal_pgradations) as renewal_pgradations
+                    , sum(upgradations) as upgradations
+                    , sum(financially_deficient) as financially_deficient
+                    , sum(marked_to_operation_wing) as marked_to_operation_wing
+                    , sum(completed_pending) as completed_pending
+                    FROM `pending_file_status`
+                    WHERE new_region IN(" . $region_ids . ")";
                     $pending = $this->db->query($query)->row(); ?>
                     <tr>
-
-                      <th>Total: </th>
-                      <th><?php echo $pending->total_pending; ?></th>
-                      <td><?php echo $pending->registrations; ?></td>
-                      <td><?php echo $pending->renewals; ?></td>
-                      <td><?php echo $pending->renewal_pgradations; ?></td>
-                      <td><?php echo $pending->upgradations; ?></td>
-                      <td><?php echo $pending->financially_deficient; ?></td>
-                      <td><?php echo $pending->marked_to_operation_wing; ?></td>
-                      <td><?php echo $pending->completed_pending; ?></td>
+                      <th style="text-align: right;">Total: </th>
+                      <th style="text-align: center;"><?php echo $pending->total_pending; ?></th>
+                      <th style="text-align: center;"><?php echo $pending->registrations; ?></th>
+                      <th style="text-align: center;"><?php echo $pending->renewals; ?></th>
+                      <th style="text-align: center;"><?php echo $pending->renewal_pgradations; ?></th>
+                      <th style="text-align: center;"><?php echo $pending->upgradations; ?></th>
+                      <th style="text-align: center;"><?php echo $pending->financially_deficient; ?></th>
+                      <th style="text-align: center;"><?php echo $pending->marked_to_operation_wing; ?></th>
+                      <th style="text-align: center;"><?php echo $pending->completed_pending; ?></th>
                     </tr>
                   </tfoot>
                 </table>
