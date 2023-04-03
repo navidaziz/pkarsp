@@ -157,7 +157,7 @@ class School extends Admin_Controller
     //                 $html.="</table>";
     //                 echo $html;exit;
 
-
+    exit();
     $query = "SELECT
                   `school`.`schoolId`
                   ,`school`.`updatedDate`
