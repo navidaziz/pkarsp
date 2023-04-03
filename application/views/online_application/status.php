@@ -99,6 +99,7 @@
                           INNER JOIN `session_year` 
                           ON (`school`.`session_year_id` = `session_year`.`sessionYearId`)
                           WHERE  `school`.`schoolId` <= '" . $school->school_id . "'
+                          AND school.schools_id = '" . $school->schools_id . "'
                           ORDER BY `school`.`schoolId` DESC LIMIT 2";
                         $sessions =  $this->db->query($query)->result();
 
