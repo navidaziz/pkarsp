@@ -184,6 +184,20 @@
   </div>
 
   <script>
+    // Get the input field
+    var input = document.getElementById("search");
+
+    // Execute a function when the user presses a key on the keyboard
+    input.addEventListener("keypress", function(event) {
+      // If the user presses the "Enter" key on the keyboard
+      if (event.key === "Enter") {
+        school_id = $('#search').val();
+        search(school_id);
+      }
+    });
+
+
+
     function search(search) {
       // var search = $('#search').val();
       var district_id = $('#district_id').val();

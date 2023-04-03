@@ -108,12 +108,16 @@ class Admin_Controller extends MY_Controller
                 ';
                     exit();
                 } else {
-                    $this->session->set_flashdata('msg_error', 'You are not allowed to access this module');
-                    // redirect($_SERVER['HTTP_REFERER']);
-                    // session_destroy();
-                    //redirect($this->session->userdata("role_homepage_uri"));
-                    $module = $this->controller_name . '-' . $this->method_name;
-                    redirect(site_url("errors/index?module=$module"));
+                    if (!$this->session->userdata('userId') && empty($this->session->userdata('userId'))) {
+                        redirect("login");
+                    } else {
+                        $this->session->set_flashdata('msg_error', 'You are not allowed to access this module');
+                        // redirect($_SERVER['HTTP_REFERER']);
+                        // session_destroy();
+                        //redirect($this->session->userdata("role_homepage_uri"));
+                        $module = $this->controller_name . '-' . $this->method_name;
+                        redirect(site_url("errors/index?module=$module"));
+                    }
                 }
             }
         }

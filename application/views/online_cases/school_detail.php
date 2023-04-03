@@ -102,10 +102,9 @@
                 <!-- <th>Date</th> -->
 
                 <th>Diary info</th>
-                <th>Note Sheet</th>
+                <th>Status</th>
                 <th>Cer. Issued</th>
                 <th>STAN</th>
-                <th>Status</th>
                 <th>Edit</th>
             </tr>
             <?php
@@ -230,12 +229,20 @@
                                 <?php } ?>
                             </td>
                             <td><?php
-                                if ($school_session->cer_issue_date) {
-                                    echo date('d M, y', strtotime($school_session->cer_issue_date));
+                                if ($school_session->cer_issue_date) { ?>
+                                    <form target="_blank" method="post" action="<?php echo site_url("print_file/certificate"); ?>">
+                                        <input type="hidden" name="school_id" value="<?php echo $school_session->schoolId ?>" />
+                                        <button class="btn btn-link btn-sm">
+                                            <i class="fa fa-print"></i>
+                                            <?php echo date('d M, y', strtotime($school_session->cer_issue_date)); ?>
+                                        </button>
+                                    </form>
+                                <?php
                                 } else {
                                     echo '<small>Pending</small>';
                                 }
-                                ?></td>
+                                ?>
+                            </td>
                             <td>
                                 <?php
                                 $query = "SELECT * FROM bank_transaction where school_id = '" . $school_session->schoolId . "'";
@@ -248,27 +255,6 @@
                                     echo "" . $bt['bt_no'] . ' ' . " - " . $bt['bt_date'] . "<br>";
                                     $count++;
                                 }  ?>
-
-                            </td>
-                            <td>
-                                <?php if ($school_session->status == 1) { ?>
-                                    Completed
-                                <?php } ?>
-                                <?php if ($school_session->status == 0) { ?>
-                                    Not Applied
-                                <?php } ?>
-                                <?php if ($school_session->status == 2 or $school->registrationNumber <= 0) { ?>
-
-
-                                    <?php if ($school_session->pending_reason) { ?>
-                                        <i><?php echo $school_session->pending_reason; ?></i>
-                                    <?php } ?>
-
-
-
-                                <?php } ?>
-
-
 
                             </td>
                             <td>
