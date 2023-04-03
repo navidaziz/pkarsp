@@ -1,9 +1,10 @@
-<p style="text-align: center;">Note: Challan calculated on max tuition fee
-    <strong>
-        <?php echo $max_tuition_fee; ?> Rs. Per / Month
-    </strong>
-</p>
-
+<?php if ($max_tuition_fee) { ?>
+    <p style="text-align: center;">Note: Challan calculated on max tuition fee
+        <strong>
+            <?php echo $max_tuition_fee; ?> Rs. Per / Month
+        </strong>
+    </p>
+<?php } ?>
 <br /><br />
 <style>
     .table2 td,

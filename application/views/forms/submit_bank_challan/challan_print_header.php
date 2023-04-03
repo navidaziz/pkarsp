@@ -110,7 +110,10 @@
                     <th><img style="width: 100px;" src="<?php echo base_url(); ?>assets/logo.png" class="img-responsive img" /></th>
                     <th>
                         <h3 style="text-align: center;">Public School Regulatory Authority Khyber Pakhtunkhwa</h4>
-                            <h4 style="text-align: center;"><?php echo $title;  ?> Challan Form For Session <?php echo $session_detail->sessionYearTitle; ?>
+                            <h4 style="text-align: center;"><?php echo $title;  ?> Challan Form
+                                <?php if ($session_detail->sessionYearTitle) { ?>
+                                    For Session <?php echo $session_detail->sessionYearTitle; ?>
+                                <?php } ?>
                             </h4>
 
 
@@ -135,36 +138,63 @@
                         (for bank use only)</th>
                 </tr>
             </table>
-            <div style="border: 1px solid #ddd; border-radius: 10px; margin-top: 5px; margin-bottom: 10px;  padding: 10px; font-size: 20px;">
-                <table class="table">
-                    <tr>
-                        <td style="text-align: left;">School ID: <span style="text-decoration: underline; ">
-                                <strong><?php echo $school->schools_id; ?><strong></span></td>
-                        <td style="text-align: center;">
+            <table class="table table-bordered">
+                <tr>
+                    <td style="padding-top: 20px;">
+                        School ID: <span style="text-decoration: underline; ">
+                            <strong>
+                                <?php if ($school) {
+                                    echo $school->schools_id;
+                                } else { ?>
+                                    ________________
+                                <?php } ?>
+                                <strong></span></td>
+                    <td style="padding-top: 20px;">
+
+                        Registration ID: <span style="text-decoration: underline; ">
                             <?php if ($school->registrationNumber) { ?>
-                                Registration ID: <span style="text-decoration: underline; ">
-                                    <strong><?php echo $school->registrationNumber; ?><strong></span>
+                                <strong><?php echo $school->registrationNumber; ?>
+                                <?php } else { ?>
+                                    ________________
+                                <?php } ?>
+                                <strong></span>
+
+                    </td>
+                    <td style="padding-top: 20px;">Session: <span style="text-decoration: underline; ">
+                            <?php if ($session_detail->sessionYearTitle) { ?>
+                                <strong><?php echo $session_detail->sessionYearTitle; ?></strong>
+                            <?php } else { ?>
+                                <strong> ____________ </strong>
                             <?php } ?>
-                        </td>
-                        <td style="text-align: right;">Session: <span style="text-decoration: underline; ">
-                                <strong><?php echo $session_detail->sessionYearTitle; ?></strong> <small> ( <?php echo $title;  ?> Challan )<small></span></td>
-                    </tr>
-                </table>
+                        </span></td>
+                </tr>
 
-                <table class="table">
-                    <tr>
-                        <td>Institute Name: <span style="text-decoration: underline; ">
-                                <strong><?php echo $school->schoolName; ?><strong></span></td>
-                        <td colspan="2">District: <span style="text-decoration: underline; ">
-                                <strong><?php $query = "SELECT `districtTitle` FROM `district` WHERE districtId = '" . $school->district_id . "'";
-                                        echo $this->db->query($query)->result()[0]->districtTitle; ?></td>
-                        <td colspan="4">Level of Institute: <span style="text-decoration: underline; ">
-                                <strong><?php $query = "SELECT `levelofInstituteTitle` FROM `levelofinstitute` WHERE levelofInstituteId = '" . $school->level_of_school_id . "'";
-                                        echo $this->db->query($query)->result()[0]->levelofInstituteTitle; ?></td>
-                    </tr>
-                </table>
+                <tr>
+                    <td style="padding-top: 20px;">Institute Name: <span style="text-decoration: underline; ">
+                            <strong><?php
+                                    if ($school->schoolName) {
+                                        echo $school->schoolName;
+                                    } else { ?>
+                                    _____________________________________
+                                <?php } ?><strong></span></td>
+                    <td style="padding-top: 20px;">District: <span style="text-decoration: underline; ">
+                            <strong>
+                                <?php $query = "SELECT `districtTitle` FROM `district` WHERE districtId = '" . $school->district_id . "'";
+                                $district = $this->db->query($query)->row()->districtTitle;
+                                if ($district) {
+                                    echo $district;
+                                } else { ?>
+                                    ______________
+                                <?php } ?></td>
+                    <td style="padding-top: 20px;">Currrent Level: <span style="text-decoration: underline; ">
+                            <strong><?php $query = "SELECT `levelofInstituteTitle` FROM `levelofinstitute` WHERE levelofInstituteId = '" . $school->level_of_school_id . "'";
+                                    $level = $this->db->query($query)->row()->levelofInstituteTitle;
+                                    if ($level) {
+                                        echo $level;
+                                    } else { ?>
+                                    ___________
+                                <?php } ?></td>
+                </tr>
+            </table>
 
-
-
-            </div>
             <div style="margin: 10px;">

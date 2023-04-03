@@ -137,6 +137,31 @@ class Print_file extends Admin_Controller
 		}
 	}
 
+	public function security_slip($level_type)
+	{
+
+		$userId = $this->session->userdata('userId');
+		$this->data['level_type'] = (int) $level_type;
+		$query = "SELECT
+		`schools`.`schoolId` as schools_id
+		, `schools`.`registrationNumber`
+		, `schools`.`schoolName`
+		, `schools`.`district_id`
+		, (SELECT level_of_school_id FROM school WHERE schools_id = `schools`.`schoolId` AND status=1 ORDER BY school.schoolId DESC LIMIT 1) as level_of_school_id
+		FROM
+			`schools`
+			WHERE `schools`.`owner_id`='" . $userId . "'";
+		$school = $this->db->query($query)->row();
+		if ($school) {
+			$this->data['school'] = $school;
+			$this->data['school'] = NULL;
+		} else {
+			$this->data['school'] = NULL;
+		}
+		$this->data['title'] = 'Security';
+		$this->load->view('print/security_slip', $this->data);
+	}
+
 	public function print_change_of_name_bank_challan()
 	{
 
