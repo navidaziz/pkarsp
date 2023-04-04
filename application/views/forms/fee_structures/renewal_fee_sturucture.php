@@ -37,8 +37,8 @@
         <th>Security</th>
       <?php } ?>
       <?php if ($school_type_id == 1) { ?>
-        <th>Processsing Fee</th>
         <th>Inspection Fee</th>
+        <th>Processsing Fee</th>
         <td></td>
         <th>Processsing Fee</th>
         <th>Inspection Fee</th>
