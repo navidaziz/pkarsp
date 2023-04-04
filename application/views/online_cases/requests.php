@@ -76,7 +76,7 @@
 
             <?php if ($request->registrationNumber) { ?>
               <!--<a href="<?php echo site_url("online_cases/combine_note_sheet/$request->schools_id"); ?>">Notesheet</a>-->
-              <a href="#"><span onclick="search('<?php echo $request->schools_id; ?>')">Notesheet</span></a>
+              <a href="javascript:void(0)"><span onclick="search('<?php echo $request->schools_id; ?>')">Notesheet</span></a>
             <?php } else { ?>
               <a href="<?php echo site_url("online_cases/single_note_sheet/$request->schools_id/$request->school_id"); ?>"> New Registration </a>
             <?php } ?>
