@@ -58,7 +58,7 @@
               <div style=" width:100%; text-align: center; margin:0px auto; color:black; ">
 
 
-                <img id="log" src=" <?php echo site_url("assets/" . ADMIN_DIR . "img/psra_log.png"); ?>" alt="PSRA" title="PSRA" style="width:350px !important;" />
+                <img id="log" src=" <?php echo site_url("assets/" . ADMIN_DIR . "img/psra_log.png"); ?>" alt="PSRA" title="PSRA" style="width:200px !important;" />
 
                 <h2>Private Schools Regulatory Authority</h2>
                 <h4>Government Of Khyber Pakhtunkhwa</h4>
@@ -75,7 +75,14 @@
 
                 <i class="fa fa-map-marker" aria-hidden="true"></i> 18-E Jamal Ud Din Afghani Road, University Town, Peshawar
                 </address>
-
+                <div class="row">
+                  <div class="col-md-6">
+                    <iframe width="100%" height="200" style="margin:5px; border-radius:5px;" src="https://www.youtube.com/embed/TEkX2iwDZno" title="How to register institute with KP PSRA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                  </div>
+                  <div class="col-md-6">
+                    <iframe width="100%" height="200" style="margin:5px; border-radius:5px;" src="https://www.youtube.com/embed/D8GIW4llH2c" title="Institute Renewal and Upgradation with KP PSRA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                  </div>
+                </div>
               </div>
               <div style="clear:both;"></div>
 
