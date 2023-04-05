@@ -151,6 +151,55 @@
 
               </div>
             </div>
+
+            <div class="col-md-12" style="padding-left:1px">
+
+              <div class="block_div">
+                <script>
+                  function search_list() {
+                    var search = $('#search_list').val();
+                    var district_id = $('#district_id').val();
+                    $.ajax({
+                        method: "POST",
+                        url: "<?php echo site_url('search/search_detail'); ?>",
+                        data: {
+                          search: search,
+                          district_id: district_id,
+                          district_name: district_name
+                        },
+                      })
+                      .done(function(respose) {
+                        $('#search_result').html(respose);
+                      });
+                  }
+                </script>
+
+                <table class="table">
+                  <tr>
+                    <td><strong>Search School By School Name or Registration Number. </strong></td>
+                    <td>
+                      <select class="form-control" name="district_id" id="district_id">
+                        <option value="0">All Districts</option>
+                        <?php $query = "SELECT * FROM district ORDER BY districtTitle ASC";
+                        $districts = $this->db->query($query)->result();
+                        foreach ($districts as $district) {
+                        ?>
+                          <option value="<?php echo $district->districtId; ?>"><?php echo $district->districtTitle; ?></option>
+                        <?php } ?>
+                      </select>
+                    </td>
+                    <td><input type="text" id="search_list" name="search_list" value="" class="form-control" /></td>
+                    <td><button onclick="search_list()">Search</button></td>
+                  </tr>
+                </table>
+                <div id="search_result" style="overflow-x:auto;"></div>
+              </div>
+
+              <div class="block_div" id="completed_request">
+                <h5 style="text-align: center;" class="linear-background"></h5>
+              </div>
+            </div>
+
           </div>
 
 
@@ -186,7 +235,6 @@
   <script>
     // Get the input field
     var input = document.getElementById("search");
-
     // Execute a function when the user presses a key on the keyboard
     input.addEventListener("keypress", function(event) {
       // If the user presses the "Enter" key on the keyboard
@@ -195,8 +243,6 @@
         search(school_id);
       }
     });
-
-
 
     function search(search) {
       // var search = $('#search').val();
@@ -226,50 +272,6 @@
 
     function search_school() {
       var school_id = $('#search').val();
-
       search(school_id);
     }
-
-
-
-
-
-
-    function get_new_requests() {
-      $.ajax({
-          method: "POST",
-          url: "<?php echo site_url('mis_dashboard/get_new_requests'); ?>"
-        })
-        .done(function(respose) {
-          $('#new_request').html(respose);
-        });
-    }
-
-    function deficient_cases() {
-      $.ajax({
-          method: "POST",
-          url: "<?php echo site_url('mis_dashboard/deficient_cases'); ?>"
-        })
-        .done(function(respose) {
-          $('#deficientcasesList').html(respose);
-        });
-    }
-
-    function notesheet() {
-      $.ajax({
-          method: "POST",
-          url: "<?php echo site_url('mis_dashboard/notesheet'); ?>"
-        })
-        .done(function(respose) {
-          $('#notesheet').html(respose);
-        });
-    }
-
-
-
-    $(document).ready(function() {
-      get_new_requests();
-      deficient_cases();
-      //notesheet();
-    });
   </script>

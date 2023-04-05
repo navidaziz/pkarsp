@@ -83,8 +83,9 @@ if ($isfined == 1) { ?>
             <?php } ?>
             <table class="table table-bordered">
                 <tr>
-                    <td>Bank Transaction Date</td>
                     <td>Bank Transaction No (STAN)</td>
+                    <td>Bank Transaction Date</td>
+
 
                 </tr>
                 <tr>
