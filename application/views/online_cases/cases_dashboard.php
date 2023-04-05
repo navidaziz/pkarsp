@@ -229,6 +229,44 @@
                     </tr>
                   </tfoot>
                 </table>
+                <table class="table table-bordered" style="font-size: 10px;">
+                  <tr>
+                    <th></th>
+                    <?php
+                    $current_date = time(); // get the current date and time as a Unix timestamp
+                    $one_month_ago = strtotime('-1 month', $current_date); // get the Unix timestamp for one month ago
+
+                    // loop through each day from one month ago until today and output the date in a desired format
+                    for ($i = $one_month_ago; $i <= $current_date; $i = strtotime('+1 day', $i)) {
+                      $date = date('d M, y', $i);
+                    ?>
+                      <th> <?php echo $date ?></th>
+                    <?php
+                    }
+                    ?>
+                  </tr>
+                  <tr>
+                    <th>Applied</th>
+                    <?php for ($i = $one_month_ago; $i <= $current_date; $i = strtotime('+1 day', $i)) {
+                      $date = date('Y-m-d', $i);
+                      $query = "SELECT COUNT(*) as total FROM school WHERE DATE(apply_date) = '" . $date . "'"; ?>
+                      <td>
+                        <?php echo $this->db->query($query)->row()->total;  ?>
+                      </td>
+                    <?php } ?>
+                  </tr>
+                  <tr>
+                    <th>Cer.Issue</th>
+                    <?php for ($i = $one_month_ago; $i <= $current_date; $i = strtotime('+1 day', $i)) {
+                      $date = date('Y-m-d', $i);
+                      $query = "SELECT COUNT(*) as total FROM school WHERE DATE(cer_issue_date) = '" . $date . "'"; ?>
+                      <td>
+                        <?php echo $this->db->query($query)->row()->total;  ?>
+                      </td>
+                    <?php } ?>
+                  </tr>
+
+                </table>
               </div>
             </div>
           </div>
