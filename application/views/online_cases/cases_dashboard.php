@@ -256,7 +256,7 @@
                     <?php } ?>
                   </tr>
                   <tr>
-                    <th>Cer.Issue</th>
+                    <th>Cer.issued</th>
                     <?php for ($i = $one_month_ago; $i <= $current_date; $i = strtotime('+1 day', $i)) {
                       $date = date('Y-m-d', $i);
                       $query = "SELECT COUNT(*) as total FROM school WHERE DATE(cer_issue_date) = '" . $date . "'"; ?>
