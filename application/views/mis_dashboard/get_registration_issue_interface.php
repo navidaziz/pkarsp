@@ -31,7 +31,7 @@
                     <?php
 
                     $query = "SELECT * FROM `levelofinstitute` 
-                        WHERE  school_type_id = '" . $school->school_type_id . "'
+                        WHERE  school_type_id <= '" . $school->school_type_id . "'
                         ORDER BY `levelofInstituteId` ASC";
 
                     $levels = $this->db->query($query)->result();
