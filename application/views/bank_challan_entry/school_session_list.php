@@ -2,7 +2,7 @@
     <h4>
         <table class="table">
             <tr>
-                <td><i class="fa fa-info-circle" aria-hidden="true"></i> Institute ID:
+                <td><i class="fa fa-info-circle" aria-hidden="true"></i> School ID:
                     <strong><?php echo $school->schools_id ?></strong>
                 </td>
                 <td>
@@ -253,32 +253,32 @@
             <th id="total_<?php echo $school_session->schoolId; ?>" style="min-width:80px; text-align:center">0.00</th>
             <td><input class="challan_heads" data-index="<?php echo $count++; ?>" onclick="add_bank_stan_no('<?php echo $school_session->schoolId; ?>')" type="button" name="add" value="Add" /> </td>
         </tr>
-
+        
+        
         <?php
-        $query = "SELECT * FROM bank_challans WHERE school_id = '0' and schools_id = " . $schoolid . "";
-        $school_session_challans = $this->db->query($query)->result();
-        foreach ($school_session_challans as $school_session_challan) { ?>
-            <tr>
+                $query = "SELECT * FROM bank_challans WHERE school_id = '" . $school_session->schoolId . "' and schools_id = " . $schoolid . "";
+                $school_session_challans = $this->db->query($query)->result();
+                foreach ($school_session_challans as $school_session_challan) { ?>
+                    <tr>
 
-                <td colspan=""></td>
+                        <td colspan=""></td>
 
-                <td><?php echo $school_session_challan->challan_for; ?></td>
-                <td><?php echo $school_session_challan->challan_no; ?></td>
-                <td><?php echo date("d M, Y", strtotime($school_session_challan->challan_date)); ?></td>
-                <td><?php echo number_format($school_session_challan->application_processing_fee, 2); ?></td>
-                <td><?php echo number_format($school_session_challan->renewal_fee, 2); ?></td>
-                <td><?php echo number_format($school_session_challan->inspection_fee, 2); ?></td>
-                <td><?php echo number_format($school_session_challan->upgradation_fee, 2); ?></td>
-                <td><?php echo number_format($school_session_challan->late_fee, 2); ?></td>
-                <td><?php echo number_format($school_session_challan->fine, 2); ?></td>
-                <td><?php echo number_format($school_session_challan->security_fee, 2); ?></td>
-                <td><?php echo number_format($school_session_challan->penalty, 2); ?></td>
-                <td><?php echo number_format($school_session_challan->miscellaneous, 2); ?></td>
-                <td><?php echo number_format($school_session_challan->total_deposit_fee, 2); ?></td>
-                <td><a href="#" onclick="edit_bank_challan('<?php echo $school_session_challan->bank_challan_id; ?>')">Edit</a></td>
-            </tr>
-        <?php } ?>
-
+                        <td><?php echo $school_session_challan->challan_for; ?></td>
+                        <td><?php echo $school_session_challan->challan_no; ?></td>
+                        <td><?php echo date("d M, Y", strtotime($school_session_challan->challan_date)); ?></td>
+                        <td><?php echo number_format($school_session_challan->application_processing_fee, 2); ?></td>
+                        <td><?php echo number_format($school_session_challan->renewal_fee, 2); ?></td>
+                        <td><?php echo number_format($school_session_challan->inspection_fee, 2); ?></td>
+                        <td><?php echo number_format($school_session_challan->upgradation_fee, 2); ?></td>
+                        <td><?php echo number_format($school_session_challan->late_fee, 2); ?></td>
+                        <td><?php echo number_format($school_session_challan->fine, 2); ?></td>
+                        <td><?php echo number_format($school_session_challan->security_fee, 2); ?></td>
+                        <td><?php echo number_format($school_session_challan->penalty, 2); ?></td>
+                        <td><?php echo number_format($school_session_challan->miscellaneous, 2); ?></td>
+                        <td><?php echo number_format($school_session_challan->total_deposit_fee, 2); ?></td>
+                        <td><a href="#" onclick="edit_bank_challan('<?php echo $school_session_challan->bank_challan_id; ?>')">Edit</a></td>
+                    </tr>
+                <?php } ?>
 
     </table>
 

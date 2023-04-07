@@ -95,11 +95,11 @@
                         <td>
                             <strong>Search By</strong>
                             <span style="margin-left: 15px;"></span>
-                            <input type="radio" name="search_type" class="search_type" value="school_id" checked /> Institute ID
+                            <input type="radio" name="search_type" class="search_type" value="school_id" checked /> School ID
                         </td>
                         <td>
 
-                            <input type="text" id="search" name="search" placeholder="Institute ID" value="" class="form-control" />
+                            <input type="text" id="search" name="search" placeholder="School ID" value="" class="form-control" />
                         </td>
                         <td>
                             <button onclick="search()">Search</button>
