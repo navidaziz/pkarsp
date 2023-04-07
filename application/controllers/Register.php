@@ -15,6 +15,12 @@ class Register extends Admin_Controller
     }
     //---------------------------------------------------------------
 
+    public function password_reset()
+    {
+
+        $this->data['title']  = "Sign Up";
+        $this->load->view("password_recovery/recover_password_form", $this->data);
+    }
 
     /**
      * Default action to be called
