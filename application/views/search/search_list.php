@@ -24,35 +24,145 @@
   </div>
 </div>
 
-<h4><?php echo $title ?></h4>
-<table class="table table-bordered table_small">
-  <tr>
-    <th>#</th>
 
-    <th>Institute ID</th>
-    <th>School Name</th>
-    <th>REG-No.</th>
-    <th>District</th>
-    <th></th>
-  </tr>
-  <?php
-  $count = 1;
 
-  foreach ($search_list as $school) { ?>
-    <tr>
+<div class="block_div">
+  <h4><?php echo $title ?></h4>
+  <table class="table table-bordered table_small" id="searchlist">
+    <thead>
+      <tr>
+        <th>#</th>
 
-      <td><?php echo $count++; ?></td>
+        <th>Institute ID</th>
+        <th>REG-No.</th>
+        <th>School Name</th>
+        <th>Year of Estb.</th>
+        <th>Gender of Edu.</th>
+        <th>Level</th>
+        <th>District</th>
+        <th>Tehsil</th>
+        <th>UC</th>
+        <th>Address</th>
 
-      <td><?php echo $school->schools_id ?></td>
-      <td><?php echo $school->schoolName ?></td>
-      <td><?php echo $school->registrationNumber ?></td>
-      <td><?php echo $school->districtTitle ?></td>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php
+      $count = 1;
 
-      <td>
-        <button class="btn btn-link btn-sm" onclick="view_school_detail('<?php echo $school->schools_id; ?>')">View</button>
-      </td>
+      if ($search_list) {
+        foreach ($search_list as $school) { ?>
+          <tr <?php if ($school->registrationNumber <= 0) { ?> style="color:#b2aeae;" <?php } else { ?> style="color:black;" <?php } ?>>
 
-    </tr>
-  <?php  } ?>
+            <td><?php echo $count++; ?></td>
+            <td><?php echo $school->schools_id ?></td>
+            <td><?php
+                if ($school->registrationNumber) {
+                  echo $school->registrationNumber;
+                }
+                ?></td>
+            <td><?php echo $school->schoolName ?></td>
 
-</table>
+
+            <td><?php echo $school->yearOfEstiblishment ?></td>
+            <td>
+              <?php $query = "SELECT genderOfSchoolTitle FROM genderofschool 
+        WHERE genderOfSchoolId = 
+        (SELECT gender_type_id FROM school WHERE schools_id = '" . $school->schools_id . "' ORDER BY schoolId DESC LIMIT 1)
+        ";
+              $edu_gender = $this->db->query($query)->row();
+              if ($edu_gender) { ?>
+                <?php echo ucwords(strtolower($edu_gender->genderOfSchoolTitle)); ?>
+              <?php } ?>
+            </td>
+            <td>
+              <?php $query = "SELECT levelofInstituteTitle FROM levelofinstitute 
+        WHERE levelofInstituteId = 
+        (SELECT level_of_school_id FROM school WHERE schools_id = '" . $school->schools_id . "' ORDER BY schoolId DESC LIMIT 1)
+        ";
+              $level = $this->db->query($query)->row();
+              if ($level) { ?>
+                <?php echo ucwords(strtolower($level->levelofInstituteTitle)); ?>
+              <?php } ?>
+            </td>
+
+            <td><?php echo ucwords(strtolower($school->districtTitle)) ?></td>
+            <td>
+              <?php $query = "SELECT tehsilTitle FROM tehsils WHERE tehsilId = '" . $school->tehsil_id . "'";
+              $tehsil = $this->db->query($query)->row();
+              if ($tehsil) { ?>
+                <?php echo ucwords(strtolower($tehsil->tehsilTitle)); ?>
+              <?php } ?>
+            </td>
+            <td>
+              <?php $query = "SELECT ucTitle FROM uc WHERE ucId = '" . $school->uc_id . "'";
+              $uc = $this->db->query($query)->row();
+              if ($uc) { ?>
+                <?php echo ucwords(strtolower($uc->ucTitle)); ?>
+              <?php } else { ?>
+                <?php echo ucwords(strtolower($uc->uc_text)); ?>
+              <?php } ?>
+            </td>
+            <td><?php echo ucfirst(strtolower($school->address)); ?></td>
+
+            <td>
+              <!--            
+            <button class="btn btn-link btn-sm" onclick="view_school_detail('<?php echo $school->schools_id; ?>')">View</button>
+            -->
+
+            </td>
+
+          </tr>
+        <?php  }
+      } else { ?>
+        <tr>
+          <td colspan="12">
+            <div style="text-align: center;">
+              <h4 style="color: #aaaaaa;">
+                Record not found. please search with different institute name, ID or Registration Number.
+              </h4>
+            </div>
+          </td>
+          <td style="display: none;"></td>
+          <td style="display: none;"></td>
+          <td style="display: none;"></td>
+          <td style="display: none;"></td>
+          <td style="display: none;"></td>
+          <td style="display: none;"></td>
+          <td style="display: none;"></td>
+          <td style="display: none;"></td>
+          <td style="display: none;"></td>
+          <td style="display: none;"></td>
+          <td style="display: none;"></td>
+        </tr>
+      <?php } ?>
+    </tbody>
+  </table>
+</div>
+<style>
+  .dt-buttons {
+    display: inline;
+  }
+
+  table.dataTable.no-footer {
+    margin-top: 10px;
+
+  }
+</style>
+<script>
+  $(document).ready(function() {
+    $('#searchlist').DataTable({
+      dom: 'Bfrtip',
+      paging: false,
+      searching: true,
+      buttons: [
+        'copy', 'csv', 'excel', 'print', {
+          extend: 'pdfHtml5',
+          orientation: 'landscape',
+          pageSize: 'LEGAL'
+        }
+      ]
+    });
+  });
+</script>
