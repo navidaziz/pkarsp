@@ -177,15 +177,19 @@
 
             ?>
 
-                    <tr <?php if ($school_session->sessionYearId == $current_session_id or $school_session->status == 2) { ?> style="background-color: #fcd4d4 !important; font-weight: bold;" <?php } ?> title="<?php echo  $school_session->schoolId; ?>">
-                        <td>
-                            <?php if ($school_session->status != 0) { ?>
+                    <tr title="<?php echo  $school_session->schoolId; ?>">
+
+                        <?php if ($school_session->status != 0) { ?>
+                            <td>
                                 <a href="<?php echo site_url("print_file/school_session_detail/" . $school_session->schoolId); ?>" target="new">
                                     <i class="fa fa-print" aria-hidden="true"></i> <?php echo $school_session->sessionYearTitle; ?></a>
-                            <?php } else { ?>
+                            </td>
+                        <?php } else { ?>
+                            <td style="color:#b2aeae;">
                                 <?php echo $school_session->sessionYearTitle; ?>
-                            <?php } ?>
-                        </td>
+                            </td>
+                        <?php } ?>
+
 
                         <?php if ($school_session->status != 0) { ?>
                             <td> <?php echo $school_session->regTypeTitle; ?></td>
@@ -324,7 +328,9 @@
 
                         <?php } else { ?>
 
-                            <td colspan="12">Not applied yet ! <i class="fa fa-unlock pull-right" style="color:green" aria-hidden="true"></i></td>
+                            <td colspan="14" style="text-align: center; color:#b2aeae;">
+                                <small><i> Not applied yet. </i></small>
+                            </td>
                         <?php } ?>
 
 
@@ -334,7 +340,7 @@
                     $previous_max = $max_tuition_fee;
                 }
             } else { ?>
-                <tr>
+                <tr style="color:#b2aeae;">
                     <td colspan="12">
                         Not applied for registartion.
                     </td>
@@ -379,20 +385,21 @@
                 foreach ($classes  as $class) { ?>
                     <th><?php echo $class->classTitle ?></th>
                 <?php } ?>
+            </tr>
 
-                <?php foreach ($school_sessions as $school_session) { ?>
+            <?php foreach ($school_sessions as $school_session) { ?>
+                <?php if ($school_session->status > 0) { ?>
+                    <tr>
+                        <td>
+                            <a target="new" href="<?php echo site_url("print_file/section_e/" . $school_session->schoolId); ?>">
+                                <i class="fa fa-print" aria-hidden="true"></i> <?php echo $school_session->sessionYearTitle ?>
+                            </a>
+                        </td>
+                        <?php
+                        foreach ($classes  as $class) {
 
-            <tr>
-                <td>
-                    <a target="new" href="<?php echo site_url("print_file/section_e/" . $school_session->schoolId); ?>">
-                        <i class="fa fa-print" aria-hidden="true"></i> <?php echo $school_session->sessionYearTitle ?>
-                    </a>
-                </td>
-            <?php
-                    foreach ($classes  as $class) {
 
-
-                        $query = "SELECT
+                            $query = "SELECT
                         `fee`.`addmissionFee`
                         , `fee`.`tuitionFee`
                         , `fee`.`securityFund`
@@ -400,20 +407,20 @@
                         FROM
                         `fee` WHERE `fee`.`school_id` = '" . $school_session->schoolId . "'
                         AND `fee`.`class_id` ='" . $class->classId . "'";
-                        $session_fee = $this->db->query($query)->result()[0];
-                        $previous_session_id = $school_session->sessionYearId - 1;
-                        if ($previous_session_id) {
-                            $query = "SELECT schoolId FROM school WHERE session_year_id = $previous_session_id
+                            $session_fee = $this->db->query($query)->result()[0];
+                            $previous_session_id = $school_session->sessionYearId - 1;
+                            if ($previous_session_id) {
+                                $query = "SELECT schoolId FROM school WHERE session_year_id = $previous_session_id
                         AND school.schools_id = '" . $school->schools_id . "'
                         ";
-                            $previous_school_id = $this->db->query($query)->row()->schoolId;
-                        } else {
-                            $previous_school_id = 0;
-                        }
+                                $previous_school_id = $this->db->query($query)->row()->schoolId;
+                            } else {
+                                $previous_school_id = 0;
+                            }
 
 
-                        if ($previous_school_id) {
-                            $query = "SELECT
+                            if ($previous_school_id) {
+                                $query = "SELECT
                         `fee`.`addmissionFee`
                         , `fee`.`tuitionFee`
                         , `fee`.`securityFund`
@@ -421,28 +428,40 @@
                         FROM
                         `fee` WHERE `fee`.`school_id` = '" . $previous_school_id . "'
                         AND `fee`.`class_id` ='" . $class->classId . "'";
-                            $pre_session_tution_fee = preg_replace("/[^0-9.]/", "", $this->db->query($query)->result()[0]->tuitionFee);
-                        }
-                        $current_fee = preg_replace("/[^0-9.]/", "", $session_fee->tuitionFee);
-                        if ($session_fee->tuitionFee == 0) {
-                            echo '<td style="text-align:center">' . $session_fee->tuitionFee . '</td>';
-                        } else {
-                            echo '<td style="text-align:center">' . $session_fee->tuitionFee;
-
-
-                            if ($pre_session_tution_fee) {
-                                $incress = round((($current_fee - $pre_session_tution_fee) / $pre_session_tution_fee) * 100, 2);
-                                if ($incress > 10) {
-                                    echo @" <small style='color:red; font-weight: bold;'><br /> <i class='fa fa-line-chart' aria-hidden='true'></i> (" . $incress . " %)</small>";
-                                } else {
-                                    // echo @" <small style='color:green'>(" . $incress . " %)</small>";
-                                }
+                                $pre_session_tution_fee = preg_replace("/[^0-9.]/", "", $this->db->query($query)->result()[0]->tuitionFee);
                             }
-                            echo '</td>';
-                        }
-                    }
-                    echo '</tr>';
-                } ?>
+                            $current_fee = preg_replace("/[^0-9.]/", "", $session_fee->tuitionFee);
+                            if ($session_fee->tuitionFee == 0) {
+                                echo '<td style="text-align:center">' . $session_fee->tuitionFee . '</td>';
+                            } else {
+                                echo '<td style="text-align:center">' . $session_fee->tuitionFee;
+
+
+                                if ($pre_session_tution_fee) {
+                                    $incress = round((($current_fee - $pre_session_tution_fee) / $pre_session_tution_fee) * 100, 2);
+                                    if ($incress > 10) {
+                                        echo @" <small style='color:red; font-weight: bold;'><br /> <i class='fa fa-line-chart' aria-hidden='true'></i> (" . $incress . " %)</small>";
+                                    } else {
+                                        // echo @" <small style='color:green'>(" . $incress . " %)</small>";
+                                    }
+                                } ?>
+                                </td>
+                        <?php  }
+                        } ?>
+                    </tr>
+                <?php   } else { ?>
+                    <tr>
+                        <td style="color:#b2aeae;">
+                            <a target="new" href="<?php echo site_url("print_file/section_e/" . $school_session->schoolId); ?>">
+                                <i class="fa fa-print" aria-hidden="true"></i> <?php echo $school_session->sessionYearTitle ?>
+                            </a>
+                        </td>
+                        <td colspan="21" style="color:#b2aeae;">
+                            <small><i> Not applied yet. </i></small>
+                        </td>
+                    </tr>
+                <?php } ?>
+            <?php   } ?>
 
 
         </table>

@@ -156,12 +156,27 @@ class Mis_dashboard extends Admin_Controller
 
    public function isssue_renewal()
    {
-
       $signatory = (int) $this->input->post('signatory');
       date_default_timezone_set("Asia/Karachi");
       $dated =  date("Y-m-d h:i:s");
       $school_id = (int) $this->input->post('school_id');
       $schools_id = (int) $this->input->post('schools_id');
+
+
+      $query = "SELECT COUNT(*) as total FROM school 
+              WHERE schoolId<'" . $school_id . "' 
+              AND schools_id = '" . $schools_id . "'
+              AND status !=1";
+      $mission_session = $this->db->query($query)->row()->total;
+      if ($mission_session) {
+         $arr['msg'] = "There is a pending case from a previous session on the list. Please check and inform the administrator.";
+         $arr['success'] = false;
+         echo json_encode($arr);
+         exit;
+      }
+
+
+
       $query = "SELECT level_of_school_id FROM school WHERE schoolId = '" . $school_id . "'";
       $current_level = $this->db->query($query)->row()->level_of_school_id;
       $levels = $this->input->post('levels');
