@@ -1,5 +1,4 @@
 <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
-
     <table style="width: 100%;">
         <tr>
             <td>
@@ -329,7 +328,21 @@
                         <?php } else { ?>
 
                             <td colspan="14" style="text-align: center; color:#b2aeae;">
-                                <small><i> Not applied yet. </i></small>
+                                <small><i> Not applied yet.</i></small>
+
+                                <span style="margin-left: 10px;"></span>
+                                <span>
+                                    <select id="reg_type_id_<?php echo $school_session->schoolId; ?>" name="reg_type_id" style="width: 150px;">
+                                        <?php if ($school->registrationNumber <= 0) { ?>
+                                            <option value="1"> New Registration</option>
+                                        <?php } else { ?>
+                                            <option <?php if ($school_session->reg_type_id == 2) { ?> selected <?php } ?> value="2">Renewal</option>
+                                            <option <?php if ($school_session->reg_type_id == 4) { ?> selected <?php } ?> value="4">Upgradation Renewal</option>
+                                        <?php } ?>
+                                    </select>
+                                    <input onclick="change_apply_status(<?php echo $school_session->schoolId; ?>)" type="submit" name="change" value="Change Apply" style="font-size: 11px; margin:0px; color:black" />
+                                </span>
+
                             </td>
                         <?php } ?>
 
@@ -472,7 +485,7 @@
 <script>
     function lock_editing(school_id) {
         $.ajax({
-            url: "<?php echo base_url(); ?>section_access/lock_editing",
+            url: "<?php echo base_url(); ?>mis_dashboard/lock_editing",
             type: "POST",
             data: {
                 school_id: school_id,
@@ -492,11 +505,35 @@
 
     function unlock_editing(school_id) {
         $.ajax({
-            url: "<?php echo base_url(); ?>section_access/unlock_editing",
+            url: "<?php echo base_url(); ?>mis_dashboard/unlock_editing",
             type: "POST",
             data: {
                 school_id: school_id,
                 schools_id: '<?php echo $school->schools_id ?>'
+            },
+            success: function(data) {
+                console.log(data);
+                if (data == 'success') {
+
+                    search(<?php echo $school->schools_id ?>);
+                } else {
+                    alert('Something went wrong');
+                }
+            }
+        });
+    }
+
+    function change_apply_status(school_id) {
+
+        var reg_type_id = $('#reg_type_id_' + school_id).val();
+        alert(reg_type_id);
+        $.ajax({
+            url: "<?php echo base_url(); ?>mis_dashboard/change_apply_status",
+            type: "POST",
+            data: {
+                school_id: school_id,
+                schools_id: '<?php echo $school->schools_id ?>',
+                reg_type_id: reg_type_id
             },
             success: function(data) {
                 console.log(data);

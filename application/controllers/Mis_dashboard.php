@@ -582,6 +582,23 @@ class Mis_dashboard extends Admin_Controller
       }
    }
 
+   public function change_apply_status()
+   {
+
+      $school_id = (int) $this->input->post('school_id');
+      $schools_id = (int) $this->input->post('schools_id');
+      $reg_type_id = (int) $this->input->post('reg_type_id');
+      $query = "UPDATE school set reg_type_id = '" . $reg_type_id . "' 
+      WHERE schoolId = '" . $school_id . "' AND schools_id ='" . $schools_id . "' LIMIT 1";
+
+      if ($this->db->query($query)) {
+         echo 'success';
+      } else {
+         echo 'error';
+      }
+   }
+
+
 
 
 
