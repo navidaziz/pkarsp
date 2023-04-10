@@ -132,7 +132,42 @@
         <div class="row">
           <div class="col-md-12">
             <div class="block_div">
-
+              <?php
+              $current_date = time(); // get the current date and time as a Unix timestamp
+              $one_month_ago = strtotime('-1 month', $current_date); // get the Unix timestamp for one month ago
+              $start_date = date('Y-m-d', $one_month_ago);
+              $query = "SELECT users.userId, users.userTitle FROM `school`  
+              INNER JOIN users ON(users.userId = school.updatedBy)
+              WHERE cer_issue_date >=DATE('" . $start_date . "')
+              GROUP BY users.userId";
+              $users = $this->db->query($query)->result();
+              ?>
+              <table class="table table-bordered" style="font-size: 10px;">
+                <tr>
+                  <th></th>
+                  <?php
+                  // loop through each day from one month ago until today and output the date in a desired format
+                  for ($i = $one_month_ago; $i <= $current_date; $i = strtotime('+1 day', $i)) {
+                    $date = date('d M, y', $i);
+                  ?>
+                    <th> <?php echo $date ?></th>
+                  <?php
+                  }
+                  ?>
+                </tr>
+                <?php foreach ($users as $user) { ?>
+                  <tr>
+                    <th><?php echo $user->userTitle; ?></th>
+                    <?php for ($i = $one_month_ago; $i <= $current_date; $i = strtotime('+1 day', $i)) {
+                      $date = date('Y-m-d', $i);
+                      $query = "SELECT COUNT(*) as total FROM school WHERE DATE(cer_issue_date) = '" . $date . "' and school.updatedBy = '" . $user->userId . "'"; ?>
+                      <td>
+                        <?php echo $this->db->query($query)->row()->total;  ?>
+                      </td>
+                    <?php } ?>
+                  </tr>
+                <?php } ?>
+              </table>
             </div>
           </div>
           <div class="col-md-9">
