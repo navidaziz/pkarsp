@@ -526,7 +526,7 @@
     function change_apply_status(school_id) {
 
         var reg_type_id = $('#reg_type_id_' + school_id).val();
-        alert(reg_type_id);
+
         $.ajax({
             url: "<?php echo base_url(); ?>mis_dashboard/change_apply_status",
             type: "POST",
