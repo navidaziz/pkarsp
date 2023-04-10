@@ -131,7 +131,9 @@
       <div class="box-body">
         <div class="row">
           <div class="col-md-12">
+            <div class="block_div">
 
+            </div>
           </div>
           <div class="col-md-9">
             <div class="block_div">

@@ -464,7 +464,7 @@ class Mis_dashboard extends Admin_Controller
       $this->db->query($query);
       //end here 
       // log final status
-      $query = "SELECT `file_status`, `status` FROM school WHERE schoolId = '" . $school_id . "'";
+      $query = "SELECT `file_status`, `status`, `session_year_id` FROM school WHERE schoolId = '" . $school_id . "'";
       $school_status = $this->db->query($query)->row();
 
       $query = "INSERT INTO file_status_logs(`schools_id`, `school_id`, `status`, `file_status`)
@@ -472,11 +472,31 @@ class Mis_dashboard extends Admin_Controller
       $this->db->query($query);
       //end here ....
 
+      $query = "SELECT sessionYearTitle FROM `session_year` WHERE  sessionYearId='" . $school_status->session_year_id . "'";
+      $certificate_session = $this->db->query($query)->row()->sessionYearTitle;
+
+      //check school session is latest or not
+      $query = "SELECT COUNT(*) as total FROM `session_year` WHERE status=1 and sessionYearId='" . $school_status->session_year_id . "'";
+      $session_latest_check = $this->db->query($query)->row()->total;
+      $other_session_apply_note = '';
+      if ($session_latest_check == 0) {
+         $other_session_apply_note = '<br />
+         <br />
+         <p>
+         <strong style="color:red;">
+         Note: Please also apply for the remaining session / sessions online, as it will allow us to proceed further with the matter.
+         </strong>
+         </p>
+         ';
+      }
+
+
       date_default_timezone_set("Asia/Karachi");
-      $insert['subject'] = "Institute " . $registration_type . " Certificate";
+      $insert['subject'] = "Institute " . $registration_type . " Certificate for session " . $certificate_session;
       $insert['discription'] = '
-         I am writing to inform you that your Institute ' . $registration_type . ' Certificate has been sent to you. 
+         I am writing to inform you that your Institute ' . $registration_type . ' Certificate for session ' . $certificate_session . ' has been sent to you. 
          Once you have received it, please download or print the certificate.
+         ' . $other_session_apply_note . '
          <br />
          <br />
          <form target="_blank" method="post" action="http://psra.gkp.pk/schoolReg/school/certificate">
