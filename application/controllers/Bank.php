@@ -2,7 +2,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Bank extends ADMIN_Controller
+class Bank extends Admin_Controller
 {
 
 	public function index()
