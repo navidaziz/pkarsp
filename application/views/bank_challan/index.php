@@ -94,7 +94,7 @@
                           <a target="_blank" class="btn btn-primary" href="<?php echo site_url('print_file/print_change_of_name_bank_challan/2') ?>">
                             <i class="fa fa-print"></i> Print Slip</a>
                         </td>
-                        <td>20,000
+                        <td>15,000
                           <br />
                           <a target="_blank" class="btn btn-primary" href="<?php echo site_url('print_file/print_change_of_name_bank_challan/3') ?>">
                             <i class="fa fa-print"></i> Print Slip</a>
@@ -107,7 +107,7 @@
                       </tr>
                     </table>
                   </li>
-                  <li class="list-group-item">Change of Location deposit slip
+                  <li class="list-group-item">Change of Building / Location deposit slip
                     <a onclick="$('#change_location').toggle();" class="pull-right" class="btn btn-primary" href="javascirpt:return false;">
                       <i class="fa fa-print"></i> Print Slip</a>
                     <br />
@@ -129,7 +129,7 @@
                           <a target="_blank" class="btn btn-primary" href="<?php echo site_url('print_file/print_change_of_building_bank_challan/2') ?>">
                             <i class="fa fa-print"></i> Print Slip</a>
                         </td>
-                        <td>20,000
+                        <td>15,000
                           <br />
                           <a target="_blank" class="btn btn-primary" href="<?php echo site_url('print_file/print_change_of_building_bank_challan/3') ?>">
                             <i class="fa fa-print"></i> Print Slip</a>
@@ -180,11 +180,11 @@
                   </li>
 
                   <li class="list-group-item">Fine deposit slip
-                    <a class="pull-right" target="_blank" class="btn btn-primary" href="<?php echo site_url('print_file/security_slip/') ?>">
+                    <a class="pull-right" target="_blank" class="btn btn-primary" href="<?php echo site_url('print_file/fine_slip/') ?>">
                       <i class="fa fa-print"></i> Print Slip</a>
                   </li>
                   <li class="list-group-item">Applicant Cerificate deposit slip
-                    <a class="pull-right" target="_blank" class="btn btn-primary" href="<?php echo site_url('print_file/print_change_of_ownership_bank_challan/') ?>">
+                    <a class="pull-right" target="_blank" class="btn btn-primary" href="<?php echo site_url('print_file/applicant_certificate_slip/') ?>">
                       <i class="fa fa-print"></i> Print Slip</a>
                   </li>
                 </ul>

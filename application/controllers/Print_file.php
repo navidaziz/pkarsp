@@ -162,13 +162,12 @@ class Print_file extends Admin_Controller
 		$this->load->view('print/security_slip', $this->data);
 	}
 
-	public function print_change_of_name_bank_challan()
+	public function print_change_of_name_bank_challan($level_type)
 	{
-
 		$userId = $this->session->userdata('userId');
-
+		$this->data['level_type'] = (int) $level_type;
 		$query = "SELECT
-		`schools`.`schoolId`
+		`schools`.`schoolId` as schools_id
 		, `schools`.`registrationNumber`
 		, `schools`.`schoolName`
 		, `schools`.`district_id`
@@ -176,7 +175,14 @@ class Print_file extends Admin_Controller
 		FROM
 			`schools`
 			WHERE `schools`.`owner_id`='" . $userId . "'";
-		$this->data['school'] = $this->db->query($query)->result()[0];
+		$school = $this->db->query($query)->row();
+		if ($school) {
+			$this->data['school'] = $school;
+			$this->data['school'] = NULL;
+		} else {
+			$this->data['school'] = NULL;
+		}
+		$this->data['title'] = 'Change of Name';
 		$this->load->view('print/change_of_name_bank_challan_print', $this->data);
 	}
 
@@ -198,13 +204,12 @@ class Print_file extends Admin_Controller
 		$this->load->view('print/penalty_bank_challan_print', $this->data);
 	}
 
-	public function print_change_of_building_bank_challan()
+	public function print_change_of_building_bank_challan($level_type)
 	{
-
 		$userId = $this->session->userdata('userId');
-
+		$this->data['level_type'] = (int) $level_type;
 		$query = "SELECT
-		`schools`.`schoolId`
+		`schools`.`schoolId` as schools_id
 		, `schools`.`registrationNumber`
 		, `schools`.`schoolName`
 		, `schools`.`district_id`
@@ -212,18 +217,24 @@ class Print_file extends Admin_Controller
 		FROM
 			`schools`
 			WHERE `schools`.`owner_id`='" . $userId . "'";
-		$this->data['school'] = $this->db->query($query)->result()[0];
+		$school = $this->db->query($query)->row();
+		if ($school) {
+			$this->data['school'] = $school;
+			$this->data['school'] = NULL;
+		} else {
+			$this->data['school'] = NULL;
+		}
+		$this->data['title'] = 'Change of Building or Location';
 		$this->load->view('print/change_of_building_bank_challan_print', $this->data);
 	}
 
 
-	public function print_change_of_ownership_bank_challan()
+	public function print_change_of_ownership_bank_challan($level_type)
 	{
-
 		$userId = $this->session->userdata('userId');
-
+		$this->data['level_type'] = (int) $level_type;
 		$query = "SELECT
-		`schools`.`schoolId`
+		`schools`.`schoolId` as schools_id
 		, `schools`.`registrationNumber`
 		, `schools`.`schoolName`
 		, `schools`.`district_id`
@@ -231,11 +242,18 @@ class Print_file extends Admin_Controller
 		FROM
 			`schools`
 			WHERE `schools`.`owner_id`='" . $userId . "'";
-		$this->data['school'] = $this->db->query($query)->result()[0];
+		$school = $this->db->query($query)->row();
+		if ($school) {
+			$this->data['school'] = $school;
+			$this->data['school'] = NULL;
+		} else {
+			$this->data['school'] = NULL;
+		}
+		$this->data['title'] = 'Change of Ownership';
 		$this->load->view('print/change_of_ownership_bank_challan_print', $this->data);
 	}
 
-	public function print_change_of_applicant_certificate_bank_challan()
+	public function applicant_certificate_slip()
 	{
 
 		$userId = $this->session->userdata('userId');
@@ -252,6 +270,22 @@ class Print_file extends Admin_Controller
 		$this->data['school'] = $this->db->query($query)->result()[0];
 		$this->load->view('print/applicant_certificate_bank_challan_print', $this->data);
 	}
+	public function fine_slip()
+	{
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT
+		`schools`.`schoolId`
+		, `schools`.`registrationNumber`
+		, `schools`.`schoolName`
+		, `schools`.`district_id`
+		, (SELECT level_of_school_id FROM school WHERE schools_id = `schools`.`schoolId` AND status=1 ORDER BY school.schoolId DESC LIMIT 1) as level_of_school_id
+		FROM
+			`schools`
+			WHERE `schools`.`owner_id`='" . $userId . "'";
+		$this->data['school'] = $this->db->query($query)->result()[0];
+		$this->load->view('print/applicant_certificate_bank_challan_print', $this->data);
+	}
+
 
 	public function  section_e($school_id)
 	{

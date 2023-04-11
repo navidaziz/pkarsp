@@ -65,12 +65,13 @@ class Section_access extends Admin_Controller
    {
       $school_id = (int) $this->input->post('school_id');
       $schools_id = (int) $this->input->post('schools_id');
-      $query = "UPDATE `school` SET section_e = 0  WHERE status='2' AND schoolId = '" . $school_id . "' 
-      AND schools_id ='" . $schools_id . "' LIMIT 1";
+      $query = "UPDATE `school` SET status = 0  WHERE status='2' 
+               AND schoolId = '" . $school_id . "' 
+               AND schools_id ='" . $schools_id . "' LIMIT 1";
       if ($this->db->query($query)) {
          $userId = $this->session->userdata('userId');
          $query = "INSERT INTO `section_open_log`(`school_id`, `status`, `user_id`) 
-                 VALUES ('" . $school_id . "','Open for editing','" . $userId . "')";
+                 VALUES ('" . $school_id . "','Form-open','" . $userId . "')";
          $this->db->query($query);
          echo 'success';
       } else {
@@ -82,12 +83,13 @@ class Section_access extends Admin_Controller
    {
       $school_id = (int) $this->input->post('school_id');
       $schools_id = (int) $this->input->post('schools_id');
-      $query = "UPDATE `school` SET section_e = 1  WHERE status='2' AND schoolId = '" . $school_id . "' 
-      AND schools_id ='" . $schools_id . "' LIMIT 1";
+      $query = "UPDATE `school` SET status = 2  WHERE status='0' 
+               AND schoolId = '" . $school_id . "' 
+               AND schools_id ='" . $schools_id . "' LIMIT 1";
       if ($this->db->query($query)) {
          $userId = $this->session->userdata('userId');
          $query = "INSERT INTO `section_open_log`(`school_id`, `status`, `user_id`) 
-                 VALUES ('" . $school_id . "','Close editing','" . $userId . "')";
+                 VALUES ('" . $school_id . "','Form-close','" . $userId . "')";
          $this->db->query($query);
          echo 'success';
       } else {

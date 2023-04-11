@@ -266,13 +266,13 @@
                     </td>
                     <td style="text-align: center;">
 
-                        <?php if ($school_session->section_e == 0) { ?>
+                        <?php if ($school_session->status == 0) { ?>
                             <a href="#" onclick="lock_editing('<?php echo $school_session->schoolId; ?>')">
                                 <i class="fa fa-unlock" style="color:green" aria-hidden="true"></i>
                             </a>
                         <?php } ?>
 
-                        <?php if ($school_session->section_e == 1) { ?>
+                        <?php if ($school_session->status == 2) { ?>
                             <a href="#" onclick="unlock_editing('<?php echo $school_session->schoolId; ?>')">
                                 <i class="fa fa-lock" style="color:red" aria-hidden="true"></i>
                             </a>
@@ -297,89 +297,6 @@
 
 </div>
 
-<div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
-
-    <table class="table table2 table-bordered">
-        <tr>
-            <th colspan="16">
-                <h4>Session Wise Monthly Tuition Fee</h4>
-            </th>
-        </tr>
-
-        <tr>
-            <th>Session</th>
-
-            <?php
-            $classes = $this->db->query("SELECT * FROM class")->result();
-            foreach ($classes  as $class) { ?>
-                <th><?php echo $class->classTitle ?></th>
-            <?php } ?>
-
-            <?php
-
-            foreach ($school_sessions as $school_session) {
-
-                echo '<tr>
-                <td>' . $school_session->sessionYearTitle . '</td>
-               ';
-                foreach ($classes  as $class) {
-
-
-                    $query = "SELECT
-                        `fee`.`addmissionFee`
-                        , `fee`.`tuitionFee`
-                        , `fee`.`securityFund`
-                        , `fee`.`otherFund`
-                        FROM
-                        `fee` WHERE `fee`.`school_id` = '" . $school_session->schoolId . "'
-                        AND `fee`.`class_id` ='" . $class->classId . "'";
-                    $session_fee = $this->db->query($query)->result()[0];
-                    $previous_session_id = $school_session->sessionYearId - 1;
-                    if ($previous_session_id) {
-                        $query = "SELECT schoolId FROM school WHERE session_year_id = $previous_session_id
-                        AND school.schools_id = '" . $school->schools_id . "'
-                        ";
-                        $previous_school_id = $this->db->query($query)->row()->schoolId;
-                    } else {
-                        $previous_school_id = 0;
-                    }
-
-
-                    if ($previous_school_id) {
-                        $query = "SELECT
-                        `fee`.`addmissionFee`
-                        , `fee`.`tuitionFee`
-                        , `fee`.`securityFund`
-                        , `fee`.`otherFund`
-                        FROM
-                        `fee` WHERE `fee`.`school_id` = '" . $previous_school_id . "'
-                        AND `fee`.`class_id` ='" . $class->classId . "'";
-                        $pre_session_tution_fee = preg_replace("/[^0-9.]/", "", $this->db->query($query)->result()[0]->tuitionFee);
-                    }
-                    $current_fee = preg_replace("/[^0-9.]/", "", $session_fee->tuitionFee);
-                    if ($session_fee->tuitionFee == 0) {
-                        echo '<td style="text-align:center">' . $session_fee->tuitionFee . '</td>';
-                    } else {
-                        echo '<td style="text-align:center">' . $session_fee->tuitionFee;
-
-
-                        if ($pre_session_tution_fee) {
-                            $incress = round((($current_fee - $pre_session_tution_fee) / $pre_session_tution_fee) * 100, 2);
-                            if ($incress > 10) {
-                                echo @" <small style='color:red;  font-weight: bold;'>(" . $incress . " %)</small>";
-                            } else {
-                                echo @" <small style='color:green;  font-weight: bold;'>(" . $incress . " %)</small>";
-                            }
-                        }
-                        echo '</td>';
-                    }
-                }
-                echo '</tr>';
-            } ?>
-
-
-    </table>
-</div>
 
 
 <script>
