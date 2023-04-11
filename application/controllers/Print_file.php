@@ -154,7 +154,6 @@ class Print_file extends Admin_Controller
 		$school = $this->db->query($query)->row();
 		if ($school) {
 			$this->data['school'] = $school;
-			$this->data['school'] = NULL;
 		} else {
 			$this->data['school'] = NULL;
 		}
@@ -204,7 +203,7 @@ class Print_file extends Admin_Controller
 		$this->load->view('print/penalty_bank_challan_print', $this->data);
 	}
 
-	public function print_change_of_building_bank_challan($level_type)
+	public function print_change_of_building_bank_challan($level_type, $school_id = NUll)
 	{
 		$userId = $this->session->userdata('userId');
 		$this->data['level_type'] = (int) $level_type;
@@ -229,7 +228,7 @@ class Print_file extends Admin_Controller
 	}
 
 
-	public function print_change_of_ownership_bank_challan($level_type)
+	public function print_change_of_ownership_bank_challan($level_type, $school_id = NUll)
 	{
 		$userId = $this->session->userdata('userId');
 		$this->data['level_type'] = (int) $level_type;
@@ -268,7 +267,7 @@ class Print_file extends Admin_Controller
 			`schools`
 			WHERE `schools`.`owner_id`='" . $userId . "'";
 		$this->data['school'] = $this->db->query($query)->result()[0];
-		$this->load->view('print/applicant_certificate_bank_challan_print', $this->data);
+		$this->load->view('print/applicant_slip', $this->data);
 	}
 	public function fine_slip()
 	{
@@ -283,7 +282,22 @@ class Print_file extends Admin_Controller
 			`schools`
 			WHERE `schools`.`owner_id`='" . $userId . "'";
 		$this->data['school'] = $this->db->query($query)->result()[0];
-		$this->load->view('print/applicant_certificate_bank_challan_print', $this->data);
+		$this->load->view('print/fine_slip', $this->data);
+	}
+	public function general_blank_challan()
+	{
+		$userId = $this->session->userdata('userId');
+		$query = "SELECT
+		`schools`.`schoolId`
+		, `schools`.`registrationNumber`
+		, `schools`.`schoolName`
+		, `schools`.`district_id`
+		, (SELECT level_of_school_id FROM school WHERE schools_id = `schools`.`schoolId` AND status=1 ORDER BY school.schoolId DESC LIMIT 1) as level_of_school_id
+		FROM
+			`schools`
+			WHERE `schools`.`owner_id`='" . $userId . "'";
+		$this->data['school'] = $this->db->query($query)->result()[0];
+		$this->load->view('print/general_blank_challan', $this->data);
 	}
 
 

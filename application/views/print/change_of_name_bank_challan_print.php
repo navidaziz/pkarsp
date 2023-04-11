@@ -3,7 +3,7 @@
 <table class="table table_reg">
   <tr>
     <th>Challan For </th>
-    <th>Security </th>
+    <th>Application Processing Fee </th>
     <th> Total </th>
   </tr>
   <tr>
