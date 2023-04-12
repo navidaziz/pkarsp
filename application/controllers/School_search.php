@@ -215,19 +215,23 @@ class School_search extends Admin_Controller
 	public function sent_message()
 	{
 
+
 		$allowed_extensions = array('pdf', 'jpeg', 'png', 'jpg', 'docx', 'docx');
 
-		if (!empty($_FILES['otherimages'])) {
+		if ($_FILES['otherimages']['name']['0'] != "") {
+
 			$file_array = $this->reArrayFiles($_FILES['otherimages']);
-			foreach ($file_array as $file) {
-				$file_extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-				if (!in_array(strtolower($file_extension), $allowed_extensions)) {
-					$arr['msg'] = "Error in file extension.";
-					$arr['success'] = false;
-					echo json_encode($arr);
-					exit();
+			if ($file_array) {
+				foreach ($file_array as $file) {
+					$file_extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+					if (!in_array(strtolower($file_extension), $allowed_extensions)) {
+						$arr['msg'] = "Error in file extension.";
+						$arr['success'] = false;
+						echo json_encode($arr);
+						exit();
+					}
+					// continue with uploading the file
 				}
-				// continue with uploading the file
 			}
 		}
 
@@ -282,7 +286,9 @@ class School_search extends Admin_Controller
 
 			$files = $_FILES;
 
-			if (isset($_FILES['otherimages']) && !empty($_FILES['otherimages']['name'])) {
+			//if (isset($_FILES['otherimages']) && !empty($_FILES['otherimages']['name'])) {
+			if ($_FILES['otherimages']['name']['0'] != "") {
+
 				$cpt = count($_FILES['otherimages']['name']);
 
 				//echo "hellow";exit;

@@ -458,7 +458,7 @@
                         <tr>
 
                             <td class=" message">
-                                <a target="_new" href="<?php echo base_url('messages/school_message_details/'); ?><?php echo $message->message_id; ?>">
+                                <a target="_new" href="<?php echo base_url('messages/message_details/'); ?><?php echo $message->message_id; ?>">
                                     <small><?php echo $message->subject; ?></small>
                                 </a>
                                 <small style="display: block; color:gray" class="float-right">
