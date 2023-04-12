@@ -167,7 +167,8 @@ class Temp_controller extends CI_Controller
 					`schools`
 					INNER JOIN `district` ON(`district`.`districtId` = `schools`.`district_id`)
 					INNER JOIN `tehsils` ON( `tehsils`.`tehsilId` = `schools`.`tehsil_id`) ";
-    $query .= " WHERE `schools`.`registrationNumber` = " . $registration_no . " ";
+    $query .= " WHERE (`schools`.`registrationNumber` = " . $registration_no . " 
+    OR `schools`.`schoolId` = " . $registration_no . " )";
     $school = $this->db->query($query)->row();
     if ($school) {
       echo '<table class="table table-bordered">
