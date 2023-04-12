@@ -67,18 +67,14 @@
             <td style="width: 250px; vertical-align: top;">
                 <strong>Owner Info</strong>
                 <ol style="margin-left: 5px;">
-                    <li>Owner Name: <strong><?php echo $school->userTitle; ?></strong></li>
-                    <li>Owner CNIC: <strong><?php echo $school->cnic; ?></strong></li>
+                    <!-- <li>Owner Name: <strong><?php //echo $school->userTitle; 
+                                                    ?></strong></li>
+                    <li>Owner CNIC: <strong><?php //echo $school->cnic; 
+                                            ?></strong></li> -->
                     <li>Owner No: <strong><?php echo $school->owner_no; ?></strong></li>
                     <oul>
             </td>
-            <td style="width: 250px; vertical-align: top;">
-                <strong>Account info</strong>
-                <ol style="margin-left: 5px;">
-                    <li>User Name: <strong><?php echo $school->userName; ?></strong></li>
-                    <li>Password: <strong><?php echo $school->userPassword; ?></strong></li>
-                    <oul>
-            </td>
+
         </tr>
     </table>
 </div>
@@ -213,15 +209,14 @@
                             <td style="text-align: center;">
 
                                 <?php if ($school_session->section_e == 0 and $school_session->status == 2) { ?>
-                                    <a href="#" onclick="lock_editing('<?php echo $school_session->schoolId; ?>')">
-                                        <i class="fa fa-unlock" style="color:red" aria-hidden="true"></i>
-                                    </a>
+
+                                    <i class="fa fa-unlock" style="color:red" aria-hidden="true"></i>
                                 <?php } ?>
 
                                 <?php if ($school_session->section_e == 1 and $school_session->status == 2) { ?>
-                                    <a href="#" onclick="unlock_editing('<?php echo $school_session->schoolId; ?>')">
-                                        <i class="fa fa-lock" style="color:green" aria-hidden="true"></i>
-                                    </a>
+
+                                    <i class="fa fa-lock" style="color:green" aria-hidden="true"></i>
+
                                 <?php } ?>
 
                             </td>
@@ -314,13 +309,7 @@
                                 </td>
                             <?php } else { ?>
                                 <td>
-                                    <?php if ($school_session->status == 2 and $pending == 0) {
-                                        $pending = 1;
-                                    ?>
-                                        <button onclick="get_renewal_issue_interface('<?php echo $school_session->schoolId; ?>')" class="<?php if ($school_session->reg_type_id == 1) { ?> btn btn-success <?php } ?> <?php if ($school_session->reg_type_id == 2) { ?> btn btn-danger <?php } ?> <?php if ($school_session->reg_type_id == 3) { ?> btn btn-primary <?php } ?> <?php if ($school_session->reg_type_id == 4) { ?> btn btn-warning <?php } ?>"><?php echo $school_session->regTypeTitle; ?></button>
-                                    <?php } else { ?>
-                                        Not Issue Yet
-                                    <?php } ?>
+                                    Not Issue Yet
                                 </td>
                             <?php } ?>
 
@@ -329,20 +318,6 @@
 
                             <td colspan="14" style="text-align: center; color:#b2aeae;">
                                 <small><i> Not applied yet.</i></small>
-
-                                <span style="margin-left: 10px;"></span>
-                                <span>
-                                    <select id="reg_type_id_<?php echo $school_session->schoolId; ?>" name="reg_type_id" style="width: 150px;">
-                                        <?php if ($school->registrationNumber <= 0) { ?>
-                                            <option value="1"> New Registration</option>
-                                        <?php } else { ?>
-                                            <option <?php if ($school_session->reg_type_id == 2) { ?> selected <?php } ?> value="2">Renewal</option>
-                                            <option <?php if ($school_session->reg_type_id == 4) { ?> selected <?php } ?> value="4">Upgradation Renewal</option>
-                                        <?php } ?>
-                                    </select>
-                                    <input onclick="change_apply_status(<?php echo $school_session->schoolId; ?>)" type="submit" name="change" value="Change Apply" style="font-size: 11px; margin:0px; color:black" />
-                                </span>
-
                             </td>
                         <?php } ?>
 
@@ -365,23 +340,7 @@
     </div>
 
 </div>
-<div id="get_renewal_issue_interface"></div>
-<script>
-    function get_renewal_issue_interface(school_id) {
-        $('#get_renewal_issue_interface').html('Please Wait .....');
-        $.ajax({
-            type: "POST",
-            url: "<?php echo site_url("mis_dashboard/get_renewal_issue_interface"); ?>",
-            data: {
-                school_id: school_id,
-                schools_id: <?php echo $school->schools_id; ?>
-            }
-        }).done(function(data) {
 
-            $('#get_renewal_issue_interface').html(data);
-        });
-    }
-</script>
 
 <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
     <h4> <i class="fa fa-info-circle" aria-hidden="true"></i>
@@ -451,11 +410,13 @@
 
 
                                 if ($pre_session_tution_fee) {
+
                                     if ($pre_session_tution_fee > 0) {
                                         $incress = round((($current_fee - $pre_session_tution_fee) / $pre_session_tution_fee) * 100, 2);
                                     } else {
                                         $incress = 0;
                                     }
+
                                     if ($incress > 10) {
                                         echo @" <small style='color:red; font-weight: bold;'><br /> <i class='fa fa-line-chart' aria-hidden='true'></i> (" . $incress . " %)</small>";
                                     } else {
@@ -485,69 +446,3 @@
     </div>
 
 </div>
-
-<script>
-    function lock_editing(school_id) {
-        $.ajax({
-            url: "<?php echo base_url(); ?>mis_dashboard/lock_editing",
-            type: "POST",
-            data: {
-                school_id: school_id,
-                schools_id: '<?php echo $school->schools_id ?>'
-            },
-            success: function(data) {
-                console.log(data);
-                if (data == 'success') {
-
-                    search(<?php echo $school->schools_id ?>);
-                } else {
-                    alert('Something went wrong');
-                }
-            }
-        });
-    }
-
-    function unlock_editing(school_id) {
-        $.ajax({
-            url: "<?php echo base_url(); ?>mis_dashboard/unlock_editing",
-            type: "POST",
-            data: {
-                school_id: school_id,
-                schools_id: '<?php echo $school->schools_id ?>'
-            },
-            success: function(data) {
-                console.log(data);
-                if (data == 'success') {
-
-                    search(<?php echo $school->schools_id ?>);
-                } else {
-                    alert('Something went wrong');
-                }
-            }
-        });
-    }
-
-    function change_apply_status(school_id) {
-
-        var reg_type_id = $('#reg_type_id_' + school_id).val();
-
-        $.ajax({
-            url: "<?php echo base_url(); ?>mis_dashboard/change_apply_status",
-            type: "POST",
-            data: {
-                school_id: school_id,
-                schools_id: '<?php echo $school->schools_id ?>',
-                reg_type_id: reg_type_id
-            },
-            success: function(data) {
-                console.log(data);
-                if (data == 'success') {
-
-                    search(<?php echo $school->schools_id ?>);
-                } else {
-                    alert('Something went wrong');
-                }
-            }
-        });
-    }
-</script>

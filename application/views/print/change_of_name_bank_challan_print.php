@@ -16,13 +16,13 @@
     <td>
       <?php if ($level_type == 1) { ?> <strong> 10,000 </strong> <?php } ?>
       <?php if ($level_type == 2) { ?> <strong> 15,000 </strong> <?php } ?>
-      <?php if ($level_type == 3) { ?> <strong> 15,000 </strong> <?php } ?>
+      <?php if ($level_type == 3) { ?> <strong> 20,000 </strong> <?php } ?>
       <?php if ($level_type == 4) { ?> <strong> 20,000 </strong> <?php } ?>
     </td>
     <td>
       <?php if ($level_type == 1) { ?> <strong> 10,000 </strong> <?php } ?>
       <?php if ($level_type == 2) { ?> <strong> 15,000 </strong> <?php } ?>
-      <?php if ($level_type == 3) { ?> <strong> 15,000 </strong> <?php } ?>
+      <?php if ($level_type == 3) { ?> <strong> 20,000 </strong> <?php } ?>
       <?php if ($level_type == 4) { ?> <strong> 20,000 </strong> <?php } ?>
     </td>
   </tr>

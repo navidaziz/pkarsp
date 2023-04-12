@@ -128,7 +128,7 @@
                           <a target="_blank" class="btn btn-primary" href="<?php echo site_url('print_file/print_change_of_name_bank_challan/2' . $school_id) ?>">
                             <i class="fa fa-print"></i> Print Slip</a>
                         </td>
-                        <td>15,000
+                        <td>20,000
                           <br />
                           <a target="_blank" class="btn btn-primary" href="<?php echo site_url('print_file/print_change_of_name_bank_challan/3' . $school_id) ?>">
                             <i class="fa fa-print"></i> Print Slip</a>
@@ -163,7 +163,7 @@
                           <a target="_blank" class="btn btn-primary" href="<?php echo site_url('print_file/print_change_of_building_bank_challan/2' . $school_id) ?>">
                             <i class="fa fa-print"></i> Print Slip</a>
                         </td>
-                        <td>15,000
+                        <td>20,000
                           <br />
                           <a target="_blank" class="btn btn-primary" href="<?php echo site_url('print_file/print_change_of_building_bank_challan/3' . $school_id) ?>">
                             <i class="fa fa-print"></i> Print Slip</a>

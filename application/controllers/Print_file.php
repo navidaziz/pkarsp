@@ -258,7 +258,7 @@ class Print_file extends Admin_Controller
 		$userId = $this->session->userdata('userId');
 
 		$query = "SELECT
-		`schools`.`schoolId`
+		`schools`.`schoolId` as schools_id
 		, `schools`.`registrationNumber`
 		, `schools`.`schoolName`
 		, `schools`.`district_id`
@@ -273,7 +273,7 @@ class Print_file extends Admin_Controller
 	{
 		$userId = $this->session->userdata('userId');
 		$query = "SELECT
-		`schools`.`schoolId`
+		`schools`.`schoolId` as schools_id
 		, `schools`.`registrationNumber`
 		, `schools`.`schoolName`
 		, `schools`.`district_id`
@@ -288,7 +288,7 @@ class Print_file extends Admin_Controller
 	{
 		$userId = $this->session->userdata('userId');
 		$query = "SELECT
-		`schools`.`schoolId`
+		`schools`.`schoolId` as schools_id
 		, `schools`.`registrationNumber`
 		, `schools`.`schoolName`
 		, `schools`.`district_id`

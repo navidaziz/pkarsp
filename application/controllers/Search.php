@@ -5,10 +5,10 @@ class Search extends MY_Controller
 {
 	public function __construct()
 	{
-
 		parent::__construct();
 		$this->load->model("school_m");
 	}
+
 
 	public function search_detail()
 	{
