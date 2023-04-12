@@ -27,9 +27,8 @@ class Bise extends Admin_Controller
 		AND school.`level_of_school_id` IN(3,4)
 		GROUP BY  schools.`schoolId`";
 		$this->data['school_list'] = $this->db->query($query)->result();
-
-		$this->data['title'] = 'Registered & Renewed High/ High Sec. School List <br />For Session ' . $session->sessionYearTitle;
-		$this->data['description'] = 'Current Session ' . $session->sessionYearTitle;
+		$this->data['title'] = 'High/ High Sec. Schools  Session ' . $session->sessionYearTitle;
+		$this->data['description'] = 'For the Session ' . $session->sessionYearTitle . ', here is the list of High/High Sec. Schools that have been registered and renewed.';
 		$this->data['view'] = 'bise/school_list';
 		$this->load->view('layout', $this->data);
 	}
