@@ -38,7 +38,7 @@
                   <tr>
                     <th>#</th>
                     <th>District</th>
-                    <th>Institute ID</th>
+                    <th>School ID</th>
                     <th>School Name</th>
                     <th>Reg. No.</th>
                     <th>Level</th>

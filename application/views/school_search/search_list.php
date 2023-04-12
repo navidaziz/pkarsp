@@ -159,6 +159,12 @@
 </style>
 <script>
   $(document).ready(function() {
+    $.fn.dataTable.ext.errMode = 'none';
+
+    $('#searchlist').on('error.dt', function(e, settings, techNote, message) {
+      console.log('An error has been reported by DataTables: ', message);
+    });
+    //console.log('we are here');
     $('#searchlist').DataTable({
       dom: 'Bfrtip',
       paging: false,
