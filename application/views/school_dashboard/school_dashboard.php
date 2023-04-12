@@ -72,7 +72,7 @@
                 <br>
               <?php endif; ?>
               <?php if (!empty($school->levelofInstituteTitle)) : ?>
-                <?php echo "Institute Level: " . $school->levelofInstituteTitle; ?>
+                <?php echo "At the time of registration (Level): " . $school->levelofInstituteTitle; ?>
                 <br>
               <?php endif; ?>
 
