@@ -44,7 +44,7 @@
         <th>UC</th>
         <th>Address</th>
 
-        <th></th>
+        <th>Contact</th>
       </tr>
     </thead>
     <tbody>
@@ -107,10 +107,7 @@
             <td><?php echo ucfirst(strtolower($school->address)); ?></td>
 
             <td>
-              <!--            
-            <button class="btn btn-link btn-sm" onclick="view_school_detail('<?php echo $school->schools_id; ?>')">View</button>
-            -->
-
+              <?php echo $school->schoolMobileNumber . " - " . $school->telePhoneNumber; ?>
             </td>
 
           </tr>

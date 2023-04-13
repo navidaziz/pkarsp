@@ -30,7 +30,11 @@ class Search extends MY_Controller
 					`schools`.`address`,
 					`schools`.`uc_id`,
 					`schools`.`uc_text`,
-					`district`.`districtTitle`
+					`district`.`districtTitle`,
+					`schools`.`telePhoneNumber`,
+					`schools`.`schoolMobileNumber`
+
+
 					FROM `schools` INNER JOIN `district` 
 					ON (`schools`.`district_id` = `district`.`districtId`) ";
 
