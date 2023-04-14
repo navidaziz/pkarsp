@@ -17,19 +17,46 @@ class Bise extends Admin_Controller
 		$previous_session = $this->db->query($query)->row();
 
 
-		$query = "SELECT schools.`schoolId`, schools.`schoolName`, schools.`registrationNumber`, 
-		district.`districtTitle`, district.`bise`,
-		levelofinstitute.`levelofInstituteTitle`,
-		(SELECT sy.sessionYearTitle FROM session_year as sy WHERE sy.sessionYearId = (SELECT MAX(school.session_year_id) FROM school as s WHERE s.schools_id = schools.schoolId and s.status=1) LIMIT 1) as `sessionYearTitle`
-		FROM schools
-		INNER JOIN school ON schools.schoolId=school.schools_id
-		INNER JOIN district ON district.`districtId` = schools.`district_id`
-		INNER JOIN levelofinstitute ON levelofinstitute.`levelofInstituteId` = school.`level_of_school_id`
-		WHERE school.`status`=1
-		AND school.`session_year_id` IN('" . $current_session->sessionYearId . "','" . $previous_session->sessionYearId . "')
-		AND district.`bise` = '" . $this->session->userdata('userTitle') . "'
-		AND school.`level_of_school_id` IN(3,4)
-		GROUP BY  schools.`schoolId`";
+		$query = "SELECT 
+		schools.schoolId, 
+		schools.schoolName, 
+		schools.registrationNumber, 
+		district.districtTitle, 
+		district.bise, 
+		levelofinstitute.levelofInstituteTitle, 
+		sy.sessionYearTitle
+	  FROM 
+		schools 
+		INNER JOIN school ON schools.schoolId = school.schools_id 
+		INNER JOIN district ON district.districtId = schools.district_id 
+		INNER JOIN levelofinstitute ON levelofinstitute.levelofInstituteId = school.level_of_school_id 
+		INNER JOIN (
+		  SELECT 
+			schools_id, 
+			MAX(session_year_id) AS latest_session_year_id
+		  FROM 
+			school 
+		  WHERE 
+			status = 1 
+			AND session_year_id IN  IN('" . $current_session->sessionYearId . "','" . $previous_session->sessionYearId . "')
+			AND level_of_school_id IN (3, 4)
+		  GROUP BY 
+			schools_id
+		) AS latest_session ON latest_session.schools_id = schools.schoolId 
+		INNER JOIN session_year AS sy ON sy.sessionYearId = latest_session.latest_session_year_id
+	  WHERE 
+	  AND district.`bise` = '" . $this->session->userdata('userTitle') . "'
+	  GROUP BY 
+		schools.schoolId, 
+		schools.schoolName, 
+		schools.registrationNumber, 
+		district.districtTitle, 
+		district.bise, 
+		levelofinstitute.levelofInstituteTitle,
+		sy.sessionYearTitle  
+	  ORDER BY `sy`.`sessionYearTitle`  DESC;";
+
+
 		$this->data['school_list'] = $this->db->query($query)->result();
 		$this->data['title'] = 'High/ High Sec. schools list for session ' . $previous_session->sessionYearTitle . ' & ' . $current_session->sessionYearTitle;
 		$this->data['description'] = 'For the Session ' .  $previous_session->sessionYearTitle . ' & ' . $current_session->sessionYearTitle . ', here is the list of High/High Sec. Schools that have been registered and renewed.<br /><br />';
