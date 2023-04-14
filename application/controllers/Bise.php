@@ -20,7 +20,7 @@ class Bise extends Admin_Controller
 		$query = "SELECT schools.`schoolId`, schools.`schoolName`, schools.`registrationNumber`, 
 		district.`districtTitle`, district.`bise`,
 		levelofinstitute.`levelofInstituteTitle`,
-		(SELECT sy.sessionYearTitle FROM session_year as sy WHERE sy.sessionYearId = (SELECT MAX(school.session_year_id) FROM school as s WHERE s.schools_id = schools.schoolId and s.status=1)) as `sessionYearTitle`
+		(SELECT sy.sessionYearTitle FROM session_year as sy WHERE sy.sessionYearId = (SELECT MAX(school.session_year_id) FROM school as s WHERE s.schools_id = schools.schoolId and s.status=1) LIMIT 1) as `sessionYearTitle`
 		FROM schools
 		INNER JOIN school ON schools.schoolId=school.schools_id
 		INNER JOIN district ON district.`districtId` = schools.`district_id`
