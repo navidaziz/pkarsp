@@ -47,13 +47,7 @@ class Bise extends Admin_Controller
 	  WHERE 
 	   district.`bise` = '" . $this->session->userdata('userTitle') . "'
 	  GROUP BY 
-		schools.schoolId, 
-		schools.schoolName, 
-		schools.registrationNumber, 
-		district.districtTitle, 
-		district.bise, 
-		levelofinstitute.levelofInstituteTitle,
-		sy.sessionYearTitle  
+		schools.schoolId
 	  ORDER BY `sy`.`sessionYearTitle`  DESC;";
 
 
