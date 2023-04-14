@@ -45,7 +45,7 @@ class Bise extends Admin_Controller
 		) AS latest_session ON latest_session.schools_id = schools.schoolId 
 		INNER JOIN session_year AS sy ON sy.sessionYearId = latest_session.latest_session_year_id
 	  WHERE 
-	  AND district.`bise` = '" . $this->session->userdata('userTitle') . "'
+	   district.`bise` = '" . $this->session->userdata('userTitle') . "'
 	  GROUP BY 
 		schools.schoolId, 
 		schools.schoolName, 
