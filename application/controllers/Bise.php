@@ -38,7 +38,7 @@ class Bise extends Admin_Controller
 			school 
 		  WHERE 
 			status = 1 
-			AND session_year_id IN  IN('" . $current_session->sessionYearId . "','" . $previous_session->sessionYearId . "')
+			AND session_year_id  IN('" . $current_session->sessionYearId . "','" . $previous_session->sessionYearId . "')
 			AND level_of_school_id IN (3, 4)
 		  GROUP BY 
 			schools_id
