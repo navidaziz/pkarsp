@@ -42,6 +42,7 @@
                     <th>School Name</th>
                     <th>Reg. No.</th>
                     <th>Level</th>
+                    <th>Session</th>
                     <th>BISE</th>
                   </tr>
                 </thead>
@@ -57,6 +58,7 @@
                       <td><?php echo $school->schoolName; ?></td>
                       <td><?php echo $school->registrationNumber; ?></td>
                       <td><?php echo $school->levelofInstituteTitle; ?></td>
+                      <td><?php echo $school->sessionYearTitle; ?></td>
                       <td><?php echo $school->bise; ?></td>
                     </tr>
                   <?php } ?>
