@@ -30,6 +30,7 @@ class Bise extends Admin_Controller
 		AND school.`session_year_id` IN('" . $current_session->sessionYearId . "','" . $previous_session->sessionYearId . "')
 		AND district.`bise` = '" . $this->session->userdata('userTitle') . "'
 		AND school.`level_of_school_id` IN(3,4)
+		AND school.schoolId = (SELECT MAX(school.schoolID) FROM school as s WHERE s.schools_id = schools.schoolId )
 		GROUP BY  schools.`schoolId`";
 		$this->data['school_list'] = $this->db->query($query)->result();
 		$this->data['title'] = 'High/ High Sec. schools list for session ' . $previous_session->sessionYearTitle . ' & ' . $current_session->sessionYearTitle;
