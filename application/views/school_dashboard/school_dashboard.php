@@ -65,6 +65,41 @@
 
         <div class="row">
           <div class="col-md-3">
+            <div class="alert alert-warning" style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
+
+              <?php
+              $query = "SELECT * FROM `session_year` WHERE status = 1";
+              $session = $this->db->query($query)->row();
+              $query = "SELECT * FROM `enrollments` 
+                        WHERE schools_id = '" . $school->schoolId . "'
+                        AND session_id = '" . $session->sessionYearId . "'";
+              $enrollment = $this->db->query($query)->row();
+              if ($enrollment) {
+                $school_enrollment =  $enrollment->enrollment;
+              } else {
+                $school_enrollment = 0;
+              }
+              ?>
+              <h4>Session <?php echo $session->sessionYearTitle; ?> Enrollment</h4>
+              <form method="post" action="<?php echo site_url('temp_controller/add_enrollement'); ?>">
+                <input type="hidden" name="schools_id" value="<?php echo  $school->schoolId; ?>" />
+                <input type="hidden" name="session_id" value="<?php echo  $session->sessionYearId; ?>" />
+                <div class="form-group">
+                  <label for="exampleInputEmail1">New Enrollment</label>
+                  <input required min="1" max="500" type="number" class="form-control" name="school_enrollment" id="school_enrollment" value="<?php echo $school_enrollment; ?>" placeholder="Enrollment">
+                  <small id="emailHelp" class="form-text text-muted">New enrollment in <strong>Play Group </strong> and <strong> Nursery </strong> classes.</small>
+                </div>
+                <div style="text-align: center;">
+                  <?php if ($school_enrollment == 0) { ?>
+                    <button type="submit" class="btn btn-danger">Add Enrollment for session <?php echo $session->sessionYearTitle; ?></button>
+
+                  <?php } else { ?>
+                    <button type="submit" class="btn btn-primary">Update Enrollment for session <?php echo $session->sessionYearTitle; ?></button>
+                  <?php } ?>
+                </div>
+              </form>
+
+            </div>
             <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
               <h4 style="text-align: center;">Other Detail</h4>
               <?php if (!empty($school->yearOfEstiblishment)) : ?>

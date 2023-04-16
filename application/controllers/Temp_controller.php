@@ -361,6 +361,31 @@ class Temp_controller extends CI_Controller
     $registered_schools = $this->db->query($query)->row();
     echo json_encode($registered_schools);
   }
+
+  public function add_enrollement()
+  {
+    $schools_id = (int) $this->input->post('schools_id');
+    $session_id = (int) $this->input->post('session_id');
+    $school_enrollment = (int) $this->input->post('school_enrollment');
+    $query = "SELECT COUNT(*) as total FROM `enrollments` 
+    WHERE schools_id = '" . $schools_id . "'
+    AND session_id = '" . $session_id . "'";
+    $enrollment_count = $this->db->query($query)->row()->total;
+    if ($enrollment_count) {
+      //update
+      $query = "UPDATE `enrollments` set enrollment =  '" . $school_enrollment . "'
+             WHERE schools_id = '" . $schools_id . "'
+             AND session_id = '" . $session_id . "'";
+      $this->db->query($query);
+    } else {
+      //insert
+      $query = "INSERT INTO `enrollments`
+      (`schools_id`, `session_id`, `enrollment`, `updated_date`) VALUES (
+        '" . $schools_id . "', '" . $session_id . "', '" . $school_enrollment . "', '" . date('Y-m-d') . "')";
+      $this->db->query($query);
+    }
+    redirect("school_dashboard");
+  }
 }
 
 
