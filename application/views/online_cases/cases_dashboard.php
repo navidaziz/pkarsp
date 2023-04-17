@@ -170,6 +170,7 @@
             <div class="block_div">
               <h4>Online Cases Summary</h4>
               <div class="table-responsive">
+
                 <table class="table table-bordered" style="text-align:center;" id="test _table">
                   <thead>
                     <tr>
@@ -233,6 +234,42 @@
                       <th style="text-align: center;"><?php echo $pending->completed_pending; ?></th>
                     </tr>
                   </tfoot>
+                </table>
+                <table class="table table-bordered" style="text-align:center;" id="test _table">
+                  <thead>
+                    <tr>
+                      <th style="text-align: center;">Session</th>
+                      <th style="text-align: center;">Total Pending</th>
+                      <td>Registrations</td>
+                      <td>Renewals</td>
+                      <td>Renewals+Upgradations</td>
+                      <td>Upgradations</td>
+                      <td>Financially Deficients</td>
+                      <td>Operation Wing (10%)</td>
+                      <td>Issue Pending</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    <?php
+                    $query = "SELECT * FROM pending_file_status_session";
+                    $pending_files = $this->db->query($query)->result();
+                    foreach ($pending_files as $pending) { ?>
+                      <tr>
+                        <th style="text-align: center;"><?php echo $pending->sessionYearTitle; ?></th>
+                        <th style="text-align: center;"><?php echo $pending->total_pending; ?></th>
+                        <td><?php echo $pending->registrations; ?></td>
+                        <td><?php echo $pending->renewals; ?></td>
+                        <td><?php echo $pending->renewal_pgradations; ?></td>
+                        <td><?php echo $pending->upgradations; ?></td>
+                        <td><?php echo $pending->financially_deficient; ?></td>
+                        <td><?php echo $pending->marked_to_operation_wing; ?></td>
+                        <td><?php echo $pending->completed_pending; ?></td>
+                      </tr>
+                    <?php } ?>
+
+                  </tbody>
+
                 </table>
                 <table class="table table-bordered" style="font-size: 10px;">
                   <tr>
