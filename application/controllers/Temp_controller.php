@@ -373,7 +373,7 @@ class Temp_controller extends CI_Controller
     $enrollment_count = $this->db->query($query)->row()->total;
     if ($enrollment_count) {
       //update
-      $query = "UPDATE `enrollments` set enrollment =  '" . $school_enrollment . "'
+      $query = "UPDATE `enrollments` set enrollment =  '" . $school_enrollment . "', `updated_date` = '" . date('Y-m-d') . "'
              WHERE schools_id = '" . $schools_id . "'
              AND session_id = '" . $session_id . "'";
       $this->db->query($query);
