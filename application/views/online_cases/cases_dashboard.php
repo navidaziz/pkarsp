@@ -252,7 +252,9 @@
                   <tbody>
 
                     <?php
-                    $query = "SELECT * FROM pending_file_status_session";
+                    $query = "select `session_year`.`sessionYearTitle` AS `sessionYearTitle`,sum(if(`school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `total_pending`,sum(if(`school`.`reg_type_id` = 1 and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `registrations`,sum(if(`school`.`reg_type_id` = 2 and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `renewals`,sum(if(`school`.`reg_type_id` = 4 and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `renewal_pgradations`,sum(if(`school`.`reg_type_id` = 3 and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `upgradations`,sum(if(`school`.`file_status` = 5 and `school`.`status` = 2,1,0)) AS `financially_deficient`,sum(if(`school`.`file_status` = 4 and `school`.`status` = 2,1,0)) AS `marked_to_operation_wing`,sum(if(`school`.`file_status` = 10 and `school`.`status` = 2,1,0)) AS `completed_pending` from (((`school` join `schools` on(`schools`.`schoolId` = `school`.`schools_id`)) join `district` on(`district`.`districtId` = `schools`.`district_id`)) join `session_year` on(`session_year`.`sessionYearId` = `school`.`session_year_id`)) 
+                    WHERE `district`.`new_region` IN (" . $region_ids . ")
+                    group by `session_year`.`sessionYearTitle`";
                     $pending_files = $this->db->query($query)->result();
                     foreach ($pending_files as $pending) { ?>
                       <tr>
