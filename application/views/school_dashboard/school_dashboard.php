@@ -82,7 +82,7 @@
               ?>
               <h4>Session <?php echo $session->sessionYearTitle; ?> Enrollment</h4>
               <div class="alert alert-danger">
-                Please enter the total number of newly enrolled students in your school in this session i.e. <strong><?php echo $session->sessionYearTitle; ?></strong> in class <strong>Playgroup / Nursery etc.</strong> and submit.
+                Please enter the <strong>total</strong> number of newly enrolled students in your school in this session i.e. <strong><?php echo $session->sessionYearTitle; ?></strong> in class <strong>Playgroup / Nursery etc.</strong> and submit.
                 <br />
                 You need to update this figure daily
               </div>
