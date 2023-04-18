@@ -179,13 +179,13 @@ class Print_file extends Admin_Controller
 	public function applicant_certificate_slip($school_id = NULL)
 	{
 		$this->data['school'] = $this->get_school_info($school_id);
-		$this->data['school'] = $this->db->query($query)->result()[0];
+		$this->data['title'] = 'Applicant Certificate';
 		$this->load->view('print/applicant_slip', $this->data);
 	}
 	public function fine_slip($school_id = NULL)
 	{
 		$this->data['school'] = $this->get_school_info($school_id);
-		$this->data['school'] = $this->db->query($query)->result()[0];
+		$this->data['title'] = 'Fine';
 		$this->load->view('print/fine_slip', $this->data);
 	}
 	public function general_blank_challan($school_id = NULL)
