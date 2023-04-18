@@ -137,92 +137,32 @@ class Print_file extends Admin_Controller
 		}
 	}
 
-	public function security_slip($level_type)
+	public function security_slip($level_type, $school_id = NULL)
 	{
-
-		$userId = $this->session->userdata('userId');
 		$this->data['level_type'] = (int) $level_type;
-		$query = "SELECT
-		`schools`.`schoolId` as schools_id
-		, `schools`.`registrationNumber`
-		, `schools`.`schoolName`
-		, `schools`.`district_id`
-		, (SELECT level_of_school_id FROM school WHERE schools_id = `schools`.`schoolId` AND status=1 ORDER BY school.schoolId DESC LIMIT 1) as level_of_school_id
-		FROM
-			`schools`
-			WHERE `schools`.`owner_id`='" . $userId . "'";
-		$school = $this->db->query($query)->row();
-		if ($school) {
-			$this->data['school'] = $school;
-		} else {
-			$this->data['school'] = NULL;
-		}
+		$this->data['school'] = $this->get_school_info($school_id);
 		$this->data['title'] = 'Security';
 		$this->load->view('print/security_slip', $this->data);
 	}
 
-	public function print_change_of_name_bank_challan($level_type)
+	public function print_change_of_name_bank_challan($level_type, $school_id = NULL)
 	{
-		$userId = $this->session->userdata('userId');
 		$this->data['level_type'] = (int) $level_type;
-		$query = "SELECT
-		`schools`.`schoolId` as schools_id
-		, `schools`.`registrationNumber`
-		, `schools`.`schoolName`
-		, `schools`.`district_id`
-		, (SELECT level_of_school_id FROM school WHERE schools_id = `schools`.`schoolId` AND status=1 ORDER BY school.schoolId DESC LIMIT 1) as level_of_school_id
-		FROM
-			`schools`
-			WHERE `schools`.`owner_id`='" . $userId . "'";
-		$school = $this->db->query($query)->row();
-		if ($school) {
-			$this->data['school'] = $school;
-			$this->data['school'] = NULL;
-		} else {
-			$this->data['school'] = NULL;
-		}
+		$this->data['school'] = $this->get_school_info($school_id);
 		$this->data['title'] = 'Change of Name';
 		$this->load->view('print/change_of_name_bank_challan_print', $this->data);
 	}
 
-	public function penalty_change_of_name_bank_challan()
-	{
-
-		$userId = $this->session->userdata('userId');
-
-		$query = "SELECT
-		`schools`.`schoolId`
-		, `schools`.`registrationNumber`
-		, `schools`.`schoolName`
-		, `schools`.`district_id`
-		, (SELECT level_of_school_id FROM school WHERE schools_id = `schools`.`schoolId` AND status=1 ORDER BY school.schoolId DESC LIMIT 1) as level_of_school_id
-		FROM
-			`schools`
-			WHERE `schools`.`owner_id`='" . $userId . "'";
-		$this->data['school'] = $this->db->query($query)->result()[0];
-		$this->load->view('print/penalty_bank_challan_print', $this->data);
-	}
+	// public function penalty_change_of_name_bank_challan($school_id = NULL)
+	// {
+	// 	$this->data['school'] = $this->get_school_info($school_id);
+	// 	$this->load->view('print/penalty_bank_challan_print', $this->data);
+	// }
 
 	public function print_change_of_building_bank_challan($level_type, $school_id = NUll)
 	{
-		$userId = $this->session->userdata('userId');
 		$this->data['level_type'] = (int) $level_type;
-		$query = "SELECT
-		`schools`.`schoolId` as schools_id
-		, `schools`.`registrationNumber`
-		, `schools`.`schoolName`
-		, `schools`.`district_id`
-		, (SELECT level_of_school_id FROM school WHERE schools_id = `schools`.`schoolId` AND status=1 ORDER BY school.schoolId DESC LIMIT 1) as level_of_school_id
-		FROM
-			`schools`
-			WHERE `schools`.`owner_id`='" . $userId . "'";
-		$school = $this->db->query($query)->row();
-		if ($school) {
-			$this->data['school'] = $school;
-			$this->data['school'] = NULL;
-		} else {
-			$this->data['school'] = NULL;
-		}
+		$this->data['school'] = $this->get_school_info($school_id);
 		$this->data['title'] = 'Change of Building or Location';
 		$this->load->view('print/change_of_building_bank_challan_print', $this->data);
 	}
@@ -230,73 +170,28 @@ class Print_file extends Admin_Controller
 
 	public function print_change_of_ownership_bank_challan($level_type, $school_id = NUll)
 	{
-		$userId = $this->session->userdata('userId');
 		$this->data['level_type'] = (int) $level_type;
-		$query = "SELECT
-		`schools`.`schoolId` as schools_id
-		, `schools`.`registrationNumber`
-		, `schools`.`schoolName`
-		, `schools`.`district_id`
-		, (SELECT level_of_school_id FROM school WHERE schools_id = `schools`.`schoolId` AND status=1 ORDER BY school.schoolId DESC LIMIT 1) as level_of_school_id
-		FROM
-			`schools`
-			WHERE `schools`.`owner_id`='" . $userId . "'";
-		$school = $this->db->query($query)->row();
-		if ($school) {
-			$this->data['school'] = $school;
-			$this->data['school'] = NULL;
-		} else {
-			$this->data['school'] = NULL;
-		}
+		$this->data['school'] = $this->get_school_info($school_id);
 		$this->data['title'] = 'Change of Ownership';
 		$this->load->view('print/change_of_ownership_bank_challan_print', $this->data);
 	}
 
-	public function applicant_certificate_slip()
+	public function applicant_certificate_slip($school_id = NULL)
 	{
-
-		$userId = $this->session->userdata('userId');
-
-		$query = "SELECT
-		`schools`.`schoolId` as schools_id
-		, `schools`.`registrationNumber`
-		, `schools`.`schoolName`
-		, `schools`.`district_id`
-		, (SELECT level_of_school_id FROM school WHERE schools_id = `schools`.`schoolId` AND status=1 ORDER BY school.schoolId DESC LIMIT 1) as level_of_school_id
-		FROM
-			`schools`
-			WHERE `schools`.`owner_id`='" . $userId . "'";
+		$this->data['school'] = $this->get_school_info($school_id);
 		$this->data['school'] = $this->db->query($query)->result()[0];
 		$this->load->view('print/applicant_slip', $this->data);
 	}
-	public function fine_slip()
+	public function fine_slip($school_id = NULL)
 	{
-		$userId = $this->session->userdata('userId');
-		$query = "SELECT
-		`schools`.`schoolId` as schools_id
-		, `schools`.`registrationNumber`
-		, `schools`.`schoolName`
-		, `schools`.`district_id`
-		, (SELECT level_of_school_id FROM school WHERE schools_id = `schools`.`schoolId` AND status=1 ORDER BY school.schoolId DESC LIMIT 1) as level_of_school_id
-		FROM
-			`schools`
-			WHERE `schools`.`owner_id`='" . $userId . "'";
+		$this->data['school'] = $this->get_school_info($school_id);
 		$this->data['school'] = $this->db->query($query)->result()[0];
 		$this->load->view('print/fine_slip', $this->data);
 	}
-	public function general_blank_challan()
+	public function general_blank_challan($school_id = NULL)
 	{
-		$userId = $this->session->userdata('userId');
-		$query = "SELECT
-		`schools`.`schoolId` as schools_id
-		, `schools`.`registrationNumber`
-		, `schools`.`schoolName`
-		, `schools`.`district_id`
-		, (SELECT level_of_school_id FROM school WHERE schools_id = `schools`.`schoolId` AND status=1 ORDER BY school.schoolId DESC LIMIT 1) as level_of_school_id
-		FROM
-			`schools`
-			WHERE `schools`.`owner_id`='" . $userId . "'";
-		$this->data['school'] = $this->db->query($query)->result()[0];
+
+		$this->data['school'] = $this->get_school_info($school_id);
 		$this->load->view('print/general_blank_challan', $this->data);
 	}
 
@@ -399,6 +294,32 @@ class Print_file extends Admin_Controller
 		}
 		if ($type_id == 4) {
 			return 'Up-Gradation And Renewal';
+		}
+	}
+
+	private function get_school_info($school_id)
+	{
+		$query = "SELECT
+		`schools`.`schoolId` as schools_id
+		, `schools`.`registrationNumber`
+		, `schools`.`schoolName`
+		, `schools`.`district_id`
+		, (SELECT level_of_school_id FROM school WHERE schools_id = `schools`.`schoolId` AND status=1 ORDER BY school.schoolId DESC LIMIT 1) as level_of_school_id
+		FROM
+			`schools` ";
+		if ($school_id) {
+			$school_id = (int) $school_id;
+			$query .= " WHERE `schools`.`schoolId`='" . $school_id . "'";
+		} else {
+			$userId = $this->session->userdata('userId');
+			$query .= "  WHERE `schools`.`owner_id`='" . $userId . "'";
+		}
+
+		$school = $this->db->query($query)->row();
+		if ($school) {
+			return  $school;
+		} else {
+			return NULL;
 		}
 	}
 }

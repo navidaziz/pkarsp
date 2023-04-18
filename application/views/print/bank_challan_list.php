@@ -60,7 +60,7 @@
 
                     <div class="row">
                       <div class="col-md-8">
-                        <input required type="number" value="<?php echo $schoolId; ?>" name="school_id" class="form-control" />
+                        <input type="number" value="<?php echo $schoolId; ?>" name="school_id" class="form-control" />
                       </div>
                       <div class="col-md-4">
                         <button>Submit School ID</button>
