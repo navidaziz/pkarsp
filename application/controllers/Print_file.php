@@ -192,6 +192,7 @@ class Print_file extends Admin_Controller
 	{
 
 		$this->data['school'] = $this->get_school_info($school_id);
+		$this->data['title'] = 'PSRA Bank';
 		$this->load->view('print/general_blank_challan', $this->data);
 	}
 
