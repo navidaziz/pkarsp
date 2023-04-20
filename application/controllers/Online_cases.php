@@ -106,7 +106,7 @@ schools.isfined,
 
       $this->get_request_list(2, 5, NULL, 'Financially Deficient Cases');
       $this->get_request_list(2, 4, NULL, 'Forwarded To Operation Wing');
-      $this->get_request_list(2, 10, NULL, '(Issue Pending)');
+      $this->get_request_list(2, 10, NULL, 'Issue Pending');
    }
 
 
