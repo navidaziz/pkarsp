@@ -285,7 +285,48 @@
                           <?php } ?>
 
                         </tbody>
+                        <tbody>
+                        <tfoot>
+                          <?php
+                          $apply_date = ' and DATE(apply_date) = DATE(NOW()) ';
+                          $pending_date = ' and DATE(pending_date) = DATE(NOW()) ';
+                          $note_sheet_completed_date = ' and DATE(note_sheet_completed_date) = DATE(NOW()) ';
+                          $cer_issue_date = ' and DATE(cer_issue_date) = DATE(NOW()) ';
 
+                          $query = "select `session_year`.`sessionYearTitle` AS `sessionYearTitle`,
+                                sum(if(`school`.`file_status`>=1 and school.status>0 " . $apply_date . " ,1,0)) AS `total_applied`,
+                                sum(if(`school`.`file_status` = 1 and `school`.`status` = 2 " . $apply_date . ",1,0)) AS `total_pending`,
+                                sum(if(`school`.`reg_type_id` = 1 and `school`.`file_status` = 1 and `school`.`status` = 2 " . $apply_date . ",1,0)) AS `registrations`,
+                                sum(if(`school`.`reg_type_id` = 2 and `school`.`file_status` = 1 and `school`.`status` = 2 " . $apply_date . ",1,0)) AS `renewals`,
+                                sum(if(`school`.`reg_type_id` = 4 and `school`.`file_status` = 1 and `school`.`status` = 2 " . $apply_date . ",1,0)) AS `renewal_pgradations`,
+                                sum(if(`school`.`reg_type_id` = 3 and `school`.`file_status` = 1 and `school`.`status` = 2 " . $apply_date . ",1,0)) AS `upgradations`,
+                                sum(if(`school`.`file_status` = 5 and `school`.`status` = 2  " . $pending_date . ",1,0)) AS `financially_deficient`,
+                                sum(if(`school`.`file_status` = 4 and `school`.`status` = 2 " . $note_sheet_completed_date . ",1,0)) AS `marked_to_operation_wing`,
+                                sum(if(`school`.`file_status` = 10 and `school`.`status` = 2 " . $note_sheet_completed_date . ", 1,0)) AS `completed_pending`,
+                                sum(if(`school`.`status` = 1 " . $cer_issue_date . ",1,0)) AS `total_issued`
+                                from (((`school` 
+                                join `schools` on(`schools`.`schoolId` = `school`.`schools_id`)) 
+                                join `district` on(`district`.`districtId` = `schools`.`district_id`)) 
+                                join `session_year` on(`session_year`.`sessionYearId` = `school`.`session_year_id`)) ";
+                          $pending_files = $this->db->query($query)->result();
+                          foreach ($pending_files as $pending) { ?>
+                            <tr>
+                              <th style="text-align: center;">Total</th>
+                              <td><?php echo $pending->total_applied; ?></td>
+                              <th style="text-align: center;"><?php echo $pending->total_pending; ?></th>
+                              <td><?php echo $pending->registrations; ?></td>
+                              <td><?php echo $pending->renewals; ?></td>
+                              <td><?php echo $pending->renewal_pgradations; ?></td>
+                              <td><?php echo $pending->upgradations; ?></td>
+                              <td><?php echo $pending->financially_deficient; ?></td>
+                              <td><?php echo $pending->marked_to_operation_wing; ?></td>
+                              <td><?php echo $pending->completed_pending; ?></td>
+                              <td><?php echo $pending->total_issued; ?></td>
+
+                            </tr>
+                          <?php } ?>
+                        </tfoot>
+                        </tbody>
                       </table>
                     </div>
                   </div>
