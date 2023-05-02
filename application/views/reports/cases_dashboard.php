@@ -104,7 +104,7 @@
                   <thead>
                     <tr>
                       <th style="text-align: center;">Regions</th>
-                      <th style="text-align: center;">Total Pending</th>
+                      <td style="text-align: center;">TPen</td>
                       <td>Reg</td>
                       <td>Ren.</td>
                       <td>Re.+Up</td>
@@ -167,8 +167,8 @@
                   <thead>
                     <tr>
                       <th style="text-align: center;">Session</th>
-                      <th style="text-align: center;">Total Applied</th>
-                      <th style="text-align: center;">Total Pending</th>
+                      <th style="text-align: center;">Appl</th>
+                      <td style="text-align: center;">TPen</td>
                       <td>Reg</td>
                       <td>Ren.</td>
                       <td>Re.+Up</td>
@@ -230,8 +230,8 @@
                         <thead>
                           <tr>
                             <th style="text-align: center;">Session</th>
-                            <th style="text-align: center;">Total Applied</th>
-                            <th style="text-align: center;">Total Pending</th>
+                            <th style="text-align: center;">Appl</th>
+                            <td style="text-align: center;">TPen</td>
                             <td>Reg</td>
                             <td>Ren.</td>
                             <td>Re.+Up</td>
@@ -290,8 +290,8 @@
                         <thead>
                           <tr>
                             <th style="text-align: center;">Session</th>
-                            <th style="text-align: center;">Total Applied</th>
-                            <th style="text-align: center;">Total Pending</th>
+                            <th style="text-align: center;">Appl</th>
+                            <td style="text-align: center;">TPen</td>
                             <td>Reg</td>
                             <td>Ren.</td>
                             <td>Re.+Up</td>
