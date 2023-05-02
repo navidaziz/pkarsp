@@ -63,51 +63,6 @@
   }
 </style>
 
-<!-- Modal -->
-<script>
-  function view_request_detail(school_id, session_id) {
-    $('#request_detail_body').html('Please Wait .....');
-    $.ajax({
-      type: "POST",
-      url: "<?php echo site_url("online_cases/get_request_detail"); ?>",
-      data: {
-        school_id: school_id,
-        session_id: session_id
-      }
-    }).done(function(data) {
-
-      $('#request_detail_body').html(data);
-    });
-
-    $('#request_detail').modal('toggle');
-  }
-
-  function add_bank_challan(schools_id) {
-
-    $('#request_detail_body').html('Please Wait .....');
-    $.ajax({
-      type: "POST",
-      url: "<?php echo site_url("online_cases/school_session_list"); ?>",
-      data: {
-        schools_id: schools_id
-      }
-    }).done(function(data) {
-
-      $('#request_detail_body').html(data);
-    });
-
-    $('#request_detail').modal('show');
-  }
-</script>
-<div class="modal fade" id="request_detail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-  <div class="modal-dialog" role="document" style="width: 90% !important;">
-    <div class="modal-content" id="request_detail_body">
-
-      ...
-
-    </div>
-  </div>
-</div>
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -289,8 +244,7 @@
 
                     <?php
                     $query = "select `session_year`.`sessionYearTitle` AS `sessionYearTitle`,
-                    IF(`session_year`.`sessionYearId`>5,
-                    sum(if(`school`.`file_status`>=1 and school.status>0 and DATE(apply_date) = DATE(NOW()) ,1,0)), '') AS `total_applied`,
+                    sum(if(`school`.`file_status`>=1 and school.status>0 and DATE(apply_date) = DATE(NOW()) ,1,0)) AS `total_applied`,
                     sum(if(`school`.`file_status` = 1 and `school`.`status` = 2 and DATE(apply_date) = DATE(NOW()),1,0)) AS `total_pending`,
                     sum(if(`school`.`reg_type_id` = 1 and `school`.`file_status` = 1 and `school`.`status` = 2 and DATE(apply_date) = DATE(NOW()),1,0)) AS `registrations`,
                     sum(if(`school`.`reg_type_id` = 2 and `school`.`file_status` = 1 and `school`.`status` = 2 and DATE(apply_date) = DATE(NOW()),1,0)) AS `renewals`,
