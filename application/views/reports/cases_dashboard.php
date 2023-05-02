@@ -105,13 +105,13 @@
                     <tr>
                       <th style="text-align: center;">Regions</th>
                       <th style="text-align: center;">Total Pending</th>
-                      <td>Registrations</td>
-                      <td>Renewals</td>
-                      <td>Renewals+Upgradations</td>
-                      <td>Upgradations</td>
-                      <td>Financially Deficients</td>
-                      <td>Operation Wing (10%)</td>
-                      <td>Issue Pending</td>
+                      <td>Reg</td>
+                      <td>Ren.</td>
+                      <td>Re.+Up</td>
+                      <td>Upg</td>
+                      <td>Def.</td>
+                      <td>OPs</td>
+                      <td>IssPen</td>
                     </tr>
                   </thead>
                   <tbody>
@@ -169,13 +169,13 @@
                       <th style="text-align: center;">Session</th>
                       <th style="text-align: center;">Total Applied</th>
                       <th style="text-align: center;">Total Pending</th>
-                      <td>Registrations</td>
-                      <td>Renewals</td>
-                      <td>Renewals+Upgradations</td>
-                      <td>Upgradations</td>
-                      <td>Financially Deficients</td>
-                      <td>Operation Wing (10%)</td>
-                      <td>Issue Pending</td>
+                      <td>Reg</td>
+                      <td>Ren.</td>
+                      <td>Re.+Up</td>
+                      <td>Upg</td>
+                      <td>Def.</td>
+                      <td>OPs</td>
+                      <td>IssPen</td>
                       <td>Issued</td>
                     </tr>
                   </thead>
@@ -232,13 +232,13 @@
                             <th style="text-align: center;">Session</th>
                             <th style="text-align: center;">Total Applied</th>
                             <th style="text-align: center;">Total Pending</th>
-                            <td>Registrations</td>
-                            <td>Renewals</td>
-                            <td>Renewals+Upgradations</td>
-                            <td>Upgradations</td>
-                            <td>Financially Deficients</td>
-                            <td>Operation Wing (10%)</td>
-                            <td>Issue Pending</td>
+                            <td>Reg</td>
+                            <td>Ren.</td>
+                            <td>Re.+Up</td>
+                            <td>Upg</td>
+                            <td>Def.</td>
+                            <td>OPs</td>
+                            <td>IssPen</td>
                             <td>Issued</td>
                           </tr>
                         </thead>
@@ -292,13 +292,13 @@
                             <th style="text-align: center;">Session</th>
                             <th style="text-align: center;">Total Applied</th>
                             <th style="text-align: center;">Total Pending</th>
-                            <td>Registrations</td>
-                            <td>Renewals</td>
-                            <td>Renewals+Upgradations</td>
-                            <td>Upgradations</td>
-                            <td>Financially Deficients</td>
-                            <td>Operation Wing (10%)</td>
-                            <td>Issue Pending</td>
+                            <td>Reg</td>
+                            <td>Ren.</td>
+                            <td>Re.+Up</td>
+                            <td>Upg</td>
+                            <td>Def.</td>
+                            <td>OPs</td>
+                            <td>IssPen</td>
                             <td>Issued</td>
                           </tr>
                         </thead>
