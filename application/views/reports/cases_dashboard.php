@@ -274,10 +274,6 @@
                         <tfoot>
 
                           <?php
-                          $apply_date = ' and DATE(apply_date) = DATE(NOW()) ';
-                          $pending_date = ' and DATE(pending_date) = DATE(NOW()) ';
-                          $note_sheet_completed_date = ' and DATE(note_sheet_completed_date) = DATE(NOW()) ';
-                          $cer_issue_date = ' and DATE(cer_issue_date) = DATE(NOW()) ';
 
                           $query = "select `session_year`.`sessionYearTitle` AS `sessionYearTitle`,
                                     sum(if(`school`.`file_status`>=1 and school.status>0 " . $apply_date . " ,1,0)) AS `total_applied`,
@@ -433,10 +429,6 @@
                         <tfoot>
 
                           <?php
-                          $apply_date = ' and DATE(apply_date) = DATE(NOW()) ';
-                          $pending_date = ' and DATE(pending_date) = DATE(NOW()) ';
-                          $note_sheet_completed_date = ' and DATE(note_sheet_completed_date) = DATE(NOW()) ';
-                          $cer_issue_date = ' and DATE(cer_issue_date) = DATE(NOW()) ';
 
                           $query = "select `session_year`.`sessionYearTitle` AS `sessionYearTitle`,
                                     sum(if(`school`.`file_status`>=1 and school.status>0 " . $apply_date . " ,1,0)) AS `total_applied`,
