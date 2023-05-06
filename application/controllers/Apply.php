@@ -88,8 +88,7 @@ class Apply extends Admin_Controller
 
 		$query = "SELECT COUNT(*) as total, schoolId FROM school 
 		        WHERE `schools_id` = '" . $schools_id . "'
-				AND session_year_id = '" . $session_id . "'
-				AND reg_type_id = 2";
+				AND session_year_id = '" . $session_id . "'";
 		$already_applied  = $this->db->query($query)->row();
 		if ($already_applied->total) {
 			$session_school_id = $already_applied->schoolId;
@@ -203,8 +202,7 @@ class Apply extends Admin_Controller
 
 		$query = "SELECT COUNT(*) as total, schoolId FROM school 
 		        WHERE `schools_id` = '" . $schools_id . "'
-				AND session_year_id = '" . $session_id . "'
-				AND reg_type_id = 4";
+				AND session_year_id = '" . $session_id . "'";
 		$already_applied  = $this->db->query($query)->row();
 		if ($already_applied->total) {
 			$session_school_id = $already_applied->schoolId;

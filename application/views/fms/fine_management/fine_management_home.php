@@ -139,9 +139,10 @@
 						<th>Level</th>
 						<th>Frequency</th>
 						<th>Total Fine</th>
-						<th>Waived Off</th>
-						<th>Total Paid</th>
-						<th>Total Remaining</th>
+						<th>Total Waived Off</th>
+						<th>Total Fine Payable</th>
+						<th>Total Fine Paid</th>
+						<th>Total Fine Remaining</th>
 						<th>View</th>
 					</tr>
 				</thead>

@@ -163,7 +163,7 @@ class Fine_management extends CI_Controller
 			$input["fine_type_id"] = $this->input->post("fine_type_id");
 			$input["fine_channel_id"] = $this->input->post("fine_channel_id");
 			$input["fine_amount"] = $this->input->post("fine_amount");
-			$input["original_fine_amount"] = $this->input->post("fine_amount");
+			//$input["original_fine_amount"] = $this->input->post("fine_amount");
 
 			$input["file_date"] = $this->input->post("file_date");
 			$input["remarks"] = $this->input->post("remarks");
@@ -326,7 +326,6 @@ class Fine_management extends CI_Controller
 	}
 	public function view_fine_detail($school_id)
 	{
-
 		$this->data['school_id'] =  $school_id = (int) $school_id;
 		$query = "SELECT s.schoolId as school_id, 
           s.registrationNumber as reg_number, 
@@ -342,20 +341,19 @@ class Fine_management extends CI_Controller
 		$this->data['school'] = $this->db->query($query)->row();
 
 		$query = "SELECT 
-		SUM(original_fine_amount) as original_fine_amount,
 		SUM(fine_amount) as fine_amount,
 		(SELECT SUM(w.waived_off_amount) FROM fine_waived_off as w WHERE w.is_deleted=0 AND w.school_id = f.school_id ) as total_waived_off,
 		(SELECT SUM(fp.deposit_amount) FROM fine_payments as fp WHERE fp.is_deleted=0 AND fp.school_id = f.school_id ) as total_fine_paid
 		FROM fines as f
-		WHERE f.school_id = $school_id;
+		WHERE f.status=1
+		AND f.school_id = $school_id;
 		";
 		$this->data['fine_summary'] = $this->db->query($query)->row();
 
 		$query = "SELECT f.*, ft.fine_title , fc.fine_channel_title,
-		SUM(original_fine_amount) as original_fine_amount,
 		SUM(fine_amount) as fine_amount,
-		(SELECT SUM(w.waived_off_amount) FROM fine_waived_off as w WHERE w.is_deleted=0 AND w.school_id = f.school_id ) as total_waived_off,
-		(SELECT SUM(fp.deposit_amount) FROM fine_payments as fp WHERE fp.is_deleted=0 AND fp.school_id = f.school_id ) as total_fine_paid
+		(SELECT SUM(w.waived_off_amount) FROM fine_waived_off as w WHERE w.is_deleted=0 AND w.school_id = f.school_id and w.fine_id = f.fine_id ) as total_waived_off,
+		(SELECT SUM(fp.deposit_amount) FROM fine_payments as fp WHERE fp.is_deleted=0 AND fp.school_id = f.school_id and fp.fine_id = f.fine_id ) as total_fine_paid
 		 FROM `fines` as f
 		INNER JOIN fine_types ft ON (ft.fine_type_id = f.fine_type_id)
 		INNER JOIN fine_channels fc ON (fc.fine_channel_id = f.fine_channel_id) 
@@ -445,22 +443,29 @@ class Fine_management extends CI_Controller
 
 				if ($this->db->insert('fine_waived_off', $input)) {
 
-					$where['fine_id'] = (int) $this->input->post('fine_id');
-					$this->db->where($where);
 
-					$update['fine_amount'] = $fine_remained;
-					$query = "select SUM(waived_off_amount) AS waived_off_amount  from fine_waived_off where fine_id = '" . $fine_id . "' and is_deleted = 0";
-					$waived_off_amount = $this->db->query($query)->result()[0]->waived_off_amount;
-					$update['waived_off_amount'] = $waived_off_amount;
+					$response['update'] = $this->update_fine_status($fine_id);
 
-					if ($this->db->update('fines', $update)) {
 
-						$response['error'] = false;
-						$response['msg'] = "Fine waived off successfully";
-					} else {
-						$response['error'] = true;
-						$response['msg'] = "Error while update fine after waive off";
-					}
+					$response['error'] = false;
+					$response['msg'] = "Fine waived off successfully";
+
+					// $where['fine_id'] = (int) $this->input->post('fine_id');
+					// $this->db->where($where);
+
+					// $update['fine_amount'] = $fine_remained;
+					// $query = "select SUM(waived_off_amount) AS waived_off_amount  from fine_waived_off where fine_id = '" . $fine_id . "' and is_deleted = 0";
+					// $waived_off_amount = $this->db->query($query)->result()[0]->waived_off_amount;
+					// $update['waived_off_amount'] = $waived_off_amount;
+
+					// if ($this->db->update('fines', $update)) {
+
+					// 	$response['error'] = false;
+					// 	$response['msg'] = "Fine waived off successfully";
+					// } else {
+					// 	$response['error'] = true;
+					// 	$response['msg'] = "Error while update fine after waive off";
+					// }
 				} else {
 					$response['error'] = true;
 					$response['msg'] = "Error while inserting waiving off";
@@ -546,32 +551,33 @@ class Fine_management extends CI_Controller
 		$this->db->where($where_fwo);
 		$status['is_deleted'] = 1;
 		if ($this->db->update('fine_waived_off', $status)) {
+			$this->update_fine_status($fine_id);
+			echo 1;
+			// $query = "select waived_off_amount from fine_waived_off where fine_id = '" . $fine_id . "' and  fine_waived_off_id = '" . $fine_waived_off_id . "'";
+			// $waived_off_amount = $this->db->query($query)->result()[0]->waived_off_amount;
 
-			$query = "select waived_off_amount from fine_waived_off where fine_id = '" . $fine_id . "' and  fine_waived_off_id = '" . $fine_waived_off_id . "'";
-			$waived_off_amount = $this->db->query($query)->result()[0]->waived_off_amount;
+			// $query = "select fine_amount, waived_off_amount from fines where fine_id = '" . $fine_id . "'";
+			// $fine = $this->db->query($query)->result()[0];
 
-			$query = "select fine_amount, waived_off_amount from fines where fine_id = '" . $fine_id . "'";
-			$fine = $this->db->query($query)->result()[0];
-
-			$where = array();
-			$where['fine_id'] = $fine_id =  (int) $this->input->post('fine_id');
-			$update = array();
-			$update['waived_off_amount'] = $fine->waived_off_amount - $waived_off_amount;
-			$update['fine_amount'] =  $fine->fine_amount + $waived_off_amount;
-			$this->db->where($where);
-			if ($this->db->update('fines', $update)) {
-				$this->activity_logs('waived_off', 'delete', '1');
-				echo 1;
-			} else {
-				$where = array();
-				$where['fine_id'] = (int) $this->input->post('fine_id');
-				$where['fine_waived_off_id'] = (int) $this->input->post('fine_waived_off_id');
-				$this->db->where($where);
-				$status['is_deleted'] = 1;
-				if ($this->db->update('fine_waived_off', $status)) {
-					echo 0;
-				}
-			}
+			// $where = array();
+			// $where['fine_id'] = $fine_id =  (int) $this->input->post('fine_id');
+			// $update = array();
+			// $update['waived_off_amount'] = $fine->waived_off_amount - $waived_off_amount;
+			// $update['fine_amount'] =  $fine->fine_amount + $waived_off_amount;
+			// $this->db->where($where);
+			// if ($this->db->update('fines', $update)) {
+			// 	$this->activity_logs('waived_off', 'delete', '1');
+			// 	echo 1;
+			// } else {
+			// 	$where = array();
+			// 	$where['fine_id'] = (int) $this->input->post('fine_id');
+			// 	$where['fine_waived_off_id'] = (int) $this->input->post('fine_waived_off_id');
+			// 	$this->db->where($where);
+			// 	$status['is_deleted'] = 1;
+			// 	if ($this->db->update('fine_waived_off', $status)) {
+			// 		echo 0;
+			// 	}
+			// }
 		} else {
 			echo 0;
 		}
@@ -637,78 +643,7 @@ class Fine_management extends CI_Controller
 	{
 		$this->load->view("fms/fine_management/fined_school_list", $this->data);
 	}
-	public function ajax_fined_school_list()
-	{
 
-
-		$draw = $this->input->post('draw');
-		$row = $this->input->post('start');
-		$rowperpage = $this->input->post('length'); // Rows display per page
-
-		$columnIndex = $_POST['order'][0]['column']; // Column index
-		$columnName = $_POST['columns'][$columnIndex]['data']; // Column name
-		//$columnName = $_POST['columns'][3]['data']; // Column name
-		$columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
-		//$columnSortOrder = "asc";
-
-		$searchValue = $this->db->escape($_POST['search']['value']);
-		$searchValue = str_replace("'", "", $searchValue);
-
-		## Search 
-		$searchQuery = " ";
-		if ($searchValue != '') {
-			$searchQuery = " and (school_id like '%" . $searchValue . "%' or 
-        school_name like '%" . $searchValue . "%' or 
-        district_name like'%" . $searchValue . "%' ) ";
-		}
-
-		## Total number of record with out filtering
-		$query = "select COUNT(*) as total from fine_school_list where status =1";
-		$totalRecords = $this->db->query($query)->result()[0]->total;
-
-		## Total number of record with filtering
-		$query = "select COUNT(*) as total from fine_school_list where status =1 " . $searchQuery;
-		$totalRecordwithFilter = $this->db->query($query)->result()[0]->total;
-
-		//
-		## Fetch records
-		$empQuery = "select * from fine_school_list WHERE status =1 
-		            " . $searchQuery . " order by " . $columnName . " 
-					" . $columnSortOrder . "  limit " . $row . "," . $rowperpage;
-		$fined_schools = $this->db->query($empQuery)->result();
-		$data = array();
-		$count = 1;
-		foreach ($fined_schools as $fined_school) {
-			$data[] = array(
-				//"s_no" => $count++,
-				"school_id" => $fined_school->school_id,
-				"school_registration_no" => $fined_school->school_registration_no,
-				"school_name" => $fined_school->school_name,
-				"district_name" => $fined_school->district_name,
-				"tehsil_name" => $fined_school->tehsil_name,
-				"address" => $fined_school->address,
-				"frequency" => $fined_school->frequency,
-				"total_fine" => $fined_school->total_fine,
-				"total_waived_off" => $fined_school->total_waived_off,
-				"total_fine_paid" => $fined_school->total_fine_paid,
-				"total_fine_remaining" => $fined_school->total_fine_remaining,
-				"action" => '<a class="btn-sm btn-primary" style="margin:0px; padding:5px" href="' . site_url("fms/fine_management/view_fine_detail/" . $fined_school->school_id) . '">
-                View
-            </a>',
-
-			);
-		}
-
-		## Response
-		$response = array(
-			"draw" => intval($draw),
-			"iTotalRecords" => $totalRecords,
-			"iTotalDisplayRecords" => $totalRecordwithFilter,
-			"aaData" => $data
-		);
-
-		echo json_encode($response);
-	}
 
 
 	private function activity_logs($table, $activity, $status)
@@ -720,57 +655,163 @@ class Fine_management extends CI_Controller
 		$this->db->insert('activity_logs', $activity_input);
 	}
 
-	public function check_school_id()
+
+
+
+	private function update_fine_status($fine_id)
 	{
-		if ($this->input->post('school_id')) {
-			$school_id = $this->input->post('school_id');
-			$query = "SELECT COUNT(*) as total FROM fined_schools WHERE school_id = '" . $school_id . "'";
-			$result = $this->db->query($query)->row()->total;
-			if ($result > 0) {
-				$this->form_validation->set_message('check_school_id', 'School Already In School List');
-				return FALSE;
-			}
-		}
-	}
-
-
-	public function add_school_in_fine_list()
-	{
-		$validations = array(
-			array('field' => 'school_id', 'label' => 'School Id', 'rules' => 'callback_check_school_id'),
-			array('field' => 'school_name', 'label' => 'School Name', 'rules' => 'required'),
-			array('field' => 'district_name', 'label' => 'District Name', 'rules' => 'required'),
-			array('field' => 'tehsil_name', 'label' => 'Tehsil Name', 'rules' => 'required'),
-			array('field' => 'address', 'label' => 'Address', 'rules' => 'required'),
-			array('field' => 'level_id', 'label' => 'School Level', 'rules' => 'required')
-
-		);
-		$this->form_validation->set_rules($validations);
-
-		if ($this->form_validation->run() === TRUE) {
-
-			$input['school_id'] = (int) $this->input->post('school_id');
-			$input['school_registration_no'] = $this->input->post('school_registration_no');
-			$input['school_name'] = $this->input->post('school_name');
-			$input['district_name'] = $this->input->post('district_name');
-			$input['tehsil_name'] = $this->input->post('tehsil_name');
-			$input['address'] = $this->input->post('address');
-			$input['level_id'] = $this->input->post('level_id');
-			$input['created_by'] = $this->session->userdata('userId');
-			$input['school_registration_no'] = $this->input->post('school_registration_no');
-			if ($this->db->insert('fined_schools', $input)) {
-
-				$response['error'] = false;
-				$response['msg'] = "School Add successfully.";
+		$fine_id = (int) $fine_id;
+		$query = "SELECT SUM(fine_amount) as fine_amount,
+		COALESCE((SELECT SUM(w.waived_off_amount) FROM fine_waived_off as w WHERE w.is_deleted=0 AND w.school_id = f.school_id and w.fine_id = f.fine_id  ),0) as total_waived_off,
+		COALESCE((SELECT SUM(fp.deposit_amount) FROM fine_payments as fp WHERE fp.is_deleted=0 AND fp.school_id = f.school_id and fp.fine_id = f.fine_id  ),0) as total_fine_paid
+		 FROM `fines` as f
+		 WHERE f.fine_id = '" . $fine_id . "'";
+		$fine = $this->db->query($query)->row();
+		$where = array();
+		$update = array();
+		if ($fine->fine_amount == ($fine->total_waived_off + $fine->total_fine_paid)) {
+			$where['fine_id'] = $fine_id;
+			$this->db->where($where);
+			$update['status'] = 2;
+			if ($this->db->update('fines', $update)) {
+				return 'updated';
 			} else {
-				$response['error'] = true;
-				$response['msg'] = "Error while adding school detail.";
+				return 'error while update';
 			}
 		} else {
-
-			$response['error'] = true;
-			$response['msg'] = validation_errors();
+			$where['fine_id'] = $fine_id;
+			$this->db->where($where);
+			$update['status'] = 1;
+			$this->db->update('fines', $update);
+			$r = $fine->total_waived_off + $fine->total_fine_paid;
+			return "$fine->fine_amount == $r";
 		}
-		echo  json_encode($response);
 	}
+
+
+	// public function ajax_fined_school_list()
+	// {
+
+
+	// 	$draw = $this->input->post('draw');
+	// 	$row = $this->input->post('start');
+	// 	$rowperpage = $this->input->post('length'); // Rows display per page
+
+	// 	$columnIndex = $_POST['order'][0]['column']; // Column index
+	// 	$columnName = $_POST['columns'][$columnIndex]['data']; // Column name
+	// 	//$columnName = $_POST['columns'][3]['data']; // Column name
+	// 	$columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
+	// 	//$columnSortOrder = "asc";
+
+	// 	$searchValue = $this->db->escape($_POST['search']['value']);
+	// 	$searchValue = str_replace("'", "", $searchValue);
+
+	// 	## Search 
+	// 	$searchQuery = " ";
+	// 	if ($searchValue != '') {
+	// 		$searchQuery = " and (school_id like '%" . $searchValue . "%' or 
+	//     school_name like '%" . $searchValue . "%' or 
+	//     district_name like'%" . $searchValue . "%' ) ";
+	// 	}
+
+	// 	## Total number of record with out filtering
+	// 	$query = "select COUNT(*) as total from fine_school_list where status =1";
+	// 	$totalRecords = $this->db->query($query)->result()[0]->total;
+
+	// 	## Total number of record with filtering
+	// 	$query = "select COUNT(*) as total from fine_school_list where status =1 " . $searchQuery;
+	// 	$totalRecordwithFilter = $this->db->query($query)->result()[0]->total;
+
+	// 	//
+	// 	## Fetch records
+	// 	$empQuery = "select * from fine_school_list WHERE status =1 
+	// 	            " . $searchQuery . " order by " . $columnName . " 
+	// 				" . $columnSortOrder . "  limit " . $row . "," . $rowperpage;
+	// 	$fined_schools = $this->db->query($empQuery)->result();
+	// 	$data = array();
+	// 	$count = 1;
+	// 	foreach ($fined_schools as $fined_school) {
+	// 		$data[] = array(
+	// 			//"s_no" => $count++,
+	// 			"school_id" => $fined_school->school_id,
+	// 			"school_registration_no" => $fined_school->school_registration_no,
+	// 			"school_name" => $fined_school->school_name,
+	// 			"district_name" => $fined_school->district_name,
+	// 			"tehsil_name" => $fined_school->tehsil_name,
+	// 			"address" => $fined_school->address,
+	// 			"frequency" => $fined_school->frequency,
+	// 			"total_fine" => $fined_school->total_fine,
+	// 			"total_waived_off" => $fined_school->total_waived_off,
+	// 			"total_fine_paid" => $fined_school->total_fine_paid,
+	// 			"total_fine_remaining" => $fined_school->total_fine_remaining,
+	// 			"action" => '<a class="btn-sm btn-primary" style="margin:0px; padding:5px" href="' . site_url("fms/fine_management/view_fine_detail/" . $fined_school->school_id) . '">
+	//             View
+	//         </a>',
+
+	// 		);
+	// 	}
+
+	// 	## Response
+	// 	$response = array(
+	// 		"draw" => intval($draw),
+	// 		"iTotalRecords" => $totalRecords,
+	// 		"iTotalDisplayRecords" => $totalRecordwithFilter,
+	// 		"aaData" => $data
+	// 	);
+
+	// 	echo json_encode($response);
+	// }
+	// public function check_school_id()
+	// {
+	// 	if ($this->input->post('school_id')) {
+	// 		$school_id = $this->input->post('school_id');
+	// 		$query = "SELECT COUNT(*) as total FROM fined_schools WHERE school_id = '" . $school_id . "'";
+	// 		$result = $this->db->query($query)->row()->total;
+	// 		if ($result > 0) {
+	// 			$this->form_validation->set_message('check_school_id', 'School Already In School List');
+	// 			return FALSE;
+	// 		}
+	// 	}
+	// }
+
+
+	// public function add_school_in_fine_list()
+	// {
+	// 	$validations = array(
+	// 		array('field' => 'school_id', 'label' => 'School Id', 'rules' => 'callback_check_school_id'),
+	// 		array('field' => 'school_name', 'label' => 'School Name', 'rules' => 'required'),
+	// 		array('field' => 'district_name', 'label' => 'District Name', 'rules' => 'required'),
+	// 		array('field' => 'tehsil_name', 'label' => 'Tehsil Name', 'rules' => 'required'),
+	// 		array('field' => 'address', 'label' => 'Address', 'rules' => 'required'),
+	// 		array('field' => 'level_id', 'label' => 'School Level', 'rules' => 'required')
+
+	// 	);
+	// 	$this->form_validation->set_rules($validations);
+
+	// 	if ($this->form_validation->run() === TRUE) {
+
+	// 		$input['school_id'] = (int) $this->input->post('school_id');
+	// 		$input['school_registration_no'] = $this->input->post('school_registration_no');
+	// 		$input['school_name'] = $this->input->post('school_name');
+	// 		$input['district_name'] = $this->input->post('district_name');
+	// 		$input['tehsil_name'] = $this->input->post('tehsil_name');
+	// 		$input['address'] = $this->input->post('address');
+	// 		$input['level_id'] = $this->input->post('level_id');
+	// 		$input['created_by'] = $this->session->userdata('userId');
+	// 		$input['school_registration_no'] = $this->input->post('school_registration_no');
+	// 		if ($this->db->insert('fined_schools', $input)) {
+
+	// 			$response['error'] = false;
+	// 			$response['msg'] = "School Add successfully.";
+	// 		} else {
+	// 			$response['error'] = true;
+	// 			$response['msg'] = "Error while adding school detail.";
+	// 		}
+	// 	} else {
+
+	// 		$response['error'] = true;
+	// 		$response['msg'] = validation_errors();
+	// 	}
+	// 	echo  json_encode($response);
+	// }
 }

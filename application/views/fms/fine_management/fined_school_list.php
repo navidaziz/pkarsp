@@ -8,10 +8,9 @@ $query = "SELECT s.schoolId as school_id,
           s.uc,
           s.address,
           s.level,
-								SUM(IF(f.status=1,1,0)) as density,
-								SUM(IF(f.status=1,f.fine_amount,0)) as total_fine,
-								SUM(IF(f.status=3,1,0)) as w_offed,
-								(SELECT SUM(fp.deposit_amount) FROM fine_payments as fp WHERE fp.is_deleted=0 AND fp.school_id = f.school_id ) as paid_amount
+          SUM(fine_amount) as fine_amount,
+		(SELECT SUM(w.waived_off_amount) FROM fine_waived_off as w WHERE w.is_deleted=0 AND w.school_id = f.school_id ) as total_waived_off,
+		(SELECT SUM(fp.deposit_amount) FROM fine_payments as fp WHERE fp.is_deleted=0 AND fp.school_id = f.school_id ) as total_fine_paid
 	                            FROM fines as f
 								INNER JOIN registered_schools s ON (s.schoolId = f.school_id)
 								GROUP BY f.school_id
@@ -30,10 +29,12 @@ foreach ($fines as $fine) {
         <td><?php echo $fine->address; ?></td>
         <td><?php echo $fine->level; ?></td>
         <td><?php echo $fine->density; ?></td>
-        <td><?php echo $fine->total_fine; ?></td>
-        <td><?php echo $fine->w_offed; ?></td>
-        <td><?php echo $fine->paid_amount; ?></td>
-        <td><?php echo $fine->total_fine - $fine->paid_amount; ?></td>
+        <td><?php echo @number_format($fine->fine_amount, 2); ?></td>
+        <td><?php echo @number_format($fine->total_waived_off, 2); ?></td>
+        <td><?php echo @number_format($fine->fine_amount - $fine_summary->total_waived_off, 2); ?></td>
+        <td><?php echo @number_format($fine->total_fine_paid, 2); ?></td>
+        <td><?php echo @number_format(($fine->fine_amount - $fine_summary->total_waived_off) - $fine_summary->total_fine_paid, 2); ?></td>
+
         <td>
             <!-- <button onclick="get_add_fine_payment_form('<?php echo $fine->fined_school_id; ?>')" class="btn btn-link btn-sm">
                 View

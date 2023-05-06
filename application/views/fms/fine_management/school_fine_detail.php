@@ -46,11 +46,11 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td><?php echo @number_format($fine_summary->original_fine_amount, 2); ?></td>
+                                <td><?php echo @number_format($fine_summary->fine_amount, 2); ?></td>
                                 <td><?php echo @number_format($fine_summary->total_waived_off, 2); ?></td>
-                                <td><?php echo @number_format($fine_summary->original_fine_amount - $fine_summary->total_waived_off, 2); ?></td>
+                                <td><?php echo @number_format($fine_summary->fine_amount - $fine_summary->total_waived_off, 2); ?></td>
                                 <td><?php echo @number_format($fine_summary->total_fine_paid, 2); ?></td>
-                                <td><?php echo @number_format(($fine_summary->original_fine_amount - $fine_summary->total_waived_off) - $fine_summary->total_fine_paid, 2); ?></td>
+                                <td><?php echo @number_format(($fine_summary->fine_amount - $fine_summary->total_waived_off) - $fine_summary->total_fine_paid, 2); ?></td>
                                 <td><button onclick="$('#add_new_fine_form').toggle()" class="btn btn-danger btn-sm">Add New Fine</button></td>
                             </tr>
                         </tbody>
@@ -83,7 +83,7 @@
 
 
                                             <tr>
-                                                <td style="width: 450px;">File Number</td>
+                                                <td>File Number</td>
                                                 <td><input required type="text" value="<?php echo set_value("file_number"); ?>" name="file_number" placeholder="File Number" id="file_number" />
                                                     <?php echo form_error("file_number", "<p class=\"text-danger\">", "</p>"); ?>
                                                 </td>
@@ -101,6 +101,14 @@
                                                 <td>
                                                     <input required type="date" value="<?php echo set_value("file_date"); ?>" name="file_date" placeholder="" id="file_date" />
                                                     <?php echo form_error("file_date", "<p class=\"text-danger\">", "</p>"); ?>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>File Nature</td>
+                                                <td>
+                                                    <input type="radio" name="fine_nature" value="general" /> General Fine
+                                                    <input type="radio" name="fine_nature" value="cc" /> CC Fine
+
                                                 </td>
                                             </tr>
                                             <tr>
@@ -182,7 +190,7 @@
                     $count = 1;
 
                     foreach ($fines as $fine) {
-                        $total_paid = $fine->fine_amount - $fine->total_payment;
+                        $total_paid = ($fine->fine_amount - $fine_summary->total_waived_off) - $fine_summary->total_fine_paid;
                     ?>
                         <div class="row">
 
@@ -192,16 +200,18 @@
 
                                     <div class="col-md-7">
                                         <div style="background-color: #f0f0f0; border-radius:10px; padding:10px;">
-                                            <table class="table" style="font-size: 10px;">
+                                            <table class="table">
                                                 <tr>
-                                                    <td>Fine ID</td>
-                                                    <td>File No</td>
-                                                    <td>Letter No</td>
-                                                    <td>Date</td>
-                                                    <td>Fine Amount</td>
-                                                    <td>Waived Off</td>
-                                                    <td>Fine Payable</td>
-                                                    <td> Status </td>
+                                                    <th>Fine ID</th>
+                                                    <th>File No</th>
+                                                    <th>Letter No</th>
+                                                    <th>Date</th>
+                                                    <th>Total Fine</th>
+                                                    <th>Total Waived Off</th>
+                                                    <th>Total Fine Payable</th>
+                                                    <th>Total Fine Paid</th>
+                                                    <th>Total Fine Remaining</th>
+                                                    <th> Status </th>
                                                     <th><i class="fa fa-file-pdf-o" aria-hidden="true"></i></th>
                                                 </tr>
                                                 <tr>
@@ -209,20 +219,18 @@
                                                     <td><?php echo $fine->file_number ?></td>
                                                     <td><?php echo $fine->letter_no; ?></td>
                                                     <td><?php echo date("d M, Y", strtotime($fine->file_date)) ?></td>
-                                                    <td><?php echo number_format($fine->original_fine_amount, 2) ?></td>
-                                                    <td><?php echo number_format($fine->waived_off_amount, 2) ?></td>
-                                                    <td><?php echo number_format($fine->fine_amount, 2) ?></td>
-                                                    <td>
-                                                        <?php
-                                                        if ($fine->status == 1 and $total_paid != 0) { ?>
-                                                            <span class="label label-danger label-sm ">Not Paid</span>
+                                                    <td><?php echo @number_format($fine->fine_amount, 2); ?></td>
+                                                    <td><?php echo @number_format($fine->total_waived_off, 2); ?></td>
+                                                    <td><?php echo @number_format($fine->fine_amount - $fine_summary->total_waived_off, 2); ?></td>
+                                                    <td><?php echo @number_format($fine->total_fine_paid, 2); ?></td>
+                                                    <td><?php echo @number_format(($fine->fine_amount - $fine_summary->total_waived_off) - $fine_summary->total_fine_paid, 2); ?></td>
 
-                                                        <?php } else { ?>
-                                                            <?php if ($fine->status == 3) { ?>
-                                                                <span class="label label-warning label-sm ">Waived Off</span>
-                                                            <?php  } else { ?>
-                                                                <span class="label label-success label-sm ">Paid</span>
-                                                            <?php } ?>
+                                                    <td>
+                                                        <?php if ($fine->status == 1) { ?>
+                                                            <span class="label label-danger label-sm ">Not Paid</span>
+                                                        <?php  } ?>
+                                                        <?php if ($fine->status == 2) { ?>
+                                                            <span class="label label-success label-sm ">Paid</span>
                                                         <?php } ?>
                                                     </td>
                                                     <td>
@@ -255,7 +263,7 @@
                                                 </tr>
                                             </table>
                                             <div>
-                                                <?php $query = "SELECT * FROM `fine_waived_off` where fine_id = '$fine->fine_id'";
+                                                <?php $query = "SELECT * FROM `fine_waived_off` where fine_id = '$fine->fine_id' and is_deleted = 0";
                                                 $fine_waived_offs = $this->db->query($query)->result();
                                                 if ($fine_waived_offs) { ?>
                                                     <table class="table" style="font-size: 9px;">
@@ -313,7 +321,7 @@
                                             </div>
 
                                             <div class="clearfix"></div>
-                                            <?php if ($fine->status == 1 and $total_paid != 0) { ?>
+                                            <?php if ($fine->status == 1) { ?>
                                                 <form onsubmit="return false;" id="form_<?php echo $fine->fine_id ?>">
                                                     <input type="hidden" id="fine_id" name="fine_id" value="<?php echo $fine->fine_id ?>" />
 
@@ -362,115 +370,89 @@
 
 
                                         <?php if ($fine->status == 1) { ?>
-                                            <?php if ($fine->total_payment != $fine->fine_amount) { ?>
-                                                <div style=" font-size:9px; background-color: #f0f0f0; border-radius:10px; padding:10px;">
-                                                    <h5>Add Fine Payment</h5>
-                                                    <table class="table">
-                                                        <tr>
 
-                                                            <th>STAN No</th>
-                                                            <th>Date</th>
-                                                            <th>Amount</th>
-                                                            <th></th>
-                                                        </tr>
-
-                                                        <tr>
-
-                                                            <td><input style="width: 100px;" type="number" value="" name="stan_no" id="stan_no_<?php echo $fine->fine_id ?>" /> </td>
-                                                            <td><input style="width: 100px;" type="date" value="" name="challan_date" id="challan_date_<?php echo $fine->fine_id ?>" /> </td>
-                                                            <td><input min="0" onkeyup="inWords2(<?php echo $fine->fine_id ?>)" max="<?php echo $fine->fine_amount; ?>" style="width: 100px;" type="number" value="" name="deposit_amount" id="deposit_amount_<?php echo $fine->fine_id ?>" />
-
-
-                                                            </td>
-                                                            <td><button onclick="add_payment(<?php echo $fine->fine_id ?>)" class="bt n btn-s uccess b tn-sm">Add Payment</button> </td>
-                                                        </tr>
-                                                        <tr id="inword_div_<?php echo $fine->fine_id; ?>" style="display:none">
-                                                            <td colspan="4" style="text-align: right;">
-                                                                <small style="color: red;"> In Words: </small> <small style="color: green;" id="inword_<?php echo $fine->fine_id ?>"></small>
-                                                            </td>
-                                                        </tr>
-
-                                                    </table>
-                                                    <div id="payment_error_<?php echo $fine->fine_id; ?>"></div>
-
-                                                </div>
-                                                <br />
-                                            <?php } ?>
-                                            <div style="font-size:9px; background-color: #f0f0f0; border-radius:10px; padding:10px;">
-
-                                                <table class="table table-bordered">
-                                                    <tr>
-                                                        <th colspan="5">Fine Payment History</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <th></th>
-                                                        <th>#</th>
-                                                        <th>STAN No</th>
-                                                        <th>Date</th>
-                                                        <th style="text-align: center;">Amount</th>
-                                                    </tr>
-                                                    <?php
-                                                    $query = "SELECT * FROM fine_payments WHERE fine_id = '" . $fine->fine_id . "' and is_deleted =0";
-                                                    $fine_payments = $this->db->query($query)->result();
-                                                    // $fine_payments = array();
-                                                    $count = 1;
-                                                    foreach ($fine_payments as $fine_payment) { ?>
-                                                        <tr <?php if ($fine_payment->is_deleted == 1) { ?> style="  background-color: #bcbcbc; text-decoration: line-through; " <?php } ?>>
-                                                            <td>
-                                                                <?php if ($fine_payment->is_deleted != 1) { ?>
-                                                                    <button class="btn btn-link" style="padding: 0px; margin: 0px;" onclick="delete_payment('<?php echo $fine->fine_id ?>','<?php echo $fine_payment->fine_payment_id;  ?>')" aria-hidden="true"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                                                                <?php } else ?>
-                                                            </td>
-                                                            <td><?php echo $count++; ?></td>
-                                                            <td><?php echo $fine_payment->stan_no ?></td>
-                                                            <td><?php echo $fine_payment->challan_date ?></td>
-                                                            <td style="text-align: center;"><?php echo $fine_payment->deposit_amount ?></td>
-
-                                                        </tr>
-                                                    <?php     }
-                                                    ?>
-
-                                                    <tr>
-                                                        <th colspan="4" style="text-align: right;">Fine Paid: (Rs) </th>
-                                                        <th style="text-align: center;"><?php echo @number_format($fine->total_payment, 2) ?></td>
-                                                    </tr>
-
-                                                    <!-- <tr>
-                                    <th colspan="4" style="text-align: right;">Total Fine Payable: (Rs) </th>
-                                    <th style="text-align: center;"><?php echo @number_format($fine->fine_amount, 2) ?></td>
-                                </tr> -->
-                                                    <tr>
-                                                        <th colspan="4" style="text-align: right;">Total Fine Remaining: (Rs) </th>
-                                                        <th style="text-align: center;"><?php echo @number_format($fine->fine_amount - $fine->total_payment, 2) ?> </th>
-                                                    </tr>
-
-                                                </table>
-                                            </div>
-
-                                        <?php  } else { ?>
-                                            <div class="alert alert-warning">
-                                                <strong> <span class="fa fa-hand-stop-o"></span> Fine Waived Off Detail</strong>
+                                            <div style=" font-size:9px; background-color: #f0f0f0; border-radius:10px; padding:10px;">
+                                                <h5>Add Fine Payment</h5>
                                                 <table class="table">
                                                     <tr>
-                                                        <td>
-                                                            Fine No: <?php echo @$fine->waived_off_file_no; ?>
+
+                                                        <th>STAN No</th>
+                                                        <th>Date</th>
+                                                        <th>Amount</th>
+                                                        <th></th>
+                                                    </tr>
+
+                                                    <tr>
+
+                                                        <td><input style="width: 100px;" type="number" value="" name="stan_no" id="stan_no_<?php echo $fine->fine_id ?>" /> </td>
+                                                        <td><input style="width: 100px;" type="date" value="" name="challan_date" id="challan_date_<?php echo $fine->fine_id ?>" /> </td>
+                                                        <td><input min="0" onkeyup="inWords2(<?php echo $fine->fine_id ?>)" max="<?php echo $fine->fine_amount; ?>" style="width: 100px;" type="number" value="" name="deposit_amount" id="deposit_amount_<?php echo $fine->fine_id ?>" />
+
+
                                                         </td>
-                                                        <td>
-                                                            Waived Amount: <?php echo @$fine->waived_off_amount; ?>
-                                                        </td>
-                                                        <td>
-                                                            Waived Amount: <?php echo @date("d M, Y", strtotime($fine->waived_off_date)); ?>
+                                                        <td><button onclick="add_payment(<?php echo $fine->fine_id ?>)" class="bt n btn-s uccess b tn-sm">Add Payment</button> </td>
+                                                    </tr>
+                                                    <tr id="inword_div_<?php echo $fine->fine_id; ?>" style="display:none">
+                                                        <td colspan="4" style="text-align: right;">
+                                                            <small style="color: red;"> In Words: </small> <small style="color: green;" id="inword_<?php echo $fine->fine_id ?>"></small>
                                                         </td>
                                                     </tr>
-                                                </table>
-                                                <br />
-                                                <p><?php echo $fine->wo_detail; ?></p>
-                                                <div style="text-align: right;">
-                                                    <button onclick="remove_wavid_off('<?php echo $fine->fine_id ?>')" class="btn btn-danger btn-sm">Remove Waived Off</button>
-                                                </div>
-                                            </div>
-                                        <?php  } ?>
 
+                                                </table>
+                                                <div id="payment_error_<?php echo $fine->fine_id; ?>"></div>
+
+                                            </div>
+                                            <br />
+
+
+
+                                        <?php  } ?>
+                                        <div style="font-size:9px; background-color: #f0f0f0; border-radius:10px; padding:10px;">
+
+                                            <table class="table table-bordered">
+                                                <tr>
+                                                    <th colspan="5">Fine Payment History</th>
+                                                </tr>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>#</th>
+                                                    <th>STAN No</th>
+                                                    <th>Date</th>
+                                                    <th style="text-align: center;">Amount</th>
+                                                </tr>
+                                                <?php
+                                                $query = "SELECT * FROM fine_payments WHERE fine_id = '" . $fine->fine_id . "' and is_deleted =0";
+                                                $fine_payments = $this->db->query($query)->result();
+                                                // $fine_payments = array();
+                                                $count = 1;
+                                                foreach ($fine_payments as $fine_payment) { ?>
+                                                    <tr <?php if ($fine_payment->is_deleted == 1) { ?> style="  background-color: #bcbcbc; text-decoration: line-through; " <?php } ?>>
+                                                        <td>
+                                                            <?php if ($fine_payment->is_deleted != 1) { ?>
+                                                                <button class="btn btn-link" style="padding: 0px; margin: 0px;" onclick="delete_payment('<?php echo $fine->fine_id ?>','<?php echo $fine_payment->fine_payment_id;  ?>')" aria-hidden="true"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                                            <?php } else ?>
+                                                        </td>
+                                                        <td><?php echo $count++; ?></td>
+                                                        <td><?php echo $fine_payment->stan_no ?></td>
+                                                        <td><?php echo $fine_payment->challan_date ?></td>
+                                                        <td style="text-align: center;"><?php echo $fine_payment->deposit_amount ?></td>
+
+                                                    </tr>
+                                                <?php     }
+                                                ?>
+
+                                                <tr>
+                                                    <th colspan="4" style="text-align: right;">Fine Paid: (Rs) </th>
+                                                    <th style="text-align: center;"><?php echo @number_format($fine->total_payment, 2) ?></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <th colspan="4" style="text-align: right;">Total Fine Remaining: (Rs) </th>
+                                                    <th style="text-align: center;"><?php echo @number_format($fine->fine_amount - $fine->total_payment, 2) ?> </th>
+                                                </tr>
+
+                                            </table>
+                                        </div>
                                     </div>
 
                                     <div class="clearfix"></div>
@@ -753,14 +735,15 @@
 
                 })
                 .done(function(response) {
+                    console.log(response);
                     //convert json response to object
                     var obj = JSON.parse(response);
-                    console.log(obj.msg);
+
 
                     if (obj.error == true) {
                         $('#waive_off_error_' + fine_id).html(obj.msg);
                     } else {
-                        location.reload();
+                        //location.reload();
 
                     }
 
