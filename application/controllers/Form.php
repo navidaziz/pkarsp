@@ -213,13 +213,14 @@ class Form extends Admin_Controller
 		//for upgradation 
 		if ($this->data['school']->reg_type_id == 4) {
 			$class_levels_id = $this->data['school']->upgradation_levels;
-			// end here 
-			$query = "SELECT classId FROM `class` 
+			if ($class_levels_id) {
+				$query = "SELECT classId FROM `class` 
 				WHERE level_id IN(" . $class_levels_id . ")";
-			$class_Ids = $this->db->query($query)->result_array();
-			//$classIds = array();
-			foreach ($class_Ids as $class_Id) {
-				$classIds[] = $class_Id['classId'];
+				$class_Ids = $this->db->query($query)->result_array();
+				//$classIds = array();
+				foreach ($class_Ids as $class_Id) {
+					$classIds[] = $class_Id['classId'];
+				}
 			}
 		}
 
@@ -671,13 +672,14 @@ class Form extends Admin_Controller
 		//for upgradation 
 		if ($this->data['school']->reg_type_id == 4) {
 			$class_levels_id = $this->data['school']->upgradation_levels;
-			// end here 
-			$query = "SELECT classId FROM `class` 
+			if ($class_levels_id) {
+				$query = "SELECT classId FROM `class` 
 				WHERE level_id IN(" . $class_levels_id . ")";
-			$class_Ids = $this->db->query($query)->result_array();
-			//$classIds = array();
-			foreach ($class_Ids as $class_Id) {
-				$classIds[] = $class_Id['classId'];
+				$class_Ids = $this->db->query($query)->result_array();
+				//$classIds = array();
+				foreach ($class_Ids as $class_Id) {
+					$classIds[] = $class_Id['classId'];
+				}
 			}
 		}
 
