@@ -24,6 +24,7 @@ class Form extends Admin_Controller
 					, `school`.`level_of_school_id`
 					, `school`.`gender_type_id`  
 					, `school`.`reg_type_id`
+					, `school`.`upgradation_levels`
 					, `schools`.`biseRegister`
 				FROM
 					`schools`
@@ -209,6 +210,19 @@ class Form extends Admin_Controller
 			$classIds[] = $class_Id['classId'];
 		}
 
+		//for upgradation 
+		if ($this->data['school']->reg_type_id == 4) {
+			$class_levels_id = $this->data['school']->upgradation_levels;
+			// end here 
+			$query = "SELECT classId FROM `class` 
+				WHERE level_id IN(" . $class_levels_id . ")";
+			$class_Ids = $this->db->query($query)->result_array();
+			//$classIds = array();
+			foreach ($class_Ids as $class_Id) {
+				$classIds[] = $class_Id['classId'];
+			}
+		}
+
 		$query = "select a_o_level FROM schools WHERE schoolId = '" . $school->schools_id . "'";
 		$a_o_level = $this->db->query($query)->row()->a_o_level;
 		if (!$a_o_level) {
@@ -255,6 +269,18 @@ class Form extends Admin_Controller
 
 	public function update_form_b_data()
 	{
+
+		$upgradation_levels = '';
+		if ($this->input->post('levels')) {
+			foreach ($this->input->post('levels') as $level_id => $level) {
+				if ($level === 'on') {
+					$upgradation_levels .= $level_id . ',';
+				}
+			}
+			$upgradation_levels = trim($upgradation_levels, ",");
+		}
+
+
 		$posts = $this->input->post();
 		$school_id = $posts['school_id'];
 		$this->db->where('school_id', $school_id);
@@ -360,6 +386,8 @@ class Form extends Admin_Controller
 		$form_input['principal'] = $this->input->post('principal');
 		$form_input['principal_cnic'] = $this->input->post('principal_cnic');
 		$form_input['principal_contact_no'] = $this->input->post('principal_contact_no');
+		$form_input['upgradation_levels'] = $upgradation_levels;
+
 		$this->db->where('schoolId', $school_id);
 		$this->db->update('school', $form_input);
 
@@ -586,7 +614,7 @@ class Form extends Admin_Controller
 		$this->data['form_status'] = $this->get_form_status($school_id);
 
 
-		//we use this code for only session 2023-24 howwver next year we get levels from school session 
+		//we use this code for only session 2023-24 howover next year we get levels from school session 
 
 		$query = "SELECT MAX(schoolId) as pre_school_id FROM school WHERE schools_id = $school->schools_id and status=1";
 		$previous_session = $this->db->query($query)->row();
@@ -625,14 +653,12 @@ class Form extends Admin_Controller
 		if ($high_sec) {
 			$min_level[] = 4;
 		}
-
+		// its only for renewal and registration
 		if (!$min_level) {
 			$min_level = 1;
 		} else {
 			$min_level = min($min_level);
 		}
-
-
 		$max_level = $this->data['school']->level_of_school_id;
 
 		// end here 
@@ -642,7 +668,20 @@ class Form extends Admin_Controller
 		foreach ($class_Ids as $class_Id) {
 			$classIds[] = $class_Id['classId'];
 		}
-		//var_dump($classIds);
+		//for upgradation 
+		if ($this->data['school']->reg_type_id == 4) {
+			$class_levels_id = $this->data['school']->upgradation_levels;
+			// end here 
+			$query = "SELECT classId FROM `class` 
+				WHERE level_id IN(" . $class_levels_id . ")";
+			$class_Ids = $this->db->query($query)->result_array();
+			//$classIds = array();
+			foreach ($class_Ids as $class_Id) {
+				$classIds[] = $class_Id['classId'];
+			}
+		}
+
+
 
 		$query = "select a_o_level FROM schools WHERE schoolId = '" . $school->schools_id . "'";
 		$a_o_level = $this->db->query($query)->row()->a_o_level;

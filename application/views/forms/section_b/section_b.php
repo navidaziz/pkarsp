@@ -340,6 +340,12 @@
                     <?php } else { ?>
                       <input type="hidden" name="gender_type_id" value="<?php echo $school_gender->gender_type_id ?>" />
                     <?php  } ?>
+
+
+
+
+
+
                     <strong> Do Institute offer O Level and A level </strong>
                     <?php
                     $query = "select a_o_level, telePhoneNumber, schoolMobileNumber, principal_email FROM schools WHERE schoolId = '" . $schools_id . "'";
@@ -428,7 +434,47 @@
 
           </div>
 
+
+
           <div style="font-size: 16px; text-align: center; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
+            <?php if ($school->reg_type_id == 4) { ?>
+              Apply Upgradation for
+              <?php $query = "SELECT * FROM `levelofinstitute` 
+                        WHERE  school_type_id = '" . $school->school_type_id . "'
+                        ORDER BY `levelofInstituteId` ASC";
+              $levels = $this->db->query($query)->result(); ?>
+              <table class="table" style="text-align: center;">
+                <tr>
+
+                  <?php foreach ($levels as $level) { ?>
+                    <th style="text-align: center;"> <?php echo $level->levelofInstituteTitle; ?></th>
+                  <?php }   ?>
+                </tr>
+                <tr>
+                  <?php
+                  $upgradation_levels = explode(",", $school->upgradation_levels);
+
+                  $upgradation = "";
+                  foreach ($levels as $level) { ?>
+                    <td>
+                      <span <?php if ($level->levelofInstituteId == $school->level_of_school_id) { ?>style='display:none;' <?php } ?>>
+
+                        <input class="<?php echo $upgradation; ?>" <?php if (in_array($level->levelofInstituteId, $upgradation_levels)) { ?> checked readonly <?php } ?> type="checkbox" name="levels[<?php echo $level->levelofInstituteId; ?>]" />
+                      </span>
+                      <?php if ($level->levelofInstituteId == $school->level_of_school_id) {
+                        $upgradation = "upgradation";
+
+                      ?>
+
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                      <?php } ?>
+                    </td>
+                  <?php }   ?>
+                </tr>
+              </table>
+
+            <?php } ?>
+
 
             <div class="row">
               <div class="col-md-6">

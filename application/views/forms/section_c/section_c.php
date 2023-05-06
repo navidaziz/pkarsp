@@ -45,8 +45,17 @@
     <?php $this->load->view('forms/form_header');   ?>
 
     <!-- Main content -->
+
     <section class="content" style="padding-top: 0px !important;">
       <?php $this->load->view('forms/navigation_bar');   ?>
+      <?php if ($school->reg_type_id == 4) { ?>
+        <div class="alert alert-success" style="text-align: center;">
+          If the upgradation classes are not listed, please go back to
+          <a href="<?php echo site_url("form/section_b/" . $school_id); ?>"><strong>Section B</strong></a>
+          and review the upgradation levels.
+        </div>
+      <?php } ?>
+
       <div class="box box-primary box-solid">
         <div class="box-header with-border">
           <h3 class="box-title">Section-C: Class & Age Wise Enrollment</h3>
@@ -58,6 +67,7 @@
 
 
             <div class="col-md-12">
+
 
               <?php if ($school->gender_type_id == 3) {
                 $boys = 1;

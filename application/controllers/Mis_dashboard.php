@@ -161,8 +161,6 @@ class Mis_dashboard extends Admin_Controller
       $dated =  date("Y-m-d h:i:s");
       $school_id = (int) $this->input->post('school_id');
       $schools_id = (int) $this->input->post('schools_id');
-
-
       $query = "SELECT COUNT(*) as total FROM school 
               WHERE schoolId<'" . $school_id . "' 
               AND schools_id = '" . $schools_id . "'
