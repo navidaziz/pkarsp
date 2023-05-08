@@ -14,10 +14,53 @@ class Fine_management extends CI_Controller
 
 	public function index()
 	{
-
 		$this->data["title"] = "Fine Management";
 		$this->data["view"] = "fms/fine_management/fine_management_home";
 		$this->load->view("layout", $this->data);
+	}
+
+	public function get_fine_add_form()
+	{
+
+
+		$this->data["title"] = "School Fined History";
+		$this->data['school_id'] = $this->input->post('school_id');
+		$this->load->view("fms/fine_management/add_fine", $this->data);
+	}
+
+	public function get_fine_payment_details()
+	{
+		$this->data['school_id'] = $school_id =  $this->input->post('school_id');
+		$this->data['fine_id'] = $fine_id = $this->input->post('fine_id');
+
+		$query = "SELECT f.*, ft.fine_title , fc.fine_channel_title,
+		SUM(fine_amount) as fine_amount,
+		(SELECT SUM(w.waived_off_amount) FROM fine_waived_off as w WHERE w.is_deleted=0 AND w.school_id = f.school_id and w.fine_id = f.fine_id ) as total_waived_off,
+		(SELECT SUM(fp.deposit_amount) FROM fine_payments as fp WHERE fp.is_deleted=0 AND fp.school_id = f.school_id and fp.fine_id = f.fine_id ) as total_fine_paid
+		 FROM `fines` as f
+		INNER JOIN fine_types ft ON (ft.fine_type_id = f.fine_type_id)
+		INNER JOIN fine_channels fc ON (fc.fine_channel_id = f.fine_channel_id) 
+		          WHERE f.school_id = '" . $school_id . "'
+				  AND f.fine_id = '" . $fine_id . "'";
+		$this->data['fine'] = $this->db->query($query)->row();
+		$this->load->view("fms/fine_management/get_fine_payment_details", $this->data);
+	}
+	public function get_fine_waive_off_details()
+	{
+		$this->data['school_id'] = $school_id =  $this->input->post('school_id');
+		$this->data['fine_id'] = $fine_id = $this->input->post('fine_id');
+
+		$query = "SELECT f.*, ft.fine_title , fc.fine_channel_title,
+		SUM(fine_amount) as fine_amount,
+		(SELECT SUM(w.waived_off_amount) FROM fine_waived_off as w WHERE w.is_deleted=0 AND w.school_id = f.school_id and w.fine_id = f.fine_id ) as total_waived_off,
+		(SELECT SUM(fp.deposit_amount) FROM fine_payments as fp WHERE fp.is_deleted=0 AND fp.school_id = f.school_id and fp.fine_id = f.fine_id ) as total_fine_paid
+		 FROM `fines` as f
+		INNER JOIN fine_types ft ON (ft.fine_type_id = f.fine_type_id)
+		INNER JOIN fine_channels fc ON (fc.fine_channel_id = f.fine_channel_id) 
+		          WHERE f.school_id = '" . $school_id . "'
+				  AND f.fine_id = '" . $fine_id . "'";
+		$this->data['fine'] = $this->db->query($query)->row();
+		$this->load->view("fms/fine_management/get_fine_waive_off_details", $this->data);
 	}
 
 	public function search_detail()
@@ -116,8 +159,12 @@ class Fine_management extends CI_Controller
 	public function get_school_add_fine_form()
 	{
 
+
 		$this->load->view("fms/fine_management/school_add_fine_form", $this->data);
 	}
+
+
+
 
 	public function file_upload_check()
 	{
@@ -133,20 +180,12 @@ class Fine_management extends CI_Controller
 
 	public function add_fine()
 	{
-
-
 		$validations = array(
-			// $this->session->set_flashdata("msg_error", 'Error in adding fine');
-			// array('field' => 'school_id', 'label' => 'School Id', 'rules' => 'required'),
-			// array('field' => 'school_registration_no', 'label' => 'School Registration No', 'rules' => 'required'),
-			// array('field' => 'school_name', 'label' => 'School Name', 'rules' => 'required'),
-			// array('field' => 'district_name', 'label' => 'District Name', 'rules' => 'required'),
-			// array('field' => 'tehsil_name', 'label' => 'Tehsil Name', 'rules' => 'required'),
-			// array('field' => 'address', 'label' => 'Address', 'rules' => 'required'),
-			// array('field' => 'level_id', 'label' => 'School Level', 'rules' => 'required'),
 			array('field' => 'file_number', 'label' => 'File Number', 'rules' => 'required'),
 			array('field' => 'letter_no', 'label' => 'Letter Number', 'rules' => 'required'),
 			array('field' => 'fine_type_id', 'label' => 'Fine Category', 'rules' => 'required'),
+			array('field' => 'fine_nature', 'label' => 'Fine Nature', 'rules' => 'required'),
+			array('field' => 'session_id', 'label' => 'Session', 'rules' => 'required'),
 			array('field' => 'fine_channel_id', 'label' => 'Fine Channel', 'rules' => 'required'),
 			array('field' => 'fine_amount', 'label' => 'Amount', 'rules' => 'required'),
 			array('field' => 'file_date', 'label' => 'File Date', 'rules' => 'required'),
@@ -155,46 +194,70 @@ class Fine_management extends CI_Controller
 		);
 		$this->form_validation->set_rules($validations);
 		$input = array();
-
 		$input['school_id'] = $school_id =  (int) $this->input->post('school_id');
 		if ($this->form_validation->run() === TRUE) {
+			if ($this->uploadfile($school_id, "fine_file")) {
+
+				$input['fine_file']  = $this->data["upload_data"]["dir"] . $this->data["upload_data"]["file_name"];
+			} else {
+				$response['error'] = true;
+				$response['msg'] = 'Error While Uploading File.';
+				echo  json_encode($response);
+				exit();
+			}
 
 			$input["file_number"] = $this->input->post("file_number");
 			$input["fine_type_id"] = $this->input->post("fine_type_id");
 			$input["fine_channel_id"] = $this->input->post("fine_channel_id");
 			$input["fine_amount"] = $this->input->post("fine_amount");
-			//$input["original_fine_amount"] = $this->input->post("fine_amount");
-
+			$input["fine_nature"] = $this->input->post("fine_nature");
+			$input["session_id"] = $this->input->post("session_id");
 			$input["file_date"] = $this->input->post("file_date");
 			$input["remarks"] = $this->input->post("remarks");
 			$input["letter_no"] = $this->input->post("letter_no");
 			$input['created_by'] = $this->session->userdata('userId');
 
-
-
-
-			// if ($this->upload_file("fine_file", NULL, FALSE, $input['school_id'])) {
-
-			// 	$input['fine_file']  = $this->data["upload_data"]["dir"] . $this->data["upload_data"]["file_name"];
-			// } else {
-
-			// 	$this->session->set_flashdata("msg_error", "Error in file upload" . $this->upload->display_errors());
-			// 	redirect("fms/fine_management/view_fine_detail/$school_id");
-			// 	exit();
-			// }
-
-
-
 			if ($this->db->insert('fines', $input)) {
-
-				$this->session->set_flashdata('msg_success', 'Fine added successfully');
-				redirect("fms/fine_management/view_fine_detail/$school_id");
+				$response['error'] = false;
+				$response['msg'] = 'Fine Add Successfully';
+				$this->_field_data = array();
 			}
 		} else {
-			//$this->session->set_flashdata("msg_error", validation_errors());
-			// redirect("fms/fine_management/index");
-			$this->view_fine_detail($school_id);
-			//redirect("fms/fine_management/view_fine_detail/$school_id");
+
+			$response['error'] = true;
+			$response['msg'] = validation_errors();
+		}
+		echo  json_encode($response);
+	}
+
+	private function uploadfile($school_id, $field_name, $config = NULL)
+	{
+		$upload_path = '/uploads/school/' . $school_id . '/fine/';
+		if (is_null($config)) {
+			$config = array(
+				"upload_path" => $_SERVER['DOCUMENT_ROOT'] . $upload_path,
+				"allowed_types" => "pdf",
+				"max_size" => 10000,
+				"max_width" => 0,
+				"max_height" => 0,
+				"remove_spaces" => true,
+				//"encrypt_name" => true
+			);
+			$config['file_name'] = 'PSRA-OPS-F-' . date('Y-M-d') . '-' . $school_id . '-' . time();
+		}
+
+		$dir = $config["upload_path"];
+		if (!is_dir($dir)) {
+			mkdir($dir, 0777, true);
+		}
+		$this->load->library("upload", $config);
+		if (!$this->upload->do_upload($field_name)) {
+			$this->data['upload_error'] = $this->upload->display_errors();
+			return $this->data['upload_error'];
+		} else {
+			$this->data['upload_data'] = $this->upload->data();
+			$this->data['upload_data']['dir'] = $upload_path;
+			return True;
 		}
 	}
 
@@ -342,18 +405,18 @@ class Fine_management extends CI_Controller
 
 		$query = "SELECT 
 		SUM(fine_amount) as fine_amount,
-		(SELECT SUM(w.waived_off_amount) FROM fine_waived_off as w WHERE w.is_deleted=0 AND w.school_id = f.school_id ) as total_waived_off,
-		(SELECT SUM(fp.deposit_amount) FROM fine_payments as fp WHERE fp.is_deleted=0 AND fp.school_id = f.school_id ) as total_fine_paid
+		COALESCE((SELECT SUM(w.waived_off_amount) FROM fine_waived_off as w WHERE w.is_deleted=0 AND w.school_id = f.school_id ),0) as total_waived_off,
+		COALESCE((SELECT SUM(fp.deposit_amount) FROM fine_payments as fp WHERE fp.is_deleted=0 AND fp.school_id = f.school_id ),0) as total_fine_paid
 		FROM fines as f
-		WHERE f.status=1
+		WHERE f.is_deleted=0
 		AND f.school_id = $school_id;
 		";
 		$this->data['fine_summary'] = $this->db->query($query)->row();
 
 		$query = "SELECT f.*, ft.fine_title , fc.fine_channel_title,
 		SUM(fine_amount) as fine_amount,
-		(SELECT SUM(w.waived_off_amount) FROM fine_waived_off as w WHERE w.is_deleted=0 AND w.school_id = f.school_id and w.fine_id = f.fine_id ) as total_waived_off,
-		(SELECT SUM(fp.deposit_amount) FROM fine_payments as fp WHERE fp.is_deleted=0 AND fp.school_id = f.school_id and fp.fine_id = f.fine_id ) as total_fine_paid
+		COALESCE((SELECT SUM(w.waived_off_amount) FROM fine_waived_off as w WHERE w.is_deleted=0 AND w.school_id = f.school_id and w.fine_id = f.fine_id ),0) as total_waived_off,
+		COALESCE((SELECT SUM(fp.deposit_amount) FROM fine_payments as fp WHERE fp.is_deleted=0 AND fp.school_id = f.school_id and fp.fine_id = f.fine_id ),0) as total_fine_paid
 		 FROM `fines` as f
 		INNER JOIN fine_types ft ON (ft.fine_type_id = f.fine_type_id)
 		INNER JOIN fine_channels fc ON (fc.fine_channel_id = f.fine_channel_id) 
@@ -419,7 +482,7 @@ class Fine_management extends CI_Controller
 			array('field' => 'waived_off_date', 'label' => 'Notification Date', 'rules' => 'required'),
 			array('field' => 'waived_off_amount', 'label' => 'Waive Off Amount', 'rules' => 'callback_valid_amount'),
 			array('field' => 'wo_detail', 'label' => 'Waive off Detail', 'rules' => 'required'),
-			//array('field' => 'waived_off_file', 'label' => 'Notification Attachment', 'rules' => 'callback_wo_attachment_check'),
+			array('field' => 'waived_off_file', 'label' => 'Notification Attachment', 'rules' => 'callback_wo_attachment_check'),
 		);
 		$this->form_validation->set_rules($validations);
 
@@ -429,50 +492,37 @@ class Fine_management extends CI_Controller
 		$school_id = $this->db->query($query)->result()[0]->school_id;
 		$input['school_id'] = $school_id;
 		if ($this->form_validation->run() === TRUE) {
-			if (1 == 1) {
-				//if ($this->upload_file("waived_off_file", NULL, FALSE, $input['school_id'])) {
-				$input['fine_amount'] = $fine_amount;
-				$input['waived_off_amount'] = $waived_off_amount = (float) $this->input->post('waived_off_amount');
-				$input['fine_remained'] = $fine_remained = $fine_amount - $waived_off_amount;
 
-				$input['waived_off_file_no'] = $this->input->post('waived_off_file_no');
-				$input['waived_off_date'] = $this->input->post('waived_off_date');
-				$input['wo_detail'] = $this->input->post('wo_detail');
+
+			if ($this->uploadfile($school_id, "waived_off_file")) {
+
 				$input['waived_off_file']  = $this->data["upload_data"]["dir"] . $this->data["upload_data"]["file_name"];
-				$input['created_by'] = $this->session->userdata('userId');
-
-				if ($this->db->insert('fine_waived_off', $input)) {
-
-
-					$response['update'] = $this->update_fine_status($fine_id);
-
-
-					$response['error'] = false;
-					$response['msg'] = "Fine waived off successfully";
-
-					// $where['fine_id'] = (int) $this->input->post('fine_id');
-					// $this->db->where($where);
-
-					// $update['fine_amount'] = $fine_remained;
-					// $query = "select SUM(waived_off_amount) AS waived_off_amount  from fine_waived_off where fine_id = '" . $fine_id . "' and is_deleted = 0";
-					// $waived_off_amount = $this->db->query($query)->result()[0]->waived_off_amount;
-					// $update['waived_off_amount'] = $waived_off_amount;
-
-					// if ($this->db->update('fines', $update)) {
-
-					// 	$response['error'] = false;
-					// 	$response['msg'] = "Fine waived off successfully";
-					// } else {
-					// 	$response['error'] = true;
-					// 	$response['msg'] = "Error while update fine after waive off";
-					// }
-				} else {
-					$response['error'] = true;
-					$response['msg'] = "Error while inserting waiving off";
-				}
 			} else {
 				$response['error'] = true;
-				$response['msg'] = $this->upload->display_errors();
+				$response['msg'] = 'Error While Uploading File.';
+				echo  json_encode($response);
+				exit();
+			}
+
+			$input['fine_amount'] = $fine_amount;
+			$input['waived_off_amount'] = $waived_off_amount = (float) $this->input->post('waived_off_amount');
+			$input['fine_remained'] = $fine_remained = $fine_amount - $waived_off_amount;
+
+			$input['waived_off_file_no'] = $this->input->post('waived_off_file_no');
+			$input['waived_off_date'] = $this->input->post('waived_off_date');
+			$input['wo_detail'] = $this->input->post('wo_detail');
+			$input['waived_off_file']  = $this->data["upload_data"]["dir"] . $this->data["upload_data"]["file_name"];
+			$input['created_by'] = $this->session->userdata('userId');
+
+			if ($this->db->insert('fine_waived_off', $input)) {
+
+
+				$response['update'] = $this->update_fine_status($fine_id);
+				$response['error'] = false;
+				$response['msg'] = "Fine waived off successfully";
+			} else {
+				$response['error'] = true;
+				$response['msg'] = "Error while inserting waiving off";
 			}
 		} else {
 			$response['error'] = true;
@@ -480,31 +530,14 @@ class Fine_management extends CI_Controller
 		}
 		echo  json_encode($response);
 	}
-	public function remove_waive_off()
-	{
 
-		$where['fine_id'] = (int) $this->input->post('fine_id');
-
-		$this->db->where($where);
-		$update['status'] = 1;
-		$update['wo_detail'] = '';
-		$update['waived_off_file_no'] = '';
-		$update['waived_off_amount'] = '';
-		$update['waived_off_date'] = '';
-		if ($this->db->update('fines', $update)) {
-			$this->activity_logs('fine', 'remove_waived_off', '1');
-			echo 1;
-		} else {
-			echo 0;
-		}
-	}
 
 	public function delete_fine()
 	{
 
 		$where['fine_id'] = (int) $this->input->post('fine_id');
 		$this->db->where($where);
-		$status['status'] = 0;
+		$status['is_deleted'] = 1;
 		if ($this->db->update('fines', $status)) {
 			$this->activity_logs('fine', 'delete_fine', '0');
 			echo 1;
@@ -518,7 +551,7 @@ class Fine_management extends CI_Controller
 
 		$where['fine_id'] = (int) $this->input->post('fine_id');
 		$this->db->where($where);
-		$status['status'] = 1;
+		$status['is_deleted'] = 0;
 		if ($this->db->update('fines', $status)) {
 			$this->activity_logs('fine', 'restore_fine', '1');
 			echo 1;
@@ -530,11 +563,12 @@ class Fine_management extends CI_Controller
 	public function delete_fine_payment()
 	{
 
-		$where['fine_id'] = (int) $this->input->post('fine_id');
+		$where['fine_id'] = $fine_id = (int) $this->input->post('fine_id');
 		$where['fine_payment_id'] = (int) $this->input->post('fine_payment_id');
 		$this->db->where($where);
 		$status['is_deleted'] = 1;
 		if ($this->db->update('fine_payments', $status)) {
+			$this->update_fine_status($fine_id);
 			$this->activity_logs('fine_payment', 'delete_payment', '1');
 			echo 1;
 		} else {
@@ -553,31 +587,6 @@ class Fine_management extends CI_Controller
 		if ($this->db->update('fine_waived_off', $status)) {
 			$this->update_fine_status($fine_id);
 			echo 1;
-			// $query = "select waived_off_amount from fine_waived_off where fine_id = '" . $fine_id . "' and  fine_waived_off_id = '" . $fine_waived_off_id . "'";
-			// $waived_off_amount = $this->db->query($query)->result()[0]->waived_off_amount;
-
-			// $query = "select fine_amount, waived_off_amount from fines where fine_id = '" . $fine_id . "'";
-			// $fine = $this->db->query($query)->result()[0];
-
-			// $where = array();
-			// $where['fine_id'] = $fine_id =  (int) $this->input->post('fine_id');
-			// $update = array();
-			// $update['waived_off_amount'] = $fine->waived_off_amount - $waived_off_amount;
-			// $update['fine_amount'] =  $fine->fine_amount + $waived_off_amount;
-			// $this->db->where($where);
-			// if ($this->db->update('fines', $update)) {
-			// 	$this->activity_logs('waived_off', 'delete', '1');
-			// 	echo 1;
-			// } else {
-			// 	$where = array();
-			// 	$where['fine_id'] = (int) $this->input->post('fine_id');
-			// 	$where['fine_waived_off_id'] = (int) $this->input->post('fine_waived_off_id');
-			// 	$this->db->where($where);
-			// 	$status['is_deleted'] = 1;
-			// 	if ($this->db->update('fine_waived_off', $status)) {
-			// 		echo 0;
-			// 	}
-			// }
 		} else {
 			echo 0;
 		}
@@ -625,7 +634,7 @@ class Fine_management extends CI_Controller
 			$query = "SELECT school_id FROM fines WHERE fines.fine_id = '" . $fine_id . "'";
 			$input['school_id'] = $this->db->query($query)->result()[0]->school_id;
 			if ($this->db->insert('fine_payments', $input)) {
-
+				$this->update_fine_status($fine_id);
 				$response['error'] = false;
 				$response['msg'] = "Payment Add successfully.";
 			} else {
@@ -643,8 +652,6 @@ class Fine_management extends CI_Controller
 	{
 		$this->load->view("fms/fine_management/fined_school_list", $this->data);
 	}
-
-
 
 	private function activity_logs($table, $activity, $status)
 	{

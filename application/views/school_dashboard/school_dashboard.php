@@ -284,7 +284,6 @@
                       `reg_type`.`regTypeTitle`
                       , `school_type`.`typeTitle`
                       , `levelofinstitute`.`levelofInstituteTitle`
-                      , `gender`.`genderTitle`
                       , `school`.`status`
                       , `school`.`upgrade`
                       , `school`.`status_type`
@@ -298,12 +297,10 @@
                       `school`,
                       `school_type`,
                       `levelofinstitute`,
-                      `gender`,
                       `session_year`  
                       WHERE `reg_type`.`regTypeId` = `school`.`reg_type_id`
                       AND `school_type`.`typeId` = `school`.`school_type_id`
                       AND `levelofinstitute`.`levelofInstituteId` = `school`.`level_of_school_id`
-                      AND `gender`.`genderId` = `school`.`gender_type_id`
                       AND `session_year`.`sessionYearId` = `school`.`session_year_id`
                       AND school.`schools_id`= '" . $school_id . "'
                       AND `school`.`session_year_id` = '" . $session->sessionYearId . "'";
