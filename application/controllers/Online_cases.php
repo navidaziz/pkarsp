@@ -42,13 +42,13 @@ class Online_cases extends Admin_Controller
 		`school`.`schoolId` as school_id,
 		`district`.`districtTitle`,
       `school`.`file_status`,
-`school`.`apply_date`,
-schools.isfined,
+      `school`.`apply_date`,
+      schools.isfined,
 		(SELECT s.status
 		FROM school as s WHERE 
 		 s.schools_id = `schools`.`schoolId`
 		AND  s.session_year_id = (`school`.`session_year_id`-1) and s.schools_id = schools.schoolId LIMIT 1) as previous_session_status,
-(SELECT COUNT(*)
+      (SELECT COUNT(*)
 		FROM school as s WHERE 
 		 s.schools_id = `schools`.`schoolId`
 		AND  s.status != 1 and `s`.`file_status`=5) as deficient
@@ -107,6 +107,7 @@ schools.isfined,
       $this->get_request_list(2, 5, NULL, 'Financially Deficient Cases');
       $this->get_request_list(2, 4, NULL, 'Forwarded To Operation Wing');
       $this->get_request_list(2, 10, NULL, 'Issue Pending');
+      $this->get_request_list(2, 3, NULL, 'Pending Due To Previous');
    }
 
 
@@ -893,5 +894,12 @@ schools.isfined,
          echo "School ID not found try again with different School ID.";
          exit();
       }
+   }
+
+   public function  change_session_status()
+   {
+      $this->data['schools_id'] = $schools_id = (int) $this->input->post('schools_id');
+      $this->data['school_id'] = $school_id = (int) $this->input->post('school_id');
+      $this->load->view('online_cases/change_session_status', $this->data);
    }
 }

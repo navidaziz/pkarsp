@@ -83,10 +83,8 @@ if ($isfined == 1) { ?>
             <?php } ?>
             <table class="table table-bordered">
                 <tr>
-                    <td>Bank Transaction No (STAN)</td>
                     <td>Bank Transaction Date</td>
-
-
+                    <td>Bank Transaction No (STAN)</td>
                 </tr>
                 <tr>
                     <td><input required name="challan_date" type="date" class="form-control" min="2018-01-01" max="<?php echo date('Y-m-d'); ?>" />

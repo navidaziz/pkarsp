@@ -671,6 +671,9 @@
                                               ?>
                       <small>
                         <button style="padding: 0px; margin:0px; font-size:9px" class="btn btn-link btn-sm hide_buttons" onclick="add_bank_challan(<?php echo $school_session->schoolId ?>)">Add Challan</button>
+                        <br />
+                        <button style="padding: 0px; margin:0px; font-size:9px" class="btn btn-link btn-sm hide_buttons" onclick="change_session_status(<?php echo $school_session->schoolId ?>)">Change Status</button>
+
                       </small>
                     </td>
                     <td>
@@ -1121,6 +1124,23 @@
     $.ajax({
       type: "POST",
       url: "<?php echo site_url("online_cases/get_session_challan_form"); ?>",
+      data: {
+        school_id: school_id,
+        schools_id: '<?php echo $school->schools_id ?>'
+      }
+    }).done(function(data) {
+
+      $('#request_detail_body').html(data);
+    });
+
+    $('#request_detail').modal('show');
+  }
+
+  function change_session_status(school_id) {
+    $('#request_detail_body').html('Please Wait .....');
+    $.ajax({
+      type: "POST",
+      url: "<?php echo site_url("online_cases/change_session_status"); ?>",
       data: {
         school_id: school_id,
         schools_id: '<?php echo $school->schools_id ?>'

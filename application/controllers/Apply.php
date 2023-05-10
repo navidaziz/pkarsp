@@ -90,10 +90,9 @@ class Apply extends Admin_Controller
 		        WHERE `schools_id` = '" . $schools_id . "'
 				AND session_year_id = '" . $session_id . "'";
 		$already_applied  = $this->db->query($query)->row();
-		if ($already_applied->total > 0) {
+		if ($already_applied->total) {
 			$session_school_id = $already_applied->schoolId;
 		}
-
 
 		$query = "SELECT * FROM `school` 
 		          WHERE `schools_id` = '" . $schools_id . "'
