@@ -44,6 +44,7 @@ class Online_cases extends Admin_Controller
       `school`.`file_status`,
       `school`.`apply_date`,
       schools.isfined,
+      school.status_remark,
 		(SELECT s.status
 		FROM school as s WHERE 
 		 s.schools_id = `schools`.`schoolId`
@@ -839,12 +840,14 @@ class Online_cases extends Admin_Controller
    {
       $this->data['schools_id'] = $schools_id = (int) $this->input->post('schools_id');
       $this->data['school_id'] = $school_id = (int) $this->input->post('school_id');
+      $status_remark = $this->db->escape($this->input->post('status_remark'));
       $file_status = (int) $this->input->post('file_status');
       $completed_date = date("Y-m-d H:i:s");
       $userId = $this->session->userdata('userId');
       $query = "UPDATE `school` SET file_status ='" . $file_status . "', 
       `note_sheet_completed_date` = '" . $completed_date . "',
-              note_sheet_completed='" . $userId . "' 
+              note_sheet_completed='" . $userId . "' ,
+              `status_remark`=" . $status_remark . "
               WHERE status=2 and schoolId= '" . $school_id . "' 
               and schools_id = '" . $schools_id . "'";
       if ($this->db->query($query)) {

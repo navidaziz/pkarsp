@@ -16,6 +16,9 @@
         <th>Defic</th>
         <th>Note</th>
         <th>Fine</th>
+        <?php if ($list_type == 3) { ?>
+          <th>Remarks</th>
+        <?php } ?>
         <th>Action</th>
 
       </tr>
@@ -74,7 +77,9 @@
                   <i class="fa fa-ban" title="Fine on this school" style="color: red;">1</i>
                 <?php } ?>
               </td>
-
+              <?php if ($list_type == 3) { ?>
+                <td><?php echo $request->status_remark; ?></td>
+              <?php } ?>
 
               <td>
                 <?php if ($request->registrationNumber) { ?>
