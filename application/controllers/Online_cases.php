@@ -840,10 +840,17 @@ class Online_cases extends Admin_Controller
    {
       $this->data['schools_id'] = $schools_id = (int) $this->input->post('schools_id');
       $this->data['school_id'] = $school_id = (int) $this->input->post('school_id');
-      $status_remark = $this->db->escape($this->input->post('status_remark'));
+
       $file_status = (int) $this->input->post('file_status');
       $completed_date = date("Y-m-d H:i:s");
       $userId = $this->session->userdata('userId');
+
+      if ($file_status == 3) {
+         $status_remark = $this->db->escape($this->input->post('status_remark'));
+      } else {
+         $status_remark = '';
+      }
+
       $query = "UPDATE `school` SET file_status ='" . $file_status . "', 
       `note_sheet_completed_date` = '" . $completed_date . "',
               note_sheet_completed='" . $userId . "' ,

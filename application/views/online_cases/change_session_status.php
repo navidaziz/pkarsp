@@ -33,17 +33,20 @@
                         <form action="<?php echo site_url("online_cases/change_file_status/$schools_id"); ?>" method="post">
                             <input type="hidden" value="<?php echo $schools_id ?>" name="schools_id" />
                             <input type="hidden" value="<?php echo $school_id ?>" name="school_id" />
-
-                            <input required type="radio" name="file_status" value="3" /> Pending Due to Previous Session<br />
+                            <input onclick="$('reason_list').hide();$('#status_remark').prop('required',false);" required type="radio" name="file_status" value="4" /> Operation Wing<br />
+                            <input onclick="$('reason_list').hide();$('#status_remark').prop('required',false);" required type="radio" name="file_status" value="10" /> Completed<br />
+                            <input onclick="$('reason_list').show();$('#status_remark').prop('required',true);" required type="radio" name="file_status" value="3" /> Pending Due to Previous Session<br />
                             <h4>Previous Session Pendency Reason</h4>
                             <?php
                             $status_remarks = array('10%', 'Financial Deficent', 'Fine', 'Other', 'Upgradation');
                             ?>
-                            <?php foreach ($status_remarks as $status_remark) { ?>
-                                <input required type="radio" value="<?php echo $status_remark; ?>" name="status_remark" />
-                                <?php echo $status_remark; ?>
-                                <span style="margin: 10px;"></span>
-                            <?php } ?>
+                            <div id="reason_list" style="">
+                                <?php foreach ($status_remarks as $status_remark) { ?>
+                                    <input required type="radio" value="<?php echo $status_remark; ?>" id="status_remark" name="status_remark" />
+                                    <?php echo $status_remark; ?>
+                                    <span style="margin: 10px;"></span>
+                                <?php } ?>
+                            </div>
 
                             <input type="submit" value="Change Status" name="Change Status" />
                         </form>
