@@ -40,7 +40,7 @@
                             <?php
                             $status_remarks = array('10%', 'Financial Deficent', 'Fine', 'Other', 'Upgradation');
                             ?>
-                            <div id="reason_list" style="">
+                            <div id="reason_list" style="display:none">
                                 <?php foreach ($status_remarks as $status_remark) { ?>
                                     <input required type="radio" value="<?php echo $status_remark; ?>" id="status_remark" name="status_remark" />
                                     <?php echo $status_remark; ?>
