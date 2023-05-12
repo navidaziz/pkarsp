@@ -848,13 +848,13 @@ class Online_cases extends Admin_Controller
       if ($file_status == 3) {
          $status_remark = $this->db->escape($this->input->post('status_remark'));
       } else {
-         $status_remark = '';
+         $status_remark = $this->db->escape('');
       }
 
       $query = "UPDATE `school` SET file_status ='" . $file_status . "', 
       `note_sheet_completed_date` = '" . $completed_date . "',
               note_sheet_completed='" . $userId . "' ,
-              `status_remark`=" . $status_remark . "
+              `status_remark`= " . $status_remark . "
               WHERE status=2 and schoolId= '" . $school_id . "' 
               and schools_id = '" . $schools_id . "'";
       if ($this->db->query($query)) {
