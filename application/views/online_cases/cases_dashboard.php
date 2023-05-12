@@ -182,7 +182,7 @@
                     <tr>
                       <th style="text-align: center;">Session</th>
                       <th style="text-align: center;">Applied</th>
-                      <th style="text-align: center;">Previous Pending</th>
+                      <th style="text-align: center;">Pending (Queue)</th>
                       <th style="text-align: center;">Total Pending</th>
                       <td>Reg.</td>
                       <td>Ren.+Upgr</td>
@@ -191,7 +191,6 @@
                       <td>Fin.Deficients</td>
                       <td>(10%)</td>
                       <td>Issue Pending</td>
-                      <td>Issued</td>
                     </tr>
                   </thead>
 
@@ -224,9 +223,9 @@
                         <td><?php echo $pending->previous_pending; ?></td>
                         <th style="text-align: center;"><?php echo $pending->total_pending; ?></th>
                         <td><?php echo $pending->registrations; ?></td>
-                        <td><?php echo $pending->renewals; ?></td>
                         <td><?php echo $pending->renewal_pgradations; ?></td>
                         <td><?php echo $pending->upgradations; ?></td>
+                        <td><?php echo $pending->renewals; ?></td>
                         <td><?php echo $pending->financially_deficient; ?></td>
                         <td><?php echo $pending->marked_to_operation_wing; ?></td>
                         <td><?php echo $pending->completed_pending; ?></td>
@@ -261,9 +260,9 @@
                       <td><?php echo $pending->previous_pending; ?></td>
                       <th style="text-align: center;"><?php echo $pending->total_pending; ?></th>
                       <td><?php echo $pending->registrations; ?></td>
-                      <td><?php echo $pending->renewals; ?></td>
                       <td><?php echo $pending->renewal_pgradations; ?></td>
                       <td><?php echo $pending->upgradations; ?></td>
+                      <td><?php echo $pending->renewals; ?></td>
                       <td><?php echo $pending->financially_deficient; ?></td>
                       <td><?php echo $pending->marked_to_operation_wing; ?></td>
                       <td><?php echo $pending->completed_pending; ?></td>
@@ -284,7 +283,7 @@
                     <tr>
                       <th style="text-align: center;">Session</th>
                       <th style="text-align: center;">Applied</th>
-                      <th style="text-align: center;">Previous Pending</th>
+                      <th style="text-align: center;">Pending (Queue)</th>
                       <th style="text-align: center;">Total Pending</th>
                       <td>Reg.</td>
                       <td>Ren.+Upgr</td>
@@ -326,9 +325,9 @@
                         <td><?php echo $pending->previous_pending; ?></td>
                         <th style="text-align: center;"><?php echo $pending->total_pending; ?></th>
                         <td><?php echo $pending->registrations; ?></td>
-                        <td><?php echo $pending->renewals; ?></td>
                         <td><?php echo $pending->renewal_pgradations; ?></td>
                         <td><?php echo $pending->upgradations; ?></td>
+                        <td><?php echo $pending->renewals; ?></td>
                         <td><?php echo $pending->financially_deficient; ?></td>
                         <td><?php echo $pending->marked_to_operation_wing; ?></td>
                         <td><?php echo $pending->completed_pending; ?></td>
