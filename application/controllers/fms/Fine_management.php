@@ -19,6 +19,16 @@ class Fine_management extends CI_Controller
 		$this->load->view("layout", $this->data);
 	}
 
+
+	public function fine_amount_detail()
+	{
+		echo "we are here";
+		$this->data["title"] = "Fine Amount Detail";
+		$this->data['school_id'] = $this->input->post('school_id');
+		$this->data['fine_id'] = $this->input->post('fine_id');
+		$this->load->view("fms/fine_management/fine_amount_detail", $this->data);
+	}
+
 	public function get_fine_add_form()
 	{
 
@@ -33,12 +43,11 @@ class Fine_management extends CI_Controller
 		$this->data['school_id'] = $school_id =  $this->input->post('school_id');
 		$this->data['fine_id'] = $fine_id = $this->input->post('fine_id');
 
-		$query = "SELECT f.*, ft.fine_title , fc.fine_channel_title,
+		$query = "SELECT f.*, fc.fine_channel_title,
 		SUM(fine_amount) as fine_amount,
 		(SELECT SUM(w.waived_off_amount) FROM fine_waived_off as w WHERE w.is_deleted=0 AND w.school_id = f.school_id and w.fine_id = f.fine_id ) as total_waived_off,
 		(SELECT SUM(fp.deposit_amount) FROM fine_payments as fp WHERE fp.is_deleted=0 AND fp.school_id = f.school_id and fp.fine_id = f.fine_id ) as total_fine_paid
 		 FROM `fines` as f
-		INNER JOIN fine_types ft ON (ft.fine_type_id = f.fine_type_id)
 		INNER JOIN fine_channels fc ON (fc.fine_channel_id = f.fine_channel_id) 
 		          WHERE f.school_id = '" . $school_id . "'
 				  AND f.fine_id = '" . $fine_id . "'";
@@ -50,12 +59,11 @@ class Fine_management extends CI_Controller
 		$this->data['school_id'] = $school_id =  $this->input->post('school_id');
 		$this->data['fine_id'] = $fine_id = $this->input->post('fine_id');
 
-		$query = "SELECT f.*, ft.fine_title , fc.fine_channel_title,
+		$query = "SELECT f.*,  fc.fine_channel_title,
 		SUM(fine_amount) as fine_amount,
 		(SELECT SUM(w.waived_off_amount) FROM fine_waived_off as w WHERE w.is_deleted=0 AND w.school_id = f.school_id and w.fine_id = f.fine_id ) as total_waived_off,
 		(SELECT SUM(fp.deposit_amount) FROM fine_payments as fp WHERE fp.is_deleted=0 AND fp.school_id = f.school_id and fp.fine_id = f.fine_id ) as total_fine_paid
 		 FROM `fines` as f
-		INNER JOIN fine_types ft ON (ft.fine_type_id = f.fine_type_id)
 		INNER JOIN fine_channels fc ON (fc.fine_channel_id = f.fine_channel_id) 
 		          WHERE f.school_id = '" . $school_id . "'
 				  AND f.fine_id = '" . $fine_id . "'";
@@ -180,10 +188,34 @@ class Fine_management extends CI_Controller
 
 	public function add_fine()
 	{
+
+
+		$fine_type_ids = explode(",", $this->input->post('fine_type_ids'));
+
+
+		$slected_fines = array();
+		$seleted_fine_amount = 0;
+		foreach ($fine_type_ids as $fine_type_id) {
+			$fine_types = $this->input->post('fine_types');
+			foreach ($fine_types as $fine_index => $fine_amount) {
+				if ($fine_type_id == $fine_index) {
+					$slected_fines[$fine_type_id] = $fine_amount;
+					$seleted_fine_amount += $fine_amount;
+				}
+			}
+		}
+
+		if ($seleted_fine_amount != $this->input->post("fine_amount")) {
+			$response['error'] = true;
+			$response['msg'] = 'Fine amount not matched. Try again.';
+			echo json_encode($response);
+			exit();
+		}
+
 		$validations = array(
-			array('field' => 'file_number', 'label' => 'File Number', 'rules' => 'required'),
+			//array('field' => 'file_number', 'label' => 'File Number', 'rules' => 'required'),
 			array('field' => 'letter_no', 'label' => 'Letter Number', 'rules' => 'required'),
-			array('field' => 'fine_type_id', 'label' => 'Fine Category', 'rules' => 'required'),
+			array('field' => 'fine_type_ids', 'label' => 'Fine Type', 'rules' => 'required'),
 			array('field' => 'fine_nature', 'label' => 'Fine Nature', 'rules' => 'required'),
 			array('field' => 'session_id', 'label' => 'Session', 'rules' => 'required'),
 			array('field' => 'fine_channel_id', 'label' => 'Fine Channel', 'rules' => 'required'),
@@ -206,8 +238,8 @@ class Fine_management extends CI_Controller
 				exit();
 			}
 
-			$input["file_number"] = $this->input->post("file_number");
-			$input["fine_type_id"] = $this->input->post("fine_type_id");
+			//$input["file_number"] = $this->input->post("file_number");
+			//$input["fine_type_id"] = $this->input->post("fine_type_id");
 			$input["fine_channel_id"] = $this->input->post("fine_channel_id");
 			$input["fine_amount"] = $this->input->post("fine_amount");
 			$input["fine_nature"] = $this->input->post("fine_nature");
@@ -216,11 +248,20 @@ class Fine_management extends CI_Controller
 			$input["remarks"] = $this->input->post("remarks");
 			$input["letter_no"] = $this->input->post("letter_no");
 			$input['created_by'] = $this->session->userdata('userId');
-
-			if ($this->db->insert('fines', $input)) {
+			$fine_id = $this->db->insert('fines', $input);
+			if ($fine_id) {
+				$this->db->where('fine_id', $fine_id);
+				$this->db->delete('fine_amount_details');
+				$fine_amount = array();
+				foreach ($slected_fines as $fine_type_id => $amount) {
+					$fine_amount['fine_id'] = $fine_id;
+					$fine_amount['school_id'] = $school_id;
+					$fine_amount['fine_type_id'] = $fine_type_id;
+					$fine_amount['amount'] = $amount;
+					$fine_id = $this->db->insert('fine_amount_details', $fine_amount);
+				}
 				$response['error'] = false;
 				$response['msg'] = 'Fine Add Successfully';
-				$this->_field_data = array();
 			}
 		} else {
 
@@ -390,17 +431,37 @@ class Fine_management extends CI_Controller
 	public function view_fine_detail($school_id)
 	{
 		$this->data['school_id'] =  $school_id = (int) $school_id;
-		$query = "SELECT s.schoolId as school_id, 
-          s.registrationNumber as reg_number, 
-          s.schoolName as school_name, 
-          s.districtTitle as district_name,
-          s.tehsil_name, 
-          s.uc,
-          s.address,
-          s.level
-		  FROM 
-		  registered_schools s 
-		  WHERE s.schoolId = $school_id";
+		// $query = "SELECT s.schoolId as school_id, 
+		//   s.registrationNumber as reg_number, 
+		//   s.schoolName as school_name, 
+		//   s.districtTitle as district_name,
+		//   s.tehsil_name, 
+		//   s.uc,
+		//   s.address,
+		//   s.level
+		//   FROM 
+		//   registered_schools s 
+		//   WHERE s.schoolId = $school_id";
+
+		$query = "select `s`.`schoolId` AS `school_id`,
+		`s`.`registrationNumber` AS `reg_number`,
+		(select `school_file_numbers`.`file_number` from `school_file_numbers` where (`school_file_numbers`.`school_id` = `s`.`schoolId`) limit 1) AS `file_no`,
+		`s`.`yearOfEstiblishment` AS `year_of_est`,
+		`s`.`schoolName` AS `school_name`,
+		`d`.`districtTitle` AS `district_name`,
+		`d`.`new_region` AS `new_region`,if((`d`.`new_region` = 1),'Central',if((`d`.`new_region` = 2),'South',if((`d`.`new_region` = 3),'Malakand',if((`d`.`new_region` = 4),'Hazara',if((`d`.`new_region` = 5),'Peshawar','Others'))))) AS `region`,
+		(select `t`.`tehsilTitle` from `tehsils` `t` where (`t`.`tehsilId` = `s`.`tehsil_id`)) AS `tehsil_name`,
+		(select `uc`.`ucTitle` from `uc` where (`uc`.`ucId` = `s`.`uc_id`)) AS `us`,
+		`s`.`address` AS `address`,
+		(select `l`.`levelofInstituteTitle` from `levelofinstitute` `l` where (`l`.`levelofInstituteId` = (select max(`school`.`level_of_school_id`) from `school` where (`school`.`schools_id` = `s`.`schoolId`)))) AS `level`, 
+		`s`.`telePhoneNumber`,
+		`s`.`schoolMobileNumber`,
+		(SELECT `u`.`contactNumber` FROM `users` as u WHERE u.userId = s.owner_id) as owner_number
+		from (`schools` `s` 
+		INNER JOIN `district` `d` on((`d`.`districtId` = `s`.`district_id`))) 
+		WHERE `s`.`registrationNumber` > 0
+		AND `s`.schoolId = $school_id";
+
 		$this->data['school'] = $this->db->query($query)->row();
 
 		$query = "SELECT 
@@ -413,13 +474,15 @@ class Fine_management extends CI_Controller
 		";
 		$this->data['fine_summary'] = $this->db->query($query)->row();
 
-		$query = "SELECT f.*, ft.fine_title , fc.fine_channel_title,
+		$query = "SELECT f.*,  fc.fine_channel_title,
 		SUM(fine_amount) as fine_amount,
 		COALESCE((SELECT SUM(w.waived_off_amount) FROM fine_waived_off as w WHERE w.is_deleted=0 AND w.school_id = f.school_id and w.fine_id = f.fine_id ),0) as total_waived_off,
-		COALESCE((SELECT SUM(fp.deposit_amount) FROM fine_payments as fp WHERE fp.is_deleted=0 AND fp.school_id = f.school_id and fp.fine_id = f.fine_id ),0) as total_fine_paid
+		COALESCE((SELECT SUM(fp.deposit_amount) FROM fine_payments as fp WHERE fp.is_deleted=0 AND fp.school_id = f.school_id and fp.fine_id = f.fine_id ),0) as total_fine_paid,
+		sy.sessionYearTitle as `session_year`
 		 FROM `fines` as f
-		INNER JOIN fine_types ft ON (ft.fine_type_id = f.fine_type_id)
 		INNER JOIN fine_channels fc ON (fc.fine_channel_id = f.fine_channel_id) 
+
+		INNER JOIN session_year sy ON (sy.sessionYearId = f.session_id) 
 		          WHERE f.school_id = '" . $school_id . "'
 				  GROUP BY f.fine_id";
 		$this->data['fines'] = $this->db->query($query)->result();

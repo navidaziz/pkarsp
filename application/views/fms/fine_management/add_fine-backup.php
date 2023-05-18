@@ -14,11 +14,16 @@
                     <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px; background-color: white; padding:10px">
                         <h4>Fine Detail</h4>
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-5">
 
                                 <table class="table">
 
-
+                                    <tr>
+                                        <td>File Number</td>
+                                        <td><input required type="text" value="<?php echo set_value("file_number"); ?>" name="file_number" placeholder="File Number" id="file_number" />
+                                            <?php echo form_error("file_number", "<p class=\"text-danger\">", "</p>"); ?>
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <td>Letter Number</td>
                                         <td><input required type="text" value="<?php echo set_value("letter_no"); ?>" name="letter_no" placeholder="Letter Number" id="letter_name" />
@@ -37,12 +42,28 @@
                                     <tr>
                                         <td>File Nature</td>
                                         <td>
-                                            <input type="radio" name="fine_nature" value="general" /> General Fine <br />
+                                            <input type="radio" name="fine_nature" value="general" /> General Fine
                                             <input type="radio" name="fine_nature" value="cc" /> CC Fine
 
                                         </td>
                                     </tr>
-
+                                    <tr>
+                                        <td>
+                                            Fine Types
+                                        </td>
+                                        <td>
+                                            <select required class="select2" id="fine_type_id" name="fine_type_id" style="width: 100%;">
+                                                <option value="">Select Fine Type</option>
+                                                <?php
+                                                $query = "SELECT * FROM `fine_types`";
+                                                $fine_types = $this->db->query($query)->result();
+                                                foreach ($fine_types as $fine_type) { ?>
+                                                    <option <?php if ($fine_type->fine_type_id == set_value("fine_type_id")) { ?> selected <?php } ?> value="<?php echo $fine_type->fine_type_id; ?>"><?php echo $fine_type->fine_title; ?></option>
+                                                <?php } ?>
+                                            </select>
+                                            <?php echo form_error("fine_type_id", "<p class=\"text-danger\">", "</p>"); ?>
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <td>Channel</td>
                                         <td><?php
@@ -72,85 +93,24 @@
                                             </select>
                                         </td>
                                     </tr>
-
-
-
-                                </table>
-
-                            </div>
-                            <div class="col-md-5">
-                                <script>
-                                    fine_type_ids = [];
-                                    var total_sum = 0;
-
-                                    function calculate_fine_total() {
-                                        total_sum = 0;
-                                        $('.fineAmount').prop('required', false);
-                                        var checkedVals = $('.fine_type_checkbox:checkbox:checked').map(function() {
-                                            return this.value;
-                                        }).get();
-                                        ids = checkedVals.join(",");
-                                        $('#fine_type_ids').val(ids);
-
-                                        ids = ids.split(",");
-                                        // alert(ids.forEach(sumfineamount));
-                                        ids.forEach(sumfineamount);
-                                        //console.log(total_sum);
-                                        $('#fine_amount').val(total_sum);
-                                        inWords4(total_sum, 'numbertowords');
-
-
-                                    }
-
-                                    function sumfineamount(value) {
-                                        // txt += value + "<br>";
-                                        //console.log('#fineAmount_' + value);
-                                        $('#fineAmount_' + value).prop('required', true);
-                                        if (value) {
-                                            if ($('#fineAmount_' + value).val() == '') {
-                                                //$('#fineAmount_' + value).val(0);
-                                                //total_sum += parseInt($('#fineAmount_' + value).val());
-                                            } else {
-                                                total_sum += parseInt($('#fineAmount_' + value).val());
-                                            }
-                                        } else {
-                                            total_sum = 0;
-                                        }
-                                    }
-                                </script>
-                                <input type="text" name="fine_type_ids" id="fine_type_ids" />
-
-                                <table class="table">
-                                    <?php
-                                    $query = "SELECT * FROM `fine_types`";
-                                    $fine_types = $this->db->query($query)->result();
-                                    foreach ($fine_types as $fine_type) { ?>
-                                        <tr>
-                                            <td> <input class="fine_type_checkbox" onchange="calculate_fine_total()" type="checkbox" value="<?php echo $fine_type->fine_type_id ?>" /></td>
-                                            <td><?php echo $fine_type->fine_title; ?></td>
-                                            <td><input class="fineAmount" onkeyup="calculate_fine_total()" type="number" name="fine_types[<?php echo $fine_type->fine_type_id ?>]" id="fineAmount_<?php echo $fine_type->fine_type_id ?>" value="<?php echo $fine_type->amount; ?>" min="<?php echo $fine_type->min_amount; ?>" max="<?php echo $fine_type->max_amount; ?>" /></td>
-                                        </tr>
-
-                                    <?php } ?>
                                     <tr>
                                         <td>
-                                        </td>
+                                            Amount </td>
                                         <td>
-                                            <div style="text-transform: capitalize;  text-align:left">
-                                                In Words:
-                                                <strong style="color: green;" id="numbertowords"></strong>
-                                            </div>
-
-                                        </td>
-                                        <td>
-                                            Total: <input required onkeyup="inWords()" type="number" value="<?php echo set_value("fine_amount"); ?>" name="fine_amount" placeholder="Example 2000 etc." id="fine_amount" />
+                                            <input required onkeyup="inWords()" type="number" value="<?php echo set_value("fine_amount"); ?>" name="fine_amount" placeholder="Example 2000 etc." id="amount" />
                                             <?php echo form_error("fine_amount", "<p class=\"text-danger\">", "</p>"); ?>
 
                                         </td>
                                     </tr>
+
+
                                 </table>
+                                <div style="text-transform: capitalize;  text-align:left">
+
+                                    <small style="color: red;"> In Words: </small> <small style="color: green;" id="number_to_words"></small>
+                                </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-7">
 
                                 <label class="control-label" for="numberOfClassroom">Fine Detail</label>
                                 <br />
