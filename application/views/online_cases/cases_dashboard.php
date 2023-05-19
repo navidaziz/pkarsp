@@ -395,41 +395,43 @@
                   </tr>
                   <?php
                   $userId = $this->session->userdata('userId');
-                  if ($userId == 28727) {
-                    $query = "SELECT users.userTitle, users.userId FROM `school`
+                  // if ($userId == 28727) {
+                  $query = "SELECT users.userTitle, users.userId FROM `school`
                           INNER JOIN users ON(users.userId = school.note_sheet_completed)
                           AND school.file_status IN (10,4)
                           GROUP BY users.userId;";
-                    $users = $this->db->query($query)->result();
-                    foreach ($users as $user) {
+                  $users = $this->db->query($query)->result();
+                  foreach ($users as $user) {
                   ?>
-                      <tr>
-                        <th><?php echo $user->userTitle;  ?></th>
-                        <?php for ($i = $one_month_ago; $i <= $current_date; $i = strtotime('+1 day', $i)) {
-                          $date = date('Y-m-d', $i);
-                          $query = "SELECT COUNT(school.note_sheet_completed) as total FROM `school`
+                    <tr>
+                      <th><?php echo $user->userTitle;  ?></th>
+                      <?php for ($i = $one_month_ago; $i <= $current_date; $i = strtotime('+1 day', $i)) {
+                        $date = date('Y-m-d', $i);
+                        $query = "SELECT COUNT(school.note_sheet_completed) as total FROM `school`
                         INNER JOIN users ON(users.userId = school.note_sheet_completed)
                         AND school.file_status IN (10,4)
                         AND users.userId = '" . $user->userId . "'
                         AND DATE(note_sheet_completed_date) = '" . $date . "'";
-                          $total = $this->db->query($query)->row()->total;
-                        ?>
-                          <td>
-                            <?php echo $total;  ?>
-                          </td>
-                        <?php } ?>
-                        <th style="text-align: center;">
-                          <?php $query = "SELECT COUNT(school.note_sheet_completed) as total FROM `school`
+                        $total = $this->db->query($query)->row()->total;
+                      ?>
+                        <td>
+                          <?php echo $total;  ?>
+                        </td>
+                      <?php } ?>
+                      <th style="text-align: center;">
+                        <?php $query = "SELECT COUNT(school.note_sheet_completed) as total FROM `school`
                         INNER JOIN users ON(users.userId = school.note_sheet_completed)
                         AND school.file_status IN (10,4)
                         AND users.userId = '" . $user->userId . "'
                         AND (DATE(note_sheet_completed_date) BETWEEN '" . date('Y-m-d', $one_month_ago) . "' and '" . date('Y-m-d', $current_date) . "')";
-                          echo $total = $this->db->query($query)->row()->total; ?>
-                        </th>
-                      </tr>
-                    <?php } ?>
+                        echo $total = $this->db->query($query)->row()->total; ?>
+                      </th>
+                    </tr>
                   <?php } ?>
+                  <?php //} 
+                  ?>
                 </table>
+
               </div>
             </div>
 
