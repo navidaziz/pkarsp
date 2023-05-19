@@ -1359,9 +1359,10 @@ class Form extends Admin_Controller
 			$this->db->query($query)->result()[0]->max_tution_fee
 		);
 
-		$query = "SELECT fee_min, fee_max, renewal_app_processsing_fee, renewal_app_inspection_fee, renewal_fee FROM `fee_structure` WHERE fee_min <= $max_tuition_fee ORDER BY fee_min DESC LIMIT 1";
+		$query = "SELECT * FROM `fee_structure` WHERE fee_min <= '" . $max_tuition_fee . "' 
+		AND school_type_id = '" . $school->school_type_id . "'
+		ORDER BY fee_min DESC LIMIT 1";
 		$this->data['fee_sturucture'] = $this->db->query($query)->result()[0];
-
 
 		$this->data['title'] = "Registration";
 		$this->data['description'] = '';
