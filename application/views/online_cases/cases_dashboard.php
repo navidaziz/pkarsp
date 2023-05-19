@@ -347,7 +347,7 @@
             <div class="block_div">
               <h4>Online Applied / Issued</h4>
               <div class="table-responsive">
-                <table class="table table-bordered" style="font-size: 10px;">
+                <table class="table table-bordered" style="font-size: 10px; text-align:center !important">
                   <tr>
                     <th></th>
                     <?php
@@ -362,6 +362,7 @@
                     <?php
                     }
                     ?>
+                    <th>Last 30 Days Progress</th>
                   </tr>
                   <tr>
                     <th>Applied</th>
@@ -372,6 +373,10 @@
                         <?php echo $this->db->query($query)->row()->total;  ?>
                       </td>
                     <?php } ?>
+                    <td>
+                      <?php $query = "SELECT COUNT(*) as total FROM school WHERE (DATE(apply_date) BETWEEN '" . date('Y-m-d', $one_month_ago) . "' and '" . date('Y-m-d', $current_date) . "')";
+                      echo $total = $this->db->query($query)->row()->total; ?>
+                    </td>
                   </tr>
                   <tr>
                     <th>Cer.issued</th>
@@ -382,6 +387,10 @@
                         <?php echo $this->db->query($query)->row()->total;  ?>
                       </td>
                     <?php } ?>
+                    <td>
+                      <?php $query = "SELECT COUNT(*) as total FROM school WHERE (DATE(note_sheet_completed_date) BETWEEN '" . date('Y-m-d', $one_month_ago) . "' and '" . date('Y-m-d', $current_date) . "')";
+                      echo $total = $this->db->query($query)->row()->total; ?>
+                    </td>
 
                   </tr>
                   <?php
@@ -409,6 +418,14 @@
                             <?php echo $total;  ?>
                           </td>
                         <?php } ?>
+                        <td>
+                          <?php $query = "SELECT COUNT(school.note_sheet_completed) as total FROM `school`
+                        INNER JOIN users ON(users.userId = school.note_sheet_completed)
+                        AND school.file_status IN (10,4)
+                        AND users.userId = '" . $user->userId . "'
+                        AND (DATE(note_sheet_completed_date) BETWEEN '" . date('Y-m-d', $one_month_ago) . "' and '" . date('Y-m-d', $current_date) . "')";
+                          echo $total = $this->db->query($query)->row()->total; ?>
+                        </td>
                       </tr>
                     <?php } ?>
                   <?php } ?>
