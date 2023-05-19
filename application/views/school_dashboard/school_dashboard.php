@@ -112,7 +112,7 @@
             <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
               <h4 style="text-align: center;">Other Detail</h4>
               <?php if (!empty($school->yearOfEstiblishment)) : ?>
-                <?php echo "Established In: " . date("M, Y", strtotime($school->yearOfEstiblishment)); ?>
+                <?php echo "Established In: " . $school->yearOfEstiblishment; ?>
                 <br>
               <?php endif; ?>
               <?php if (!empty($school->levelofInstituteTitle)) : ?>
