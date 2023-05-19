@@ -313,7 +313,8 @@ class Temp_controller extends CI_Controller
   public function get_notifications()
   {
     $query =
-      "SELECT * FROM message_for_all where`message_for_all`.`select_all`='yes'  order by `message_for_all`.`message_id` DESC LIMIT 30";
+      "SELECT * FROM message_for_all where`message_for_all`.`select_all`='yes' and status=1 
+      order by `message_for_all`.`message_id` DESC LIMIT 30";
     $query_result = $this->db->query($query);
     $notifications = $query_result->result();
     foreach ($notifications as $message) { ?>
