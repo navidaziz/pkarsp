@@ -97,6 +97,28 @@ class Mis_dashboard extends Admin_Controller
          exit();
       }
 
+      $query = "SELECT portal_block,portal_block_reason FROM schools WHERE schoolId = '" . $schools_id . "'";
+      $block = $this->db->query($query)->row();
+      if ($block->portal_block != 0) {
+         echo '
+         <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
+
+         <div class="row">
+         <div class="col-md-12">
+         <div style="text-align:center">
+         <div class="alert alert-warning">';
+         echo 'The school portal has been blocked for the following reason:
+            <i>' . $block->portal_block_reason . '</i>
+            <br />
+            Renewal or registration services cannot be provided until the administrator unblock the portal.';
+         echo '</div>
+         </div>
+         </div>
+         <div>
+         </div>';
+         exit();
+      }
+
       $query = "SELECT section_e FROM school WHERE schoolId = '" . $school_id . "'";
       $section_e = $this->db->query($query)->row()->section_e;
       if ($section_e == 0) {
@@ -266,6 +288,11 @@ class Mis_dashboard extends Admin_Controller
          $this->db->where('schoolId', $school_id);
          $affected_rows = $this->db->update('school', $update_data);
          if ($affected_rows > 0) {
+            $query = "UPDATE school SET file_status=1
+            WHERE schools_id = '" . $schools_id . "'
+            AND schoolId > '" . $school_id . "'
+            AND file_status=3";
+            $this->db->query($query);
             $this->send_certificate($schools_id, $school_id, $registration_type);
             $arr['schools_id'] = $schools_id;
             $arr['msg'] = "Issued Successfully";
