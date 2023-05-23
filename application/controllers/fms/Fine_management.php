@@ -20,12 +20,29 @@ class Fine_management extends CI_Controller
 	}
 
 
+	// public function fine_amount_detail()
+	// {
+
+	// 	$this->data["title"] = "Fine Amount Detail";
+	// 	$this->data['school_id'] = $this->input->post('school_id');
+	// 	$this->data['fine_id'] = $this->input->post('fine_id');
+	// 	$this->load->view("fms/fine_management/fine_amount_detail", $this->data);
+	// }
+
 	public function fine_amount_detail()
 	{
-		echo "we are here";
-		$this->data["title"] = "Fine Amount Detail";
-		$this->data['school_id'] = $this->input->post('school_id');
-		$this->data['fine_id'] = $this->input->post('fine_id');
+		$this->data['school_id'] = $school_id =  $this->input->post('school_id');
+		$this->data['fine_id'] = $fine_id = $this->input->post('fine_id');
+
+		$query = "SELECT f.*,  fc.fine_channel_title,
+		SUM(fine_amount) as fine_amount,
+		(SELECT SUM(w.waived_off_amount) FROM fine_waived_off as w WHERE w.is_deleted=0 AND w.school_id = f.school_id and w.fine_id = f.fine_id ) as total_waived_off,
+		(SELECT SUM(fp.deposit_amount) FROM fine_payments as fp WHERE fp.is_deleted=0 AND fp.school_id = f.school_id and fp.fine_id = f.fine_id ) as total_fine_paid
+		 FROM `fines` as f
+		INNER JOIN fine_channels fc ON (fc.fine_channel_id = f.fine_channel_id) 
+		          WHERE f.school_id = '" . $school_id . "'
+				  AND f.fine_id = '" . $fine_id . "'";
+		$this->data['fine'] = $this->db->query($query)->row();
 		$this->load->view("fms/fine_management/fine_amount_detail", $this->data);
 	}
 

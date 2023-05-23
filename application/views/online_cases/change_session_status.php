@@ -28,6 +28,7 @@
                 <?php
                 $query = "SELECT file_status, `status` FROM school WHERE schoolId='" . $school_id . "' and schools_id = '" . $schools_id . "' and status=2";
                 $filestatus = $this->db->query($query)->row();
+
                 if ($filestatus->file_status == 1 or is_null($filestatus->file_status)) { ?>
                     <h5>
                         <form action="<?php echo site_url("online_cases/change_file_status/$schools_id"); ?>" method="post">
@@ -52,7 +53,8 @@
                         </form>
                     </h5>
                 <?php } else { ?>
-                    Status change not allowed
+                    Status change not allowed<br />
+                    File Status <?php echo $filestatus->file_status; ?>
                 <?php } ?>
             </div>
         </div>
