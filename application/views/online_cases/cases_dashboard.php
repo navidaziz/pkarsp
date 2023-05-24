@@ -426,7 +426,7 @@
                         AND DATE(note_sheet_completed_date) = '" . $date . "'";
                         $total = $this->db->query($query)->row()->total;
                       ?>
-                        <td>
+                        <td style="background-color: rgba(255, 99, 71, 0.<?php echo $total; ?>);">
                           <?php echo $total;  ?>
                         </td>
                       <?php } ?>
