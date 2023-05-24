@@ -443,7 +443,8 @@
                         INNER JOIN users ON(users.userId = school.note_sheet_completed)
                         AND school.file_status IN (10,4)
                         AND users.userId = '" . $user->userId . "'";
-                        echo $total = $this->db->query($query)->row()->total; ?>
+                        //echo $total = $this->db->query($query)->row()->total; 
+                        ?>
                       </th>
                     </tr>
                   <?php } ?>
