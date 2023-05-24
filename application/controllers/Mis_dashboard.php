@@ -78,6 +78,32 @@ class Mis_dashboard extends Admin_Controller
       $this->data['schools_id'] = $schools_id = (int) $this->input->post('schools_id');
       $this->data['school_id'] = $school_id = (int) $this->input->post('school_id');
 
+
+
+
+
+      $query = " SELECT COUNT(*) as previous_not_issued FROM school 
+                 WHERE schoolId < '" . $school_id . "' 
+                 AND schools_id ='" . $schools_id . "' 
+                 AND status!=1;";
+      $previous_not_issued = $this->db->query($query)->row()->previous_not_issued;
+      if ($previous_not_issued >= 0) {
+         echo '
+         <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
+
+         <div class="row">
+         <div class="col-md-12">
+         <div style="text-align:center">
+         <div class="alert alert-warning">';
+         echo 'We cannot issue renewal or registration until previous session renewal not issued.';
+         echo '</div>
+         </div>
+         </div>
+         <div>
+         </div>';
+         exit();
+      }
+
       $query = "SELECT isfined FROM schools WHERE schoolId = '" . $schools_id . "'";
       $isfined = $this->db->query($query)->row()->isfined;
       if ($isfined == 1) {
