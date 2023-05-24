@@ -392,7 +392,7 @@
                       </td>
                     <?php } ?>
                     <th style="text-align: center;">
-                      <?php $query = "SELECT COUNT(*) as total FROM school WHERE (DATE(note_sheet_completed_date) BETWEEN '" . date('Y-m-d', $one_month_ago) . "' and '" . date('Y-m-d', $current_date) . "')";
+                      <?php $query = "SELECT COUNT(*) as total FROM school WHERE (DATE(cer_issue_date) BETWEEN '" . date('Y-m-d', $one_month_ago) . "' and '" . date('Y-m-d', $current_date) . "')";
                       echo $total = $this->db->query($query)->row()->total; ?>
                     </th>
                     <th></th>
