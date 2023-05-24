@@ -364,6 +364,7 @@
                     ?>
                     <th style="text-align: center;">Last 30 Days Progress</th>
                     <th>Total Progress</th>
+                    <th>Daily AVG</th>
                   </tr>
                   <tr>
                     <th>Applied</th>
@@ -379,6 +380,7 @@
                       echo $total = $this->db->query($query)->row()->total; ?>
                     </th>
                     <th></th>
+                    <th></th>
                   </tr>
                   <tr>
                     <th>Cer.issued</th>
@@ -393,6 +395,7 @@
                       <?php $query = "SELECT COUNT(*) as total FROM school WHERE (DATE(note_sheet_completed_date) BETWEEN '" . date('Y-m-d', $one_month_ago) . "' and '" . date('Y-m-d', $current_date) . "')";
                       echo $total = $this->db->query($query)->row()->total; ?>
                     </th>
+                    <th></th>
                     <th></th>
                   </tr>
                   <?php
@@ -430,6 +433,13 @@
                       </th>
                       <th style="text-align: center;">
                         <?php $query = "SELECT COUNT(school.note_sheet_completed) as total FROM `school`
+                        INNER JOIN users ON(users.userId = school.note_sheet_completed)
+                        AND school.file_status IN (10,4)
+                        AND users.userId = '" . $user->userId . "'";
+                        echo $total = $this->db->query($query)->row()->total; ?>
+                      </th>
+                      <th style="text-align: center;">
+                        <?php $query = "SELECT AVG(school.note_sheet_completed) as total FROM `school`
                         INNER JOIN users ON(users.userId = school.note_sheet_completed)
                         AND school.file_status IN (10,4)
                         AND users.userId = '" . $user->userId . "'";
