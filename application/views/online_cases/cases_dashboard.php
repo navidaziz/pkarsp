@@ -351,20 +351,27 @@
                   <tr>
                     <th></th>
                     <?php
+                    $working_days = 0;
                     $current_date = time(); // get the current date and time as a Unix timestamp
                     $one_month_ago = strtotime('-1 month', $current_date); // get the Unix timestamp for one month ago
 
                     // loop through each day from one month ago until today and output the date in a desired format
                     for ($i = $one_month_ago; $i <= $current_date; $i = strtotime('+1 day', $i)) {
                       $date = date('d M, y', $i);
+
                     ?>
-                      <th> <?php echo $date ?></th>
+                      <th> <?php echo $date;
+                            echo '<br />';
+                            if (date('N', $i) < 6) {
+                              $working_days++;
+                            }
+                            ?></th>
                     <?php
                     }
                     ?>
                     <th style="text-align: center;">Last 30 Days Progress</th>
                     <th>Total Progress</th>
-                    <!-- <th>Daily AVG</th> -->
+                    <th>AVG (<?php echo $working_days; ?> working days)</th>
                   </tr>
                   <tr>
                     <th>Applied</th>
@@ -380,7 +387,7 @@
                       echo $total = $this->db->query($query)->row()->total; ?>
                     </th>
                     <th></th>
-                    <!-- <th></th> -->
+                    <th></th>
                   </tr>
                   <tr>
                     <th>Cer.issued</th>
@@ -396,7 +403,7 @@
                       echo $total = $this->db->query($query)->row()->total; ?>
                     </th>
                     <th></th>
-                    <!-- <th></th> -->
+                    <th></th>
                   </tr>
                   <?php
                   $userId = $this->session->userdata('userId');
@@ -437,6 +444,13 @@
                         AND school.file_status IN (10,4)
                         AND users.userId = '" . $user->userId . "'";
                         echo $total = $this->db->query($query)->row()->total; ?>
+                      </th>
+                      <th>
+                        <?php if ($total) {
+                          echo round($total / $working_days, 2);
+                        }
+
+                        ?>
                       </th>
                       <!-- <th style="text-align: center;">
                         <?php
