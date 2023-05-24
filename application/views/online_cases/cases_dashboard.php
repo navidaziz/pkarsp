@@ -364,7 +364,7 @@
                     ?>
                     <th style="text-align: center;">Last 30 Days Progress</th>
                     <th>Total Progress</th>
-                    <th>Daily AVG</th>
+                    <!-- <th>Daily AVG</th> -->
                   </tr>
                   <tr>
                     <th>Applied</th>
@@ -380,7 +380,7 @@
                       echo $total = $this->db->query($query)->row()->total; ?>
                     </th>
                     <th></th>
-                    <th></th>
+                    <!-- <th></th> -->
                   </tr>
                   <tr>
                     <th>Cer.issued</th>
@@ -396,7 +396,7 @@
                       echo $total = $this->db->query($query)->row()->total; ?>
                     </th>
                     <th></th>
-                    <th></th>
+                    <!-- <th></th> -->
                   </tr>
                   <?php
                   $userId = $this->session->userdata('userId');
@@ -438,20 +438,21 @@
                         AND users.userId = '" . $user->userId . "'";
                         echo $total = $this->db->query($query)->row()->total; ?>
                       </th>
-                      <th style="text-align: center;">
-                        <?php $query = "
-                        SELECT AVG(total) AS avg_daily_entries
-                        FROM (SELECT COUNT(school.note_sheet_completed) as total FROM `school`
-                        INNER JOIN users ON(users.userId = school.note_sheet_completed)
-                        AND school.file_status IN (10,4)
-                        AND users.userId = '" . $user->userId . "'
-                              GROUP BY DATE(note_sheet_completed_date)
-                              )
-                        AS daily_counts;
-                        ";
-                        echo $total = round($this->db->query($query)->row()->avg_daily_entries, 2);
+                      <!-- <th style="text-align: center;">
+                        <?php
+                        // $query = "
+                        // SELECT AVG(total) AS avg_daily_entries
+                        // FROM (SELECT COUNT(school.note_sheet_completed) as total FROM `school`
+                        // INNER JOIN users ON(users.userId = school.note_sheet_completed)
+                        // AND school.file_status IN (10,4)
+                        // AND users.userId = '" . $user->userId . "'
+                        //       GROUP BY DATE(note_sheet_completed_date)
+                        //       )
+                        // AS daily_counts;
+                        // ";
+                        //echo $total = round($this->db->query($query)->row()->avg_daily_entries, 2);
                         ?>
-                      </th>
+                      </th> -->
                     </tr>
                   <?php } ?>
                   <?php //} 
