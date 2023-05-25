@@ -87,7 +87,7 @@ class Mis_dashboard extends Admin_Controller
                  AND schools_id ='" . $schools_id . "' 
                  AND status!=1;";
       $previous_not_issued = $this->db->query($query)->row()->previous_not_issued;
-      if ($previous_not_issued >= 0) {
+      if ($previous_not_issued > 0) {
          echo '
          <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
 
