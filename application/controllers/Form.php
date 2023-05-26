@@ -177,7 +177,7 @@ class Form extends Admin_Controller
 		}
 		$query = "select SUM(`s`.`enrolled`) as total FROM
 		         `age_and_class` as `s` 
-				 where `s`.`class_id` in (9,10,11)
+				 where `s`.`class_id` in (12,13)
 				 AND `s`.`school_id` = '" . $previous_session->pre_school_id . "'";
 		$high = $this->db->query($query)->row()->total;
 		if ($high) {
@@ -639,7 +639,7 @@ class Form extends Admin_Controller
 		}
 		$query = "select SUM(`s`.`enrolled`) as total FROM
 		         `age_and_class` as `s` 
-				 where `s`.`class_id` in (9,10,11)
+				 where `s`.`class_id` in (12,13)
 				 AND `s`.`school_id` = '" . $previous_session->pre_school_id . "'";
 		$high = $this->db->query($query)->row()->total;
 		if ($high) {
