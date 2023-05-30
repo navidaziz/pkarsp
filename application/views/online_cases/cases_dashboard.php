@@ -513,7 +513,7 @@
                       $query = "SELECT COUNT(*) as total FROM school WHERE DATE(cer_issue_date) = '" . $date . "'";
                       $total = $this->db->query($query)->row()->total;
                     ?>
-                      <td style="background-color: rgba(0, 0, 255, <?php echo $total; ?>%);">
+                      <td style="background-color: rgba(179, 206, 229, <?php echo $total; ?>%);">
                         <?php echo  $total; ?>
                       </td>
                     <?php } ?>
