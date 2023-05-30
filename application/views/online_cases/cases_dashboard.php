@@ -389,22 +389,7 @@
                     <th></th>
                     <th></th>
                   </tr>
-                  <tr>
-                    <th>Cer.issued</th>
-                    <?php for ($i = $one_month_ago; $i <= $current_date; $i = strtotime('+1 day', $i)) {
-                      $date = date('Y-m-d', $i);
-                      $query = "SELECT COUNT(*) as total FROM school WHERE DATE(cer_issue_date) = '" . $date . "'"; ?>
-                      <td>
-                        <?php echo $this->db->query($query)->row()->total;  ?>
-                      </td>
-                    <?php } ?>
-                    <th style="text-align: center;">
-                      <?php $query = "SELECT COUNT(*) as total FROM school WHERE (DATE(cer_issue_date) BETWEEN '" . date('Y-m-d', $one_month_ago) . "' and '" . date('Y-m-d', $current_date) . "')";
-                      echo $total = $this->db->query($query)->row()->total; ?>
-                    </th>
-                    <th></th>
-                    <th></th>
-                  </tr>
+
                   <?php
                   $userId = $this->session->userdata('userId');
                   // if ($userId == 28727) {
@@ -520,6 +505,24 @@
                         //echo $total = round($this->db->query($query)->row()->avg_daily_entries, 2);
                         ?>
                       </th> -->
+                  </tr>
+                  <tr>
+                    <th>Cer.issued</th>
+                    <?php for ($i = $one_month_ago; $i <= $current_date; $i = strtotime('+1 day', $i)) {
+                      $date = date('Y-m-d', $i);
+                      $query = "SELECT COUNT(*) as total FROM school WHERE DATE(cer_issue_date) = '" . $date . "'";
+                      $total = $this->db->query($query)->row()->total;
+                    ?>
+                      <td style="background-color: rgba(0, 0, 255, <?php echo $total; ?>%);">
+                        <?php echo  $total; ?>
+                      </td>
+                    <?php } ?>
+                    <th style="text-align: center;">
+                      <?php $query = "SELECT COUNT(*) as total FROM school WHERE (DATE(cer_issue_date) BETWEEN '" . date('Y-m-d', $one_month_ago) . "' and '" . date('Y-m-d', $current_date) . "')";
+                      echo $total = $this->db->query($query)->row()->total; ?>
+                    </th>
+                    <th></th>
+                    <th></th>
                   </tr>
                 </table>
 
