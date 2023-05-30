@@ -345,11 +345,11 @@
           </div>
           <div class="col-md-12">
             <div class="block_div">
-              <h4>Online Applied / Issued</h4>
+              <h4>Progress Report</h4>
               <div class="table-responsive">
                 <table class="table table-bordered" style="font-size: 10px; text-align:center !important">
                   <tr>
-                    <th></th>
+                    <th style="position: sticky;"></th>
                     <?php
                     $working_days = 0;
                     $current_date = time(); // get the current date and time as a Unix timestamp
@@ -374,7 +374,7 @@
                     <th>AVG (<?php echo $working_days; ?> working days)</th>
                   </tr>
                   <tr>
-                    <th>Applied</th>
+                    <th style="position: sticky;">Applied</th>
                     <?php for ($i = $one_month_ago; $i <= $current_date; $i = strtotime('+1 day', $i)) {
                       $date = date('Y-m-d', $i);
                       $query = "SELECT COUNT(*) as total FROM school WHERE DATE(apply_date) = '" . $date . "'"; ?>
@@ -457,7 +457,7 @@
                   <?php //} 
                   ?>
                   <tr>
-                    <th>Daily Progress</th>
+                    <th style="position: sticky;">Daily Progress</th>
                     <?php for ($i = $one_month_ago; $i <= $current_date; $i = strtotime('+1 day', $i)) {
                       $date = date('Y-m-d', $i);
                       $query = "SELECT COUNT(school.note_sheet_completed) as total FROM `school`
@@ -507,7 +507,7 @@
                       </th> -->
                   </tr>
                   <tr>
-                    <th>Cer.issued</th>
+                    <th style="position: sticky;">Cer.issued</th>
                     <?php for ($i = $one_month_ago; $i <= $current_date; $i = strtotime('+1 day', $i)) {
                       $date = date('Y-m-d', $i);
                       $query = "SELECT COUNT(*) as total FROM school WHERE DATE(cer_issue_date) = '" . $date . "'";
