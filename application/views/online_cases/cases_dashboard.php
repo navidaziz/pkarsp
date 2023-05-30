@@ -471,6 +471,56 @@
                   <?php } ?>
                   <?php //} 
                   ?>
+                  <tr>
+                    <th>Daily Progress</th>
+                    <?php for ($i = $one_month_ago; $i <= $current_date; $i = strtotime('+1 day', $i)) {
+                      $date = date('Y-m-d', $i);
+                      $query = "SELECT COUNT(school.note_sheet_completed) as total FROM `school`
+                        INNER JOIN users ON(users.userId = school.note_sheet_completed)
+                        AND school.file_status IN (10,4)
+                        AND DATE(note_sheet_completed_date) = '" . $date . "'";
+                      $total = $this->db->query($query)->row()->total;
+                    ?>
+                      <td style="background-color: rgba(255, 0, 0, <?php echo $total; ?>%);">
+                        <?php echo $total;  ?>
+                      </td>
+                    <?php } ?>
+                    <th style="text-align: center;">
+                      <?php $query = "SELECT COUNT(school.note_sheet_completed) as total FROM `school`
+                        INNER JOIN users ON(users.userId = school.note_sheet_completed)
+                        AND school.file_status IN (10,4)
+                        AND (DATE(note_sheet_completed_date) BETWEEN '" . date('Y-m-d', $one_month_ago) . "' and '" . date('Y-m-d', $current_date) . "')";
+                      echo $total = $this->db->query($query)->row()->total; ?>
+                    </th>
+                    <th style="text-align: center;">
+                      <?php $query = "SELECT COUNT(school.note_sheet_completed) as total FROM `school`
+                        INNER JOIN users ON(users.userId = school.note_sheet_completed)
+                        AND school.file_status IN (10,4)";
+                      echo $total = $this->db->query($query)->row()->total; ?>
+                    </th>
+                    <th>
+                      <?php if ($total) {
+                        echo round($total / $working_days, 2);
+                      }
+
+                      ?>
+                    </th>
+                    <!-- <th style="text-align: center;">
+                        <?php
+                        // $query = "
+                        // SELECT AVG(total) AS avg_daily_entries
+                        // FROM (SELECT COUNT(school.note_sheet_completed) as total FROM `school`
+                        // INNER JOIN users ON(users.userId = school.note_sheet_completed)
+                        // AND school.file_status IN (10,4)
+                        // AND users.userId = '" . $user->userId . "'
+                        //       GROUP BY DATE(note_sheet_completed_date)
+                        //       )
+                        // AS daily_counts;
+                        // ";
+                        //echo $total = round($this->db->query($query)->row()->avg_daily_entries, 2);
+                        ?>
+                      </th> -->
+                  </tr>
                 </table>
 
               </div>
