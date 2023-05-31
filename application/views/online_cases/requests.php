@@ -20,6 +20,7 @@
           <th>Remarks</th>
         <?php } ?>
         <?php if ($request_type == 1) { ?>
+          <th>YofEst</th>
           <th>BISE Reg.</td>
           <?php } ?>
           <th>Action</th>
@@ -84,6 +85,7 @@
                 <td><?php echo $request->status_remark; ?></td>
               <?php } ?>
               <?php if ($request_type == 1) { ?>
+                <td><?php echo $request->yearOfEstiblishment; ?></td>
                 <td><?php
                     if ($request->biseRegister == 'Yes') {
                       echo 'Yes - ';
