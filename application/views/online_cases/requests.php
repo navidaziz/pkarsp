@@ -19,7 +19,10 @@
         <?php if ($list_type == 3) { ?>
           <th>Remarks</th>
         <?php } ?>
-        <th>Action</th>
+        <?php if ($request_type == 1) { ?>
+          <th>BISE Reg.</td>
+          <?php } ?>
+          <th>Action</th>
 
       </tr>
     </thead>
@@ -80,6 +83,14 @@
               <?php if ($list_type == 3) { ?>
                 <td><?php echo $request->status_remark; ?></td>
               <?php } ?>
+              <?php if ($request_type == 1) { ?>
+                <td><?php
+                    if ($request->biseRegister == 'Yes') {
+                      echo $request->biseRegister;
+                    }
+                    ?></td>
+              <?php } ?>
+
 
               <td>
                 <?php if ($request->registrationNumber) { ?>

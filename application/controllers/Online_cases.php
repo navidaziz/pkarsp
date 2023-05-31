@@ -77,6 +77,7 @@ class Online_cases extends Admin_Controller
 
       if ($request_type) {
          $query .= "AND `school`.`reg_type_id`= $request_type";
+         $this->data['request_type'] = $request_type;
       }
 
 
