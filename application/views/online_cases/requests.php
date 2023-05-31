@@ -85,7 +85,7 @@
               <?php } ?>
               <?php if ($request_type == 1) { ?>
                 <td><?php
-                    if ($request->biseRegister == 'Yes') {
+                    if ($request->biseRegister == 'Yes' or $request->registrationNumber) {
                       echo $request->registrationNumber;
                     }
                     ?></td>
