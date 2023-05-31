@@ -46,7 +46,7 @@ class Online_cases extends Admin_Controller
       `school`.`apply_date`,
       schools.isfined,
       school.status_remark,
-      `schools`.`yearOfEstiblishment`
+      `schools`.`yearOfEstiblishment`,
 		(SELECT s.status
 		FROM school as s WHERE 
 		 s.schools_id = `schools`.`schoolId`
