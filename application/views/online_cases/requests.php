@@ -21,18 +21,19 @@
           <th>Address</th>
           <th>Contact</th>
         <?php } ?>
-        <th>Session</th>
-        <th>Days</th>
-        <th>Defic</th>
-        <th>Note</th>
-        <th>Fine</th>
-        <?php if ($list_type == 3) { ?>
-          <th>Remarks</th>
-        <?php } ?>
         <?php if ($request_type == 1) { ?>
           <th>YofEst</th>
           <th>BISE Reg.</td>
           <?php } ?>
+          <th>Session</th>
+          <th>Days</th>
+          <th>Defic</th>
+          <th>Note</th>
+          <th>Fine</th>
+          <?php if ($list_type == 3) { ?>
+            <th>Remarks</th>
+          <?php } ?>
+
 
           <th>Action</th>
 
@@ -69,6 +70,17 @@
                     <?php echo $request->owner_contact_no; ?>,
 
                   </td>
+
+                  <?php if ($request_type == 1) { ?>
+                    <td><?php echo $request->yearOfEstiblishment; ?></td>
+                    <td><?php
+                        if ($request->biseRegister == 'Yes') {
+                          echo 'Yes - ';
+                        }
+                        echo $request->biseregistrationNumber;
+                        ?></td>
+                  <?php } ?>
+
                 <?php } ?>
               <?php } else { ?>
                 <td colspan="4"></td>
@@ -110,15 +122,7 @@
               <?php if ($list_type == 3) { ?>
                 <td><?php echo $request->status_remark; ?></td>
               <?php } ?>
-              <?php if ($request_type == 1) { ?>
-                <td><?php echo $request->yearOfEstiblishment; ?></td>
-                <td><?php
-                    if ($request->biseRegister == 'Yes') {
-                      echo 'Yes - ';
-                    }
-                    echo $request->biseregistrationNumber;
-                    ?></td>
-              <?php } ?>
+
 
 
               <td>
