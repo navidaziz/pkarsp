@@ -175,7 +175,7 @@
           extend: 'excelHtml5',
           title: '<?php echo str_replace(" ", "-", $title) . "-Date: " . Date("d-M-Y");  ?>',
           exportOptions: {
-            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
           }
         },
         {
@@ -183,7 +183,7 @@
           title: '<?php echo str_replace(" ", "-", $title) . "-Date: " . Date("d-M-Y");  ?>',
           pageSize: 'A4',
           exportOptions: {
-            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
           }
         }
       ]
