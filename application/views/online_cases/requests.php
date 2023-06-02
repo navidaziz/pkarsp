@@ -10,7 +10,17 @@
 
         <th>SID</th>
         <th>School Name</th>
+        <?php if ($request_type == 1 or $request_type == 4) { ?>
+          <th>Level</th>
+        <?php } ?>
         <th>District</th>
+        <?php if ($request_type == 1 or $request_type == 4) { ?>
+          <th>Tehsil</th>
+        <?php } ?>
+        <?php if ($request_type == 1 or $request_type == 4) { ?>
+          <th>Address</th>
+          <th>Contact</th>
+        <?php } ?>
         <th>Session</th>
         <th>Days</th>
         <th>Defic</th>
@@ -23,6 +33,7 @@
           <th>YofEst</th>
           <th>BISE Reg.</td>
           <?php } ?>
+
           <th>Action</th>
 
       </tr>
@@ -43,7 +54,22 @@
 
                 <td><?php echo $request->schools_id ?></td>
                 <td><?php echo substr($request->schoolName, 0, 45) ?></td>
+                <?php if ($request_type == 1 or $request_type == 4) { ?>
+                  <td><?php echo $request->level; ?></td>
+                <?php } ?>
                 <td><?php echo $request->districtTitle; ?></td>
+                <?php if ($request_type == 1 or $request_type == 4) { ?>
+                  <td><?php echo $request->tehsil; ?></td>
+                <?php } ?>
+                <?php if ($request_type == 1 or $request_type == 4) { ?>
+                  <td><?php echo $request->address; ?></td>
+                  <td><?php echo $request->telePhoneNumber; ?>,
+                    <?php echo $request->schoolMobileNumber; ?>,
+                    <?php echo $request->principal_contact_no; ?>,
+                    <?php echo $request->owner_contact_no; ?>,
+
+                  </td>
+                <?php } ?>
               <?php } else { ?>
                 <td colspan="4"></td>
                 <td style="display: none;"></td>

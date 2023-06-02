@@ -47,7 +47,16 @@ class Online_cases extends Admin_Controller
       schools.isfined,
       school.status_remark,
       `schools`.`yearOfEstiblishment`,
-		(SELECT s.status
+      (SELECT `tehsils`.`tehsilTitle` FROM `tehsils` WHERE `tehsils`.`tehsilId` = schools.tehsil_id) as tehsil,
+      schools.address,
+      (SELECT `levelofinstitute`.`levelofInstituteTitle` FROM `levelofinstitute`  WHERE `levelofinstitute`.`levelofInstituteId`= school.level_of_school_id) as level,
+		
+      schools.telePhoneNumber,
+schools.schoolMobileNumber,
+school.principal_contact_no,
+(SELECT `users`.`contactNumber` FROM users WHERE `users`.`userId`=schools.owner_id) as owner_contact_no,
+      
+      (SELECT s.status
 		FROM school as s WHERE 
 		 s.schools_id = `schools`.`schoolId`
 		AND  s.session_year_id = (`school`.`session_year_id`-1) and s.schools_id = schools.schoolId LIMIT 1) as previous_session_status,
