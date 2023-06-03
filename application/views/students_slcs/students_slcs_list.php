@@ -105,13 +105,13 @@
         </div>
         <div class="modal-body">
           <form action="<?php echo site_url("students_slcs/create_student_slc") ?>" method="post">
-            <input type="text" name="school_id" value="<?php echo $school->schools_id; ?>" />
+            <input type="hidden" name="school_id" value="<?php echo $school->schools_id; ?>" />
             <?php
             //get current session 
             $query = "SELECT sessionYearId FROM session_year WHERE status=1";
             $session_id = $this->db->query($query)->row()->sessionYearId;
             ?>
-            <input type="text" name="session_id" value="<?php echo $session_id; ?>" />
+            <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
 
             <div class="row">
               <div class="col-md-6">
