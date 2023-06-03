@@ -11,8 +11,8 @@ class Students_slcs extends CI_Controller
 
 		parent::__construct();
 		//error_reporting(0);
-		$this->load->model("student_model");
-		$this->lang->load("students", 'english');
+		//$this->load->model("student_model");
+		//$this->lang->load("students", 'english');
 		$this->lang->load("system", 'english');
 
 		$this->load->library('form_validation');
