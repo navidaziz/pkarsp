@@ -27,46 +27,50 @@
           <div class="row">
             <div class="col-md-12">
               <h3 style="border-left: 20px solid #9FC8E8; padding-left:5px">
-                <strong>Students Leaving Certificate List</strong>
+                <strong>Students School Leaving Certificate List</strong>
                 <button onclick="create_slc()" class="btn btn-success pull-right">Create SLC</button>
               </h3>
               <br />
               <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <th>Student ID</th>
-                    <th>SLC ID</th>
+                    <th>#</th>
+                    <th>SLC Code</th>
+                    <th>Admission No</th>
                     <th>Student Name</th>
                     <th>Father Name</th>
+                    <th>Gender</th>
                     <th>Date Of Birth</th>
-                    <th>School leaving date</th>
+                    <th>Admission Date</th>
+                    <th>School leaving Date</th>
                     <th>SLC Issued Date</th>
+                    <th>File No</th>
+                    <th>SLC Certificate No</th>
                     <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <?php foreach ($slc_list as $student_slc) : ?>
+                  <?php
+                  $count = 1;
+                  foreach ($slc_list as $student_slc) : ?>
                     <tr>
-                      <td><?php echo $student_slc->psra_student_id; ?></td>
-                      <td><?php echo $student_slc->slc_id; ?></td>
+                      <td><?php echo $count++; ?></td>
+                      <td><?php echo $student_slc->slc_code; ?></td>
+                      <td><?php echo $student_slc->admission_no; ?></td>
                       <td><?php echo $student_slc->student_name; ?></td>
-                      <td><?php echo $student_slc->student_father_name; ?></td>
+                      <td><?php echo $student_slc->father_name; ?></td>
+                      <td><?php echo $student_slc->gender; ?></td>
                       <td><?php echo date('d M, Y', strtotime($student_slc->student_data_of_birth)); ?></td>
+                      <td><?php echo $student_slc->admission_date; ?></td>
                       <td><?php echo date('d M, Y', strtotime($student_slc->school_leaving_date)); ?></td>
                       <td><?php echo date('d M, Y', strtotime($student_slc->slc_issue_date)); ?></td>
-                      <td><?php //echo $student_slc->status;
-                          if ($student_slc->status == 1) {
-                            echo "Admit";
-                          }
-                          if ($student_slc->status == 2) {
-                            echo "Struck Off";
-                          }
-
-                          if ($student_slc->status == 3) {
-                            echo "SLC";
-                          }
-
-                          ?></td>
+                      <td><?php echo $student_slc->slc_file_no; ?></td>
+                      <td><?php echo $student_slc->slc_certificate_no; ?></td>
+                      <td>
+                        <a href="">Edit</a>
+                        <span style="margin-left:10px ;"></span>
+                        <a target="new" href="<?php echo site_url("students_slcs/slc_certificate/" . $student_slc->slc_id); ?>">Print</a>
+                      </td>
 
                     </tr>
                   <?php endforeach; ?>
@@ -100,8 +104,14 @@
           <br />
         </div>
         <div class="modal-body">
-          <form action="<?php echo site_url(ADMIN_DIR . "admission/withdraw_student") ?>" method="post">
-
+          <form action="<?php echo site_url("students_slcs/create_student_slc") ?>" method="post">
+            <input type="text" name="school_id" value="<?php echo $school->schools_id; ?>" />
+            <?php
+            //get current session 
+            $query = "SELECT sessionYearId FROM session_year WHERE status=1";
+            $session_id = $this->db->query($query)->row()->sessionYearId;
+            ?>
+            <input type="text" name="session_id" value="<?php echo $session_id; ?>" />
 
             <div class="row">
               <div class="col-md-6">
@@ -115,6 +125,19 @@
                   <input type="text" class="form-control" name="father_name" placeholder="Student Father Name">
                   <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
                 </div>
+
+
+                <div class="form-group">
+                  <label for="admission_no">Gender</label>
+                  <input type="radio" value="Male" name="gender" /> Male
+
+                  <input type="radio" value="Female" name="gender" /> Female
+                </div>
+                <div class="form-group">
+                  <label for="admission_no">Student Data of Birth</label>
+                  <input type="date" class="form-control" name="student_data_of_birth" placeholder="Admission No">
+                  <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+                </div>
                 <div class="form-group">
                   <label for="admission_no">Admission No</label>
                   <input type="text" class="form-control" name="admission_no" placeholder="Admission No">
@@ -122,15 +145,10 @@
                 </div>
                 <div class="form-group">
                   <label for="admission_date">Admission Date</label>
-                  <input type="text" class="form-control" name="admission_date" placeholder="Admission Date">
+                  <input type="date" class="form-control" name="admission_date" placeholder="Admission Date">
                   <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
                 </div>
 
-
-                <div class="form-check">
-                  <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                  <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                </div>
               </div>
               <div class="col-md-6">
                 <table class="table table-bordered" style="width: 100%;">
@@ -178,22 +196,15 @@
                   <tr>
 
                     <td colspan="2">
-                      <?php $query = "SELECT class_title FROM classes WHERE class_id ='" . $students[0]->class_id . "'";
-                      $class_name = $this->db->query($query)->result()[0]->class_title;
-                      ?>
-                      Student is currently in class - <strong><?php echo $class_name; ?>.
-                        <input type="hidden" name="current_class" value="<?php echo $class_name; ?>" /> </strong>
-                      <?php $query = "SELECT class_id, class_title FROM classes WHERE class_id >= '" . $students[0]->class_id . "' LIMIT 2";
-                      $classes = $this->db->query($query)->result();
-                      ?>
+                      Ready in class
+                      <input type="text" name="current_class" value="" placeholder="Nursery, KG, Ist etc" />
+                      <br />
+                      Do you suggest promotion ?
+                      <input type="radio" value="Yes" name="promotion_suggestion" /> Yes
 
-                      Promote to class
-                      <select name="promoted_to_class">
-                        <?php foreach ($classes as $class) { ?>
-                          <option <?php if ($class->class_id == $students[0]->class_id) { ?> selected <?php } ?> value="<?php echo $class->class_title; ?>"><?php echo $class->class_title; ?></option>
-                        <?php } ?>
-                      </select>
-                    </td>
+                      <input type="radio" value="Yes" name="promotion_suggestion" /> No
+                      <br />
+                      Promotion to class<input type="text" name="promoted_to_class" value="" placeholder="Nursery, KG, Ist etc" </td>
                   </tr>
                   <tr>
                     <td>Withdrawal Reason:</td>
@@ -202,7 +213,7 @@
                     </td>
                   </tr>
                   <tr>
-                    <td colspan="2"><input type="submit" class="btn btn-danger btn-sm" value="Withdraw Admission" /></td>
+                    <td colspan="2"><input type="submit" class="btn btn-danger btn-sm" value="Create SLC" /></td>
                   </tr>
                 </table>
               </div>
