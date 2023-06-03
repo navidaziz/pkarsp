@@ -48,7 +48,7 @@
       ?>
 
           <?php if ($request->deficient == 0  or 1 == 1) { ?>
-            <tr <?php if ($request->deficient > 0) { ?> style="color:red; <?php if ($list_type == 1) { ?> display:none;<?php } ?> " <?php } ?>>
+            <tr <?php if ($request->deficient > 0) { ?> style="color:red; <?php if ($list_type == 1) { ?> display:n one;<?php } ?> " <?php } ?>>
 
               <?php if ($previous_school_id != $request->schools_id) { ?>
                 <td><?php echo $count++; ?> </td>
