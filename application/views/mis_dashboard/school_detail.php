@@ -211,19 +211,21 @@
                             </td>
 
                             <td style="text-align: center;">
+                                <?php
+                                $userId = $this->session->userdata('userId');
+                                if ($userId != 28870) { ?>
+                                    <?php if ($school_session->section_e == 0 and $school_session->status == 2) { ?>
+                                        <a href="#" onclick="lock_editing('<?php echo $school_session->schoolId; ?>')">
+                                            <i class="fa fa-unlock" style="color:red" aria-hidden="true"></i>
+                                        </a>
+                                    <?php } ?>
 
-                                <?php if ($school_session->section_e == 0 and $school_session->status == 2) { ?>
-                                    <a href="#" onclick="lock_editing('<?php echo $school_session->schoolId; ?>')">
-                                        <i class="fa fa-unlock" style="color:red" aria-hidden="true"></i>
-                                    </a>
+                                    <?php if ($school_session->section_e == 1 and $school_session->status == 2) { ?>
+                                        <a href="#" onclick="unlock_editing('<?php echo $school_session->schoolId; ?>')">
+                                            <i class="fa fa-lock" style="color:green" aria-hidden="true"></i>
+                                        </a>
+                                    <?php } ?>
                                 <?php } ?>
-
-                                <?php if ($school_session->section_e == 1 and $school_session->status == 2) { ?>
-                                    <a href="#" onclick="unlock_editing('<?php echo $school_session->schoolId; ?>')">
-                                        <i class="fa fa-lock" style="color:green" aria-hidden="true"></i>
-                                    </a>
-                                <?php } ?>
-
                             </td>
 
                             <td style="text-align: center;"><?php
