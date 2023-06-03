@@ -78,6 +78,17 @@
 
               <?php } else { ?>
                 <td colspan="4"></td>
+                <?php if ($request_type == 1) { ?>
+                  <td style="display: none;"></td>
+                  <td style="display: none;"></td>
+                <?php } ?>
+                <?php if ($request_type == 1 or $request_type == 4) { ?>
+                  <td style="display: none;"></td>
+                  <td style="display: none;"></td>
+                  <td style="display: none;"></td>
+                  <td style="display: none;"></td>
+                  <td style="display: none;"></td>
+                <?php } ?>
                 <td style="display: none;"></td>
                 <td style="display: none;"></td>
                 <td style="display: none;"></td>
