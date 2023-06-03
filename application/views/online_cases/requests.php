@@ -12,12 +12,8 @@
         <th>School Name</th>
         <?php if ($request_type == 1 or $request_type == 4) { ?>
           <th>Level</th>
-        <?php } ?>
-        <th>District</th>
-        <?php if ($request_type == 1 or $request_type == 4) { ?>
+          <th>District</th>
           <th>Tehsil</th>
-        <?php } ?>
-        <?php if ($request_type == 1 or $request_type == 4) { ?>
           <th>Address</th>
           <th>Contact</th>
         <?php } ?>
@@ -57,31 +53,29 @@
                 <td><?php echo substr($request->schoolName, 0, 45) ?></td>
                 <?php if ($request_type == 1 or $request_type == 4) { ?>
                   <td><?php echo $request->level; ?></td>
-                <?php } ?>
-                <td><?php echo $request->districtTitle; ?></td>
-                <?php if ($request_type == 1 or $request_type == 4) { ?>
+
+                  <td><?php echo $request->districtTitle; ?></td>
+
                   <td><?php echo $request->tehsil; ?></td>
-                <?php } ?>
-                <?php if ($request_type == 1 or $request_type == 4) { ?>
+
                   <td><?php echo $request->address; ?></td>
                   <td><?php echo $request->telePhoneNumber; ?>,
                     <?php echo $request->schoolMobileNumber; ?>,
                     <?php echo $request->principal_contact_no; ?>,
                     <?php echo $request->owner_contact_no; ?>,
-
                   </td>
-
-                  <?php if ($request_type == 1) { ?>
-                    <td><?php echo $request->yearOfEstiblishment; ?></td>
-                    <td><?php
-                        if ($request->biseRegister == 'Yes') {
-                          echo 'Yes - ';
-                        }
-                        echo $request->biseregistrationNumber;
-                        ?></td>
-                  <?php } ?>
-
                 <?php } ?>
+                <?php if ($request_type == 1) { ?>
+                  <td><?php echo $request->yearOfEstiblishment; ?></td>
+                  <td><?php
+                      if ($request->biseRegister == 'Yes') {
+                        echo 'Yes - ';
+                      }
+                      echo $request->biseregistrationNumber;
+                      ?></td>
+                <?php } ?>
+
+
               <?php } else { ?>
                 <td colspan="4"></td>
                 <td style="display: none;"></td>
