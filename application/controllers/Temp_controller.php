@@ -179,7 +179,14 @@ class Temp_controller extends CI_Controller
       <br />
       DOB: ' . date('d M, Y', strtotime($student_slc->student_data_of_birth)) . '
       </td>
-      
+      <td>' . $student_slc->schoolName . '
+      <br />
+      Registration No' . $student_slc->registrationNumber . '
+      </td>
+      <td>
+      Addmission No:' . $student_slc->admission_no . ' <br />
+      Addmission Date:' . date('d M, Y', strtotime($student_slc->admission_date)) . ' <br />
+      </td>
       <tr>
       </table>
 <table class="table table-bordered">
@@ -189,14 +196,7 @@ class Temp_controller extends CI_Controller
 <th>Others</th>
 </tr>
 <tr>
-<td>' . $student_slc->schoolName . '
-      <br />
-      Registration No' . $student_slc->registrationNumber . '
-      </td>
-      <td>
-      Addmission No:' . $student_slc->admission_no . ' <br />
-      Addmission Date:' . date('d M, Y', strtotime($student_slc->admission_date)) . ' <br />
-      </td>
+
       <td>
       Read in class :' . $student_slc->current_class . ' <br />
       Promote to class :' . $student_slc->promoted_to_class . ' <br />
