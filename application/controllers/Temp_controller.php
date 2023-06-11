@@ -187,12 +187,12 @@ class Temp_controller extends CI_Controller
       <td>
       Addmission No:' . $student_slc->admission_no . ' <br />
       Addmission Date:' . date('d M, Y', strtotime($student_slc->admission_date)) . ' <br />
-
       </td>
+
       <td>
       Read in class :' . $student_slc->current_class . ' <br />
       Promote to class :' . $student_slc->promoted_to_class . ' <br />
-      <td/>
+      </td>
 
       <td>
       Acadmic Record:' . $student_slc->academic_record . ' <br />
