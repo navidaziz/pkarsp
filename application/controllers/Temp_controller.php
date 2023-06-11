@@ -161,8 +161,7 @@ class Temp_controller extends CI_Controller
       <th>Student</th>
       <th>SLC Issued By</th>
       <th>Admission Info</th>
-      <th>Class </th>
-      <th>Others</th>
+      
       </tr>
       <tr>
       <td> SLC Code: ' . $student_slc->slc_code . '
@@ -191,6 +190,10 @@ class Temp_controller extends CI_Controller
       <tr>
       </table>
 <table class="table table-bordered">
+<tr>
+<th>Student Class info </th>
+<th>Others</th>
+</tr>
 <tr>
       <td>
       Read in class :' . $student_slc->current_class . ' <br />
