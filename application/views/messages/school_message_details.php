@@ -185,8 +185,8 @@
                           <tr>
                             <th>Challan For </th>
                             <th>Session</th>
-                            <th>Bank Transaction No (STAN No)</th>
                             <th>Bank Transaction Date</th>
+                            <th>Bank Transaction No (STAN No)</th>
                             <th>Add Challan</th>
                           </tr>
 

@@ -154,18 +154,18 @@
                   Session Year: <?php echo @$school->sessionYearTitle; ?><br />
                   Case: <?php echo @$school->regTypeTitle; ?><br />
                   File No: <strong><?php
-                                $query = "SELECT * FROM `school_file_numbers` WHERE `school_id`='$school->schoolId'";
-                                $file_numbers = $this->db->query($query)->result();
-                                $count = 1;
-                                foreach ($file_numbers as $file_number) {
-                                    if ($count > 1) {
+                                    $query = "SELECT * FROM `school_file_numbers` WHERE `school_id`='$school->schoolId'";
+                                    $file_numbers = $this->db->query($query)->result();
+                                    $count = 1;
+                                    foreach ($file_numbers as $file_number) {
+                                      if ($count > 1) {
                                         echo ", ";
-                                    }
-                                    echo $file_number->file_number;
+                                      }
+                                      echo $file_number->file_number;
 
-                                    $count++;
-                                }
-                                ?></strong><br />
+                                      $count++;
+                                    }
+                                    ?></strong><br />
                 </h6>
 
               </td>
@@ -273,6 +273,7 @@
                             echo "<strong>Transaction</strong> # $count: " . $bt['bt_no'] . ' ' . "<strong> Date</strong>: " . $bt['bt_date'] . "<br>";
                             $count++;
                           }  ?>
+
                           <br>
                         <?php endif; ?>
                         <?php if (!empty($school_bank->bankAccountNumber)) : ?>
@@ -697,13 +698,13 @@
                         AND `fee`.`class_id` ='" . $class->classId . "'";
 
                 $session_fee = $this->db->query($query)->result()[0];
-               // $session_fee->addmissionFee = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->addmissionFee));
+                // $session_fee->addmissionFee = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->addmissionFee));
                 $admission_fee_row .= '<td>' . $session_fee->addmissionFee . '</td>';
-               // $session_fee->tuitionFee = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->tuitionFee));
+                // $session_fee->tuitionFee = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->tuitionFee));
                 $tuitionFee_row .= '<td>' . $session_fee->tuitionFee . '</td>';
-               // $session_fee->securityFund = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->securityFund));
+                // $session_fee->securityFund = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->securityFund));
                 $securityFund_row .= '<td>' . $session_fee->securityFund . '</td>';
-               // $session_fee->otherFund = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->otherFund));
+                // $session_fee->otherFund = preg_replace('/[^0-9.]/', '', str_replace("Rs.", "", $session_fee->otherFund));
                 $otherFund_row .= '<td>' . $session_fee->otherFund . '</td>';
               } ?>
             </tr>

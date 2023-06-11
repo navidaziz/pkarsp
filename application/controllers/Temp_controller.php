@@ -139,6 +139,73 @@ class Temp_controller extends CI_Controller
     }
   }
 
+  public function check_student_slc()
+  {
+    $student_slc_code = $this->input->post("student_slc_code");
+    if ($student_slc_code == '') {
+      echo '<p style="color:red; text-align:center;">Please Enter Student SLC Code.<p>';
+      exit();
+    }
+    $student_slc_code = $this->db->escape($student_slc_code);
+    $query = "SELECT slc.*, schools.schoolId as school_id,
+    `schools`.`registrationNumber`,
+    `schools`.`schoolName`
+    FROM student_leaving_certificates as slc 
+     INNER JOIN schools ON (schools.schoolId = slc.school_id )
+     WHERE `slc`.`slc_code` = $student_slc_code";
+    $student_slc = $this->db->query($query)->row();
+    if ($student_slc) {
+      echo '<table class="table table-bordered">
+      <tr>
+      <th>SLC Info</th>
+      <th>Student</th>
+      <th>SLC Issued By</th>
+      <th>Admission Info</th>
+      <th>Class </th>
+      <th>Others</th>
+      </tr>
+      <tr>
+      <td> SLC Code: ' . $student_slc->slc_code . '
+      <br />
+      School Leaving Date: ' . date('d M, Y', strtotime($student_slc->school_leaving_date)) . ' <br />
+      Issue Date: ' . date('d M, Y', strtotime($student_slc->slc_issue_date)) . '
+      </td>
+      <td>
+      Name: ' . $student_slc->student_name . '
+      <br />
+      Father Name: ' . $student_slc->father_name . '
+      <br />
+      Gender: 
+      ' . $student_slc->gender . '
+      <br />
+      DOB: ' . date('d M, Y', strtotime($student_slc->student_data_of_birth)) . '
+      </td>
+      <td>' . $student_slc->schoolName . '
+      <br />
+      Registration No' . $student_slc->registrationNumber . '
+      </td>
+      <td>
+      Addmission No:' . $student_slc->admission_no . ' <br />
+      Addmission Date:' . date('d M, Y', strtotime($student_slc->admission_date)) . ' <br />
+
+      </td>
+      <td>
+      Read in class :' . $student_slc->current_class . ' <br />
+      Promote to class :' . $student_slc->promoted_to_class . ' <br />
+      <td/>
+
+      <td>
+      Acadmic Record:' . $student_slc->academic_record . ' <br />
+      Character & Conduct:' . $student_slc->character_and_conduct . ' <br />
+      </td>
+      </tr>
+      </table>';
+    } else {
+      echo '<p style="color:red; text-align:center;">The Student\'s School Leaving Certificate could not be found. Please retry with a valid SLC code.</p>';
+    }
+  }
+
+
   public function check_school_registration()
   {
 
