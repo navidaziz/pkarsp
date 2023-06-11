@@ -155,7 +155,9 @@ class Temp_controller extends CI_Controller
      WHERE `slc`.`slc_code` = $student_slc_code";
     $student_slc = $this->db->query($query)->row();
     if ($student_slc) {
-      echo '<table class="table table-bordered">
+      echo '<h4>School Leaving Certificate Detail</h4>
+      
+      <table class="table table-bordered">
       <tr>
       <th>SLC Info</th>
       <th>Student Info</th>
