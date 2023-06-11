@@ -158,30 +158,29 @@ class Temp_controller extends CI_Controller
       echo '<table class="table table-bordered">
       <tr>
       <th>SLC Info</th>
-      <th>Student</th>
+      <th>Student Info</th>
       <th>SLC Issued By</th>
       
       
       </tr>
       <tr>
-      <td> SLC Code: ' . $student_slc->slc_code . '
+      <td> SLC Code: <strong>' . $student_slc->slc_code . '</strong>
       <br />
-      School Leaving Date: ' . date('d M, Y', strtotime($student_slc->school_leaving_date)) . ' <br />
-      Issue Date: ' . date('d M, Y', strtotime($student_slc->slc_issue_date)) . '
+      School Leaving Date: <strong>' . date('d M, Y', strtotime($student_slc->school_leaving_date)) . '</strong> <br />
+      Issue Date: <strong>' . date('d M, Y', strtotime($student_slc->slc_issue_date)) . '</strong>
       </td>
       <td>
-      Name: ' . $student_slc->student_name . '
+      Name: <strong>' . $student_slc->student_name . '</strong>
       <br />
-      Father Name: ' . $student_slc->father_name . '
+      Father Name: <strong>' . $student_slc->father_name . '</strong>
       <br />
-      Gender: 
-      ' . $student_slc->gender . '
+      Gender: <strong>' . $student_slc->gender . '</strong>
       <br />
-      DOB: ' . date('d M, Y', strtotime($student_slc->student_data_of_birth)) . '
+      DOB: <strong>' . date('d M, Y', strtotime($student_slc->student_data_of_birth)) . '</strong>
       </td>
-      <td>' . $student_slc->schoolName . '
+      <td>School Name: <strong>' . $student_slc->schoolName . '</strong>
       <br />
-      Registration No' . $student_slc->registrationNumber . '
+      Registration No: <strong>' . $student_slc->registrationNumber . '</strong>
       </td>
       
       <tr>
@@ -194,17 +193,17 @@ class Temp_controller extends CI_Controller
 </tr>
 <tr>
 <td>
-      Addmission No:' . $student_slc->admission_no . ' <br />
-      Addmission Date:' . date('d M, Y', strtotime($student_slc->admission_date)) . ' <br />
+      Addmission No: <strong>' . $student_slc->admission_no . ' </strong><br />
+      Addmission Date: <strong>' . date('d M, Y', strtotime($student_slc->admission_date)) . ' </strong><br />
       </td>
       <td>
-      Read in class :' . $student_slc->current_class . ' <br />
-      Promote to class :' . $student_slc->promoted_to_class . ' <br />
+      Read in class: <strong>' . $student_slc->current_class . '</strong> <br />
+      Promote to class: <strong>' . $student_slc->promoted_to_class . '</strong> <br />
       </td>
 
       <td>
-      Acadmic Record:' . $student_slc->academic_record . ' <br />
-      Character & Conduct:' . $student_slc->character_and_conduct . ' <br />
+      Acadmic Record: <strong>' . $student_slc->academic_record . '</strong> <br />
+      Character & Conduct: <strong>' . $student_slc->character_and_conduct . '</strong> <br />
       </td>
       </tr>
       </table>';
