@@ -113,8 +113,8 @@ class Students_slcs extends CI_Controller
 					" . $academic_record . ",  
 					'" . $school_id . "',
 					" . $student_name . ",
-					" . $gender . ",
 					" . $father_name . ",
+					" . $gender . ",
 					" . $current_class . ",
 					" . $promoted_to_class . ",
 					'" . $userId . "')";

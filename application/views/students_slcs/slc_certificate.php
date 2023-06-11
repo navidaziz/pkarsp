@@ -175,8 +175,7 @@ function numToOrdinalWord($num)
                   <?php echo $student_slc->slc_code; ?>
                 </span></strong>
               <br />
-              PSRA Student ID: <strong><?php echo $student_slc->psra_student_id ?></strong>
-              <br />
+
               Admission No.
               <span style="text-decoration: underline; font-weight: bold;">
                 <?php echo $student_slc->admission_no ?>
@@ -234,7 +233,7 @@ function numToOrdinalWord($num)
               <br />
               His date of birth according to school record is
               <span style="text-decoration: underline; font-weight: bold;">
-                <?php echo date("d-m-Y", strtotime($student_slc->student_data_of_birth)); ?>.</span> <br />
+                <?php echo date("d M, Y", strtotime($student_slc->student_data_of_birth)); ?>.</span> <br />
               In words (
               <span style="font-weight: bold;">
                 The <?php echo numToOrdinalWord(date("d", strtotime($student_slc->student_data_of_birth))); ?>
@@ -258,14 +257,29 @@ function numToOrdinalWord($num)
               <span style="text-decoration: underline; font-weight: bold;">
                 <?php echo $student_slc->current_class; ?>
               </span>
-              &nbsp;&nbsp;&nbsp;&nbsp;
-              Promoted to
-              <span style="text-decoration: underline; font-weight: bold;">
-                <?php echo $student_slc->promoted_to_class; ?>
-              </span>
+              <?php if ($student_slc->promoted_to_class) { ?>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                Promoted to
+                <span style="text-decoration: underline; font-weight: bold;">
+                  <?php echo $student_slc->promoted_to_class; ?>
+                </span>
+              <?php } ?>
             </p>
 
+            <p style="font-size: 16px; padding-left: 20px; padding-right: 20px;">
+              School Leaving Date:
+              <span style="text-decoration: underline; font-weight: bold;">
+                <?php echo date('d M, Y', strtotime($student_slc->school_leaving_date)) ?>
+              </span>
 
+            </p>
+            <p style="font-size: 16px; padding-left: 20px; padding-right: 20px;">
+              Certificate Issue Date:
+              <span style="text-decoration: underline; font-weight: bold;">
+                <?php echo date('d M, Y', strtotime($student_slc->slc_issue_date)) ?>
+              </span>
+
+            </p>
             <p style="font-size: 16px; padding-left: 20px; padding-right: 20px;">Character and Conduct
               <span style="text-decoration: underline; font-weight: bold;">
                 <?php echo $student_slc->character_and_conduct ?>

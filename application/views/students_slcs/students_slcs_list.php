@@ -27,7 +27,7 @@
           <div class="row">
             <div class="col-md-12">
               <h3 style="border-left: 20px solid #9FC8E8; padding-left:5px">
-                <strong>Students School Leaving Certificate List</strong>
+                <strong>List of School Leaving Certificates for Students</strong>
                 <button onclick="create_slc()" class="btn btn-success pull-right">Create SLC</button>
               </h3>
               <br />
@@ -117,35 +117,35 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="student_name">Student Name</label>
-                  <input type="text" class="form-control" name="student_name" placeholder="Student Name">
+                  <input required type="text" class="form-control" name="student_name" placeholder="Student Name">
                   <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
                 </div>
                 <div class="form-group">
                   <label for="father_name">Student Father Name</label>
-                  <input type="text" class="form-control" name="father_name" placeholder="Student Father Name">
+                  <input required type="text" class="form-control" name="father_name" placeholder="Student Father Name">
                   <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
                 </div>
 
 
                 <div class="form-group">
                   <label for="admission_no">Gender</label>
-                  <input type="radio" value="Male" name="gender" /> Male
+                  <input required type="radio" value="Male" name="gender" /> Male
 
-                  <input type="radio" value="Female" name="gender" /> Female
+                  <input required type="radio" value="Female" name="gender" /> Female
                 </div>
                 <div class="form-group">
                   <label for="admission_no">Student Data of Birth</label>
-                  <input type="date" class="form-control" name="student_data_of_birth" placeholder="Admission No">
+                  <input required type="date" class="form-control" name="student_data_of_birth" placeholder="Admission No">
                   <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
                 </div>
                 <div class="form-group">
                   <label for="admission_no">Admission No</label>
-                  <input type="text" class="form-control" name="admission_no" placeholder="Admission No">
+                  <input required type="text" class="form-control" name="admission_no" placeholder="Admission No">
                   <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
                 </div>
                 <div class="form-group">
                   <label for="admission_date">Admission Date</label>
-                  <input type="date" class="form-control" name="admission_date" placeholder="Admission Date">
+                  <input required type="date" class="form-control" name="admission_date" placeholder="Admission Date">
                   <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
                 </div>
 
@@ -155,20 +155,20 @@
 
                   <tr>
                     <td>Schoool Leaving Date:</td>
-                    <td> <input type="date" required name="school_leaving_date" id="school_leaving_date" value="" />
+                    <td> <input required type="date" required name="school_leaving_date" id="school_leaving_date" value="" />
                     </td>
                   </tr>
                   <tr>
                     <td>SLC Issue Date:</td>
-                    <td><input type="date" required name="slc_issue_date" id="slc_issue_date" value="" /></td>
+                    <td><input required type="date" required name="slc_issue_date" id="slc_issue_date" value="" /></td>
                   </tr>
                   <tr>
                     <td>SLC File No:</td>
-                    <td><input type="text" required name="slc_file_no" id="slc_file_no" value="" /></td>
+                    <td><input required type="text" required name="slc_file_no" id="slc_file_no" value="" /></td>
                   </tr>
                   <tr>
                     <td>SLC Certificate No:</td>
-                    <td><input type="text" required name="slc_certificate_no" id="slc_certificate_no" value="" /></td>
+                    <td><input required type="text" required name="slc_certificate_no" id="slc_certificate_no" value="" /></td>
                   </tr>
                   <tr>
                     <td>Character and Conduct</td>
@@ -177,7 +177,7 @@
                     ?>
                     <td>
                       <?php foreach ($scales as $scale) { ?>
-                        <input type="radio" name="character_and_conduct" value="<?php echo $scale; ?>" required="">
+                        <input required type="radio" name="character_and_conduct" value="<?php echo $scale; ?>" required="">
                         <?php echo $scale; ?>
                         <span style="margin-left: 10px;"></span>
                       <?php } ?>
@@ -187,7 +187,7 @@
                     <td>Academic Record</td>
                     <td>
                       <?php foreach ($scales as $scale) { ?>
-                        <input type="radio" name="academic_record" value="<?php echo $scale; ?>" required="">
+                        <input required type="radio" name="academic_record" value="<?php echo $scale; ?>" required="">
                         <?php echo $scale; ?>
                         <span style="margin-left: 10px;"></span>
                       <?php } ?>
@@ -196,24 +196,27 @@
                   <tr>
 
                     <td colspan="2">
-                      Ready in class
-                      <input type="text" name="current_class" value="" placeholder="Nursery, KG, Ist etc" />
+                      In which class is the student currently enrolled?
+                      <input required type="text" name="current_class" value="" placeholder="Nursery, KG, Ist etc" />
                       <br />
-                      Do you suggest promotion ?
-                      <input type="radio" value="Yes" name="promotion_suggestion" /> Yes
+                      Would you recommend promoting the student to the next class?
+                      <input required type="radio" onclick="$('#promation_div').show(); $('#promoted_to_class').attr('required', true)" value="Yes" name="promotion_suggestion" /> Yes
 
-                      <input type="radio" value="Yes" name="promotion_suggestion" /> No
+                      <input required type="radio" onclick="$('#promation_div').hide(); $('#promoted_to_class').attr('required', false)" value="No" name="promotion_suggestion" /> No
                       <br />
-                      Promotion to class<input type="text" name="promoted_to_class" value="" placeholder="Nursery, KG, Ist etc" </td>
-                  </tr>
-                  <tr>
-                    <td>Withdrawal Reason:</td>
-                    <td>
-                      <input style="width: 100%;" type="text" required name="withdraw_reason" id="withdraw_reason" value="" />
+                      <div style="display: none;" id="promation_div">
+                        Promote to class <input type="text" id="promoted_to_class" name="promoted_to_class" value="" placeholder="Nursery, KG, Ist etc" />
+                      </div>
                     </td>
                   </tr>
                   <tr>
-                    <td colspan="2"><input type="submit" class="btn btn-danger btn-sm" value="Create SLC" /></td>
+                    <td>Addmission Withdrawal Reason:</td>
+                    <td>
+                      <input required style="width: 100%;" type="text" required name="withdraw_reason" id="withdraw_reason" value="" />
+                    </td>
+                  </tr>
+                  <tr style="text-align: center;">
+                    <td colspan="2"><input type="submit" class="btn btn-danger btn-sm" value="Create and Save School Leaving Certificate" /></td>
                   </tr>
                 </table>
               </div>
