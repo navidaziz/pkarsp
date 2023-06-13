@@ -56,59 +56,17 @@
       <li><a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> Home </a></li>
       <li><a href="#">School Dashboard</a></li>
     </ol>
-  </section>
-  <!-- Main content -->
-  <section class="content ">
-
-    <div class="box box-primary box-solid">
-      <div class="box-body">
-
-        <div class="row">
-          <div class="col-md-3">
-            <div class="alert " style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
-
-              <?php
-              $query = "SELECT * FROM `session_year` WHERE status = 1";
-              $session = $this->db->query($query)->row();
-              $query = "SELECT * FROM `enrollments` 
-                        WHERE schools_id = '" . $school->schoolId . "'
-                        AND session_id = '" . $session->sessionYearId . "'";
-              $enrollment = $this->db->query($query)->row();
-              if ($enrollment) {
-                $school_enrollment =  $enrollment->enrollment;
-              } else {
-                $school_enrollment = 0;
-              }
-              ?>
-              <h4>Session <?php echo $session->sessionYearTitle; ?> Enrollment</h4>
-              <div class="alert alert-danger">
-                Please enter the <strong>total</strong> number of newly enrolled students in your school in this session i.e. <strong><?php echo $session->sessionYearTitle; ?></strong> in class <strong>Playgroup / Nursery etc.</strong> and submit.
-                <br />
-                You need to update this figure daily
-              </div>
-              <form method="post" action="<?php echo site_url('temp_controller/add_enrollement'); ?>">
-                <input type="hidden" name="schools_id" value="<?php echo  $school->schoolId; ?>" />
-                <input type="hidden" name="session_id" value="<?php echo  $session->sessionYearId; ?>" />
-                <div class="form-group">
-                  <label for="exampleInputEmail1">
-                    <h4>Total New Enrollment</h4>
-                  </label>
-                  <input required min="1" max="2000" type="number" class="form-control" name="school_enrollment" id="school_enrollment" value="<?php echo $school_enrollment; ?>" placeholder="Enrollment">
-                  <small id="emailHelp" class="form-text text-muted">
-                    Updated on: <?php echo date('l F jS, Y', strtotime($enrollment->updated_date)) ?>
-                  </small>
-                </div>
-                <div style="text-align: center;">
-                  <?php if ($school_enrollment == 0) { ?>
-                    <button type="submit" class="btn btn-danger">Submit</button>
-
-                  <?php } else { ?>
-                    <button type="submit" class="btn btn-danger">Submit</button>
-                  <?php } ?>
-                </div>
-              </form>
-
-            </div>
+    <!-- detail modal -->
+    <div id="institute_detail" class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title pull-left">Institute Detail</h5>
+            <button type="button" class="close pull-right" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
             <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
               <h4 style="text-align: center;">Other Detail</h4>
               <?php if (!empty($school->yearOfEstiblishment)) : ?>
@@ -227,6 +185,98 @@
                   <?php echo @$school->longitude; ?>
                 <?php endif; ?>
               </address>
+
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end detail modal -->
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#institute_detail">
+      Institute Detail
+    </button>
+    <!-- end Button trigger modal -->
+  </section>
+  <!-- Main content -->
+  <section class="content ">
+
+    <div class="box box-primary box-solid">
+      <div class="box-body">
+
+        <div class="row">
+          <div class="col-md-3">
+            <div class="alert " style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
+
+              <?php
+              $query = "SELECT * FROM `session_year` WHERE status = 1";
+              $session = $this->db->query($query)->row();
+              $query = "SELECT * FROM `enrollments` 
+                        WHERE schools_id = '" . $school->schoolId . "'
+                        AND session_id = '" . $session->sessionYearId . "'";
+              $enrollment = $this->db->query($query)->row();
+              if ($enrollment) {
+                $school_enrollment =  $enrollment->enrollment;
+              } else {
+                $school_enrollment = 0;
+              }
+              ?>
+              <h4>Session <?php echo $session->sessionYearTitle; ?> Enrollment</h4>
+              <div class="alert alert-danger">
+                Please enter the <strong>total</strong> number of newly enrolled students in your school in this session i.e. <strong><?php echo $session->sessionYearTitle; ?></strong> in class <strong>Playgroup / Nursery etc.</strong> and submit.
+                <br />
+                You need to update this figure daily
+              </div>
+              <form method="post" action="<?php echo site_url('temp_controller/add_enrollement'); ?>">
+                <input type="hidden" name="schools_id" value="<?php echo  $school->schoolId; ?>" />
+                <input type="hidden" name="session_id" value="<?php echo  $session->sessionYearId; ?>" />
+                <div class="form-group">
+                  <label for="exampleInputEmail1">
+                    <h4>Total New Enrollment</h4>
+                  </label>
+                  <input required min="1" max="2000" type="number" class="form-control" name="school_enrollment" id="school_enrollment" value="<?php echo $school_enrollment; ?>" placeholder="Enrollment">
+                  <small id="emailHelp" class="form-text text-muted">
+                    Updated on: <?php echo date('l F jS, Y', strtotime($enrollment->updated_date)) ?>
+                  </small>
+                </div>
+                <div style="text-align: center;">
+                  <?php if ($school_enrollment == 0) { ?>
+                    <button type="submit" class="btn btn-danger">Submit</button>
+
+                  <?php } else { ?>
+                    <button type="submit" class="btn btn-danger">Submit</button>
+                  <?php } ?>
+                </div>
+              </form>
+
+            </div>
+            <div class="alert " style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
+
+              <?php
+              $query = "SELECT * FROM `session_year` WHERE status = 1";
+              $session = $this->db->query($query)->row();
+              $query = "SELECT * FROM `enrollments` 
+          WHERE schools_id = '" . $school->schoolId . "'
+          AND session_id = '" . $session->sessionYearId . "'";
+              $enrollment = $this->db->query($query)->row();
+              if ($enrollment) {
+                $school_enrollment =  $enrollment->enrollment;
+              } else {
+                $school_enrollment = 0;
+              }
+              ?>
+              <h4>Online School Leaving Certificate</h4>
+              <div class="alert alert-success">
+                PSRA has launched an online platform to facilitate the issuance of student <strong>School Leaving Certificate</strong> for registered schools.
+              </div>
+              <div style="text-align: center;">
+                <a class="btn btn-success" href="<?php echo site_url('students_slcs'); ?>">
+                  <i class="fa fa-certificate" aria-hidden="true"></i> School Leaving Certificates
+                </a>
+              </div>
 
             </div>
           </div>

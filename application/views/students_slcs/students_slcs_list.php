@@ -31,51 +31,60 @@
                 <button onclick="create_slc()" class="btn btn-success pull-right">Create SLC</button>
               </h3>
               <br />
-              <table class="table table-bordered">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>SLC Code</th>
-                    <th>Admission No</th>
-                    <th>Student Name</th>
-                    <th>Father Name</th>
-                    <th>Gender</th>
-                    <th>Date Of Birth</th>
-                    <th>Admission Date</th>
-                    <th>School leaving Date</th>
-                    <th>SLC Issued Date</th>
-                    <th>File No</th>
-                    <th>SLC Certificate No</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php
-                  $count = 1;
-                  foreach ($slc_list as $student_slc) : ?>
-                    <tr>
-                      <td><?php echo $count++; ?></td>
-                      <td><?php echo $student_slc->slc_code; ?></td>
-                      <td><?php echo $student_slc->admission_no; ?></td>
-                      <td><?php echo $student_slc->student_name; ?></td>
-                      <td><?php echo $student_slc->father_name; ?></td>
-                      <td><?php echo $student_slc->gender; ?></td>
-                      <td><?php echo date('d M, Y', strtotime($student_slc->student_data_of_birth)); ?></td>
-                      <td><?php echo $student_slc->admission_date; ?></td>
-                      <td><?php echo date('d M, Y', strtotime($student_slc->school_leaving_date)); ?></td>
-                      <td><?php echo date('d M, Y', strtotime($student_slc->slc_issue_date)); ?></td>
-                      <td><?php echo $student_slc->slc_file_no; ?></td>
-                      <td><?php echo $student_slc->slc_certificate_no; ?></td>
-                      <td>
-                        <a href="">Edit</a>
-                        <span style="margin-left:10px ;"></span>
-                        <a target="new" href="<?php echo site_url("students_slcs/slc_certificate/" . $student_slc->slc_id); ?>">Print</a>
-                      </td>
+              <?php if ($school->registrationNumber > 0) { ?>
 
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>SLC Code</th>
+                      <th>Admission No</th>
+                      <th>Student Name</th>
+                      <th>Father Name</th>
+                      <th>Gender</th>
+                      <th>Date Of Birth</th>
+                      <th>Admission Date</th>
+                      <th>School leaving Date</th>
+                      <th>SLC Issued Date</th>
+                      <th>File No</th>
+                      <th>SLC Certificate No</th>
+                      <th>Status</th>
                     </tr>
-                  <?php endforeach; ?>
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    <?php
+                    $count = 1;
+                    foreach ($slc_list as $student_slc) : ?>
+                      <tr>
+                        <td><?php echo $count++; ?></td>
+                        <td><?php echo $student_slc->slc_code; ?></td>
+                        <td><?php echo $student_slc->admission_no; ?></td>
+                        <td><?php echo $student_slc->student_name; ?></td>
+                        <td><?php echo $student_slc->father_name; ?></td>
+                        <td><?php echo $student_slc->gender; ?></td>
+                        <td><?php echo date('d M, Y', strtotime($student_slc->student_data_of_birth)); ?></td>
+                        <td><?php echo $student_slc->admission_date; ?></td>
+                        <td><?php echo date('d M, Y', strtotime($student_slc->school_leaving_date)); ?></td>
+                        <td><?php echo date('d M, Y', strtotime($student_slc->slc_issue_date)); ?></td>
+                        <td><?php echo $student_slc->slc_file_no; ?></td>
+                        <td><?php echo $student_slc->slc_certificate_no; ?></td>
+                        <td>
+                          <a href="<?php echo site_url("students_slcs/edit_student_slc/" . $student_slc->slc_id); ?>">Edit</a>
+                          <span style="margin-left:10px ;"></span>
+                          <a target="new" href="<?php echo site_url("students_slcs/slc_certificate/" . $student_slc->slc_id); ?>">Print</a>
+                        </td>
+
+                      </tr>
+                    <?php endforeach; ?>
+                  </tbody>
+                </table>
+
+              <?php } else { ?>
+                <h4>
+                  The online <strong>school leaving certificate system </strong> is exclusively accessible to registered schools only.
+                </h4>
+
+              <?php } ?>
             </div>
           </div>
         </div>
@@ -104,7 +113,7 @@
           <br />
         </div>
         <div class="modal-body">
-          <form action="<?php echo site_url("students_slcs/create_student_slc") ?>" method="post">
+          <form action="<?php echo site_url("students_slcs/add_slc") ?>" method="post">
             <input type="hidden" name="school_id" value="<?php echo $school->schools_id; ?>" />
             <?php
             //get current session 
@@ -121,8 +130,8 @@
                   <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
                 </div>
                 <div class="form-group">
-                  <label for="father_name">Student Father Name</label>
-                  <input required type="text" class="form-control" name="father_name" placeholder="Student Father Name">
+                  <label for="father_name">Father Name</label>
+                  <input required type="text" class="form-control" name="father_name" placeholder="Father Name">
                   <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
                 </div>
 
@@ -212,7 +221,7 @@
                   <tr>
                     <td>Addmission Withdrawal Reason:</td>
                     <td>
-                      <input required style="width: 100%;" type="text" required name="withdraw_reason" id="withdraw_reason" value="" />
+                      <input required style="width: 100%;" type="text" required name="leaving_reason" id="leaving_reason" value="" />
                     </td>
                   </tr>
                   <tr style="text-align: center;">

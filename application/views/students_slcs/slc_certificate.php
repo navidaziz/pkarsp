@@ -328,7 +328,10 @@ function numToOrdinalWord($num)
       <p>
         <small>
           <i>
-            Note: The only responsibility of the Khyber Pakhtunkhwa Private School Regulatory Authority (KP PSRA) is limited to school registration. On the other hand, the signatory above holds the responsibility for maintaining and handling school leaving certificate data. These certificates are computer-generated and their authenticity can be verified through the official website portal of the KP PSRA.
+            Note: The accuracy, completeness, and integrity of all the data provided herein are the responsibility of the school administration. <br />
+            These certificates are computer-generated and their authenticity can be verified through the official website portal of the KP PSRA.
+
+
           </i>
         </small>
       </p>
