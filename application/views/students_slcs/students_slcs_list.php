@@ -28,7 +28,9 @@
             <div class="col-md-12">
               <h3 style="border-left: 20px solid #9FC8E8; padding-left:5px">
                 <strong>List of School Leaving Certificates for Students</strong>
-                <button onclick="create_slc()" class="btn btn-success pull-right">Create SLC</button>
+                <?php if ($school->registrationNumber > 0) { ?>
+                  <button onclick="create_slc()" class="btn btn-success pull-right">Create SLC</button>
+                <?php } ?>
               </h3>
               <br />
               <?php if ($school->registrationNumber > 0) { ?>
@@ -101,139 +103,140 @@
     }
   </script>
 
+  <?php if ($school->registrationNumber > 0) { ?>
+    <div id="withdrawal" class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document" style="width: 70%;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title pull-left" id="withdrawal_model_title">Title</h5>
+            <button type="button" class="close pull-right" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <br />
+          </div>
+          <div class="modal-body">
+            <form action="<?php echo site_url("students_slcs/add_slc") ?>" method="post">
+              <input type="hidden" name="school_id" value="<?php echo $school->schools_id; ?>" />
+              <?php
+              //get current session 
+              $query = "SELECT sessionYearId FROM session_year WHERE status=1";
+              $session_id = $this->db->query($query)->row()->sessionYearId;
+              ?>
+              <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
 
-  <div id="withdrawal" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="width: 70%;">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title pull-left" id="withdrawal_model_title">Title</h5>
-          <button type="button" class="close pull-right" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          <br />
-        </div>
-        <div class="modal-body">
-          <form action="<?php echo site_url("students_slcs/add_slc") ?>" method="post">
-            <input type="hidden" name="school_id" value="<?php echo $school->schools_id; ?>" />
-            <?php
-            //get current session 
-            $query = "SELECT sessionYearId FROM session_year WHERE status=1";
-            $session_id = $this->db->query($query)->row()->sessionYearId;
-            ?>
-            <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
-
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="student_name">Student Name</label>
-                  <input required type="text" class="form-control" name="student_name" placeholder="Student Name">
-                  <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
-                </div>
-                <div class="form-group">
-                  <label for="father_name">Father Name</label>
-                  <input required type="text" class="form-control" name="father_name" placeholder="Father Name">
-                  <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
-                </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="student_name">Student Name</label>
+                    <input required type="text" class="form-control" name="student_name" placeholder="Student Name">
+                    <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+                  </div>
+                  <div class="form-group">
+                    <label for="father_name">Father Name</label>
+                    <input required type="text" class="form-control" name="father_name" placeholder="Father Name">
+                    <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+                  </div>
 
 
-                <div class="form-group">
-                  <label for="admission_no">Gender</label>
-                  <input required type="radio" value="Male" name="gender" /> Male
+                  <div class="form-group">
+                    <label for="admission_no">Gender</label>
+                    <input required type="radio" value="Male" name="gender" /> Male
 
-                  <input required type="radio" value="Female" name="gender" /> Female
-                </div>
-                <div class="form-group">
-                  <label for="admission_no">Student Data of Birth</label>
-                  <input required type="date" class="form-control" name="student_data_of_birth" placeholder="Admission No">
-                  <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
-                </div>
-                <div class="form-group">
-                  <label for="admission_no">Admission No</label>
-                  <input required type="text" class="form-control" name="admission_no" placeholder="Admission No">
-                  <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
-                </div>
-                <div class="form-group">
-                  <label for="admission_date">Admission Date</label>
-                  <input required type="date" class="form-control" name="admission_date" placeholder="Admission Date">
-                  <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
-                </div>
+                    <input required type="radio" value="Female" name="gender" /> Female
+                  </div>
+                  <div class="form-group">
+                    <label for="admission_no">Student Data of Birth</label>
+                    <input required type="date" class="form-control" name="student_data_of_birth" placeholder="Admission No">
+                    <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+                  </div>
+                  <div class="form-group">
+                    <label for="admission_no">Admission No</label>
+                    <input required type="text" class="form-control" name="admission_no" placeholder="Admission No">
+                    <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+                  </div>
+                  <div class="form-group">
+                    <label for="admission_date">Admission Date</label>
+                    <input required type="date" class="form-control" name="admission_date" placeholder="Admission Date">
+                    <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+                  </div>
 
+                </div>
+                <div class="col-md-6">
+                  <table class="table table-bordered" style="width: 100%;">
+
+                    <tr>
+                      <td>Schoool Leaving Date:</td>
+                      <td> <input required type="date" required name="school_leaving_date" id="school_leaving_date" value="" />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>SLC Issue Date:</td>
+                      <td><input required type="date" required name="slc_issue_date" id="slc_issue_date" value="" /></td>
+                    </tr>
+                    <tr>
+                      <td>SLC File No:</td>
+                      <td><input required type="text" required name="slc_file_no" id="slc_file_no" value="" /></td>
+                    </tr>
+                    <tr>
+                      <td>SLC Certificate No:</td>
+                      <td><input required type="text" required name="slc_certificate_no" id="slc_certificate_no" value="" /></td>
+                    </tr>
+                    <tr>
+                      <td>Character and Conduct</td>
+                      <?php
+                      $scales = array("Excellent", "Very Good", "Good", "Fair", "Poor")
+                      ?>
+                      <td>
+                        <?php foreach ($scales as $scale) { ?>
+                          <input required type="radio" name="character_and_conduct" value="<?php echo $scale; ?>" required="">
+                          <?php echo $scale; ?>
+                          <span style="margin-left: 10px;"></span>
+                        <?php } ?>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Academic Record</td>
+                      <td>
+                        <?php foreach ($scales as $scale) { ?>
+                          <input required type="radio" name="academic_record" value="<?php echo $scale; ?>" required="">
+                          <?php echo $scale; ?>
+                          <span style="margin-left: 10px;"></span>
+                        <?php } ?>
+                      </td>
+                    </tr>
+                    <tr>
+
+                      <td colspan="2">
+                        In which class is the student currently enrolled?
+                        <input required type="text" name="current_class" value="" placeholder="Nursery, KG, Ist etc" />
+                        <br />
+                        Would you recommend promoting the student to the next class?
+                        <input required type="radio" onclick="$('#promation_div').show(); $('#promoted_to_class').attr('required', true)" value="Yes" name="promotion_suggestion" /> Yes
+
+                        <input required type="radio" onclick="$('#promation_div').hide(); $('#promoted_to_class').attr('required', false)" value="No" name="promotion_suggestion" /> No
+                        <br />
+                        <div style="display: none;" id="promation_div">
+                          Promote to class <input type="text" id="promoted_to_class" name="promoted_to_class" value="" placeholder="Nursery, KG, Ist etc" />
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Addmission Withdrawal Reason:</td>
+                      <td>
+                        <input required style="width: 100%;" type="text" required name="leaving_reason" id="leaving_reason" value="" />
+                      </td>
+                    </tr>
+                    <tr style="text-align: center;">
+                      <td colspan="2"><input type="submit" class="btn btn-danger btn-sm" value="Create and Save School Leaving Certificate" /></td>
+                    </tr>
+                  </table>
+                </div>
               </div>
-              <div class="col-md-6">
-                <table class="table table-bordered" style="width: 100%;">
+            </form>
 
-                  <tr>
-                    <td>Schoool Leaving Date:</td>
-                    <td> <input required type="date" required name="school_leaving_date" id="school_leaving_date" value="" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>SLC Issue Date:</td>
-                    <td><input required type="date" required name="slc_issue_date" id="slc_issue_date" value="" /></td>
-                  </tr>
-                  <tr>
-                    <td>SLC File No:</td>
-                    <td><input required type="text" required name="slc_file_no" id="slc_file_no" value="" /></td>
-                  </tr>
-                  <tr>
-                    <td>SLC Certificate No:</td>
-                    <td><input required type="text" required name="slc_certificate_no" id="slc_certificate_no" value="" /></td>
-                  </tr>
-                  <tr>
-                    <td>Character and Conduct</td>
-                    <?php
-                    $scales = array("Excellent", "Very Good", "Good", "Fair", "Poor")
-                    ?>
-                    <td>
-                      <?php foreach ($scales as $scale) { ?>
-                        <input required type="radio" name="character_and_conduct" value="<?php echo $scale; ?>" required="">
-                        <?php echo $scale; ?>
-                        <span style="margin-left: 10px;"></span>
-                      <?php } ?>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Academic Record</td>
-                    <td>
-                      <?php foreach ($scales as $scale) { ?>
-                        <input required type="radio" name="academic_record" value="<?php echo $scale; ?>" required="">
-                        <?php echo $scale; ?>
-                        <span style="margin-left: 10px;"></span>
-                      <?php } ?>
-                    </td>
-                  </tr>
-                  <tr>
-
-                    <td colspan="2">
-                      In which class is the student currently enrolled?
-                      <input required type="text" name="current_class" value="" placeholder="Nursery, KG, Ist etc" />
-                      <br />
-                      Would you recommend promoting the student to the next class?
-                      <input required type="radio" onclick="$('#promation_div').show(); $('#promoted_to_class').attr('required', true)" value="Yes" name="promotion_suggestion" /> Yes
-
-                      <input required type="radio" onclick="$('#promation_div').hide(); $('#promoted_to_class').attr('required', false)" value="No" name="promotion_suggestion" /> No
-                      <br />
-                      <div style="display: none;" id="promation_div">
-                        Promote to class <input type="text" id="promoted_to_class" name="promoted_to_class" value="" placeholder="Nursery, KG, Ist etc" />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Addmission Withdrawal Reason:</td>
-                    <td>
-                      <input required style="width: 100%;" type="text" required name="leaving_reason" id="leaving_reason" value="" />
-                    </td>
-                  </tr>
-                  <tr style="text-align: center;">
-                    <td colspan="2"><input type="submit" class="btn btn-danger btn-sm" value="Create and Save School Leaving Certificate" /></td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-          </form>
+          </div>
 
         </div>
-
       </div>
     </div>
-  </div>
+  <?php } ?>
