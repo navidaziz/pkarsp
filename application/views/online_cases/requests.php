@@ -95,7 +95,7 @@
 
 
               <?php } else { ?>
-                <td colspan="3"></td>
+                <td colspan="4"></td>
                 <?php if ($request_type == 1) { ?>
                   <td style="display: none;"></td>
                   <td style="display: none;"></td>
