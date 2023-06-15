@@ -9,6 +9,7 @@
         <th>#</th>
 
         <th>SID</th>
+        <th>Level</th>
         <th>School Name</th>
         <?php if ($request_type == 1 or $request_type == 4) { ?>
           <th>Level</th>
@@ -50,6 +51,23 @@
                 <td><?php echo $count++; ?> </td>
 
                 <td><?php echo $request->schools_id ?></td>
+                <td>
+                  <?php if ($request->level_of_school_id == 1) {
+                    echo "Primary";
+                  } ?>
+                  <?php if ($request->level_of_school_id == 2) {
+                    echo "Middle";
+                  } ?>
+                  <?php if ($request->level_of_school_id == 3) {
+                    echo "High";
+                  } ?>
+                  <?php if ($request->level_of_school_id == 4) {
+                    echo "H.Sec";
+                  } ?>
+                  <?php if ($request->level_of_school_id == 5) {
+                    echo "Academy";
+                  } ?>
+                </td>
                 <td><?php echo substr($request->schoolName, 0, 45) ?></td>
                 <?php if ($request_type == 1 or $request_type == 4) { ?>
                   <td><?php echo $request->level; ?></td>

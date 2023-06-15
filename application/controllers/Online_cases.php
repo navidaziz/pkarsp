@@ -46,6 +46,7 @@ class Online_cases extends Admin_Controller
       `school`.`apply_date`,
       schools.isfined,
       school.status_remark,
+      `school`.`level_of_school_id`,
       `schools`.`yearOfEstiblishment`,
       (SELECT `tehsils`.`tehsilTitle` FROM `tehsils` WHERE `tehsils`.`tehsilId` = schools.tehsil_id) as tehsil,
       schools.address,
