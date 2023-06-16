@@ -23,7 +23,7 @@
   <!-- <h5 style="color: red;">Note: For example age 3+ means “equal to or greater than 3 but less than 4 years”, similarly for 4+ , 5+ and so on.</h5>
    -->
 
-  <form action="<?php echo site_url("section_c/update_class_ages_data") ?>" method="post">
+  <form action="<?php echo site_url("update_sectionc/updateclassagesdata") ?>" method="post">
     <table class="table table-bordered">
 
       <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />

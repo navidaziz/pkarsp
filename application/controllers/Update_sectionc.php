@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Section_c extends Admin_Controller
+class Update_sectionc extends Admin_Controller
 {
 
 	private function registaion_type($type_id)
@@ -62,7 +62,7 @@ class Section_c extends Admin_Controller
 		return $this->db->query($query)->result()[0];
 	}
 
-	public function update_section_c($school_session_id)
+	public function updatesectionc($school_session_id)
 	{
 
 		$userId = $this->session->userdata('userId');
@@ -191,7 +191,7 @@ class Section_c extends Admin_Controller
 	}
 
 
-	public function update_class_ages_from()
+	public function updateclassagesfrom()
 	{
 
 		$this->data['gender_id'] = (int) $this->input->post("gender_id");
@@ -207,7 +207,7 @@ class Section_c extends Admin_Controller
 	}
 
 
-	public function update_class_ages_data()
+	public function updateclassagesdata()
 	{
 
 		$class_id = $this->input->post("class_id");
@@ -261,6 +261,6 @@ class Section_c extends Admin_Controller
 		}
 
 		$this->session->set_flashdata('msg', "Class Age Wise Data For $gender Add Successfully");
-		redirect("section_c/update_section_c/$school_id");
+		redirect("update_sectionc/updatesectionc/$school_id");
 	}
 }

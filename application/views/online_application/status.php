@@ -73,7 +73,7 @@
                     <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Dashboard
                     <i class="fa fa-dashboard"></i>
                   </a>
-                  <a class="btn btn-primary" href="<?php echo site_url("section_c/update_section_c/$school_session_id"); ?>">
+                  <a class="btn btn-primary" href="<?php echo site_url("update_sectionc/updatesectionc/$school_session_id"); ?>">
                     <i class="fa fa-edit" aria-hidden="true"></i> Edit Section C
                   </a>
                   <!-- <span style="margin-left: 20px;"></span>

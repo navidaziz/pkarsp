@@ -3,7 +3,7 @@
     function update_class_ages_from(gender_id, class_id) {
       $.ajax({
         type: "POST",
-        url: "<?php echo site_url("section_c/update_class_ages_from"); ?>",
+        url: "<?php echo site_url("update_sectionc/updateclassagesfrom"); ?>",
         data: {
 
           gender_id: gender_id,
