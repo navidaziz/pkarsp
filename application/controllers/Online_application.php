@@ -46,6 +46,7 @@ class Online_application extends Admin_Controller
 
 		$this->data['school'] =  $this->db->query($query)->result()[0];
 		$this->data['school_id'] = $school_id = $this->data['school']->school_id;
+		$this->data['school_session_id'] = $school_session_id;
 
 		$this->data['session_id'] = $session_id = (int) $this->data['school']->session_year_id;
 		$this->data['session_detail'] = $this->db->query("SELECT * FROM `session_year` 

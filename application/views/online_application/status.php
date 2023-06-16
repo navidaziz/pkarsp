@@ -64,9 +64,17 @@
                     <?php echo get_session_request_status($school->status); ?>
                   </strong><br />
                   <br />
+
+
+
+
+
                   <a class="btn btn-warning" href="<?php echo site_url("school_dashboard"); ?>">
                     <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Dashboard
                     <i class="fa fa-dashboard"></i>
+                  </a>
+                  <a class="btn btn-primary" href="<?php echo site_url("section_c/update_section_c/$school_session_id"); ?>">
+                    <i class="fa fa-edit" aria-hidden="true"></i> Edit Section C
                   </a>
                   <!-- <span style="margin-left: 20px;"></span>
                   <a target="_blank" class="btn btn-primary" href="<?php echo site_url("print_file/school_session_detail/" . $school->school_id); ?>">
