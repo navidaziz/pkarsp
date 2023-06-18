@@ -100,7 +100,6 @@
                   <td style="display: none;"></td>
                   <td style="display: none;"></td>
                   <td style="display: none;"></td>
-                  <td style="display: none;"></td>
                 <?php } ?>
               <?php } ?>
               <td><?php echo $request->sessionYearTitle ?></td>
