@@ -24,6 +24,7 @@ class Online_cases extends Admin_Controller
       $this->load->view('layout', $this->data);
    }
 
+
    private function get_request_list($status, $file_status, $request_type = NULL, $title = NULL)
    {
       $userId = $this->session->userdata('userId');

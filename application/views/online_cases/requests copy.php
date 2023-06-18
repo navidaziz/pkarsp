@@ -3,8 +3,6 @@
   <span class="label label-primary pull-right"><?php echo sizeof($requests); ?></span>
 </h4>
 <div class="table-responsive">
-
-
   <table class="table table-bordered table_small" id="<?php echo  str_replace(" ", "_", $title);  ?>" style="font-size:11px">
     <thead>
       <tr>
@@ -14,7 +12,7 @@
         <th>Level</th>
         <th>District</th>
         <th>School Name</th>
-        <?php if ($request_type == 1 or $request_type == 4) { ?>
+        <?php if ($request_type == 1) { ?>
           <th>Tehsil</th>
           <th>Address</th>
           <th>Contact</th>
@@ -42,7 +40,7 @@
       ?>
 
           <?php if ($request->deficient == 0  or 1 == 1) { ?>
-            <tr <?php if ($request->deficient > 0) { ?> style="color:red; <?php if ($list_type == 1) { ?> display:none;<?php } ?> " <?php } ?>>
+            <tr <?php if ($request->deficient > 0) { ?> style="color:red; <?php if ($list_type == 1) { ?> disp lay:none;<?php } ?> " <?php } ?>>
 
               <?php if ($previous_school_id != $request->schools_id) { ?>
                 <td><?php echo $count++; ?> </td>
@@ -86,7 +84,7 @@
 
 
               <?php } else { ?>
-                <td colspan="5"></td>
+                <td colspan="6"></td>
 
                 <?php if ($request_type == 1 or $request_type == 4) { ?>
                   <td style="display: none;"></td>
@@ -158,7 +156,6 @@
       } ?>
     </tbody>
   </table>
-
 </div>
 <style>
   .dt-buttons {
@@ -184,30 +181,14 @@
           extend: 'print',
           title: '<?php echo str_replace(" ", "-", $title) . "-Date: " . Date("d-M-Y");  ?>',
           exportOptions: {
-            <?php if ($request_type == 2) { ?>
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
-            <?php } ?>
-            <?php if ($request_type == 1) { ?>
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
-            <?php } ?>
-            <?php if ($request_type == 4) { ?>
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-            <?php } ?>
+            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
           }
         },
         {
           extend: 'excelHtml5',
           title: '<?php echo str_replace(" ", "-", $title) . "-Date: " . Date("d-M-Y");  ?>',
           exportOptions: {
-            <?php if ($request_type == 2) { ?>
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-            <?php } ?>
-            <?php if ($request_type == 1) { ?>
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-            <?php } ?>
-            <?php if ($request_type == 4) { ?>
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-            <?php } ?>
+            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
           }
         },
         {
@@ -215,15 +196,7 @@
           title: '<?php echo str_replace(" ", "-", $title) . "-Date: " . Date("d-M-Y");  ?>',
           pageSize: 'A4',
           exportOptions: {
-            <?php if ($request_type == 2) { ?>
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-            <?php } ?>
-            <?php if ($request_type == 1) { ?>
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-            <?php } ?>
-            <?php if ($request_type == 4) { ?>
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-            <?php } ?>
+            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
           }
         }
       ]

@@ -3,8 +3,6 @@
   <span class="label label-primary pull-right"><?php echo sizeof($requests); ?></span>
 </h4>
 <div class="table-responsive">
-
-
   <table class="table table-bordered table_small" id="<?php echo  str_replace(" ", "_", $title);  ?>" style="font-size:11px">
     <thead>
       <tr>
@@ -12,12 +10,15 @@
 
         <th>SID</th>
         <th>Level</th>
-        <th>District</th>
         <th>School Name</th>
         <?php if ($request_type == 1 or $request_type == 4) { ?>
+          <th>Level</th>
+          <th>District</th>
           <th>Tehsil</th>
           <th>Address</th>
           <th>Contact</th>
+        <?php } ?>
+        <?php if ($request_type == 1) { ?>
           <th>YofEst</th>
           <th>BISE Reg.</td>
           <?php } ?>
@@ -29,6 +30,8 @@
           <?php if ($list_type == 3) { ?>
             <th>Remarks</th>
           <?php } ?>
+
+
           <th>Action</th>
 
       </tr>
@@ -65,16 +68,22 @@
                     echo "Academy";
                   } ?>
                 </td>
-                <td><?php echo $request->districtTitle; ?></td>
                 <td><?php echo substr($request->schoolName, 0, 45) ?></td>
                 <?php if ($request_type == 1 or $request_type == 4) { ?>
+                  <td><?php echo $request->level; ?></td>
+
+                  <td><?php echo $request->districtTitle; ?></td>
+
                   <td><?php echo $request->tehsil; ?></td>
+
                   <td><?php echo $request->address; ?></td>
                   <td><?php echo $request->telePhoneNumber; ?>,
                     <?php echo $request->schoolMobileNumber; ?>,
                     <?php echo $request->principal_contact_no; ?>,
                     <?php echo $request->owner_contact_no; ?>,
                   </td>
+                <?php } ?>
+                <?php if ($request_type == 1) { ?>
                   <td><?php echo $request->yearOfEstiblishment; ?></td>
                   <td><?php
                       if ($request->biseRegister == 'Yes') {
@@ -86,22 +95,21 @@
 
 
               <?php } else { ?>
-                <td colspan="5"></td>
-
+                <td colspan="4"></td>
+                <?php if ($request_type == 1) { ?>
+                  <td style="display: none;"></td>
+                  <td style="display: none;"></td>
+                <?php } ?>
                 <?php if ($request_type == 1 or $request_type == 4) { ?>
                   <td style="display: none;"></td>
                   <td style="display: none;"></td>
                   <td style="display: none;"></td>
                   <td style="display: none;"></td>
                   <td style="display: none;"></td>
-                <?php } else { ?>
-
-                  <td style="display: none;"></td>
-                  <td style="display: none;"></td>
-                  <td style="display: none;"></td>
-                  <td style="display: none;"></td>
-                  <td style="display: none;"></td>
                 <?php } ?>
+                <td style="display: none;"></td>
+                <td style="display: none;"></td>
+                <td style="display: none;"></td>
               <?php } ?>
               <td><?php echo $request->sessionYearTitle ?></td>
               <td style="text-align: center;" title="<?php echo date('d M, Y', strtotime($request->apply_date)); ?>">
@@ -158,7 +166,6 @@
       } ?>
     </tbody>
   </table>
-
 </div>
 <style>
   .dt-buttons {
@@ -200,10 +207,10 @@
           title: '<?php echo str_replace(" ", "-", $title) . "-Date: " . Date("d-M-Y");  ?>',
           exportOptions: {
             <?php if ($request_type == 2) { ?>
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
             <?php } ?>
             <?php if ($request_type == 1) { ?>
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
             <?php } ?>
             <?php if ($request_type == 4) { ?>
               columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
@@ -216,10 +223,10 @@
           pageSize: 'A4',
           exportOptions: {
             <?php if ($request_type == 2) { ?>
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
             <?php } ?>
             <?php if ($request_type == 1) { ?>
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
             <?php } ?>
             <?php if ($request_type == 4) { ?>
               columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
