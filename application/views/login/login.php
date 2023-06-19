@@ -76,11 +76,14 @@
                 <i class="fa fa-map-marker" aria-hidden="true"></i> 18-E Jamal Ud Din Afghani Road, University Town, Peshawar
                 </address>
                 <div class="row">
-                  <div class="col-md-6">
-                    <iframe width="100%" height="200" style="margin:5px; border-radius:5px;" src="https://www.youtube.com/embed/TEkX2iwDZno" title="How to register institute with KP PSRA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                  <div class="col-md-4">
+                    <iframe width="100%" height="180" style="margin:5px; border-radius:5px;" src="https://www.youtube.com/embed/TEkX2iwDZno" title="How to register institute with KP PSRA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                   </div>
-                  <div class="col-md-6">
-                    <iframe width="100%" height="200" style="margin:5px; border-radius:5px;" src="https://www.youtube.com/embed/D8GIW4llH2c" title="Institute Renewal and Upgradation with KP PSRA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                  <div class="col-md-4">
+                    <iframe width="100%" height="180" style="margin:5px; border-radius:5px;" src="https://www.youtube.com/embed/D8GIW4llH2c" title="Institute Renewal and Upgradation with KP PSRA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                  </div>
+                  <div class="col-md-4">
+                    <iframe width="100%" height="180" style="margin:5px; border-radius:5px;" src="https://www.youtube.com/embed/pO6c8oNYvtw" title="Step-by-Step Guide: Issuing School Leaving Certificates through the PSRA School Portal" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                   </div>
                 </div>
               </div>
