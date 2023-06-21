@@ -260,7 +260,7 @@ class Temp_controller extends CI_Controller
       if ($school->registrationNumber) {
         echo $school->registrationNumber;
       } else {
-        echo 'Not Registered';
+        echo '<strong style="color:red">Not Registered</strong>';
       }
 
       echo '</td>
