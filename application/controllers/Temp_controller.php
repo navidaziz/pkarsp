@@ -255,7 +255,15 @@ class Temp_controller extends CI_Controller
         <th>Address</th>
         </tr>
     <tr>
-    <td>' . $school->registrationNumber . '</td>
+    <td>';
+
+      if ($school->registrationNumber) {
+        echo $school->registrationNumber;
+      } else {
+        echo 'Not Registered';
+      }
+
+      echo '</td>
      <td>' . $school->schools_id . '</td>
       <td>' . $school->schoolName . '</td>
       <td> <small>';
