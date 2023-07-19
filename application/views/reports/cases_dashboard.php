@@ -204,7 +204,9 @@
                     join `session_year` on(`session_year`.`sessionYearId` = `school`.`session_year_id`)) 
                     group by `session_year`.`sessionYearTitle`";
                     $pending_files = $this->db->query($query)->result();
-                    foreach ($pending_files as $pending) { ?>
+                    foreach ($pending_files as $pending) {
+                      $cumulative_registered += $pending->total_registered;
+                    ?>
                       <tr>
                         <th style="text-align: center;"><?php echo $pending->sessionYearTitle; ?></th>
                         <td><?php echo $pending->total_applied; ?></td>
@@ -221,7 +223,7 @@
                         <td><?php echo $cumulative_registered; ?></td>
                       </tr>
                     <?php
-                      $cumulative_registered += $pending->total_registered;
+
                     } ?>
 
                   </tbody>
