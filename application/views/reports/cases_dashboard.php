@@ -179,6 +179,7 @@
                       <td>Issued</td>
                       <td>Registered</td>
                       <td>Cumulative Registered</td>
+                      <td>Renewal Remaining</td>
                     </tr>
                   </thead>
                   <tbody>
@@ -221,6 +222,7 @@
                         <td><?php echo $pending->total_issued; ?></td>
                         <td><?php echo $pending->total_registered; ?></td>
                         <td><?php echo $cumulative_registered; ?></td>
+                        <td><?php echo ($cumulative_registered - $pending->total_issued); ?></td>
                       </tr>
                     <?php
 
