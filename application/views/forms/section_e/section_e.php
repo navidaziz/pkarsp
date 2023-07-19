@@ -122,6 +122,7 @@
 
       <?php $this->load->view('forms/navigation_bar');   ?>
 
+
       <div class="box box-primary box-solid">
         <style>
           @media (max-width:629px) {
@@ -186,6 +187,7 @@
 
                 </small>
               </p>
+
               <table class="table table-bordered">
 
                 <tr>
@@ -199,14 +201,18 @@
                           `school`
                           INNER JOIN `session_year` 
                           ON (`school`.`session_year_id` = `session_year`.`sessionYearId`)
-                          WHERE `session_year`.`sessionYearId`= $session_id
-                          AND  `school`.`schoolId` = '" . $school->school_id . "'
-                          ORDER BY `session_year`.`sessionYearId` DESC LIMIT 1";
+                          WHERE `session_year`.`sessionYearId` <= $session_id
+                          AND  `school`.`schools_id` = '" . $school->schools_id . "'
+                          ORDER BY `session_year`.`sessionYearId` DESC LIMIT 2";
+
+                  // WHERE `session_year`.`sessionYearId`= $session_id
+                  // AND  `school`.`schoolId` = '" . $school->school_id . "'
+                  // ORDER BY `session_year`.`sessionYearId` DESC LIMIT 1";
                   $sessions =  $this->db->query($query)->result();
 
                   asort($sessions);
                   foreach ($sessions  as $session) { ?>
-                    <th colspan="3" style="text-align: center;"><?php echo $session->sessionYearTitle; ?></th>
+                    <th colspan="2" style="text-align: center;"><?php echo $session->sessionYearTitle; ?></th>
                   <?php } ?>
 
                 </tr>

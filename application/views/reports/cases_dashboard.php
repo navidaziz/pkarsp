@@ -228,8 +228,8 @@
                         <td>
                           <?php
                           if ($previous_registration) {
-                            echo round(($pending->total_issued / $previous_registration) * 100, 2);
-                          } ?> %
+                            echo round(($pending->total_issued / $previous_registration) * 100, 2) . " %";
+                          } ?>
                         </td>
                         <td>
                           <?php
