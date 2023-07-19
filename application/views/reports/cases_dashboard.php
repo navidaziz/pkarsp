@@ -178,11 +178,13 @@
                       <td>IssPen</td>
                       <td>Issued</td>
                       <td>Registered</td>
+                      <td>Cumulative Registered</td>
                     </tr>
                   </thead>
                   <tbody>
 
                     <?php
+                    $cumulative_registered = 0;
                     $query = "select `session_year`.`sessionYearTitle` AS `sessionYearTitle`,
                     IF(`session_year`.`sessionYearId`>5,
                     sum(if(`school`.`file_status`>=1 and school.status>0 ,1,0)), '') AS `total_applied`,
@@ -216,8 +218,11 @@
                         <td><?php echo $pending->completed_pending; ?></td>
                         <td><?php echo $pending->total_issued; ?></td>
                         <td><?php echo $pending->total_registered; ?></td>
+                        <td><?php echo $cumulative_registered; ?></td>
                       </tr>
-                    <?php } ?>
+                    <?php
+                      $cumulative_registered += $pending->total_registered;
+                    } ?>
 
                   </tbody>
 
