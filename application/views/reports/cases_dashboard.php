@@ -179,6 +179,7 @@
                       <td>Issued</td>
                       <td>Registered</td>
                       <td>Cumulative Registered</td>
+                      <td>Completed %</td>
                       <td>Renewal Remaining</td>
                     </tr>
                   </thead>
@@ -228,8 +229,9 @@
                           <?php
                           if ($previous_registration) {
                             echo round(($pending->total_issued / $previous_registration) * 100, 2);
-                          } ?>
-                          -
+                          } ?> %
+                        </td>
+                        <td>
                           <?php
                           if ($previous_registration) {
                             echo ($previous_registration - $pending->total_issued);
