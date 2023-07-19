@@ -186,6 +186,7 @@
 
                     <?php
                     $cumulative_registered = 0;
+                    $previous_registration = 0;
                     $query = "select `session_year`.`sessionYearTitle` AS `sessionYearTitle`,
                     IF(`session_year`.`sessionYearId`>5,
                     sum(if(`school`.`file_status`>=1 and school.status>0 ,1,0)), '') AS `total_applied`,
@@ -207,6 +208,7 @@
                     $pending_files = $this->db->query($query)->result();
                     foreach ($pending_files as $pending) {
                       $cumulative_registered += $pending->total_registered;
+                      $previous_registration += $pending->total_registered;
                     ?>
                       <tr>
                         <th style="text-align: center;"><?php echo $pending->sessionYearTitle; ?></th>
@@ -222,7 +224,7 @@
                         <td><?php echo $pending->total_issued; ?></td>
                         <td><?php echo $pending->total_registered; ?></td>
                         <td><?php echo $cumulative_registered; ?></td>
-                        <td><?php echo ($cumulative_registered - $pending->total_issued); ?></td>
+                        <td><?php echo $previous_registration; ?></td>
                       </tr>
                     <?php
 
