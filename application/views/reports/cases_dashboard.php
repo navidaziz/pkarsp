@@ -224,10 +224,16 @@
                         <td><?php echo $pending->total_issued; ?></td>
                         <td><?php echo $pending->total_registered; ?></td>
                         <td><?php echo $cumulative_registered; ?></td>
-                        <td><?php
-                            if ($previous_registration) {
-                              echo ($previous_registration - $pending->total_issued);
-                            } ?></td>
+                        <td>
+                          <?php
+                          if ($previous_registration) {
+                            echo round(($pending->total_issued / $previous_registration) * 100, 2);
+                          } ?>
+                          -
+                          <?php
+                          if ($previous_registration) {
+                            echo ($previous_registration - $pending->total_issued);
+                          } ?></td>
                       </tr>
                     <?php
                       $previous_registration += $pending->total_registered;
