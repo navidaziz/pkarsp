@@ -177,6 +177,7 @@
                       <td>OPs</td>
                       <td>IssPen</td>
                       <td>Issued</td>
+                      <td>Registered</td>
                     </tr>
                   </thead>
                   <tbody>
@@ -193,7 +194,8 @@
                     sum(if(`school`.`file_status` = 5 and `school`.`status` = 2,1,0)) AS `financially_deficient`,
                     sum(if(`school`.`file_status` = 4 and `school`.`status` = 2,1,0)) AS `marked_to_operation_wing`,
                     sum(if(`school`.`file_status` = 10 and `school`.`status` = 2,1,0)) AS `completed_pending`,
-                     sum(if(`school`.`status` = 1,1,0)) AS `total_issued`
+                    sum(if(`school`.`status` = 1,1,0)) AS `total_issued`,
+                    SUM(IF(`school`.`status` = 1 and `school`.`renewal_code`<=0),1,0) as total_registered
                     from (((`school` 
                     join `schools` on(`schools`.`schoolId` = `school`.`schools_id`)) 
                     join `district` on(`district`.`districtId` = `schools`.`district_id`)) 
@@ -213,7 +215,7 @@
                         <td><?php echo $pending->marked_to_operation_wing; ?></td>
                         <td><?php echo $pending->completed_pending; ?></td>
                         <td><?php echo $pending->total_issued; ?></td>
-
+                        <td><?php echo $pending->total_registered; ?></td>
                       </tr>
                     <?php } ?>
 
