@@ -289,7 +289,7 @@
                     sum(if(`school`.`file_status` = 4 and `school`.`status` = 2,1,0)) AS `marked_to_operation_wing`,
                     sum(if(`school`.`file_status` = 10 and `school`.`status` = 2,1,0)) AS `completed_pending`,
                     sum(if(`school`.`status` = 1,1,0)) AS `total_issued`,
-                    COUNT(0) as total_registered
+                    SUM(IF((`school`.`status` = 1 and `school`.`renewal_code`<=0),1,0)) as total_registered
                     from (((`school` 
                     join `schools` on(`schools`.`schoolId` = `school`.`schools_id`)) 
                     join `district` on(`district`.`districtId` = `schools`.`district_id`)) 
