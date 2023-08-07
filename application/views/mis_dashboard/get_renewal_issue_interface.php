@@ -62,7 +62,7 @@
                         <tr>
                             <td>
                                 <?php
-                                $query = "SELECT max(CONVERT(tuitionFee, SIGNED INTEGER)) as max_tution_fee  
+                                echo  $query = "SELECT max(CONVERT(tuitionFee, SIGNED INTEGER)) as max_tution_fee  
                             FROM `fee` WHERE school_id= '" . $school_id . "'";
                                 $max_tuition_fee = $this->db->query($query)->result()[0]->max_tution_fee;
                                 $max_tuition_fee = (int) preg_replace('/[^0-9.]/', '', $this->db->query($query)->result()[0]->max_tution_fee);
