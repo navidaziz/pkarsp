@@ -105,7 +105,7 @@
                             </tr>
                             <?php
 
-                            echo $query = "SELECT challan_no, challan_date, SUM(total_deposit_fee-security_fee) as total_deposit_fee 
+                            $query = "SELECT challan_no, challan_date, SUM(total_deposit_fee-security_fee) as total_deposit_fee 
                         FROM `bank_challans` WHERE school_id ='" . $school_id . "'
                         AND challan_for='" . $challan_for->challan_for . "'
                         GROUP BY challan_date
@@ -121,7 +121,7 @@
 
                                         echo '<span style="margin-left:10px;"></span>';
 
-                                        $query = "SELECT fine_percentage FROM `session_fee_submission_dates` 
+                                        echo $query = "SELECT fine_percentage FROM `session_fee_submission_dates` 
                                               WHERE last_date>= '" . $challan->challan_date . "' ORDER BY last_date ASC LIMIT 1;";
                                         $date_fine = $this->db->query($query)->row();
                                         if ($date_fine) {
