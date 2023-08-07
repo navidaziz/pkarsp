@@ -62,7 +62,7 @@
                         <tr>
                             <td>
                                 <?php
-                                echo  $query = "SELECT max(CONVERT(tuitionFee, SIGNED INTEGER)) as max_tution_fee  
+                                $query = "SELECT max(CONVERT(tuitionFee, SIGNED INTEGER)) as max_tution_fee  
                             FROM `fee` WHERE school_id= '" . $school_id . "'";
                                 $max_tuition_fee = $this->db->query($query)->result()[0]->max_tution_fee;
                                 $max_tuition_fee = (int) preg_replace('/[^0-9.]/', '', $this->db->query($query)->result()[0]->max_tution_fee);
@@ -90,7 +90,7 @@
                     </table>
 
                     <?php
-                    $query = "SELECT challan_for FROM `bank_challans` WHERE school_id ='" . $school_id . "' GROUP BY challan_for";
+                    echo $query = "SELECT challan_for FROM `bank_challans` WHERE school_id ='" . $school_id . "' GROUP BY challan_for";
                     $challan_fors = $this->db->query($query)->result();
                     $previous_percentage = "";
                     foreach ($challan_fors as $challan_for) {
