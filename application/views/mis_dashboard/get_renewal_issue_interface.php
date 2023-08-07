@@ -121,9 +121,10 @@
 
                                         echo '<span style="margin-left:10px;"></span>';
 
-                                        echo $query = "SELECT fine_percentage FROM `session_fee_submission_dates` 
+                                        $query = "SELECT fine_percentage FROM `session_fee_submission_dates` 
                                               WHERE last_date>= '" . $challan->challan_date . "' 
-                                              AND school_type_id = '1'
+                                              AND school_type_id = '" . $school->school_type_id . "'
+                                              AND session_id = '" . $school->session_year_id . "'
                                               ORDER BY last_date ASC LIMIT 1;";
                                         $date_fine = $this->db->query($query)->row();
                                         if ($date_fine) {
