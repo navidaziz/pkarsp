@@ -90,7 +90,7 @@
                     </table>
 
                     <?php
-                    echo $query = "SELECT challan_for FROM `bank_challans` WHERE school_id ='" . $school_id . "' GROUP BY challan_for";
+                    $query = "SELECT challan_for FROM `bank_challans` WHERE school_id ='" . $school_id . "' GROUP BY challan_for";
                     $challan_fors = $this->db->query($query)->result();
                     $previous_percentage = "";
                     foreach ($challan_fors as $challan_for) {
@@ -105,7 +105,7 @@
                             </tr>
                             <?php
 
-                            $query = "SELECT challan_no, challan_date, SUM(total_deposit_fee-security_fee) as total_deposit_fee 
+                            echo $query = "SELECT challan_no, challan_date, SUM(total_deposit_fee-security_fee) as total_deposit_fee 
                         FROM `bank_challans` WHERE school_id ='" . $school_id . "'
                         AND challan_for='" . $challan_for->challan_for . "'
                         GROUP BY challan_date
