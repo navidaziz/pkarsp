@@ -39,7 +39,7 @@
                         </form>
                     </h5>
                 <?php } else { ?>
-                    Status change not allowed. we are here .....
+                    Status change not allowed.
                 <?php } ?>
             </div>
         </div>
