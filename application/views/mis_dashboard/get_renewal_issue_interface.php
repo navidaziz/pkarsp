@@ -122,7 +122,9 @@
                                         echo '<span style="margin-left:10px;"></span>';
 
                                         echo $query = "SELECT fine_percentage FROM `session_fee_submission_dates` 
-                                              WHERE last_date>= '" . $challan->challan_date . "' ORDER BY last_date ASC LIMIT 1;";
+                                              WHERE last_date>= '" . $challan->challan_date . "' 
+                                              AND school_type_id = '1'
+                                              ORDER BY last_date ASC LIMIT 1;";
                                         $date_fine = $this->db->query($query)->row();
                                         if ($date_fine) {
                                             $fine_percentage = $date_fine->fine_percentage;
