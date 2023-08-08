@@ -868,7 +868,7 @@ school.principal_contact_no,
       $query = "SELECT file_status FROM school WHERE schoolId= '" . $school_id . "' 
       and schools_id = '" . $schools_id . "'";
       $school_file_status = $this->db->query($query)->file_status;
-      if ($school_file_status == 1) {
+      if ($school_file_status == 2) {
          $query = "UPDATE `school` SET file_status ='" . $file_status . "', 
       `note_sheet_completed_date` = '" . $completed_date . "',
               note_sheet_completed='" . $userId . "' ,
