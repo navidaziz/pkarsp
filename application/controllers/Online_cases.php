@@ -868,17 +868,17 @@ school.principal_contact_no,
       $query = "SELECT file_status FROM school WHERE schoolId= '" . $school_id . "' 
       and schools_id = '" . $schools_id . "'";
       $school_file_status = $this->db->query($query)->file_status;
-      if ($school_file_status == 2 or $school_file_status == 1) {
-         $query = "UPDATE `school` SET file_status ='" . $file_status . "', 
+      //if ($school_file_status == 2 or $school_file_status == 1) {
+      $query = "UPDATE `school` SET file_status ='" . $file_status . "', 
       `note_sheet_completed_date` = '" . $completed_date . "',
               note_sheet_completed='" . $userId . "' ,
               `status_remark`= " . $status_remark . "
               WHERE status=2 and schoolId= '" . $school_id . "' 
               and schools_id = '" . $schools_id . "'";
-      } else {
-         $query = "UPDATE `school` SET file_status ='" . $file_status . "'
-              WHERE status=2 and  schoolId= '" . $school_id . "' and schools_id = '" . $schools_id . "'";
-      }
+      //} else {
+      // $query = "UPDATE `school` SET file_status ='" . $file_status . "'
+      //         WHERE status=2 and  schoolId= '" . $school_id . "' and schools_id = '" . $schools_id . "'";
+      // }
       if ($this->db->query($query)) {
          //redirect("online_cases/combine_note_sheet/" . $schools_id);
          redirect($_SERVER['HTTP_REFERER']);
