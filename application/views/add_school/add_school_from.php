@@ -86,11 +86,19 @@
                     <tr>
                       <td colspan="2">
                         <strong class="required"> Institute Type</strong><br />
-                        <?php foreach ($school_types as $school_type) : ?>
-                          <input onclick="hide_and_show('<?php echo $school_type->typeId; ?>')" type="radio" name="school_type_id" value="<?= $school_type->typeId; ?>" required />
-                          <?php echo $school_type->typeTitle; ?>
+                        <strong>Please choose the type of institute:</strong>
+                        <br />
+                        <p style="font-weight: bold; color:red; padding:5px; font-size:small">Important Note: To register a private school, please choose the "Private School" option. For registering a tuition academy, select the "Tuition Academy" option.</p>
 
-                        <?php endforeach; ?>
+                        <ul class="list-group">
+                          <?php foreach ($school_types as $school_type) : ?>
+                            <li class="list-group-item" <?php if ($school_type->typeId == 1) { ?> style=" color: #004085; background-color: #b8daff; font-weight:bold" <?php } ?> <?php if ($school_type->typeId == 7) { ?> style="color: #155724;
+    background-color: #c3e6cb; font-weight:bold" <?php } ?>>
+                              <input onclick="hide_and_show('<?php echo $school_type->typeId; ?>')" type="radio" name="school_type_id" value="<?= $school_type->typeId; ?>" required />
+                              <?php echo $school_type->typeTitle; ?>
+                            </li>
+                          <?php endforeach; ?>
+                        </ul>
 
                       </td>
                     </tr>
