@@ -180,37 +180,39 @@
                               } ?>
                               <?php if ($session_count == 2) { ?>
                                 <small style="margin-left:15px;">Maximum expected value:
-
-                                  <strong><?php echo round($previous_session_max_fee[$class->classId], 2); ?></strong></small>
-
-                                <input required type="number" <?php if ($previous_session_max_fee[$class->classId] > 0) { ?> max="<?php echo round($previous_session_max_fee[$class->classId], 2); ?>" <?php } ?> name="fee[<?php echo $session_fee->feeId; ?>]" value="<?php echo $session_fee->tuitionFee; ?>" />
-
-                                <span style="margin-left: 5px; color:green">
-                                  <?php
-
-                                  $diff = $session_fee->tuitionFee - $previous_session_fee[$class->classId];
-                                  if ($previous_session_fee[$class->classId]) {
-                                    $percentage = ($diff / $previous_session_fee[$class->classId]) * 100;
-                                  } else {
-                                    $percentage = 0;
-                                  }
-                                  //printf("%2d", $percentage);
-                                  echo round($percentage, 2);
-                                  //$incress =  round((($session_fee->tuitionFee - $previous_session_fee[$class->classId]) / ($diff) * 100, 2);
-                                  //echo round(((($session_fee->tuitionFee - $previous_session_fee[$class->classId]) / $session_fee->tuitionFee) * 100), 2);
-                                  ?> %
-                                </span>
+                                  <?php if ($session_max_fee <= $previous_session_max_fee[$class->classId]) { ?>
+                                    <strong><?php echo round($session_max_fee, 2); ?></strong></small>
+                              <?php } else { ?>
+                                <strong><?php echo round($previous_session_max_fee[$class->classId], 2); ?></strong></small>
                               <?php } ?>
+                              <input required type="number" <?php if ($previous_session_max_fee[$class->classId] > 0) { ?> <?php if ($session_max_fee <= $previous_session_max_fee[$class->classId]) { ?> max="<?php echo round($session_max_fee, 2); ?>" <?php } else { ?> max="<?php echo round($previous_session_max_fee[$class->classId], 2); ?>" <?php } ?> <?php } ?> name="fee[<?php echo $session_fee->feeId; ?>]" value="<?php echo $session_fee->tuitionFee; ?>" />
+
+                              <span style="margin-left: 5px; color:green">
+                                <?php
+
+                                $diff = $session_fee->tuitionFee - $previous_session_fee[$class->classId];
+                                if ($previous_session_fee[$class->classId]) {
+                                  $percentage = ($diff / $previous_session_fee[$class->classId]) * 100;
+                                } else {
+                                  $percentage = 0;
+                                }
+                                //printf("%2d", $percentage);
+                                echo round($percentage, 2);
+                                //$incress =  round((($session_fee->tuitionFee - $previous_session_fee[$class->classId]) / ($diff) * 100, 2);
+                                //echo round(((($session_fee->tuitionFee - $previous_session_fee[$class->classId]) / $session_fee->tuitionFee) * 100), 2);
+                                ?> %
+                              </span>
+                            <?php } ?>
 
 
-                              <small style="margin-left: 10px;">
-                                <i>
-                                  <?php
-                                  //$f = new NumberFormatter("in", NumberFormatter::SPELLOUT);
-                                  //echo ucwords(strtolower(convertNumberToWord($session_fee->tuitionFee)));
-                                  ?>
-                                </i>
-                              </small>
+                            <small style="margin-left: 10px;">
+                              <i>
+                                <?php
+                                //$f = new NumberFormatter("in", NumberFormatter::SPELLOUT);
+                                //echo ucwords(strtolower(convertNumberToWord($session_fee->tuitionFee)));
+                                ?>
+                              </i>
+                            </small>
                             </td>
 
 

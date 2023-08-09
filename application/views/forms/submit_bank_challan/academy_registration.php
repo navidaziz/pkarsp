@@ -55,7 +55,7 @@
           </form> -->
 
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-7">
               <div class="col-md-6">
                 <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px; margin-bottom: 2px; padding: 5px; background-color: white;">
                   <h5>
@@ -94,91 +94,15 @@
                 </div>
               </div>
 
-              <div class="col-md-6">
-                <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px !important;  margin-bottom: 2px; padding: 5px; background-color: white;">
-                  <h4>Session: <?php echo $session_detail->sessionYearTitle; ?> Due Dates</h4>
-                  <table class="table table-bordered">
 
-                    <tr>
-                      <th>#</th>
-                      <th>Last Date</th>
-                      <th>Fines</th>
-                    </tr>
-                    <?php
-                    $count = 1;
-                    $s_no = 1;
+              <?php $this->load->view('forms/submit_bank_challan/cut_off_dates');   ?>
 
-                    if ($session_fee_submission_dates) {
-                      foreach ($session_fee_submission_dates as $session_fee_submission_date) { ?>
-                        <tr>
-                          <th><?php echo $s_no++; ?></th>
-                          <td>
-                            <strong>
-                              <?php echo date('d M, Y', strtotime($session_fee_submission_date->start_date)); ?>
-                            </strong>
-                            <span style="margin-left: 5px; margin-right:5px"> to </span>
-                            <strong>
-                              <?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?>
-                            </strong>
+              <?php $this->load->view('forms/submit_bank_challan/online_apply_instructions');   ?>
 
-                          </td>
-                          <td>
-                            <?php
-                            if ($session_fee_submission_date->fine_percentage != 'fine') {
-                              if ($session_fee_submission_date->fine_percentage) {
-                            ?>
-                                <?php echo $session_fee_submission_date->fine_percentage; ?> %
-                              <?php
-                              } else {
-                                echo "<small>Normal Fee</small>";
-                              }
-                            } else { ?>
-                              <?php echo $session_fee_submission_date->detail; ?>
-                            <?php } ?>
-                          </td>
-                        </tr>
-                      <?php } ?>
-                    <?php } else { ?>
-                      <tr>
-                        <td colspan="3" style="text-align: center;">Not yet defined</td>
-                      </tr>
-                    <?php } ?>
-                  </table>
-                  <div style="font-size: 12px;">
-                    <h5> <i class="fa fa-info-circle" aria-hidden="true"></i> How to submit bank challan online ?</h5>
-                    <p>
-                    <ol>
-                      <li>Print PSRA Deposit Slip / Bank Challan</li>
-                      <li>Deposit Fee as per due dates</li>
-                      <li>Take computerized bank challan having STAN No. from the bank</li>
-                      <li>Submit <strong>Bank STAN</strong> number and Transaction date</li>
-                      <li>Click on <strong>"Submit bank challan"</strong></li>
-                      <li>View Registration application status on school dashboard</li>
-                      </ul>
-                    </ol>
-                    </p>
-                    <div style="direction: rtl;">
-                      <p>
-                      <h5 style="direction: rtl;"> <i class="fa fa-info-circle" aria-hidden="true"></i> بینک چالان آن لائن کیسے جمع کریں؟</h5>
 
-                      <ol style="direction: rtl;">
-                        <li>PSRA ڈپازٹ سلپ/بینک چالان پرنٹ کریں۔</li>
-                        <li>مقررہ تاریخوں کے مطابق فیس جمع کروائیں۔</li>
-                        <li>بینک سے STAN No والا کمپیوٹرائزڈ بینک چالان لیں۔</li>
-                        <li>بینک STAN نمبر اور لین دین کی تاریخ جمع کروائیں۔</li>
-                        <li style="direction: rtl;"> کلک کریں۔ "Submit bank challan"</li>
-                        <li>اسکول کے ڈیش بورڈ پر رجسٹریشن کی درخواست کی حیثیت دیکھیں</li>
-                        </ul>
-                      </ol>
-                      </p>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-5">
               <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px; margin-bottom: 2px; padding: 5px; background-color: white;">
                 <h4>Session: <?php echo $session_detail->sessionYearTitle; ?> Registration Fee Detail</h4>
                 <table class="table" style="font-size: 13px;">
@@ -246,22 +170,33 @@
                             $session_fee_submission_dates[0] = new stdClass();
                           }
                           //var_dump($session_fee_submission_dates);
-
+                          $count = 1;
+                          $previous_last_date = '';
                           foreach ($session_fee_submission_dates as $session_fee_submission_date) { ?>
 
                             <tr>
-                              <td>
-                                <?php if ($session_fee_submission_date->start_date) { ?>
-                                  <strong>
-                                    <?php echo date('d M, Y', strtotime($session_fee_submission_date->start_date)); ?>
-                                  </strong>
+                              <td style="width: 200px;">
+                                <?php if ($count == 1) { ?>
+
+                                  <span>Up to </span>
+
+                                <?php } else { ?>
+                                  <?php if ($count >= sizeof($session_fee_submission_dates)) { ?>
+                                    After
+                                  <?php } else { ?>
+                                    <strong> <?php echo $previous_last_date; ?> </strong> to
+                                  <?php } ?>
                                 <?php } ?>
-                                <?php if ($session_fee_submission_date->last_date) { ?>
-                                  <span style="margin-left: 5px; margin-right:5px"> to </span>
-                                  <strong>
-                                    <?php echo date('d M, Y', strtotime($session_fee_submission_date->last_date)); ?>
-                                  </strong>
-                                <?php } ?>
+                                <?php
+                                $previous_last_date = date('d M, Y', strtotime($session_fee_submission_date->last_date . ' +1 day'));
+                                if ($count >= sizeof($session_fee_submission_dates)) {
+                                  echo "<strong>" . date('d M, Y', strtotime($session_fee_submission_date->last_date . '-1 day')) . "</strong>";
+                                } else {
+                                  echo "<strong>" . date('d M, Y', strtotime($session_fee_submission_date->last_date)) . "</strong>";
+                                }
+                                ?>
+
+
                               </td>
                               <?php if ($session_fee_submission_date->fine_percentage == 0) { ?>
                                 <td colspan="2"> <strong> Normal Fee </strong></td>
@@ -295,7 +230,9 @@
 
 
 
-                          <?php } ?>
+                          <?php
+                            $count++;
+                          } ?>
 
                         </table>
                       </td>
