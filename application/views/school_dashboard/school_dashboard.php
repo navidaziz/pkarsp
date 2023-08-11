@@ -427,6 +427,19 @@
 
                                 </td>
                               </tr>
+
+
+                              <?php if ($session->status == 1) { ?>
+                                <tr>
+                                  <td colspan="5" style="text-align: center;">
+                                    <a href="<?php echo site_url("update_sectionc/updatesectionc/$upgradation_and_renewal->school_id"); ?>" class="btn btn-primary">
+                                      Current Year Enrollment
+                                    </a>
+                                  </td>
+                                </tr>
+                              <?php } ?>
+
+
                               <?php
 
                               if ($session->status == 1) {
@@ -525,15 +538,7 @@
                         </tr>
                       <?php } ?>
 
-                      <?php if ($session->status == 1) { ?>
-                        <tr>
-                          <td colspan="5">
-                            <a href="<?php echo site_url("update_sectionc/updatesectionc/$session->sessionYearId"); ?>" class="btn btn-primary">
-                              Current Year Enrollment
-                            </a>
-                          </td>
-                        </tr>
-                      <?php } ?>
+
 
                     <?php   }  ?>
 
