@@ -320,6 +320,7 @@
                           <?php } ?>
                         </td>
                       </tr>
+
                     <?php } ?>
 
 
@@ -471,13 +472,6 @@
 
 
                         <?php } ?>
-
-                        <?php if ($upgradation) { ?>
-                          <a href="<?php echo site_url("update_sectionc/updatesectionc/$session->session_year_id"); ?>" class="btn btn-primary">
-                            Current Year Enrollment
-                          </a>
-                        <?php } ?>
-
                         <?php
                         $query = "SELECT  (`primary_level`+`middle_level`+`high_level`+`h_sec_college_level`) as total 
                       FROM schools WHERE schools.`schoolId`= '" . $school_id . "'";
@@ -530,6 +524,17 @@
                           </td>
                         </tr>
                       <?php } ?>
+
+                      <?php if ($session->status == 1) { ?>
+                        <tr>
+                          <td colspan="5">
+                            <a href="<?php echo site_url("update_sectionc/updatesectionc/$session->sessionYearId"); ?>" class="btn btn-primary">
+                              Current Year Enrollment
+                            </a>
+                          </td>
+                        </tr>
+                      <?php } ?>
+
                     <?php   }  ?>
 
 
