@@ -476,7 +476,7 @@
                       FROM schools WHERE schools.`schoolId`= '" . $school_id . "'";
                         $upgradation_code = $this->db->query($query)->result()[0]->total;
                         if ($upgradation and $upgradation_code != 4) { ?>
-                          <tr>
+                          <tr style="display:none;">
                             <td colspan="5" style="text-align: center;">
                               <p class="btn btn-outline-warning">
                                 Apply For <?php echo $session->sessionYearTitle; ?>
