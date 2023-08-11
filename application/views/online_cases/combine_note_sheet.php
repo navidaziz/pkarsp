@@ -1056,16 +1056,19 @@
           <input type="hidden" name="session_id" value="<?php echo $last_applied_session->session_year_id; ?>" />
           <input type="hidden" name="school_id" value="<?php echo $last_applied_session->schoolId; ?>" />
           <input type="hidden" name="schools_id" value="<?php echo $school->schools_id; ?>" />
+          <?php if ($deficient == 0) { ?>
+            <table class="table">
+              <tr>
+                <td><textarea name="comment" id="comment" onkeyup="autoheight(this)" style="width: 100%; height:40px; border-radius: 9px;"></textarea></td>
+                <td style="width: 180px;">
+                  <button class="btn btn-primary btn-sm" onclick="submit_comment()" style="margin:2px; background-color:#A6A6A6; border:1px solid #A6A6A6;">Add Note Sheet Para </button>
+                </td>
+              </tr>
 
-          <table class="table">
-            <tr>
-              <td><textarea name="comment" id="comment" onkeyup="autoheight(this)" style="width: 100%; height:40px; border-radius: 9px;"></textarea></td>
-              <td style="width: 180px;">
-                <button class="btn btn-primary btn-sm" onclick="submit_comment()" style="margin:2px; background-color:#A6A6A6; border:1px solid #A6A6A6;">Add Note Sheet Para </button>
-              </td>
-            </tr>
-
-          </table>
+            </table>
+          <?php } else {
+            echo "deficiency in notesheet.";
+          } ?>
         </form>
         <a class="btn btn-warning btn-sm" href="<?php echo site_url("online_cases"); ?>">Back To Dashboard</a>
         <button class="btn btn-info btn-sm" onclick="window.print();"> <i class="fa fa-print" aria-hidden="true"></i> Print Note Sheet</button>
