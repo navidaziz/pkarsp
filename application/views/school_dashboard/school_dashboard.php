@@ -432,8 +432,8 @@
                               <?php if ($session->status == 1) { ?>
                                 <tr>
                                   <td colspan="5" style="text-align: center;">
-                                    <a href="<?php echo site_url("update_sectionc/updatesectionc/$upgradation_and_renewal->school_id"); ?>" class="btn btn-primary">
-                                      Current Year Enrollment
+                                    <a href="<?php echo site_url("update_sectionc/updatesectionc/$upgradation_and_renewal->school_id"); ?>" class="btn btn-success"> <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                      Update <?php echo $upgradation_and_renewal->sessionYearTitle; ?> Enrollment
                                     </a>
                                   </td>
                                 </tr>
