@@ -471,6 +471,13 @@
 
 
                         <?php } ?>
+
+                        <?php if ($upgradation) { ?>
+                          <a href="<?php echo site_url("update_sectionc/updatesectionc/$session->session_year_id"); ?>" class="btn btn-primary">
+                            Current Year Enrollment
+                          </a>
+                        <?php } ?>
+
                         <?php
                         $query = "SELECT  (`primary_level`+`middle_level`+`high_level`+`h_sec_college_level`) as total 
                       FROM schools WHERE schools.`schoolId`= '" . $school_id . "'";
