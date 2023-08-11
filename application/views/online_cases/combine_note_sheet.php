@@ -598,7 +598,7 @@
 
               $query = "select max(sessionYearId) as sessionYearId from session_year";
               $current_session_id = $query = $this->db->query($query)->row()->sessionYearId;
-
+              $deficient = 0;
 
               if ($school_sessions) {
                 $count = 1;
@@ -663,6 +663,7 @@
                                               if (!is_null($school_session->file_status)) {
                                                 echo "New";
                                                 if ($school_session->file_status == 5) {
+                                                  $deficient++;
                                                   echo " - Deficient";
                                                 }
                                               } else {

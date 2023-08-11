@@ -208,82 +208,83 @@
       <div class="box-body">
 
         <div class="row">
-          <div class="col-md-3">
-            <div class="alert " style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
+          <?php if ($school->school_type_id == 1) { ?>
+            <div class="col-md-3">
+              <div class="alert " style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
 
-              <?php
-              $query = "SELECT * FROM `session_year` WHERE status = 1";
-              $session = $this->db->query($query)->row();
-              $query = "SELECT * FROM `enrollments` 
+                <?php
+                $query = "SELECT * FROM `session_year` WHERE status = 1";
+                $session = $this->db->query($query)->row();
+                $query = "SELECT * FROM `enrollments` 
                         WHERE schools_id = '" . $school->schoolId . "'
                         AND session_id = '" . $session->sessionYearId . "'";
-              $enrollment = $this->db->query($query)->row();
-              if ($enrollment) {
-                $school_enrollment =  $enrollment->enrollment;
-              } else {
-                $school_enrollment = 0;
-              }
-              ?>
-              <h4>Session <?php echo $session->sessionYearTitle; ?> Enrollment</h4>
-              <div class="alert alert-danger">
-                Please enter the <strong>total</strong> number of newly enrolled students in your school in this session i.e. <strong><?php echo $session->sessionYearTitle; ?></strong> in class <strong>Playgroup / Nursery etc.</strong> and submit.
-                <br />
-                You need to update this figure daily
+                $enrollment = $this->db->query($query)->row();
+                if ($enrollment) {
+                  $school_enrollment =  $enrollment->enrollment;
+                } else {
+                  $school_enrollment = 0;
+                }
+                ?>
+                <h4>Session <?php echo $session->sessionYearTitle; ?> Enrollment</h4>
+                <div class="alert alert-danger">
+                  Please enter the <strong>total</strong> number of newly enrolled students in your school in this session i.e. <strong><?php echo $session->sessionYearTitle; ?></strong> in class <strong>Playgroup / Nursery etc.</strong> and submit.
+                  <br />
+                  You need to update this figure daily
+                </div>
+                <form method="post" action="<?php echo site_url('temp_controller/add_enrollement'); ?>">
+                  <input type="hidden" name="schools_id" value="<?php echo  $school->schoolId; ?>" />
+                  <input type="hidden" name="session_id" value="<?php echo  $session->sessionYearId; ?>" />
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">
+                      <h4>Total New Enrollment</h4>
+                    </label>
+                    <input required min="1" max="2000" type="number" class="form-control" name="school_enrollment" id="school_enrollment" value="<?php echo $school_enrollment; ?>" placeholder="Enrollment">
+                    <small id="emailHelp" class="form-text text-muted">
+                      Updated on: <?php echo date('l F jS, Y', strtotime($enrollment->updated_date)) ?>
+                    </small>
+                  </div>
+                  <div style="text-align: center;">
+                    <?php if ($school_enrollment == 0) { ?>
+                      <button type="submit" class="btn btn-danger">Submit</button>
+
+                    <?php } else { ?>
+                      <button type="submit" class="btn btn-danger">Submit</button>
+                    <?php } ?>
+                  </div>
+                </form>
+
               </div>
-              <form method="post" action="<?php echo site_url('temp_controller/add_enrollement'); ?>">
-                <input type="hidden" name="schools_id" value="<?php echo  $school->schoolId; ?>" />
-                <input type="hidden" name="session_id" value="<?php echo  $session->sessionYearId; ?>" />
-                <div class="form-group">
-                  <label for="exampleInputEmail1">
-                    <h4>Total New Enrollment</h4>
-                  </label>
-                  <input required min="1" max="2000" type="number" class="form-control" name="school_enrollment" id="school_enrollment" value="<?php echo $school_enrollment; ?>" placeholder="Enrollment">
-                  <small id="emailHelp" class="form-text text-muted">
-                    Updated on: <?php echo date('l F jS, Y', strtotime($enrollment->updated_date)) ?>
-                  </small>
+              <div class="alert " style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
+
+                <?php
+                $query = "SELECT * FROM `session_year` WHERE status = 1";
+                $session = $this->db->query($query)->row();
+                $query = "SELECT * FROM `enrollments` 
+              WHERE schools_id = '" . $school->schoolId . "'
+              AND session_id = '" . $session->sessionYearId . "'";
+                $enrollment = $this->db->query($query)->row();
+                if ($enrollment) {
+                  $school_enrollment =  $enrollment->enrollment;
+                } else {
+                  $school_enrollment = 0;
+                }
+                ?>
+                <h4>Online School Leaving Certificate</h4>
+                <div class="alert alert-success">
+                  PSRA has launched an online platform to facilitate the issuance of student <strong>School Leaving Certificate</strong> for registered schools.
                 </div>
                 <div style="text-align: center;">
-                  <?php if ($school_enrollment == 0) { ?>
-                    <button type="submit" class="btn btn-danger">Submit</button>
-
-                  <?php } else { ?>
-                    <button type="submit" class="btn btn-danger">Submit</button>
-                  <?php } ?>
+                  <a class="btn btn-success" href="<?php echo site_url('students_slcs'); ?>">
+                    <i class="fa fa-certificate" aria-hidden="true"></i> School Leaving Certificates
+                  </a>
                 </div>
-              </form>
 
-            </div>
-            <div class="alert " style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
-
-              <?php
-              $query = "SELECT * FROM `session_year` WHERE status = 1";
-              $session = $this->db->query($query)->row();
-              $query = "SELECT * FROM `enrollments` 
-          WHERE schools_id = '" . $school->schoolId . "'
-          AND session_id = '" . $session->sessionYearId . "'";
-              $enrollment = $this->db->query($query)->row();
-              if ($enrollment) {
-                $school_enrollment =  $enrollment->enrollment;
-              } else {
-                $school_enrollment = 0;
-              }
-              ?>
-              <h4>Online School Leaving Certificate</h4>
-              <div class="alert alert-success">
-                PSRA has launched an online platform to facilitate the issuance of student <strong>School Leaving Certificate</strong> for registered schools.
               </div>
-              <div style="text-align: center;">
-                <a class="btn btn-success" href="<?php echo site_url('students_slcs'); ?>">
-                  <i class="fa fa-certificate" aria-hidden="true"></i> School Leaving Certificates
-                </a>
-              </div>
-
             </div>
-          </div>
+          <?php } ?>
 
 
-
-          <div class="col-md-5">
+          <div <?php if ($school->school_type_id == 1) { ?>class="col-md-5" <?php } ?> <?php if ($school->school_type_id == 7) { ?>class="col-md-8" <?php } ?>>
             <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
               <?php
               if ($school->registrationNumber) { ?>

@@ -141,7 +141,7 @@
             <table class="table table-bordered">
                 <tr>
                     <td style="padding-top: 20px;">
-                        School ID: <span style="text-decoration: underline; ">
+                        Institute ID: <span style="text-decoration: underline; ">
                             <strong>
                                 <?php if ($school) {
                                     echo $school->schools_id;

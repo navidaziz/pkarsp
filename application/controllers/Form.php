@@ -1668,7 +1668,12 @@ class Form extends Admin_Controller
 		          WHERE school_type_id = '" . $school_type_id . "' 
 				  ORDER BY fee_max ASC";
 		$this->data['fee_structures'] = $this->db->query($query)->result();
-		$this->load->view('forms/fee_structures/renewal_fee_sturucture', $this->data);
+		if ($school_type_id == 1) {
+			$this->load->view('forms/fee_structures/renewal_fee_sturucture', $this->data);
+		}
+		if ($school_type_id == 7) {
+			$this->load->view('forms/fee_structures/academey_fee_sturucture', $this->data);
+		}
 	}
 
 	public function upload_affidavit($school_id)
