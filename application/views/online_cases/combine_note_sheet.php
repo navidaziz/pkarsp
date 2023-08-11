@@ -1071,8 +1071,10 @@
           } ?>
         </form>
         <a class="btn btn-warning btn-sm" href="<?php echo site_url("online_cases"); ?>">Back To Dashboard</a>
-        <button class="btn btn-info btn-sm" onclick="window.print();"> <i class="fa fa-print" aria-hidden="true"></i> Print Note Sheet</button>
-        <a class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to mark notesheet complete?');" href="<?php echo site_url("online_cases"); ?>">Mark as completed</a>
+        <?php if ($deficient == 0) { ?>
+          <button class="btn btn-info btn-sm" onclick="window.print();"> <i class="fa fa-print" aria-hidden="true"></i> Print Note Sheet</button>
+          <a class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to mark notesheet complete?');" href="<?php echo site_url("online_cases"); ?>">Mark as completed</a>
+        <?php } ?>
       </section>
 
 
