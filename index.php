@@ -56,7 +56,13 @@
  */
 define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
 
+$hostname = $_SERVER['HTTP_HOST'];
 
+if ($hostname === 'localhost' || $hostname === '127.0.0.1') {
+	define('ENVIRONMENT', 'development');
+} else {
+	define('ENVIRONMENT', 'production');
+}
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING
@@ -66,7 +72,7 @@ define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'developm
  * By default development will show errors but testing and live will hide them.
  */
 //switch (ENVIRONMENT) {
-switch ('production') {
+switch (ENVIRONMENT) {
 	case 'development':
 		error_reporting(-1);
 		error_reporting(E_ERROR | E_PARSE);

@@ -602,8 +602,11 @@ class Mis_dashboard extends Admin_Controller
    public function unlock_editing()
    {
       $school_id = (int) $this->input->post('school_id');
+      $query = "SELECT MAX(CAST(tuitionFee AS SIGNED)) AS max_fee FROM fee WHERE school_id = '" . $school_id . "'";
+      $max_fee = $this->db->query($query)->row()->max_fee;
       $schools_id = (int) $this->input->post('schools_id');
-      $query = "UPDATE `school` SET section_e = 0  WHERE status='2' AND schoolId = '" . $school_id . "' 
+      $query = "UPDATE `school` SET section_e = 0, max_fee = $max_fee  
+               WHERE status='2' AND schoolId = '" . $school_id . "' 
       AND schools_id ='" . $schools_id . "' LIMIT 1";
       if ($this->db->query($query)) {
          $userId = $this->session->userdata('userId');
