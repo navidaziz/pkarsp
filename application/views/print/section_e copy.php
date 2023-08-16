@@ -94,7 +94,7 @@
       padding: 8px;
       line-height: 1;
       vertical-align: top;
-      font-size: 20px !important;
+      font-size: 12px !important;
 
     }
 
@@ -187,55 +187,7 @@
 
 
         <div class="col-md-12">
-          <?php
 
-          $query = "SELECT `school`.`session_year_id` FROM school WHERE schoolId = '" . $school_id . "'";
-          $currentsessionid = $this->db->query($query)->row()->session_year_id;
-          $previoussessionid = ($currentsessionid - 1);
-          $query = "SELECT
-          `reg_type`.`regTypeTitle`,
-          `levelofinstitute`.`levelofInstituteTitle`,
-          `session_year`.`sessionYearTitle`,
-          `session_year`.`sessionYearId`,
-          `school`.`renewal_code`,
-          `school`.`status`,
-          `school`.`created_date`,
-          `school`.`updatedBy`,
-          `school`.`updatedDate`,
-          `school`.`schoolId`,
-          `school`.`visit_list`,
-          `school`.`visit_type`,
-          `school`.`visit_entry_date`,
-          `school`.`cer_issue_date`,
-          school.pending_type,
-          school.pending_date,
-          school.pending_reason,
-          school.dairy_type,
-          school.dairy_no,
-          school.dairy_date
-          FROM
-          `school`,
-          `reg_type`,
-          `gender`,
-          
-          `levelofinstitute`,
-          `session_year`
-          WHERE `reg_type`.`regTypeId` = `school`.`reg_type_id`
-          AND `gender`.`genderId` = `school`.`gender_type_id`
-          
-          AND `levelofinstitute`.`levelofInstituteId` = `school`.`level_of_school_id`
-          AND `session_year`.`sessionYearId` = `school`.`session_year_id`
-          AND schools_id = " . $school->schoolId . "
-          AND `school`.`session_year_id` IN ('" . $currentsessionid . "','" . $previoussessionid . "')
-          ORDER BY `session_year`.`sessionYearId` ASC
-          ";
-          $school_sessions = $this->db->query($query)->result();
-
-          $query = "select max(sessionYearId) as sessionYearId from session_year";
-          $current_session_id = $query = $this->db->query($query)->row()->sessionYearId;
-
-
-          ?>
 
 
           <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
@@ -249,38 +201,84 @@
 
               <tr>
                 <th>Session</th>
-                <?php foreach ($school_sessions as $school_session) { ?>
-                  <th style="text-align: center;"><?php echo $school_session->sessionYearTitle ?></th>
-                <?php } ?>
-              <tr>
                 <th>Level</th>
-                <?php foreach ($school_sessions as $school_session) { ?>
-                  <th style="text-align: center;"><?php echo substr($school_session->levelofInstituteTitle, 0, 18); ?></th>
-                <?php } ?>
-              </tr>
+                <?php
 
-              <?php
-              $classes = $this->db->query("SELECT * FROM class")->result();
-              foreach ($classes  as $class) { ?>
-                <tr>
+                $query = "SELECT `school`.`session_year_id` FROM school WHERE schoolId = '" . $school_id . "'";
+                $currentsessionid = $this->db->query($query)->row()->session_year_id;
+                $previoussessionid = ($currentsessionid - 1);
+                $query = "SELECT
+                `reg_type`.`regTypeTitle`,
+                `levelofinstitute`.`levelofInstituteTitle`,
+                `session_year`.`sessionYearTitle`,
+                `session_year`.`sessionYearId`,
+                `school`.`renewal_code`,
+                `school`.`status`,
+                `school`.`created_date`,
+                `school`.`updatedBy`,
+                `school`.`updatedDate`,
+                `school`.`schoolId`,
+                `school`.`visit_list`,
+                `school`.`visit_type`,
+                `school`.`visit_entry_date`,
+                `school`.`cer_issue_date`,
+                school.pending_type,
+                school.pending_date,
+                school.pending_reason,
+                school.dairy_type,
+                school.dairy_no,
+                school.dairy_date
+                FROM
+                `school`,
+                `reg_type`,
+                `gender`,
+                
+                `levelofinstitute`,
+                `session_year`
+                WHERE `reg_type`.`regTypeId` = `school`.`reg_type_id`
+                AND `gender`.`genderId` = `school`.`gender_type_id`
+                
+                AND `levelofinstitute`.`levelofInstituteId` = `school`.`level_of_school_id`
+                AND `session_year`.`sessionYearId` = `school`.`session_year_id`
+                AND schools_id = " . $school->schoolId . "
+                AND `school`.`session_year_id` IN ('" . $currentsessionid . "','" . $previoussessionid . "')
+                ORDER BY `session_year`.`sessionYearId` ASC
+                ";
+                $school_sessions = $this->db->query($query)->result();
+
+                $query = "select max(sessionYearId) as sessionYearId from session_year";
+                $current_session_id = $query = $this->db->query($query)->row()->sessionYearId;
+
+                $classes = $this->db->query("SELECT * FROM class")->result();
+                foreach ($classes  as $class) { ?>
                   <th><?php echo $class->classTitle ?></th>
-                  <?php foreach ($school_sessions as $school_session) { ?>
-                    <?php
+                <?php } ?>
+
+                <?php foreach ($school_sessions as $school_session) { ?>
+
+              <tr>
+                <td>
+                  <?php echo $school_session->sessionYearTitle ?>
+                </td>
+                <td><?php echo substr($school_session->levelofInstituteTitle, 0, 15); ?></td>
+              <?php
+                  foreach ($classes  as $class) {
+
 
                     $query = "SELECT
-                      `fee`.`addmissionFee`
-                      , `fee`.`tuitionFee`
-                      , `fee`.`securityFund`
-                      , `fee`.`otherFund`
-                      FROM
-                      `fee` WHERE `fee`.`school_id` = '" . $school_session->schoolId . "'
-                      AND `fee`.`class_id` ='" . $class->classId . "'";
+                    `fee`.`addmissionFee`
+                    , `fee`.`tuitionFee`
+                    , `fee`.`securityFund`
+                    , `fee`.`otherFund`
+                    FROM
+                    `fee` WHERE `fee`.`school_id` = '" . $school_session->schoolId . "'
+                    AND `fee`.`class_id` ='" . $class->classId . "'";
                     $session_fee = $this->db->query($query)->result()[0];
                     $previous_session_id = $school_session->sessionYearId - 1;
                     if ($previous_session_id) {
                       $query = "SELECT schoolId FROM school WHERE session_year_id = $previous_session_id
-                      AND school.schools_id = '" . $school->schools_id . "'
-                      ";
+                    AND school.schools_id = '" . $school->schools_id . "'
+                    ";
                       $previous_school_id = $this->db->query($query)->row()->schoolId;
                     } else {
                       $previous_school_id = 0;
@@ -289,13 +287,13 @@
 
                     if ($previous_school_id) {
                       $query = "SELECT
-                        `fee`.`addmissionFee`
-                        , `fee`.`tuitionFee`
-                        , `fee`.`securityFund`
-                        , `fee`.`otherFund`
-                        FROM
-                        `fee` WHERE `fee`.`school_id` = '" . $previous_school_id . "'
-                        AND `fee`.`class_id` ='" . $class->classId . "'";
+                    `fee`.`addmissionFee`
+                    , `fee`.`tuitionFee`
+                    , `fee`.`securityFund`
+                    , `fee`.`otherFund`
+                    FROM
+                    `fee` WHERE `fee`.`school_id` = '" . $previous_school_id . "'
+                    AND `fee`.`class_id` ='" . $class->classId . "'";
                       $pre_session_tution_fee = preg_replace("/[^0-9.]/", "", $this->db->query($query)->result()[0]->tuitionFee);
                     }
                     $current_fee = preg_replace("/[^0-9.]/", "", $session_fee->tuitionFee);
@@ -308,20 +306,16 @@
                       if ($pre_session_tution_fee) {
                         $incress = round((($current_fee - $pre_session_tution_fee) / $pre_session_tution_fee) * 100, 2);
                         if ($incress > 10) {
-                          echo @" <small style='color:black;  font-weight: bold; margin-left:10px'>" . $incress . "%</small>";
+                          echo @" <small style='color:black;  font-weight: bold;'>" . $incress . "%</small>";
                         } else {
-                          // echo @" <small style='color:black;  font-weight: bold;'>" . $incress . "%</small>";
+                          echo @" <small style='color:black;  font-weight: bold;'>" . $incress . "%</small>";
                         }
                       }
                       echo '</td>';
                     }
-
-
-                    ?>
-                  <?php } ?>
-                </tr>
-              <?php } ?>
-              </tr>
+                  }
+                  echo '</tr>';
+                } ?>
 
 
             </table>
@@ -350,8 +344,6 @@
           </p>
 
       </section>
-      <br />
-      <br />
       <!-- /.content -->
       <div class="clearfix"></div>
 
