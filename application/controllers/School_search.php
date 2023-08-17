@@ -12,7 +12,7 @@ class School_search extends Admin_Controller
 	public function index()
 	{
 		$this->data['title'] = 'Search';
-		$this->data['description'] = 'Search registere and unregisteres institute by name, id or registration no.';
+		$this->data['description'] = 'Search registered and unregistered institutes by name, id or registration no.';
 		$this->data['view'] = 'school_search/index';
 		$this->load->view('layout', $this->data);
 	}
