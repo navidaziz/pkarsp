@@ -336,7 +336,19 @@
 
                     <tr>
                       <td style="width:50%;"><b>Building</b></td>
-                      <td><?php echo $school_physical_facilities->physicalBuildingTitle; ?></td>
+                      <td><?php
+                          if ($school_physical_facilities->building_id == 1) {
+                            echo "Owned";
+                          }
+
+                          if ($school_physical_facilities->building_id == 2) {
+                            echo "Rented";
+                          }
+
+                          if ($school_physical_facilities->building_id == 3) {
+                            echo "Donated/Trusted";
+                          }
+                          ?></td>
                     </tr>
                     <?php if ($school_physical_facilities->rent_amount) { ?>
                       <tr>
