@@ -338,7 +338,7 @@
                       <td style="width:50%;"><b>Building</b></td>
                       <td><?php echo $school_physical_facilities->physicalBuildingTitle; ?></td>
                     </tr>
-                    <?php if ($school_physical_facilities->physicalBuildingTitle == 'Rented') { ?>
+                    <?php if ($school_physical_facilities->rent_amount) { ?>
                       <tr>
                         <td style="width:50%;"><b>Rent Amount</b></td>
                         <td><?php echo $school_physical_facilities->rent_amount; ?></td>
