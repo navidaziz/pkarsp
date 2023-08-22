@@ -380,7 +380,7 @@
 
                   <?php } ?>
 
-                  <strong> <?php echo $session_detail->sessionYearTitle; ?> session head of institute, <i>Principal, Head Master etc</i> </strong>
+                  <strong> <?php echo $session_detail->sessionYearTitle; ?> session head of institute, <i>Principal, Head Master, Director etc</i> </strong>
                   <?php
                   $query = "select principal_cnic,principal,principal_contact_no FROM school WHERE schoolId = '" . $school_id . "'";
                   $principal = $this->db->query($query)->row();
