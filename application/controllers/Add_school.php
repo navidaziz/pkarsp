@@ -66,8 +66,6 @@ class Add_school extends MY_Controller
 
 
 
-
-
 		//var_dump($school_data);
 		//exit();
 
@@ -77,6 +75,7 @@ class Add_school extends MY_Controller
 		$woner_data['cnic'] = $this->input->post('cnic');
 		$woner_data['gender'] = $this->input->post('gender');
 		$woner_data['address'] = $this->input->post('owner_address');
+		$owners = $this->input->post("owners");
 
 		$this->db->where('userId', $userId);
 		$this->db->update('users', $woner_data);
@@ -108,6 +107,7 @@ class Add_school extends MY_Controller
 
 		//unset($school_data['level_of_school_id']);
 		$school_data['owner_id'] = $userId;
+		unset($school_data['owners']);
 		unset($school_data['userTitle']);
 		unset($school_data['contactNumber']);
 		unset($school_data['cnic']);
@@ -179,6 +179,24 @@ class Add_school extends MY_Controller
 		$owner['status'] = 1;
 		$owner['school_id'] = $school_id;
 		$this->db->insert('school_owners', $owner);
+
+
+		//var_dump($owners);
+		if ($owners) {
+			foreach ($owners as $index => $owner) {
+				$owner_input['owner_name'] = $owner['owner_name'];
+				$owner_input['owner_father_name'] = '';
+				$owner_input['owner_contact_no'] = $owner['owner_contact_no'];
+				$owner_input['owner_cnic'] = $owner['owner_cnic'];
+				$owner_input['gender'] = $owner['gender'];
+				$owner_input['address'] = $owner['owner_address'];
+				$owner_input['status'] = 1;
+				$owner_input['school_id'] = $school_id;
+				var_dump($owner_input);
+				$this->db->insert('school_owners', $owner_input);
+			}
+		}
+
 
 		$this->session->set_userdata('role_homepage_uri', 'school_dashboard');
 		redirect('school_dashboard');

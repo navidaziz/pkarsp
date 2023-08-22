@@ -392,59 +392,6 @@
                       </td>
                     </tr>
                   </table>
-
-                  <div id="owners_list">
-                  </div>
-
-                  <script>
-                    var ownerCounter = 0;
-
-                    function remove_owner_table(id) {
-                      $('#owners' + id).remove();
-                    }
-
-                    function add_another_owner() {
-                      ownerCounter++;
-
-                      var ownerTable = '<table class="table" id="owners' + ownerCounter + '">\n' +
-                        '                    <tbody><tr><td colspan="2" style="text-align:right; color:red; cursor: pointer;"><span onclick="remove_owner_table(' + ownerCounter + ')">Remove Owner</span> <td></tr>\n' +
-                        '                      <tr>\n' +
-                        '                        <td class="required">Owner Name</td>\n' +
-                        '                        <td><input class="form-control" type="text" required="required" name="owners[' + ownerCounter + '][owner_name]" value="" id="owner_name" placeholder="Owner Name"></td>\n' +
-                        '                      </tr>\n' +
-                        '                      <tr>\n' +
-                        '                        <td class="required">Owner Contact No.</td>\n' +
-                        '                        <td><input class="form-control owner_contact_no" type="text" required="required" name="owners[' + ownerCounter + '][owner_contact_no]" value=""  id="owner_contact_no" placeholder="Mobile No."></td>\n' +
-                        '                      </tr>\n' +
-                        '                      <tr>\n' +
-                        '                        <td class="required">Owner CNIC No.</td>\n' +
-                        '                        <td><input class="form-control owner_cnic" type="text" required="required" name="owners[' + ownerCounter + '][owner_cnic]" value=""  id="owner_cnic" placeholder="CNIC No."></td>\n' +
-                        '                      </tr>\n' +
-                        '                      <tr>\n' +
-                        '                        <td class="required">Owner Gender</td>\n' +
-                        '                        <td>\n' +
-                        '                          <input type="radio" name="owners[' + ownerCounter + '][gender]" value="1" required=""> Male\n' +
-                        '                          <input type="radio" name="owners[' + ownerCounter + '][gender]" value="2" required=""> Female\n' +
-                        '                          <input type="radio" name="owners[' + ownerCounter + '][gender]" value="3" required=""> Other\n' +
-                        '                        </td>\n' +
-                        '                      </tr>\n' +
-                        '                      <tr>\n' +
-                        '                        <td class="required">Address</td>\n' +
-                        '                        <td><input class="form-control" type="text" name="owners[' + ownerCounter + '][owner_address]" value="" required=""></td>\n' +
-                        '                      </tr>\n' +
-                        '                    </tbody>\n' +
-                        '                  </table>';
-
-                      $('#owners_list').append(ownerTable);
-                      $('.owner_contact_no').inputmask('99999-9999999-9');
-                      $('.owner_cnic').inputmask('(9999)-9999999');
-                    }
-                  </script>
-                  <div style="text-align: center;">
-                    <button type="button" class="btn btn-warning btn-sm" onclick="add_another_owner()" style="cursor: copy;">Add Another Owner</button>
-
-                  </div>
-
                   <div class="p_div">
                     <h4>BISE Affiliation / Registration Details</h4>
 
@@ -591,10 +538,6 @@
 
         $('#late').inputmask('99.9999999');
         $('#long').inputmask('99.9999999');
-
-
-
-
 
 
       });
