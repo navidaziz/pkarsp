@@ -109,7 +109,7 @@
                       <th>Sessions</th>
                       <?php
 
-                      $query = "SELECT * FROM class WHERE classId IN(SELECT class_id FROM fee WHERE school_id = '" . $school->school_id . "')";
+                      $query = "SELECT * FROM class WHERE classId IN(SELECT class_id FROM fee WHERE school_id = '" . $school_id . "')";
 
                       $classes = $this->db->query($query)->result();
                       $query = "SELECT
