@@ -166,7 +166,7 @@
               <!-- SOCIAL LOGIN -->
               <div class="divide-20"></div>
 
-              <h4>Create Account For School / Tuition Academy</h4>
+              <h4>New School / Institute Registration</h4>
 
               <a class="btn btn-primary" style="text-decoration: none; width:100%" href="<?php echo site_url(); ?>register/index">Create institute Account</a><br>
 
