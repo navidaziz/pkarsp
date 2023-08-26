@@ -5,9 +5,9 @@ $query = "SELECT `users`.`region_ids` FROM `users`
 $region_ids = $this->db->query($query)->row()->region_ids;
 ?>
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-5">
         <div class="block_div">
-            <h4>Online Cases Summary</h4>
+            <strong>Region Wise Progress Report Summary</strong>
             <div class="table-responsive">
 
 
@@ -114,9 +114,9 @@ $region_ids = $this->db->query($query)->row()->region_ids;
             </div>
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-7">
         <div class="block_div">
-            <h4>Online Cases Summary</h4>
+            <strong>Session Wise Progress Report Summary</strong>
             <div class="table-responsive">
 
                 <table class="table table-bordered" style="text-align:center; font-size:10px" id="test _table">
@@ -190,9 +190,9 @@ $region_ids = $this->db->query($query)->row()->region_ids;
     </div>
     <div class="col-md-12">
         <div class="block_div">
-            <h4>Progress Report</h4>
+            <strong>Last 30 Days Progress Report</strong>
             <div class="table-responsive">
-                <table class="table table-bordered" style="font-size: 10px; text-align:center !important">
+                <table class="table" style="font-size: 11px; text-align:center !important">
                     <tr>
                         <th style="position: sticky;"></th>
                         <?php
@@ -202,24 +202,24 @@ $region_ids = $this->db->query($query)->row()->region_ids;
 
                         // loop through each day from one month ago until today and output the date in a desired format
                         for ($i = $one_month_ago; $i <= $current_date; $i = strtotime('+1 day', $i)) {
-                            $date = date('d M, y', $i);
+                            $date = date('d-M', $i);
 
                         ?>
-                            <th> <?php echo $date;
-                                    echo '<br />';
-                                    if (date('N', $i) < 6) {
-                                        $working_days++;
-                                    }
-                                    ?></th>
+                            <th style="width: 20px;"> <?php echo $date;
+                                                        echo '<br />';
+                                                        if (date('N', $i) < 6) {
+                                                            $working_days++;
+                                                        }
+                                                        ?></th>
                         <?php
                         }
                         ?>
-                        <th style="text-align: center;">Last 30 Days Progress</th>
-                        <th>Total Progress</th>
-                        <th>AVG (<?php echo $working_days; ?> working days)</th>
+                        <th style="text-align: center;">30 Days Total</th>
+                        <th>Over All</th>
+                        <th>AVG/Day</th>
                     </tr>
                     <tr>
-                        <th style="position: sticky;">Applied</th>
+                        <th style="position: sticky;">Daily Online Applied</th>
                         <?php for ($i = $one_month_ago; $i <= $current_date; $i = strtotime('+1 day', $i)) {
                             $date = date('Y-m-d', $i);
                             $query = "SELECT COUNT(*) as total FROM school WHERE DATE(apply_date) = '" . $date . "'"; ?>
@@ -302,7 +302,7 @@ $region_ids = $this->db->query($query)->row()->region_ids;
                     <?php //} 
                     ?>
                     <tr>
-                        <th style="position: sticky;">Daily Progress</th>
+                        <th style="position: sticky;">Daily Completed</th>
                         <?php for ($i = $one_month_ago; $i <= $current_date; $i = strtotime('+1 day', $i)) {
                             $date = date('Y-m-d', $i);
                             $query = "SELECT COUNT(school.note_sheet_completed) as total FROM `school`
@@ -352,7 +352,7 @@ $region_ids = $this->db->query($query)->row()->region_ids;
                       </th> -->
                     </tr>
                     <tr>
-                        <th style="position: sticky;">Cer.issued</th>
+                        <th style="position: sticky;">Daily Cer. Issued (MIS)</th>
                         <?php for ($i = $one_month_ago; $i <= $current_date; $i = strtotime('+1 day', $i)) {
                             $date = date('Y-m-d', $i);
                             $query = "SELECT COUNT(*) as total FROM school WHERE DATE(cer_issue_date) = '" . $date . "'";

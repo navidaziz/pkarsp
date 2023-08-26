@@ -344,7 +344,7 @@ $menu_list .= "</ul>";
   <!-- google code ends -->
 </head>
 
-<body <?php if ($this->router->fetch_class() == 'online_cases') { ?> class="sidebar-collapse" <?php } else { ?> class="hold-transition skin-blue sidebar-mini" <?php } ?> style="background-color:#fff;">
+<body <?php if ($this->router->fetch_class() == 'online_cases') { ?> class="skin-blue sidebar-mini sidebar-collapse" <?php } else { ?> class="skin-blue sidebar-mini" <?php } ?> style="background-color:#fff;">
   <!-- Site wrapper -->
   <div class="wrapper">
 

@@ -114,45 +114,45 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <div class="row">
-      <div class="col-md-7">
+      <div class="col-md-6">
         <h2 style="display:inline;">
           <?php echo ucwords(strtolower($title)); ?>
         </h2>
         <br />
         <small><?php echo ucwords(strtolower($description)); ?></small>
       </div>
-      <div class="col-md-5">
-        <script>
-          function load_school_dashboard(institute_type_id) {
-            $('#institute_type_id').val(institute_type_id);
-            get_new_requests();
-            deficient_cases();
-            summary_report();
-          }
-        </script>
-        <table style="width: 100%;">
-          <td>
-            <div class="block_div">
-              <strong><i class="fa fa-filter" aria-hidden="true"></i> Filter by institute type</strong><br />
-              <input type="hidden" name="institute_type_id" id="institute_type_id" value="1" />
-              <button class="btn btn-primary" onclick="load_school_dashboard(1)" id="school"> <i class="fa fa-university" aria-hidden="true"></i> Schools</button>
-              <button class="btn btn-success" onclick="load_school_dashboard(7)" id="academies"> <i class="fa fa-university" aria-hidden="true"></i> Academies</button>
+      <div class="col-md-6">
+        <ol class="breadcrumb">
+          <script>
+            function load_school_dashboard(institute_type_id) {
+              $('#institute_type_id').val(institute_type_id);
+              get_new_requests();
+              deficient_cases();
+              summary_report();
+            }
+          </script>
 
-            </div>
+          <li><a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> Home </a></li>
+          <input type="hidden" name="institute_type_id" id="institute_type_id" value="1" />
 
+          <!-- <li><a href="#">Examples</a></li> -->
+          <li class="active"><?php echo @ucfirst($title); ?></li>
+        </ol>
+
+        <table class="table table-bordered">
+          <td><button onclick="load_school_dashboard(1)" id="school">Schools</button>
+            <button onclick="load_school_dashboard(7)" id="academies">Academies</button>
           </td>
           <td>
-            <div class="block_div">
-              <strong> <i class="fa fa-search" aria-hidden="true"></i> Search institute By institute ID: </strong><br />
-
-
-              <input type="hidden" name="search_type" class="search_type" value="school_id" style="display: inline;" />
-              <input type="text" id="search" name="search" placeholder="School ID" value="" class="form-control" style="height: 33px !important; width:70%" />
-              <button class="btn btn-danger" style="display: inline;" onclick="search_school()"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
-
-            </div>
+            <strong>Search By</strong>
+            <span style="margin-left: 15px;"></span>
+            <input type="radio" name="search_type" class="search_type" value="school_id" checked /> School ID
           </td>
+          <td>
 
+            <input type="text" id="search" name="search" placeholder="School ID" value="" class="form-control" />
+          </td>
+          <td><button onclick="search_school()">Search</button></td>
           </tr>
         </table>
       </div>
@@ -164,32 +164,50 @@
   <!-- Main content -->
   <section class="content" style="padding-top: 0px !important;">
 
+    <div class="box box-primary box-solid">
 
 
 
-
-    <div class="box-body">
-
-      <div id="summary_report">
-        <h5 style="text-align: center;" class="linear-background"></h5>
-      </div>
-
-
-
-      <div class="row">
-        <div class="col-md-6">
-          <div class="block_div" id="new_request">
-            <h5 style="text-align: center;" class="linear-background"></h5>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="block_div" id="deficientcasesList">
-            <h5 style="text-align: center;" class="linear-background"></h5>
-          </div>
-        </div>
+      <div class="col-lg-12 col-xs-12">
 
       </div>
-    </div>
+
+
+      <div class="box-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="block_div">
+
+
+
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="block_div" id="summary_report">
+          <h5 style="text-align: center;" class="linear-background"></h5>
+        </div>
+
+
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="block_div" id="new_request">
+              <h5 style="text-align: center;" class="linear-background"></h5>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="block_div" id="deficientcasesList">
+              <h5 style="text-align: center;" class="linear-background"></h5>
+            </div>
+          </div>
+
+        </div>
+      </div>
 
   </section>
 
