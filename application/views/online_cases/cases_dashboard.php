@@ -20,6 +20,10 @@
     border-top: 1px solid #ddd;
   }
 
+  .table {
+    margin-bottom: 1px !important;
+  }
+
   .btn-group-sm>.btn,
   .btn-sm {
     padding: 1px 1px !important;
@@ -133,7 +137,7 @@
         <table style="width: 100%;">
           <td>
             <div class="block_div">
-              <strong><i class="fa fa-filter" aria-hidden="true"></i> Filter by institute type</strong><br />
+              <strong><i class="fa fa-filter" aria-hidden="true"></i> Filter by Institute type</strong><br />
               <input type="hidden" name="institute_type_id" id="institute_type_id" value="1" />
               <button class="btn btn-primary" onclick="load_school_dashboard(1)" id="school"> <i class="fa fa-university" aria-hidden="true"></i> Schools</button>
               <button class="btn btn-success" onclick="load_school_dashboard(7)" id="academies"> <i class="fa fa-university" aria-hidden="true"></i> Academies</button>
@@ -143,11 +147,11 @@
           </td>
           <td>
             <div class="block_div">
-              <strong> <i class="fa fa-search" aria-hidden="true"></i> Search by institute ID: </strong><br />
+              <strong> <i class="fa fa-search" aria-hidden="true"></i> Search by Institute ID: </strong><br />
 
 
               <input type="hidden" name="search_type" class="search_type" value="school_id" style="display: inline;" />
-              <input type="text" id="search" name="search" placeholder="institute ID" value="" class="form-control" style="height: 33px !important; width:70%" />
+              <input type="text" id="search" name="search" placeholder="Institute ID" value="" class="form-control" style="height: 33px !important; width:70%" />
               <button class="btn btn-danger" style="display: inline;" onclick="search_school()"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
 
             </div>
