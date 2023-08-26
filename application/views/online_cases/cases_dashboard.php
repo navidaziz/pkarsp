@@ -143,11 +143,11 @@
           </td>
           <td>
             <div class="block_div">
-              <strong> <i class="fa fa-search" aria-hidden="true"></i> Search institute By institute ID: </strong><br />
+              <strong> <i class="fa fa-search" aria-hidden="true"></i> Search by institute ID: </strong><br />
 
 
               <input type="hidden" name="search_type" class="search_type" value="school_id" style="display: inline;" />
-              <input type="text" id="search" name="search" placeholder="School ID" value="" class="form-control" style="height: 33px !important; width:70%" />
+              <input type="text" id="search" name="search" placeholder="institute ID" value="" class="form-control" style="height: 33px !important; width:70%" />
               <button class="btn btn-danger" style="display: inline;" onclick="search_school()"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
 
             </div>

@@ -10,7 +10,7 @@
       <tr>
         <th>#</th>
 
-        <th>SID</th>
+        <th>Insti.ID</th>
         <th>Level</th>
         <th>District</th>
         <th>School Name</th>
