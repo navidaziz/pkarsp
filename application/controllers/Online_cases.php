@@ -99,15 +99,15 @@ school.principal_contact_no,
 
 
 
-      if ($title) {
-         if ($institute_type_id) {
-            if ($institute_type_id == 1) {
-               $title = $title . " (Schools)";
-            }
-            if ($institute_type_id == 7) {
-               $title = $title . " (Academies)";
-            }
+      $institute_type = "";
+      if ($institute_type_id) {
+         if ($institute_type_id == 1) {
+            $institute_type = " (Schools)";
          }
+         if ($institute_type_id == 7) {
+            $institute_type = " (Academies)";
+         }
+         $$this->data['institute_type'] = $institute_type;
          $this->data['title'] = $title;
       }
 

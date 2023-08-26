@@ -1,5 +1,5 @@
 <?php $this->load->helper('project_helper'); ?>
-<h4> <?php echo  $title;  ?>
+<h4> <?php echo  $title . " " . $institute_type;  ?>
   <span class="label label-primary pull-right"><?php echo sizeof($requests); ?></span>
 </h4>
 <div class="table-responsive">

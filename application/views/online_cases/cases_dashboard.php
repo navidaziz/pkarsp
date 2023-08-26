@@ -127,7 +127,7 @@
           summary_report();
         }
       </script>
-      <input type="text" name="institute_type_id" id="institute_type_id" value="1" />
+      <input type="hidden" name="institute_type_id" id="institute_type_id" value="1" />
       <button onclick="load_school_dashboard(1)" id="school">Schools</button>
       <button onclick="load_school_dashboard(7)" id="academies">Academies</button>
       <li><a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> Home </a></li>
