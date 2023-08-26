@@ -107,7 +107,7 @@ school.principal_contact_no,
          if ($institute_type_id == 7) {
             $institute_type = " (Academies)";
          }
-         $$this->data['institute_type'] = $institute_type;
+         $this->data['institute_type'] = $institute_type;
          $this->data['title'] = $title;
       }
 
