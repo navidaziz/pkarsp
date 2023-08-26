@@ -27,6 +27,7 @@ class Online_cases extends Admin_Controller
 
    private function get_request_list($status, $file_status, $request_type = NULL, $title = NULL)
    {
+      $institute_type_id = (int) $this->input->post('institute_type_id');
       $userId = $this->session->userdata('userId');
       $query = "SELECT region_ids FROM users WHERE userId = '" . $userId . "'";
       $region_ids = $this->db->query($query)->row()->region_ids;
@@ -89,12 +90,24 @@ school.principal_contact_no,
 
 
       if ($request_type) {
-         $query .= "AND `school`.`reg_type_id`= $request_type";
+         $query .= " AND `school`.`reg_type_id`= '" . $request_type . "' ";
          $this->data['request_type'] = $request_type;
+      }
+      if ($institute_type_id) {
+         $query .= " AND `schools`.`school_type_id`= '" . $institute_type_id . "' ";
       }
 
 
+
       if ($title) {
+         if ($institute_type_id) {
+            if ($institute_type_id == 1) {
+               $title = $title . " (Schools)";
+            }
+            if ($institute_type_id == 7) {
+               $title = $title . " (Academies)";
+            }
+         }
          $this->data['title'] = $title;
       }
 
@@ -109,6 +122,7 @@ school.principal_contact_no,
 
    public function get_new_requests()
    {
+
       $this->get_request_list(2, 1, 2, 'New Renewal');
       $this->get_request_list(2, 1, 4, 'New Renewal-Upgradation');
       $this->get_request_list(2, 1, 1, 'New Registration');
@@ -935,5 +949,11 @@ school.principal_contact_no,
       $this->data['schools_id'] = $schools_id = (int) $this->input->post('schools_id');
       $this->data['school_id'] = $school_id = (int) $this->input->post('school_id');
       $this->load->view('online_cases/change_session_status', $this->data);
+   }
+
+   public function summary_report()
+   {
+      $this->data['institute_type_id'] = (int) $this->input->post('institute_type_id');
+      $this->load->view('online_cases/summary_report', $this->data);
    }
 }
