@@ -59,6 +59,7 @@
         `school`.`visit_type`,
         `school`.`visit_entry_date`,
         `school`.`cer_issue_date`,
+        `school`.`file_status`,
         school.pending_type,
         school.pending_date,
         school.pending_reason,
@@ -101,7 +102,7 @@
                 <th>Staffs</th>
                 <!-- <th>Date</th> -->
 
-                <th>Diary info</th>
+                <th>File Status</th>
                 <th>Status</th>
                 <th>Cer. Issued</th>
                 <th>STAN</th>
@@ -209,13 +210,11 @@
                                         ?></td> -->
 
 
-                            <td><?php echo $school_session->dairy_no;  ?> -
-                                <?php echo $school_session->dairy_type; ?>
-                                - <?php
-                                    if ($school_session->dairy_date) {
-                                        echo date("d M, y", strtotime($school_session->dairy_date));
-                                    }
-                                    ?> </td>
+                            <td>
+                                <?php if ($school_session->status != 1) {
+                                    file_status($school_session->file_status);
+                                } ?>
+                            </td>
                             </td>
                             <td style="text-align: center;">
                                 <?php if ($school_session->status == 2) { ?>

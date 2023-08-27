@@ -1067,10 +1067,33 @@
 
     <div class="footer hide_buttons">
       <?php
-      $query = "SELECT file_status FROM school WHERE schoolId ='" . $school_id . "'";
-      echo $file_status = $this->db->query($query)->row()->file_status;
+      $query = "SELECT `file_status`,`status`, `visit`, `recommended`, `reg_type_id` FROM school WHERE schoolId ='" . $school_id . "'";
+      $schoolsession = $this->db->query($query)->row();
+      $file_status = $schoolsession->file_status;
+      $case_status = $schoolsession->status;
+      $recommended = $schoolsession->recommended;
+      $applied_type = $schoolsession->reg_type_id;
+      $visit = $schoolsession->visit;
 
       ?>
+
+      <?php if ($case_status != 1) {
+        echo "File Current Status: ";
+        file_status($file_status);
+        if ($visit) {
+          echo " : Visit: " . $visit;
+          if ($recommended) {
+            echo " : Recommended: " . $recommended;
+          }
+        }
+      }
+
+      if ($applied_type == 2) {
+        $visit = 'Yes';
+      }
+
+      ?>
+
       <?php if ($file_status == '10' or $file_status == '4') { ?>
 
       <?php } else { ?>
@@ -1082,7 +1105,7 @@
         <script>
           $(document).on('keydown', function(e) {
             if ((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80)) {
-              alert("I'm sorry! \n Note sheet can be printed after they are marked as complete.\nThanks");
+              alert("I apologize! \nYou can print the note sheet after it has been marked as complete. \nThank you.");
               e.cancelBubble = true;
               e.preventDefault();
 
@@ -1093,34 +1116,63 @@
       <?php } ?>
 
       <section style="width: 70%; margin:0px auto; margin-bottom:5px;">
+        <?php if ($visit == 'Yes') { ?>
+          <form action="<?php echo site_url("online_cases/update_visit_detail"); ?>" method="post">
+            <?php
+            $query = "SELECT session_year_id FROM school WHERE schools_id = '" . $school->schools_id . "' AND schoolId = '" . $school_id . "'";
+            $session_year_id = $this->db->query($query)->row()->session_year_id;
+            ?>
 
-        <form action="<?php echo site_url("online_cases/add_comment"); ?>" method="post">
-          <?php
-          $query = "SELECT session_year_id FROM school WHERE schools_id = '" . $school->schools_id . "' AND schoolId = '" . $school_id . "'";
-          $session_year_id = $this->db->query($query)->row()->session_year_id;
-          ?>
+
+            <input type="hidden" name="session_id" value="<?php echo $session_year_id; ?>" />
+            <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
+            <input type="hidden" name="schools_id" value="<?php echo $schools_id; ?>" />
+
+            <table class="table">
+              <tr>
+                <td><textarea name="comment" id="comment" onkeyup="autoheight(this)" style="width: 100%; height:40px; border-radius: 9px;"></textarea></td>
+                <td style="width: 180px;">
+                  <button class="btn btn-primary btn-sm" onclick="submit_comment()" style="margin:2px; background-color:#A6A6A6; border:1px solid #A6A6A6;">Add Note Sheet Para </button>
+                </td>
+              </tr>
+
+            </table>
+          </form>
+        <?php } else { ?>
+          <form action="<?php echo site_url("online_cases/update_visit_detail"); ?>" method="post">
 
 
-          <input type="hidden" name="session_id" value="<?php echo $session_year_id; ?>" />
-          <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
-          <input type="hidden" name="schools_id" value="<?php echo $schools_id; ?>" />
+            <input type="hidden" name="session_id" value="<?php echo $session_year_id; ?>" />
+            <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
+            <input type="hidden" name="schools_id" value="<?php echo $schools_id; ?>" />
+            <div> Has the institute been visited? <span style="margin: 10px;"></span>
+              <input required="required" onclick="$('#recommended').show();$('.recommended').attr('required', true)" type="radio" name="visit" value="Yes" /> Yes <span style="margin: 5px;"></span>
 
-          <table class="table">
-            <tr>
-              <td><textarea name="comment" id="comment" onkeyup="autoheight(this)" style="width: 100%; height:40px; border-radius: 9px;"></textarea></td>
-              <td style="width: 180px;">
-                <button class="btn btn-primary btn-sm" onclick="submit_comment()" style="margin:2px; background-color:#A6A6A6; border:1px solid #A6A6A6;">Add Note Sheet Para </button>
-              </td>
-            </tr>
+              <input required="required" onclick="$('#recommended').hide();$('.recommended').attr('required', false)" type="radio" name="visit" value="No" /> No
+            </div>
+            <div id="recommended" style="display: none;">
+              Has the visit report recommended the institute?
+              <input class="recommended" type="radio" name="recommended" value="Yes" /> Yes
+              <input class="recommended" type="radio" name="recommended" value="No" /> No
 
-          </table>
-        </form>
-        <a class="btn btn-warning btn-sm" href="<?php echo site_url("online_cases"); ?>">Back To Dashboard</a>
+            </div>
+
+            <div>
+              <input class="btn btn-danger btn-sm" type="submit" value="Update Visit Detail" name="update_visit_detail" />
+            </div>
+          </form>
+
+        <?php } ?>
+      </section>
+
+      <a class="btn btn-warning btn-sm" href="<?php echo site_url("online_cases"); ?>">Back To Dashboard</a>
+      <?php if ($visit == 'Yes') { ?>
         <?php if ($file_status == 4 or $file_status == 10) { ?>
           <button class="btn btn-info btn-sm" onclick="window.print();"> <i class="fa fa-print" aria-hidden="true"></i> Print Note Sheet</button>
         <?php } ?>
         <button class="btn btn-danger btn-sm" onclick="mark_as_complete('<?php echo $school_id; ?>')">Mark as completed</a>
-      </section>
+        <?php } ?>
+        </section>
 
 
     </div>

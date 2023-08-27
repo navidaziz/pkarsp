@@ -6,6 +6,7 @@ class Online_cases extends Admin_Controller
    public function __construct()
    {
       parent::__construct();
+      $this->load->helper('project_helper');
    }
 
    public function index()
@@ -960,5 +961,27 @@ school.principal_contact_no,
    {
       $this->data['institute_type_id'] = (int) $this->input->post('institute_type_id');
       $this->load->view('online_cases/summary_report', $this->data);
+   }
+
+   public function update_visit_detail()
+   {
+      $session_id = (int) $this->input->post('session_id');
+      $school_id = (int) $this->input->post('school_id');
+      $schools_id =  (int) $this->input->post('schools_id');
+
+      $visit =  $this->db->escape($this->input->post('visit'));
+      $recommended = $this->db->escape($this->input->post('recommended'));
+
+      $query = "UPDATE `school` SET 
+         `visit` = " . $visit . ", 
+         `recommended` = " . $recommended . "
+         WHERE schoolId= '" . $school_id . "' 
+         and schools_id = '" . $schools_id . "'";
+
+      if ($this->db->query($query)) {
+         redirect($_SERVER['HTTP_REFERER']);
+      } else {
+         redirect($_SERVER['HTTP_REFERER']);
+      }
    }
 }

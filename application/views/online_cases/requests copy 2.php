@@ -14,15 +14,22 @@
         <th>Level</th>
         <th>District</th>
         <th>School Name</th>
-        <th>Session</th>
-        <th>Days</th>
-        <th>Defic</th>
-        <th>Note</th>
-        <th>Fine</th>
-        <?php if ($list_type == 3) { ?>
-          <th>Remarks</th>
-        <?php } ?>
-        <th>Action</th>
+        <?php if ($request_type == 1 or $request_type == 4) { ?>
+          <th>Tehsil</th>
+          <th>Address</th>
+          <th>Contact</th>
+          <th>YofEst</th>
+          <th>BISE Reg.</td>
+          <?php } ?>
+          <th>Session</th>
+          <th>Days</th>
+          <th>Defic</th>
+          <th>Note</th>
+          <th>Fine</th>
+          <?php if ($list_type == 3) { ?>
+            <th>Remarks</th>
+          <?php } ?>
+          <th>Action</th>
 
       </tr>
     </thead>
@@ -60,18 +67,40 @@
                 </td>
                 <td><?php echo $request->districtTitle; ?></td>
                 <td><?php echo substr($request->schoolName, 0, 45) ?></td>
-
+                <?php if ($request_type == 1 or $request_type == 4) { ?>
+                  <td><?php echo $request->tehsil; ?></td>
+                  <td><?php echo $request->address; ?></td>
+                  <td><?php echo $request->telePhoneNumber; ?>,
+                    <?php echo $request->schoolMobileNumber; ?>,
+                    <?php echo $request->principal_contact_no; ?>,
+                    <?php echo $request->owner_contact_no; ?>,
+                  </td>
+                  <td><?php echo $request->yearOfEstiblishment; ?></td>
+                  <td><?php
+                      if ($request->biseRegister == 'Yes') {
+                        echo 'Yes - ';
+                      }
+                      echo $request->biseregistrationNumber;
+                      ?></td>
+                <?php } ?>
 
 
               <?php } else { ?>
                 <td colspan="5"></td>
 
+                <?php if ($request_type == 1 or $request_type == 4) { ?>
+                  <td style="display: none;"></td>
+                  <td style="display: none;"></td>
+                  <td style="display: none;"></td>
+                  <td style="display: none;"></td>
+                  <td style="display: none;"></td>
+                <?php } else { ?>
 
-                <td style="display: none;"></td>
-                <td style="display: none;"></td>
-                <td style="display: none;"></td>
-                <td style="display: none;"></td>
-
+                  <td style="display: none;"></td>
+                  <td style="display: none;"></td>
+                  <td style="display: none;"></td>
+                  <td style="display: none;"></td>
+                <?php } ?>
               <?php } ?>
               <td><?php echo $request->sessionYearTitle ?></td>
               <td style="text-align: center;" title="<?php echo date('d M, Y', strtotime($request->apply_date)); ?>">

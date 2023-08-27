@@ -289,3 +289,29 @@ function timeago2($time)
     }
   }
 }
+function file_status($file_status)
+{
+
+  switch ($file_status) {
+    case '1':
+      echo "New";
+      break;
+
+    case '3':
+      echo "Pending due to previous";
+      break;
+    case '4':
+      echo "Marked to operation Wing";
+      break;
+    case '5':
+      echo "Financial deficient";
+      break;
+    case '10':
+      echo "Marked as completed";
+      break;
+
+    default:
+
+      break;
+  }
+}
