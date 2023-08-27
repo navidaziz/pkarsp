@@ -6,8 +6,8 @@ $region_ids = $this->db->query($query)->row()->region_ids;
 ?>
 <div class="row">
     <div class="col-md-5">
-        <div class="block_div">
-            <strong>Region Wise Progress Report Summary</strong>
+        <div class="blo ck_div">
+            <strong>Region Wise Progress Summary Report </strong>
             <div class="table-responsive">
 
 
@@ -50,6 +50,10 @@ $region_ids = $this->db->query($query)->row()->region_ids;
                     WHERE `district`.`new_region` IN (" . $region_ids . ") ";
                         if ($institute_type_id) {
                             $query .= " AND `schools`.`school_type_id`= '" . $institute_type_id . "' ";
+                        }
+                        if ($this->input->post('level_id')) {
+                            $level_id = (int) $this->input->post('level_id');
+                            $query .= " AND `school`.`level_of_school_id`= '" . $level_id . "' ";
                         }
                         $query .= " group by `district`.`new_region`";
                         $pending_files = $this->db->query($query)->result();
@@ -93,6 +97,10 @@ $region_ids = $this->db->query($query)->row()->region_ids;
                         if ($institute_type_id) {
                             $query .= " AND `schools`.`school_type_id`= '" . $institute_type_id . "' ";
                         }
+                        if ($this->input->post('level_id')) {
+                            $level_id = (int) $this->input->post('level_id');
+                            $query .= " AND `school`.`level_of_school_id`= '" . $level_id . "' ";
+                        }
 
                         $pending = $this->db->query($query)->row(); ?>
                         <tr>
@@ -115,8 +123,8 @@ $region_ids = $this->db->query($query)->row()->region_ids;
         </div>
     </div>
     <div class="col-md-7">
-        <div class="block_div">
-            <strong>Session Wise Progress Report Summary</strong>
+        <div class="blo ck_div">
+            <strong>Session Wise Progress Summary Report </strong>
             <div class="table-responsive">
 
                 <table class="table table-bordered" style="text-align:center; font-size:10px" id="test _table">
@@ -160,8 +168,11 @@ $region_ids = $this->db->query($query)->row()->region_ids;
                         if ($institute_type_id) {
                             $query .= " AND `schools`.`school_type_id`= '" . $institute_type_id . "' ";
                         }
-                        $query .= "
-                    group by `session_year`.`sessionYearTitle`";
+                        if ($this->input->post('level_id')) {
+                            $level_id = (int) $this->input->post('level_id');
+                            $query .= " AND `school`.`level_of_school_id`= '" . $level_id . "' ";
+                        }
+                        $query .= "group by `session_year`.`sessionYearTitle`";
                         $pending_files = $this->db->query($query)->result();
                         foreach ($pending_files as $pending) { ?>
                             <tr>
@@ -189,8 +200,8 @@ $region_ids = $this->db->query($query)->row()->region_ids;
         </div>
     </div>
     <div class="col-md-12">
-        <div class="block_div">
-            <strong>Last 30 Days Progress Report</strong>
+        <div class="bloc k_div">
+            <strong>Last 30 Days Progress Summary Report </strong>
             <div class="table-responsive">
                 <table class="table" style="font-size: 11px; text-align:center !important">
                     <tr>

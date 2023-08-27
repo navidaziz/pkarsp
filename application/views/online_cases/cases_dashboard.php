@@ -118,20 +118,30 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <div class="row">
-      <div class="col-md-7">
+      <div class="col-md-5">
         <h2 style="display:inline;">
           <?php echo ucwords(strtolower($title)); ?>
         </h2>
         <br />
         <small><?php echo ucwords(strtolower($description)); ?></small>
       </div>
-      <div class="col-md-5">
+      <div class="col-md-7">
         <script>
           function load_school_dashboard(institute_type_id) {
             $('#institute_type_id').val(institute_type_id);
             get_new_requests();
             deficient_cases();
             summary_report();
+          }
+
+          function select_level_id() {
+            var level_id = $('#level :selected').val();
+            if (level_id > 0) {
+              $('#level_id').val(level_id);
+              get_new_requests();
+              deficient_cases();
+              summary_report();
+            }
           }
         </script>
         <table style="width: 100%;">
@@ -141,7 +151,15 @@
               <input type="hidden" name="institute_type_id" id="institute_type_id" value="1" />
               <button class="btn btn-primary" onclick="load_school_dashboard(1)" id="school"> <i class="fa fa-university" aria-hidden="true"></i> Schools</button>
               <button class="btn btn-success" onclick="load_school_dashboard(7)" id="academies"> <i class="fa fa-university" aria-hidden="true"></i> Academies</button>
-
+              <span style="margin: 10px;"></span>
+              <input type="hidden" name="level_id" id="level_id" value="" />
+              <select id="level" onchange="select_level_id()" class="form-control" style="display: inline; width:40%; height:33px" id="institute_level">
+                <option value="0">Filter By Level</option>
+                <option value="1">Primary</option>
+                <option value="2">Middle</option>
+                <option value="3">High</option>
+                <option value="4">High Secondary</option>
+              </select>
             </div>
 
           </td>
@@ -273,11 +291,13 @@
   function get_new_requests() {
     $('#new_request').html('<h5 style="text-align: center;" class="linear-background"></h5>');
     var institute_type_id = $('#institute_type_id').val();
+    var level_id = $('#level_id').val();
     $.ajax({
         method: "POST",
         url: "<?php echo site_url('online_cases/get_new_requests'); ?>",
         data: {
-          institute_type_id: institute_type_id
+          institute_type_id: institute_type_id,
+          level_id: level_id
         }
       })
       .done(function(respose) {
@@ -288,11 +308,13 @@
   function deficient_cases() {
     $('#deficientcasesList').html('<h5 style="text-align: center;" class="linear-background"></h5>');
     var institute_type_id = $('#institute_type_id').val();
+    var level_id = $('#level_id').val();
     $.ajax({
         method: "POST",
         url: "<?php echo site_url('online_cases/deficient_cases'); ?>",
         data: {
-          institute_type_id: institute_type_id
+          institute_type_id: institute_type_id,
+          level_id: level_id
         }
       })
       .done(function(respose) {
@@ -314,11 +336,13 @@
   function summary_report() {
     $('#summary_report').html('<h5 style="text-align: center;" class="linear-background"></h5>');
     var institute_type_id = $('#institute_type_id').val();
+    var level_id = $('#level_id').val();
     $.ajax({
         method: "POST",
         url: "<?php echo site_url('online_cases/summary_report'); ?>",
         data: {
-          institute_type_id: institute_type_id
+          institute_type_id: institute_type_id,
+          level_id: level_id
         }
       })
       .done(function(respose) {

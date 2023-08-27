@@ -28,6 +28,7 @@ class Online_cases extends Admin_Controller
    private function get_request_list($status, $file_status, $request_type = NULL, $title = NULL)
    {
       $institute_type_id = (int) $this->input->post('institute_type_id');
+
       $userId = $this->session->userdata('userId');
       $query = "SELECT region_ids FROM users WHERE userId = '" . $userId . "'";
       $region_ids = $this->db->query($query)->row()->region_ids;
@@ -95,6 +96,10 @@ school.principal_contact_no,
       }
       if ($institute_type_id) {
          $query .= " AND `schools`.`school_type_id`= '" . $institute_type_id . "' ";
+      }
+      if ($this->input->post('level_id')) {
+         $level_id = (int) $this->input->post('level_id');
+         $query .= " AND `school`.`level_of_school_id`= '" . $level_id . "' ";
       }
 
 
