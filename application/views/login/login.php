@@ -53,13 +53,11 @@
     <section id="login_bg" <?php if ($this->input->get('register') != 1) { ?>class="visible" <?php } ?>>
       <div class="container">
         <div class="row" id="hidden-mobile" style="margin: 10px; margin-top: 70px;">
-          <div class="col-md-7">
-            <div id="logo">
-              <div style=" width:100%; text-align: center; margin:0px auto; color:black; ">
-
-
-                <img id="log" src=" <?php echo site_url("assets/" . ADMIN_DIR . "img/psra_log.png"); ?>" alt="PSRA" title="PSRA" style="width:200px !important;" />
-
+          <div class="col-md-8">
+            <div class="row">
+              <div class="col-md-2" style="vertical-align: middle;"> <img id="log" src=" <?php echo site_url("assets/" . ADMIN_DIR . "img/psra_log.png"); ?>" alt="PSRA" title="PSRA" style="width:100px !important;" />
+              </div>
+              <div class="col-md-8">
                 <h2>Private Schools Regulatory Authority</h2>
                 <h4>Government Of Khyber Pakhtunkhwa</h4>
                 <!-- <address><i class="fa fa-envelope"></i> psra.pmdu@gmail.com
@@ -71,6 +69,7 @@
                   091-9216205 </a>
 
                 <br />
+
                 <style>
                   .block_div {
                     border: 1px solid #9FC8E8;
@@ -86,23 +85,40 @@
 
                 <i class="fa fa-map-marker" aria-hidden="true"></i> 18-E Jamal Ud Din Afghani Road, University Town, Peshawar
                 </address>
+              </div>
+            </div>
+            <div id="logo">
+              <div style=" width:100%; text-align: center; margin:0px auto; color:black; ">
+
+
+
+
                 <div class="row">
                   <div class="col-md-4">
                     <div class="block_div">
-                      <h5>How to apply for Institute New Registration</h5>
+                      <strong style="font-size: 12px;">How to apply for Institute New Registration</strong>
                       <iframe width="100%" style="margin:0px; border-radius:5px;" src="https://www.youtube.com/embed/TEkX2iwDZno" title="How to register institute with KP PSRA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                     </div>
                   </div>
                   <div class="col-md-4">
                     <div class="block_div">
-                      <h5>How to apply for Renewal / Upgradation</h5>
+                      <strong style="font-size: 12px;">How to apply for Renewal / Upgradation</strong>
                       <iframe width="100%" style="margin:0px; border-radius:5px;" src="https://www.youtube.com/embed/D8GIW4llH2c" title="Institute Renewal and Upgradation with KP PSRA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                     </div>
                   </div>
                   <div class="col-md-4">
                     <div class="block_div">
-                      <h5>How to issue School Leaving Certificate online</h5>
+                      <strong style="font-size: 12px;">How to issue School Leaving Certificate</strong>
                       <iframe width="100%" style="margin:0px; border-radius:5px;" src="https://www.youtube.com/embed/pO6c8oNYvtw" title="Step-by-Step Guide: Issuing School Leaving Certificates through the PSRA School Portal" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="block_div">
+                      <strong>How to register Tuition Academy with KP PSRA</strong>
+                      <iframe width="100%" height="210px" style="margin:0px; border-radius:5px;" src="https://www.youtube.com/embed/iYd2tp67MsI" title="How to register Tuition Academy with KP PSRA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                     </div>
                   </div>
                 </div>
