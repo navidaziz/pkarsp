@@ -338,7 +338,7 @@
                     <br />
                     <br />
                   <?php } else { ?>
-                    <input type="text" name="gender_type_id" value="<?php echo $school_gender->gender_type_id ?>" />
+                    <input type="hidden" name="gender_type_id" value="<?php echo $school_gender->gender_type_id ?>" />
                   <?php  } ?>
 
 
