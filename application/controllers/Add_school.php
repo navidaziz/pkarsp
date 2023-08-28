@@ -192,7 +192,6 @@ class Add_school extends MY_Controller
 				$owner_input['address'] = $owner['owner_address'];
 				$owner_input['status'] = 1;
 				$owner_input['school_id'] = $school_id;
-				var_dump($owner_input);
 				$this->db->insert('school_owners', $owner_input);
 			}
 		}

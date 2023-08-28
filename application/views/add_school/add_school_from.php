@@ -436,8 +436,8 @@
                         '                  </table>';
 
                       $('#owners_list').append(ownerTable);
-                      $('.owner_contact_no').inputmask('99999-9999999-9');
-                      $('.owner_cnic').inputmask('(9999)-9999999');
+                      $('.owner_cnic').inputmask('99999-9999999-9');
+                      $('.owner_contact_no').inputmask('(9999)-9999999');
                     }
                   </script>
                   <div style="text-align: center;">
