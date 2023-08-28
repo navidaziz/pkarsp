@@ -1117,7 +1117,7 @@
 
       <section style="width: 70%; margin:0px auto; margin-bottom:5px;">
         <?php if ($visit == 'Yes') { ?>
-          <form action="<?php echo site_url("online_cases/update_visit_detail"); ?>" method="post">
+          <form action="<?php echo site_url("online_cases/add_comment"); ?>" method="post">
             <?php
             $query = "SELECT session_year_id FROM school WHERE schools_id = '" . $school->schools_id . "' AND schoolId = '" . $school_id . "'";
             $session_year_id = $this->db->query($query)->row()->session_year_id;
