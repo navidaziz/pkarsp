@@ -315,34 +315,34 @@
                 <?php } ?>
 
                 <div style=" font-size: 16px; border:1px solid #9FC8E8; border-radius: 10px; min-height: 10px;  margin: 10px; padding: 10px; background-color: white;">
+
+                  <?php
+                  $query = "select gender_type_id FROM school WHERE schoolId = '" . $school_id . "'";
+                  $school_gender = $this->db->query($query)->row();
+                  ?>
+                  <?php if ($school->registrationNumber) { ?>
+                    <strong> Gender of Education <small>(Institute)</small> </strong>
+
+                    <br />
+                    <input type="radio" name="gender_type_id" value="1" <?php if ($school_gender->gender_type_id === "1") {
+                                                                          echo "checked";
+                                                                        } ?> required /> Boys <span style="margin-left: 10px;"></span>
+                    <input type="radio" name="gender_type_id" value="2" <?php if ($school_gender->gender_type_id === "2") {
+                                                                          echo "checked";
+                                                                        } ?> required /> Girls <span style="margin-left: 10px;"></span>
+
+                    <input type="radio" name="gender_type_id" value="3" <?php if ($school_gender->gender_type_id === "3") {
+                                                                          echo "checked";
+                                                                        } ?> required /> Co-Education
+
+                    <br />
+                    <br />
+                  <?php } else { ?>
+                    <input type="text" name="gender_type_id" value="<?php echo $school_gender->gender_type_id ?>" />
+                  <?php  } ?>
+
+
                   <?php if ($school->school_type_id == 1) { ?>
-                    <?php
-                    $query = "select gender_type_id FROM school WHERE schoolId = '" . $school_id . "'";
-                    $school_gender = $this->db->query($query)->row();
-                    ?>
-                    <?php if ($school->registrationNumber) { ?>
-                      <strong> Gender of Education <small>(Institute)</small> </strong>
-
-                      <br />
-                      <input type="radio" name="gender_type_id" value="1" <?php if ($school_gender->gender_type_id === "1") {
-                                                                            echo "checked";
-                                                                          } ?> required /> Boys <span style="margin-left: 10px;"></span>
-                      <input type="radio" name="gender_type_id" value="2" <?php if ($school_gender->gender_type_id === "2") {
-                                                                            echo "checked";
-                                                                          } ?> required /> Girls <span style="margin-left: 10px;"></span>
-
-                      <input type="radio" name="gender_type_id" value="3" <?php if ($school_gender->gender_type_id === "3") {
-                                                                            echo "checked";
-                                                                          } ?> required /> Co-Education
-
-                      <br />
-                      <br />
-                    <?php } else { ?>
-                      <input type="hidden" name="gender_type_id" value="<?php echo $school_gender->gender_type_id ?>" />
-                    <?php  } ?>
-
-
-
 
 
 

@@ -41,25 +41,46 @@
 
         <div class="box-body">
           <div class="row">
-            <div class="col-md-12">
-              <div style="text-align:center; margin:0px auto; width:70%; border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;   padding: 5px; background-color: white;">
+            <div class="col-md-5">
+              <h2>
+                Documents Needed for <i><strong>"<?php echo $school->levelofInstituteTitle; ?>"</strong></i> Registration</h2>
+              <h4>
+                PSRA officials will collect these documents during the inspection for registartion. Please ensure you have them ready before your visit:
+              </h4>
+              <ol style="font-size: larger;">
+                <li>Ownership Documents or Affidavit
+                  <a target="_blank" href="https://psra.gkp.pk/uploads/attachments/A_Affadavit.pdf">PDF Download</a>
+                  <span style="margin-left: 10px;"></span>
+                  <a target="_blank" href="https://psra.gkp.pk/uploads/attachments/A_Affadavit.pdf">Docx Download</a>
+                </li>
+                <li>Rent Agreement (if it applies)</li>
+                <li> Copy of the Owner or Owners' CNIC</li>
+                <li> Building Map</li>
+              </ol>
+
+
+
+            </div>
+            <div class="col-md-7">
+              <div style="text-align:center; margin:0px auto; width:100%; border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;   padding: 5px; background-color: white;">
 
                 <h4> Online Applicaiton Status</h4>
                 <h3> <?php echo $school->regTypeTitle ?> for <?php echo $school->levelofInstituteTitle; ?> Session: <?php echo $session_detail->sessionYearTitle; ?></h3>
-                <p>
-                  Your application has been successfully submitted online, and there is no need to submit any printed documents. PSRA officials will keep you informed about the progress of your application. Keep view PSRA school portal regularly. Make sure to regularly check the PSRA school portal for any updates.
+                <p style="text-align: left;">
+                  Your application has been successfully submitted online, and there is no need to submit any printed documents. PSRA officials will keep you informed about the progress of your application. Keep view PSRA institute portal regularly. Make sure to regularly check the PSRA institute portal for any updates.
                 </p>
-                <p style="direction: rtl;">
+                <p style="direction: rtl; text-align: right;">
                   آپ کی درخواست کامیابی کے ساتھ آن لائن جمع کرائی گئی ہے، اور کوئی بھی پرنٹ شدہ دستاویزات جمع کرانے کی ضرورت نہیں ہے۔
                   <br />
                   PSRA کے اہلکار آپ کو آپ کی درخواست کی پیشرفت سے آگاہ کرتے رہیں گے۔
                   <br />
-                  PSRA سکول پورٹل کو باقاعدگی سے دیکھیں۔
+                  PSRA انسٹی ٹیوٹ پورٹل کو باقاعدگی سے دیکھیں۔
                   <br />
-                  کسی بھی اپ ڈیٹ کے لیے "PSRA" اسکول پورٹل کو باقاعدگی سے چیک کرنا یقینی بنائیں۔
+                  کسی بھی اپ ڈیٹ کے لیے "PSRA" انسٹی ٹیوٹ پورٹل کو باقاعدگی سے چیک کرنا یقینی بنائیں۔
                 </p>
 
                 <h4>
+
                   <strong>
                     <?php echo get_session_request_status($school->status); ?>
                   </strong><br />
@@ -73,9 +94,11 @@
                     <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Dashboard
                     <i class="fa fa-dashboard"></i>
                   </a>
-                  <a class="btn btn-primary" href="<?php echo site_url("update_sectionc/updatesectionc/$school_session_id"); ?>">
-                    <i class="fa fa-edit" aria-hidden="true"></i> Edit Section C
-                  </a>
+                  <?php if ($school_session->school_type_id == 1) { ?>
+                    <a class="btn btn-primary" href="<?php echo site_url("update_sectionc/updatesectionc/$school_session_id"); ?>">
+                      <i class="fa fa-edit" aria-hidden="true"></i> Edit Section C
+                    </a>
+                  <?php } ?>
                   <!-- <span style="margin-left: 20px;"></span>
                   <a target="_blank" class="btn btn-primary" href="<?php echo site_url("print_file/school_session_detail/" . $school->school_id); ?>">
                     <i class="fa fa-print" aria-hidden="true"></i> Print Data
