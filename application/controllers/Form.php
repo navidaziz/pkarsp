@@ -831,7 +831,7 @@ class Form extends Admin_Controller
 	{
 
 		$class_id = 21;
-		$age_id = 20;
+		$age_id = 19;
 		$school_id = (int) $this->input->post("school_id");
 		$query = "DELETE FROM age_and_class 
 		          WHERE school_id ='" . $school_id . "' 

@@ -28,7 +28,7 @@
                 <th>Male Students</th>
                 <?php
                 $query = "SELECT SUM(`enrolled`) as enrolled  FROM `age_and_class` 
-                WHERE  class_id ='16'
+                WHERE  class_id ='21'
                 AND gender_id = '1'
                 AND school_id = '" . $school_id . "'";
                 $query_result = $this->db->query($query)->row();
@@ -46,7 +46,7 @@
                 <th>Female Students</th>
                 <?php
                 $query = "SELECT SUM(`enrolled`) as enrolled  FROM `age_and_class` 
-                WHERE  class_id ='16'
+                WHERE  class_id ='21'
                 AND gender_id = '2'
                 AND school_id = '" . $school_id . "'";
                 $query_result = $this->db->query($query)->row();
