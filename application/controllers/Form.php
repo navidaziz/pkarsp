@@ -830,7 +830,7 @@ class Form extends Admin_Controller
 	public function add_academy_section_c_data()
 	{
 
-		$class_id = 16;
+		$class_id = 21;
 		$age_id = 20;
 		$school_id = (int) $this->input->post("school_id");
 		$query = "DELETE FROM age_and_class 
