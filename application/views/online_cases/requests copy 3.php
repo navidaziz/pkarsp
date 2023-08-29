@@ -19,10 +19,6 @@
         <th>Defic</th>
         <th>Note</th>
         <th>Fine</th>
-        <?php if ($request_type == 1 || $request_type == 4) { ?>
-          <th>Visit</th>
-          <th>Reco.</th>
-        <?php } ?>
         <?php if ($list_type == 3) { ?>
           <th>Remarks</th>
         <?php } ?>
@@ -108,10 +104,6 @@
                   <i class="fa fa-ban" title="Fine on this school" style="color: red;">1</i>
                 <?php } ?>
               </td>
-              <?php if ($request_type == 1 || $request_type == 4) { ?>
-                <td><?php echo $request->visit; ?></td>
-                <td><?php echo $request->recommended; ?></td>
-              <?php } ?>
               <?php if ($list_type == 3) { ?>
                 <td><?php echo $request->status_remark; ?></td>
               <?php } ?>
