@@ -41,26 +41,25 @@
 
         <div class="box-body">
           <div class="row">
-            <div class="col-md-5">
-              <h2>
-                Documents Needed for <i><strong>"<?php echo $school->levelofInstituteTitle; ?>"</strong></i> Registration</h2>
-              <h4>
-                PSRA officials will collect these documents during the inspection for registartion. Please ensure you have them ready before your visit:
-              </h4>
-              <ol style="font-size: larger;">
-                <li>Ownership Documents or Affidavit
-                  <a target="_blank" href="https://psra.gkp.pk/uploads/attachments/A_Affadavit.pdf">PDF Download</a>
-                  <span style="margin-left: 10px;"></span>
-                  <a target="_blank" href="https://psra.gkp.pk/uploads/attachments/A_Affadavit.pdf">Docx Download</a>
-                </li>
-                <li>Rent Agreement (if it applies)</li>
-                <li> Copy of the Owner or Owners' CNIC</li>
-                <li> Building Map</li>
-              </ol>
-
-
-
-            </div>
+            <?php if ($school->reg_type_id != 2) { ?>
+              <div class="col-md-5">
+                <h2>
+                  Documents Needed for <i><strong>"<?php echo $school->levelofInstituteTitle; ?>"</strong></i> Registration</h2>
+                <h4>
+                  PSRA officials will collect these documents during the inspection for registartion. Please ensure you have them ready before your visit:
+                </h4>
+                <ol style="font-size: larger;">
+                  <li>Ownership Documents or Affidavit
+                    <a target="_blank" href="https://psra.gkp.pk/uploads/attachments/A_Affadavit.pdf">PDF Download</a>
+                    <span style="margin-left: 10px;"></span>
+                    <a target="_blank" href="https://psra.gkp.pk/uploads/attachments/A_Affadavit.pdf">Docx Download</a>
+                  </li>
+                  <li>Rent Agreement (if it applies)</li>
+                  <li> Copy of the Owner or Owners' CNIC</li>
+                  <li> Building Map</li>
+                </ol>
+              </div>
+            <?php } ?>
             <div class="col-md-7">
               <div style="text-align:center; margin:0px auto; width:100%; border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;   padding: 5px; background-color: white;">
 
