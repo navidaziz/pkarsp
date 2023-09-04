@@ -11,8 +11,8 @@ $region_ids = $this->db->query($query)->row()->region_ids;
             <thead>
                 <tr>
                     <th colspan="2"></th>
-                    <th colspan="3" style="text-align: center;">New Registration</th>
-                    <th colspan="3" style="text-align: center;">Upgradation</th>
+                    <th colspan="4" style="text-align: center;">New Registration</th>
+                    <th colspan="4" style="text-align: center;">Upgradation</th>
                 </tr>
                 <tr>
                     <th style="text-align: center;">Session</th>
