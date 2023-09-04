@@ -10,6 +10,11 @@ $region_ids = $this->db->query($query)->row()->region_ids;
         <table class="table table-bordered" style="text-align:center; font-size:10px" id="test _table">
             <thead>
                 <tr>
+                    <th colspan="2"></th>
+                    <th colspan="3" style="text-align: center;">New Registration</th>
+                    <th colspan="3" style="text-align: center;">Upgradation</th>
+                </tr>
+                <tr>
                     <th style="text-align: center;">Session</th>
                     <th style="text-align: center;">Total Registration+Upgradation</th>
                     <td>Registration</td>
