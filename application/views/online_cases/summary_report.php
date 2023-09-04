@@ -29,11 +29,11 @@ $region_ids = $this->db->query($query)->row()->region_ids;
                 $query = "SELECT if((`district`.`new_region` = 1),'Central',if((`district`.`new_region` = 2),'South',if((`district`.`new_region` = 3),'Malakand',if((`district`.`new_region` = 4),'Hazara',if((`district`.`new_region` = 5),'Peshawar','Others'))))) AS `region`,
                    sum(if((`school`.`reg_type_id` = 1 or `school`.`reg_type_id` = 4) and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `reg_upg_total`,
                     sum(if(`school`.`reg_type_id` = 1 and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `registrations`,
-                    sum(if(`school`.`reg_type_id` = 1 and `school`.`visit` = NULL and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `reg_not_define`,
+                    sum(if(`school`.`reg_type_id` = 1 and `school`.`visit` = '' and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `reg_not_define`,
                     sum(if(`school`.`reg_type_id` = 1 and `school`.`visit` = 'Yes' and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `reg_visited_yes`,
                     sum(if(`school`.`reg_type_id` = 1 and `school`.`visit` = 'No' and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `reg_visited_no`,
                     sum(if(`school`.`reg_type_id` = 4 and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `re_up`,
-                    sum(if(`school`.`reg_type_id` = 4 and `school`.`visit` = NULL and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `re_up_not_define`,
+                    sum(if(`school`.`reg_type_id` = 4 and `school`.`visit` = '' and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `re_up_not_define`,
                     sum(if(`school`.`reg_type_id` = 4 and `school`.`visit` = 'Yes' and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `re_up_visited_yes`,
                     sum(if(`school`.`reg_type_id` = 4 and `school`.`visit` = 'No' and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `re_up_visited_no`
                     from (((`school` 
@@ -74,11 +74,11 @@ $region_ids = $this->db->query($query)->row()->region_ids;
                 <?php
                 $query = "SELECT sum(if((`school`.`reg_type_id` = 1 or `school`.`reg_type_id` = 4) and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `reg_upg_total`,
                  sum(if(`school`.`reg_type_id` = 1 and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `registrations`,
-                 sum(if(`school`.`reg_type_id` = 1 and `school`.`visit` = NULL and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `reg_not_define`,
+                 sum(if(`school`.`reg_type_id` = 1 and `school`.`visit` = '' and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `reg_not_define`,
                  sum(if(`school`.`reg_type_id` = 1 and `school`.`visit` = 'Yes' and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `reg_visited_yes`,
                  sum(if(`school`.`reg_type_id` = 1 and `school`.`visit` = 'No' and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `reg_visited_no`,
                  sum(if(`school`.`reg_type_id` = 4 and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `re_up`,
-                 sum(if(`school`.`reg_type_id` = 4 and `school`.`visit` = NULL and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `re_up_not_define`,
+                 sum(if(`school`.`reg_type_id` = 4 and `school`.`visit` = '' and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `re_up_not_define`,
                  sum(if(`school`.`reg_type_id` = 4 and `school`.`visit` = 'Yes' and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `re_up_visited_yes`,
                  sum(if(`school`.`reg_type_id` = 4 and `school`.`visit` = 'No' and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `re_up_visited_no`
                  from (((`school` 
