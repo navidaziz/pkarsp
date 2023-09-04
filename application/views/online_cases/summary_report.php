@@ -72,8 +72,7 @@ $region_ids = $this->db->query($query)->row()->region_ids;
             </tbody>
             <tfoot>
                 <?php
-                $query = "SELECT if((`district`.`new_region` = 1),'Central',if((`district`.`new_region` = 2),'South',if((`district`.`new_region` = 3),'Malakand',if((`district`.`new_region` = 4),'Hazara',if((`district`.`new_region` = 5),'Peshawar','Others'))))) AS `region`,
-                sum(if((`school`.`reg_type_id` = 1 or `school`.`reg_type_id` = 4) and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `reg_upg_total`,
+                $query = "SELECT sum(if((`school`.`reg_type_id` = 1 or `school`.`reg_type_id` = 4) and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `reg_upg_total`,
                  sum(if(`school`.`reg_type_id` = 1 and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `registrations`,
                  sum(if(`school`.`reg_type_id` = 1 and `school`.`visit` = NULL and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `reg_not_define`,
                  sum(if(`school`.`reg_type_id` = 1 and `school`.`visit` = 'Yes' and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `reg_visited_yes`,
@@ -94,7 +93,7 @@ $region_ids = $this->db->query($query)->row()->region_ids;
                     $level_id = (int) $this->input->post('level_id');
                     $query .= " AND `school`.`level_of_school_id`= '" . $level_id . "' ";
                 }
-                $query .= " group by `district`.`new_region`";
+                // $query .= " group by `district`.`new_region`";
 
                 $pending = $this->db->query($query)->row(); ?>
                 <tr>
