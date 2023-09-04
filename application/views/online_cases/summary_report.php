@@ -5,6 +5,119 @@ $query = "SELECT `users`.`region_ids` FROM `users`
 $region_ids = $this->db->query($query)->row()->region_ids;
 ?>
 <div class="row">
+    <div class="col-md-12">
+        <strong>Region Wise Visit/Visit Pending Report (New Registration and Upgradation)</strong>
+        <table class="table table-bordered" style="text-align:center; font-size:10px" id="test _table">
+            <thead>
+                <tr>
+                    <th style="text-align: center;">Session</th>
+                    <th style="text-align: center;">Total Registration+Upgradation</th>
+                    <td>Registration</td>
+                    <td>Not Define</td>
+                    <td>Visited</td>
+                    <td>Not Visited</td>
+                    <td>Upgradation</td>
+                    <td>Not Define</td>
+                    <td>Visited</td>
+                    <td>Not Visited</td>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <?php
+                $query = "SELECT if((`district`.`new_region` = 1),'Central',if((`district`.`new_region` = 2),'South',if((`district`.`new_region` = 3),'Malakand',if((`district`.`new_region` = 4),'Hazara',if((`district`.`new_region` = 5),'Peshawar','Others'))))) AS `region`,
+                   sum(if((`school`.`reg_type_id` = 1 or `school`.`reg_type_id` = 4) and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `reg_upg_total`,
+                    sum(if(`school`.`reg_type_id` = 1 and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `registrations`,
+                    sum(if(`school`.`reg_type_id` = 1 and `school`.`visit` = NULL and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `reg_not_define`,
+                    sum(if(`school`.`reg_type_id` = 1 and `school`.`visit` = 'Yes' and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `reg_visited_yes`,
+                    sum(if(`school`.`reg_type_id` = 1 and `school`.`visit` = 'No' and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `reg_visited_no`,
+                    sum(if(`school`.`reg_type_id` = 4 and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `re_up`,
+                    sum(if(`school`.`reg_type_id` = 4 and `school`.`visit` = NULL and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `re_up_not_define`,
+                    sum(if(`school`.`reg_type_id` = 4 and `school`.`visit` = 'Yes' and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `re_up_visited_yes`,
+                    sum(if(`school`.`reg_type_id` = 4 and `school`.`visit` = 'No' and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `re_up_visited_no`
+                    from (((`school` 
+                    join `schools` on(`schools`.`schoolId` = `school`.`schools_id`)) 
+                    join `district` on(`district`.`districtId` = `schools`.`district_id`)) 
+                    join `session_year` on(`session_year`.`sessionYearId` = `school`.`session_year_id`)) 
+                    WHERE `district`.`new_region` IN (" . $region_ids . ") ";
+                if ($institute_type_id) {
+                    $query .= " AND `schools`.`school_type_id`= '" . $institute_type_id . "' ";
+                }
+                if ($this->input->post('level_id')) {
+                    $level_id = (int) $this->input->post('level_id');
+                    $query .= " AND `school`.`level_of_school_id`= '" . $level_id . "' ";
+                }
+                $query .= " group by `district`.`new_region`";
+                $pending_files = $this->db->query($query)->result();
+                foreach ($pending_files as $pending) { ?>
+                    <tr>
+                        <th style="text-align: center;"><?php echo $pending->region; ?></th>
+                        <td><?php echo $pending->reg_upg_total; ?></td>
+
+                        <td><?php echo $pending->registrations; ?></td>
+                        <td><?php echo $pending->reg_not_define; ?></td>
+                        <td><?php echo $pending->reg_visited_yes; ?></td>
+                        <td><?php echo $pending->reg_visited_no; ?></td>
+
+                        <td><?php echo $pending->re_up; ?></td>
+                        <td><?php echo $pending->re_up_not_define; ?></td>
+                        <td><?php echo $pending->re_up_visited_yes; ?></td>
+                        <td><?php echo $pending->re_up_visited_no; ?></td>
+
+
+                    </tr>
+                <?php } ?>
+
+            </tbody>
+            <tfoot>
+                <?php
+                $query = "SELECT if((`district`.`new_region` = 1),'Central',if((`district`.`new_region` = 2),'South',if((`district`.`new_region` = 3),'Malakand',if((`district`.`new_region` = 4),'Hazara',if((`district`.`new_region` = 5),'Peshawar','Others'))))) AS `region`,
+                sum(if((`school`.`reg_type_id` = 1 or `school`.`reg_type_id` = 4) and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `reg_upg_total`,
+                 sum(if(`school`.`reg_type_id` = 1 and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `registrations`,
+                 sum(if(`school`.`reg_type_id` = 1 and `school`.`visit` = NULL and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `reg_not_define`,
+                 sum(if(`school`.`reg_type_id` = 1 and `school`.`visit` = 'Yes' and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `reg_visited_yes`,
+                 sum(if(`school`.`reg_type_id` = 1 and `school`.`visit` = 'No' and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `reg_visited_no`,
+                 sum(if(`school`.`reg_type_id` = 4 and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `re_up`,
+                 sum(if(`school`.`reg_type_id` = 4 and `school`.`visit` = NULL and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `re_up_not_define`,
+                 sum(if(`school`.`reg_type_id` = 4 and `school`.`visit` = 'Yes' and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `re_up_visited_yes`,
+                 sum(if(`school`.`reg_type_id` = 4 and `school`.`visit` = 'No' and `school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `re_up_visited_no`
+                 from (((`school` 
+                 join `schools` on(`schools`.`schoolId` = `school`.`schools_id`)) 
+                 join `district` on(`district`.`districtId` = `schools`.`district_id`)) 
+                 join `session_year` on(`session_year`.`sessionYearId` = `school`.`session_year_id`)) 
+                 WHERE `district`.`new_region` IN (" . $region_ids . ") ";
+                if ($institute_type_id) {
+                    $query .= " AND `schools`.`school_type_id`= '" . $institute_type_id . "' ";
+                }
+                if ($this->input->post('level_id')) {
+                    $level_id = (int) $this->input->post('level_id');
+                    $query .= " AND `school`.`level_of_school_id`= '" . $level_id . "' ";
+                }
+                $query .= " group by `district`.`new_region`";
+
+                $pending = $this->db->query($query)->row(); ?>
+                <tr>
+                    <th style="text-align: center;">Total</th>
+                    <th style="text-align: center;"><?php echo $pending->reg_upg_total; ?></th>
+
+                    <th style="text-align: center;"><?php echo $pending->registrations; ?></th>
+                    <th style="text-align: center;"><?php echo $pending->reg_not_define; ?></th>
+                    <th style="text-align: center;"><?php echo $pending->reg_visited_yes; ?></th>
+                    <th style="text-align: center;"><?php echo $pending->reg_visited_no; ?></th>
+
+                    <th style="text-align: center;"><?php echo $pending->re_up; ?></th>
+                    <th style="text-align: center;"><?php echo $pending->re_up_not_define; ?></th>
+                    <th style="text-align: center;"><?php echo $pending->re_up_visited_yes; ?></th>
+                    <th style="text-align: center;"><?php echo $pending->re_up_visited_no; ?></th>
+
+
+                </tr>
+            </tfoot>
+
+        </table>
+
+    </div>
     <div class="col-md-5">
         <div class="blo ck_div">
             <strong>Region Wise Progress Summary Report </strong>
@@ -14,7 +127,7 @@ $region_ids = $this->db->query($query)->row()->region_ids;
                 <table class="table table-bordered" style="text-align:center; font-size:10px" id="test _table">
                     <thead>
                         <tr>
-                            <th style="text-align: center;">Session</th>
+                            <th style="text-align: center;">Region</th>
                             <th style="text-align: center;">Applied</th>
                             <th style="text-align: center;">Pending (Queue)</th>
                             <th style="text-align: center;">Total Pending</th>
