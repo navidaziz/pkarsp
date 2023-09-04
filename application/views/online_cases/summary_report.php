@@ -13,11 +13,11 @@ $region_ids = $this->db->query($query)->row()->region_ids;
                     <th style="text-align: center;">Session</th>
                     <th style="text-align: center;">Total Registration+Upgradation</th>
                     <td>Registration</td>
-                    <td>Not Define</td>
+                    <td>Visit Not Mentioned</td>
                     <td>Visited</td>
                     <td>Not Visited</td>
                     <td>Upgradation</td>
-                    <td>Not Define</td>
+                    <td>Visit Not Mentioned</td>
                     <td>Visited</td>
                     <td>Not Visited</td>
                 </tr>
