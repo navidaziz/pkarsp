@@ -47,7 +47,30 @@ class Operation extends Admin_Controller
 	{
 		$this->data['school_id'] = (int) $school_id;
 		$this->data['schools_id'] = $schools_id = (int) $schools_id;
-		$this->data['school'] = $this->school_m->explore_schools_by_school_id_m($schools_id);
+		$query = "SELECT
+   	`schools`.schoolId 
+   	, `schools`.`registrationNumber`
+      , `schools`.`schoolName`
+      , `schools`.`yearOfEstiblishment`
+      , `schools`.`school_type_id`
+      , `schools`.`level_of_school_id`
+      , `schools`.`gender_type_id`
+      , (IF(district.region=1,'Central', IF(district.region=2, 'South', IF(district.region=3, 'Malakand', IF(district.region=4, 'Hazara', 'Other'))))) as division
+      , `district`.`districtTitle` 
+      , `tehsils`.`tehsilTitle`
+      , (SELECT `uc`.`ucTitle` FROM `uc` WHERE `uc`.`ucId` = `schools`.`uc_id`) as `ucTitle`,
+      `schools`.`address`,
+      `schools`.`telePhoneNumber`,
+      `schools`.`schoolMobileNumber`,
+      `schools`.`isfined`,
+      `schools`.`file_no`,
+      `schools`.`principal_email`
+   	FROM `schools` INNER JOIN `district` 
+        ON (`schools`.`district_id` = `district`.`districtId`) 
+        INNER JOIN `tehsils` ON( `tehsils`.`tehsilId` = `schools`.`tehsil_id`)";
+		$query .= " WHERE `schools`.`schoolId` = " . $schools_id . " ";
+		$this->data['school'] = $this->db->query($query)->row();
+
 		$this->data['session_id'] = (int) $session_id;
 		$this->data['title'] = "Update Section E";
 		$this->data['description'] = "Update Section E";

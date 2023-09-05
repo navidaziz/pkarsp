@@ -18,7 +18,7 @@
                                                                                           } ?></h3>
 
               <address>
-                <?php if ($school->district_id) {
+                <?php if ($school->districtTitle) {
                   echo "District: <strong>" . $school->districtTitle . "</strong>";
                 } ?>
                 <?php if ($school->tehsilTitle) {
@@ -182,11 +182,11 @@
                               <strong><?php echo $session_fee->tuitionFee; ?> </strong>
                             <?php } ?>
                             <?php if ($session_count == 1) {
-                              $number = $session_fee->tuitionFee;
-                              $percentage = 10;
-                              $result = $number + ($number * $percentage / 100);
-                              $previous_session_max_fee[$class->classId] = $result;
-                              $previous_session_fee[$class->classId] = $number;
+                              @$number = (int) $session_fee->tuitionFee;
+                              @$percentage = 10;
+                              @$result = $number + ($number * $percentage / 100);
+                              @$previous_session_max_fee[$class->classId] = $result;
+                              @$previous_session_fee[$class->classId] = $number;
                             } ?>
                             <?php if ($session_count == 2) { ?>
                               <?php if ($session_fee->feeId) { ?>
