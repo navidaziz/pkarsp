@@ -9,7 +9,9 @@
     <thead>
       <tr>
         <th>#</th>
-
+        <?php if ($list_type == 5) { ?>
+          <th>Type</th>
+        <?php } ?>
         <th>Insti.ID</th>
         <th>Level</th>
         <th>District</th>
@@ -43,7 +45,9 @@
 
               <?php if ($previous_school_id != $request->schools_id) { ?>
                 <td><?php echo $count++; ?> </td>
-
+                <?php if ($list_type == 5) { ?>
+                  <td><?php echo $request->regTypeTitle; ?></td>
+                <?php } ?>
                 <td><?php echo $request->schools_id ?></td>
                 <td>
                   <?php if ($request->level_of_school_id == 1) {
@@ -69,7 +73,9 @@
 
               <?php } else { ?>
                 <td colspan="5"></td>
-
+                <?php if ($list_type == 5) { ?>
+                  <td></td>
+                <?php } ?>
 
                 <td style="display: none;"></td>
                 <td style="display: none;"></td>
