@@ -76,7 +76,7 @@ school.principal_contact_no,
 		`schools`,
 		`session_year`,
 		`reg_type`,
-      `district`
+      `district` 
 		
 		WHERE  `session_year`.`sessionYearId` = `school`.`session_year_id`
 		AND `school`.`schools_id` = `schools`.`schoolId`

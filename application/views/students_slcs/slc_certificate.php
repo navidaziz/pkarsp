@@ -231,7 +231,7 @@ function numToOrdinalWord($num)
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               </span>&nbsp; is / was regular student of this school. <br />
               <br />
-              His date of birth according to school record is
+              His / Her date of birth according to school record is
               <span style="text-decoration: underline; font-weight: bold;">
                 <?php echo date("d M, Y", strtotime($student_slc->student_data_of_birth)); ?>.</span> <br />
               In words (
