@@ -139,6 +139,9 @@
                   <?php if ($school->ucTitle) {
                     echo " / Unionconsil: <strong>" . $school->ucTitle . "</strong>";
                   } ?>
+                  <?php if ($school->address) {
+                    echo " / Address: <strong>" . $school->address . "</strong>";
+                  } ?>
                   <?php if (!empty($school->location)) { ?>
                     <?php echo " (<strong>" . $school->location . ") </strong>"; ?>
                   <?php } ?>
