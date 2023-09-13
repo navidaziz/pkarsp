@@ -29,6 +29,14 @@
           <th>Remarks</th>
         <?php } ?>
         <th>Action</th>
+        <?php if ($request_type == 1 || $request_type == 4) { ?>
+          <th>Tehsil</th>
+          <th>Address</th>
+          <th>Contact</th>
+          <th>YofEst</th>
+          <th>BISE Reg.</td>
+          <?php } ?>
+
 
       </tr>
     </thead>
@@ -133,6 +141,23 @@
                 <?php } ?>
               </td>
 
+              <?php if ($request_type == 1 or $request_type == 4) { ?>
+                <td><?php echo $request->tehsil; ?></td>
+                <td><?php echo $request->address; ?></td>
+                <td><?php echo $request->telePhoneNumber; ?>,
+                  <?php echo $request->schoolMobileNumber; ?>,
+                  <?php echo $request->principal_contact_no; ?>,
+                  <?php echo $request->owner_contact_no; ?>,
+                </td>
+                <td><?php echo $request->yearOfEstiblishment; ?></td>
+                <td><?php
+                    if ($request->biseRegister == 'Yes') {
+                      echo 'Yes - ';
+                    }
+                    echo $request->biseregistrationNumber;
+                    ?></td>
+              <?php } ?>
+
 
             </tr>
           <?php } ?>
@@ -169,13 +194,13 @@
           title: '<?php echo str_replace(" ", "-", $title) . "-Date: " . Date("d-M-Y");  ?>',
           exportOptions: {
             <?php if ($request_type == 2) { ?>
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+              //columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
             <?php } ?>
             <?php if ($request_type == 1) { ?>
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+              // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
             <?php } ?>
             <?php if ($request_type == 4) { ?>
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+              //columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
             <?php } ?>
           }
         },
@@ -184,13 +209,13 @@
           title: '<?php echo str_replace(" ", "-", $title) . "-Date: " . Date("d-M-Y");  ?>',
           exportOptions: {
             <?php if ($request_type == 2) { ?>
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+              // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
             <?php } ?>
             <?php if ($request_type == 1) { ?>
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+              // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
             <?php } ?>
             <?php if ($request_type == 4) { ?>
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+              //columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
             <?php } ?>
           }
         },
@@ -200,13 +225,13 @@
           pageSize: 'A4',
           exportOptions: {
             <?php if ($request_type == 2) { ?>
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+              // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
             <?php } ?>
             <?php if ($request_type == 1) { ?>
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+              // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
             <?php } ?>
             <?php if ($request_type == 4) { ?>
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+              // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
             <?php } ?>
           }
         }
