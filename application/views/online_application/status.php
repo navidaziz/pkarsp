@@ -93,7 +93,11 @@
                     <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Dashboard
                     <i class="fa fa-dashboard"></i>
                   </a>
-                  <?php if ($school_session->school_type_id == 1) { ?>
+                  <?php
+
+                  var_dump($school_session);
+
+                  if ($school_session->school_type_id == 1) { ?>
                     <a class="btn btn-primary" href="<?php echo site_url("update_sectionc/updatesectionc/$school_session_id"); ?>">
                       <i class="fa fa-edit" aria-hidden="true"></i> Edit Section C
                     </a>
