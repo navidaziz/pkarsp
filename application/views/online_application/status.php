@@ -95,9 +95,9 @@
                   </a>
                   <?php
 
-                  var_dump($school_session);
+                  var_dump($school);
 
-                  if ($school_session->school_type_id == 1) { ?>
+                  if ($school->school_type_id == 1) { ?>
                     <a class="btn btn-primary" href="<?php echo site_url("update_sectionc/updatesectionc/$school_session_id"); ?>">
                       <i class="fa fa-edit" aria-hidden="true"></i> Edit Section C
                     </a>
