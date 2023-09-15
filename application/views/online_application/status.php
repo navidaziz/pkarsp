@@ -95,7 +95,6 @@
                   </a>
                   <?php
 
-                  var_dump($school);
 
                   if ($school->school_type_id == 1) { ?>
                     <a class="btn btn-primary" href="<?php echo site_url("update_sectionc/updatesectionc/$school_session_id"); ?>">
