@@ -89,12 +89,14 @@
               </style>
               <?php if ($boys) { ?>
                 <h4 style="border-left: 20px solid #9FC8E8; padding-left:5px"><strong>Boys</strong> Enrollment Class and Age wise.<br />
-                  <small class="guideline" class="" style="color: red;">
-                    Note: For example age 3+ means “equal to or greater than 3 but less than 4 years”, similarly for 4+ , 5+ and so on.
-                    <span style="font-family: 'Noto Nastaliq Urdu Draft', serif; font-weight: bold; " class="pull-right">
-                      مثال کے طور پر عمر 3+ کا مطلب ہے "3 کے برابر یا اس سے زیادہ لیکن 4 سال سے کم"، اسی طرح 4+، +5
-                    </span>
-                  </small>
+                  <p>
+                    <small class="guideline" class="" style="color: red;">
+                      Note: For example age 3+ means “equal to or greater than 3 but less than 4 years”, similarly for 4+ , 5+ and so on.
+                      <span style="font-family: 'Noto Nastaliq Urdu Draft', serif; font-weight: bold; " class="pull-right">
+                        مثال کے طور پر عمر 3+ کا مطلب ہے "3 کے برابر یا اس سے زیادہ لیکن 4 سال سے کم"، اسی طرح 4+، +5
+                      </span>
+                    </small>
+                  </p>
                 </h4>
                 <div class="table-responsive">
                   <table class="table table-bordered">
