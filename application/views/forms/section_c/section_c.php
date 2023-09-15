@@ -103,6 +103,7 @@
                     <span style="font-family: 'Noto Nastaliq Urdu Draft', serif; font-weight: bold; " class="pull-right">
                       مثال کے طور پر عمر 3+ کا مطلب ہے "3 کے برابر یا اس سے زیادہ لیکن 4 سال سے کم"، اسی طرح 4+، +5
                     </span>
+                  <div style="clear: both;"></div>
                   </p>
                 </h4>
 
