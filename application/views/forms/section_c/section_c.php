@@ -102,6 +102,7 @@
                     </span>
                   </small>
                 </h4>
+                <br />
                 <div class="table-responsive">
                   <table class="table table-bordered">
                     <tr>
