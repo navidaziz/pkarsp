@@ -96,6 +96,7 @@
                         مثال کے طور پر عمر 3+ کا مطلب ہے "3 کے برابر یا اس سے زیادہ لیکن 4 سال سے کم"، اسی طرح 4+، +5
                       </span>
                     </small>
+                  <div style="clear: both;"></div>
                   </p>
                 </h4>
                 <div class="table-responsive">
