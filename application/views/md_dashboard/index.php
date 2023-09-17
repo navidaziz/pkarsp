@@ -394,7 +394,7 @@
                             <?php
                             $query = "SELECT COUNT(*) as total FROM `processed_cases` 
                             WHERE renewal_code<=0 and session_year_id=(SELECT sessionYearId FROM `session_year` WHERE status=1) 
-                            and new_region='" . $report->new_region . "';";
+                            and districtId='" . $report->districtId . "';";
                             $current_registered = $this->db->query($query)->row();
                             //$session->commulative_registration = $total_registration += $report->total;
                             //$session->new_registration = $report->total;
@@ -403,7 +403,7 @@
                             <?php
                             $query = "SELECT COUNT(*) as total FROM `processed_cases` 
                             WHERE renewal_code>0 and session_year_id=(SELECT sessionYearId FROM `session_year` WHERE status=1) and upgrade=1 
-                            and new_region='" . $report->new_region . "';";
+                            and districtId='" . $report->districtId . "';";
                             $current_upgradation = $this->db->query($query)->row();
                             //$session->commulative_registration = $total_registration += $report->total;
                             //$session->new_registration = $report->total;
@@ -412,7 +412,7 @@
                             <?php
                             $query = "SELECT COUNT(*) as total FROM `processed_cases` 
                             WHERE renewal_code>0 and session_year_id=(SELECT sessionYearId FROM `session_year` WHERE status=1) 
-                            and new_region='" . $report->new_region . "';";
+                            and districtId='" . $report->districtId . "';";
                             $current_renewal = $this->db->query($query)->row();
                             //$session->commulative_registration = $total_registration += $report->total;
                             //$session->new_registration = $report->total;
