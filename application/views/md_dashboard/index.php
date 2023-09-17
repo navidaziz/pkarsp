@@ -61,6 +61,7 @@
                             $query = "SELECT COUNT(*) as total FROM `processed_cases` WHERE renewal_code<=0 and session_year_id='" . $session->sessionYearId . "';";
                             $report = $this->db->query($query)->row();
                             $session->commulative_registration = $total_registration += $report->total;
+                            $session->new_registration = $report->total;
                         ?>
                             <th><?php echo $report->total; ?></th>
                         <?php } ?>
@@ -88,7 +89,10 @@
                         <?php
                         foreach ($sessions as $session) {
                         ?>
-                            <th><?php echo  round(($session->renewals / $session->commulative_registration) * 100, 2) . " % "; ?></th>
+                            <th><?php
+                                if ($session->commulative_registration - $session->new_registration > 0) {
+                                    echo  round(($session->renewals / ($session->commulative_registration - $session->new_registration)) * 100, 2) . " % ";
+                                } ?></th>
                         <?php } ?>
                     </tr>
                     <tr>
@@ -96,7 +100,7 @@
                         <?php
                         foreach ($sessions as $session) {
                         ?>
-                            <th><?php echo $session->commulative_registration - $session->renewals; ?></th>
+                            <th><?php echo ($session->commulative_registration - $session->new_registration) - $session->renewals; ?></th>
                         <?php } ?>
                     </tr>
                     <tr>
