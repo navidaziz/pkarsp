@@ -35,14 +35,14 @@
     <!-- Dashboard Content -->
     <div class="container" style="margin:10px;">
         <div class="row">
-            <div class="col-md-5">
+            <div class="col-md-6">
 
                 <?php
                 $query = "SELECT * FROM session_year";
                 $sessions  = $this->db->query($query)->result();
 
                 ?>
-                <table class="table table_small" id="yearly_and_monthly_progress_report">
+                <table class="table table_small table-bordered" id="yearly_and_monthly_progress_report">
                     <tr>
                         <th colspan="14">Session Wise Registration / Renewals / Upgradation Report</th>
                     </tr>
@@ -55,20 +55,48 @@
                     </tr>
                     <tr>
                         <th>Registration</th>
-                        <?php foreach ($sessions as $session) {
+                        <?php
+                        $total_registration = 0;
+                        foreach ($sessions as $session) {
                             $query = "SELECT COUNT(*) as total FROM `processed_cases` WHERE renewal_code<=0 and session_year_id='" . $session->sessionYearId . "';";
                             $report = $this->db->query($query)->row();
+                            $session->commulative_registration = $total_registration += $report->total;
                         ?>
                             <th><?php echo $report->total; ?></th>
                         <?php } ?>
                     </tr>
                     <tr>
+                        <th>Comulative Registration</th>
+                        <?php
+                        foreach ($sessions as $session) { ?>
+                            <th><?php echo $session->commulative_registration; ?></th>
+                        <?php } ?>
+                    </tr>
+                    <tr>
                         <th>Renewals</th>
-                        <?php foreach ($sessions as $session) {
+                        <?php
+                        foreach ($sessions as $session) {
                             $query = "SELECT COUNT(*) as total FROM `processed_cases` WHERE renewal_code>0 and session_year_id='" . $session->sessionYearId . "';";
                             $report = $this->db->query($query)->row();
+                            $session->renewals = $report->total;
                         ?>
                             <th><?php echo $report->total; ?></th>
+                        <?php } ?>
+                    </tr>
+                    <tr>
+                        <th>Renewals %</th>
+                        <?php
+                        foreach ($sessions as $session) {
+                        ?>
+                            <th><?php echo  round(($session->renewals / $session->commulative_registration) * 100, 2) . " % "; ?></th>
+                        <?php } ?>
+                    </tr>
+                    <tr>
+                        <th>Renewals Remaining</th>
+                        <?php
+                        foreach ($sessions as $session) {
+                        ?>
+                            <th><?php echo $session->commulative_registration - $session->renewals; ?></th>
                         <?php } ?>
                     </tr>
                     <tr>
