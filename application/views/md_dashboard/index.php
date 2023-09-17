@@ -26,6 +26,14 @@
         font-size: 9px;
         text-align: center;
     }
+
+    .container,
+    .container-lg,
+    .container-md,
+    .container-sm,
+    .container-xl {
+        max-width: 100%;
+    }
 </style>
 
 
@@ -33,9 +41,9 @@
 
 
     <!-- Dashboard Content -->
-    <div class="container" style="margin:10px;">
+    <div class="container">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
 
                 <?php
                 $query = "SELECT * FROM session_year";
@@ -67,7 +75,7 @@
                         <?php } ?>
                     </tr>
                     <tr>
-                        <th>Comulative Registration</th>
+                        <th>Comulative</th>
                         <?php
                         foreach ($sessions as $session) { ?>
                             <th><?php echo $session->commulative_registration; ?></th>
@@ -96,7 +104,7 @@
                         <?php } ?>
                     </tr>
                     <tr>
-                        <th>Renewals Remaining</th>
+                        <th>Remaining</th>
                         <?php
                         foreach ($sessions as $session) {
                         ?>
@@ -115,161 +123,263 @@
 
 
                 </table>
-            </div>
-            <div class="col-md-5">
 
                 <?php
-                $query = "SELECT
-                    YEAR(cer_issue_date) as Year,
-                    SUM(IF(cer_issue_date,1,0)) as `total`,
-                    SUM(IF(MONTH(cer_issue_date)=04,1,0)) as `Apr`,
-                    SUM(IF(MONTH(cer_issue_date)=05,1,0)) as `May`,
-                    SUM(IF(MONTH(cer_issue_date)=06,1,0)) as `Jun`,
-                    SUM(IF(MONTH(cer_issue_date)=07,1,0)) as `Jul`,
-                    SUM(IF(MONTH(cer_issue_date)=08,1,0)) as `Aug`,
-                    SUM(IF(MONTH(cer_issue_date)=09,1,0)) as `Sep`,
-                    SUM(IF(MONTH(cer_issue_date)=10,1,0)) as `Oct`,
-                    SUM(IF(MONTH(cer_issue_date)=11,1,0)) as `Nov`,
-                    SUM(IF(MONTH(cer_issue_date)=12,1,0)) as `Dec`,
-                    SUM(IF(MONTH(cer_issue_date)=01,1,0)) as `Jan`,
-                    SUM(IF(MONTH(cer_issue_date)=02,1,0)) as `Feb`,
-                    SUM(IF(MONTH(cer_issue_date)=03,1,0)) as `Mar`
-                    FROM `processed_cases`
-                    GROUP BY YEAR(cer_issue_date)
-                    ORDER BY YEAR(cer_issue_date) DESC";
-                $reports  = $this->db->query($query)->result();
-
+                $query = "SELECT 
+                IF(current_level=1,'Primary',
+                  IF(current_level=2, 'Middle',
+                    IF(current_level=3, 'High', 
+                       IF(current_level=4, 'High Secondary',
+                           IF(current_level=5, 'Academies', 'Others')
+                         )))) as level,
+                         current_level as current_level_id,
+                         count(*) as total,
+                SUM(IF(gender_type_id=1, 1,0 )) as boys,
+                SUM(IF(gender_type_id=2, 1,0 )) as girls,
+                SUM(IF(gender_type_id=3, 1,0 )) as co_edu
+                FROM `processed_cases` WHERE renewal_code<=0
+                GROUP BY current_level;";
+                $reports = $this->db->query($query)->result();
                 ?>
-                <table class="table table_small table-bordered" id="yearly_and_monthly_progress_report">
+                <table class="table table_small ">
                     <tr>
-                        <th colspan="14">Yearly and monthly progress report</th>
-                    </tr>
-
-                    <tr>
-                        <th>Year</th>
-                        <th>Apr</th>
-                        <?php if (date('m') == '04') { ?> <td> * </td><?php } ?>
-                        <th>May</th>
-                        <?php if (date('m') == '05') { ?> <td> * </td><?php } ?>
-                        <th>Jun</th>
-                        <?php if (date('m') == '06') { ?> <td> * </td><?php } ?>
-                        <th>Jul</th>
-                        <?php if (date('m') == '07') { ?> <td> * </td><?php } ?>
-                        <th>Aug</th>
-                        <?php if (date('m') == '08') { ?> <td> * </td><?php } ?>
-                        <th>Sep</th>
-                        <?php if (date('m') == '09') { ?> <td> * </td><?php } ?>
-                        <th>Oct</th>
-                        <?php if (date('m') == '10') { ?> <td> * </td><?php } ?>
-                        <th>Nov</th>
-                        <?php if (date('m') == '11') { ?> <td> * </td><?php } ?>
-                        <th>Dec</th>
-                        <?php if (date('m') == '12') { ?> <td> * </td><?php } ?>
-                        <th>Jan</th>
-                        <?php if (date('m') == '01') { ?> <td> * </td><?php } ?>
-                        <th>Feb</th>
-                        <?php if (date('m') == '02') { ?> <td> * </td><?php } ?>
-                        <th>Mar</th>
-                        <?php if (date('m') == '03') { ?> <td> * </td><?php } ?>
-                        <th>Yearly Total</th>
-                    </tr>
-
-                    <?php foreach ($reports as $report) { ?>
-                        <tr>
-                            <th><?php echo $report->Year ?></td>
-                            <td class="gradient-cell" style="color: black;"><?php echo $report->Apr ?></td>
-                            <?php if (date('m') == '04') { ?> <td class="current_month"> <?php echo $report->Apr; ?> </td><?php } ?>
-                            <td class="gradient-cell" style="color: black;"><?php echo $report->May ?></td>
-                            <?php if (date('m') == '05') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May; ?> </td><?php } ?>
-                            <td class="gradient-cell" style="color: black;"><?php echo $report->Jun ?></td>
-                            <?php if (date('m') == '06') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun; ?> </td><?php } ?>
-                            <td class="gradient-cell" style="color: black;"><?php echo $report->Jul ?></td>
-                            <?php if (date('m') == '07') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul; ?> </td><?php } ?>
-                            <td class="gradient-cell" style="color: black;"><?php echo $report->Aug ?></td>
-                            <?php if (date('m') == '08') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug; ?> </td><?php } ?>
-                            <td class="gradient-cell" style="color: black;"><?php echo $report->Sep ?></td>
-                            <?php if (date('m') == '09') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep; ?> </td><?php } ?>
-                            <td class="gradient-cell" style="color: black;"><?php echo $report->Oct ?></td>
-                            <?php if (date('m') == '10') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct; ?> </td><?php } ?>
-                            <td class="gradient-cell" style="color: black;"><?php echo $report->Nov ?></td>
-                            <?php if (date('m') == '11') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov; ?> </td><?php } ?>
-                            <td class="gradient-cell" style="color: black;"><?php echo $report->Dec ?></td>
-                            <?php if (date('m') == '12') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov + $report->Dec; ?> </td><?php } ?>
-                            <td class="gradient-cell" style="color: black;"><?php echo $report->Jan ?></td>
-                            <?php if (date('m') == '01') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov + $report->Dec + $report->Jan; ?> </td><?php } ?>
-                            <td class="gradient-cell" style="color: black;"><?php echo $report->Feb ?></td>
-                            <?php if (date('m') == '02') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov + $report->Dec + $report->Jan + $report->Feb; ?> </td><?php } ?>
-                            <td class="gradient-cell" style="color: black;"><?php echo $report->Mar ?></td>
-                            <?php if (date('m') == '03') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov + $report->Dec + $report->Jan + $report->Feb + $report->Mar; ?> </td><?php } ?>
-                            <td class="yearly_total" style="color: black;"><?php echo $report->total ?></td>
-                        </tr>
-                    <?php } ?>
-                </table>
-            </div>
-            <div class="col-md-5">
-
-                <?php
-                $query = "SELECT YEAR(pc.cer_issue_date) as year,
-                SUM(CASE WHEN pc.session_year_id = 1 THEN 1 ELSE 0 END) as `one`,
-                SUM(CASE WHEN pc.session_year_id = 2 THEN 1 ELSE 0 END) as `two`,
-                SUM(CASE WHEN pc.session_year_id = 3 THEN 1 ELSE 0 END) as `three`,
-                SUM(CASE WHEN pc.session_year_id = 4 THEN 1 ELSE 0 END) as `four`,
-                SUM(CASE WHEN pc.session_year_id = 5 THEN 1 ELSE 0 END) as `five`,
-                SUM(CASE WHEN pc.session_year_id = 6 THEN 1 ELSE 0 END) as `six`,
-                COUNT(0) as total_process
-            FROM 
-                `processed_cases` as pc
-                GROUP BY YEAR(pc.cer_issue_date)
-                ORDER BY YEAR(pc.cer_issue_date) DESC;";
-                $reports  = $this->db->query($query)->result();
-
-                ?>
-                <table class="table table_small table-bordered" id="yearly_and_monthly_progress_report">
-                    <tr>
-                        <th colspan="14">Session and Yearly Processed Files</th>
-                    </tr>
-
-                    <tr>
-                        <th>Year</th>
-                        <th>2018-19</th>
-                        <th>2019-20</th>
-                        <th>2020-21</th>
-                        <th>2021-22</th>
-                        <th>2022-23</th>
-                        <th>2023-24</th>
+                        <th>Levels</th>
                         <th>Total</th>
+                        <th>Boys</th>
+                        <th>Girls</th>
+                        <th>Co-Education</th>
+                        <th>New Registered</th>
+                        <th>Upgradation</th>
+                        <th>Latest Renewals</th>
                     </tr>
-
                     <?php foreach ($reports as $report) { ?>
                         <tr>
-                            <th><?php echo $report->year ?></td>
-                            <td class="gradient-cell" style="color: black;"><?php echo $report->one; ?></td>
-                            <td class="gradient-cell" style="color: black;"><?php echo $report->two; ?></td>
-                            <td class="gradient-cell" style="color: black;"><?php echo $report->three; ?></td>
-                            <td class="gradient-cell" style="color: black;"><?php echo $report->four; ?></td>
-                            <td class="gradient-cell" style="color: black;"><?php echo $report->five; ?></td>
-                            <td class="gradient-cell" style="color: black;"><?php echo $report->six; ?></td>
-                            <td class="current_month" style="color: black;"><?php echo $report->total_process; ?></td>
+                            <th><?php echo $report->level ?></th>
+                            <td><?php echo $report->total ?></td>
+                            <td><?php echo $report->boys ?></td>
+                            <td><?php echo $report->girls ?></td>
+                            <td><?php echo $report->co_edu ?></td>
+                            <?php
+                            $query = "SELECT COUNT(*) as total FROM `processed_cases` 
+                            WHERE renewal_code<=0 and session_year_id='6' and current_level='" . $report->current_level_id . "';";
+                            $current_registered = $this->db->query($query)->row();
+                            //$session->commulative_registration = $total_registration += $report->total;
+                            //$session->new_registration = $report->total;
+                            ?>
+                            <th><?php echo $current_registered->total; ?></th>
+                            <?php
+                            $query = "SELECT COUNT(*) as total FROM `processed_cases` 
+                            WHERE renewal_code>0 and session_year_id='6' and upgrade=1 and current_level='" . $report->current_level_id . "';";
+                            $current_registered = $this->db->query($query)->row();
+                            //$session->commulative_registration = $total_registration += $report->total;
+                            //$session->new_registration = $report->total;
+                            ?>
+                            <th><?php echo $current_registered->total; ?></th>
+                            <?php
+                            $query = "SELECT COUNT(*) as total FROM `processed_cases` 
+                            WHERE renewal_code>0 and session_year_id='6' and current_level='" . $report->current_level_id . "';";
+                            $current_registered = $this->db->query($query)->row();
+                            //$session->commulative_registration = $total_registration += $report->total;
+                            //$session->new_registration = $report->total;
+                            ?>
+                            <th><?php echo $current_registered->total; ?></th>
 
                         </tr>
                     <?php } ?>
+                    <?php $query = "SELECT 
+                         current_level as current_level_id,
+                         count(*) as total,
+                SUM(IF(gender_type_id=1, 1,0 )) as boys,
+                SUM(IF(gender_type_id=2, 1,0 )) as girls,
+                SUM(IF(gender_type_id=3, 1,0 )) as co_edu
+                FROM `processed_cases` WHERE renewal_code<=0";
+                    $report = $this->db->query($query)->row();
+                    ?>
+                    <tr>
+                        <th>Total</th>
+                        <th><?php echo $report->total ?></th>
+                        <th><?php echo $report->boys ?></th>
+                        <th><?php echo $report->girls ?></th>
+                        <th><?php echo $report->co_edu ?></th>
+                        <?php
+                        $query = "SELECT COUNT(*) as total FROM `processed_cases` 
+                            WHERE renewal_code<=0 and session_year_id='6' ";
+                        $current_registered = $this->db->query($query)->row();
+                        //$session->commulative_registration = $total_registration += $report->total;
+                        //$session->new_registration = $report->total;
+                        ?>
+                        <th><?php echo $current_registered->total; ?></th>
+                        <?php
+                        $query = "SELECT COUNT(*) as total FROM `processed_cases` 
+                            WHERE renewal_code>0 and session_year_id='6' and upgrade=1 ;";
+                        $current_registered = $this->db->query($query)->row();
+                        //$session->commulative_registration = $total_registration += $report->total;
+                        //$session->new_registration = $report->total;
+                        ?>
+                        <th><?php echo $current_registered->total; ?></th>
+                        <?php
+                        $query = "SELECT COUNT(*) as total FROM `processed_cases` 
+                            WHERE renewal_code>0 and session_year_id='6';";
+                        $current_registered = $this->db->query($query)->row();
+                        //$session->commulative_registration = $total_registration += $report->total;
+                        //$session->new_registration = $report->total;
+                        ?>
+                        <th><?php echo $current_registered->total; ?></th>
+
+                    </tr>
                 </table>
             </div>
-            <div class="col-md-3">
-                <div id="chart-container"></div>
-                <!-- Sidebar navigation here -->
-                <ul class="list-group">
-                    <li class="list-group-item">Item 1</li>
-                    <li class="list-group-item">Item 2</li>
-                    <li class="list-group-item">Item 3</li>
-                </ul>
-            </div>
-            <div class="col-md-9">
-                <!-- Main content area -->
-                <h2>Welcome to the Dashboard</h2>
-                <p>This is your dashboard content.</p>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-7">
+
+                        <?php
+                        $query = "SELECT
+                                    YEAR(cer_issue_date) as Year,
+                                    SUM(IF(cer_issue_date,1,0)) as `total`,
+                                    SUM(IF(MONTH(cer_issue_date)=04,1,0)) as `Apr`,
+                                    SUM(IF(MONTH(cer_issue_date)=05,1,0)) as `May`,
+                                    SUM(IF(MONTH(cer_issue_date)=06,1,0)) as `Jun`,
+                                    SUM(IF(MONTH(cer_issue_date)=07,1,0)) as `Jul`,
+                                    SUM(IF(MONTH(cer_issue_date)=08,1,0)) as `Aug`,
+                                    SUM(IF(MONTH(cer_issue_date)=09,1,0)) as `Sep`,
+                                    SUM(IF(MONTH(cer_issue_date)=10,1,0)) as `Oct`,
+                                    SUM(IF(MONTH(cer_issue_date)=11,1,0)) as `Nov`,
+                                    SUM(IF(MONTH(cer_issue_date)=12,1,0)) as `Dec`,
+                                    SUM(IF(MONTH(cer_issue_date)=01,1,0)) as `Jan`,
+                                    SUM(IF(MONTH(cer_issue_date)=02,1,0)) as `Feb`,
+                                    SUM(IF(MONTH(cer_issue_date)=03,1,0)) as `Mar`
+                                    FROM `processed_cases`
+                                    GROUP BY YEAR(cer_issue_date)
+                                    ORDER BY YEAR(cer_issue_date) DESC";
+                        $reports  = $this->db->query($query)->result();
+
+                        ?>
+                        <table class="table table_small table-bordered" id="yearly_and_monthly_progress_report">
+                            <tr>
+                                <th colspan="14">Yearly and monthly progress report</th>
+                            </tr>
+
+                            <tr>
+                                <th>Year</th>
+                                <th>Apr</th>
+                                <?php if (date('m') == '04') { ?> <td> * </td><?php } ?>
+                                <th>May</th>
+                                <?php if (date('m') == '05') { ?> <td> * </td><?php } ?>
+                                <th>Jun</th>
+                                <?php if (date('m') == '06') { ?> <td> * </td><?php } ?>
+                                <th>Jul</th>
+                                <?php if (date('m') == '07') { ?> <td> * </td><?php } ?>
+                                <th>Aug</th>
+                                <?php if (date('m') == '08') { ?> <td> * </td><?php } ?>
+                                <th>Sep</th>
+                                <?php if (date('m') == '09') { ?> <td> * </td><?php } ?>
+                                <th>Oct</th>
+                                <?php if (date('m') == '10') { ?> <td> * </td><?php } ?>
+                                <th>Nov</th>
+                                <?php if (date('m') == '11') { ?> <td> * </td><?php } ?>
+                                <th>Dec</th>
+                                <?php if (date('m') == '12') { ?> <td> * </td><?php } ?>
+                                <th>Jan</th>
+                                <?php if (date('m') == '01') { ?> <td> * </td><?php } ?>
+                                <th>Feb</th>
+                                <?php if (date('m') == '02') { ?> <td> * </td><?php } ?>
+                                <th>Mar</th>
+                                <?php if (date('m') == '03') { ?> <td> * </td><?php } ?>
+                                <th>Yearly Total</th>
+                            </tr>
+
+                            <?php foreach ($reports as $report) { ?>
+                                <tr>
+                                    <th><?php echo $report->Year ?></td>
+                                    <td class="gradient-cell" style="color: black;"><?php echo $report->Apr ?></td>
+                                    <?php if (date('m') == '04') { ?> <td class="current_month"> <?php echo $report->Apr; ?> </td><?php } ?>
+                                    <td class="gradient-cell" style="color: black;"><?php echo $report->May ?></td>
+                                    <?php if (date('m') == '05') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May; ?> </td><?php } ?>
+                                    <td class="gradient-cell" style="color: black;"><?php echo $report->Jun ?></td>
+                                    <?php if (date('m') == '06') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun; ?> </td><?php } ?>
+                                    <td class="gradient-cell" style="color: black;"><?php echo $report->Jul ?></td>
+                                    <?php if (date('m') == '07') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul; ?> </td><?php } ?>
+                                    <td class="gradient-cell" style="color: black;"><?php echo $report->Aug ?></td>
+                                    <?php if (date('m') == '08') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug; ?> </td><?php } ?>
+                                    <td class="gradient-cell" style="color: black;"><?php echo $report->Sep ?></td>
+                                    <?php if (date('m') == '09') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep; ?> </td><?php } ?>
+                                    <td class="gradient-cell" style="color: black;"><?php echo $report->Oct ?></td>
+                                    <?php if (date('m') == '10') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct; ?> </td><?php } ?>
+                                    <td class="gradient-cell" style="color: black;"><?php echo $report->Nov ?></td>
+                                    <?php if (date('m') == '11') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov; ?> </td><?php } ?>
+                                    <td class="gradient-cell" style="color: black;"><?php echo $report->Dec ?></td>
+                                    <?php if (date('m') == '12') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov + $report->Dec; ?> </td><?php } ?>
+                                    <td class="gradient-cell" style="color: black;"><?php echo $report->Jan ?></td>
+                                    <?php if (date('m') == '01') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov + $report->Dec + $report->Jan; ?> </td><?php } ?>
+                                    <td class="gradient-cell" style="color: black;"><?php echo $report->Feb ?></td>
+                                    <?php if (date('m') == '02') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov + $report->Dec + $report->Jan + $report->Feb; ?> </td><?php } ?>
+                                    <td class="gradient-cell" style="color: black;"><?php echo $report->Mar ?></td>
+                                    <?php if (date('m') == '03') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov + $report->Dec + $report->Jan + $report->Feb + $report->Mar; ?> </td><?php } ?>
+                                    <td class="yearly_total" style="color: black;"><?php echo $report->total ?></td>
+                                </tr>
+                            <?php } ?>
+                        </table>
+                    </div>
+                    <div class="col-md-5">
+
+                        <?php
+                        $query = "SELECT YEAR(pc.cer_issue_date) as year,
+                        SUM(CASE WHEN pc.session_year_id = 1 THEN 1 ELSE 0 END) as `one`,
+                        SUM(CASE WHEN pc.session_year_id = 2 THEN 1 ELSE 0 END) as `two`,
+                        SUM(CASE WHEN pc.session_year_id = 3 THEN 1 ELSE 0 END) as `three`,
+                        SUM(CASE WHEN pc.session_year_id = 4 THEN 1 ELSE 0 END) as `four`,
+                        SUM(CASE WHEN pc.session_year_id = 5 THEN 1 ELSE 0 END) as `five`,
+                        SUM(CASE WHEN pc.session_year_id = 6 THEN 1 ELSE 0 END) as `six`,
+                        COUNT(0) as total_process
+                            FROM 
+                        `processed_cases` as pc
+                        GROUP BY YEAR(pc.cer_issue_date)
+                        ORDER BY YEAR(pc.cer_issue_date) DESC;";
+                        $reports  = $this->db->query($query)->result();
+
+                        ?>
+                        <table class="table table_small table-bordered" id="yearly_and_monthly_progress_report">
+                            <tr>
+                                <th colspan="14">Session and Yearly Processed Files</th>
+                            </tr>
+
+                            <tr>
+                                <th>Year</th>
+                                <th>2018-19</th>
+                                <th>2019-20</th>
+                                <th>2020-21</th>
+                                <th>2021-22</th>
+                                <th>2022-23</th>
+                                <th>2023-24</th>
+                                <th>Total</th>
+                            </tr>
+
+                            <?php foreach ($reports as $report) { ?>
+                                <tr>
+                                    <th><?php echo $report->year ?></td>
+                                    <td class="gradient-cell" style="color: black;"><?php echo $report->one; ?></td>
+                                    <td class="gradient-cell" style="color: black;"><?php echo $report->two; ?></td>
+                                    <td class="gradient-cell" style="color: black;"><?php echo $report->three; ?></td>
+                                    <td class="gradient-cell" style="color: black;"><?php echo $report->four; ?></td>
+                                    <td class="gradient-cell" style="color: black;"><?php echo $report->five; ?></td>
+                                    <td class="gradient-cell" style="color: black;"><?php echo $report->six; ?></td>
+                                    <td class="current_month" style="color: black;"><?php echo $report->total_process; ?></td>
+
+                                </tr>
+                            <?php } ?>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <div class="col-md-9">
+            <!-- Main content area -->
+            <h2>Welcome to the Dashboard</h2>
+            <p>This is your dashboard content.</p>
+        </div>
+    </div>
     </div>
 
 
