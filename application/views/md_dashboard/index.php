@@ -165,7 +165,7 @@
                         <?php if (date('m') == '11') { ?> <td> * </td><?php } ?>
                         <th>Dec</th>
                         <?php if (date('m') == '12') { ?> <td> * </td><?php } ?>
-                        <th>Jun</th>
+                        <th>Jan</th>
                         <?php if (date('m') == '01') { ?> <td> * </td><?php } ?>
                         <th>Feb</th>
                         <?php if (date('m') == '02') { ?> <td> * </td><?php } ?>
