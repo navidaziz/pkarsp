@@ -178,29 +178,29 @@
                         <tr>
                             <th><?php echo $report->Year ?></td>
                             <td class="gradient-cell" style="color: black;"><?php echo $report->Apr ?></td>
-                            <?php if (date('m') == '04') { ?> <td> <?php echo $report->Apr; ?> </td><?php } ?>
+                            <?php if (date('m') == '04') { ?> <td class="current_month"> <?php echo $report->Apr; ?> </td><?php } ?>
                             <td class="gradient-cell" style="color: black;"><?php echo $report->May ?></td>
-                            <?php if (date('m') == '05') { ?> <td> <?php echo $report->Apr + $report->May; ?> </td><?php } ?>
+                            <?php if (date('m') == '05') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May; ?> </td><?php } ?>
                             <td class="gradient-cell" style="color: black;"><?php echo $report->Jun ?></td>
-                            <?php if (date('m') == '06') { ?> <td> <?php echo $report->Apr + $report->May + $report->Jun; ?> </td><?php } ?>
+                            <?php if (date('m') == '06') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun; ?> </td><?php } ?>
                             <td class="gradient-cell" style="color: black;"><?php echo $report->Jul ?></td>
-                            <?php if (date('m') == '07') { ?> <td> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul; ?> </td><?php } ?>
+                            <?php if (date('m') == '07') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul; ?> </td><?php } ?>
                             <td class="gradient-cell" style="color: black;"><?php echo $report->Aug ?></td>
-                            <?php if (date('m') == '08') { ?> <td> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug; ?> </td><?php } ?>
+                            <?php if (date('m') == '08') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug; ?> </td><?php } ?>
                             <td class="gradient-cell" style="color: black;"><?php echo $report->Sep ?></td>
-                            <?php if (date('m') == '09') { ?> <td> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep; ?> </td><?php } ?>
+                            <?php if (date('m') == '09') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep; ?> </td><?php } ?>
                             <td class="gradient-cell" style="color: black;"><?php echo $report->Oct ?></td>
-                            <?php if (date('m') == '10') { ?> <td> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct; ?> </td><?php } ?>
+                            <?php if (date('m') == '10') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct; ?> </td><?php } ?>
                             <td class="gradient-cell" style="color: black;"><?php echo $report->Nov ?></td>
-                            <?php if (date('m') == '11') { ?> <td> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov; ?> </td><?php } ?>
+                            <?php if (date('m') == '11') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov; ?> </td><?php } ?>
                             <td class="gradient-cell" style="color: black;"><?php echo $report->Dec ?></td>
-                            <?php if (date('m') == '12') { ?> <td> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov + $report->Dec; ?> </td><?php } ?>
+                            <?php if (date('m') == '12') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov + $report->Dec; ?> </td><?php } ?>
                             <td class="gradient-cell" style="color: black;"><?php echo $report->Jun ?></td>
-                            <?php if (date('m') == '01') { ?> <td> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov + $report->Dec + $report->Jun; ?> </td><?php } ?>
+                            <?php if (date('m') == '01') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov + $report->Dec + $report->Jun; ?> </td><?php } ?>
                             <td class="gradient-cell" style="color: black;"><?php echo $report->Feb ?></td>
-                            <?php if (date('m') == '02') { ?> <td> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov + $report->Dec + $report->Jun + $report->Feb; ?> </td><?php } ?>
+                            <?php if (date('m') == '02') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov + $report->Dec + $report->Jun + $report->Feb; ?> </td><?php } ?>
                             <td class="gradient-cell" style="color: black;"><?php echo $report->Mar ?></td>
-                            <?php if (date('m') == '03') { ?> <td> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov + $report->Dec + $report->Jun + $report->Feb + $report->Mar; ?> </td><?php } ?>
+                            <?php if (date('m') == '03') { ?> <td class="current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov + $report->Dec + $report->Jun + $report->Feb + $report->Mar; ?> </td><?php } ?>
                             <td class="yearly_total" style="color: black;"><?php echo $report->total ?></td>
                         </tr>
                     <?php } ?>
@@ -262,7 +262,11 @@
                     if (value > 0) {
                         var factor = (value - minValue) / (maxValue - minValue);
                         var opacity = 0.3 + factor * (1 - 0.3); // Adjust opacity as needed
+
                         var color = `rgba(100, 149, 237, ${opacity})`;
+                        if (className == 'current_month') {
+                            var color = `rgba(152,251,152, ${opacity})`;
+                        }
                         element.style.backgroundColor = color;
                     }
 
@@ -282,6 +286,7 @@
         // Apply gradient colors to elements with the specified class name
         applyGradientColor("gradient-cell");
         applyGradientColor("yearly_total");
+        applyGradientColor("current_month");
     </script>
 
 
