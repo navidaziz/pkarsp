@@ -239,6 +239,244 @@
 
                     </tr>
                 </table>
+
+
+
+                <?php
+                $query = "SELECT 
+                 if((`new_region` = 1),'Central',if((`new_region` = 2),'South',if((`new_region` = 3),'Malakand',if((`new_region` = 4),'Hazara',if((`new_region` = 5),'Peshawar','Others'))))) AS `region`,
+                 new_region,
+                 count(*) as total,
+                SUM(IF(gender_type_id=1, 1,0 )) as boys,
+                SUM(IF(gender_type_id=2, 1,0 )) as girls,
+                SUM(IF(gender_type_id=3, 1,0 )) as co_edu
+                FROM `processed_cases` WHERE renewal_code<=0
+                GROUP BY new_region;";
+                $reports = $this->db->query($query)->result();
+                ?>
+                <table class="table table_small ">
+                    <tr>
+                        <th>Levels</th>
+                        <th>Total</th>
+                        <th>Boys</th>
+                        <th>Girls</th>
+                        <th>Co-Education</th>
+                        <th>New Registered</th>
+                        <th>Upgradation</th>
+                        <th>Latest Renewals</th>
+                        <th>Renewals %</th>
+                    </tr>
+                    <?php foreach ($reports as $report) { ?>
+                        <tr>
+                            <th><?php echo $report->region ?></th>
+                            <td><?php echo $report->total ?></td>
+                            <td><?php echo $report->boys ?></td>
+                            <td><?php echo $report->girls ?></td>
+                            <td><?php echo $report->co_edu ?></td>
+                            <?php
+                            $query = "SELECT COUNT(*) as total FROM `processed_cases` 
+                            WHERE renewal_code<=0 and session_year_id=(SELECT sessionYearId FROM `session_year` WHERE status=1) 
+                            and new_region='" . $report->new_region . "';";
+                            $current_registered = $this->db->query($query)->row();
+                            //$session->commulative_registration = $total_registration += $report->total;
+                            //$session->new_registration = $report->total;
+                            ?>
+                            <th><?php echo $current_registered->total; ?></th>
+                            <?php
+                            $query = "SELECT COUNT(*) as total FROM `processed_cases` 
+                            WHERE renewal_code>0 and session_year_id=(SELECT sessionYearId FROM `session_year` WHERE status=1) and upgrade=1 
+                            and new_region='" . $report->new_region . "';";
+                            $current_upgradation = $this->db->query($query)->row();
+                            //$session->commulative_registration = $total_registration += $report->total;
+                            //$session->new_registration = $report->total;
+                            ?>
+                            <th><?php echo $current_upgradation->total; ?></th>
+                            <?php
+                            $query = "SELECT COUNT(*) as total FROM `processed_cases` 
+                            WHERE renewal_code>0 and session_year_id=(SELECT sessionYearId FROM `session_year` WHERE status=1) 
+                            and new_region='" . $report->new_region . "';";
+                            $current_renewal = $this->db->query($query)->row();
+                            //$session->commulative_registration = $total_registration += $report->total;
+                            //$session->new_registration = $report->total;
+                            ?>
+                            <th><?php echo $current_renewal->total; ?></th>
+                            <th>
+                                <?php
+                                if ($report->total - $current_registered->total) {
+                                    echo round((($current_renewal->total / ($report->total - $current_registered->total)) * 100), 2) . " %";
+                                }
+                                ?>
+                            </th>
+
+                        </tr>
+                    <?php } ?>
+                    <?php $query = "SELECT 
+                                        current_level as current_level_id,
+                                        count(*) as total,
+                                SUM(IF(gender_type_id=1, 1,0 )) as boys,
+                                SUM(IF(gender_type_id=2, 1,0 )) as girls,
+                                SUM(IF(gender_type_id=3, 1,0 )) as co_edu
+                                FROM `processed_cases` WHERE renewal_code<=0";
+                    $report = $this->db->query($query)->row();
+                    ?>
+                    <tr>
+                        <th>Total</th>
+                        <th><?php echo $report->total ?></th>
+                        <th><?php echo $report->boys ?></th>
+                        <th><?php echo $report->girls ?></th>
+                        <th><?php echo $report->co_edu ?></th>
+                        <?php
+                        $query = "SELECT COUNT(*) as total FROM `processed_cases` 
+                            WHERE renewal_code<=0 and session_year_id='6' ";
+                        $current_registered = $this->db->query($query)->row();
+                        //$session->commulative_registration = $total_registration += $report->total;
+                        //$session->new_registration = $report->total;
+                        ?>
+                        <th><?php echo $current_registered->total; ?></th>
+                        <?php
+                        $query = "SELECT COUNT(*) as total FROM `processed_cases` 
+                            WHERE renewal_code>0 and session_year_id='6' and upgrade=1 ;";
+                        $current_upgradation = $this->db->query($query)->row();
+                        //$session->commulative_registration = $total_registration += $report->total;
+                        //$session->new_registration = $report->total;
+                        ?>
+                        <th><?php echo $current_upgradation->total; ?></th>
+                        <?php
+                        $query = "SELECT COUNT(*) as total FROM `processed_cases` 
+                            WHERE renewal_code>0 and session_year_id='6';";
+                        $current_renewal = $this->db->query($query)->row();
+                        //$session->commulative_registration = $total_registration += $report->total;
+                        //$session->new_registration = $report->total;
+                        ?>
+                        <th><?php echo $current_renewal->total; ?></th>
+                        <th>
+                            <?php
+                            echo round((($current_renewal->total / ($report->total - $current_registered->total)) * 100), 2) . " %";
+                            ?>
+                        </th>
+
+                    </tr>
+                </table>
+
+
+
+                <?php
+                $query = "SELECT 
+                 districtTitle,
+                 districtId,
+                 count(*) as total,
+                SUM(IF(gender_type_id=1, 1,0 )) as boys,
+                SUM(IF(gender_type_id=2, 1,0 )) as girls,
+                SUM(IF(gender_type_id=3, 1,0 )) as co_edu
+                FROM `processed_cases` WHERE renewal_code<=0
+                GROUP BY districtTitle;";
+                $reports = $this->db->query($query)->result();
+                ?>
+                <table class="table table_small ">
+                    <tr>
+                        <th>District</th>
+                        <th>Total</th>
+                        <th>Boys</th>
+                        <th>Girls</th>
+                        <th>Co-Education</th>
+                        <th>New Registered</th>
+                        <th>Upgradation</th>
+                        <th>Latest Renewals</th>
+                        <th>Renewals %</th>
+                    </tr>
+                    <?php foreach ($reports as $report) { ?>
+                        <tr>
+                            <th><?php echo $report->districtTitle ?></th>
+                            <td><?php echo $report->total ?></td>
+                            <td><?php echo $report->boys ?></td>
+                            <td><?php echo $report->girls ?></td>
+                            <td><?php echo $report->co_edu ?></td>
+                            <?php
+                            $query = "SELECT COUNT(*) as total FROM `processed_cases` 
+                            WHERE renewal_code<=0 and session_year_id=(SELECT sessionYearId FROM `session_year` WHERE status=1) 
+                            and new_region='" . $report->new_region . "';";
+                            $current_registered = $this->db->query($query)->row();
+                            //$session->commulative_registration = $total_registration += $report->total;
+                            //$session->new_registration = $report->total;
+                            ?>
+                            <th><?php echo $current_registered->total; ?></th>
+                            <?php
+                            $query = "SELECT COUNT(*) as total FROM `processed_cases` 
+                            WHERE renewal_code>0 and session_year_id=(SELECT sessionYearId FROM `session_year` WHERE status=1) and upgrade=1 
+                            and new_region='" . $report->new_region . "';";
+                            $current_upgradation = $this->db->query($query)->row();
+                            //$session->commulative_registration = $total_registration += $report->total;
+                            //$session->new_registration = $report->total;
+                            ?>
+                            <th><?php echo $current_upgradation->total; ?></th>
+                            <?php
+                            $query = "SELECT COUNT(*) as total FROM `processed_cases` 
+                            WHERE renewal_code>0 and session_year_id=(SELECT sessionYearId FROM `session_year` WHERE status=1) 
+                            and new_region='" . $report->new_region . "';";
+                            $current_renewal = $this->db->query($query)->row();
+                            //$session->commulative_registration = $total_registration += $report->total;
+                            //$session->new_registration = $report->total;
+                            ?>
+                            <th><?php echo $current_renewal->total; ?></th>
+                            <th>
+                                <?php
+                                if ($report->total - $current_registered->total) {
+                                    echo round((($current_renewal->total / ($report->total - $current_registered->total)) * 100), 2) . " %";
+                                }
+                                ?>
+                            </th>
+
+                        </tr>
+                    <?php } ?>
+                    <?php $query = "SELECT 
+                                        current_level as current_level_id,
+                                        count(*) as total,
+                                SUM(IF(gender_type_id=1, 1,0 )) as boys,
+                                SUM(IF(gender_type_id=2, 1,0 )) as girls,
+                                SUM(IF(gender_type_id=3, 1,0 )) as co_edu
+                                FROM `processed_cases` WHERE renewal_code<=0";
+                    $report = $this->db->query($query)->row();
+                    ?>
+                    <tr>
+                        <th>Total</th>
+                        <th><?php echo $report->total ?></th>
+                        <th><?php echo $report->boys ?></th>
+                        <th><?php echo $report->girls ?></th>
+                        <th><?php echo $report->co_edu ?></th>
+                        <?php
+                        $query = "SELECT COUNT(*) as total FROM `processed_cases` 
+                            WHERE renewal_code<=0 and session_year_id='6' ";
+                        $current_registered = $this->db->query($query)->row();
+                        //$session->commulative_registration = $total_registration += $report->total;
+                        //$session->new_registration = $report->total;
+                        ?>
+                        <th><?php echo $current_registered->total; ?></th>
+                        <?php
+                        $query = "SELECT COUNT(*) as total FROM `processed_cases` 
+                            WHERE renewal_code>0 and session_year_id='6' and upgrade=1 ;";
+                        $current_upgradation = $this->db->query($query)->row();
+                        //$session->commulative_registration = $total_registration += $report->total;
+                        //$session->new_registration = $report->total;
+                        ?>
+                        <th><?php echo $current_upgradation->total; ?></th>
+                        <?php
+                        $query = "SELECT COUNT(*) as total FROM `processed_cases` 
+                            WHERE renewal_code>0 and session_year_id='6';";
+                        $current_renewal = $this->db->query($query)->row();
+                        //$session->commulative_registration = $total_registration += $report->total;
+                        //$session->new_registration = $report->total;
+                        ?>
+                        <th><?php echo $current_renewal->total; ?></th>
+                        <th>
+                            <?php
+                            echo round((($current_renewal->total / ($report->total - $current_registered->total)) * 100), 2) . " %";
+                            ?>
+                        </th>
+
+                    </tr>
+                </table>
+
+
             </div>
             <div class="col-md-8">
                 <div class="row">
