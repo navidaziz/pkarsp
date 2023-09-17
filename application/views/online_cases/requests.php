@@ -11,6 +11,7 @@
         <th>#</th>
         <?php if ($list_type == 5) { ?>
           <th>Type</th>
+          <th>Contact</th>
         <?php } ?>
         <th>Insti.ID</th>
         <th>Level</th>
@@ -55,6 +56,10 @@
                 <td><?php echo $count++; ?> </td>
                 <?php if ($list_type == 5) { ?>
                   <td><?php echo $request->regTypeTitle; ?></td>
+                  <td><?php echo $request->telePhoneNumber; ?>,
+                    <?php echo $request->schoolMobileNumber; ?>,
+                    <?php echo $request->principal_contact_no; ?>,
+                    <?php echo $request->owner_contact_no; ?></td>
                 <?php } ?>
                 <td><?php echo $request->schools_id ?></td>
                 <td>

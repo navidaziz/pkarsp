@@ -450,6 +450,8 @@
                                 FROM `processed_cases` WHERE renewal_code<=0";
                         $report = $this->db->query($query)->row();
                         ?>
+                    </tbody>
+                    <tfoot>
                         <tr>
                             <th>Total</th>
                             <th><?php echo $report->total ?></th>
@@ -487,7 +489,7 @@
                             </th>
 
                         </tr>
-                    </tbody>
+                    </tfoot>
                 </table>
 
 
