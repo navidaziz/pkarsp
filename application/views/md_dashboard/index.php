@@ -627,12 +627,12 @@
                             <?php foreach ($reports as $report) { ?>
                                 <tr>
                                     <th><?php echo $report->year ?></td>
-                                    <td class="gradient-cell" style="color: black;"><?php echo $report->one; ?></td>
-                                    <td class="gradient-cell" style="color: black;"><?php echo $report->two; ?></td>
-                                    <td class="gradient-cell" style="color: black;"><?php echo $report->three; ?></td>
-                                    <td class="gradient-cell" style="color: black;"><?php echo $report->four; ?></td>
-                                    <td class="gradient-cell" style="color: black;"><?php echo $report->five; ?></td>
-                                    <td class="gradient-cell" style="color: black;"><?php echo $report->six; ?></td>
+                                    <td class="gradient-cell2" style="color: black;"><?php echo $report->one; ?></td>
+                                    <td class="gradient-cell2" style="color: black;"><?php echo $report->two; ?></td>
+                                    <td class="gradient-cell2" style="color: black;"><?php echo $report->three; ?></td>
+                                    <td class="gradient-cell2" style="color: black;"><?php echo $report->four; ?></td>
+                                    <td class="gradient-cell2" style="color: black;"><?php echo $report->five; ?></td>
+                                    <td class="gradient-cell2" style="color: black;"><?php echo $report->six; ?></td>
                                     <td class="current_month" style="color: black;"><?php echo $report->total_process; ?></td>
 
                                 </tr>
@@ -1222,6 +1222,7 @@
 
         // Apply gradient colors to elements with the specified class name
         applyGradientColor("gradient-cell");
+        applyGradientColor("gradient-cell2");
         applyGradientColor("yearly_total");
         applyGradientColor("current_month");
         $(document).ready(function() {

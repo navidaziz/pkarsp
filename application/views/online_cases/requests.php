@@ -88,6 +88,7 @@
                 <td colspan="5"></td>
                 <?php if ($list_type == 5) { ?>
                   <td></td>
+                  <td></td>
                 <?php } ?>
 
                 <td style="display: none;"></td>
