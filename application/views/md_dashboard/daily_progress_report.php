@@ -12,15 +12,22 @@
 
             // loop through each day from one month ago until today and output the date in a desired format
             for ($i = $one_month_ago; $i <= $current_date; $i = strtotime('+1 day', $i)) {
-                $date = date('d-M', $i);
+                $date = date('d M', $i);
+                $date = date('d', $i);
+                $month = date('M', $i);
+                $day = date('D', $i);
 
             ?>
-                <th style="width: 20px;"> <?php echo $date;
-                                            echo '<br />';
-                                            if (date('N', $i) < 6) {
-                                                $working_days++;
-                                            }
-                                            ?></th>
+                <th style="width: 20px;">
+                    <?php echo date('d', $i); ?>
+                    <small><?php echo date('M', $i); ?>
+                        <?php //echo date('D', $i) 
+                        ?>
+                    </small>
+                    <?php if (date('N', $i) < 6) {
+                        $working_days++;
+                    } ?>
+                </th>
             <?php
             }
             ?>
@@ -39,6 +46,7 @@
             <?php } ?>
             <th style="text-align: center;">
                 <?php $query = "SELECT COUNT(*) as total FROM school WHERE (DATE(apply_date) BETWEEN '" . date('Y-m-d', $one_month_ago) . "' and '" . date('Y-m-d', $current_date) . "')";
+
                 echo $total = $this->db->query($query)->row()->total; ?>
             </th>
             <th></th>
@@ -67,7 +75,10 @@
                     $total = $this->db->query($query)->row()->total;
                 ?>
                     <td class="current_month">
-                        <?php echo $total;  ?>
+                        <?php
+                        if ($total) {
+                            echo $total;
+                        }  ?>
                     </td>
                 <?php } ?>
                 <th style="text-align: center;">
@@ -145,21 +156,6 @@
 
                 ?>
             </th>
-            <!-- <th style="text-align: center;">
-                        <?php
-                        // $query = "
-                        // SELECT AVG(total) AS avg_daily_entries
-                        // FROM (SELECT COUNT(school.note_sheet_completed) as total FROM `school`
-                        // INNER JOIN users ON(users.userId = school.note_sheet_completed)
-                        // AND school.file_status IN (10,4)
-                        // AND users.userId = '" . $user->userId . "'
-                        //       GROUP BY DATE(note_sheet_completed_date)
-                        //       )
-                        // AS daily_counts;
-                        // ";
-                        //echo $total = round($this->db->query($query)->row()->avg_daily_entries, 2);
-                        ?>
-                      </th> -->
         </tr>
         <tr>
             <th style="position: sticky;"><small>Daily Cer. Issued (MIS)</small></th>
