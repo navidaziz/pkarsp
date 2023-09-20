@@ -48,13 +48,20 @@
                 <div id="level_wise_summary"></div>
                 <div id="region_wise_summary"></div>
                 <div id="district_wise_summary"></div>
-
-
-
-
-
             </div>
-
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div id="yearly_monthly_summary"></div>
+                    </div>
+                    <div class="col-md-5">
+                        <div id="yearly_monthly_session_summary"></div>
+                    </div>
+                    <div class="col-md-12">
+                        <div id="daily_progress_report"></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
 
@@ -80,7 +87,7 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script>
         function get_report(funcation_name) {
-
+            $('#' + funcation_name).html('<h5 style="text-align: center;" class="linear-background"></h5>');
             $.ajax({
                     method: "POST",
                     url: "<?php echo site_url('md_dashboard/'); ?>" + funcation_name,
@@ -97,6 +104,9 @@
         get_report("level_wise_summary");
         get_report("region_wise_summary");
         get_report("district_wise_summary");
+        get_report("yearly_monthly_summary");
+        get_report("yearly_monthly_session_summary");
+        get_report("daily_progress_report");
     </script>
 
     <script>
@@ -179,6 +189,20 @@
         .dataTables_filter,
         .dataTables_info {
             display: none;
+        }
+
+        .linear-background {
+            animation-duration: 1s;
+            animation-fill-mode: forwards;
+            animation-iteration-count: infinite;
+            animation-name: placeHolderShimmer;
+            animation-timing-function: linear;
+            background: #f6f7f8;
+            background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+            background-size: 1000px 104px;
+            height: 30px;
+            position: relative;
+            overflow: hidden;
         }
     </style>
 
