@@ -50,7 +50,7 @@
                 echo $total = $this->db->query($query)->row()->total; ?>
             </th>
             <th></th>
-            <th></th>
+            <th><?php echo round($total / $working_days, 2); ?></th>
         </tr>
 
         <?php
@@ -87,7 +87,7 @@
                         AND school.file_status IN (10,4)
                         AND users.userId = '" . $user->userId . "'
                         AND (DATE(note_sheet_completed_date) BETWEEN '" . date('Y-m-d', $one_month_ago) . "' and '" . date('Y-m-d', $current_date) . "')";
-                    echo $total = $this->db->query($query)->row()->total; ?>
+                    echo $thirty_day_total = $this->db->query($query)->row()->total; ?>
                 </th>
                 <th style="text-align: center;">
                     <?php $query = "SELECT COUNT(school.note_sheet_completed) as total FROM `school`
@@ -98,7 +98,7 @@
                 </th>
                 <th>
                     <?php if ($total) {
-                        echo round($total / $working_days, 2);
+                        echo round($thirty_day_total / $working_days, 2);
                     }
 
                     ?>
@@ -141,7 +141,7 @@
                         INNER JOIN users ON(users.userId = school.note_sheet_completed)
                         AND school.file_status IN (10,4)
                         AND (DATE(note_sheet_completed_date) BETWEEN '" . date('Y-m-d', $one_month_ago) . "' and '" . date('Y-m-d', $current_date) . "')";
-                echo $total = $this->db->query($query)->row()->total; ?>
+                echo $thirty_day_completed = $this->db->query($query)->row()->total; ?>
             </th>
             <th style="text-align: center;">
                 <?php $query = "SELECT COUNT(school.note_sheet_completed) as total FROM `school`
@@ -150,8 +150,8 @@
                 echo $total = $this->db->query($query)->row()->total; ?>
             </th>
             <th>
-                <?php if ($total) {
-                    echo round($total / $working_days, 2);
+                <?php if ($thirty_day_completed) {
+                    echo round($thirty_day_completed / $working_days, 2);
                 }
 
                 ?>
@@ -173,7 +173,7 @@
                 echo $total = $this->db->query($query)->row()->total; ?>
             </th>
             <th></th>
-            <th></th>
+            <th><?php echo round($total / $working_days, 2) ?></th>
         </tr>
     </table>
 

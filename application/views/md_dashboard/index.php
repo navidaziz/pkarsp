@@ -58,6 +58,7 @@
                         <div id="yearly_monthly_session_summary"></div>
                     </div>
                     <div class="col-md-12">
+                        <div id="region_progress_report"></div>
                         <div id="daily_progress_report"></div>
                     </div>
                 </div>
@@ -106,6 +107,7 @@
         get_report("district_wise_summary");
         get_report("yearly_monthly_summary");
         get_report("yearly_monthly_session_summary");
+        get_report("region_progress_report");
         get_report("daily_progress_report");
     </script>
 
