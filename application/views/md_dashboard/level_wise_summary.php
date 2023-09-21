@@ -37,9 +37,9 @@ $current_session = $this->db->query($query)->row();
         foreach ($reports as $report) { ?>
             <tr>
                 <th><?php echo $report->level ?></th>
-                <td><?php echo $report->total;
-                    $total_registered += $report->total;
-                    ?></td>
+                <td class="level_total_registered"><?php echo $report->total;
+                                                    $total_registered += $report->total;
+                                                    ?></td>
                 <?php
                 $query = "SELECT COUNT(*) as total FROM `school` 
                             WHERE renewal_code<=0 
@@ -48,8 +48,8 @@ $current_session = $this->db->query($query)->row();
                             AND level_of_school_id='" . $report->level_of_school_id . "';";
                 $current_registered = $this->db->query($query)->row();
                 ?>
-                <th><?php echo $current_registered->total; ?></th>
-                <th></th>
+                <th class="level_new_registration"><?php echo $current_registered->total; ?></th>
+                <th class="level_upgradation"></th>
                 <?php
                 $query = "SELECT COUNT(*) as total FROM `school` 
                             WHERE renewal_code>0 
@@ -59,8 +59,8 @@ $current_session = $this->db->query($query)->row();
                 $current_renewal = $this->db->query($query)->row();
 
                 ?>
-                <th><?php echo $current_renewal->total; ?></th>
-                <th>
+                <th class="level_renewal_total"><?php echo $current_renewal->total; ?></th>
+                <th class="level_precentage">
                     <?php
                     echo round((($current_renewal->total / ($report->total - $current_registered->total)) * 100), 2) . " %";
                     ?>

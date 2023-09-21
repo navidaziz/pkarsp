@@ -47,8 +47,8 @@ $current_session = $this->db->query($query)->row();
                 AND district.new_region ='" . $report->new_region . "'";
                 $current_registered = $this->db->query($query)->row();
                 ?>
-                <th><?php echo $current_registered->total; ?></th>
-                <th></th>
+                <th class="region_registered"><?php echo $current_registered->total; ?></th>
+                <th class="region_upgradation"></th>
                 <?php
                 $query = "SELECT COUNT(*) as total
                 FROM school
@@ -62,8 +62,8 @@ $current_session = $this->db->query($query)->row();
                 $current_renewal = $this->db->query($query)->row();
 
                 ?>
-                <th><?php echo $current_renewal->total; ?></th>
-                <th>
+                <th class="region_total"><?php echo $current_renewal->total; ?></th>
+                <th class="region_precentage">
                     <?php
                     echo round((($current_renewal->total / ($report->total - $current_registered->total)) * 100), 2) . " %";
                     ?>

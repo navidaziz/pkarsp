@@ -59,6 +59,7 @@
                     </div>
                     <div class="col-md-12">
                         <div id="region_progress_report"></div>
+                        <div id="session_progress_report"></div>
                         <div id="daily_progress_report"></div>
                     </div>
                 </div>
@@ -98,6 +99,47 @@
                 })
                 .done(function(respose) {
                     $('#' + funcation_name).html(respose);
+                    applyGradientColor("y_m_summary_report");
+                    applyGradientColor("y_m_current_month");
+                    applyGradientColor("y_m_s_s_report");
+                    applyGradientColor("y_m_s_s_current_year_report");
+                    applyGradientColor("district_precentage");
+                    applyGradientColor("district_total");
+                    applyGradientColor("daily_progress");
+                    applyGradientColor("daily_apply");
+                    applyGradientColor("days_total");
+                    applyGradientColor("daily_over_all");
+                    applyGradientColor("days_avg");
+                    applyGradientColor("daily_completed");
+
+
+
+
+
+                    applyGradientColor("district_reg_total");
+                    applyGradientColor("district_upgradation");
+                    applyGradientColor("district_registration");
+
+                    applyGradientColor("region_registered");
+                    applyGradientColor("region_upgradation");
+                    applyGradientColor("region_total");
+                    applyGradientColor("region_precentage");
+
+                    applyGradientColor("level_total_registered");
+                    applyGradientColor("level_new_registration");
+                    applyGradientColor("level_upgradation");
+                    applyGradientColor("level_renewal_total");
+                    applyGradientColor("level_precentage");
+
+
+
+
+
+
+
+
+
+
                 });
         }
 
@@ -108,6 +150,7 @@
         get_report("yearly_monthly_summary");
         get_report("yearly_monthly_session_summary");
         get_report("region_progress_report");
+        get_report("session_progress_report");
         get_report("daily_progress_report");
     </script>
 
@@ -144,9 +187,15 @@
                         var opacity = 0.3 + factor * (1 - 0.3); // Adjust opacity as needed
 
                         var color = `rgba(100, 149, 237, ${opacity})`;
-                        if (className == 'current_month') {
+                        if (className == 'y_m_current_month') {
                             var color = `rgba(152,251,152, ${opacity})`;
                         }
+                        if (className == 'y_m_s_s_current_year_report') {
+                            var color = `rgba(152,251,152, ${opacity})`;
+                        }
+
+
+
                         element.style.backgroundColor = color;
                     }
 
@@ -168,6 +217,8 @@
         applyGradientColor("gradient-cell2");
         applyGradientColor("yearly_total");
         applyGradientColor("current_month");
+        applyGradientColor("gradient-cell");
+
         // $(document).ready(function() {
         //     $('.datatable').DataTable({
         //         dom: 'Bfrtip',

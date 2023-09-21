@@ -64,4 +64,11 @@ class Md_dashboard extends CI_Controller
       $this->data['description'] = 'Monitoring and evaluation dashboard';
       $this->load->view('md_dashboard/region_progress_report', $this->data);
    }
+
+   public function session_progress_report()
+   {
+      $this->data['title'] = 'PSRA Dashboard';
+      $this->data['description'] = 'Monitoring and evaluation dashboard';
+      $this->load->view('md_dashboard/session_progress_report', $this->data);
+   }
 }

@@ -40,7 +40,7 @@
             <?php for ($i = $one_month_ago; $i <= $current_date; $i = strtotime('+1 day', $i)) {
                 $date = date('Y-m-d', $i);
                 $query = "SELECT COUNT(*) as total FROM school WHERE DATE(apply_date) = '" . $date . "'"; ?>
-                <td>
+                <td class="daily_apply">
                     <?php echo $this->db->query($query)->row()->total;  ?>
                 </td>
             <?php } ?>
@@ -74,14 +74,14 @@
                         AND DATE(note_sheet_completed_date) = '" . $date . "'";
                     $total = $this->db->query($query)->row()->total;
                 ?>
-                    <td class="current_month">
+                    <td class="daily_progress">
                         <?php
                         if ($total) {
                             echo $total;
                         }  ?>
                     </td>
                 <?php } ?>
-                <th style="text-align: center;">
+                <th class="days_total">
                     <?php $query = "SELECT COUNT(school.note_sheet_completed) as total FROM `school`
                         INNER JOIN users ON(users.userId = school.note_sheet_completed)
                         AND school.file_status IN (10,4)
@@ -89,14 +89,14 @@
                         AND (DATE(note_sheet_completed_date) BETWEEN '" . date('Y-m-d', $one_month_ago) . "' and '" . date('Y-m-d', $current_date) . "')";
                     echo $thirty_day_total = $this->db->query($query)->row()->total; ?>
                 </th>
-                <th style="text-align: center;">
+                <th class="daily_over_all">
                     <?php $query = "SELECT COUNT(school.note_sheet_completed) as total FROM `school`
                         INNER JOIN users ON(users.userId = school.note_sheet_completed)
                         AND school.file_status IN (10,4)
                         AND users.userId = '" . $user->userId . "'";
                     echo $total = $this->db->query($query)->row()->total; ?>
                 </th>
-                <th>
+                <th class="days_avg">
                     <?php if ($total) {
                         echo round($thirty_day_total / $working_days, 2);
                     }
@@ -132,7 +132,7 @@
                         AND DATE(note_sheet_completed_date) = '" . $date . "'";
                 $total = $this->db->query($query)->row()->total;
             ?>
-                <td style="background-color: rgba(0, 255, 0, <?php echo $total; ?>%);">
+                <td class="daily_completed">
                     <?php echo $total;  ?>
                 </td>
             <?php } ?>

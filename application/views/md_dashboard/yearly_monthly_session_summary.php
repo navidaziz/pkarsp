@@ -34,13 +34,13 @@ $reports  = $this->db->query($query)->result();
     <?php foreach ($reports as $report) { ?>
         <tr>
             <th><?php echo $report->year ?></td>
-            <td class="gradient-cell2" style="color: black;"><?php echo $report->one; ?></td>
-            <td class="gradient-cell2" style="color: black;"><?php echo $report->two; ?></td>
-            <td class="gradient-cell2" style="color: black;"><?php echo $report->three; ?></td>
-            <td class="gradient-cell2" style="color: black;"><?php echo $report->four; ?></td>
-            <td class="gradient-cell2" style="color: black;"><?php echo $report->five; ?></td>
-            <td class="gradient-cell2" style="color: black;"><?php echo $report->six; ?></td>
-            <td class="current_month" style="color: black;"><?php echo $report->total_process; ?></td>
+            <td class="y_m_s_s_report" style="color: black;"><?php echo $report->one; ?></td>
+            <td class="y_m_s_s_report" style="color: black;"><?php echo $report->two; ?></td>
+            <td class="y_m_s_s_report" style="color: black;"><?php echo $report->three; ?></td>
+            <td class="y_m_s_s_report" style="color: black;"><?php echo $report->four; ?></td>
+            <td class="y_m_s_s_report" style="color: black;"><?php echo $report->five; ?></td>
+            <td class="y_m_s_s_report" style="color: black;"><?php echo $report->six; ?></td>
+            <td class="y_m_s_s_current_year_report" style="color: black;"><?php echo $report->total_process; ?></td>
 
         </tr>
     <?php } ?>

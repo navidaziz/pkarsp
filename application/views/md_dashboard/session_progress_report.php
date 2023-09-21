@@ -1,5 +1,5 @@
 <?php $start_time = microtime(true);
-$query = "SELECT if((`district`.`new_region` = 1),'Central',if((`district`.`new_region` = 2),'South',if((`district`.`new_region` = 3),'Malakand',if((`district`.`new_region` = 4),'Hazara',if((`district`.`new_region` = 5),'Peshawar','Others'))))) AS `region`,
+$query = "SELECT `session_year`.`sessionYearTitle`,
 sum(if(`school`.`file_status` >=1 and school.status>0 ,1,0)) AS `total_applied`,
 sum(if(`school`.`file_status` =3 and school.status=2 ,1,0)) AS `previous_pending`,
 sum(if(`school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `total_pending`,
@@ -39,11 +39,11 @@ if ($this->input->post('level_id')) {
     $level_id = (int) $this->input->post('level_id');
     $query .= " AND `school`.`level_of_school_id`= '" . $level_id . "' ";
 }
-$query .= " group by `district`.`new_region`";
+$query .= " GROUP BY `school`.`session_year_id`";
 $pending_files = $this->db->query($query)->result();
 ?>
 
-<strong>Region Wise Progress Summary Report </strong>
+<strong>Session Wise Progress Summary Report </strong>
 <div class="table-respons ive">
 
 
@@ -57,7 +57,7 @@ $pending_files = $this->db->query($query)->result();
                 <th colspan="4">Fina. Deficients</th>
             </tr>
             <tr>
-                <td style="text-align: center;">Region</td>
+                <td style="text-align: center;">Session</td>
                 <td style="text-align: center;">Applied</td>
                 <td style="text-align: center;">Pending (Queue)</td>
                 <td style="text-align: center;">Total Pending</td>
@@ -89,7 +89,7 @@ $pending_files = $this->db->query($query)->result();
             <?php
             foreach ($pending_files as $pending) { ?>
                 <tr>
-                    <th style="text-align: center;"><?php echo $pending->region; ?></th>
+                    <th style="text-align: center;"><?php echo $pending->sessionYearTitle; ?></th>
                     <td><?php echo $pending->total_applied; ?></td>
                     <td><?php echo $pending->previous_pending; ?></td>
                     <th style="text-align: center;"><?php echo $pending->total_pending; ?></th>

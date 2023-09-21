@@ -32,9 +32,9 @@ $current_session = $this->db->query($query)->row();
         foreach ($reports as $report) { ?>
             <tr>
                 <th><?php echo $report->districtTitle ?></th>
-                <td><?php echo $report->total;
-                    $total_registered += $report->total;
-                    ?></td>
+                <td class="district_reg_total"><?php echo $report->total;
+                                                $total_registered += $report->total;
+                                                ?></td>
                 <?php
                 $query = "SELECT COUNT(*) as total
                 FROM school
@@ -47,8 +47,8 @@ $current_session = $this->db->query($query)->row();
                 AND district.districtId ='" . $report->districtId . "'";
                 $current_registered = $this->db->query($query)->row();
                 ?>
-                <th><?php echo $current_registered->total; ?></th>
-                <th></th>
+                <th class="district_registration"><?php echo $current_registered->total; ?></th>
+                <th class="district_upgradation"></th>
                 <?php
                 $query = "SELECT COUNT(*) as total
                 FROM school
@@ -62,8 +62,8 @@ $current_session = $this->db->query($query)->row();
                 $current_renewal = $this->db->query($query)->row();
 
                 ?>
-                <th><?php echo $current_renewal->total; ?></th>
-                <th>
+                <td class="district_total"><?php echo $current_renewal->total; ?></td>
+                <th class="district_precentage">
                     <?php
                     echo round((($current_renewal->total / ($report->total - $current_registered->total)) * 100), 2) . " %";
                     ?>
