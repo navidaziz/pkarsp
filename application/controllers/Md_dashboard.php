@@ -9,11 +9,22 @@ class Md_dashboard extends CI_Controller
       $this->load->helper('project_helper');
    }
 
+
+
+
+
    public function index()
    {
       $this->data['title'] = 'PSRA Dashboard';
       $this->data['description'] = 'Monitoring and evaluation dashboard';
       $this->load->view('md_dashboard/index', $this->data);
+   }
+
+   public function registration_summary()
+   {
+      $this->data['title'] = 'PSRA Dashboard';
+      $this->data['description'] = 'Monitoring and evaluation dashboard';
+      $this->load->view('md_dashboard/registration_summary', $this->data);
    }
 
    public function summary()
@@ -70,5 +81,12 @@ class Md_dashboard extends CI_Controller
       $this->data['title'] = 'PSRA Dashboard';
       $this->data['description'] = 'Monitoring and evaluation dashboard';
       $this->load->view('md_dashboard/session_progress_report', $this->data);
+   }
+
+   public function students_summary_report()
+   {
+      $this->data['title'] = 'PSRA Dashboard';
+      $this->data['description'] = 'Monitoring and evaluation dashboard';
+      $this->load->view('md_dashboard/students_summary_report', $this->data);
    }
 }

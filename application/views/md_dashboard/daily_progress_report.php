@@ -64,7 +64,7 @@
         foreach ($users as $user) {
         ?>
             <tr>
-                <th><small><?php echo $user->userTitle; ?></small></th>
+                <th style="text-align: left;"><?php echo $user->userTitle; ?></th>
                 <?php for ($i = $one_month_ago; $i <= $current_date; $i = strtotime('+1 day', $i)) {
                     $date = date('Y-m-d', $i);
                     $query = "SELECT COUNT(school.note_sheet_completed) as total FROM `school`
@@ -75,10 +75,12 @@
                     $total = $this->db->query($query)->row()->total;
                 ?>
                     <td class="daily_progress">
+
                         <?php
                         if ($total) {
                             echo $total;
                         }  ?>
+
                     </td>
                 <?php } ?>
                 <th class="days_total">

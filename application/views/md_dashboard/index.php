@@ -10,9 +10,30 @@
     <!-- Include Highcharts library from CDN -->
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/heatmap.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
 
 </head>
 <style>
+    .table_small2>tbody>tr>td,
+    .table_small2>tbody>tr>th,
+    .table_small2>tfoot>tr>td,
+    .table_small2>tfoot>tr>th,
+    .table_small2>thead>tr>td,
+    .table_small2>thead>tr>th {
+        padding: 3px;
+        line-height: 1.42857143;
+        vertical-align: top;
+        border-top: 1px solid #ddd;
+        font-size: 10px;
+        text-align: center;
+        border: 0px !important;
+    }
+
     .table_small>tbody>tr>td,
     .table_small>tbody>tr>th,
     .table_small>tfoot>tr>td,
@@ -25,7 +46,10 @@
         border-top: 1px solid #ddd;
         font-size: 9px;
         text-align: center;
+        border: 0px !important;
     }
+
+
 
     .container,
     .container-lg,
@@ -34,6 +58,34 @@
     .container-xl {
         max-width: 100%;
     }
+
+    .female {
+        background-color: #FFB1CB;
+        width: 100%;
+        display: block;
+        margin-top: 2px;
+        padding: 2px;
+        color: #fff;
+
+    }
+
+    .male {
+        background-color: #01A6EA;
+        width: 100%;
+        display: block;
+        margin-top: 2px;
+        padding: 2px;
+        color: #fff;
+    }
+
+    .female_male {
+        background-color: #FFCC10;
+        width: 100%;
+        display: block;
+        margin-top: 1px;
+        padding: 2px;
+        color: #fff;
+    }
 </style>
 
 
@@ -41,11 +93,18 @@
 
 
     <!-- Dashboard Content -->
-    <div class="container">
+    <div class="container" style="padding-top: 5px;">
         <div class="row">
             <div class="col-md-4">
+                <div id="registration_summary"></div>
+                <div id="container2" style="height: 280px;"></div>
+                <div id="container" style="height: 300px;"></div>
+
                 <div id="summary"></div>
+
+                <div id="level_wise_summary_chart" style="height: 300px;"></div>
                 <div id="level_wise_summary"></div>
+                <div id="region_wise_summary_chart"></div>
                 <div id="region_wise_summary"></div>
                 <div id="district_wise_summary"></div>
             </div>
@@ -61,6 +120,7 @@
                         <div id="region_progress_report"></div>
                         <div id="session_progress_report"></div>
                         <div id="daily_progress_report"></div>
+                        <div id="students_summary_report"></div>
                     </div>
                 </div>
             </div>
@@ -99,6 +159,14 @@
                 })
                 .done(function(respose) {
                     $('#' + funcation_name).html(respose);
+                    applyGradientColor("new_registrations");
+                    applyGradientColor("commulative_registration");
+                    applyGradientColor("renewals");
+                    applyGradientColor("renewals_remanings");
+
+
+
+
                     applyGradientColor("y_m_summary_report");
                     applyGradientColor("y_m_current_month");
                     applyGradientColor("y_m_s_s_report");
@@ -143,6 +211,7 @@
                 });
         }
 
+        get_report("registration_summary");
         get_report("summary");
         get_report("level_wise_summary");
         get_report("region_wise_summary");
@@ -152,6 +221,8 @@
         get_report("region_progress_report");
         get_report("session_progress_report");
         get_report("daily_progress_report");
+
+        //get_report("students_summary_report");
     </script>
 
     <script>
@@ -193,6 +264,43 @@
                         if (className == 'y_m_s_s_current_year_report') {
                             var color = `rgba(152,251,152, ${opacity})`;
                         }
+                        if (className == 'new_registrations') {
+                            var color = `rgba(44, 175, 253, ${opacity})`;
+                        }
+                        if (className == 'renewals') {
+                            var color = `rgba(152,251,152, ${opacity})`;
+                        }
+                        if (className == 'renewals_remanings') {
+                            var color = `rgba(255, 180, 180, ${opacity})`;
+                        }
+
+                        if (className == 'daily_apply') {
+                            var color = `rgba(238, 108, 77, ${opacity})`;
+                        }
+
+                        if (className == 'daily_completed') {
+                            var color = `rgba(251, 203, 4, ${opacity})`;
+                        }
+
+                        if (className == 'days_total') {
+                            var color = `rgba( 245, 245, 219, ${opacity})`;
+                        }
+
+                        if (className == 'daily_over_all') {
+                            var color = `rgba( 90, 209, 253, ${opacity})`;
+                        }
+
+                        if (className == 'days_avg') {
+                            var color = `rgba(147, 176, 217, ${opacity})`;
+                        }
+
+
+
+
+
+
+
+
 
 
 
@@ -258,7 +366,6 @@
             overflow: hidden;
         }
     </style>
-
 
 
 

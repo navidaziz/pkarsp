@@ -29,11 +29,14 @@ $current_session = $this->db->query($query)->row();
         <?php
         $total_registered = 0;
 
+        $regions = array();
+
         foreach ($reports as $report) { ?>
             <tr>
                 <th><?php echo $report->region ?></th>
                 <td><?php echo $report->total;
                     $total_registered += $report->total;
+                    $regions[$report->region]['total'] = $report->total;
                     ?></td>
                 <?php
                 $query = "SELECT COUNT(*) as total
@@ -62,7 +65,9 @@ $current_session = $this->db->query($query)->row();
                 $current_renewal = $this->db->query($query)->row();
 
                 ?>
-                <th class="region_total"><?php echo $current_renewal->total; ?></th>
+                <th class="region_total"><?php echo $current_renewal->total;
+                                            $regions[$report->region]['renewal'] = $current_renewal->total;
+                                            ?></th>
                 <th class="region_precentage">
                     <?php
                     echo round((($current_renewal->total / ($report->total - $current_registered->total)) * 100), 2) . " %";
@@ -118,3 +123,65 @@ $execution_time = $end_time - $start_time; // Calculate the execution time
 
 echo "<small>Execution Time: " . $execution_time . " seconds </small>";
 ?>
+
+<script>
+    Highcharts.chart('region_wise_summary_chart', {
+        title: {
+            text: 'Sales of petroleum products March, Norway',
+            align: 'left'
+        },
+        xAxis: {
+            categories: [
+                <?php foreach ($regions as $region_name => $region) { ?>
+                    <?php echo "'" . $region_name . "', "; ?>
+                <?php } ?>
+            ]
+        },
+        yAxis: {
+            title: {
+                text: 'Million liters'
+            }
+        },
+        tooltip: {
+            valueSuffix: ' million liters'
+        },
+        plotOptions: {
+            series: {
+                borderRadius: '25%'
+            }
+        },
+        series: [{
+                type: 'column',
+                name: 'Registered',
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: true,
+                data: [
+                    <?php foreach ($regions as $region_name => $region) { ?>
+                        <?php echo "" . $region['total'] . ", "; ?>
+                    <?php } ?>
+                ]
+            }, {
+                type: 'bar',
+                name: 'Average',
+                color: 'red',
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: true,
+                data: [
+                    <?php foreach ($regions as $region_name => $region) { ?>
+                        <?php echo "" . $region['renewal'] . ", "; ?>
+                    <?php } ?>
+                ],
+                marker: {
+                    lineWidth: 2,
+                    lineColor: Highcharts.getOptions().colors[3],
+                    fillColor: 'white'
+                }
+            },
+
+        ]
+    });
+</script>

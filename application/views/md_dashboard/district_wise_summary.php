@@ -11,6 +11,7 @@ WHERE school.schoolId = (select MAX(s.schoolId) from school as s WHERE s.schools
 AND school.status=1
 GROUP BY districtId;";
 $reports = $this->db->query($query)->result();
+$districts = array();
 $query = "SELECT sessionYearId FROM `session_year` WHERE status=1";
 $current_session = $this->db->query($query)->row();
 ?>
@@ -31,7 +32,9 @@ $current_session = $this->db->query($query)->row();
 
         foreach ($reports as $report) { ?>
             <tr>
-                <th><?php echo $report->districtTitle ?></th>
+                <th><?php
+                    $districts[$report->districtTitle]['total'] = $report->total;
+                    echo $report->districtTitle ?></th>
                 <td class="district_reg_total"><?php echo $report->total;
                                                 $total_registered += $report->total;
                                                 ?></td>
@@ -111,6 +114,7 @@ $current_session = $this->db->query($query)->row();
         </tr>
     </tfoot>
 </table>
+
 <?php
 $end_time = microtime(true); // Record the end time in seconds with microseconds
 

@@ -33,12 +33,14 @@ $current_session = $this->db->query($query)->row();
     <tbody>
         <?php
         $total_registered = 0;
-
+        $levels = array();
         foreach ($reports as $report) { ?>
             <tr>
                 <th><?php echo $report->level ?></th>
                 <td class="level_total_registered"><?php echo $report->total;
                                                     $total_registered += $report->total;
+                                                    $levels[$report->level]['total'] = $report->total;
+
                                                     ?></td>
                 <?php
                 $query = "SELECT COUNT(*) as total FROM `school` 
@@ -59,7 +61,9 @@ $current_session = $this->db->query($query)->row();
                 $current_renewal = $this->db->query($query)->row();
 
                 ?>
-                <th class="level_renewal_total"><?php echo $current_renewal->total; ?></th>
+                <th class="level_renewal_total"><?php
+                                                $levels[$report->level]['renewal'] = $current_renewal->total;
+                                                echo $current_renewal->total; ?></th>
                 <th class="level_precentage">
                     <?php
                     echo round((($current_renewal->total / ($report->total - $current_registered->total)) * 100), 2) . " %";
@@ -115,3 +119,65 @@ $execution_time = $end_time - $start_time; // Calculate the execution time
 
 echo "<small>Execution Time: " . $execution_time . " seconds </small>";
 ?>
+
+<script>
+    Highcharts.chart('level_wise_summary_chart', {
+        title: {
+            text: 'Sales of petroleum products March, Norway',
+            align: 'left'
+        },
+        xAxis: {
+            categories: [
+                <?php foreach ($levels as $level_name => $level) { ?>
+                    <?php echo "'" . $level_name . "', "; ?>
+                <?php } ?>
+            ]
+        },
+        yAxis: {
+            title: {
+                text: 'Million liters'
+            }
+        },
+        tooltip: {
+            valueSuffix: ' million liters'
+        },
+        plotOptions: {
+            series: {
+                borderRadius: '25%'
+            }
+        },
+        series: [{
+                type: 'column',
+                name: 'Registered',
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: true,
+                data: [
+                    <?php foreach ($levels as $level_name => $level) { ?>
+                        <?php echo "" . $level['total'] . ", "; ?>
+                    <?php } ?>
+                ]
+            }, {
+                type: 'bar',
+                name: 'Average',
+                color: 'red',
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: true,
+                data: [
+                    <?php foreach ($levels as $level_name => $level) { ?>
+                        <?php echo "" . $level['renewal'] . ", "; ?>
+                    <?php } ?>
+                ],
+                marker: {
+                    lineWidth: 2,
+                    lineColor: Highcharts.getOptions().colors[3],
+                    fillColor: 'white'
+                }
+            },
+
+        ]
+    });
+</script>
