@@ -33,8 +33,8 @@
                         <form action="<?php echo site_url("online_cases/change_file_status/$schools_id"); ?>" method="post">
                             <input type="hidden" value="<?php echo $schools_id ?>" name="schools_id" />
                             <input type="hidden" value="<?php echo $school_id ?>" name="school_id" />
-                            <input type="radio" name="file_status" value="4" /> Operation Wing<br />
-                            <input type="radio" name="file_status" value="10" /> Completed<br />
+                            <input required type="radio" name="file_status" value="4" /> Operation Wing<br />
+                            <input required type="radio" name="file_status" value="10" /> Completed<br />
                             <input type="submit" value="Change Status" name="Change Status" />
                         </form>
                     </h5>

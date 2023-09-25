@@ -97,7 +97,7 @@
         <div class="row">
             <div class="col-md-4">
                 <div id="registration_summary"></div>
-                <div id="container2" style="height: 280px;"></div>
+                <!-- <div id="container2" style="height: 280px;"></div> -->
                 <div id="container" style="height: 300px;"></div>
 
                 <div id="summary"></div>
@@ -221,6 +221,7 @@
         get_report("region_progress_report");
         get_report("session_progress_report");
         get_report("daily_progress_report");
+        get_report("other_summary");
 
         //get_report("students_summary_report");
     </script>

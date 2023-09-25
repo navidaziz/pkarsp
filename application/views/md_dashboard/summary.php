@@ -245,8 +245,8 @@ $sessions  = $this->db->query($query)->result();
         },
         pane: {
             size: '100%',
-            innerSize: '20%',
-            endAngle: 270,
+            innerSize: '10%',
+            endAngle: 15,
         },
         xAxis: {
             tickInterval: 1,

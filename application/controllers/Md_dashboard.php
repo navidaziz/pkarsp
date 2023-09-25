@@ -27,6 +27,13 @@ class Md_dashboard extends CI_Controller
       $this->load->view('md_dashboard/registration_summary', $this->data);
    }
 
+   public function other_summary()
+   {
+      $this->data['title'] = 'PSRA Dashboard';
+      $this->data['description'] = 'Monitoring and evaluation dashboard';
+      $this->load->view('md_dashboard/other_summary', $this->data);
+   }
+
    public function summary()
    {
       $this->data['title'] = 'PSRA Dashboard';
