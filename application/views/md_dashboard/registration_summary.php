@@ -17,48 +17,23 @@ $current_session = $this->db->query($query)->row()->sessionYearId;
         </tr>
     </table>
     <div style="text-align: center;">
-        <h1>ِ10,665 </h1>
+        <h1>
+            <?php
+            $query = "SELECT COUNT(*) as total FROM `school` 
+            WHERE renewal_code<=0 and status=1 ";
+            echo $this->db->query($query)->row()->total;
+            ?>
+        </h1>
         <h5 style="display: inline;"> Schools Registered So Far</h5>
     </div>
     <p>
-    <table class="table_small" style="width: 100%;">
-        <tr></tr>
 
-        <?php
-        $query = "SELECT * FROM session_year";
-        $sessions  = $this->db->query($query)->result();
-        foreach ($sessions as $session) {
-            $query = "SELECT COUNT(*) as total FROM `school` WHERE renewal_code<=0 and  status=1 and  session_year_id='" . $session->sessionYearId . "';";
-            $report = $this->db->query($query)->row();
-            $session->commulative_registration = $total_registration += $report->total;
-            $session->new_registration = $report->total;
+    <div id="summary"></div>
+    <div id="other_summary"></div>
+    <div id="level_wise_summary"></div>
+    <div id="level_wise_summary_chart" style="height: 200px;"></div>
 
-            $query = "SELECT COUNT(*) as total FROM `school` WHERE renewal_code>0 and session_year_id='" . $session->sessionYearId . "';";
-            $report = $this->db->query($query)->row();
-            $session->renewals = $report->total;
-        }
-        foreach ($sessions as $session) {
-            if ($session->commulative_registration - $session->new_registration > 0) {
-                $renewal_percantage = round(($session->renewals / ($session->commulative_registration - $session->new_registration)) * 100, 2);
-            }
-        ?><tr>
-                <th style="width: 80px;"> <?php echo  str_replace("-20", "-", $session->sessionYearTitle); ?></th>
-                <td>
-                    <?php if ($renewal_percantage) { ?>
-                        <div class="progress" style="margin-top: 3px;">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $renewal_percantage ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $renewal_percantage; ?>%;">
-                                <small> <?php echo $renewal_percantage ?> % (Completed) </small>
-                            </div>
-                            <div class="progress-bar-danger" role="progressbar" aria-valuenow="<?php echo 100 - $renewal_percantage ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo 100 - $renewal_percantage; ?>%;">
-                                <small> <?php echo 100 - $renewal_percantage; ?> % </small>
-                            </div>
-                        </div>
-                    <?php } ?>
-                </td>
-            </tr>
-        <?php } ?>
 
-    </table>
 
 
 

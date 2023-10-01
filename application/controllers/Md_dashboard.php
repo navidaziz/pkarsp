@@ -96,4 +96,49 @@ class Md_dashboard extends CI_Controller
       $this->data['description'] = 'Monitoring and evaluation dashboard';
       $this->load->view('md_dashboard/students_summary_report', $this->data);
    }
+
+   public function back()
+   {
+
+      // Database configuration
+      $databaseHost = 'localhost';
+      $databaseName = 'new_psra_db_4';
+      $databaseUser = 'root';
+      $databasePassword = '';
+
+      // Google Drive configuration
+      $folderId = 'your_google_drive_folder_id';
+      $serviceAccountKeyFile = 'path/to/your/service-account-key.json';
+
+      // Database backup filename (you can customize this)
+      $backupFilename = 'database_backup_' . date('Y-m-d') . '.sql';
+
+      // Create a database backup
+      $backupCommand = "mysqldump -h$databaseHost -u$databaseUser -p$databasePassword $databaseName > $backupFilename";
+      exec($backupCommand);
+
+      // Initialize Google Drive client
+      putenv('GOOGLE_APPLICATION_CREDENTIALS=' . $serviceAccountKeyFile);
+      $client = new Google_Client();
+      $client->useApplicationDefaultCredentials();
+      $client->setScopes(['https://www.googleapis.com/auth/drive.file']);
+      $driveService = new Google_Service_Drive($client);
+
+      // Upload the backup to Google Drive
+      $fileMetadata = new Google_Service_Drive_DriveFile([
+         'name' => $backupFilename,
+         'parents' => [$folderId],
+      ]);
+      $fileContent = file_get_contents($backupFilename);
+      $file = $driveService->files->create($fileMetadata, [
+         'data' => $fileContent,
+         'mimeType' => 'application/sql', // Adjust the MIME type if needed
+         'uploadType' => 'multipart',
+      ]);
+
+      // Clean up: Delete the local backup file if needed
+      unlink($backupFilename);
+
+      echo 'Database backup successfully created and uploaded to Google Drive.';
+   }
 }

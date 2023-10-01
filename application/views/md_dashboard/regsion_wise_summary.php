@@ -14,32 +14,33 @@ $reports = $this->db->query($query)->result();
 $query = "SELECT sessionYearId FROM `session_year` WHERE status=1";
 $current_session = $this->db->query($query)->row();
 ?>
-<table class="datatable table table_small table-bordered">
-    <thead>
-        <tr>
-            <th>Regions</th>
-            <th>Total</th>
-            <th>New Registered</th>
-            <th>Upgradation</th>
-            <th>Latest Renewals</th>
-            <th>Renewals %</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-        $total_registered = 0;
-
-        $regions = array();
-
-        foreach ($reports as $report) { ?>
+<div class="jumbotron" style="padding: 9px;">
+    <table class="datatable table table_small table-bordered">
+        <thead>
             <tr>
-                <th><?php echo $report->region ?></th>
-                <td><?php echo $report->total;
-                    $total_registered += $report->total;
-                    $regions[$report->region]['total'] = $report->total;
-                    ?></td>
-                <?php
-                $query = "SELECT COUNT(*) as total
+                <th>Regions</th>
+                <th>Total</th>
+                <th>New Registered</th>
+                <th>Upgradation</th>
+                <th>Latest Renewals</th>
+                <th>Renewals %</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $total_registered = 0;
+
+            $regions = array();
+
+            foreach ($reports as $report) { ?>
+                <tr>
+                    <th><?php echo $report->region ?></th>
+                    <td><?php echo $report->total;
+                        $total_registered += $report->total;
+                        $regions[$report->region]['total'] = $report->total;
+                        ?></td>
+                    <?php
+                    $query = "SELECT COUNT(*) as total
                 FROM school
                 INNER JOIN schools ON(schools.schoolId = school.schools_id)
                 INNER JOIN district ON(schools.district_id = district.districtId)
@@ -48,12 +49,12 @@ $current_session = $this->db->query($query)->row();
                 AND renewal_code<=0 
                 AND session_year_id= '" . $current_session->sessionYearId . "' 
                 AND district.new_region ='" . $report->new_region . "'";
-                $current_registered = $this->db->query($query)->row();
-                ?>
-                <th class="region_registered"><?php echo $current_registered->total; ?></th>
-                <th class="region_upgradation"></th>
-                <?php
-                $query = "SELECT COUNT(*) as total
+                    $current_registered = $this->db->query($query)->row();
+                    ?>
+                    <th class="region_registered"><?php echo $current_registered->total; ?></th>
+                    <th class="region_upgradation"></th>
+                    <?php
+                    $query = "SELECT COUNT(*) as total
                 FROM school
                 INNER JOIN schools ON(schools.schoolId = school.schools_id)
                 INNER JOIN district ON(schools.district_id = district.districtId)
@@ -62,28 +63,28 @@ $current_session = $this->db->query($query)->row();
                 AND renewal_code>0
                 AND session_year_id= '" . $current_session->sessionYearId . "' 
                 AND district.new_region ='" . $report->new_region . "'";
-                $current_renewal = $this->db->query($query)->row();
+                    $current_renewal = $this->db->query($query)->row();
 
-                ?>
-                <th class="region_total"><?php echo $current_renewal->total;
-                                            $regions[$report->region]['renewal'] = $current_renewal->total;
-                                            ?></th>
-                <th class="region_precentage">
-                    <?php
-                    echo round((($current_renewal->total / ($report->total - $current_registered->total)) * 100), 2) . " %";
                     ?>
-                </th>
+                    <th class="region_total"><?php echo $current_renewal->total;
+                                                $regions[$report->region]['renewal'] = $current_renewal->total;
+                                                ?></th>
+                    <th class="region_precentage">
+                        <?php
+                        echo round((($current_renewal->total / ($report->total - $current_registered->total)) * 100), 2) . " %";
+                        ?>
+                    </th>
 
-            </tr>
-        <?php } ?>
-    </tbody>
-    <tfoot>
-        <tr>
-            <th>Total</th>
-            <th><?php echo $total_registered; ?></th>
+                </tr>
+            <?php } ?>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Total</th>
+                <th><?php echo $total_registered; ?></th>
 
-            <?php
-            $query = "SELECT COUNT(*) as total
+                <?php
+                $query = "SELECT COUNT(*) as total
             FROM school
             INNER JOIN schools ON(schools.schoolId = school.schools_id)
             INNER JOIN district ON(schools.district_id = district.districtId)
@@ -91,12 +92,12 @@ $current_session = $this->db->query($query)->row();
             AND school.status=1
             AND renewal_code<=0 
             AND session_year_id= '" . $current_session->sessionYearId . "'";
-            $current_registered = $this->db->query($query)->row();
-            ?>
-            <th><?php echo $current_registered->total; ?></th>
-            <th></th>
-            <?php
-            $query = "SELECT COUNT(*) as total
+                $current_registered = $this->db->query($query)->row();
+                ?>
+                <th><?php echo $current_registered->total; ?></th>
+                <th></th>
+                <?php
+                $query = "SELECT COUNT(*) as total
            FROM school
            INNER JOIN schools ON(schools.schoolId = school.schools_id)
            INNER JOIN district ON(schools.district_id = district.districtId)
@@ -104,18 +105,19 @@ $current_session = $this->db->query($query)->row();
            AND school.status=1
            AND renewal_code>0
            AND session_year_id= '" . $current_session->sessionYearId . "'";
-            $current_renewal = $this->db->query($query)->row();
-            ?>
-            <th><?php echo $current_renewal->total; ?></th>
-            <th>
-                <?php
-                echo round((($current_renewal->total / ($total_registered - $current_registered->total)) * 100), 2) . " %";
+                $current_renewal = $this->db->query($query)->row();
                 ?>
-            </th>
+                <th><?php echo $current_renewal->total; ?></th>
+                <th>
+                    <?php
+                    echo round((($current_renewal->total / ($total_registered - $current_registered->total)) * 100), 2) . " %";
+                    ?>
+                </th>
 
-        </tr>
-    </tfoot>
-</table>
+            </tr>
+        </tfoot>
+    </table>
+</div>
 <?php
 $end_time = microtime(true); // Record the end time in seconds with microseconds
 

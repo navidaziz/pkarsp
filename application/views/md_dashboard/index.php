@@ -46,7 +46,9 @@
         border-top: 1px solid #ddd;
         font-size: 9px;
         text-align: center;
-        border: 0px !important;
+        border: 0.1px solid gray !important;
+        font-weight: bold !important;
+        color: black !important;
     }
 
 
@@ -98,12 +100,11 @@
             <div class="col-md-4">
                 <div id="registration_summary"></div>
                 <!-- <div id="container2" style="height: 280px;"></div> -->
-                <div id="container" style="height: 300px;"></div>
 
-                <div id="summary"></div>
 
-                <div id="level_wise_summary_chart" style="height: 300px;"></div>
-                <div id="level_wise_summary"></div>
+
+
+
                 <div id="region_wise_summary_chart"></div>
                 <div id="region_wise_summary"></div>
                 <div id="district_wise_summary"></div>
@@ -117,11 +118,32 @@
                         <div id="yearly_monthly_session_summary"></div>
                     </div>
                     <div class="col-md-12">
+                        <div id="daily_progress_report"></div>
+                    </div>
+                    <div class="col-md-12">
                         <div id="region_progress_report"></div>
                         <div id="session_progress_report"></div>
-                        <div id="daily_progress_report"></div>
+
                         <div id="students_summary_report"></div>
                     </div>
+                </div>
+
+
+
+
+            </div>
+
+            <div class="col-md-4">
+
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div id="container" style="width:300px"></div>
+
+                    </div>
+
+
                 </div>
             </div>
         </div>
@@ -222,6 +244,7 @@
         get_report("session_progress_report");
         get_report("daily_progress_report");
         get_report("other_summary");
+
 
         //get_report("students_summary_report");
     </script>

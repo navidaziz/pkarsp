@@ -115,12 +115,12 @@ $sessions  = $this->db->query($query)->result();
             // accessibility: {
             //     rangeDescription: 'Range: 2018 to 2023'
             // }
-            categories: [<?php foreach ($sessions as $session) { ?> '<?php echo $session->sessionYearTitle ?>',
+            categories: [<?php foreach ($sessions as $session) { ?> '<?php echo  str_replace("-20", "-", $session->sessionYearTitle); ?>',
                 <?php } ?>
             ],
             labels: {
                 style: {
-                    fontSize: '9px'
+                    fontSize: '8px'
                 }
             }
         },

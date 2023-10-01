@@ -19,8 +19,15 @@ $reports = $this->db->query($query)->result();
 $query = "SELECT sessionYearId FROM `session_year` WHERE status=1";
 $current_session = $this->db->query($query)->row();
 ?>
-<table class="datatable table table_small table-bordered">
+
+
+
+<table class="datatable table table_small table-bordered" style="background-color: white;">
     <thead>
+        <tr>
+            <th colspan="2"></th>
+            <th colspan="4">Current session detail</th>
+        </tr>
         <tr>
             <th>Levels</th>
             <th>Total</th>
@@ -37,11 +44,13 @@ $current_session = $this->db->query($query)->row();
         foreach ($reports as $report) { ?>
             <tr>
                 <th><?php echo $report->level ?></th>
-                <td class="level_total_registered"><?php echo $report->total;
-                                                    $total_registered += $report->total;
-                                                    $levels[$report->level]['total'] = $report->total;
+                <td class="level_total_registered">
+                    <strong style="font-size: 12px;"><?php echo $report->total;
+                                                        $total_registered += $report->total;
+                                                        $levels[$report->level]['total'] = $report->total;
 
-                                                    ?></td>
+                                                        ?></strong>
+                </td>
                 <?php
                 $query = "SELECT COUNT(*) as total FROM `school` 
                             WHERE renewal_code<=0 
@@ -123,8 +132,11 @@ echo "<small>Execution Time: " . $execution_time . " seconds </small>";
 <script>
     Highcharts.chart('level_wise_summary_chart', {
         title: {
-            text: 'Sales of petroleum products March, Norway',
-            align: 'left'
+            text: 'Level Wise Registered and Current Session Renewals',
+            align: 'left',
+            style: {
+                fontSize: '10px' // Corrected font size
+            }
         },
         xAxis: {
             categories: [
@@ -135,11 +147,11 @@ echo "<small>Execution Time: " . $execution_time . " seconds </small>";
         },
         yAxis: {
             title: {
-                text: 'Million liters'
+                text: 'Total'
             }
         },
         tooltip: {
-            valueSuffix: ' million liters'
+            valueSuffix: ' Total'
         },
         plotOptions: {
             series: {
@@ -148,7 +160,7 @@ echo "<small>Execution Time: " . $execution_time . " seconds </small>";
         },
         series: [{
                 type: 'column',
-                name: 'Registered',
+                name: 'Registered (Institutes)',
                 dataLabels: {
                     enabled: true
                 },
@@ -159,8 +171,8 @@ echo "<small>Execution Time: " . $execution_time . " seconds </small>";
                     <?php } ?>
                 ]
             }, {
-                type: 'bar',
-                name: 'Average',
+                type: 'column',
+                name: 'Current Session Renewals',
                 color: 'red',
                 dataLabels: {
                     enabled: true

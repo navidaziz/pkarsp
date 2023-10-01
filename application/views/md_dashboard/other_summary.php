@@ -1,3 +1,7 @@
+<?php
+$query = "SELECT sessionYearId FROM `session_year` WHERE status=1";
+$current_session = $this->db->query($query)->row()->sessionYearId;
+?>
 <table class="datatable table table_small table-bordered" style="background-color: white;">
     <tr>
         <th>Gender Wise Schools</th>
