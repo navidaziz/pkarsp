@@ -21,11 +21,15 @@ $current_session = $this->db->query($query)->row()->sessionYearId;
             <?php
             $query = "SELECT COUNT(*) as total FROM `school` 
             WHERE renewal_code<=0 and status=1 ";
-            echo $this->db->query($query)->row()->total;
+            $registered_schools = $this->db->query($query)->row()->total;
+            echo number_format($registered_schools);
             ?>
         </h1>
         <h5 style="display: inline;"> Schools Registered So Far</h5>
     </div>
+
+
+
     <p>
 
     <div id="summary"></div>

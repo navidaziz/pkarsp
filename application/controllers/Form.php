@@ -1346,10 +1346,14 @@ class Form extends Admin_Controller
 
 		$query = "SELECT session_id, last_date, fine_percentage FROM `session_fee_submission_dates` 
 		               WHERE session_id= $session_id AND last_date >='" . date('Y-m-d') . "' 
+					   AND school_type_id = '" . $school->school_type_id . "'
 					   ORDER BY last_date ASC LIMIT 1";
 		$this->data['late_fee'] = $this->db->query($query)->result()[0];
 
-		$query = "SELECT * FROM `session_fee_submission_dates` WHERE session_id = '" . $session_id . "'";
+		$query = "SELECT * FROM `session_fee_submission_dates` 
+		          WHERE session_id = '" . $session_id . "'
+				 AND school_type_id = '" . $school->school_type_id . "' 
+				  ";
 		$this->data['session_fee_submission_dates'] = $this->db->query($query)->result();
 
 		$query = "SELECT max(CONVERT(tuitionFee, SIGNED INTEGER)) as max_tution_fee  FROM `fee` WHERE school_id= '" . $school_id . "'";
@@ -1557,10 +1561,13 @@ class Form extends Admin_Controller
 
 		$query = "SELECT session_id, last_date, fine_percentage FROM `session_fee_submission_dates` 
 		               WHERE session_id= $session_id AND last_date >='" . date('Y-m-d') . "' 
+					   AND school_type_id = '" . $school->school_type_id . "' 
 					   ORDER BY last_date ASC LIMIT 1";
 		$this->data['late_fee'] = $this->db->query($query)->result()[0];
 
-		$query = "SELECT * FROM `session_fee_submission_dates` WHERE session_id = '" . $session_id . "'";
+		$query = "SELECT * FROM `session_fee_submission_dates` 
+		WHERE session_id = '" . $session_id . "'
+		AND school_type_id = '" . $school->school_type_id . "' ";
 		$this->data['session_fee_submission_dates'] = $this->db->query($query)->result();
 
 		$query = "SELECT max(CONVERT(tuitionFee, SIGNED INTEGER)) as max_tution_fee  FROM `fee` WHERE school_id= '" . $school_id . "'";
@@ -1594,11 +1601,15 @@ class Form extends Admin_Controller
 		$this->data['form_status'] = $this->get_form_status($school_id);
 
 		$query = "SELECT session_id, last_date, fine_percentage FROM `session_fee_submission_dates` 
-		               WHERE session_id= $session_id AND last_date >='" . date('Y-m-d') . "' 
+		               WHERE session_id= $session_id 
+					   AND school_type_id = '" . $school->school_type_id . "' 
+					   AND last_date >='" . date('Y-m-d') . "' 
 					   ORDER BY last_date ASC LIMIT 1";
 		$this->data['late_fee'] = $this->db->query($query)->result()[0];
 
-		$query = "SELECT * FROM `session_fee_submission_dates` WHERE session_id = '" . $session_id . "'";
+		$query = "SELECT * FROM `session_fee_submission_dates` WHERE 
+		session_id = '" . $session_id . "'
+		AND school_type_id = '" . $school->school_type_id . "' ";
 		$this->data['session_fee_submission_dates'] = $this->db->query($query)->result();
 
 		$query = "SELECT max(CONVERT(tuitionFee, SIGNED INTEGER)) as max_tution_fee  FROM `fee` WHERE school_id= '" . $school_id . "'";
@@ -1634,11 +1645,16 @@ class Form extends Admin_Controller
 		$this->data['form_status'] = $this->get_form_status($school_id);
 
 		$query = "SELECT session_id, last_date, fine_percentage FROM `session_fee_submission_dates` 
-		               WHERE session_id= $session_id AND last_date >='" . date('Y-m-d') . "' 
+		               WHERE session_id= $session_id 
+					   AND last_date >='" . date('Y-m-d') . "' 
+					   AND school_type_id = '" . $school->school_type_id . "' 
 					   ORDER BY last_date ASC LIMIT 1";
 		$this->data['late_fee'] = $this->db->query($query)->result()[0];
 
-		$query = "SELECT * FROM `session_fee_submission_dates` WHERE session_id = '" . $session_id . "'";
+		$query = "SELECT * FROM `session_fee_submission_dates` 
+		WHERE session_id = '" . $session_id . "'
+		AND school_type_id = '" . $school->school_type_id . "'";
+
 		$this->data['session_fee_submission_dates'] = $this->db->query($query)->result();
 
 		$query = "SELECT max(CONVERT(tuitionFee, SIGNED INTEGER)) as max_tution_fee  FROM `fee` WHERE school_id= '" . $school_id . "'";
