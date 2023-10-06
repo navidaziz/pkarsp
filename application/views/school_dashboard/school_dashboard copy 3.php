@@ -293,7 +293,6 @@
                             <h4>Textbooks being taught in all private schools of Khyber Pakhtunkhwa</h4>
                             <p>All private institutions in Khyber Pakhtunkhwa are directed to submit a compliance report on textbooks being taught at each level for the current session.</p>
                             <br />
-                            <strong>Which publisher's textbooks are being taught in</strong>
                             <?php
                             $query = "SELECT * FROM `publishers`";
                             $publishers = $this->db->query($query)->result();
@@ -307,42 +306,35 @@
                             $text_book = $this->db->query($query)->row();
                             $publisher_id = 0;
                             foreach ($levels as $key => $level) { ?>
-                              <div style="margin: 5px; padding:5px; background-color: #F1F2F4;">
-                                <div class="form-group">
-                                  <label for="<?php echo $level->levelofInstituteTitle; ?>">
-                                    <strong><?php echo $level->levelofInstituteTitle; ?>-Level</strong> classes?
-                                  </label>
-                                  <select class="publisher_list form-control" style="width: 100% !important;" id="<?php echo $level->levelofInstituteTitle; ?>" name="levels[<?php echo $level->levelofInstituteId; ?>]" required>
-                                    <option value="">Select Publisher</option>
-                                    <?php
-                                    if ($text_book) {
-                                      if ($level->levelofInstituteId == 1) {
-                                        $publisher_id = $text_book->primary;
-                                      }
-                                      if ($level->levelofInstituteId == 2) {
-                                        $publisher_id = $text_book->middle;
-                                      }
-                                      if ($level->levelofInstituteId == 3) {
-                                        $publisher_id = $text_book->high;
-                                      }
-                                      if ($level->levelofInstituteId == 4) {
-                                        $publisher_id = $text_book->high_sec;
-                                      }
+
+                              <div class="form-group">
+                                <label for="<?php echo $level->levelofInstituteTitle; ?>">
+                                  Which publisher's textbooks are being taught in <strong><?php echo $level->levelofInstituteTitle; ?>-Level</strong> classes?
+                                </label>
+                                <select class="publisher_list form-control" style="width: 100% !important;" name="levels[<?php echo $level->levelofInstituteId; ?>]" required>
+                                  <option value="">Select Publisher</option>
+                                  <?php
+                                  if ($text_book) {
+                                    if ($level->levelofInstituteId == 1) {
+                                      $publisher_id = $text_book->primary;
                                     }
-                                    foreach ($publishers as $publisher) { ?>
-                                      <option <?php if ($publisher_id == $publisher->id) { ?>selected <?php } ?> value="<?php echo $publisher->id; ?>"><?php echo $publisher->publisher_name; ?></option>
-                                    <?php } ?>
-                                    <option value="other">Other</option>
-                                  </select>
-                                  <small id="emailHelp" class="form-text text-muted" style="color: red;">If the publisher's name is not in the list, please choose the 'Other' option.</small>
-
-                                  <div style="display:none;" id="<?php echo $level->levelofInstituteId; ?>_other_div">
-
-                                    Please Enter Publisher Name:
-                                    <input minlength="10" class="control-form" style="width: 100%;" type="text" value="" name="<?php echo $level->levelofInstituteId; ?>_other" id="<?php echo $level->levelofInstituteId; ?>_other" />
-                                  </div>
-                                </div>
+                                    if ($level->levelofInstituteId == 2) {
+                                      $publisher_id = $text_book->middle;
+                                    }
+                                    if ($level->levelofInstituteId == 3) {
+                                      $publisher_id = $text_book->high;
+                                    }
+                                    if ($level->levelofInstituteId == 4) {
+                                      $publisher_id = $text_book->high_sec;
+                                    }
+                                  }
+                                  foreach ($publishers as $publisher) { ?>
+                                    <option <?php if ($publisher_id == $publisher->id) { ?>selected <?php } ?> value="<?php echo $publisher->id; ?>"><?php echo $publisher->publisher_name; ?></option>
+                                  <?php } ?>
+                                </select>
+                                <small id="emailHelp" class="form-text text-muted" style="color: red;">If the publisher's name is not in the list, please choose the 'Other' option.</small>
                               </div>
+
 
                             <?php } ?>
 
@@ -357,8 +349,6 @@
                             <input <?php if ($text_book->regional_language == 'No') { ?> checked <?php } ?> onclick="$('#language').hide(); $('#comment').show();  $('.level_language').removeAttr('required'); $('.lang2').removeAttr('required');" required type="radio" name="regional_language" value="No" id=""> No
 
                             <div id="language" style="margin-top: 10px; <?php if (!$text_book) { ?> display:none <?php } ?> <?php if ($text_book->regional_language == 'No') { ?> display:none <?php } ?>">
-
-                              Pashtu / Regional languages are being taught in <br />
                               <?php foreach ($levels as $key => $level) {
 
                                 if ($text_book) {
@@ -396,7 +386,7 @@
                                   }
                                 }
                               ?>
-                                <strong><?php echo $level->levelofInstituteTitle; ?>-Level</strong> classes ?
+                                Pashtu / Regional languages are being taught in <strong><?php echo $level->levelofInstituteTitle; ?>-Level</strong> classes ?
                                 <span style="margin: 5px;"></span>
                                 <input class="level_language" <?php if ($level_language == 'Yes' && $text_book) { ?> checked <?php } ?> onclick="$('#level_language_<?php echo $level->levelofInstituteId; ?>').show(); $('.language_<?php echo $level->levelofInstituteId; ?>').attr('required', 'true')" type="radio" name="rg[<?php echo $level->levelofInstituteId; ?>]" value="Yes" id=""> Yes
                                 <span style="margin: 10px;"></span>
@@ -422,7 +412,7 @@
                             </div>
 
                             <div id="comment" style="margin-top: 10px; <?php if (!$text_book) { ?> display:none <?php } ?><?php if ($text_book->regional_language == 'Yes') { ?> display:none <?php } ?>">
-                              <strong>Please comment</strong>
+                              <strong>Comment Please</strong>
                               <textarea style="width: 100%; border-radius:5px; padding-top:2px;" name="comment"><?php echo $text_book->comment; ?></textarea>
                             </div>
 
@@ -1061,24 +1051,4 @@
       $('#survey').modal('show');
     });
   </script>
-
 <?php } ?>
-
-<script>
-  $(document).ready(function() {
-    <?php foreach ($levels as $key => $level) { ?>
-      $("#<?php echo $level->levelofInstituteTitle ?>").on('select2:select', function(e) {
-        // Your code here for the first dropdown
-        //console.log("Dropdown 1 selected: " + e.params.data.value);
-        if (e.params.data.text == 'Other') {
-          alert();
-          $('#<?php echo $level->levelofInstituteId ?>_other_div').show();
-          $('#<?php echo $level->levelofInstituteId ?>_other').attr("required", true);
-        } else {
-          $('#<?php echo $level->levelofInstituteId ?>_other_div').hide();
-          $('#<?php echo $level->levelofInstituteId ?>_other').removeAttr("required");
-        }
-      });
-    <?php } ?>
-  });
-</script>

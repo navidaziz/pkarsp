@@ -3,6 +3,102 @@
 class Temp_controller extends CI_Controller
 {
 
+  public function add_survey()
+  {
+    //var_dump($_POST);
+    $input = array();
+    $input['school_id'] = $school_id = (int) $this->input->post("school_id");
+    $input['session_id'] = $session_id =  (int) $this->input->post("session_id");
+    $input['regional_language'] = $this->input->post("regional_language");
+    $input['rl_primary'] =  NULL;
+    $input['rl_middle'] = NULL;
+    $input['rl_high'] = NULL;
+    $input['rl_high_sec'] = NULL;
+    $input['comment'] = $this->input->post("comment");
+    if ($input['regional_language'] == 'Yes') {
+      $languages = $this->input->post("language");
+      foreach ($languages as $level_id => $language) {
+        if ($level_id == 1) {
+          $input['rl_primary'] =  $language;
+        }
+        if ($level_id == 2) {
+          $input['rl_middle'] =  $language;
+        }
+        if ($level_id == 3) {
+          $input['rl_high'] =  $language;
+        }
+        if ($level_id == 4) {
+          $input['rl_high_sec'] = $language;
+        }
+      }
+      $input['comment'] = NULL;
+    }
+
+    $levels = $this->input->post("levels");
+    foreach ($levels as $level_id => $publisher_id) {
+      if ($level_id == 1) {
+        $input['primary'] = (int) $publisher_id;
+        if ($publisher_id == 'other') {
+          $input['primary'] = $this->add_new_publisher($level_id);
+        }
+      }
+      if ($level_id == 2) {
+        $input['middle'] = (int) $publisher_id;
+        if ($publisher_id == 'other') {
+          $input['middle'] = $this->add_new_publisher($level_id);
+        }
+      }
+      if ($level_id == 3) {
+        $input['high'] = (int) $publisher_id;
+        if ($publisher_id == 'other') {
+          $input['middle'] = $this->add_new_publisher($level_id);
+        }
+      }
+      if ($level_id == 4) {
+        $input['high_sec'] = (int) $publisher_id;
+        if ($publisher_id == 'other') {
+          $input['middle'] = $this->add_new_publisher($level_id);
+        }
+      }
+    }
+    //check data already inserted or not
+    $query = "SELECT COUNT(*) as total FROM textbooks WHERE school_id = '" . $school_id . "' and session_id = '" . $session_id . "'";
+    $count = $this->db->query($query)->row()->total;
+    if ($count == 0) {
+      //insert data
+      $this->db->insert('textbooks', $input);
+      $this->session->set_flashdata('msg_success', 'Data insert successfully!');
+    } else {
+      //update data 
+      $where['school_id'] = $school_id;
+      $where['session_id'] = $session_id;
+      $this->db->where($where);
+      $this->db->update('textbooks', $input);
+
+      $this->session->set_flashdata('msg_success', 'Data updated successfully!');
+    }
+
+    redirect("school_dashboard");
+  }
+
+  private function add_new_publisher($level_id)
+  {
+    //if publisher ID 77 means Other please check and add as new publisher
+    $new_publisher_name = $this->input->post($level_id . "_other");
+
+    $query = "SELECT id, COUNT(*) as total 
+              FROM publishers 
+              WHERE publisher_name = " . $this->db->escape($new_publisher_name);
+    $publisher = $this->db->query($query)->row();
+    if ($publisher->total == 0) {
+      $new_publisher_input['publisher_name'] = $new_publisher_name;
+      $this->db->insert('publishers', $new_publisher_input);
+      return $this->db->insert_id();
+    } else {
+      return $publisher->id;
+    }
+  }
+
 
   public function temp_form()
   {

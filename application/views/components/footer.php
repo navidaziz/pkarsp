@@ -207,8 +207,8 @@
 <script src='<?php echo base_url("assets/lib/jquery/dist/jquery.min.js"); ?>'></script>
 <!-- <script type="text/javascript" src="<?php echo base_url('assets/datatables/tools/jquery.dataTables.min.js'); ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/datatables/dataTables.bootstrap.js'); ?>"></script>
-
-<script type="text/javascript" src='<?php echo base_url("assets/toastr/build/toastr.min.js"); ?>'></script> -->
+-->
+<script type="text/javascript" src='<?php echo base_url("assets/toastr/build/toastr.min.js"); ?>'></script>
 
 
 <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
@@ -329,6 +329,12 @@ if ($this->session->flashdata("msg") || $this->session->flashdata("msg_error") |
 
     });
 
+  });
+</script>
+<script>
+  $('.publisher_list').select2({
+    placeholder: 'Select an option',
+    allowClear: false
   });
 </script>
 </body>
