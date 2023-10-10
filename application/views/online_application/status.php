@@ -46,7 +46,7 @@
                 <h2>
                   Documents Needed for <i><strong>"<?php echo $school->levelofInstituteTitle; ?>"</strong></i> Registration</h2>
                 <h4>
-                  PSRA officials will collect these documents during the inspection for registartion. Please ensure you have them ready before your visit:
+                  PSRA officials will collect these documents during the inspection for registration. Please ensure you have them ready before your visit:
                 </h4>
                 <ol style="font-size: larger;">
                   <li>Ownership Documents or Affidavit

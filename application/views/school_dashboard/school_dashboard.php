@@ -297,7 +297,7 @@
                             <?php
                             $query = "SELECT * FROM `publishers`";
                             $publishers = $this->db->query($query)->result();
-                            $query = "SELECT * FROM `levelofinstitute` WHERE levelofInstituteId >='" . $min_level . "' and levelofInstituteId< '" . $max_level . "'";
+                            $query = "SELECT * FROM `levelofinstitute` WHERE levelofInstituteId >='" . $min_level . "' and levelofInstituteId<= '" . $max_level . "'";
                             $levels = $this->db->query($query)->result();
 
 
