@@ -24,31 +24,20 @@ class Bise extends Admin_Controller
 		district.districtTitle, 
 		district.bise, 
 		levelofinstitute.levelofInstituteTitle, 
-		sy.sessionYearTitle
+		session_year.sessionYearTitle
 	  FROM 
 		schools 
 		INNER JOIN school ON schools.schoolId = school.schools_id 
 		INNER JOIN district ON district.districtId = schools.district_id 
 		INNER JOIN levelofinstitute ON levelofinstitute.levelofInstituteId = school.level_of_school_id 
-		INNER JOIN (
-		  SELECT 
-			schools_id, 
-			MAX(session_year_id) AS latest_session_year_id
-		  FROM 
-			school 
-		  WHERE 
-			status = 1 
-			AND session_year_id  IN('" . $current_session->sessionYearId . "','" . $previous_session->sessionYearId . "')
-			AND level_of_school_id IN (3, 4)
-		  GROUP BY 
-			schools_id
-		) AS latest_session ON latest_session.schools_id = schools.schoolId 
-		INNER JOIN session_year AS sy ON sy.sessionYearId = latest_session.latest_session_year_id
-	  WHERE 
+		INNER JOIN session_year  ON(session_year.sessionYearId = school.session_year_id)
+		WHERE 
 	   district.`bise` = '" . $this->session->userdata('userTitle') . "'
-	  GROUP BY 
-		schools.schoolId
-	  ORDER BY `sy`.`sessionYearTitle`  DESC;";
+	   AND school.session_year_id  IN('" . $current_session->sessionYearId . "','" . $previous_session->sessionYearId . "')
+	   AND school.schoolId = (select max(`s`.`schoolId`) from `school` as s where `s`.`status` = 1 and s.schools_id = schools.schoolId )
+	   AND school.level_of_school_id IN(3,4)  
+	   AND schools.registrationNumber>0 
+	   GROUP BY  schools.schoolId";
 
 
 		$this->data['school_list'] = $this->db->query($query)->result();
