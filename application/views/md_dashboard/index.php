@@ -221,6 +221,22 @@
                     applyGradientColor("level_renewal_total");
                     applyGradientColor("level_precentage");
 
+                    applyGradientColor("registration_total");
+                    applyGradientColor("registration_other");
+
+                    applyGradientColor("re_upg_total");
+                    applyGradientColor("re_upg_other");
+
+                    applyGradientColor("upgra");
+                    applyGradientColor("renew");
+
+
+
+
+
+
+
+
 
 
 
@@ -244,6 +260,7 @@
         get_report("session_progress_report");
         get_report("daily_progress_report");
         get_report("other_summary");
+
 
 
         //get_report("students_summary_report");
@@ -317,6 +334,27 @@
                         if (className == 'days_avg') {
                             var color = `rgba(147, 176, 217, ${opacity})`;
                         }
+
+                        if (className == 'registration_total') {
+                            var color = `rgba(241,194,50, ${opacity})`;
+                        }
+                        if (className == 'registration_other') {
+                            var color = `rgba(241,194,50, ${opacity})`;
+                        }
+                        if (className == 're_upg_total') {
+                            var color = `rgba(102,211,252, ${opacity})`;
+                        }
+                        if (className == 're_upg_other') {
+                            var color = `rgba(102,211,252, ${opacity})`;
+                        }
+                        if (className == 'upgra') {
+                            var color = `rgba(102,211,252, ${opacity})`;
+                        }
+
+                        if (className == 'renew') {
+                            var color = `rgba(166,77,121, ${opacity})`;
+                        }
+
 
 
 

@@ -42,85 +42,87 @@ if ($this->input->post('level_id')) {
 $query .= " group by `district`.`new_region`";
 $pending_files = $this->db->query($query)->result();
 ?>
+<div class="jumbotron" style="padding: 9px;">
+    <strong>Region Wise Progress Summary Report </strong>
+    <div class="table-respons ive">
 
-<strong>Region Wise Progress Summary Report </strong>
-<div class="table-respons ive">
 
-
-    <table class="table table_small table-bordered" style="text-align:center; font-size:7px !important" id="test _table">
-        <thead>
-            <tr>
-                <th colspan="4"></th>
-                <th colspan="5">Registration</th>
-                <th colspan="5">Renewal+Upgradation</th>
-                <th colspan="2"></th>
-                <th colspan="4">Fina. Deficients</th>
-            </tr>
-            <tr>
-                <td style="text-align: center;">Region</td>
-                <td style="text-align: center;">Applied</td>
-                <td style="text-align: center;">Pending (Queue)</td>
-                <td style="text-align: center;">Total Pending</td>
-                <td>Total</td>
-                <td>New</td>
-                <td>Not Visited</td>
-                <td>Visited</td>
-                <td>Not Recom.</td>
-
-                <td>Total</td>
-                <td>New</td>
-                <td>Not Visited</td>
-                <td>Visited</td>
-                <td>Not Recom.</td>
-
-                <td>Upgr</td>
-                <td>Renewal</td>
-                <td>Total</td>
-                <td>Regi</td>
-                <td>Ren+Upg</td>
-                <td>Renewal</td>
-                <td>(10%)</td>
-                <td>Issue Pend.</td>
-            </tr>
-        </thead>
-
-        <tbody>
-
-            <?php
-            foreach ($pending_files as $pending) { ?>
+        <table class="table table_small table-bordered" style="text-align:center; font-size:7px !important" id="test _table">
+            <thead>
                 <tr>
-                    <th style="text-align: center;"><?php echo $pending->region; ?></th>
-                    <td><?php echo $pending->total_applied; ?></td>
-                    <td><?php echo $pending->previous_pending; ?></td>
-                    <th style="text-align: center;"><?php echo $pending->total_pending; ?></th>
-                    <td><?php echo $pending->registrations; ?></td>
-                    <th><?php echo $pending->reg_new; ?></th>
-                    <th><?php echo $pending->reg_visited_no; ?></th>
-                    <th><?php echo $pending->reg_visited_yes; ?></th>
-                    <th><?php echo $pending->reg_not_recommend; ?></th>
-
-                    <td><?php echo $pending->renewal_pgradations; ?></td>
-                    <th><?php echo $pending->re_up_new; ?></th>
-                    <th><?php echo $pending->re_up_visited_no; ?></th>
-                    <th><?php echo $pending->re_up_visited_yes; ?></th>
-                    <th><?php echo $pending->re_up_not_recommend; ?></th>
-
-
-                    <td><?php echo $pending->upgradations; ?></td>
-                    <td><?php echo $pending->renewals; ?></td>
-                    <td><?php echo $pending->financially_deficient; ?></td>
-                    <td><?php echo $pending->reg_deficient; ?></td>
-                    <td><?php echo $pending->ren_upg_deficient; ?></td>
-                    <td><?php echo $pending->rene_deficient; ?></td>
-                    <td><?php echo $pending->marked_to_operation_wing; ?></td>
-                    <td><?php echo $pending->completed_pending; ?></td>
-
+                    <th colspan="4"></th>
+                    <th colspan="5" style="background-color: #87CEFF;">Registrations</th>
+                    <th colspan="5" style="background-color: #A6DBFF;">Renewal+Upgradation's</th>
+                    <th style="background-color: #C6E8FF;">Upgradataions</th>
+                    <th style="background-color: #C6E8FF;">Renewals</th>
+                    <th colspan="4" style="background-color: #E5F5FF">Fina. Deficients</th>
                 </tr>
-            <?php } ?>
+                <tr>
+                    <td style="text-align: center;">Region</td>
+                    <td style="text-align: center;">Applied</td>
+                    <td style="text-align: center;">Pending (Queue)</td>
+                    <td style="text-align: center;">Total Pending</td>
+                    <td style="background-color: #87CEFF;">Total</td>
+                    <td style="background-color: #87CEFF;">New</td>
+                    <td style="background-color: #87CEFF;">Not Visited</td>
+                    <td style="background-color: #87CEFF;">Visited</td>
+                    <td style="background-color: #87CEFF;">Not Recom.</td>
 
-        </tbody>
-        <tfoot>
-            <?php $query = "SELECT if((`district`.`new_region` = 1),'Central',if((`district`.`new_region` = 2),'South',if((`district`.`new_region` = 3),'Malakand',if((`district`.`new_region` = 4),'Hazara',if((`district`.`new_region` = 5),'Peshawar','Others'))))) AS `region`,
+                    <td>Total</td>
+                    <td>New</td>
+                    <td>Not Visited</td>
+                    <td>Visited</td>
+                    <td>Not Recom.</td>
+
+                    <td>Total</td>
+                    <td>Total</td>
+                    <td>Total</td>
+                    <td>Regi</td>
+                    <td>Ren+Upg</td>
+                    <td>Renewal</td>
+                    <td>(10%)</td>
+                    <td>Issue Pend.</td>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <?php
+                foreach ($pending_files as $pending) { ?>
+                    <tr>
+                        <th style="text-align: center;"><?php echo $pending->region; ?></th>
+                        <td><?php echo $pending->total_applied; ?></td>
+                        <td><?php echo $pending->previous_pending; ?></td>
+                        <th style="text-align: center;"><?php echo $pending->total_pending; ?></th>
+
+                        <td class="registration_total"><?php echo $pending->registrations; ?></td>
+                        <th class="registration_other"><?php echo $pending->reg_new; ?></th>
+                        <th class="registration_other"><?php echo $pending->reg_visited_no; ?></th>
+                        <th class="registration_other"><?php echo $pending->reg_visited_yes; ?></th>
+                        <th class="registration_other"><?php echo $pending->reg_not_recommend; ?></th>
+
+                        <td class="re_upg_total"><?php echo $pending->renewal_pgradations; ?></td>
+                        <th class="re_upg_other"><?php echo $pending->re_up_new; ?></th>
+                        <th class="re_upg_other"><?php echo $pending->re_up_visited_no; ?></th>
+                        <th class="re_upg_other"><?php echo $pending->re_up_visited_yes; ?></th>
+                        <th class="re_upg_other"><?php echo $pending->re_up_not_recommend; ?></th>
+
+
+                        <td class="upgra"><?php echo $pending->upgradations; ?></td>
+                        <td class="renew"><?php echo $pending->renewals; ?></td>
+                        <td><?php echo $pending->financially_deficient; ?></td>
+                        <td><?php echo $pending->reg_deficient; ?></td>
+                        <td><?php echo $pending->ren_upg_deficient; ?></td>
+                        <td><?php echo $pending->rene_deficient; ?></td>
+                        <td><?php echo $pending->marked_to_operation_wing; ?></td>
+                        <td><?php echo $pending->completed_pending; ?></td>
+
+                    </tr>
+                <?php } ?>
+
+            </tbody>
+            <tfoot>
+                <?php $query = "SELECT if((`district`.`new_region` = 1),'Central',if((`district`.`new_region` = 2),'South',if((`district`.`new_region` = 3),'Malakand',if((`district`.`new_region` = 4),'Hazara',if((`district`.`new_region` = 5),'Peshawar','Others'))))) AS `region`,
             sum(if(`school`.`file_status` >=1 and school.status>0 ,1,0)) AS `total_applied`,
             sum(if(`school`.`file_status` =3 and school.status=2 ,1,0)) AS `previous_pending`,
             sum(if(`school`.`file_status` = 1 and `school`.`status` = 2,1,0)) AS `total_pending`,
@@ -153,47 +155,48 @@ $pending_files = $this->db->query($query)->result();
             join `district` on(`district`.`districtId` = `schools`.`district_id`)) 
             join `session_year` on(`session_year`.`sessionYearId` = `school`.`session_year_id`)) 
             ";
-            if ($institute_type_id) {
-                $query .= " AND `schools`.`school_type_id`= '" . $institute_type_id . "' ";
-            }
-            if ($this->input->post('level_id')) {
-                $level_id = (int) $this->input->post('level_id');
-                $query .= " AND `school`.`level_of_school_id`= '" . $level_id . "' ";
-            }
-            //$query .= " group by `district`.`new_region`";
-            $pending = $this->db->query($query)->row();
-            ?>
-            <tr>
-                <th style="text-align: center;">Total</th>
-                <th><?php echo $pending->total_applied; ?></th>
-                <td><?php echo $pending->previous_pending; ?></th>
-                <th style="text-align: center;"><?php echo $pending->total_pending; ?></th>
-                <th><?php echo $pending->registrations; ?></th>
-                <th><?php echo $pending->reg_new; ?></th>
-                <th><?php echo $pending->reg_visited_no; ?></th>
-                <th><?php echo $pending->reg_visited_yes; ?></th>
-                <th><?php echo $pending->reg_not_recommend; ?></th>
+                if ($institute_type_id) {
+                    $query .= " AND `schools`.`school_type_id`= '" . $institute_type_id . "' ";
+                }
+                if ($this->input->post('level_id')) {
+                    $level_id = (int) $this->input->post('level_id');
+                    $query .= " AND `school`.`level_of_school_id`= '" . $level_id . "' ";
+                }
+                //$query .= " group by `district`.`new_region`";
+                $pending = $this->db->query($query)->row();
+                ?>
+                <tr>
+                    <th style="text-align: center;">Total</th>
+                    <th><?php echo $pending->total_applied; ?></th>
+                    <td><?php echo $pending->previous_pending; ?></th>
+                    <th style="text-align: center;"><?php echo $pending->total_pending; ?></th>
+                    <th><?php echo $pending->registrations; ?></th>
+                    <th><?php echo $pending->reg_new; ?></th>
+                    <th><?php echo $pending->reg_visited_no; ?></th>
+                    <th><?php echo $pending->reg_visited_yes; ?></th>
+                    <th><?php echo $pending->reg_not_recommend; ?></th>
 
-                <th><?php echo $pending->renewal_pgradations; ?></th>
-                <th><?php echo $pending->re_up_new; ?></th>
-                <th><?php echo $pending->re_up_visited_no; ?></th>
-                <th><?php echo $pending->re_up_visited_yes; ?></th>
-                <th><?php echo $pending->re_up_not_recommend; ?></th>
+                    <th><?php echo $pending->renewal_pgradations; ?></th>
+                    <th><?php echo $pending->re_up_new; ?></th>
+                    <th><?php echo $pending->re_up_visited_no; ?></th>
+                    <th><?php echo $pending->re_up_visited_yes; ?></th>
+                    <th><?php echo $pending->re_up_not_recommend; ?></th>
 
 
-                <th><?php echo $pending->upgradations; ?></th>
-                <th><?php echo $pending->renewals; ?></th>
-                <th><?php echo $pending->financially_deficient; ?></th>
-                <th><?php echo $pending->reg_deficient; ?></th>
-                <th><?php echo $pending->ren_upg_deficient; ?></th>
-                <th><?php echo $pending->rene_deficient; ?></th>
-                <th><?php echo $pending->marked_to_operation_wing; ?></th>
-                <th><?php echo $pending->completed_pending; ?></th>
+                    <th><?php echo $pending->upgradations; ?></th>
+                    <th><?php echo $pending->renewals; ?></th>
+                    <th><?php echo $pending->financially_deficient; ?></th>
+                    <th><?php echo $pending->reg_deficient; ?></th>
+                    <th><?php echo $pending->ren_upg_deficient; ?></th>
+                    <th><?php echo $pending->rene_deficient; ?></th>
+                    <th><?php echo $pending->marked_to_operation_wing; ?></th>
+                    <th><?php echo $pending->completed_pending; ?></th>
 
-            </tr>
-        </tfoot>
+                </tr>
+            </tfoot>
 
-    </table>
+        </table>
+    </div>
 </div>
 <?php
 $end_time = microtime(true); // Record the end time in seconds with microseconds
