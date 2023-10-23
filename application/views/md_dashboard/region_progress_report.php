@@ -51,37 +51,37 @@ $pending_files = $this->db->query($query)->result();
             <thead>
                 <tr>
                     <th colspan="4"></th>
-                    <th colspan="5" style="background-color: #87CEFF;">Registrations</th>
-                    <th colspan="5" style="background-color: #A6DBFF;">Renewal+Upgradation's</th>
-                    <th style="background-color: #C6E8FF;">Upgradataions</th>
-                    <th style="background-color: #C6E8FF;">Renewals</th>
-                    <th colspan="4" style="background-color: #E5F5FF">Fina. Deficients</th>
+                    <th colspan="5" style="background-color: rgb(241, 194, 50);">New Registration Cases</th>
+                    <th colspan="5" style="background-color: rgba(102, 211, 252);">Renewal+Upgradation Cases</th>
+                    <th>Only Upgradataions</th>
+                    <th style="background-color: rgb(166, 77, 121);">Renewal Cases</th>
+                    <th colspan="4" style="background-color: rgb(253, 92, 99)">Financial Deficiency Cases</th>
                 </tr>
                 <tr>
                     <td style="text-align: center;">Region</td>
                     <td style="text-align: center;">Applied</td>
                     <td style="text-align: center;">Pending (Queue)</td>
                     <td style="text-align: center;">Total Pending</td>
-                    <td style="background-color: #87CEFF;">Total</td>
-                    <td style="background-color: #87CEFF;">New</td>
-                    <td style="background-color: #87CEFF;">Not Visited</td>
-                    <td style="background-color: #87CEFF;">Visited</td>
-                    <td style="background-color: #87CEFF;">Not Recom.</td>
+                    <td style="background-color: rgb(241, 194, 50);">Total</td>
+                    <td style="background-color: rgb(241, 194, 50);">New</td>
+                    <td style="background-color: rgb(241, 194, 50);">Not Visited</td>
+                    <td style="background-color: rgb(241, 194, 50);">Visited</td>
+                    <td style="background-color: rgb(241, 194, 50);">Not Recom.</td>
+
+                    <td style="background-color: rgba(102, 211, 252);">Total</td>
+                    <td style="background-color: rgba(102, 211, 252);">New</td>
+                    <td style="background-color: rgba(102, 211, 252);">Not Visited</td>
+                    <td style="background-color: rgba(102, 211, 252);">Visited</td>
+                    <td style="background-color: rgba(102, 211, 252);">Not Recom.</td>
 
                     <td>Total</td>
-                    <td>New</td>
-                    <td>Not Visited</td>
-                    <td>Visited</td>
-                    <td>Not Recom.</td>
-
-                    <td>Total</td>
-                    <td>Total</td>
-                    <td>Total</td>
-                    <td>Regi</td>
-                    <td>Ren+Upg</td>
-                    <td>Renewal</td>
-                    <td>(10%)</td>
-                    <td>Issue Pend.</td>
+                    <td style="background-color: rgb(166, 77, 121);">Total</td>
+                    <td style="background-color: rgb(253, 92, 99)">Total</td>
+                    <td style="background-color: rgb(253, 92, 99)">Regi</td>
+                    <td style="background-color: rgb(253, 92, 99)">Ren+Upg</td>
+                    <td style="background-color: rgb(253, 92, 99)">Renewal</td>
+                    <td style="background-color: rgb(222, 49, 99)">(10%)</td>
+                    <td style="background-color: rgb(230, 32, 32);">Issue Pend.</td>
                 </tr>
             </thead>
 
@@ -110,12 +110,12 @@ $pending_files = $this->db->query($query)->result();
 
                         <td class="upgra"><?php echo $pending->upgradations; ?></td>
                         <td class="renew"><?php echo $pending->renewals; ?></td>
-                        <td><?php echo $pending->financially_deficient; ?></td>
-                        <td><?php echo $pending->reg_deficient; ?></td>
-                        <td><?php echo $pending->ren_upg_deficient; ?></td>
-                        <td><?php echo $pending->rene_deficient; ?></td>
-                        <td><?php echo $pending->marked_to_operation_wing; ?></td>
-                        <td><?php echo $pending->completed_pending; ?></td>
+                        <td class="deficient"><?php echo $pending->financially_deficient; ?></td>
+                        <td class="deficient"><?php echo $pending->reg_deficient; ?></td>
+                        <td class="deficient"><?php echo $pending->ren_upg_deficient; ?></td>
+                        <td class="deficient"><?php echo $pending->rene_deficient; ?></td>
+                        <td class="operation_wing"><?php echo $pending->marked_to_operation_wing; ?></td>
+                        <td class="issue_pending"><?php echo $pending->completed_pending; ?></td>
 
                     </tr>
                 <?php } ?>
@@ -167,30 +167,30 @@ $pending_files = $this->db->query($query)->result();
                 ?>
                 <tr>
                     <th style="text-align: center;">Total</th>
-                    <th><?php echo $pending->total_applied; ?></th>
-                    <td><?php echo $pending->previous_pending; ?></th>
-                    <th style="text-align: center;"><?php echo $pending->total_pending; ?></th>
-                    <th><?php echo $pending->registrations; ?></th>
-                    <th><?php echo $pending->reg_new; ?></th>
-                    <th><?php echo $pending->reg_visited_no; ?></th>
-                    <th><?php echo $pending->reg_visited_yes; ?></th>
-                    <th><?php echo $pending->reg_not_recommend; ?></th>
+                    <th class=""><?php echo $pending->total_applied; ?></th>
+                    <td class="pending_total"><?php echo $pending->previous_pending; ?></th>
+                    <th style="text-align: center;" class="pending_total"><?php echo $pending->total_pending; ?></th>
+                    <th class="pending_total"><?php echo $pending->registrations; ?></th>
+                    <th class="pending_total"><?php echo $pending->reg_new; ?></th>
+                    <th class="pending_total"><?php echo $pending->reg_visited_no; ?></th>
+                    <th class="pending_total"><?php echo $pending->reg_visited_yes; ?></th>
+                    <th class="pending_total"><?php echo $pending->reg_not_recommend; ?></th>
 
-                    <th><?php echo $pending->renewal_pgradations; ?></th>
-                    <th><?php echo $pending->re_up_new; ?></th>
-                    <th><?php echo $pending->re_up_visited_no; ?></th>
-                    <th><?php echo $pending->re_up_visited_yes; ?></th>
-                    <th><?php echo $pending->re_up_not_recommend; ?></th>
+                    <th class="pending_total"><?php echo $pending->renewal_pgradations; ?></th>
+                    <th class="pending_total"><?php echo $pending->re_up_new; ?></th>
+                    <th class="pending_total"><?php echo $pending->re_up_visited_no; ?></th>
+                    <th class="pending_total"><?php echo $pending->re_up_visited_yes; ?></th>
+                    <th class="pending_total"><?php echo $pending->re_up_not_recommend; ?></th>
 
 
-                    <th><?php echo $pending->upgradations; ?></th>
-                    <th><?php echo $pending->renewals; ?></th>
-                    <th><?php echo $pending->financially_deficient; ?></th>
-                    <th><?php echo $pending->reg_deficient; ?></th>
-                    <th><?php echo $pending->ren_upg_deficient; ?></th>
-                    <th><?php echo $pending->rene_deficient; ?></th>
-                    <th><?php echo $pending->marked_to_operation_wing; ?></th>
-                    <th><?php echo $pending->completed_pending; ?></th>
+                    <th class="pending_total"><?php echo $pending->upgradations; ?></th>
+                    <th class="pending_total"><?php echo $pending->renewals; ?></th>
+                    <th class="pending_total"><?php echo $pending->financially_deficient; ?></th>
+                    <th class="pending_total"><?php echo $pending->reg_deficient; ?></th>
+                    <th class="pending_total"><?php echo $pending->ren_upg_deficient; ?></th>
+                    <th class="pending_total"><?php echo $pending->rene_deficient; ?></th>
+                    <th class="pending_total"><?php echo $pending->marked_to_operation_wing; ?></th>
+                    <th class="pending_total"><?php echo $pending->completed_pending; ?></th>
 
                 </tr>
             </tfoot>

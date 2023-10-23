@@ -230,6 +230,15 @@
                     applyGradientColor("upgra");
                     applyGradientColor("renew");
 
+                    applyGradientColor("deficient");
+                    applyGradientColor("operation_wing");
+                    applyGradientColor("issue_pending");
+                    applyGradientColor("pending_total");
+
+
+
+
+
 
 
 
@@ -354,6 +363,28 @@
                         if (className == 'renew') {
                             var color = `rgba(166,77,121, ${opacity})`;
                         }
+                        if (className == 'deficient') {
+                            var color = `rgba(253, 92, 99, ${opacity})`;
+                        }
+                        if (className == 'operation_wing') {
+                            var color = `rgba(222, 49, 99, ${opacity})`;
+                        }
+
+                        if (className == 'issue_pending') {
+                            var color = `rgba(230, 32, 32, ${opacity})`;
+                        }
+
+                        if (className == 'pending_total') {
+                            var color = `rgba(247, 100, 3, ${opacity})`;
+                        }
+
+
+
+
+
+
+
+
 
 
 

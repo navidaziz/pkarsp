@@ -129,8 +129,11 @@ echo "<small>Execution Time: " . $execution_time . " seconds </small>";
 <script>
     Highcharts.chart('region_wise_summary_chart', {
         title: {
-            text: 'Sales of petroleum products March, Norway',
-            align: 'left'
+            text: 'Region wise Registered Schools and Current Session Renewals',
+            align: 'left',
+            style: {
+                fontSize: '12px' // Corrected font size
+            }
         },
         xAxis: {
             categories: [
@@ -141,11 +144,11 @@ echo "<small>Execution Time: " . $execution_time . " seconds </small>";
         },
         yAxis: {
             title: {
-                text: 'Million liters'
+                text: 'Total'
             }
         },
         tooltip: {
-            valueSuffix: ' million liters'
+            valueSuffix: ' Total'
         },
         plotOptions: {
             series: {
@@ -166,7 +169,7 @@ echo "<small>Execution Time: " . $execution_time . " seconds </small>";
                 ]
             }, {
                 type: 'bar',
-                name: 'Average',
+                name: 'Renewals',
                 color: 'red',
                 dataLabels: {
                     enabled: true

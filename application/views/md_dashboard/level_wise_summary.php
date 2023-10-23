@@ -135,7 +135,7 @@ echo "<small>Execution Time: " . $execution_time . " seconds </small>";
             text: 'Level Wise Registered and Current Session Renewals',
             align: 'left',
             style: {
-                fontSize: '10px' // Corrected font size
+                fontSize: '12px' // Corrected font size
             }
         },
         xAxis: {
