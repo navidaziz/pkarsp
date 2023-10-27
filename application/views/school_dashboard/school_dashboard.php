@@ -214,7 +214,7 @@
 
               <?php if ($school->registrationNumber > 0) { ?>
 
-                <div class="alert alert-primary" style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
+                <div class="alert alert-primary" style="display:none; border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
 
                   <!-- Modal -->
                   <div class="modal fade" id="update_voter_info" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -237,7 +237,7 @@
 
 
 
-                              <h4>Please confirm you voter Name and CNIC for upcoming election</h4>
+                              <h4>According to PSRA data, the following is the voter information that will be allowed to cast a vote on behalf of your school in the upcoming election of private schools member of PSRA. Please confirm it or if you want to nominate the Principal/Director/Head of your school as a voter, please update the name and CNIC and submit</h4>
                               <?php
                               $query = "SELECT * FROM voters_list WHERE school_id = '" . $school->schoolId . "' AND session_id ='" . $session->sessionYearId . "'";
                               $voter_info = $this->db->query($query)->row();
@@ -1161,7 +1161,7 @@
 </div>
 
 
-<?php if ($school->registrationNumber > 0) { ?>
+<?php if ($school->registrationNumber > 0 and 1 == 2) { ?>
 
   <?php if (!$voter_info) { ?>
     <script>
