@@ -567,7 +567,44 @@ class Temp_controller extends CI_Controller
     }
     redirect("school_dashboard");
   }
+
+  public function add_voter_information()
+  {
+    $input = array();
+    $input['school_id'] = $school_id = (int) $this->input->post("school_id");
+    $query = "SELECT owner_id FROM schools WHERE schoolId = " . $school_id;
+    $owner_id = $this->db->query($query)->row()->owner_id;
+    $userId = $this->session->userdata('userId');
+    if ($owner_id == $userId) {
+
+      $input['session_id'] = $session_id =  (int) $this->input->post("session_id");
+      $input['voter_name'] = $this->input->post("voter_name");
+      $input['voter_cnic'] = $this->input->post("voter_cnic");
+
+      //check data already inserted or not
+      $query = "SELECT COUNT(*) as total FROM textbooks WHERE school_id = '" . $school_id . "' and session_id = '" . $session_id . "'";
+      $count = $this->db->query($query)->row()->total;
+      if ($count == 0) {
+        //insert data
+        $this->db->insert('voters_list', $input);
+        $this->session->set_flashdata('msg_success', 'Data insert successfully!');
+      } else {
+        //update data 
+        $where['school_id'] = $school_id;
+        $where['session_id'] = $session_id;
+        $this->db->where($where);
+        $this->db->update('voters_list', $input);
+
+        $this->session->set_flashdata('msg_success', 'Data updated successfully!');
+      }
+    } else {
+      $this->session->set_flashdata('msg_success', 'You are not allowed to change the record');
+    }
+    redirect("school_dashboard");
+  }
 }
+
+
 
 
 ?>

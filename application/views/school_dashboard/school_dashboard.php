@@ -210,8 +210,111 @@
         <div class="row">
 
           <?php if ($school->school_type_id == 1) { ?>
-
             <div class="col-md-3">
+
+
+              <div class="alert alert-primary" style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
+
+                <!-- Modal -->
+                <div class="modal fade" id="update_voter_info" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" style="display: inline;" id="exampleModalLabel">Voter Infromation</h5>
+                        <button type="button" class="close pull-right" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <form action="<?php echo site_url('temp_controller/add_voter_information'); ?>" method="post">
+                          <input type="hidden" name="school_id" value="<?php echo $school->schoolId; ?>" />
+                          <?php $query = "SELECT sessionYearId FROM `session_year` WHERE status=1";
+                          $session = $this->db->query($query)->row(); ?>
+                          <input type="hidden" name="session_id" value="<?php echo $session->sessionYearId; ?>" />
+                          <div class="alert alert-primary" style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
+
+
+
+
+                            <h4>Please confirm you voter Name and CNIC for upcoming election</h4>
+                            <?php
+                            $query = "SELECT * FROM voters_list WHERE school_id = '" . $school->schoolId . "' AND session_id ='" . $session->sessionYearId . "'";
+                            $voter_info = $this->db->query($query)->row();
+                            if (!$voter_info) {
+                              $query = "SELECT owner_id FROM schools WHERE schoolId = " . $school->schoolId;
+                              $owner_id = $this->db->query($query)->row()->owner_id;
+                              $query = "SELECT userTitle,cnic FROM users WHERE userId = " . $owner_id;
+                              $user_info = $this->db->query($query)->row();
+                              $voter_name = $user_info->userTitle;
+                              $voter_cnic = $user_info->cnic;
+                            } else {
+                              $voter_name = $voter_info->voter_name;
+                              $voter_cnic = $voter_info->voter_cnic;
+                            }
+                            ?>
+                            <strong>Voter Name:</strong> <input name="voter_name" type="text" required class="form-control" value="<?php echo $voter_name; ?>" />
+                            <strong>Voter CNIC: </strong><input name="voter_cnic" pattern="\d{5}-\d{7}-\d{1}" required type="text" class="form-control" onKeyUp="nic_dash1(this)" value="<?php echo $voter_cnic; ?>" />
+                            <script language="javascript">
+                              function nic_dash1(t)
+
+                              {
+                                var donepatt = /^(\d{5})\/(\d{7})\/(\d{1})$/;
+
+                                var patt = /(\d{5}).*(\d{7}).*(\d{1})/;
+
+                                var str = t.value;
+
+                                if (!str.match(donepatt))
+
+                                {
+                                  result = str.match(patt);
+
+                                  if (result != null)
+
+                                  {
+                                    t.value = t.value.replace(/[^\d]/gi, '');
+
+                                    str = result[1] + '-' + result[2] + '-' + result[3];
+
+                                    t.value = str;
+
+                                  } else {
+
+                                    if (t.value.match(/[^\d]/gi))
+
+                                      t.value = t.value.replace(/[^\d]/gi, '');
+
+                                  }
+                                }
+                              }
+                            </script>
+                          </div>
+
+                          <div style=" text-align: center;">
+                            <input type="submit" class="btn btn-danger" name="survey_data" value="Confirm Voter Information" />
+                          </div>
+                        </form>
+                      </div>
+
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="alert alert-danger">
+                  Update Voter Information
+                </div>
+                <div style="text-align: center;">
+                  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#update_voter_info">
+                    <i class="fa fa-vote"></i> Update Voter Info
+                  </button>
+                </div>
+              </div>
+
+
               <div class="alert alert-primary" style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
 
                 <!-- Modal -->
@@ -1055,7 +1158,20 @@
     </div>
   </section>
 </div>
-<?php if (!$text_book) { ?>
+
+
+
+
+<?php if (!$voter_info) { ?>
+  <script>
+    $(document).ready(function() {
+      $('#update_voter_info').modal('show');
+    });
+  </script>
+
+<?php } ?>
+
+<?php if (!$text_book and $voter_info) { ?>
   <script>
     $(document).ready(function() {
       $('#survey').modal('show');
@@ -1071,7 +1187,6 @@
         // Your code here for the first dropdown
         //console.log("Dropdown 1 selected: " + e.params.data.value);
         if (e.params.data.text == 'Other') {
-          alert();
           $('#<?php echo $level->levelofInstituteId ?>_other_div').show();
           $('#<?php echo $level->levelofInstituteId ?>_other').attr("required", true);
         } else {
