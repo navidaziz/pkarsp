@@ -582,7 +582,7 @@ class Temp_controller extends CI_Controller
       $input['voter_cnic'] = $this->input->post("voter_cnic");
 
       //check data already inserted or not
-      $query = "SELECT COUNT(*) as total FROM textbooks WHERE school_id = '" . $school_id . "' and session_id = '" . $session_id . "'";
+      $query = "SELECT COUNT(*) as total FROM voters_list WHERE school_id = '" . $school_id . "' and session_id = '" . $session_id . "'";
       $count = $this->db->query($query)->row()->total;
       if ($count == 0) {
         //insert data
