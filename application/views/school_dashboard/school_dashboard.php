@@ -253,9 +253,9 @@
                                 $voter_cnic = $voter_info->voter_cnic;
                               }
                               ?>
-                              <strong>Voter Name:(Principal/Director/Head/Owner Name)</strong>
+                              <strong>Voter Name:(Principal/Director/Head/Owner Name) ووٹر کا نام</strong>
                               <input name="voter_name" type="text" required class="form-control" value="<?php echo $voter_name; ?>" />
-                              <strong>Voter CNIC: </strong><input name="voter_cnic" pattern="\d{5}-\d{7}-\d{1}" required type="text" class="form-control" onKeyUp="nic_dash1(this)" value="<?php echo $voter_cnic; ?>" />
+                              <strong>Voter CNIC: ووٹر کا شناختی کارڈ</strong><input name="voter_cnic" pattern="\d{5}-\d{7}-\d{1}" required type="text" class="form-control" onKeyUp="nic_dash1(this)" value="<?php echo $voter_cnic; ?>" />
                               <script language="javascript">
                                 function nic_dash1(t)
 
