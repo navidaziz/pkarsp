@@ -235,9 +235,16 @@
                             <div class="alert alert-primary" style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
 
 
+                              <h3>Institute Name: <?php echo ucwords(strtolower($school->schoolName)); ?></h3>
+                              <h4>Institute ID: <?php echo $school->schoolId ?><br />
+                                <?php if ($school->registrationNumber > 0) { ?>
+                                  <span>Registration ID: <?php echo $school->registrationNumber ?></span>
+                                <?php } ?>
+                              </h4>
 
+                              <p>According to PSRA data, the following is the voter information who will be allowed to cast a vote on behalf of your school in the upcoming election of private schools member of PSRA. Please confirm it or if you want to nominate the Principal/Director/Head of your school as a voter, please update the name and CNIC and submit by 6th November 2023</p>
 
-                              <h4>According to PSRA data, the following is the voter information who will be allowed to cast a vote on behalf of your school in the upcoming election of private schools member of PSRA. Please confirm it or if you want to nominate the Principal/Director/Head of your school as a voter, please update the name and CNIC and submit by 6th November 2023</h4>
+                              <br />
                               <?php
                               $query = "SELECT * FROM voters_list WHERE school_id = '" . $school->schoolId . "' AND session_id ='" . $session->sessionYearId . "'";
                               $voter_info = $this->db->query($query)->row();
@@ -255,7 +262,11 @@
                               ?>
                               <strong>Voter Name:(Principal/Director/Head/Owner Name) ووٹر کا نام</strong>
                               <input name="voter_name" type="text" required class="form-control" value="<?php echo $voter_name; ?>" />
+                              <br />
                               <strong>Voter CNIC: ووٹر کا شناختی کارڈ</strong><input name="voter_cnic" pattern="\d{5}-\d{7}-\d{1}" required type="text" class="form-control" onKeyUp="nic_dash1(this)" value="<?php echo $voter_cnic; ?>" />
+
+                              <br />
+                              <br />
                               <script language="javascript">
                                 function nic_dash1(t)
 
