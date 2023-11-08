@@ -100,38 +100,41 @@ $sessions  = $this->db->query($query)->result();
 
         yAxis: {
             title: {
-                text: 'Total',
-                style: {
-                    fontSize: '7px' // Set the font size for the yAxis title
-                }
+                text: 'Total Renewals'
             },
-            labels: {
-                style: {
-                    fontSize: '7px' // Set the font size for y-axis labels
-                }
+            style: {
+                fontSize: '9px' // Set the font size for the xAxis labels
             },
             plotLines: [{
                 color: '#FF0000', // Red
                 width: 1,
                 dashStyle: 'dash',
+
                 value: <?php echo $total_registration; ?> // Position, you'll have to translate this to the values on your x axis
             }]
         },
 
         xAxis: {
-            categories: [<?php foreach ($sessions as $session) { ?> '<?php echo  substr(str_replace("-20", "-", $session->sessionYearTitle), 2); ?>',
+            // accessibility: {
+            //     rangeDescription: 'Range: 2018 to 2023'
+            // }
+
+            categories: [<?php foreach ($sessions as $session) { ?> '<?php echo  str_replace("-20", "-", $session->sessionYearTitle); ?>',
                 <?php } ?>
             ],
+            style: {
+                fontSize: '9px' // Set the font size for the xAxis labels
+            },
             labels: {
                 style: {
-                    fontSize: '9px'
+                    fontSize: '8px'
                 }
             }
         },
 
         legend: {
             layout: 'vertical',
-            align: 'left',
+            align: 'right',
             verticalAlign: 'middle',
             itemStyle: {
                 "fontSize": "9px"
@@ -152,29 +155,34 @@ $sessions  = $this->db->query($query)->result();
                 dataLabels: {
                     enabled: true
                 },
-                style: {
-                    fontSize: '8px'
-                },
                 enableMouseTracking: false,
             }
 
 
         },
 
-        series: [{
+        series: [
+
+
+
+
+            {
                 name: 'Comm.Reg.',
                 data: [<?php foreach ($sessions as $session) { ?>
                         <?php echo $session->commulative_registration ?>,
                     <?php } ?>
                 ],
-                type: 'spline',
-                dataLabels: {
-                    enabled: true, // Enable data labels
-                    style: {
-                        fontSize: '7px' // Set the font size for data labels
-                    }
-                }
+                type: 'line'
             },
+            // {
+            //     name: 'Renewals Remaning',
+            //     data: [<?php foreach ($sessions as $session) { ?>
+            //             <?php echo $session->remaning ?>,
+            //         <?php } ?>
+            //     ],
+            //     type: 'line',
+            //     color: '#F29B9B'
+            // },
             {
                 name: 'Ren.',
                 data: [<?php foreach ($sessions as $session) { ?>
@@ -183,13 +191,7 @@ $sessions  = $this->db->query($query)->result();
                 ],
                 type: 'spline',
                 color: 'rgb(152, 251, 152)',
-                width: '1',
-                dataLabels: {
-                    enabled: true, // Enable data labels
-                    style: {
-                        fontSize: '7px' // Set the font size for data labels
-                    }
-                }
+                width: '2'
             },
 
             {
@@ -198,13 +200,7 @@ $sessions  = $this->db->query($query)->result();
                         <?php echo $session->new_registration ?>,
                     <?php } ?>
                 ],
-                type: 'spline',
-                dataLabels: {
-                    enabled: true, // Enable data labels
-                    style: {
-                        fontSize: '7px' // Set the font size for data labels
-                    }
-                }
+                type: 'spline'
             },
 
 
@@ -225,5 +221,104 @@ $sessions  = $this->db->query($query)->result();
             }]
         }
 
+    });
+</script>
+<script>
+    <?php //var_dump($sessions);
+
+    $sessionYearTitles = array_column($sessions, 'sessionYearTitle');
+
+    // Sort the original array based on the extracted "sessionYearTitle" values
+    array_multisort($sessionYearTitles, SORT_DESC, $sessions);
+
+    ?>
+    Highcharts.chart('container2', {
+        colors: ['#FFD700', '#C0C0C0', '#CD7F32'],
+        chart: {
+            type: 'column',
+            inverted: true,
+            polar: true
+        },
+        title: {
+            text: '',
+            align: 'left'
+        },
+        subtitle: {
+            text: '',
+            align: 'left'
+        },
+        tooltip: {
+            outside: true
+        },
+        pane: {
+            size: '100%',
+            innerSize: '10%',
+            endAngle: 15,
+        },
+        xAxis: {
+            tickInterval: 1,
+            labels: {
+                align: 'right',
+                useHTML: true,
+                allowOverlap: true,
+                step: 1,
+                y: 3,
+                style: {
+                    fontSize: '9px'
+                }
+            },
+            lineWidth: 0,
+            categories: [
+                <?php foreach ($sessions as $session) { ?> '<?php echo $session->sessionYearTitle . '<span class="f16"><span id="flag" class="flag no"></span></span>'; ?>',
+                <?php } ?>
+
+            ]
+        },
+        yAxis: {
+            crosshair: {
+                enabled: true,
+                color: '#333'
+            },
+            lineWidth: 0,
+            tickInterval: 25,
+            reversedStacks: false,
+            endOnTick: true,
+            showLastLabel: true,
+
+        },
+        plotOptions: {
+            column: {
+                stacking: 'normal',
+                borderWidth: 0,
+                pointPadding: 0,
+                groupPadding: 0.15,
+
+            }
+
+        },
+        series: [{
+                name: 'Renewals',
+                data: [
+                    <?php foreach ($sessions as $session) { ?>
+                        <?php
+                        echo $session->renewal_percantage;
+                        ?>,
+                    <?php } ?>
+
+                ],
+                color: 'rgb(152, 251, 152)'
+            },
+            {
+                name: 'Remanings',
+                data: [
+                    <?php foreach ($sessions as $session) { ?>
+                        <?php echo 100 - $session->renewal_percantage;
+                        ?>,
+                    <?php } ?>
+
+                ],
+                color: '#F29B9B'
+            }
+        ]
     });
 </script>

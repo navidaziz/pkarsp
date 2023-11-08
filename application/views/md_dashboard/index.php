@@ -105,7 +105,12 @@
             </div>
             <div class="col-md-8">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-4">
+
+                        <div id="container" style="height: 200px;"></div>
+
+                    </div>
+                    <div class="col-md-8">
                         <div id="level_wise_other_summary"></div>
                     </div>
                     <div class="col-md-7">
@@ -136,7 +141,7 @@
             <div class="col-md-8">
                 <div class="row">
                     <div class="col-md-7">
-                        <div id="container" style="width:300px"></div>
+                        <div id="" style="width:300px"></div>
 
                     </div>
 

@@ -25,12 +25,11 @@ $current_session = $this->db->query($query)->row()->sessionYearId; ?>
 
 
 <div class="jumbotron" style="padding: 9px;">
-    <table class="datatable table table_small table-bordered">
+    <table class="datatable table table_small table-bordered" style="font-size: 12px !important;">
 
         <thead>
             <tr>
-                <th></th>
-                <th></th>
+                <th colspan="2"></th>
 
                 <th colspan="3"> Gender of Education </th>
 
@@ -52,12 +51,12 @@ $current_session = $this->db->query($query)->row()->sessionYearId; ?>
                 <th>Boys</th>
                 <th>Total</th>
 
-                <th>Male</th>
                 <th>Female</th>
+                <th>Male</th>
                 <th>Total</th>
 
-                <th>Male</th>
                 <th>Female</th>
+                <th>Male</th>
                 <th>Total</th>
             </tr>
         </thead>
@@ -72,7 +71,7 @@ $current_session = $this->db->query($query)->row()->sessionYearId; ?>
             ?>
                 <tr>
                     <th><?php echo $report->level ?></th>
-                    <th class="level_new_registration" style="width: 20%;"><?php echo $report->total; ?></th>
+                    <th><?php echo $report->total; ?></th>
                     <td>
                         <?php
                         $query = "SELECT 
@@ -220,7 +219,7 @@ $current_session = $this->db->query($query)->row()->sessionYearId; ?>
         <tfoot>
             <tr>
                 <th>Total</th>
-                <th class="level_new_registration" style="width: 20%;"><?php echo $levels_total; ?></th>
+                <th><?php echo $levels_total; ?></th>
                 <td>
                     <?php
                     $query = "SELECT 
