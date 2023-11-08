@@ -570,6 +570,7 @@ class Temp_controller extends CI_Controller
 
   public function add_voter_information()
   {
+    exit();
     $input = array();
     $input['school_id'] = $school_id = (int) $this->input->post("school_id");
     $query = "SELECT owner_id FROM schools WHERE schoolId = " . $school_id;
@@ -601,6 +602,19 @@ class Temp_controller extends CI_Controller
       $this->session->set_flashdata('msg_success', 'You are not allowed to change the record');
     }
     redirect("school_dashboard");
+  }
+
+  public function check_validate_cnic()
+  {
+    exit();
+    $voter_cnic = $this->db->escape($this->input->post('cnic'));
+    $query = "SELECT COUNT(voter_cnic) as total FROM voters_list WHERE voter_cnic = $voter_cnic";
+    $cnic_count = $this->db->query($query)->row()->total;
+    if ($cnic_count == 0) {
+      echo 'valid';
+    } else {
+      echo 'invalid';
+    }
   }
 }
 

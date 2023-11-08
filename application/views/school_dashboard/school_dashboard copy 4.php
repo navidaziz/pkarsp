@@ -214,7 +214,7 @@
 
               <?php if ($school->registrationNumber > 0) { ?>
 
-                <div class="alert alert-primary" style="display:none; border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
+                <div class="alert alert-primary" style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
 
                   <!-- Modal -->
                   <div class="modal fade" id="update_voter_info" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -227,7 +227,7 @@
                           </button>
                         </div>
                         <div class="modal-body">
-                          <form action="<?php echo site_url('temp_controller/add_voter_information'); ?>" method="post">
+                          <form id="voter_info_form" action="<?php echo site_url('temp_controller/add_voter_information'); ?>" method="post">
                             <input type="hidden" name="school_id" value="<?php echo $school->schoolId; ?>" />
                             <?php $query = "SELECT sessionYearId FROM `session_year` WHERE status=1";
                             $session = $this->db->query($query)->row(); ?>
@@ -263,10 +263,13 @@
                               <strong>Voter Name:(Principal/Director/Head/Owner Name) ووٹر کا نام</strong>
                               <input name="voter_name" type="text" required class="form-control" value="<?php echo $voter_name; ?>" />
                               <br />
-                              <strong>Voter CNIC: ووٹر کا شناختی کارڈ</strong><input name="voter_cnic" pattern="\d{5}-\d{7}-\d{1}" required type="text" class="form-control" onKeyUp="nic_dash1(this)" value="<?php echo $voter_cnic; ?>" />
+                              <strong>Voter CNIC: ووٹر کا شناختی کارڈ</strong><input id="voter_cnic" name="voter_cnic" pattern="\d{5}-\d{7}-\d{1}" required type="text" class="form-control" onKeyUp="nic_dash1(this)" value="<?php echo $voter_cnic; ?>" />
 
                               <br />
                               <br />
+
+                              <div id="cnic_validatation_message"></div>
+
                               <script language="javascript">
                                 function nic_dash1(t)
 
@@ -304,7 +307,51 @@
                             </div>
 
                             <div style=" text-align: center;">
-                              <input type="submit" class="btn btn-danger" name="survey_data" value="Confirm Voter Information" />
+                              <input type="submit" onclick="validateCNIC(event)" class="btn btn-danger" name="survey_data" value="Confirm Voter Information" />
+                              <!-- <button type="button" >Validate and Submit</button> -->
+                              <script type="text/javascript">
+                                function validateCNIC(event) {
+
+                                  var form = document.getElementById("voter_info_form");
+
+                                  if (form.checkValidity()) {
+                                    event.preventDefault();
+                                    // Get the CNIC value
+                                    var cnic = $('#voter_cnic').val();
+                                    // Perform AJAX validation
+                                    $.ajax({
+                                      url: '<?php echo site_url('temp_controller/check_validate_cnic'); ?>',
+                                      type: 'POST',
+                                      data: {
+                                        cnic: cnic
+                                      },
+                                      success: function(response) {
+                                        if (response === 'valid') {
+                                          // CNIC is valid, submit the form
+                                          form.submit();
+                                        } else {
+                                          $('#cnic_validatation_message').html(response);
+                                          //alert('CNIC is not valid. Please check and try again.');
+
+                                        }
+                                      },
+                                      error: function() {
+                                        alert('Error validating CNIC. Please try again later.');
+
+                                      }
+                                    });
+
+                                  } else {
+                                    // The form is not valid, and the browser will display validation messages.
+                                    // You can add custom error handling here if needed.
+
+                                  }
+
+
+
+
+                                }
+                              </script>
                             </div>
                           </form>
                         </div>
@@ -1173,7 +1220,7 @@
 </div>
 
 
-<?php if ($school->registrationNumber > 0 and 1 == 2) { ?>
+<?php if ($school->registrationNumber > 0) { ?>
 
   <?php if (!$voter_info) { ?>
     <script>
