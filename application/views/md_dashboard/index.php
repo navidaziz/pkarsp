@@ -99,18 +99,15 @@
         <div class="row">
             <div class="col-md-4">
                 <div id="registration_summary"></div>
-                <!-- <div id="container2" style="height: 280px;"></div> -->
-
-
-
-
-
                 <div id="region_wise_summary_chart"></div>
                 <div id="region_wise_summary"></div>
                 <div id="district_wise_summary"></div>
             </div>
             <div class="col-md-8">
                 <div class="row">
+                    <div class="col-md-12">
+                        <div id="level_wise_other_summary"></div>
+                    </div>
                     <div class="col-md-7">
                         <div id="yearly_monthly_summary"></div>
                     </div>
@@ -269,6 +266,8 @@
         get_report("session_progress_report");
         get_report("daily_progress_report");
         get_report("other_summary");
+        get_report("level_wise_other_summary");
+
 
 
 

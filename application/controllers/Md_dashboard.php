@@ -34,6 +34,13 @@ class Md_dashboard extends CI_Controller
       $this->load->view('md_dashboard/other_summary', $this->data);
    }
 
+   public function level_wise_other_summary()
+   {
+      $this->data['title'] = 'PSRA Dashboard';
+      $this->data['description'] = 'Level Wise Other Summary';
+      $this->load->view('md_dashboard/level_wise_other_summary', $this->data);
+   }
+
    public function summary()
    {
       $this->data['title'] = 'PSRA Dashboard';
