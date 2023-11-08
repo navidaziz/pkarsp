@@ -220,7 +220,7 @@ $current_session = $this->db->query($query)->row()->sessionYearId; ?>
         <tfoot>
             <tr>
                 <th>Total</th>
-                <th class="level_new_registration" style="width: 20%;"><?php echo $report->total; ?></th>
+                <th class="level_new_registration" style="width: 20%;"><?php echo $levels_total; ?></th>
                 <td>
                     <?php
                     $query = "SELECT 
