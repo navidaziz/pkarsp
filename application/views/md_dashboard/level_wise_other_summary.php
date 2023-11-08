@@ -66,7 +66,10 @@ $current_session = $this->db->query($query)->row()->sessionYearId; ?>
             <?php
             $total_registered = 0;
             $levels = array();
-            foreach ($reports as $report) { ?>
+            $levels_total = 0;
+            foreach ($reports as $report) {
+                $levels_total += $report->total;
+            ?>
                 <tr>
                     <th><?php echo $report->level ?></th>
                     <th class="level_new_registration" style="width: 20%;"><?php echo $report->total; ?></th>
@@ -215,6 +218,137 @@ $current_session = $this->db->query($query)->row()->sessionYearId; ?>
 
         </tbody>
         <tfoot>
+            <tr>
+                <th>Total</th>
+                <th class="level_new_registration" style="width: 20%;"><?php echo $report->total; ?></th>
+                <td>
+                    <?php
+                    $query = "SELECT 
+                                COUNT(DISTINCT schools_id) AS total
+                                FROM school
+                                WHERE schoolId = (select MAX(s.schoolId) from school as s WHERE s.schools_id = school.schools_id and status=1)
+                                AND status=1 and gender_type_id=2";
+                    $total = $this->db->query($query)->row()->total;
+                    echo number_format($total);
+                    ?>
+                </td>
+                <td>
+                    <?php
+                    $query = "SELECT 
+                                COUNT(DISTINCT schools_id) AS total
+                                FROM school
+                                WHERE schoolId = (select MAX(s.schoolId) from school as s WHERE s.schools_id = school.schools_id and status=1)
+                                AND status=1 and gender_type_id=1";
+                    $total = $this->db->query($query)->row()->total;
+                    echo number_format($total);
+                    ?>
+                </td>
+                <td>
+                    <?php
+                    $query = "SELECT 
+                                COUNT(DISTINCT schools_id) AS total
+                                FROM school
+                                WHERE schoolId = (select MAX(s.schoolId) from school as s WHERE s.schools_id = school.schools_id and status=1)
+                                AND status=1 and gender_type_id=3";
+                    $total = $this->db->query($query)->row()->total;
+                    echo number_format($total);
+                    ?>
+
+                </td>
+                <td>
+
+                    <?php
+                    $query = "SELECT SUM(enrolled) as total FROM age_and_class as e
+                                INNER JOIN school as s on(s.schoolId = e.school_id)
+                                WHERE s.session_year_id = '" . $current_session . "'
+                                AND e.gender_id=2";
+                    $total = $this->db->query($query)->row()->total;
+                    echo number_format($total); ?>
+                </td>
+                <td>
+                    <?php
+                    $query = "SELECT SUM(enrolled) as total FROM age_and_class as e
+                                INNER JOIN school as s on(s.schoolId = e.school_id)
+                                WHERE s.session_year_id = '" . $current_session . "'
+                                AND e.gender_id=1";
+                    $total = $this->db->query($query)->row()->total;
+                    echo number_format($total);
+                    ?>
+                </td>
+                <td>
+                    <?php
+                    $query = "SELECT SUM(enrolled) as total FROM age_and_class as e
+                    INNER JOIN school as s on(s.schoolId = e.school_id)
+                    WHERE s.session_year_id = '" . $current_session . "'";
+                    $total = $this->db->query($query)->row()->total;
+                    echo number_format($total);
+                    ?>
+
+                </td>
+                <td>
+                    <?php
+                    $query = "SELECT COUNT(schoolStaffId) as total FROM school_staff as ss
+                                INNER JOIN school as s on(s.schoolId = ss.school_id)
+                                WHERE s.session_year_id = '" . $current_session . "'
+                                AND ss.schoolStaffGender=2
+                                AND ss.schoolStaffType = 2";
+                    $total = $this->db->query($query)->row()->total;
+                    echo number_format($total);
+                    ?>
+                </td>
+                <td>
+                    <?php $query = "SELECT COUNT(schoolStaffId) as total FROM school_staff as ss
+                                INNER JOIN school as s on(s.schoolId = ss.school_id)
+                                WHERE s.session_year_id = '" . $current_session . "'
+                                AND ss.schoolStaffGender=1
+                                AND ss.schoolStaffType = 2";
+                    $total = $this->db->query($query)->row()->total;
+                    echo number_format($total);
+                    ?>
+                </td>
+                <td>
+                    <?php $query = "SELECT COUNT(schoolStaffId) as total FROM school_staff as ss
+                                INNER JOIN school as s on(s.schoolId = ss.school_id)
+                                WHERE s.session_year_id = '" . $current_session . "'
+                                AND ss.schoolStaffType = 2";
+                    $total = $this->db->query($query)->row()->total;
+                    echo number_format($total);
+                    ?>
+                </td>
+
+
+                <td>
+                    <?php
+                    $query = "SELECT COUNT(schoolStaffId) as total FROM school_staff as ss
+                                INNER JOIN school as s on(s.schoolId = ss.school_id)
+                                WHERE s.session_year_id = '" . $current_session . "'
+                                AND ss.schoolStaffGender=2
+                                AND ss.schoolStaffType = 1";
+                    $total = $this->db->query($query)->row()->total;
+                    echo number_format($total);
+                    ?>
+                </td>
+                <td>
+                    <?php $query = "SELECT COUNT(schoolStaffId) as total FROM school_staff as ss
+                                INNER JOIN school as s on(s.schoolId = ss.school_id)
+                                WHERE s.session_year_id = '" . $current_session . "'
+                                AND ss.schoolStaffGender=1
+                                AND ss.schoolStaffType = 1";
+                    $total = $this->db->query($query)->row()->total;
+                    echo number_format($total);
+                    ?>
+                </td>
+                <td>
+                    <?php $query = "SELECT COUNT(schoolStaffId) as total FROM school_staff as ss
+                                INNER JOIN school as s on(s.schoolId = ss.school_id)
+                                WHERE s.session_year_id = '" . $current_session . "'
+                                AND ss.schoolStaffType = 1";
+                    $total = $this->db->query($query)->row()->total;
+                    echo number_format($total);
+                    ?>
+                </td>
+
+            </tr>
 
         </tfoot>
     </table>
