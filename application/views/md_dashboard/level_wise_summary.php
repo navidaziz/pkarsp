@@ -6,7 +6,7 @@ SELECT
 IF(level_of_school_id=1,'Primary',
                   IF(level_of_school_id=2, 'Middle',
                     IF(level_of_school_id=3, 'High', 
-                       IF(level_of_school_id=4, 'High Secondary',
+                       IF(level_of_school_id=4, 'High Sec.',
                            IF(level_of_school_id=5, 'Academies', 'Others')
                          )))) as level,
                          level_of_school_id,
@@ -171,7 +171,7 @@ echo "<small>Execution Time: " . $execution_time . " seconds </small>";
                     <?php } ?>
                 ]
             }, {
-                type: 'column',
+                type: 'bar',
                 name: 'Current Session Renewals',
                 color: 'red',
                 dataLabels: {

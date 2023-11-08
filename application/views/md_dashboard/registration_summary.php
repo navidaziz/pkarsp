@@ -36,7 +36,7 @@ $current_session = $this->db->query($query)->row()->sessionYearId;
     <div id="other_summary"></div>
 
     <div id="level_wise_summary"></div>
-    <div id="level_wise_summary_chart" style="height: 200px;"></div>
+    <div id="level_wise_summary_chart" style="height: 270px;"></div>
 
 
 

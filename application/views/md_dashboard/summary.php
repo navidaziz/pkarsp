@@ -89,14 +89,14 @@ $sessions  = $this->db->query($query)->result();
     Highcharts.chart('container', {
 
         title: {
-            text: '',
-            align: ''
+            text: 'Trends - Registration and Renewals',
+            align: '',
+            style: {
+                fontSize: '12px' // Set the font size for the yAxis title
+            }
         },
 
-        subtitle: {
-            text: '',
-            align: ''
-        },
+
 
         yAxis: {
             title: {
