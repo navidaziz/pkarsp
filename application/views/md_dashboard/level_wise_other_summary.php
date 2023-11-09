@@ -25,8 +25,8 @@ $current_session = $this->db->query($query)->row()->sessionYearId; ?>
 
 
 <div class="jumbotron" style="padding: 9px;">
+    <strong>Students and Staff Distribution Across Gender and Levels</strong>
     <table class="datatable table table_small table-bordered" style="font-size: 12px !important;">
-
         <thead>
             <tr>
                 <th colspan="2"></th>

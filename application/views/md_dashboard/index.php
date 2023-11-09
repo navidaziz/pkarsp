@@ -127,7 +127,6 @@
                         <div id="session_progress_report"></div>
 
                         <div id="students_summary_report"></div>
-                        <div id="students_summary_report"></div>
                     </div>
                 </div>
 
@@ -271,13 +270,8 @@
         get_report("region_progress_report");
         get_report("session_progress_report");
         get_report("daily_progress_report");
-        get_report("other_summary");
+        //get_report("other_summary");
         get_report("level_wise_other_summary");
-        get_report("students_summary_report");
-
-
-
-
         //get_report("students_summary_report");
     </script>
 

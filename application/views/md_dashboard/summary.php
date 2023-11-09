@@ -3,7 +3,48 @@ $query = "SELECT * FROM session_year";
 $sessions  = $this->db->query($query)->result();
 
 ?>
-<table class="datatable table table_small2 table-bordered" id="yearly_and_monthly_progress_report">
+<?php
+$total_registration = 0;
+foreach ($sessions as $session) {
+    $query = "SELECT COUNT(*) as total FROM `school` WHERE renewal_code<=0 and  status=1 and  session_year_id='" . $session->sessionYearId . "';";
+    $report = $this->db->query($query)->row();
+    $session->commulative_registration = $total_registration += $report->total;
+    $session->new_registration = $report->total;
+    $query = "SELECT COUNT(*) as total FROM `school` WHERE renewal_code>0 and session_year_id='" . $session->sessionYearId . "';";
+    $report = $this->db->query($query)->row();
+    $session->renewals = $report->total;
+}
+?>
+
+<table class="datatable table table_small2" style="background-color: white;">
+    <?php
+    $precetange = 0;
+    foreach ($sessions as $session) {
+
+    ?>
+        <?php
+        if ($session->commulative_registration - $session->new_registration > 0) {
+            $session->renewal_percantage = $precetange = round(($session->renewals / ($session->commulative_registration - $session->new_registration)) * 100, 2);
+            //echo   $precetange;
+        } ?>
+        <tr>
+            <th style="width: 80px;"><?php echo  $session->sessionYearTitle; ?></th>
+            <td>
+                <div class="progress" style="margin: 2px;">
+                    <div class="progress-bar" role="progressbar" style="text-align: center; width: <?php echo $precetange; ?>%;" aria-valuenow="<?php echo $precetange; ?>" aria-valuemin="0" aria-valuemax="100">
+                        <small> <?php echo $precetange; ?>% </small>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    <?php
+    } ?>
+
+</table>
+
+
+
+<table class="datatable table table_small table-bordered" id="yearly_and_monthly_progress_report">
     <thead>
         <tr>
             <th colspan="7">Session Wise Registration / Renewals / Upgradation Report</th>
@@ -20,12 +61,7 @@ $sessions  = $this->db->query($query)->result();
             <td>Registration</td>
             <?php
             $total_registration = 0;
-            foreach ($sessions as $session) {
-                $query = "SELECT COUNT(*) as total FROM `school` WHERE renewal_code<=0 and  status=1 and  session_year_id='" . $session->sessionYearId . "';";
-                $report = $this->db->query($query)->row();
-                $session->commulative_registration = $total_registration += $report->total;
-                $session->new_registration = $report->total;
-            ?>
+            foreach ($sessions as $session) { ?>
                 <td class="new_registrations"><?php echo $report->total; ?></td>
             <?php } ?>
         </tr>

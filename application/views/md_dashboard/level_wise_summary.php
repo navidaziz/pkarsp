@@ -21,20 +21,21 @@ $current_session = $this->db->query($query)->row();
 ?>
 
 
+<br />
 
 <table class="datatable table table_small table-bordered" style="background-color: white;">
     <thead>
         <tr>
             <th colspan="2"></th>
-            <th colspan="4">Current session detail</th>
+            <th colspan="4">Current session registration, upgradation and renewals</th>
         </tr>
         <tr>
             <th>Levels</th>
             <th>Total</th>
             <th>New Registered</th>
             <th>Upgradation</th>
-            <th>Latest Renewals</th>
-            <th>Renewals %</th>
+            <th>Renewals</th>
+            <th>Renewals Issued (%)</th>
         </tr>
     </thead>
     <tbody>
@@ -43,13 +44,13 @@ $current_session = $this->db->query($query)->row();
         $levels = array();
         foreach ($reports as $report) { ?>
             <tr>
-                <th><?php echo $report->level ?></th>
+                <th style="width: 100px;"><?php echo $report->level ?></th>
                 <td class="level_total_registered">
-                    <strong style="font-size: 12px;"><?php echo $report->total;
-                                                        $total_registered += $report->total;
-                                                        $levels[$report->level]['total'] = $report->total;
+                    <?php echo $report->total;
+                    $total_registered += $report->total;
+                    $levels[$report->level]['total'] = $report->total;
 
-                                                        ?></strong>
+                    ?>
                 </td>
                 <?php
                 $query = "SELECT COUNT(*) as total FROM `school` 
@@ -73,10 +74,18 @@ $current_session = $this->db->query($query)->row();
                 <th class="level_renewal_total"><?php
                                                 $levels[$report->level]['renewal'] = $current_renewal->total;
                                                 echo $current_renewal->total; ?></th>
-                <th class="level_precentage">
+                <th style="width: 150px;">
                     <?php
-                    echo round((($current_renewal->total / ($report->total - $current_registered->total)) * 100), 2) . " %";
+                    $precentage = round((($current_renewal->total / ($report->total - $current_registered->total)) * 100), 2) . "";
+
                     ?>
+
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: <?php echo $precentage; ?>%;" aria-valuenow="<?php echo $precentage ?>" aria-valuemin="0" aria-valuemax="100">
+                            <small> <?php echo $precentage; ?>% </small>
+                        </div>
+                    </div>
+
                 </th>
 
             </tr>
@@ -130,6 +139,57 @@ echo "<small>Execution Time: " . $execution_time . " seconds </small>";
 ?>
 
 <script>
+    Highcharts.chart('level_pie_chart', {
+        chart: {
+            type: 'pie'
+        },
+        title: {
+            text: 'Levels Wise Registered Institutes',
+            style: {
+                fontSize: '9px',
+            }
+        },
+        tooltip: {
+            valueSuffix: ''
+        },
+
+        plotOptions: {
+            series: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: [{
+                    enabled: true,
+                    distance: 20
+                }, {
+                    enabled: true,
+                    distance: -40,
+                    format: '{point.percentage:.1f}%',
+                    style: {
+                        fontSize: '9pc',
+                        textOutline: 'none',
+                        opacity: 0.7
+                    },
+                    filter: {
+                        operator: '>',
+                        property: 'percentage',
+                        value: 10
+                    }
+                }]
+            }
+        },
+        series: [{
+            name: 'Total',
+            colorByPoint: true,
+            data: [
+                <?php foreach ($levels as $level_name => $level) { ?> {
+                        name: '<?php echo $level_name; ?>',
+                        y: <?php echo $level['total']; ?>
+                    },
+                <?php } ?>
+            ]
+        }]
+    });
+
     Highcharts.chart('level_wise_summary_chart', {
         title: {
             text: 'Level Wise Registered and Current Session Renewals',
