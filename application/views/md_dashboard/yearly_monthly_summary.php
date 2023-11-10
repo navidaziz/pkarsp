@@ -62,27 +62,58 @@ $reports  = $this->db->query($query)->result();
                 <th><?php echo $report->Year ?></td>
                 <td class="y_m_summary_report" style="color: black;"><?php echo $report->Apr ?></td>
                 <?php if (date('m') == '04') { ?> <td class="y_m_current_month"> <?php echo $report->Apr; ?> </td><?php } ?>
-                <td class="y_m_summary_report" style="color: black;"><?php echo $report->May ?></td>
+                <td class="y_m_summary_report" style="color: black;">
+
+                    <?php if ($report->Apr > $report->May) { ?> <i style="color: red;" class="fa fa-sort-desc"></i> <?php } else { ?> <i style="color: green;" class="fa fa-sort-asc"></i> <?php } ?>
+                    <?php echo $report->May ?></td>
                 <?php if (date('m') == '05') { ?> <td class="y_m_current_month"> <?php echo $report->Apr + $report->May; ?> </td><?php } ?>
-                <td class="y_m_summary_report" style="color: black;"><?php echo $report->Jun ?></td>
+                <td class="y_m_summary_report" style="color: black;">
+                    <?php if ($report->May > $report->Jun) { ?> <i style="color: red;" class="fa fa-sort-desc"></i> <?php } else { ?> <i style="color: green;" class="fa fa-sort-asc"></i> <?php } ?>
+                    <?php echo $report->Jun ?></td>
                 <?php if (date('m') == '06') { ?> <td class="y_m_current_month"> <?php echo $report->Apr + $report->May + $report->Jun; ?> </td><?php } ?>
-                <td class="y_m_summary_report" style="color: black;"><?php echo $report->Jul ?></td>
+                <td class="y_m_summary_report" style="color: black;">
+                    <?php if ($report->Jun > $report->Jul) { ?> <i style="color: red;" class="fa fa-sort-desc"></i> <?php } else { ?> <i style="color: green;" class="fa fa-sort-asc"></i> <?php } ?>
+
+                    <?php echo $report->Jul ?></td>
                 <?php if (date('m') == '07') { ?> <td class="y_m_current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul; ?> </td><?php } ?>
-                <td class="y_m_summary_report" style="color: black;"><?php echo $report->Aug ?></td>
+                <td class="y_m_summary_report" style="color: black;">
+                    <?php if ($report->Jul > $report->Aug) { ?> <i style="color: red;" class="fa fa-sort-desc"></i> <?php } else { ?> <i style="color: green;" class="fa fa-sort-asc"></i> <?php } ?>
+
+                    <?php echo $report->Aug ?></td>
                 <?php if (date('m') == '08') { ?> <td class="y_m_current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug; ?> </td><?php } ?>
-                <td class="y_m_summary_report" style="color: black;"><?php echo $report->Sep ?></td>
+                <td class="y_m_summary_report" style="color: black;">
+                    <?php if ($report->Aug > $report->Sep) { ?> <i style="color: red;" class="fa fa-sort-desc"></i> <?php } else { ?> <i style="color: green;" class="fa fa-sort-asc"></i> <?php } ?>
+
+                    <?php echo $report->Sep ?></td>
                 <?php if (date('m') == '09') { ?> <td class="y_m_current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep; ?> </td><?php } ?>
-                <td class="y_m_summary_report" style="color: black;"><?php echo $report->Oct ?></td>
+                <td class="y_m_summary_report" style="color: black;">
+                    <?php if ($report->Sep > $report->Oct) { ?> <i style="color: red;" class="fa fa-sort-desc"></i> <?php } else { ?> <i style="color: green;" class="fa fa-sort-asc"></i> <?php } ?>
+                    <?php echo $report->Oct ?></td>
                 <?php if (date('m') == '10') { ?> <td class="y_m_current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct; ?> </td><?php } ?>
-                <td class="y_m_summary_report" style="color: black;"><?php echo $report->Nov ?></td>
+                <td class="y_m_summary_report" style="color: black;">
+                    <?php if ($report->Oct > $report->Nov) { ?> <i style="color: red;" class="fa fa-sort-desc"></i> <?php } else { ?> <i style="color: green;" class="fa fa-sort-asc"></i> <?php } ?>
+
+                    <?php echo $report->Nov ?></td>
                 <?php if (date('m') == '11') { ?> <td class="y_m_current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov; ?> </td><?php } ?>
-                <td class="y_m_summary_report" style="color: black;"><?php echo $report->Dec ?></td>
+                <td class="y_m_summary_report" style="color: black;">
+                    <?php if ($report->Nov > $report->Dec) { ?> <i style="color: red;" class="fa fa-sort-desc"></i> <?php } else { ?> <i style="color: green;" class="fa fa-sort-asc"></i> <?php } ?>
+
+                    <?php echo $report->Dec ?></td>
                 <?php if (date('m') == '12') { ?> <td class="y_m_current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov + $report->Dec; ?> </td><?php } ?>
-                <td class="y_m_summary_report" style="color: black;"><?php echo $report->Jan ?></td>
+                <td class="y_m_summary_report" style="color: black;">
+                    <?php if ($report->Dec > $report->Jan) { ?> <i style="color: red;" class="fa fa-sort-desc"></i> <?php } else { ?> <i style="color: green;" class="fa fa-sort-asc"></i> <?php } ?>
+
+                    <?php echo $report->Jan ?></td>
                 <?php if (date('m') == '01') { ?> <td class="y_m_current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov + $report->Dec + $report->Jan; ?> </td><?php } ?>
-                <td class="y_m_summary_report" style="color: black;"><?php echo $report->Feb ?></td>
+                <td class="y_m_summary_report" style="color: black;">
+                    <?php if ($report->Jan > $report->Feb) { ?> <i style="color: red;" class="fa fa-sort-desc"></i> <?php } else { ?> <i style="color: green;" class="fa fa-sort-asc"></i> <?php } ?>
+
+                    <?php echo $report->Feb ?></td>
                 <?php if (date('m') == '02') { ?> <td class="y_m_current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov + $report->Dec + $report->Jan + $report->Feb; ?> </td><?php } ?>
-                <td class="y_m_summary_report" style="color: black;"><?php echo $report->Mar ?></td>
+                <td class="y_m_summary_report" style="color: black;">
+                    <?php if ($report->Feb > $report->Mar) { ?> <i style="color: red;" class="fa fa-sort-desc"></i> <?php } else { ?> <i style="color: green;" class="fa fa-sort-asc"></i> <?php } ?>
+
+                    <?php echo $report->Mar ?></td>
                 <?php if (date('m') == '03') { ?> <td class="y_m_current_month"> <?php echo $report->Apr + $report->May + $report->Jun + $report->Jul + $report->Aug + $report->Sep + $report->Oct + $report->Nov + $report->Dec + $report->Jan + $report->Feb + $report->Mar; ?> </td><?php } ?>
                 <td class="yearly_total" style="color: black;"><?php echo $report->total ?></td>
             </tr>

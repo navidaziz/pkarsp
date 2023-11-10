@@ -44,7 +44,7 @@ foreach ($sessions as $session) {
 
 
 
-<table class="datatable table table_small table-bordered" id="yearly_and_monthly_progress_report">
+<table class="datatable table table_small table-bordered" id="yearly_and_monthly_progress_report" style="background-color: white;">
     <thead>
         <tr>
             <th colspan="7">Session Wise Registration / Renewals / Upgradation Report</th>
