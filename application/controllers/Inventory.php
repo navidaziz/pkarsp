@@ -42,8 +42,11 @@ class Inventory extends CI_Controller
 
             // Check if an image was uploaded
             if (!empty($_FILES['item_image']['name']) or 1 == 1) {
-                // Handle image upload
-                $config['upload_path'] = './uploads/item_images/';
+                $upload_dir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/inventory/';
+                if (!file_exists($upload_dir)) {
+                    mkdir($upload_dir, 0777, true);  //create directory if not exist
+                }
+                $config['upload_path'] = $upload_dir;
                 $config['allowed_types'] = 'jpg|jpeg|png|gif';
                 $config['max_size'] = 2048;
 
@@ -90,7 +93,11 @@ class Inventory extends CI_Controller
         // Check if a file is uploaded
         if ($_FILES['item_image_allot']['name'] != "") {
             // Handle image upload
-            $config['upload_path'] = './uploads/item_images_allot/'; // Define the upload directory
+            $upload_dir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/inventory/';
+            if (!file_exists($upload_dir)) {
+                mkdir($upload_dir, 0777, true);  //create directory if not exist
+            }
+            $config['upload_path'] = $upload_dir;
             $config['allowed_types'] = 'jpg|jpeg|png|gif'; // Define allowed file types
             $config['max_size'] = 2048; // Define max file size in kilobytes (2MB)
 
@@ -128,8 +135,11 @@ class Inventory extends CI_Controller
 
     public function allot_item1()
     { {
-            // Handle image upload
-            $config['upload_path'] = './uploads/item_images_allot/'; // Define the upload directory
+            $upload_dir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/inventory/';
+            if (!file_exists($upload_dir)) {
+                mkdir($upload_dir, 0777, true);  //create directory if not exist
+            }
+            $config['upload_path'] = $upload_dir;
             $config['allowed_types'] = 'jpg|jpeg|png|gif'; // Define allowed file types
             $config['max_size'] = 2048; // Define max file size in kilobytes (2MB)
 
