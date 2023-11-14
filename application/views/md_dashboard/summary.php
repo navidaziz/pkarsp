@@ -60,9 +60,9 @@ foreach ($sessions as $session) {
         <tr>
             <td>Registration</td>
             <?php
-            $total_registration = 0;
+            // $total_registration = 0;
             foreach ($sessions as $session) { ?>
-                <td class="new_registrations"><?php echo $report->total; ?></td>
+                <td class="new_registrations"><?php echo $session->new_registration; ?></td>
             <?php } ?>
         </tr>
         <tr>
