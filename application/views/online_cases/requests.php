@@ -14,6 +14,7 @@
           <th>Contact</th>
         <?php } ?>
         <th>Insti.ID</th>
+        <th>File No.</th>
         <th>Level</th>
         <th>District</th>
         <th>School Name</th>
@@ -63,6 +64,21 @@
                 <?php } ?>
                 <td><?php echo $request->schools_id ?></td>
                 <td>
+                  <?php
+                  $query = "SELECT * FROM `school_file_numbers` WHERE `school_id`='$request->schools_id'";
+                  $file_numbers = $this->db->query($query)->result();
+                  $count = 1;
+                  foreach ($file_numbers as $file_number) {
+                    if ($count > 1) {
+                      echo ", ";
+                    }
+                    echo $file_number->file_number;
+
+                    $count++;
+                  }
+                  ?>
+                </td>
+                <td>
                   <?php if ($request->level_of_school_id == 1) {
                     echo "Primary";
                   } ?>
@@ -85,12 +101,12 @@
 
 
               <?php } else { ?>
-                <td colspan="5"></td>
+                <td colspan="6"></td>
                 <?php if ($list_type == 5) { ?>
                   <td></td>
                   <td></td>
                 <?php } ?>
-
+                <td style="display: none;"></td>
                 <td style="display: none;"></td>
                 <td style="display: none;"></td>
                 <td style="display: none;"></td>
