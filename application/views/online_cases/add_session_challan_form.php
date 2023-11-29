@@ -237,25 +237,27 @@
 
                         <tr>
                             <td style="width: 210px;">
+                                <?php if ($count == 1) { ?>
 
-                                <?php if ($count == 1) { ?> <strong> 01 Apr, <?php echo date('Y', strtotime($session_fee_submission_date->last_date)); ?></strong> to <?php } else { ?>
+                                    <span>Up to </span>
+
+                                <?php } else { ?>
                                     <?php if ($count >= sizeof($session_fee_submission_dates)) { ?>
                                         After
                                     <?php } else { ?>
-                                        <strong> <?php echo date('d M, Y', strtotime($previous_last_date)); ?> </strong> to
+                                        <strong> <?php echo $previous_last_date; ?> </strong> to
                                     <?php } ?>
                                 <?php } ?>
-                                <strong>
-                                    <?php
-                                    $previous_last_date = date('d M, Y', strtotime($session_fee_submission_date->last_date . ' +1 day'));
-                                    if ($count >= sizeof($session_fee_submission_dates)) {
-                                        echo date('d M, Y', strtotime($session_fee_submission_date->last_date . '-1 day'));
-                                    } else {
+                                <?php
+                                $previous_last_date = date('d M, Y', strtotime($session_fee_submission_date->last_date . ' +1 day'));
+                                if ($count >= sizeof($session_fee_submission_dates)) {
+                                    echo "<strong>" . date('d M, Y', strtotime($session_fee_submission_date->last_date . '-1 day')) . "</strong>";
+                                } else {
+                                    echo "<strong>" . date('d M, Y', strtotime($session_fee_submission_date->last_date)) . "</strong>";
+                                }
+                                ?>
 
-                                        echo date('d M, Y', strtotime($session_fee_submission_date->last_date));
-                                    }
-                                    ?>
-                                </strong>
+
                             </td>
                             <td><?php echo number_format($fee_sturucture->renewal_app_processsing_fee); ?></td>
                             <td><?php echo number_format($fee_sturucture->renewal_fee); ?></td>
