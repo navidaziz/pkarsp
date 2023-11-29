@@ -19,6 +19,7 @@
         <th>District</th>
         <th>School Name</th>
         <th>Session</th>
+        <th>Flag</th>
         <th>Days</th>
         <th>Defic</th>
         <th>Note</th>
@@ -51,7 +52,8 @@
       ?>
 
           <?php if ($request->deficient == 0  or 1 == 1) { ?>
-            <tr <?php if ($request->deficient > 0) { ?> style="color:red; <?php if ($list_type == 1) { ?> display:no ne;<?php } ?> " <?php } ?>>
+            <tr style="<?php if ($request->flag_color) { ?>
+            background-color: <?php echo $request->flag_color; ?>; <?php } ?> <?php if ($request->deficient > 0) { ?> color:red; <?php if ($list_type == 1) { ?> display:no ne;<?php } ?> <?php } ?>">
 
               <?php if ($previous_school_id != $request->schools_id) { ?>
                 <td><?php echo $count++; ?> </td>
@@ -101,7 +103,8 @@
 
 
               <?php } else { ?>
-                <td colspan="6"></td>
+                <td colspan=" 6">
+                </td>
                 <?php if ($list_type == 5) { ?>
                   <td></td>
                   <td></td>
@@ -114,6 +117,7 @@
 
               <?php } ?>
               <td><?php echo $request->sessionYearTitle ?></td>
+              <td><?php echo $request->flag_detail ?></td>
               <td style="text-align: center;" title="<?php echo date('d M, Y', strtotime($request->apply_date)); ?>">
                 <?php
                 //strtotime($request->apply_date)

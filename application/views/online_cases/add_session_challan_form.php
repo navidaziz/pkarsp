@@ -89,7 +89,9 @@
         school.dairy_no,
         school.dairy_date,
         school.reg_type_id,
-        school.file_status
+        school.file_status,
+        school.flag_color,
+        school.flag_detail
         FROM
         `school`,
         `reg_type`,
@@ -147,9 +149,60 @@
 
         </div>
         <div class="col-md-5">
+
+            <?php
+            $colors = array();
+            $colors["#B8ED88"] = "Green";
+            $colors["#FF99AD"] = "Red";
+            $colors["#FFDF9E"] = "Yellow";
+            $colors["#72DCFF"] = "Blue";
+            ?>
+
+            <table class="table">
+                <th> <i class="fa fa-flag" aria-hidden="true"></i> Flag Document</th>
+                <td>
+                    <select class="form-control" required name="flag_color" id="flag_color">
+                        <option id="">Select Color</option>
+                        <?php foreach ($colors as $color_code => $color_name) { ?>
+                            <option <?php if ($school_session->flag_color == $color_code) { ?> selected <?php } ?> value="<?php echo $color_code; ?>"><?php echo $color_name; ?></option>
+                        <?php } ?>
+                    </select>
+                </td>
+                <td>
+                    <input class="form-control" type="text" value="<?php echo $school_session->flag_detail; ?>" name="flag_detail" id="flag_detail" />
+                </td>
+                <td>
+                    <button onclick="flag_case()" class="btn btn-success btn-sm"><i class="fa fa-flag" aria-hidden="true"></i> Flag</button>
+                </td>
+            </table>
+            <div id="flag_message"></div>
+            <script>
+                function flag_case() {
+                    var flag_color = $('#flag_color').val();
+                    var flag_detail = $('#flag_detail').val();
+
+                    $.ajax({
+                            method: "POST",
+                            url: "<?php echo site_url('online_cases/update_flag'); ?>",
+                            data: {
+                                session_id: <?php echo $school_session->sessionYearId; ?>,
+                                school_id: <?php echo $school_id; ?>,
+                                schools_id: <?php echo $schoolid; ?>,
+                                flag_color: flag_color,
+                                flag_detail: flag_detail
+                            },
+                        })
+                        .done(function(response) {
+                            $('#flag_message').html(response);
+                        });
+                }
+            </script>
+
             <?php
             $query = "SELECT fee_min, fee_max, renewal_app_processsing_fee, renewal_app_inspection_fee, renewal_fee, up_grad_fee 
-    FROM `fee_structure` WHERE fee_min <= '" . $max_tuition_fee . "' ORDER BY fee_min DESC LIMIT 1";
+    FROM `fee_structure` WHERE fee_min <= '" . $max_tuition_fee . "' 
+     AND school_type_id = '" . $school->school_type_id . "'
+    ORDER BY fee_min DESC LIMIT 1";
             $fee_sturucture = $this->db->query($query)->result()[0];
             $query = "SELECT * FROM `session_fee_submission_dates` WHERE session_id = '" . $school_session->sessionYearId . "'";
             $session_fee_submission_dates = $this->db->query($query)->result();

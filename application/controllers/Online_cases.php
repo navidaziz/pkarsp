@@ -52,6 +52,8 @@ class Online_cases extends Admin_Controller
       school.status_remark,
       school.visit,
       school.recommended,
+      school.flag_color,
+        school.flag_detail,
       `school`.`level_of_school_id`,
       `schools`.`yearOfEstiblishment`,
       (SELECT `tehsils`.`tehsilTitle` FROM `tehsils` WHERE `tehsils`.`tehsilId` = schools.tehsil_id) as tehsil,
@@ -984,6 +986,35 @@ school.principal_contact_no,
          redirect($_SERVER['HTTP_REFERER']);
       } else {
          redirect($_SERVER['HTTP_REFERER']);
+      }
+   }
+
+   public function update_flag()
+   {
+      $this->form_validation->set_rules('school_id', 'School ID', 'required|integer');
+      $this->form_validation->set_rules('schools_id', 'Schools ID', 'required|integer');
+      $this->form_validation->set_rules('flag_color', 'Flag Color', 'required');
+      $this->form_validation->set_rules('flag_detail', 'Flag Detail', 'required');
+
+      if ($this->form_validation->run() == FALSE) {
+         echo validation_errors();
+      } else {
+         $school_id = (int) $this->input->post('school_id');
+         $session_id = (int) $this->input->post('session_id');
+         $schools_id =  (int) $this->input->post('schools_id');
+         $flag_color = $this->db->escape($this->input->post('flag_color'));
+         $flag_detail = $this->db->escape($this->input->post('flag_detail'));
+         $query = "UPDATE `school` SET 
+         `flag_color` = " . $flag_color . ", 
+         `flag_detail` = " . $flag_detail . "
+         WHERE schoolId= '" . $school_id . "' 
+         AND session_year_id = '" . $session_id . "'
+         and schools_id = '" . $schools_id . "'";
+         if ($this->db->query($query)) {
+            echo "Flag Update Successfully";
+         } else {
+            echo "Error Try Again";
+         }
       }
    }
 }
