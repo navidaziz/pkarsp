@@ -131,7 +131,7 @@ class Messages extends Admin_Controller
    }
    public function message_details($message_id)
    {
-      $message_id = (int) = $message_id;
+      $message_id = (int) $message_id;
       $query1 = "  SELECT * FROM `message_for_all` where message_id=$message_id ";
       $query1 = $this->db->query($query1);
       $message_info = $query1->row();
