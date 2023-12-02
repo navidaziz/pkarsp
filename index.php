@@ -63,6 +63,7 @@ if ($hostname === 'localhost' || $hostname === '127.0.0.1') {
 } else {
 	define('ENVIRONMENT', 'production');
 }
+echo ENVIRONMENT;
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING
