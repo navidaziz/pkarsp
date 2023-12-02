@@ -58,12 +58,11 @@ define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'developm
 
 $hostname = $_SERVER['HTTP_HOST'];
 
-if ($hostname === 'psra.gkp.pk') {
-	define('ENVIRONMENT', 'production');
-} else {
+if ($hostname === 'localhost' || $hostname === '127.0.0.1') {
 	define('ENVIRONMENT', 'development');
+} else {
+	define('ENVIRONMENT', 'production');
 }
-echo ENVIRONMENT;
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING
