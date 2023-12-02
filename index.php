@@ -64,7 +64,7 @@ if ($hostname === 'localhost' || $hostname === '127.0.0.1') {
 	//define('ENVIRONMENT', 'production');
 	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'production');
 }
-echo ENVIRONMENT;
+
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING
