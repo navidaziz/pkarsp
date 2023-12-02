@@ -56,7 +56,7 @@
  */
 define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
 
-$hostname = $_SERVER['HTTP_HOST'];
+echo $hostname = $_SERVER['HTTP_HOST'];
 
 if ($hostname === 'localhost' || $hostname === '127.0.0.1') {
 	define('ENVIRONMENT', 'development');
