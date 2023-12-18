@@ -17,6 +17,11 @@ class Bank_challan_entry extends Admin_Controller
       $this->load->view('layout', $this->data);
    }
 
+   public function generate_notesheet()
+   {
+      $this->load->view('bank_challan_entry/change_of_name', $this->data);
+   }
+
 
 
    public function school_detail()

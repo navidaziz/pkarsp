@@ -111,6 +111,10 @@
                         <i class="fa fa-clock-o" aria-hidden="true"></i>
                         <?php echo date("d M, Y", strtotime($message->created_date)); ?>
                     </small>
+                    <details>
+                        <summary style="cursor: pointer; color: #3c8dbc;"><strong>Message Detail</strong></summary>
+                        <p><?php echo $message->discription; ?></p>
+                    </details>
                 </li>
 
             <?php endforeach; ?>
