@@ -158,7 +158,7 @@
         <div class="col-md-12">
           <table class="table2" style="width: 100%;">
             <tr>
-              <td> <img src="<?php echo base_url('assets/images/site_images/certificate-logo-1-in-print.jpg'); ?>" style="height: 100px; width: 100px;">
+              <td> <img src="<?php echo base_url('assets/images/site_images/certificate-logo-2-in-print.png'); ?>" style="height: 108px; width: 128px;">
               </td>
               <td>
                 <h4 class="text-center">PRIVATE SCHOOLS REGULATORY AUTHORITY</h4>
@@ -170,7 +170,10 @@
                   </small>
                 </p>
               </td>
-              <td> <img src="<?php echo base_url('assets/images/site_images/certificate-logo-2-in-print.png'); ?>" style="height: 108px; width: 128px;">
+              <td>
+                <div>
+                  <img style="border-radius: 5px; border: 1px solid black;" src="https://api.qrserver.com/v1/create-qr-code/?color=000000&amp;bgcolor=FFFFFF&amp;data=https%3A%2F%2Fpsra.gkp.pk%2Finstitute%2Fqrcode%2F<?php echo $schools_id; ?>%2F0&amp;qzone=1&amp;margin=0&amp;size=108x108&amp;ecc=L" alt="qr code" />
+                </div>
               </td>
             </tr>
           </table>
