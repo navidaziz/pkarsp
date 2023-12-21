@@ -75,7 +75,7 @@ $current_session = $this->db->query($query)->row()->sessionYearId;
                 type: 'column'
             },
             title: {
-                text: 'For the current session, distribute based on fee categories.'
+                text: 'Current session, fee categories wise distribution'
             },
             subtitle: {
                 text: ''
