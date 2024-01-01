@@ -209,10 +209,201 @@
 
         <div class="row">
 
+          <!-- Modal -->
+          <div class="modal fade" id="vehicles" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" style="display: inline;" id="exampleModalLabel">Institute Vehicles Detail</h5>
+                  <button type="button" class="close pull-right" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div style="margin: 5px; padding:5px; background-color: #F1F2F4;">
+                    <div class="row">
+                      <div class="form-group col-md-4">
+                        <label for="vehicle_number">Vehicle No</label>
+                        <input placeholder="Vehicle Number" class="form-control" type="text" id="vehicle_number" name="vehicle_number" required>
+                      </div>
+                      <div class="form-group col-md-4">
+                        <label for="vehicle_model_year">Model Year</label>
+                        <select class="form-control" name="vehicle_model_year" id="vehicle_model_year" required>
+                          <option value="0">Select Year</option>
+                          <?php for ($years = 2023; $years >= 1950; $years--) { ?>
+                            <option value="<?php echo $years; ?>"><?php echo $years; ?></option>
+                          <?php } ?>
+                        </select>
+                      </div>
+                      <div class="form-group col-md-4">
+                        <label for="type_of_vehicle">Type of Vehicle</label>
+                        <input placeholder="Couster, Bus, Van, Coach etc" class="form-control" style="width: 100% !important;" type="text" id="type_of_vehicle" name="type_of_vehicle" required>
+                      </div>
+                      <div class="form-group col-md-5">
+                        <label for="expiry_of_fit_certificate">Fitness Certificate (Expiry Date)</label>
+                        <input class="form-control" style="width: 100% !important;" type="date" id="expiry_of_fit_certificate" name="expiry_of_fit_certificate" required>
+                      </div>
+                      <div class="form-group col-md-4">
+                        <label for="total_seats">Total No. of Seats</label>
+                        <input placeholder="10, 20, 50 etc" class="form-control" min="5" max="100" style="width: 100% !important;" title="10" type="number" id="total_seats" name="total_seats" required>
+
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label for="add_record">Add Record</label>
+                        <input onclick="add_vehicle_info()" type="button" class="btn btn-primary btn-sm" value="Add Vehicle">
+
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="table-responsive" id="vehicle_list">
+                    <table class="table" style="font-size: 11px;">
+                      <tr>
+                        <th>S/No</td>
+                        <th>Vehicle No.</th>
+                        <th>Model Year</th>
+                        <th>Type of Vehicle</th>
+                        <th>Date of expiry of last fitness Certificate</th>
+                        <th>Total Seats</th>
+                        <th>Action</th>
+                      </tr>
+                      <?php $query = "SELECT * FROM school_vehicles WHERE school_id = '" . $school->schoolId . "'";
+                      $school_vehicles = $this->db->query($query)->result();
+                      if ($school_vehicles) {
+                        $count = 1;
+                        foreach ($school_vehicles as $school_vehicle) { ?>
+                          <tr>
+                            <td><?php echo $count++; ?></td>
+                            <td><?php echo $school_vehicle->vehicle_number; ?></td>
+                            <td><?php echo $school_vehicle->vehicle_model_year; ?></td>
+                            <td><?php echo $school_vehicle->type_of_vehicle; ?></td>
+                            <td><?php
+                                // echo $school_vehicle->expiry_of_fit_certificate;
+                                if ($school_vehicle->expiry_of_fit_certificate != '0000-00-00') {
+                                  echo date('d M, Y', strtotime($school_vehicle->expiry_of_fit_certificate));
+                                } ?></td>
+                            <td><?php echo $school_vehicle->total_seats; ?></td>
+
+                            <td><a href="#" onclick="delete_vehicle_date(<?php echo $school_vehicle->vehicle_id ?>)">delete</a></td>
+
+                          </tr>
+                        <?php } ?>
+                      <?php } ?>
+                    </table>
+                  </div>
+
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+          <script>
+            function delete_vehicle_date(vehicle_id) {
+              $.ajax({
+                  method: "POST",
+                  url: "<?php echo site_url('Temp_controller/delete_vehicle_data'); ?>",
+                  data: {
+                    vehicle_id: vehicle_id,
+                    school_id: <?php echo $school->schoolId ?>
+                  }
+                })
+                .done(function(msg) {
+                  $('#vehicle_list').html(msg);
+                });
+            }
+
+            function add_vehicle_info() {
+              var vehicle_number = $('#vehicle_number').val();
+              if (vehicle_number == '') {
+                alert('Please enter Vehicle No');
+                return false;
+              }
+              var vehicle_model_year = $('#vehicle_model_year').val();
+              if (vehicle_model_year == '' || vehicle_model_year == 0) {
+                alert('Please Select Vehicle Model Year.');
+                return false;
+              }
+
+
+
+              var type_of_vehicle = $('#type_of_vehicle').val();
+              if (type_of_vehicle == '') {
+                alert('Type of Vehicle Required');
+                return false;
+              }
+
+              var total_seats = $('#total_seats').val();
+              if (total_seats == '') {
+                alert('Total Seats Required');
+                return false;
+              }
+              if (total_seats > 100) {
+                alert('Please mention seats between 5 and 100.');
+                return false;
+              }
+              if (total_seats < 5) {
+                alert('Seats should not be less than 5.');
+                return false;
+              }
+
+              var expiry_of_fit_certificate = $('#expiry_of_fit_certificate').val();
+              $.ajax({
+                  method: "POST",
+                  url: "<?php echo site_url('Temp_controller/temp_vehicle'); ?>",
+                  data: {
+                    vehicle_number: vehicle_number,
+                    vehicle_model_year: vehicle_model_year,
+                    total_seats: total_seats,
+                    type_of_vehicle: type_of_vehicle,
+                    expiry_of_fit_certificate: expiry_of_fit_certificate,
+                    school_id: <?php echo $school->schoolId ?>
+                  }
+                })
+                .done(function(msg) {
+                  $('#vehicle_list').html(msg);
+                  $('#total_seats').val("");
+                  $('#vehicle_number').val("");
+                  $('#vehicle_model_year').val("");
+                });
+            }
+          </script>
+
+
           <?php if ($school->school_type_id == 1) { ?>
             <div class="col-md-3">
 
               <?php if ($school->registrationNumber > 0) { ?>
+
+                <div class="alert alert-primary" style="display:block; border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
+                  <div class="alert alert-info">
+                    <style>
+                      .blink_me {
+                        animation: blinker 1s linear infinite;
+                        color: red;
+                      }
+
+                      @keyframes blinker {
+                        50% {
+                          opacity: 0;
+                        }
+                      }
+                    </style>
+                    <span class="blink_me">Urgent information</span> is required regarding school vehicles. Please provide details about the school vehicles.
+                  </div>
+                  <div style="text-align: center;">
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#vehicles">
+                      <i class="fa fa-bus"></i> School Vehicles Information
+                    </button>
+                  </div>
+                </div>
+
 
                 <div class="alert alert-primary" style="display:none; border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
 

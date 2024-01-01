@@ -164,15 +164,15 @@ class Temp_controller extends CI_Controller
 
     $input['school_id'] = $school_id = $this->input->post('school_id');
     $this->db->insert('school_vehicles', $input);
-    echo '<table class="table">
+    echo '<table class="table" style="font-size: 11px;">
     <tr>
-      <th>S/No</td>
-      <th>Vehicle No.</th>
-      <th>Model Year</th>
-      <th>Type of Vehicle</th>
-      <th>Date of expiry of last fitness Certificate</th>
-      <th>Total Seats</th>
-      <th>Action</th>
+    <th>S/No</td>
+    <th>Vehicle No.</th>
+    <th>Model Year</th>
+    <th>Type of Vehicle</th>
+    <th>Date of expiry of last fitness Certificate</th>
+    <th>Total Seats</th>
+    <th>Action</th>
     </tr>';
     $query = "SELECT * FROM school_vehicles WHERE school_id = '" . $school_id . "'";
     $school_vehicles = $this->db->query($query)->result();
@@ -181,7 +181,7 @@ class Temp_controller extends CI_Controller
       foreach ($school_vehicles as $school_vehicle) {
         echo '<tr>
           <td>' . $count++ . '</td>
-          <td>' . $school_vehicle->vehical_number . '</td>
+          <td>' . $school_vehicle->vehicle_number . '</td>
           <td>' . $school_vehicle->vehicle_model_year . '</td>
           <td>' . $school_vehicle->type_of_vehicle . '</td><td>';
         if ($school_vehicle->expiry_of_fit_certificate != '0000-00-00') {
@@ -205,13 +205,15 @@ class Temp_controller extends CI_Controller
     $this->db->where('school_id', $school_id);
     $this->db->delete('school_vehicles');
 
-    echo '<table class="table">
+    echo '<table class="table" style="font-size: 11px;">
     <tr>
-      <th>S/No</td>
-      <th>Vehicle No.</th>
-      <th>Model Year</th>
-      <th>Total Seats</th>
-      <th>Action</th>
+    <th>S/No</td>
+    <th>Vehicle No.</th>
+    <th>Model Year</th>
+    <th>Type of Vehicle</th>
+    <th>Date of expiry of last fitness Certificate</th>
+    <th>Total Seats</th>
+    <th>Action</th>
     </tr>';
     $query = "SELECT * FROM school_vehicles WHERE school_id = '" . $school_id . "'";
     $school_vehicles = $this->db->query($query)->result();
@@ -220,7 +222,7 @@ class Temp_controller extends CI_Controller
       foreach ($school_vehicles as $school_vehicle) {
         echo '<tr>
           <td>' . $count++ . '</td>
-          <td>' . $school_vehicle->vehical_number . '</td>
+          <td>' . $school_vehicle->vehicle_number . '</td>
           <td>' . $school_vehicle->vehicle_model_year . '</td>
           <td>' . $school_vehicle->type_of_vehicle . '</td><td>';
         if ($school_vehicle->expiry_of_fit_certificate != '0000-00-00') {
