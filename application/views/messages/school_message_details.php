@@ -241,10 +241,10 @@
                                 <div class="alert alert-danger">
                                   <div class="row">
                                     <div class="col-md-6">
-                                      <div>To reprocess your case, click "Deficiency Completed" after entering your deficiency bank challan.</div>
+                                      <div>To reprocess your case, click "Submit Deficiency Online" after entering your deficiency bank challan.</div>
                                     </div>
                                     <div class="col-md-6" style="direction: rtl;">
-                                      اپنے کیس کو ری پروسیس کرنے کے لیے، اپنا ڈیفیشینسی بینک چالان داخل کرنے کے بعد "Deficiency Completed" پر کلک کریں۔
+                                      اپنے کیس کو ری پروسیس کرنے کے لیے، اپنا ڈیفیشینسی بینک چالان داخل کرنے کے بعد "Submit Deficiency Online" پر کلک کریں۔
                                     </div>
                                   </div>
                                 </div>
