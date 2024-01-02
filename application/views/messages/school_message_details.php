@@ -250,7 +250,7 @@
                                 </div>
                                 <form method="post" action="<?php echo base_url('messages/school_message_details/' . $message_info->message_id); ?>">
                                   <input type="hidden" name="school_id" value="<?php echo $message_info->school_session_id; ?>" />
-                                  <input class="btn btn-danger" type="submit" name="deficiency_completed" value="Deficiency Completed" />
+                                  <input class="btn btn-danger" type="submit" name="deficiency_completed" value="Submit Deficiency Online" />
                                 </form>
                               </td>
                             </tr>
