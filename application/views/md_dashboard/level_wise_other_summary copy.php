@@ -6,18 +6,22 @@ $current_session = $this->db->query($query)->row()->sessionYearId;
 
 <?php $query = "
                 SELECT 
-                IF(level_of_school_id=1,'Primary',
-                                IF(level_of_school_id=2, 'Middle',
-                                    IF(level_of_school_id=3, 'High', 
-                                    IF(level_of_school_id=4, 'High Sec.',
-                                        IF(level_of_school_id=5, 'Academies', 'Others')
+                IF(school.level_of_school_id=1,'Primary',
+                                IF(school.level_of_school_id=2, 'Middle',
+                                    IF(school.level_of_school_id=3, 'High', 
+                                    IF(school.level_of_school_id=4, 'High Sec.',
+                                        IF(school.level_of_school_id=5, 'Academies', 'Others')
                                         )))) as level,
-                                        level_of_school_id,
-                                        COUNT(DISTINCT schools_id) AS total
+                                        school.level_of_school_id,
+                                        COUNT(DISTINCT school.schools_id) AS total
                 FROM school
-                WHERE level_of_school_id = (select MAX(s.level_of_school_id) from school as s WHERE s.schools_id = school.schools_id and status=1)
-                AND status=1
-                GROUP BY level_of_school_id;";
+                INNER JOIN schools ON(schools.schoolId = school.schools_id)
+                WHERE school.level_of_school_id = (select MAX(s.level_of_school_id) from school as s WHERE s.schools_id = school.schools_id and status=1)
+                AND school.status=1 ";
+if ($district_id) {
+    $query .= " AND schools.district_id = $district_id";
+}
+$query .= " GROUP BY level_of_school_id;";
 $reports = $this->db->query($query)->result();
 $query = "SELECT sessionYearId FROM `session_year` WHERE status=1";
 $current_session = $this->db->query($query)->row()->sessionYearId; ?>
@@ -25,10 +29,15 @@ $current_session = $this->db->query($query)->row()->sessionYearId; ?>
 
 
 <div class="jumbotron" style="padding: 9px;">
-    <strong>Students and Staff Distribution Across Gender and Levels
-
-
-    </strong>
+    <strong class="pull-left">Students and Staff Distribution Across Gender and Levels</strong>
+    <!-- <select onchange="level_wise_other_summary('level_wise_other_summary')" class="pull-right" style="font-size: 12px;">
+        <option value="0">Filter By District</option>
+        <?php $query = "SELECT * FROM district";
+        $districts = $this->db->query($query)->result();
+        foreach ($districts as $district) { ?>
+            <option id="<?php echo $district->districtId; ?>"><?php echo $district->districtTitle; ?></option>
+        <?php } ?>
+    </select> -->
     <table class="datatable table table_small table-bordered" style="font-size: 12px !important;">
         <thead>
             <tr>
@@ -381,3 +390,20 @@ $current_session = $this->db->query($query)->row()->sessionYearId; ?>
     echo "<small style='font-size:9px !important'>Execution Time: " . $execution_time . " seconds </small>";
     ?>
 </div>
+<script>
+    function level_wise_other_summary(funcation_name) {
+        alert(funcation_name);
+        district_id = 0;
+        $('#' + funcation_name).html('<h6 style="text-align: center;" class="linear-background">Please Wiat ....</h6>');
+        $.ajax({
+                method: "POST",
+                url: "http://localhost/pkarsp/md_dashboard/" + funcation_name,
+                data: {
+                    district_id: district_id
+                }
+            })
+            .done(function(respose) {
+                $('#' + funcation_name).html(respose);
+            });
+    }
+</script>

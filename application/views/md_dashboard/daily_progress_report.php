@@ -59,6 +59,8 @@
             $query = "SELECT users.userTitle, users.userId FROM `school`
                           INNER JOIN users ON(users.userId = school.note_sheet_completed)
                           AND school.file_status IN (10,4)
+                          AND DATE(note_sheet_completed_date) >= '" .  date('Y-m-d', $one_month_ago) . "'
+                          AND DATE(note_sheet_completed_date) <= '" .  date('Y-m-d', $current_date) . "'
                           GROUP BY users.userId;";
             $users = $this->db->query($query)->result();
             foreach ($users as $user) {

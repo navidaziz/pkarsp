@@ -36,6 +36,11 @@ class Md_dashboard extends Admin_Controller
 
    public function level_wise_other_summary()
    {
+      if ($this->input->post("district_id")) {
+         $this->data['district_id'] = (int) $this->input->post("district_id");
+      } else {
+         $this->data['district_id'] = 0;
+      }
       $this->data['title'] = 'PSRA Dashboard';
       $this->data['description'] = 'Level Wise Other Summary';
       $this->load->view('md_dashboard/level_wise_other_summary', $this->data);
