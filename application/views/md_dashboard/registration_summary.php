@@ -89,7 +89,7 @@ $current_session = $this->db->query($query)->row()->sessionYearId;
                     '6000-10000',
                     '10001-15000',
                     '15000-20000',
-                    'Above 2K'
+                    'Above 20000'
                 ],
                 crosshair: true
             },

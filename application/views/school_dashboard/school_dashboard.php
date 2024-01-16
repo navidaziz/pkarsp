@@ -1389,12 +1389,18 @@
   <?php if (!$text_book) { ?>
     <script>
       $(document).ready(function() {
-        $('#survey').modal('show');
+        //  $('#survey').modal('show');
       });
     </script>
   <?php } ?>
 
 <?php } ?>
+<script>
+  $(document).ready(function() {
+    $('#vehicles').modal('show');
+  });
+</script>
+
 
 <script>
   $(document).ready(function() {
