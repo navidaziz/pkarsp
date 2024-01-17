@@ -50,38 +50,42 @@ $pending_files = $this->db->query($query)->result();
         <table class="table table_small table-bordered" style="text-align:center; font-size:7px !important" id="test _table">
             <thead>
                 <tr>
-                    <th colspan="4"></th>
+                    <th colspan="2"></th>
+                    <th style="background-color: rgb(255, 165, 0);">Pending (Queue)</th>
+                    <th style="background-color: rgb(255, 99, 71);">Pending</th>
                     <th colspan="5" style="background-color: rgb(241, 194, 50);">New Registration Cases</th>
                     <th colspan="5" style="background-color: rgba(102, 211, 252);">Renewal+Upgradation Cases</th>
-                    <th>Only Upgradataions</th>
-                    <th style="background-color: rgb(166, 77, 121);">Renewal Cases</th>
+                    <th style="background-color: rgb(152, 250, 152);">Renewal Cases</th>
+                    <th style="background-color: rgb(224,149,247);">Only Upgradataions</th>
                     <th colspan="4" style="background-color: rgb(253, 92, 99)">Financial Deficiency Cases</th>
-                </tr>
-                <tr>
-                    <td style="text-align: center;">Region</td>
-                    <td style="text-align: center;">Applied</td>
-                    <td style="text-align: center;">Pending (Queue)</td>
-                    <td style="text-align: center;">Total Pending</td>
-                    <td style="background-color: rgb(241, 194, 50);">Total</td>
-                    <td style="background-color: rgb(241, 194, 50);">New</td>
-                    <td style="background-color: rgb(241, 194, 50);">Not Visited</td>
-                    <td style="background-color: rgb(241, 194, 50);">Visited</td>
-                    <td style="background-color: rgb(241, 194, 50);">Not Recom.</td>
-
-                    <td style="background-color: rgba(102, 211, 252);">Total</td>
-                    <td style="background-color: rgba(102, 211, 252);">New</td>
-                    <td style="background-color: rgba(102, 211, 252);">Not Visited</td>
-                    <td style="background-color: rgba(102, 211, 252);">Visited</td>
-                    <td style="background-color: rgba(102, 211, 252);">Not Recom.</td>
-
-                    <td>Total</td>
-                    <td style="background-color: rgb(166, 77, 121);">Total</td>
-                    <td style="background-color: rgb(253, 92, 99)">Total</td>
-                    <td style="background-color: rgb(253, 92, 99)">Regi</td>
-                    <td style="background-color: rgb(253, 92, 99)">Ren+Upg</td>
-                    <td style="background-color: rgb(253, 92, 99)">Renewal</td>
-                    <td style="background-color: rgb(222, 49, 99)">(10%)</td>
+                    <th style="background-color: rgb(222, 49, 99)">10%</th>
                     <td style="background-color: rgb(230, 32, 32);">Issue Pend.</td>
+                </tr>
+                <tr style="background-color: lightgray">
+                    <td style="text-align: center; background-color: lightgray">Region</td>
+                    <td style="text-align: center; background-color: lightgray">Applied</td>
+                    <td style="text-align: center; background-color: lightgray">Total</td>
+                    <td style="text-align: center; background-color: lightgray">Total</td>
+                    <td style="background-color: lightgray;">Total</td>
+                    <td style="background-color: lightgray;">New</td>
+                    <td style="background-color: lightgray;">Not Visited</td>
+                    <td style="background-color: lightgray;">Visited</td>
+                    <td style="background-color: lightgray;">Not Recom.</td>
+
+                    <td style="background-color: lightgray;">Total</td>
+                    <td style="background-color: lightgray;">New</td>
+                    <td style="background-color: lightgray;">Not Visited</td>
+                    <td style="background-color: lightgray;">Visited</td>
+                    <td style="background-color: lightgray;">Not Recom.</td>
+                    <td style="background-color: lightgray;">Total</td>
+                    <td>Total</td>
+
+                    <td style="background-color: lightgray;">Total</td>
+                    <td style="background-color: lightgray;">Regi</td>
+                    <td style="background-color: lightgray;">Ren+Upg</td>
+                    <td style="background-color: lightgray;">Renewal</td>
+                    <td>Total</td>
+                    <td>Total</td>
                 </tr>
             </thead>
 
@@ -92,8 +96,8 @@ $pending_files = $this->db->query($query)->result();
                     <tr>
                         <th style="text-align: center;"><?php echo $pending->region; ?></th>
                         <td><?php echo $pending->total_applied; ?></td>
-                        <td><?php echo $pending->previous_pending; ?></td>
-                        <th style="text-align: center;"><?php echo $pending->total_pending; ?></th>
+                        <td class="region_preding_previous"><?php echo $pending->previous_pending; ?></td>
+                        <th class="region_pending_cases" style="text-align: center;"><?php echo $pending->total_pending; ?></th>
 
                         <td class="registration_total"><?php echo $pending->registrations; ?></td>
                         <th class="registration_other"><?php echo $pending->reg_new; ?></th>
@@ -107,9 +111,9 @@ $pending_files = $this->db->query($query)->result();
                         <th class="re_upg_other"><?php echo $pending->re_up_visited_yes; ?></th>
                         <th class="re_upg_other"><?php echo $pending->re_up_not_recommend; ?></th>
 
-
-                        <td class="upgra"><?php echo $pending->upgradations; ?></td>
                         <td class="renew"><?php echo $pending->renewals; ?></td>
+                        <td class="upgra"><?php echo $pending->upgradations; ?></td>
+
                         <td class="deficient"><?php echo $pending->financially_deficient; ?></td>
                         <td class="deficient"><?php echo $pending->reg_deficient; ?></td>
                         <td class="deficient"><?php echo $pending->ren_upg_deficient; ?></td>
@@ -182,9 +186,8 @@ $pending_files = $this->db->query($query)->result();
                     <th class="pending_total"><?php echo $pending->re_up_visited_yes; ?></th>
                     <th class="pending_total"><?php echo $pending->re_up_not_recommend; ?></th>
 
-
-                    <th class="pending_total"><?php echo $pending->upgradations; ?></th>
                     <th class="pending_total"><?php echo $pending->renewals; ?></th>
+                    <th class="pending_total"><?php echo $pending->upgradations; ?></th>
                     <th class="pending_total"><?php echo $pending->financially_deficient; ?></th>
                     <th class="pending_total"><?php echo $pending->reg_deficient; ?></th>
                     <th class="pending_total"><?php echo $pending->ren_upg_deficient; ?></th>

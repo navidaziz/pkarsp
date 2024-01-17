@@ -238,6 +238,9 @@
                     applyGradientColor("issue_pending");
                     applyGradientColor("pending_total");
 
+                    applyGradientColor("region_preding_previous");
+                    applyGradientColor("region_pending_cases");
+
 
 
 
@@ -362,7 +365,7 @@
                         }
 
                         if (className == 'renew') {
-                            var color = `rgba(166,77,121, ${opacity})`;
+                            var color = `rgba(152, 250, 152, ${opacity})`;
                         }
                         if (className == 'deficient') {
                             var color = `rgba(253, 92, 99, ${opacity})`;
@@ -378,6 +381,13 @@
                         if (className == 'pending_total') {
                             var color = `rgba(247, 100, 3, ${opacity})`;
                         }
+                        if (className == 'region_preding_previous') {
+                            var color = `rgba(255, 165, 0, ${opacity})`;
+                        }
+                        if (className == 'region_pending_cases') {
+                            var color = `rgba(255, 99, 71, ${opacity})`;
+                        }
+
 
 
 
