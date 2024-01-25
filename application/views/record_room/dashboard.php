@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document" style="width: 90%;">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="modal_title" style="display: inline;"></h4>
@@ -62,295 +62,294 @@
                     background-color: white;
                 }
             </style>
-            <div class="col-lg-12 col-xs-12">
-                <div class="block_div">
-
-
-                    <table class="table table-bordered">
-                        <td>
-                            <strong>Search By</strong>
-                            <span style="margin-left: 15px;"></span>
-                            <input type="radio" name="search_type" class="search_type" value="school_id" checked /> School ID
-                        </td>
-                        <td>
-
-                            <input type="text" id="search" name="search" placeholder="School ID" value="" class="form-control" />
-                        </td>
-                        <td><button onclick="search()">Search</button></td>
-                        </tr>
-                    </table>
-
-                </div>
-            </div>
-
             <?php
             $userId = $this->session->userdata('userId');
-            $query = "select district_ids From users WHERE userId = '" . $userId . "'";
-            $district_ids = $this->db->query($query)->row()->district_ids;
-            if ($district_ids) {
-                $districtId = "  " . $districtId . "  ";
-            } else {
-                $districtId = " 1=1 ";
-            }
+            $query = "SELECT region_ids FROM users WHERE userId = '" . $userId . "'";
+            $region_ids = $this->db->query($query)->row()->region_ids;
+            $status = 2;
+            $file_status = 1;
+            $institute_type_id = 2;
+            $request_type = 1;
+            $query = "SELECT
+         `schools`.schoolId as schools_id,
+         `schools`.schoolName,
+         `schools`.docs,
+         `schools`.registrationNumber,
+         `schools`.biseRegister,
+         `schools`.`biseregistrationNumber`,
+         `session_year`.`sessionYearTitle`,
+         `session_year`.`sessionYearId`,
+         `school`.`status`,
+         `reg_type`.`regTypeTitle`,
+         `school`.`schoolId` as school_id,
+         `district`.`districtTitle`,
+         `school`.`file_status`,
+         `school`.`apply_date`,
+         schools.isfined,
+         school.status_remark,
+         `schools`.`school_type_id`,
+         school.visit,
+         school.recommended,
+         school.flag_color,
+         school.flag_detail,
+         `school`.`level_of_school_id`,
+         `schools`.`yearOfEstiblishment`,
+         (SELECT `tehsils`.`tehsilTitle` FROM `tehsils` WHERE `tehsils`.`tehsilId` = schools.tehsil_id) as tehsil,
+         schools.address,
+         (SELECT `levelofinstitute`.`levelofInstituteTitle` FROM `levelofinstitute`  WHERE `levelofinstitute`.`levelofInstituteId`= school.level_of_school_id) as level,
+         
+         schools.telePhoneNumber,
+         schools.schoolMobileNumber,
+         school.principal_contact_no,
+         (SELECT `users`.`contactNumber` FROM users WHERE `users`.`userId`=schools.owner_id) as owner_contact_no,
+         
+         (SELECT s.status
+         FROM school as s WHERE 
+         s.schools_id = `schools`.`schoolId`
+         AND  s.session_year_id = (`school`.`session_year_id`-1) and s.schools_id = schools.schoolId LIMIT 1) as previous_session_status,
+         (SELECT COUNT(*)
+         FROM school as s WHERE 
+         s.schools_id = `schools`.`schoolId`
+         AND  s.status != 1 and `s`.`file_status`=5) as deficient
+         FROM
+         `school`,
+         `schools`,
+         `session_year`,
+         `reg_type`,
+         `district` 
+         WHERE  `session_year`.`sessionYearId` = `school`.`session_year_id`
+         AND `school`.`schools_id` = `schools`.`schoolId`
+         AND `school`.`reg_type_id` = `reg_type`.`regTypeId` 
+         AND schools.district_id = district.districtId
+         AND `school`.`status`='" . $status . "'
+         AND `school`.`file_status`= '" . $file_status . "'
+         AND district.new_region IN(" . $region_ids . ")
+         AND `school`.`reg_type_id`= '" . $request_type . "'
+         ";
 
-            $query = "SELECT * FROM district WHERE  " . $districtId . "  GROUP BY region ASC";
-            $regions = $this->db->query($query)->result();
-            foreach ($regions as $region) { ?>
-                <div class="col-lg-3 col-xs-12">
-                    <div class="sma ll-box" style="padding-bottom: 10px; background-color:#5C9ACC; color:white; ">
-                        <div style="background-color: #5C9ACC; padding-left:5px; padding-right:5px">
-                            <h3 style="padding: 3px;">
-                                <?php if ($region->region == 1) {
-                                    echo "Central";
-                                } ?>
-                                <?php if ($region->region == 2) {
-                                    echo "South";
-                                } ?>
-                                <?php if ($region->region == 3) {
-                                    echo "Malakand";
-                                } ?>
-                                <?php if ($region->region == 4) {
-                                    echo "Hazara";
-                                } ?>
-                                <span class="pull-right" style="font-size: 25px;">
-                                    <?php
-                                    $query = "SELECT COUNT(0) as total FROM schools
-                              INNER JOIN district ON district.districtId = schools.district_id
-                              WHERE district.region = '$region->region'
-                              AND schools.registrationNumber > 0";
-                                    echo $this->db->query($query)->row()->total;
-                                    ?>
-                                </span>
-                            </h3>
+            //  "AND district.new_region IN(" . $region_ids . ") 
+            //  
+            //  
+            //  AND `school`.`reg_type_id`= '" . $registration_type_id . "' 
+            //  AND `schools`.`school_type_id`= '" . $institute_type_id . "' 
+            //  ORDER BY `school`.`apply_date` ASC, 
+            //  `school`.`schools_id` ASC, 
+            //  `school`.`session_year_id` ASC ";
+            $requests = $this->db->query($query)->result();
+
+            ?>
+            <section class="content" style="padding-top: 0px !important;">
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="block_div" id="new_registration_list">
+                            <h4>New Registration Appllied Cases</h4>
+                            <div class="table-responsive">
+
+
+                                <table class="table table-bordered table_small" id="<?php echo  str_replace(" ", "_", $title);  ?>" style="font-size:11px">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Type</th>
+                                            <th>Insti.ID</th>
+                                            <th>File No.</th>
+                                            <th>Level</th>
+                                            <th>District</th>
+                                            <th>School Name</th>
+                                            <th>Session</th>
+                                            <th>Flag</th>
+                                            <th>Days</th>
+                                            <th>Defic</th>
+                                            <th>Note</th>
+                                            <th>Fine</th>
+                                            <th>Visit</th>
+                                            <th>Reco.</th>
+                                            <th>Remarks</th>
+
+                                            <th>Tehsil</th>
+                                            <th>Address</th>
+                                            <th>Contact</th>
+                                            <th>YofEst</th>
+                                            <th>BISE Reg.</td>
+                                            <th>Documents</th>
+                                            <th>Action</th>
+
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $count = 1;
+                                        $previous_school_id = 0;
+                                        foreach ($requests as $request) {
+                                            if ($request->previous_session_status != 8) {
+                                        ?>
+
+                                                <tr>
+                                                    <td><?php echo $count++; ?> </td>
+                                                    <td><?php echo $request->regTypeTitle; ?></td>
+
+                                                    <td><?php echo $request->schools_id ?></td>
+                                                    <td>
+                                                        <?php
+                                                        $query = "SELECT * FROM `school_file_numbers` WHERE `school_id`='$request->schools_id'";
+                                                        $file_numbers = $this->db->query($query)->result();
+                                                        $fcount = 1;
+                                                        foreach ($file_numbers as $file_number) {
+                                                            if ($fcount > 1) {
+                                                                echo ", ";
+                                                            }
+                                                            echo $file_number->file_number;
+
+                                                            $fcount++;
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php if ($request->level_of_school_id == 1) {
+                                                            echo "Primary";
+                                                        } ?>
+                                                        <?php if ($request->level_of_school_id == 2) {
+                                                            echo "Middle";
+                                                        } ?>
+                                                        <?php if ($request->level_of_school_id == 3) {
+                                                            echo "High";
+                                                        } ?>
+                                                        <?php if ($request->level_of_school_id == 4) {
+                                                            echo "H.Sec";
+                                                        } ?>
+                                                        <?php if ($request->level_of_school_id == 5) {
+                                                            echo "Academy";
+                                                        } ?>
+                                                    </td>
+                                                    <td><?php echo $request->districtTitle; ?></td>
+                                                    <td><?php echo substr($request->schoolName, 0, 45) ?></td>
+
+
+
+                                                    <td><?php echo $request->sessionYearTitle ?></td>
+                                                    <td><?php echo $request->flag_detail ?></td>
+                                                    <td style="text-align: center;" title="<?php echo date('d M, Y', strtotime($request->apply_date)); ?>">
+                                                        <?php
+                                                        //strtotime($request->apply_date)
+                                                        if ($request->apply_date) {
+                                                            echo timeago(strtotime($request->apply_date));
+                                                        }
+                                                        ?></td>
+                                                    <td style="text-align: center;">
+                                                        <?php
+                                                        $query = "SELECT COUNT(*) as total FROM `file_status_logs` WHERE `file_status` = 5 and schools_id = '" . $request->schools_id . "'";
+                                                        $once_deficient = $this->db->query($query)->row()->total;
+                                                        if ($once_deficient > 0) {
+                                                            echo '<i title="Deficiency completed" class="fa fa-flag" style="color:red" aria-hidden="true">1</i>';
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td style="text-align: center;">
+                                                        <?php
+                                                        $query = "SELECT COUNT(*) as total FROM `comments` WHERE school_id='" . $request->school_id . "' and schools_id = '" . $request->schools_id . "' and deleted=0";
+                                                        $comments = $this->db->query($query)->row()->total;
+                                                        if ($comments > 0) {
+                                                            echo '<i title="Maybe notesheet completed" class="fa fa-comment" style="color:green" aria-hidden="true">1</i>';
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td style="text-align: center;">
+                                                        <?php if ($request->isfined == 1) { ?>
+                                                            <i class="fa fa-ban" title="Fine on this school" style="color: red;">1</i>
+                                                        <?php } ?>
+                                                    </td>
+                                                    <td><?php echo $request->visit; ?></td>
+                                                    <td><?php echo $request->recommended; ?></td>
+
+
+                                                    <td><?php echo $request->status_remark; ?></td>
+
+
+
+
+
+                                                    <td><?php echo $request->tehsil; ?></td>
+                                                    <td><?php echo $request->address; ?></td>
+                                                    <td><?php echo $request->telePhoneNumber; ?>,
+                                                        <?php echo $request->schoolMobileNumber; ?>,
+                                                        <?php echo $request->principal_contact_no; ?>,
+                                                        <?php echo $request->owner_contact_no; ?>,
+                                                    </td>
+                                                    <td><?php echo $request->yearOfEstiblishment; ?></td>
+                                                    <td><?php
+                                                        if ($request->biseRegister == 'Yes') {
+                                                            echo 'Yes - ';
+                                                        }
+                                                        echo $request->biseregistrationNumber;
+                                                        ?></td>
+
+
+                                                    <td>
+                                                        <?php if ($request->docs == 0) {
+                                                            echo "No";
+                                                        } ?>
+                                                        <?php if ($request->docs == 1) {
+                                                            echo "Yes";
+                                                        } ?>
+                                                    </td>
+                                                    <td>
+                                                        <button onclick="get_document_update_form('<?php echo $request->schools_id ?>')" class="btn btn-link btn-sm "> Update Doc / File No </button>
+                                                    </td>
+
+                                                </tr>
+                                            <?php } ?>
+                                        <?php
+
+                                        } ?>
+                                    </tbody>
+                                </table>
+
+                            </div>
                         </div>
-                        <div style="padding: 5px;">
-                            <table class="table" style="text-align: center; font-size:12px">
-                                <tr>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="block_div" id="deficient_list">
 
-                                    <th colspan="6" style="text-align: center;">Pending Cases</th>
-                                </tr>
-                                <tr>
-
-                                    <td>#</td>
-                                    <td>District</td>
-                                    <td>Total(Reg.)</td>
-                                    <td>Reception</td>
-                                    <td>Visit Pending</td>
-                                    <td>Deficient</td>
-
-                                </tr>
-                                <?php
-
-                                $query = "SELECT * FROM district WHERE   " . $districtId . "  AND  region = '$region->region'";
-                                $districts = $this->db->query($query)->result();
-                                $count = 1;
-                                foreach ($districts as $district) { ?>
-
-
-                                    <tr>
-                                        <td><?php echo $count++; ?></td>
-                                        <td><?php echo $district->districtTitle;  ?></td>
-                                        <td>
-                                            <?php
-                                            $query = "SELECT COUNT(0) as total FROM schools
-                                            INNER JOIN district ON district.districtId = schools.district_id
-                                            WHERE district.districtId = '$district->districtId'
-                                            AND schools.registrationNumber > 0";
-                                            echo $this->db->query($query)->row()->total;
-                                            ?>
-                                        </td>
-                                        <td>
-                                            <?php
-                                            $query = "SELECT COUNT(0) as total FROM school
-                                        INNER JOIN schools as schools ON schools.schoolId = school.schools_id
-                                        INNER JOIN district ON district.districtId = schools.district_id
-                                        WHERE district.region = '$region->region'
-                                        AND district.districtId = '$district->districtId'
-                                        AND school.status!=1
-                                        AND school.dairy_type != ''
-                                        AND school.pending_type IS NULL
-                                        ";
-                                            echo $this->db->query($query)->row()->total;
-
-                                            ?> -
-                                            <?php
-                                            $query = "SELECT COUNT(0) as total FROM school
-                                        INNER JOIN schools as schools ON schools.schoolId = school.schools_id
-                                        INNER JOIN district ON district.districtId = schools.district_id
-                                        WHERE district.region = '$region->region'
-                                        AND district.districtId = '$district->districtId'
-                                        AND DATE(school.dairy_date) = DATE(NOW())
-                                        AND school.status!=1
-                                        AND school.dairy_type != ''";
-                                            echo $this->db->query($query)->row()->total;
-
-                                            ?>
-                                        </td>
-                                        <td>
-                                            <?php
-                                            $query = "SELECT COUNT(0) as total FROM schools
-                                            INNER JOIN school ON (school.schools_id = schools.schoolId)
-                                            INNER JOIN district ON district.districtId = schools.district_id
-                                            WHERE district.districtId = '" . $district->districtId . "'
-                                            AND visit_list=1
-                                            AND school.status!=1";
-                                            echo $this->db->query($query)->row()->total;
-                                            ?>
-                                        </td>
-
-                                        <td>
-                                            <?php
-                                            $query = "SELECT COUNT(0) as total FROM schools
-                                            INNER JOIN school ON (school.schools_id = schools.schoolId)
-                                            INNER JOIN district ON district.districtId = schools.district_id
-                                            WHERE district.districtId = '" . $district->districtId . "'
-                                            AND school.status!=1
-                                            AND school.pending_type = 'Deficiency'";
-                                            echo $this->db->query($query)->row()->total;
-                                            ?>
-                                            - <?php
-                                                $query = "SELECT COUNT(0) as total FROM schools
-                                            INNER JOIN school ON (school.schools_id = schools.schoolId)
-                                            INNER JOIN district ON district.districtId = schools.district_id
-                                            WHERE district.districtId = '" . $district->districtId . "'
-                                            AND school.status!=1
-                                            AND school.pending_type = 'Deficiency'
-                                            AND DATE(school.pending_date) = DATE(NOW())";
-                                                echo $this->db->query($query)->row()->total;
-                                                ?>
-
-
-                                        </td>
-                                    </tr>
-
-
-                                <?php  }  ?>
-
-                                <tr>
-                                    <td style="text-align: right;" colspan="2">Total:</td>
-                                    <td>
-                                        <?php
-                                        $query = "SELECT COUNT(0) as total FROM schools
-                                            INNER JOIN district ON district.districtId = schools.district_id
-                                            WHERE  
-                                            district.region = '$region->region'
-                                            AND " . $districtId . " 
-                                            AND schools.registrationNumber > 0";
-                                        echo $this->db->query($query)->row()->total;
-                                        ?>
-                                    </td>
-                                    <td>
-                                        <?php
-                                        $query = "SELECT COUNT(0) as total FROM school
-                                        INNER JOIN schools as schools ON schools.schoolId = school.schools_id
-                                        INNER JOIN district ON district.districtId = schools.district_id
-                                        WHERE district.region = '$region->region'
-                                        AND " . $districtId . " 
-                                        AND school.status!=1
-                                        AND school.dairy_type != ''
-                                        AND school.pending_type IS NULL";
-                                        echo $this->db->query($query)->row()->total;
-
-                                        ?> -
-                                        <?php
-                                        $query = "SELECT COUNT(0) as total FROM school
-                                        INNER JOIN schools as schools ON schools.schoolId = school.schools_id
-                                        INNER JOIN district ON district.districtId = schools.district_id
-                                        WHERE district.region = '$region->region'
-                                        AND " . $districtId . " 
-                                        AND DATE(school.dairy_date) = DATE(NOW())
-                                        AND school.status!=1
-                                        AND school.dairy_type != ''";
-                                        echo $this->db->query($query)->row()->total;
-
-                                        ?>
-                                    </td>
-                                    <td>
-                                        <?php
-                                        $query = "SELECT COUNT(0) as total FROM schools
-                                            INNER JOIN school ON (school.schools_id = schools.schoolId)
-                                            INNER JOIN district ON district.districtId = schools.district_id
-                                            WHERE visit_list=1
-                                           AND  district.region = '$region->region'
-                                            AND " . $districtId . " 
-                                            AND school.status!=1";
-                                        echo $this->db->query($query)->row()->total;
-                                        ?>
-                                    </td>
-
-                                    <td>
-                                        <?php
-                                        $query = "SELECT COUNT(0) as total FROM schools
-                                            INNER JOIN school ON (school.schools_id = schools.schoolId)
-                                            INNER JOIN district ON district.districtId = schools.district_id
-                                            WHERE school.status!=1
-                                            AND  district.region = '$region->region'
-                                            AND " . $districtId . " 
-                                            AND school.pending_type = 'Deficiency'";
-                                        echo $this->db->query($query)->row()->total;
-                                        ?>
-                                        - <?php
-                                            $query = "SELECT COUNT(0) as total FROM schools
-                                            INNER JOIN school ON (school.schools_id = schools.schoolId)
-                                            INNER JOIN district ON district.districtId = schools.district_id
-                                            WHERE  school.status!=1
-                                            AND  district.region = '$region->region'
-                                            AND school.pending_type = 'Deficiency'
-                                            AND " . $districtId . " 
-                                            AND DATE(school.pending_date) = DATE(NOW())";
-                                            echo $this->db->query($query)->row()->total;
-                                            ?>
-
-
-                                    </td>
-                                </tr>
-                            </table>
                         </div>
-
                     </div>
 
                 </div>
-            <?php  }  ?>
-            <script>
-                function open_visit_modal() {
-                    $('#modal').modal('show');
-                    $('#modal_title').html("Add School In Visit List");
-                    $.ajax({
-                        url: '<?php echo base_url(); ?>record_room/get_visit_list_form',
-                        type: 'POST',
-                        data: {
-                            'region': '1'
-                        },
-                        success: function(data) {
-                            $('#modal_body').html(data);
-                        }
-                    });
-                }
-
-                function open_upgradation_modal() {
-                    $('#modal').modal('show');
-                    $('#modal_title').html("Add School In Upgradation Visit List");
-                }
-            </script>
-
-
-
-
-
-
-            <div class="clearfix"></div>
-
-
-            <!-- Main row -->
-            <!-- /.row (main row) -->
-
         </div>
 
 
-    </section>
+
+
+        <div class="clearfix"></div>
+
+
+        <!-- Main row -->
+        <!-- /.row (main row) -->
+
+</div>
+
+
+</section>
 </div>
 
 <script>
+    function get_document_update_form(schools_id) {
+        $.ajax({
+                method: "POST",
+                url: "<?php echo site_url('record_room/school_detail'); ?>",
+                data: {
+                    schools_id: schools_id
+                },
+            })
+            .done(function(respose) {
+                $('#modal').modal('show');
+                $('#modal_title').html("Update Documents Status");
+                $('#modal_body').html(respose);
+            });
+    }
+
     // Get the input field
     var input = document.getElementById("search");
 

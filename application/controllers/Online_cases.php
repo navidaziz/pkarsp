@@ -61,9 +61,9 @@ class Online_cases extends Admin_Controller
       (SELECT `levelofinstitute`.`levelofInstituteTitle` FROM `levelofinstitute`  WHERE `levelofinstitute`.`levelofInstituteId`= school.level_of_school_id) as level,
 		
       schools.telePhoneNumber,
-schools.schoolMobileNumber,
-school.principal_contact_no,
-(SELECT `users`.`contactNumber` FROM users WHERE `users`.`userId`=schools.owner_id) as owner_contact_no,
+      schools.schoolMobileNumber,
+      school.principal_contact_no,
+      (SELECT `users`.`contactNumber` FROM users WHERE `users`.`userId`=schools.owner_id) as owner_contact_no,
       
       (SELECT s.status
 		FROM school as s WHERE 

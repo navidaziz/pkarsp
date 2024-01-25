@@ -6,6 +6,7 @@ class Record_room extends Admin_Controller
    public function __construct()
    {
       parent::__construct();
+      $this->load->helper('project_helper');
    }
 
    public function index()
@@ -15,6 +16,13 @@ class Record_room extends Admin_Controller
       $this->data['description'] = 'info about module';
       $this->data['view'] = 'record_room/dashboard';
       $this->load->view('layout', $this->data);
+   }
+
+   private function get_request_list($status, $file_status, $request_type = NULL, $title = NULL)
+   {
+
+
+      $this->load->view('online_cases/requests', $this->data);
    }
 
    public function get_visit_list_form()
@@ -30,13 +38,11 @@ class Record_room extends Admin_Controller
    public function school_detail()
    {
 
-
-      $visit_type = $this->input->post('type');
-      $region = $this->input->post('region');
-      $this->data['schoolid'] = $schoolid = $this->db->escape($this->input->post('search'));
+      $this->data['schoolid'] = $schoolid = (int) $this->input->post('schools_id');
       $query = "SELECT
 		`schools`.schoolId as schools_id,
 		`schools`.schoolName,
+      `schools`.docs,
 		`schools`.registrationNumber,
 		`district`.`districtTitle`,
       `district`.`region`,
@@ -60,7 +66,7 @@ class Record_room extends Admin_Controller
          $this->data['school'] = $school;
 
 
-         $this->load->view('record_room/school_detail', $this->data);
+         $this->load->view('record_room/doc_detail', $this->data);
       } else {
          echo "School ID not found try again with different School ID.";
          exit();
@@ -123,6 +129,7 @@ class Record_room extends Admin_Controller
 
    public function save_file_number()
    {
+
       $school_id = (int) $this->input->post('school_id');
       $file_no = $this->db->escape($this->input->post('file_no'));
 
@@ -136,17 +143,22 @@ class Record_room extends Admin_Controller
          }
 
          if ($this->db->query($query)) {
-            echo 'success';
+            //echo 'success';
          } else {
-            echo 'error';
+            //echo 'error';
          }
       } else {
          $query = "INSERT INTO school_file_numbers (`school_id`, `file_number`) VALUES ($school_id, $file_no)";
          if ($this->db->query($query)) {
-            echo 'success';
+            // echo 'success';
          } else {
-            echo 'error';
+            //echo 'error';
          }
       }
+
+      $docs = (int) $this->input->post('docs');
+      $query = "UPDATE schools SET docs = $docs WHERE schoolId = $school_id";
+      $this->db->query($query);
+      redirect("record_room/index");
    }
 }

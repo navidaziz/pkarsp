@@ -89,20 +89,77 @@
     line-height: 1;
     vertical-align: top;
     font-size: 12px !important;
+    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+
+
 
   }
 
-  .table2>thead>tr>th,
-  .table2>tbody>tr>th,
-  .table2>tfoot>tr>th,
-  .table2>thead>tr>td,
-  .table2>tbody>tr>td,
-  .table2>tfoot>tr>td {
+  .table {
+    margin: 1px !important;
+  }
+
+  .box {
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    min-height: 10px;
+    margin: 2px;
+    padding: 5px;
+    background-color: white;
+  }
+
+  .table_small>thead>tr>th,
+  .table_small>tbody>tr>th,
+  .table_small>tfoot>tr>th,
+  .table_small>thead>tr>td,
+  .table_small>tbody>tr>td,
+  .table_small>tfoot>tr>td {
+    padding: 1px;
+    line-height: 1;
+    vertical-align: top;
+    font-size: 11px !important;
+    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+
+
+  }
+
+  .table_large>thead>tr>th,
+  .table_large>tbody>tr>th,
+  .table_large>tfoot>tr>th,
+  .table_large>thead>tr>td,
+  .table_large>tbody>tr>td,
+  .table_large>tfoot>tr>td {
     padding: 5px;
     line-height: 1;
     vertical-align: top;
-    color: black !important;
+    font-size: 13px !important;
+    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
 
+
+  }
+
+  .table_medium>thead>tr>th,
+  .table_medium>tbody>tr>th,
+  .table_medium>tfoot>tr>th,
+  .table_medium>thead>tr>td,
+  .table_medium>tbody>tr>td,
+  .table_medium>tfoot>tr>td {
+    padding: 3px;
+    line-height: 1;
+    vertical-align: top;
+    font-size: 12px !important;
+    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+
+
+  }
+
+  .table-bordered>thead>tr>th,
+  .table-bordered>tbody>tr>th,
+  .table-bordered>tfoot>tr>th,
+  .table-bordered>thead>tr>td,
+  .table-bordered>tbody>tr>td,
+  .table-bordered>tfoot>tr>td {
+    border: 1px solid black !important;
   }
 </style>
 
@@ -119,118 +176,140 @@
                                                                                               echo " - PPC Code" . $school->ppcCode;
                                                                                             } ?></h3>
                 <h4> Apply for <strong><?php echo $school->levelofInstituteTitle ?></strong> level, <strong><?php echo @$school->regTypeTitle; ?></strong></h4>
-                <table class="table table-bordered">
-                  <tr style="text-align: center;">
-                    <th>Primary</th>
-                    <th>Middle</th>
-                    <th>High</th>
-                    <th>High Secondary</th>
-                    <th>
-                      O Level and A level
+              </td>
+              <td>
+                <small>
+                  School Id # <?php echo $school->schoolId; ?> <br />
+                  <?php if ($school->registrationNumber != 0) : ?>
+                    <?php echo "Registration # " . @$school->registrationNumber; ?><br />
+                  <?php endif; ?>
+                  Session Year: <?php echo @$school->sessionYearTitle; ?><br />
+                  Case: <?php echo @$school->regTypeTitle; ?><br />
+                  File No: <strong><?php
+                                    $query = "SELECT * FROM `school_file_numbers` WHERE `school_id`='$school->schoolId'";
+                                    $file_numbers = $this->db->query($query)->result();
+                                    $count = 1;
+                                    foreach ($file_numbers as $file_number) {
+                                      if ($count > 1) {
+                                        echo ", ";
+                                      }
+                                      echo $file_number->file_number;
 
-                    </th>
-                    <th>Gender of Education</th>
-                    <th>Institute Timing</th>
+                                      $count++;
+                                    }
+                                    ?></strong><br />
+                </small>
 
-
-                  </tr>
-                  <tr style="text-align: center;">
-                    <td><?php if ($school->levelofInstituteTitle == 'Primary') { ?>&#10004; <?php } ?></td>
-                    <td><?php if ($school->levelofInstituteTitle == 'Middle') { ?>&#10004; <?php } ?></td>
-                    <td><?php if ($school->levelofInstituteTitle == 'High') { ?>&#10004; <?php } ?></td>
-                    <td><?php if ($school->levelofInstituteTitle == 'Higher Secondary') { ?>&#10004; <?php } ?></td>
-                    <td>
-                      <?php
-                      $query = "select a_o_level, telePhoneNumber, schoolMobileNumber, principal_email FROM schools WHERE schoolId = '" . $schools_id . "'";
-                      $school_more_info = $this->db->query($query)->row();
-                      //var_dump($a_o_level);
-                      ?>
-
-                      <input type="radio" name="a_o_level" value="1" <?php if ($school_more_info->a_o_level === "1") {
-                                                                        echo "checked";
-                                                                      } ?> required /> Yes <span style="margin-left: 10px;"></span>
-                      <input type="radio" name="a_o_level" value="0" <?php if ($school_more_info->a_o_level === "0") {
-                                                                        echo "checked";
-                                                                      } ?> required /> No
-                    </td>
-                    <td><?php echo " " . $school->genderOfSchoolTitle; ?></td>
-                    <td> <input required type="radio" name="timing" value="morning" <?php if ($school_physical_facilities->timing == 'morning') {
-                                                                                      echo 'checked';
-                                                                                    } ?> /> Morning <span style="margin-left: 10px;"></span>
-                      <input required type="radio" name="timing" value="evening" <?php if ($school_physical_facilities->timing == 'evening') {
-                                                                                    echo 'checked';
-                                                                                  } ?> /> Evening <span style="margin-left: 10px;"></span>
-
-                      <input required type="radio" name="timing" value="both" <?php if ($school_physical_facilities->timing == 'both') {
-                                                                                echo 'checked';
-                                                                              } ?> /> Both
-                    </td>
-                  </tr>
+              </td>
             </tr>
-          </table>
-
-
-          </td>
-          <td>
-            <h4>
-              School Id # <?php echo $school->schoolId; ?> <br />
-              <?php if ($school->registrationNumber != 0) : ?>
-                <?php echo "Registration # " . @$school->registrationNumber; ?><br />
-              <?php endif; ?>
-              Session Year: <?php echo @$school->sessionYearTitle; ?><br />
-              Case: <?php echo @$school->regTypeTitle; ?><br />
-              File No: <strong><?php
-                                $query = "SELECT * FROM `school_file_numbers` WHERE `school_id`='$school->schoolId'";
-                                $file_numbers = $this->db->query($query)->result();
-                                $count = 1;
-                                foreach ($file_numbers as $file_number) {
-                                  if ($count > 1) {
-                                    echo ", ";
-                                  }
-                                  echo $file_number->file_number;
-
-                                  $count++;
-                                }
-                                ?></strong><br />
-            </h4>
-
-          </td>
-          </tr>
 
           </table>
 
-          <hr>
         </div>
         <div class="col-md-12">
-          <strong>Please confirm location of the school</strong>
+          <table class="table table-bordered">
+            <tr style="text-align: center;">
+              <th>Primary</th>
+              <th>Middle</th>
+              <th>High</th>
+              <th>High Secondary</th>
+              <th>
+                O Level and A level
+
+              </th>
+              <th>Gender of Education</th>
+              <th>Institute Timing</th>
+
+
+            </tr>
+            <tr style="text-align: center;">
+              <td><?php if ($school->levelofInstituteTitle == 'Primary') { ?>&#10004; <?php } ?></td>
+              <td><?php if ($school->levelofInstituteTitle == 'Middle') { ?>&#10004; <?php } ?></td>
+              <td><?php if ($school->levelofInstituteTitle == 'High') { ?>&#10004; <?php } ?></td>
+              <td><?php if ($school->levelofInstituteTitle == 'Higher Secondary') { ?>&#10004; <?php } ?></td>
+              <td>
+                <?php
+                $query = "select a_o_level, telePhoneNumber, schoolMobileNumber, principal_email FROM schools WHERE schoolId = '" . $schools_id . "'";
+                $school_more_info = $this->db->query($query)->row();
+                //var_dump($a_o_level);
+                ?>
+
+                <input type="radio" name="a_o_level" value="1" <?php if ($school_more_info->a_o_level === "1") {
+                                                                  echo "checked";
+                                                                } ?> required /> Yes <span style="margin-left: 10px;"></span>
+                <input type="radio" name="a_o_level" value="0" <?php if ($school_more_info->a_o_level === "0") {
+                                                                  echo "checked";
+                                                                } ?> required /> No
+              </td>
+              <td><?php echo " " . $school->genderOfSchoolTitle; ?></td>
+              <td> <input required type="radio" name="timing" value="morning" <?php if ($school_physical_facilities->timing == 'morning') {
+                                                                                echo 'checked';
+                                                                              } ?> /> Morning <span style="margin-left: 10px;"></span>
+                <input required type="radio" name="timing" value="evening" <?php if ($school_physical_facilities->timing == 'evening') {
+                                                                              echo 'checked';
+                                                                            } ?> /> Evening <span style="margin-left: 10px;"></span>
+
+                <input required type="radio" name="timing" value="both" <?php if ($school_physical_facilities->timing == 'both') {
+                                                                          echo 'checked';
+                                                                        } ?> /> Both
+              </td>
+            </tr>
+          </table>
+          <strong>Please confirm address of the school</strong>
           <table class="table table-bordered">
             <tr>
-              <th style="width: 50px;">Location</th>
               <th style="width: 110px;">District</th>
               <th style="width: 110px;">Tehsil</th>
               <th style="width: 130px;">UC</th>
-              <th>Address</th>
-              <th style="width: 130px;">Latitude</th>
-              <th style="width: 130px;">Longitude</th>
-              <th style="width: 130px;">Land Type</th>
-
+              <th style="width:300px">Address</th>
+              <th style="width: 100px;">Latitude</th>
+              <th style="width: 100px;">Longitude</th>
             </tr>
             <tr>
-              <td></td>
               <td><?php echo $school->districtTitle; ?></td>
               <td><?php echo $school->tehsilTitle; ?></td>
               <td><?php echo $school->ucTitle; ?></td>
               <td><?php echo $school->address; ?></td>
               <td><?php echo $school->late; ?></td>
               <td><?php echo $school->longitude; ?></td>
-              <td><input required type="radio" name="land_type" value="commercial" <?php if ($school_physical_facilities->land_type == 'commercial') {
-                                                                                      echo 'checked';
-                                                                                    } ?> /> Commercial <span style="margin-left: 10px;"></span>
-                <input required type="radio" name="land_type" value="residential" <?php if ($school_physical_facilities->land_type == 'residential') {
-                                                                                    echo 'checked';
-                                                                                  } ?> /> Residential
+            </tr>
+            <tr>
+              <td style="height: 20px;"></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+
+          </table>
+          <br />
+          <table class="table table-bordered">
+            <tr>
+              <th>Property Possession</th>
+              <th>land Type</th>
+              <th style="width: 100px;">Total Area</th>
+              <th style="width: 100px;">Covered Area</th>
+            </tr>
+            <tr>
+              <td>
+                Owned
                 <br />
+                Rented:Monthly Rent <small>(Rs.):_________</small>
+                <br />
+                Donated/Trusted
               </td>
+              <td>
+                Commercial <?php if ($school_physical_facilities->land_type == 'commercial') {
+                              echo '&#10004;';
+                            } ?> <br />
+                Residential <?php if ($school_physical_facilities->land_type == 'residential') {
+                              echo '&#10004;';
+                            } ?>
+
+              </td>
+              <td><small>In Marla: </small></td>
+              <td><small>In Marla: </small></td>
             </tr>
 
           </table>
@@ -242,6 +321,7 @@
               <th>First Teacher Appointment Date</th>
               <th>Rent Aggrement Date</th>
               <th>Confirm Year of establisment</th>
+              <th>Suggest Session</th>
             </tr>
             <tr>
               <td><?php echo " " . $school->yearOfEstiblishment; ?></td>
@@ -249,8 +329,167 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
 
+          </table>
+          <br />
+
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <th>Portrait of Quid-e-Azam</th>
+                <td style="width: 50px;">Yes</td>
+                <td style="width: 50px;">No</td>
+              </tr>
+              <tr>
+                <th>Portrait of Allama Iqbal</th>
+                <td style="width: 50px;">Yes</td>
+                <td style="width: 50px;">No</td>
+              </tr>
+              <tr>
+                <th>Waiting Area for visitor</th>
+                <td style="width: 50px;">Yes</td>
+                <td style="width: 50px;">No</td>
+              </tr>
+
+              <tr>
+                <th>Furniture provided to all students</th>
+                <td style="width: 50px;">Yes</td>
+                <td style="width: 50px;">No</td>
+              </tr>
+              <tr>
+                <th>Furniture provided to all staff</th>
+                <td style="width: 50px;">Yes</td>
+                <td style="width: 50px;">No</td>
+              </tr>
+              <tr>
+                <th>Cross-ventilation in the classroom exists</th>
+                <td style="width: 50px;">Yes</td>
+                <td style="width: 50px;">No</td>
+              </tr>
+
+              <tr>
+                <th>Notice Board exist</th>
+                <td style="width: 50px;">Yes</td>
+                <td style="width: 50px;">No</td>
+              </tr>
+              <tr>
+                <th>Class bell exist</th>
+                <td style="width: 50px;">Yes</td>
+                <td style="width: 50px;">No</td>
+              </tr>
+              <tr>
+                <th>National Flag exist</th>
+                <td style="width: 50px;">Yes</td>
+                <td style="width: 50px;">No</td>
+              </tr>
+
+              <tr>
+                <th>School Fee details displayed outside (attach pictures)</th>
+                <td style="width: 50px;">Yes</td>
+                <td style="width: 50px;">No</td>
+              </tr>
+              <tr>
+                <th>Annual calendar displayed for each class</th>
+                <td style="width: 50px;">Yes</td>
+                <td style="width: 50px;">No</td>
+              </tr>
+
+
+              <tr>
+                <th>
+                  Water </th>
+                <td style="width: 50px;">Yes</td>
+                <td style="width: 50px;">No</td>
+              </tr>
+              <tr>
+                <th>
+                  Electricity </th>
+                <td style="width: 50px;">Yes</td>
+                <td style="width: 50px;">No</td>
+              </tr>
+              <tr>
+                <th>
+                  Boundary Wall </th>
+                <td style="width: 50px;">Yes</td>
+                <td style="width: 50px;">No</td>
+              </tr>
+              <tr>
+                <th>Exam Hall</th>
+                <td>Yes</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <th>Play Ground</th>
+                <td>Yes</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <th>Play area exist</th>
+                <td style="width: 50px;">Yes</td>
+                <td style="width: 50px;">No</td>
+              </tr>
+              <tr>
+                <th>Canteen</th>
+                <td>Yes</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <th>Hostel (For Student)</th>
+                <td>Yes</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <th>Hostel (For Staff)</th>
+                <td>Yes</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <th>Transport</th>
+                <td>Yes</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <th>First Aid</th>
+                <td>Yes</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td colspan="3">
+                  Registers Maintained
+                  <table class="table table-bordered">
+                    <tr>
+                      <th>Admission and withdrawal </th>
+                      <td>Yes</td>
+                      <td>No</td>
+                    </tr>
+                    <tr>
+                      <th>
+                        Student Attend </th>
+                      <td>Yes</td>
+                      <td>No</td>
+                    </tr>
+                    <tr>
+                      <th>
+                        Teacher Attend: </th>
+                      <td>Yes</td>
+                      <td>No</td>
+                    </tr>
+                    <tr>
+                      <th>
+                        Teacher Salary Registers
+                      </th>
+                      <td>Yes</td>
+                      <td>No</td>
+                    </tr>
+
+                  </table>
+                </td>
+              </tr>
+
+
+            </tbody>
           </table>
 
 
@@ -258,14 +497,21 @@
             <tr>
               <td>
                 <table class="table table2 table-bordered">
+                  <tr>
+                    <th rowspan="2">Level</th>
+                    <th rowspan="2">Classes</th>
+                    <th rowspan="2">Rooms</th>
+                    <th rowspan="2">Rooms Size (sq feet)</th>
+                    <th colspan="2">Students</th>
+                    <th rowspan="2" style="width: 80px;">Max Tuition Fee</th>
+                    <th rowspan="2">Regional language</th>
+                    <th rowspan="2" style="width: 200px;">Publisher's textbooks are being taught in each levels</th>
+
+                  </tr>
 
                   <tr>
-                    <th>Level</th>
-                    <th>Classes</th>
-                    <th>Rooms</th>
-                    <th>Students</th>
-                    <th>Max Fee</th>
-                    <th>Publisher</th>
+                    <th>Boys</th>
+                    <th>Girls</th>
                   </tr>
 
 
@@ -289,6 +535,16 @@
                         } ?>
                         <th style=""><?php echo $class->classTitle ?></th>
                         <td></td>
+                        <td></td>
+                        <td style="text-align: center;"><?php $query = "SELECT SUM(`enrolled`) as enrolled  FROM `age_and_class` 
+                                            WHERE class_id ='" . $class->classId . "'
+                                            AND school_id = '" . $school_id . "'";
+                                                        $query_result = $this->db->query($query)->result();
+                                                        if ($query_result) {
+                                                          $total_class_enrollment += $query_result[0]->enrolled;
+                                                          echo $query_result[0]->enrolled;
+                                                        }
+                                                        ?></td>
                         <td style="text-align: center;"><?php $query = "SELECT SUM(`enrolled`) as enrolled  FROM `age_and_class` 
                                             WHERE class_id ='" . $class->classId . "'
                                             AND school_id = '" . $school_id . "'";
@@ -299,7 +555,7 @@
                                                         }
                                                         ?></td>
                         <td></td>
-
+                        <td></td>
 
                         <?php if ($count2 == 1) { ?>
                           <th style="vertical-align: middle; text-align:center" rowspan="<?php echo count($classes); ?>"></th>
@@ -311,9 +567,10 @@
                   }
                   ?>
                   <tr>
-                    <th></th>
-                    <th style="text-align: right; ">Total</th>
+                    <th style="height: 50px;"></th>
+                    <th style="text-align: right; "></th>
                     <th>
+                    <th></th>
 
                     </th>
                     <th style="text-align: center; "><?php $query = "SELECT SUM(`enrolled`) as enrolled FROM `age_and_class` 
@@ -326,362 +583,454 @@
                                                       ?></th>
 
 
-
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
 
 
                   </tr>
 
                 </table>
+                <table class="table">
+                  <tr>
+                    <th>Rooms</th>
+                    <th colspan="2">Science Lab <span style="margin: 10px;"> Yes</span>
+                      <span style="margin: 10px;"> No</span>
+                    </th>
 
-              </td>
-              <td>
-                <table class="table table-bordered">
-                  <tbody>
-                    <tr>
-                      <th style="width: 150px;">Total Class Rooms</th>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <th>Staff Rooms</th>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <th>Office</th>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <th>Total Rooms</th>
-                      <td></td>
-                    </tr>
-                  </tbody>
-                </table>
+                  </tr>
+                  <tr>
+                    <td>
+                      <table class="table table-bordered">
+                        <tbody>
+                          <tr>
+                            <th>Total Class Rooms</th>
+                            <td style="width: 50px;"></td>
+                          </tr>
+                          <tr>
+                            <th>Staff Rooms</th>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <th>Office</th>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <th>Total Rooms</th>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <th>Principal Office</th>
+                            <td style="width: 50px;"></td>
+                          </tr>
+                          <tr>
+                            <th>Account Assistant Office</th>
+                            <td style="width: 50px;"></td>
+                          </tr>
 
-                <table class="table table-bordered">
-                  <tbody>
-                    <tr>
-                      <td>
-                        <strong> Owned </strong>
+                          <tr>
+                            <th>Reception</th>
+                            <td style="width: 50px;"></td>
+                          </tr>
 
-                        <span style="margin-top: 10px; display: block;"> </span>
-                        <strong> Rented </strong>
+                        </tbody>
+                      </table>
+                    </td>
 
-                        <span id="building_rent">
-                          (Monthly Rent Amount (Rs.):
-                        </span> <span style="margin-top: 10px; display: block;"> </span>
-                        <strong> Donated/Trusted </strong>
+                    <td colspan="2">
+                      <table class="table table-bordered">
+                        <tbody>
+                          <tr>
+                            <th colspan="3">HIGH LEVEL ONLY</th>
+                            <td>Equipment:</td>
+                          </tr>
+                          <tr>
+                            <td>Science Lab</td>
+                            <td>Yes</td>
+                            <td>No</td>
+                            <td> (i) *Sufficient (ii) Deficient</td>
+                          </tr>
 
-                        <span style="margin-top: 10px; display: block;"> </span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th style="width: 150px;">Average Class Rooms Size (sq feet): </th>
+                        </tbody>
+                      </table>
+                      <br />
+                      <table class="table table-bordered">
+                        <tbody>
+                          <tr>
+                            <th colspan="3">HIGH Sec. LEVEL ONLY</th>
+                            <td>Equipment:</td>
+                          </tr>
 
-                    </tr>
-                    <tr>
-                      <th>Total Area (in Marla): </th>
-                    </tr>
-                    <tr>
-                      <th>Covered Area (in Marla):</th>
-                    </tr>
+                          <tr>
 
-                  </tbody>
-                </table>
-                <h5><strong class="">Whether the following facilities are available in the School?</strong></h5>
-                <strong style="font-size: 15px; margin-top:5px;">Physical:</strong>
-                <br>
-                <table class="table table-bordered">
-                  <tbody>
-                    <tr>
-                      <th>
-                        Water </th>
-                      <td style="width: 50px;">Yes</td>
-                      <td style="width: 50px;">No</td>
-                    </tr>
+                            <td>Physics</td>
+                            <td>Yes</td>
+                            <td>No</td>
+                            <td> (i) *Sufficient (ii) Deficient</td>
+                          </tr>
+                          <tr>
+                            <td>Chemistery</td>
+                            <td>Yes</td>
+                            <td>No</td>
+                            <td>(i) *Sufficient (ii) Deficient</td>
+                          </tr>
+                          <tr>
+                            <td>Biology</td>
+                            <td>Yes</td>
+                            <td>No</td>
+                            <td>(i) *Sufficient (ii) Deficient</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
 
+                  <tr>
+                    <td>
+                      <div class="box">
+                        <strong>Toilets</strong>
+                        <table class="table table-bordered">
+                          <tbody>
 
-                    <tr>
-                      <td colspan="3">
-                        <strong> Toilets</strong>
+                            <tr>
+                              <th>Male </th>
+                              <td style="width: 100px;"></td>
+                            </tr>
+                            <tr>
+                              <th>Female </th>
+                              <td></td>
+                            </tr>
+                            <tr>
+                              <th>Total </th>
+                              <td></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="box">
+                        <strong>Computer Lab</strong>
+                        <table class="table table-bordered">
+                          <tr>
+                            <th>Computer Lab </th>
+                            <td>Yes</td>
+                            <td>No</td>
+                          </tr>
+                          <tr>
+                            <th>Total Computers </th>
+                            <td colspan="2"> </td>
+                          </tr>
+                          <tr>
+                            <th>Working Computers</th>
+                            <td colspan="2"> </td>
+                          </tr>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">
+                      <div class="box">
+                        <strong>Library</strong>
                         <table class="table table-bordered">
                           <tbody>
                             <tr>
-                              <td> Male </td>
-                              <td>Female </td>
-                              <td>Total </td>
+                              <th>General Knowledge Books</th>
+                              <th>History Books</th>
+                              <th>Islamic Books</th>
+                              <th>Other Books</th>
+                              <th>Total Books</th>
                             </tr>
+
                             <tr>
-                              <td style="height: 50px;"></td>
+                              <td style="height: 30px;"></td>
+                              <td></td>
+                              <td></td>
                               <td></td>
                               <td></td>
                             </tr>
                           </tbody>
                         </table>
-                      </td>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+
+
+              </td>
+
+            </tr>
+
+          </table>
+
+
+
+
+        </div>
+
+        <div class="col-md-12">
+
+
+
+
+          <table class="table">
+            <tr>
+              <td>
+                <table class="table table_medium  table-bordered">
+                  <tr>
+                    <th>#</th>
+                    <th style="width: 120px;">Subject</th>
+                    <th style="width: 200px;">Teacher Name</th>
+                    <th>Qualification</th>
+                    <th>Prof. Degree</th>
+                  </tr>
+                  <?php
+                  $count = 1;
+                  $subjects = array("Bio-Chem", "Math-Phy", "IT", "", "", "", "", "", "");
+                  foreach ($subjects as $subject) {
+                  ?>
+                    <tr>
+                      <th><?php echo $count++; ?></th>
+                      <th>SST <?php echo $subject; ?></th>
+                      <td></td>
+                      <td></td>
+                      <td></td>
                     </tr>
+                  <?php } ?>
+                </table>
+              </td>
+              <td>
+                <table class="table table_medium table-bordered">
+                  <tr>
+                    <th>#</th>
+                    <th style="width: 110px;">Subject</th>
+                    <th style="width: 200px;">Teacher Name</th>
+                    <th>Qualification</th>
+                    <th>Prof. Degree</th>
+                  </tr>
+                  <?php
+                  $count = 1;
+                  $subjects = array("Urdu", "English", "Math", "Biology", "Physic", "Chemistry", "Computer Science", "Pakistan Study", "Islamiyat");
+                  foreach ($subjects as $subject) {
+                  ?>
+                    <tr>
+                      <th><?php echo $count++; ?></th>
+                      <th>SS <?php echo $subject; ?></th>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  <?php } ?>
+                </table>
+              </td>
+            </tr>
+          </table>
 
+          <table class="table">
+            <tr>
+              <td>
+                <h4>Staff informaiton</h4>
 
-
+                <table class="table table_large table-bordered">
+                  <thead>
 
                     <tr>
-                      <th>
-                        Electricity </th>
-                      <td style="width: 50px;">Yes</td>
-                      <td style="width: 50px;">No</td>
+                      <th>Category</th>
+                      <th>Male</th>
+                      <th>Female</th>
+                      <th>Total</th>
                     </tr>
-
-
+                  </thead>
+                  <tbody>
                     <tr>
-                      <th>
-                        Boundary Wall </th>
-                      <td style="width: 50px;">Yes</td>
-                      <td style="width: 50px;">No</td>
+                      <th>Teaching Staff</th>
+                      <td></td>
+                      <td></td>
+                      <td></td>
                     </tr>
-
-
+                    <tr>
+                      <th>Non-Teaching Staff</th>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>Total</th>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
                   </tbody>
                 </table>
-
-
-
               </td>
-
               <td>
+                <h4>Teaching Staff Qualification</h4>
+                <table class="table table_large table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Education </th>
+                      <th>Qualification</th>
+                      <th>Male</th>
+                      <th>Female</th>
+                      <th>Total</th>
+                    </tr>
+                    <tr>
+                      <th>12 Years</th>
+                      <th>FA / FSc</th>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>14 Years</th>
+                      <th>BA / BSc</th>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th rowspan="2">16 Years</th>
+                      <th>Graduation BS 4 Years</th>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>Post Graduation MA / MSc</th>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>18 Years</th>
+                      <th>MS / M.Phil</th>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <th>PhD</th>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+              </td>
+            </tr>
+          </table>
 
-                <strong style="font-size: 15px; margin-top:5px;">Academic:</strong>
-                <table class="table table-bordered">
-                  <?php
-
-                  $query = "SELECT * FROM physical_facilities_academic_meta WHERE  school_type_id like '%" . $school->school_type_id . "%'";
-                  $academics = $this->db->query($query)->result();
-                  //var_dump($academics);
-                  if (!empty($academics)) : ?>
-                    <?php foreach ($academics as $academic) :
-                      if ($academic->academicId == 2) { ?>
-                        <tr>
-                          <th><?php echo $academic->academicTitle; ?> </th>
-                          <td>Yes</td>
-                          <td>No</td>
-                        </tr>
-                        <tr>
-                          <td colspan="3">
-
-                            <table class="table table-bordered">
-
-                              <?php foreach ($book_types as $library) :
-                                $query = "SELECT numberOfBooks FROM school_library 
-                                    WHERE `book_type_id` = '" . $library->bookTypeId . "'
-                                    AND school_id = '" . $school_id . "'";
-                                $library_book_total = $this->db->query($query)->result()[0]->numberOfBooks;
-                              ?>
-                                <tr>
-                                  <th><?php echo $library->bookType; ?></th>
-                                  <td style="width: 50px;"></td>
-                                </tr>
-                              <?php endforeach; ?>
-                              <tr>
-                                <th>Total Books</th>
-                                <td></td>
-                              </tr>
-                            </table>
-                          </td>
-                        </tr>
-                        <?php } else {
-                        if ($academic->academicId == 4) {
-                        ?>
-                          <tr>
-                            <th><?php echo $academic->academicTitle; ?> </th>
-                            <td>Yes</td>
-                            <td>No</td>
-                          </tr>
-                          <tr>
-                            <th>Total Computer </th>
-                            <td colspan="2"> </td>
-                          </tr>
-                          <?php } else {
-                          if ($academic->academicId == 1) { ?>
-                            <tr>
-                              <th>
-                                <?php echo $academic->academicTitle; ?>
-                              </th>
-                              <td>Yes</td>
-                              <td>No</td>
-                            </tr>
-                            <tr>
-                              <td colspan="3">
-                                <table class="table table-bordered">
-                                  <tr>
-                                    <th colspan="3">
-                                      For High Level only
-                                    </th>
-                                  </tr>
-                                  <tr>
-                                    <td>Combined</td>
-                                    <td>Yes</td>
-                                    <td>No</td>
-                                  </tr>
-                                  <tr>
-                                    <th colspan="3">
-                                      For High Sec. level only
-                                    </th>
-                                  </tr>
-                                  <tr>
-                                    <td>Physics</td>
-                                    <td>Yes</td>
-                                    <td>No</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Chemistery</td>
-                                    <td>Yes</td>
-                                    <td>No</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Biology</td>
-                                    <td>Yes</td>
-                                    <td>No</td>
-                                  </tr>
-                                </table>
-                            </tr>
-
-                          <?php  } else { ?>
-                            <tr>
-                              <th><?php echo $academic->academicTitle; ?></th>
-                              <td>Yes</td>
-                              <td>No</td>
-                            </tr>
-                          <?php } ?>
-                        <?php } ?>
-                      <?php } ?>
-                    <?php endforeach; ?>
-                  <?php else : ?>
-                    <span class="text-danger">No Academic found.</span>
-                  <?php endif; ?>
+          <table class="table table_large ">
+            <tr>
+              <td>
+                <h4>Head of the school institute</h4>
+                <table class="table table_large table-bordered">
+                  <tr>
+                    <th style="width: 30px;">Name</th>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <th>CNIC</th>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <th>Contact</th>
+                    <td></td>
+                  </tr>
                 </table>
               </td>
               <td>
-
-                <?php $query = "SELECT * FROM physical_facilities_co_curricular_meta 
-                  WHERE  school_type_id like '%" . $school->school_type_id . "%'";
-                $co_curriculars = $this->db->query($query)->result();
-                ?>
-                <?php if (!empty($co_curriculars)) { ?>
-                  <strong>Co-Curricular:</strong>
-                  <table class="table table-bordered">
-                    <?php foreach ($co_curriculars as $co_curricular) : ?>
-                      <tr>
-                        <th><?php echo $co_curricular->coCurricularTitle; ?></th>
-                        <td>Yes</td>
-                        <td>No</td>
-                      </tr>
-                    <?php endforeach; ?>
-                  </table>
-                <?php } ?>
-
-                <?php $query = "SELECT * FROM physical_facilities_others_meta 
-                  WHERE  school_type_id like '%" . $school->school_type_id . "%'";
-                $other = $this->db->query($query)->result();
-                ?>
-                <?php if (!empty($other)) { ?>
-                  <strong>Others:</strong>
-                  <table class="table table-bordered">
-                    <?php foreach ($other as $oth) : ?>
-                      <tr>
-                        <th><?php echo $oth->otherTitle; ?></th>
-                        <td>Yes</td>
-                        <td>No</td>
-                      </tr>
-                    <?php endforeach; ?>
-                  </table>
-                <?php } ?>
-
-                <strong> Head of institute contact detail</i> </strong>
-                <?php
-                $query = "select principal_cnic,principal,principal_contact_no FROM school WHERE schoolId = '" . $school_id . "'";
-                $principal = $this->db->query($query)->row();
-                ?>
-
-                <table class="table">
+                <h4>Detail of Board of Direcotors / Owners</h4>
+                <table class="table table_large table-bordered">
                   <tr>
-                    <td style="width: 10px;"> Name: </td>
-                    <td> <input type="text" name="principal" value="<?php if ($principal->principal) {
-                                                                      echo $principal->principal;
-                                                                    } ?>" style="width: 100%;" required /></td>
+                    <th>#</th>
+                    <th>Owner Name</th>
+                    <th>Father Name</th>
+                    <th>Owner CNIC</th>
                   </tr>
                   <tr>
-                    <td> CNIC: </td>
-                    <td> <input maxlength="15" id="principal_cnic" type="text" name="principal_cnic" value="<?php if ($principal->principal_cnic) {
-                                                                                                              echo $principal->principal_cnic;
-                                                                                                            } ?>" style="width: 100%;" required /></td>
+                    <td>1.</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                   </tr>
                   <tr>
-                    <td> Contact: </td>
-                    <td> <input maxlength="15" id="principal_contact_no" type="text" name="principal_contact_no" value="<?php if ($principal->principal_contact_no) {
-                                                                                                                          echo $principal->principal_contact_no;
-                                                                                                                        } ?>" style="width: 100%;" required /></td>
+                    <td>2.</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                   </tr>
+                  <tr>
+                    <td>3.</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>4.</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+
                 </table>
 
+              </td>
+            </tr>
+          </table>
 
+          <h4>Recommendation</h4>
+          <table class="table table_large table-bordered">
+            <tr>
+              <th></th>
+              <th>Primary (PG to 5th Class)</th>
+              <th>Middle (6th Class to 8th Class)</th>
+              <th>High (9th Class to 10th Class)</th>
+              <th>High Sec (11th Class to 2nd Class)</th>
+            </tr>
+            <tr>
+              <th style="height: 50px;">Not Recommended</th>
+              <td style="vertical-align: bottom; text-align:center">
+                <small>Signature</small>
+              </td>
+              <td style="vertical-align: bottom; text-align:center">
+                <small>Signature</small>
+              </td>
+              <td style="vertical-align: bottom; text-align:center">
+                <small>Signature</small>
+              </td>
+              <td style="vertical-align: bottom; text-align:center">
+                <small>Signature</small>
+              </td>
+            </tr>
+            <tr>
+              <th style="height: 50px;">Recommended</th>
+              <td style="vertical-align: bottom; text-align:center">
+                <small>Signature</small>
+              </td>
+              <td style="vertical-align: bottom; text-align:center">
+                <small>Signature</small>
+              </td>
+              <td style="vertical-align: bottom; text-align:center">
+                <small>Signature</small>
+              </td>
+              <td style="vertical-align: bottom; text-align:center">
+                <small>Signature</small>
               </td>
             </tr>
           </table>
 
         </div>
 
-        <div class="col-md-12">
-          <table class="table table2 table-bordered">
-            <thead>
-              <tr>
-                <th colspan="14" style="text-align: center;">
-                  <strong style="font-size: 20px;">Section-D: Staff Detail</strong>
-                </th>
-              </tr>
-              <tr>
-                <th>#</th>
-                <th style="width: 130px;">Name</th>
-                <th style="width: 130px;">F/Husband Name</th>
-                <th style="width: 100px;">CNIC</th>
-                <th>Gender</th>
-                <th>Type</th>
-                <th>Academic</th>
-                <th>Professional</th>
-                <th>Training In Months</th>
-                <th>Experience In Months</th>
-                <th>Designation</th>
-                <th>Appointment At</th>
-                <th>Net.Pay</th>
-                <th>Annual Increament</th>
-
-              </tr>
-            </thead>
-            <tbody>
-              <?php $counter = 1; ?>
-
-              <?php foreach ($school_staff as $st) : ?>
-                <tr>
-                  <td><?php echo $counter; ?></td>
-                  <td><?php echo $st->schoolStaffName; ?></td>
-                  <td><?php echo $st->schoolStaffFatherOrHusband; ?></td>
-                  <td><?php echo $st->schoolStaffCnic; ?></td>
-                  <td><?php echo $st->genderTitle; ?></td>
-                  <td><?php echo $st->staffTtitle; ?></td>
-                  <td><?php echo $st->schoolStaffQaulificationAcademic; ?></td>
-                  <td><?php echo $st->schoolStaffQaulificationProfessional; ?></td>
-                  <td><?php echo $st->TeacherTraining; ?></td>
-                  <td><?php echo $st->TeacherExperience; ?></td>
-                  <td><?php echo $st->schoolStaffDesignition; ?></td>
-                  <td><?php echo $st->schoolStaffAppointmentDate; ?></td>
-                  <td><?php echo $st->schoolStaffNetPay; ?></td>
-                  <td><?php echo $st->schoolStaffAnnualIncreament; ?></td>
-
-                </tr>
-                <?php $counter++; ?>
-              <?php endforeach; ?>
 
 
-            </tbody>
-          </table>
-        </div>
+
         <br />
+
+
 
         <div class="col-md-12">
           <table class="table">
