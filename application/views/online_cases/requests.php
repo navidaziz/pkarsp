@@ -70,14 +70,14 @@
                   <?php
                   $query = "SELECT * FROM `school_file_numbers` WHERE `school_id`='$request->schools_id'";
                   $file_numbers = $this->db->query($query)->result();
-                  $count = 1;
+                  $fcount = 1;
                   foreach ($file_numbers as $file_number) {
-                    if ($count > 1) {
+                    if ($fcount > 1) {
                       echo ", ";
                     }
                     echo $file_number->file_number;
 
-                    $count++;
+                    $fcount++;
                   }
                   ?>
                 </td>
