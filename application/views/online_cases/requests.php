@@ -20,6 +20,7 @@
         <th>School Name</th>
         <th>Session</th>
         <th>Flag</th>
+        <th>Docs</th>
         <th>Days</th>
         <th>Defic</th>
         <th>Note</th>
@@ -118,6 +119,16 @@
               <?php } ?>
               <td><?php echo $request->sessionYearTitle ?></td>
               <td><?php echo $request->flag_detail ?></td>
+              <td>
+                <?php if ($request_type == 1) { ?>
+                  <?php if ($request->docs == 0) {
+                    echo '<i style="color:red" class="fa fa-times-circle-o" aria-hidden="true"></i> No';
+                  } ?>
+                  <?php if ($request->docs == 1) {
+                    echo '<i style="color:green" class="fa fa-check-circle" aria-hidden="true"></i> Yes';
+                  } ?>
+                <?php } ?>
+              </td>
               <td style="text-align: center;" title="<?php echo date('d M, Y', strtotime($request->apply_date)); ?>">
                 <?php
                 //strtotime($request->apply_date)

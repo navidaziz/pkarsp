@@ -40,6 +40,7 @@ class Online_cases extends Admin_Controller
 		`schools`.registrationNumber,
 		`schools`.biseRegister,
       `schools`.`biseregistrationNumber`,
+      `schools`.`docs`,
 		`session_year`.`sessionYearTitle`,
 		`session_year`.`sessionYearId`,
 		`school`.`status`,

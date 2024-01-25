@@ -1,3 +1,13 @@
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+
+
 <!-- Modal -->
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -30,6 +40,8 @@
         background-color: transparent !important;
         margin: 2px;
         width: 99%;
+        padding: 0px;
+        font-size: 7px;
     }
 
     .table>tbody>tr>td,
@@ -38,7 +50,7 @@
     .table>tfoot>tr>th,
     .table>thead>tr>td,
     .table>thead>tr>th {
-        line-height: 1.42857143;
+        line-height: 1;
         vertical-align: top;
         border-top: 1px solid #ddd;
         background-color: transparent !important;
@@ -125,6 +137,8 @@
          AND `school`.`file_status`= '" . $file_status . "'
          AND district.new_region IN(" . $region_ids . ")
          AND `school`.`reg_type_id`= '" . $request_type . "'
+         ORDER BY `school`.`schools_id` ASC, 
+         `schools`.`docs` ASC
          ";
 
             //  "AND district.new_region IN(" . $region_ids . ") 
@@ -132,9 +146,7 @@
             //  
             //  AND `school`.`reg_type_id`= '" . $registration_type_id . "' 
             //  AND `schools`.`school_type_id`= '" . $institute_type_id . "' 
-            //  ORDER BY `school`.`apply_date` ASC, 
-            //  `school`.`schools_id` ASC, 
-            //  `school`.`session_year_id` ASC ";
+            // ";
             $requests = $this->db->query($query)->result();
 
             ?>
@@ -148,16 +160,15 @@
                             <div class="table-responsive">
 
 
-                                <table class="table table-bordered table_small" id="<?php echo  str_replace(" ", "_", $title);  ?>" style="font-size:11px">
+                                <table class="table table-bordered table_small" id="table_new_registration" style="font-size:11px">
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Type</th>
                                             <th>Insti.ID</th>
                                             <th>File No.</th>
                                             <th>Level</th>
                                             <th>District</th>
-                                            <th>School Name</th>
+                                            <th style="width: 100px;">School Name</th>
                                             <th>Session</th>
                                             <th>Flag</th>
                                             <th>Days</th>
@@ -189,7 +200,6 @@
 
                                                 <tr>
                                                     <td><?php echo $count++; ?> </td>
-                                                    <td><?php echo $request->regTypeTitle; ?></td>
 
                                                     <td><?php echo $request->schools_id ?></td>
                                                     <td>
@@ -289,10 +299,10 @@
 
                                                     <td>
                                                         <?php if ($request->docs == 0) {
-                                                            echo "No";
+                                                            echo '<i style="color:red" class="fa fa-times-circle-o" aria-hidden="true"></i> No';
                                                         } ?>
                                                         <?php if ($request->docs == 1) {
-                                                            echo "Yes";
+                                                            echo '<i style="color:green" class="fa fa-check-circle" aria-hidden="true"></i> Yes';
                                                         } ?>
                                                     </td>
                                                     <td>
@@ -349,42 +359,65 @@
                 $('#modal_body').html(respose);
             });
     }
+</script>
 
-    // Get the input field
-    var input = document.getElementById("search");
+<script>
+    $(document).ready(function() {
+        $('#table_new_registration').DataTable({
+            dom: 'Bfrtip',
+            paging: false,
+            title: 'New Registration Cases',
+            "order": [],
+            searching: true,
+            buttons: [
 
-    // Execute a function when the user presses a key on the keyboard
-    input.addEventListener("keypress", function(event) {
-        // If the user presses the "Enter" key on the keyboard
-        if (event.key === "Enter") {
-
-            search();
-        }
-    });
-
-    function search() {
-        var search = $('#search').val();
-        var district_id = $('#district_id').val();
-        var district_name = $('#district_id :selected').text();
-        var search_by = $('input[name="search_type"]:checked').val();
-
-        $.ajax({
-                method: "POST",
-                url: "<?php echo site_url('record_room/school_detail'); ?>",
-                data: {
-                    search: search,
-                    district_id: district_id,
-                    district_name: district_name,
-                    search_by: search_by,
-                    type: '<?php echo $type; ?>',
-                    region: '',
+                {
+                    extend: 'print',
+                    title: 'New Registration Cases',
+                    exportOptions: {
+                        <?php if ($request_type == 2) { ?>
+                            //columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                        <?php } ?>
+                        <?php if ($request_type == 1) { ?>
+                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                        <?php } ?>
+                        <?php if ($request_type == 4) { ?>
+                            //columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                        <?php } ?>
+                    }
                 },
-            })
-            .done(function(respose) {
-                //$('#search_result').html(respose);
-                $('#modal').modal('show');
-                $('#modal_title').html("School Case Details");
-                $('#modal_body').html(respose);
-            });
-    }
+                {
+                    extend: 'excelHtml5',
+                    title: 'New Registration Cases',
+                    exportOptions: {
+                        <?php if ($request_type == 2) { ?>
+                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                        <?php } ?>
+                        <?php if ($request_type == 1) { ?>
+                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                        <?php } ?>
+                        <?php if ($request_type == 4) { ?>
+                            //columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                        <?php } ?>
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    title: 'New Registration Cases',
+                    pageSize: 'A4',
+                    exportOptions: {
+                        <?php if ($request_type == 2) { ?>
+                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                        <?php } ?>
+                        <?php if ($request_type == 1) { ?>
+                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                        <?php } ?>
+                        <?php if ($request_type == 4) { ?>
+                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                        <?php } ?>
+                    }
+                }
+            ]
+        });
+    });
 </script>

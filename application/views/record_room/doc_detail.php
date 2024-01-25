@@ -57,18 +57,12 @@
                 <th>Are the documents complete?</th>
                 <td>
                     <ol>
-                        <li>
-                            <small>Copy of the Owner or Owners' CNIC</small>
-                        </li>
+                        <li><small>Copy of the Owner or Owners' CNIC</small></li>
                         <li><small>Ownership Documents or Affidavit</small></li>
-                        <li>
-                            <small>Teachers Appoinments Letters</small>
-                        </li>
-                        <li>
-                            <small>Institute Building Map</small>
-                        </li>
-
-                        <li> <small> Rent Agreement (if it applies) </small></li>
+                        <li><small>Teachers Appoinments Letters</small></li>
+                        <li><small>Institute Building Map</small></li>
+                        <li> <small>Rent Agreement (if it applies) </small></li>
+                        <li> <strong>Online Apply For Registration</strong></li>
                     </ol>
 
                     <input <?php if ($school->docs == 0) { ?> checked <?php } ?> required type="radio" value="0" name="docs" /> <strong> No</strong>
