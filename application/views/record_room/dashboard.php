@@ -41,7 +41,6 @@
         margin: 2px;
         width: 99%;
         padding: 0px;
-        font-size: 7px;
     }
 
     .table>tbody>tr>td,
