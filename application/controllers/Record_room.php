@@ -39,6 +39,7 @@ class Record_room extends Admin_Controller
    {
 
       $this->data['schoolid'] = $schoolid = (int) $this->input->post('schools_id');
+
       $query = "SELECT
 		`schools`.schoolId as schools_id,
 		`schools`.schoolName,
@@ -136,11 +137,11 @@ class Record_room extends Admin_Controller
       $query = "SELECT COUNT(0) as total FROM school_file_numbers WHERE school_id = $school_id";
       $total = $this->db->query($query)->row()->total;
       if ($total) {
-         if ($this->input->post('file_no') == "" or $this->input->post('file_no') == 0) {
-            $query = "DELETE FROM school_file_numbers WHERE school_id = $school_id";
-         } else {
+         // if ($this->input->post('file_no') == "" or $this->input->post('file_no') == 0) {
+         //    $query = "DELETE FROM school_file_numbers WHERE school_id = $school_id";
+         // } else {
             $query = "UPDATE school_file_numbers SET file_number = $file_no WHERE school_id = $school_id";
-         }
+         // }
 
          if ($this->db->query($query)) {
             //echo 'success';
