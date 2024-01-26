@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>PSRA Visit Report</title>
+  <title>Bootstrap Example</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -17,6 +17,7 @@
       padding: 4px;
       line-height: 1;
       vertical-align: top;
+      border-top: 1px solid #ddd;
       font-size: 11px !important;
       color: black;
       margin: 0px !important;
@@ -31,20 +32,9 @@
       line-height: 1;
       vertical-align: top;
       border-top: 1px solid #ddd;
-      font-size: 10px !important;
+      font-size: 11px !important;
       color: black;
       margin: 0px !important;
-    }
-
-    
-    .table-bordered>thead>tr>th,
-    .table-bordered>tbody>tr>th,
-    .table-bordered>tfoot>tr>th,
-    .table-bordered>thead>tr>td,
-    .table-bordered>tbody>tr>td,
-    .table-bordered>tfoot>tr>td
-    {
-      border:1px solid black !important;
     }
     
     .table {
@@ -55,7 +45,7 @@
       body {
         counter-reset: page;
       }
-   
+
       
       footer {
         display: block;
@@ -80,19 +70,19 @@
       <table class="table">
         <tr>
           <td>
-            <h5>PSRA Visit Proforma </h5>
             <h5 style="text-transform: uppercase;"><?php echo @$school->schoolName; ?> <?php if (!empty($school->ppcCode)) {
                                                                                           echo " - PPC Code" . $school->ppcCode;
                                                                                         } ?></h5>
             <h5> Applied for <strong><?php echo $school->levelofInstituteTitle ?></strong> level, <strong><?php echo @$school->regTypeTitle; ?></strong></h5>
           </td>
           <td>
-            <h5>
+            <small>
               School Id # <?php echo $school->schoolId; ?> <br />
               <?php if ($school->registrationNumber != 0) : ?>
                 <?php echo "Registration # " . @$school->registrationNumber; ?><br />
               <?php endif; ?>
               Session Year: <?php echo @$school->sessionYearTitle; ?><br />
+              Case: <?php echo @$school->regTypeTitle; ?><br />
               File No: <strong><?php
                                 $query = "SELECT * FROM `school_file_numbers` WHERE `school_id`='$school->schoolId'";
                                 $file_numbers = $this->db->query($query)->result();
@@ -105,9 +95,8 @@
 
                                   $count++;
                                 }
-                                ?></strong>
-                                </h5>
-            
+                                ?></strong><br />
+            </small>
 
           </td>
         </tr>
@@ -118,91 +107,6 @@
       <table style="width: 100%; margin-top: 3px; margin-bottom: 10px;">
         
         <tbody>
-         
-          <table class="table table_large ">
-            <tr>
-              <td>
-              <?php
-                  $query = "SELECT principal_cnic,
-                                   principal,
-                                   principal_contact_no 
-                            FROM school 
-                            WHERE schoolId = '" . $school_id . "'";
-                  $principal = $this->db->query($query)->row();
-                  ?>
-                <h5>Head of the Institute (Principal / Director)</h5>
-                <table class="table table_large table-bordered">
-                    <tr>
-                      <td style="width: 10px;"> Name: </td>
-                      <td><?php  echo $principal->principal; ?></td>
-                    </tr>
-                    <tr>
-                      <td> CNIC: </td>
-                      <td><?php echo $principal->principal_cnic; ?></td>
-                    </tr>
-                    <tr>
-                      <td> Contact: </td>
-                      <td> <?php  echo $principal->principal_contact_no; ?> </td>
-                    </tr>
-                  </table>
-
-                
-              </td>
-              <td>
-                <h5>Detail of  Owner / Owners </h5>
-                <?php 
-                $all_owners = array();
-                $query="SELECT u.userTitle as owner_name,
-                               u.cnic as owner_cnic,
-                               u.contactNumber as owner_contact_no FROM `schools` as s 
-                        INNER JOIN users as u ON(u.userId = s.owner_id)
-                        WHERE s.schoolId = '".$school->schoolId."'";
-                $owner = $this->db->query($query)->row();
-                $all_owners[$owner->owner_cnic] = $owner;
-                $query="SELECT * FROM `school_owners` WHERE school_id = '".$school->schoolId."'";
-                $owners = $this->db->query($query)->result();
-                if($owners){
-                  foreach($owners as $owner){
-                    $all_owners[$owner->owner_cnic] = $owner;
-                  }
-                }
-
-                ?>
-                <table class="table table_large table-bordered">
-                  <tr>
-                    <th>#</th>
-                    <th>Owner CNIC</th>
-                    <th>Owner Name</th>
-                    <th>Father Name</th>
-                    <th>Owner CNIC</th>
-                  </tr>
-                  <?php 
-                  $count=1;
-                  foreach($all_owners as $owner_cnic => $owner){?>
-                    <tr>
-                    <td><?php echo $count++; ?></td>
-                    <td><?php echo $owner_cnic; ?></td>
-                    <td><?php echo $owner->owner_name; ?></td>
-                    <td><?php echo $owner->owner_father_name; ?></td>
-                    <td><?php echo $owner->owner_contact_no; ?></td>
-                  </tr>
-                  <?php } ?>
-                 <?php for($i=$count; $i<=4; $i++){ ?>
-                  <tr>
-                    <td><?php echo $i; ?>.</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <?php } ?>
-                  
-
-                </table>
-
-              </td>
-            </tr>
-          </table>
           <table class="table table-bordered">
             <tr style="text-align: center;">
               <th>Primary</th>
@@ -310,14 +214,10 @@
               <th style="width: 100px;">Covered Area</th>
             </tr>
             <tr>
-              <td style="width:420px">
-                1. Owned 
-                <span style="margin-left:15px;"></span>
-               2. Rented: <small> Monthly Rent (Rs.):______________</small> 
-                <span style="margin-left:15px;"></span>
-               3.  Donated/Trusted
+              <td>
+                Owned Rented: <small> Monthly Rent (Rs.):______________</small> Donated/Trusted
               </td>
-              <td style="width:180px">
+              <td>
                 <?php if ($school_physical_facilities->land_type == 'commercial') {
                   echo '&#10004;';
                 } ?> <span style="margin-left: 3px;"></span> Commercial <span style="margin-left: 30px;"></span>
@@ -335,7 +235,7 @@
           <table class="table table-bordered">
             <tr>
               <th>Year of establisment online apply</th>
-              <th>First Student Addmission Date</th>
+              <th>Fist Student Addmission Date</th>
               <th>First Teacher Appointment Date</th>
               <th>Rent Aggrement Date</th>
               <th>Confirm Year of establisment</th>
@@ -572,11 +472,11 @@
 
                 <table class="table table-bordered">
                   <tr>
-                    <td >Account Type:</td>
+                    <td>Account Type:</td>
                     <td>
-                      <span style="margin-left: 10px;"></span> Individual
-                      <span style="margin-left: 10px;"></span> Designated
-                      <span style="margin-left: 10px;"></span> Joint
+                      <span style="margin-left: 30px;"></span> Individual
+                      <span style="margin-left: 30px;"></span> Designated
+                      <span style="margin-left: 30px;"></span> Joint
                     </td>
                   </tr>
                   <tr>
@@ -626,7 +526,7 @@
                       <?php endif; ?>
                       <?php if (!empty($school_security_measures->SecurityPersonnelTitle)) : ?>
                         <tr>
-                          <td><b>Security Personnel (In Number)</b></td>
+                          <td><b>Security Personnel (in Nos)</b></td>
                           <td>
                             <?php echo $school_security_measures->SecurityPersonnelTitle; ?>
                           </td>
@@ -1035,38 +935,19 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <th>1. Total Teaching Staff</th>
+                        <th>Teaching Staff</th>
                         <td></td>
                         <td></td>
                         <td></td>
                       </tr>
                       <tr>
-                        <th>2. Total Non-Teaching Staff</th>
+                        <th>Non-Teaching Staff</th>
                         <td></td>
                         <td></td>
                         <td></td>
                       </tr>
                       <tr>
-                        <td> <span style="margin-left:20px"><span>2.1 Management Staff</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <td><span style="margin-left:20px"><span>2.2 Security Guard</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <td><span style="margin-left:20px"><span>2.3 Children Attendant</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      
-                      <tr>
-                        <th>Total (Teaching Staff+Non-Teaching Staff)</th>
+                        <th>Total</th>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -1087,13 +968,6 @@
                       </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <th>10 Years</th>
-                        <th>Matric</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
                       <tr>
                         <th>12 Years</th>
                         <th>FA / FSc</th>
@@ -1135,12 +1009,6 @@
                         <td></td>
                         <td></td>
                       </tr>
-                      <tr>
-                        <th colspan="2">Total</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
                     </tbody>
                   </table>
                 </td>
@@ -1154,8 +1022,8 @@
                   <tr>
                     <th rowspan="2">Level</th>
                     <th rowspan="2" style="width: 90px;">Classes</th>
-                    <th rowspan="2">Rooms <small style="display:blockx">(In Number)</small></th>
-                    <th rowspan="2">Rooms Size <small>(sq feet)</small></th>
+                    <th rowspan="2">Rooms</th>
+                    <th rowspan="2">Rooms Size (sq feet)</th>
                     <th colspan="2">Students</th>
                     <th rowspan="2" style="width: 80px;">Max Tuition Fee</th>
                     <th rowspan="2">Regional language</th>
@@ -1192,8 +1060,7 @@
                         <td></td>
                         <td style="text-align: center;"><?php $query = "SELECT SUM(`enrolled`) as enrolled  FROM `age_and_class` 
                                             WHERE class_id ='" . $class->classId . "'
-                                            AND school_id = '" . $school_id . "'
-                                            AND gender_id = '1' ";
+                                            AND school_id = '" . $school_id . "'";
                                                         $query_result = $this->db->query($query)->result();
                                                         if ($query_result) {
                                                           $total_class_enrollment += $query_result[0]->enrolled;
@@ -1202,8 +1069,7 @@
                                                         ?></td>
                         <td style="text-align: center;"><?php $query = "SELECT SUM(`enrolled`) as enrolled  FROM `age_and_class` 
                                             WHERE class_id ='" . $class->classId . "'
-                                            AND school_id = '" . $school_id . "'
-                                            AND gender_id = '2' ";
+                                            AND school_id = '" . $school_id . "'";
                                                         $query_result = $this->db->query($query)->result();
                                                         if ($query_result) {
                                                           $total_class_enrollment += $query_result[0]->enrolled;
@@ -1236,7 +1102,7 @@
                     </th>
 
                     <th style=" vertical-align:bottom; text-align: center;"><?php $query = "SELECT SUM(`enrolled`) as enrolled FROM `age_and_class` 
-                                            WHERE  school_id = '" . $school_id . "' AND gender_id = '1'";
+                                            WHERE  school_id = '" . $school_id . "'";
                                                                             $query_result = $this->db->query($query)->result();
                                                                             if ($query_result) {
                                                                               $total_school_entrollment += $query_result[0]->enrolled;
@@ -1247,7 +1113,7 @@
                       <small style="font-size: 8px;">Boys</small>
                     </th>
                     <th style=" vertical-align:bottom; text-align: center;"><?php $query = "SELECT SUM(`enrolled`) as enrolled FROM `age_and_class` 
-                                            WHERE  school_id = '" . $school_id . "' AND gender_id = '2'";
+                                            WHERE  school_id = '" . $school_id . "'";
                                                                             $query_result = $this->db->query($query)->result();
                                                                             if ($query_result) {
                                                                               $total_school_entrollment += $query_result[0]->enrolled;
@@ -1262,13 +1128,7 @@
 
                       <small style="font-size: 8px;">Max Tuition Fee</small>
                     </th>
-                    <th colspan="2" style="padding-top:10px;">
-
-*Student Class Rooms Ratio. ___________________ <= 40<br />
-<br />
-*Student Class Teachers Ratio. _________________ <= 40 
-
-                    </th>
+                    <th colspan="2"></th>
 
 
                   </tr>
@@ -1280,10 +1140,7 @@
                     <th colspan="2">Science Lab <span style="margin: 10px;"> Yes</span>
                       <span style="margin: 10px;"> No</span>
                     </th>
-                   
-                    <th colspan="2">Computer Lab <span style="margin: 10px;"> Yes</span>
-                      <span style="margin: 10px;"> No</span>
-                    </th>
+
                   </tr>
                   <tr>
                     <td>
@@ -1291,15 +1148,15 @@
                         <tbody>
 
                           <tr>
-                            <th style="width: 110px;">Staff Rooms</th>
-                            <td style="width: 50px;"></td>
+                            <th style="width: 150px;">Staff Rooms</th>
+                            <td></td>
                           </tr>
                           <tr>
                             <th>Principal Office</th>
                             <td></td>
                           </tr>
                           <tr>
-                            <th>Account Ass. Office</th>
+                            <th>Account Assistant Office</th>
                             <td></td>
                           </tr>
                           <tr>
@@ -1363,7 +1220,7 @@
                             <th>Physics</th>
                             <td>Yes</td>
                             <td>No</td>
-                            <th style="text-align: center;"> (i) *Sufficient <span style="margin-left: 10px;"></span> (ii) Deficient</th>
+                            <th style="text-align: center;"> (i) *Sufficient <span style="margin-left: 30px;"></span> (ii) Deficient</th>
 
                           </tr>
                           <tr>
@@ -1371,7 +1228,7 @@
                             <th>Chemistery</th>
                             <td>Yes</td>
                             <td>No</td>
-                            <th style="text-align: center;"> (i) *Sufficient <span style="margin-left: 10px;"></span> (ii) Deficient</th>
+                            <th style="text-align: center;"> (i) *Sufficient <span style="margin-left: 30px;"></span> (ii) Deficient</th>
 
                           </tr>
                           <tr>
@@ -1379,52 +1236,58 @@
                             <th>Biology</th>
                             <td>Yes</td>
                             <td>No</td>
-                            <th style="text-align: center;"> (i) *Sufficient <span style="margin-left: 10px;"></span> (ii) Deficient</th>
+                            <th style="text-align: center;"> (i) *Sufficient <span style="margin-left: 30px;"></span> (ii) Deficient</th>
 
                           </tr>
                         </tbody>
                       </table>
                     </td>
+                  </tr>
+
+                  <tr>
                     <td>
-                    <table class="table table-bordered">
-                      
+                      <table class="table table-bordered">
+                        <tr>
+                          <th>Computer Lab </th>
+                          <td>Yes</td>
+                          <td>No</td>
+                        </tr>
                         <tr>
                           <th>Total Computers </th>
-                          <td style="width:30px" > </td>
+                          <td colspan="2"> </td>
                         </tr>
                         <tr>
                           <th>Working Computers</th>
-                          <td > </td>
+                          <td colspan="2"> </td>
                         </tr>
                       </table>
-                      <strong>Library</strong>
+
+                    </td>
+                    <td>
+                      
+                        <strong>Library</strong>
                         <table class="table table-bordered">
                           <tbody>
                             <tr>
                               <th>General Knowledge Books</th>
-                              <td style="width:30px"></td>
-                            </tr>
-                            <tr>
                               <th>History Books</th>
-                              <td ></td>
-                            </tr>
-                            <tr>
                               <th>Islamic Books</th>
-                              <td ></td>
-                            </tr>
-                            <tr>
                               <th>Other Books</th>
-                              <td ></td>
-                            </tr>
-                            <tr>
                               <th>Total Books</th>
+                            </tr>
+
+                            <tr>
+                              <td style="height: 30px;"></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
                               <td></td>
                             </tr>
                           </tbody>
                         </table>
+                  
                     </td>
                   </tr>
-
 
                 </table>
 
@@ -1436,17 +1299,16 @@
           </table>
         
            
-            <h5>Recommendation <span class="pull-right"> Visit Date: __________________ Time: ___________</span></h5>
-            <table class="table table_small  table-bordered">
+            <h5>Recommendation</h5>
+            <table class="table  table-bordered">
               <tr>
-                <th style="width:50px"></th>
+                <th></th>
                 <th>Primary <br /><small>(PG to 5th)</small></th>
                 <th>Middle <br />(6th to 8th)</th>
                 <th>High <br />(9th to 10th)</th>
                 <th>High Sec <br />(11th to 2nd)</th>
-                <th style="width: 150px;">Officer Signature</th>
-                <th style="width: 150px;">Official Signature</th>
-                <th style="width: 80px;">Institute</th>
+                <th style="width: 180px;">Officer Signature</th>
+                <th style="width: 180px;">Official Signature</th>
               </tr>
               <tr>
                 <th style="height: 50px;">Not Recommended</th>
@@ -1463,35 +1325,24 @@
                   <small>Signature</small>
                 </td>
                 <td rowspan="2">
-                  Name: 
-                  <br /> 
+                  Visit Date: __________________<br />
+                  <br />
+                  Name: _____________________<br />
                   <br />
                   <br />
                   <br />
-                  Designation:
                   <br />
-                  <br />
-                  Signature: 
+                  Signature: ________________
                 </td>
                 <td rowspan="2">
-                  Name:
-                  <br /> 
+                  Visit Date: __________________<br />
+                  <br />
+                  Name: _____________________<br />
                   <br />
                   <br />
                   <br />
-                  Designation:
                   <br />
-                  <br />
-                  
-                  Signature:
-                </td>
-                <td rowspan="2" style="text-align:center">
-                  
-                  <br />
-                  <br />
-                  <br />
-                  Institute Official Stamp
-                  
+                  Signature: ________________
                 </td>
               </tr>
               <tr>
@@ -1591,19 +1442,7 @@
                 <?php echo "Registration # " . @$school->registrationNumber; ?> - 
               <?php endif; ?>
               Session Year: <?php echo @$school->sessionYearTitle; ?> -
-              Case: <?php echo @$school->regTypeTitle; ?> - File No: <?php
-                                $query = "SELECT * FROM `school_file_numbers` WHERE `school_id`='$school->schoolId'";
-                                $file_numbers = $this->db->query($query)->result();
-                                $count = 1;
-                                foreach ($file_numbers as $file_number) {
-                                  if ($count > 1) {
-                                    echo ", ";
-                                  }
-                                  echo $file_number->file_number;
-
-                                  $count++;
-                                }
-                                ?>
+              Case: <?php echo @$school->regTypeTitle; ?> -
               Printer on date: <?php echo date("d M, Y h:m:s a"); ?>
             </small>
 

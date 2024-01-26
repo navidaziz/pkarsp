@@ -8,7 +8,11 @@ class Print_visit_report extends CI_Controller
 
 		parent::__construct();
 		$this->load->model("school_m");
+		
 	}
+
+	
+	
 	public function  visit_report($school_id)
 	{
 		$school_id = (int) $school_id;
