@@ -1385,7 +1385,7 @@
                           </tr>
                         </tbody>
                       </table>
-                      <h5>Total No of Labs ___________________ </5>
+                      <h5>Total Number of Labs ___________________ </5>
                     </td>
                     <td>
                     <table class="table table-bordered">
