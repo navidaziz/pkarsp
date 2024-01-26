@@ -84,7 +84,7 @@
             <h5 style="text-transform: uppercase;"><?php echo @$school->schoolName; ?> <?php if (!empty($school->ppcCode)) {
                                                                                           echo " - PPC Code" . $school->ppcCode;
                                                                                         } ?></h5>
-            <h5> Applied for <strong><?php echo $school->levelofInstituteTitle ?></strong> level, <strong><?php echo @$school->regTypeTitle; ?></strong></h5>
+            <h5> Applied for  <strong><?php echo @$school->regTypeTitle; ?></strong></h5>
           </td>
           <td>
             <h5>
@@ -92,6 +92,7 @@
               <?php if ($school->registrationNumber != 0) : ?>
                 <?php echo "Registration # " . @$school->registrationNumber; ?><br />
               <?php endif; ?>
+              Current Level: <?php echo $school->levelofInstituteTitle ?><br /> 
               Session Year: <?php echo @$school->sessionYearTitle; ?><br />
               File No: <strong><?php
                                 $query = "SELECT * FROM `school_file_numbers` WHERE `school_id`='$school->schoolId'";
@@ -1384,6 +1385,7 @@
                           </tr>
                         </tbody>
                       </table>
+                      <h5>Total No of Labs ___________________ </5>
                     </td>
                     <td>
                     <table class="table table-bordered">
