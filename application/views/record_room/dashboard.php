@@ -328,8 +328,45 @@
                 </div>
         </div>
 
-
-
+        <h4>
+            Missing File Numbers
+        </h4>
+        <table class="table table-bordered table_small" id="missing_file_number" >
+                                    <thead>
+        <tr>
+            <th>#</th>
+            <th>School ID</th>
+            <th>School Name</th>
+            <th>District Name</th>
+            <th>File No.</th>
+            <th>Registration</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        $count=1; 
+        $query="SELECT f.*, `district`.`districtTitle` FROM file_numbers as f 
+         INNER JOIN district ON(f.district_id = district.districtId)
+        WHERE f.file_no IS NULL
+        AND district.new_region IN(" . $region_ids . ") ";
+        $files = $this->db->query($query)->result(); 
+        foreach($files as $file){ ?>
+        <tr>
+            <td><?php echo $count++; ?></td>
+            <td><?php echo $file->schoolId; ?></td>
+            <td><?php echo $file->schoolName; ?></td>
+            <td><?php echo $file->districtTitle; ?></td>
+            <td><?php echo $file->registrationNumber; ?></td>
+            <td><?php echo $file->file_no; ?></td>
+            <td>
+            <button onclick="get_document_update_form('<?php echo $file->schoolId ?>')" class="btn btn-link btn-sm "> Only Add File No. </button>
+                                                  
+            </td>
+        </tr>
+        <?php } ?>
+        </tbody>
+        </table>
 
         <div class="clearfix"></div>
 
@@ -361,6 +398,65 @@
 </script>
 
 <script>
+    
+    $(document).ready(function() {
+        $('#missing_file_number').DataTable({
+            dom: 'Bfrtip',
+            paging: false,
+            title: 'New Registration Cases',
+            "order": [],
+            searching: true,
+            buttons: [
+
+                {
+                    extend: 'print',
+                    title: 'New Registration Cases',
+                    exportOptions: {
+                        <?php if ($request_type == 2) { ?>
+                            //columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                        <?php } ?>
+                        <?php if ($request_type == 1) { ?>
+                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                        <?php } ?>
+                        <?php if ($request_type == 4) { ?>
+                            //columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                        <?php } ?>
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    title: 'New Registration Cases',
+                    exportOptions: {
+                        <?php if ($request_type == 2) { ?>
+                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                        <?php } ?>
+                        <?php if ($request_type == 1) { ?>
+                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                        <?php } ?>
+                        <?php if ($request_type == 4) { ?>
+                            //columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                        <?php } ?>
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    title: 'New Registration Cases',
+                    pageSize: 'A4',
+                    exportOptions: {
+                        <?php if ($request_type == 2) { ?>
+                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                        <?php } ?>
+                        <?php if ($request_type == 1) { ?>
+                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                        <?php } ?>
+                        <?php if ($request_type == 4) { ?>
+                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                        <?php } ?>
+                    }
+                }
+            ]
+        });
+    });
     $(document).ready(function() {
         $('#table_new_registration').DataTable({
             dom: 'Bfrtip',
