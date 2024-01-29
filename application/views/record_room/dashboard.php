@@ -338,8 +338,8 @@
             <th>School ID</th>
             <th>School Name</th>
             <th>District Name</th>
-            <th>File No.</th>
             <th>Registration</th>
+            <th>File No.</th>
             <th>Action</th>
         </tr>
         </thead>
