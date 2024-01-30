@@ -133,7 +133,7 @@
          AND `school`.`reg_type_id` = `reg_type`.`regTypeId` 
          AND schools.district_id = district.districtId
          AND `school`.`status`='" . $status . "'
-         AND `school`.`file_status`= IN('" . $file_status . "')
+         AND `school`.`file_status` IN ( " . $file_status . " )
          AND district.new_region IN(" . $region_ids . ")
          AND `school`.`reg_type_id`= '" . $request_type . "'
          ORDER BY `school`.`schools_id` ASC, 
@@ -297,10 +297,12 @@
 
 
                                                     <td>
-                                                        <?php if ($request->docs == 0) {
+                                                        <?php 
+                                                        //echo $request->docs;
+                                                        if ($request->docs === '0') {
                                                             echo '<i style="color:red" class="fa fa-times-circle-o" aria-hidden="true"></i> No';
                                                         } ?>
-                                                        <?php if ($request->docs == 1) {
+                                                        <?php if ($request->docs === '1') {
                                                             echo '<i style="color:green" class="fa fa-check-circle" aria-hidden="true"></i> Yes';
                                                         } ?>
                                                     </td>
