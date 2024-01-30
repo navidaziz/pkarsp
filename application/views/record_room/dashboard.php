@@ -78,7 +78,7 @@
             $query = "SELECT region_ids FROM users WHERE userId = '" . $userId . "'";
             $region_ids = $this->db->query($query)->row()->region_ids;
             $status = 2;
-            $file_status = 1;
+            $file_status = "1,5";
             $institute_type_id = 2;
             $request_type = 1;
             $query = "SELECT
@@ -133,7 +133,7 @@
          AND `school`.`reg_type_id` = `reg_type`.`regTypeId` 
          AND schools.district_id = district.districtId
          AND `school`.`status`='" . $status . "'
-         AND `school`.`file_status`= '" . $file_status . "'
+         AND `school`.`file_status`= IN('" . $file_status . "')
          AND district.new_region IN(" . $region_ids . ")
          AND `school`.`reg_type_id`= '" . $request_type . "'
          ORDER BY `school`.`schools_id` ASC, 
