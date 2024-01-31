@@ -74,8 +74,8 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    Write any notes here.
-                    <textarea style="width: 100%;" name="rr_note"></textarea>
+                    Write notes here
+                    <textarea style="width: 100%; padding:3px;" name="rr_note"><?php echo $school->rr_note; ?></textarea>
                 </td>
             </tr>
             <tr>

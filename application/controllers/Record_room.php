@@ -44,6 +44,7 @@ class Record_room extends Admin_Controller
 		`schools`.schoolId as schools_id,
 		`schools`.schoolName,
       `schools`.docs,
+      `schools`.rr_note,
 		`schools`.registrationNumber,
 		`district`.`districtTitle`,
       `district`.`region`,
@@ -133,7 +134,7 @@ class Record_room extends Admin_Controller
 
       $school_id = (int) $this->input->post('school_id');
       $file_no = $this->db->escape($this->input->post('file_no'));
-      if ($file_no) {
+      if ($this->input->post('file_no')) {
          $query = "SELECT COUNT(0) as total FROM school_file_numbers WHERE school_id = $school_id";
          $total = $this->db->query($query)->row()->total;
          if ($total) {
@@ -156,6 +157,9 @@ class Record_room extends Admin_Controller
                //echo 'error';
             }
          }
+      } else {
+         $query = "DELETE FROM school_file_numbers WHERE school_id = $school_id";
+         $this->db->query($query);
       }
 
       $docs = (int) $this->input->post('docs');
