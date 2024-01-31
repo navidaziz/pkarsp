@@ -63,6 +63,39 @@
         <!-- Small boxes (Stat box) -->
         <div class="row">
 
+        <h4>Progress Report</h4>
+        <?php 
+        $userId = $this->session->userdata('userId');
+        $query = "SELECT region_ids FROM users WHERE userId = '" . $userId . "'";
+        $region_ids = $this->db->query($query)->row()->region_ids;
+        $query="SELECT
+        IF(district.new_region=1,'Central', IF(district.new_region=2,'South', IF(district.new_region=3,'Malakand', IF(district.new_region=4,'Hazara', IF(district.new_region=5,'Peshawar', 'Other')))) ) as Region,
+                 COUNT(*) as Total,
+                 SUM(IF(schools.docs IS NULL, 1, 0)) as Not_Update,
+                 SUM(IF(schools.docs=1, 1, 0)) as Doc_Yes,
+                 SUM(IF(schools.docs=0, 1, 0)) as Doc_No  
+                 FROM
+                 `school`,
+                 `schools`,
+                 `session_year`,
+                 `reg_type`,
+                 `district` 
+                 WHERE  `session_year`.`sessionYearId` = `school`.`session_year_id`
+                 AND `school`.`schools_id` = `schools`.`schoolId`
+                 AND `school`.`reg_type_id` = `reg_type`.`regTypeId` 
+                 AND `schools`.district_id = district.districtId
+                 AND `school`.`status`='2'
+                 AND district.new_region IN(" . $region_ids . ")
+                 AND `school`.`file_status` IN ( 1,5 )
+                 AND `school`.`reg_type_id`= '1'
+                 AND `schools`.`school_type_id`= '1'  
+                 GROUP BY district.new_region;";
+        
+                 $progress_reports = $this->db->query()->result();
+
+        ?>
+
+
             <style>
                 .block_div {
                     border: 1px solid #9FC8E8;
@@ -73,10 +106,36 @@
                     background-color: white;
                 }
             </style>
+
+
+<table class="table table-bordered" id="summary_report">
+    <thead>
+    <tr>
+        <th>Region</th>
+        <th>Total</th>
+        <th>Not Update</th>
+        <th>Doc Yes</th>
+        <th>Doc No</th>
+    </tr>
+    </thead>
+    <?php foreach($progress_reports as $progress_report){ ?>
+    <tr>
+<th><?php echo $progress_report->Region ?></th>
+<td><?php echo $progress_report->Total ?></td>
+<td><?php echo $progress_report->Not_Update ?></td>
+<td><?php echo $progress_report->Doc_Yes ?></td>
+<td><?php echo $progress_report->Doc_No ?></td>
+
+    </tr>
+    <?php } ?>
+    <tbody>
+
+    </tbody>
+    
+</table>
+
             <?php
-            $userId = $this->session->userdata('userId');
-            $query = "SELECT region_ids FROM users WHERE userId = '" . $userId . "'";
-            $region_ids = $this->db->query($query)->row()->region_ids;
+            
             $status = 2;
             $file_status = "1,5";
             $institute_type_id = 2;
@@ -402,17 +461,17 @@
 <script>
     
     $(document).ready(function() {
-        $('#missing_file_number').DataTable({
+        $('#summary_report').DataTable({
             dom: 'Bfrtip',
             paging: false,
-            title: 'New Registration Cases',
+            title: 'Record Room Summary Report',
             "order": [],
             searching: true,
             buttons: [
 
                 {
                     extend: 'print',
-                    title: 'New Registration Cases',
+                    title: 'Record Room Summary Report',
                     exportOptions: {
                         <?php if ($request_type == 2) { ?>
                             //columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
@@ -427,7 +486,7 @@
                 },
                 {
                     extend: 'excelHtml5',
-                    title: 'New Registration Cases',
+                    title: 'Record Room Summary Report',
                     exportOptions: {
                         <?php if ($request_type == 2) { ?>
                             // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -442,7 +501,65 @@
                 },
                 {
                     extend: 'pdfHtml5',
-                    title: 'New Registration Cases',
+                    title: 'Record Room Summary Report',
+                    pageSize: 'A4',
+                    exportOptions: {
+                        <?php if ($request_type == 2) { ?>
+                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                        <?php } ?>
+                        <?php if ($request_type == 1) { ?>
+                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                        <?php } ?>
+                        <?php if ($request_type == 4) { ?>
+                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                        <?php } ?>
+                    }
+                }
+            ]
+        });
+    });
+    $(document).ready(function() {
+        $('#missing_file_number').DataTable({
+            dom: 'Bfrtip',
+            paging: false,
+            title: 'Record Room Missing File',
+            "order": [],
+            searching: true,
+            buttons: [
+
+                {
+                    extend: 'print',
+                    title: 'Record Room Missing File',
+                    exportOptions: {
+                        <?php if ($request_type == 2) { ?>
+                            //columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                        <?php } ?>
+                        <?php if ($request_type == 1) { ?>
+                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                        <?php } ?>
+                        <?php if ($request_type == 4) { ?>
+                            //columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                        <?php } ?>
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    title: 'Record Room Missing File',
+                    exportOptions: {
+                        <?php if ($request_type == 2) { ?>
+                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                        <?php } ?>
+                        <?php if ($request_type == 1) { ?>
+                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                        <?php } ?>
+                        <?php if ($request_type == 4) { ?>
+                            //columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                        <?php } ?>
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    title: 'Record Room Missing File',
                     pageSize: 'A4',
                     exportOptions: {
                         <?php if ($request_type == 2) { ?>
