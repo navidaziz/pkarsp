@@ -91,7 +91,7 @@
                  AND `schools`.`school_type_id`= '1'  
                  GROUP BY district.new_region;";
         
-                 $progress_reports = $this->db->query()->result();
+                 $progress_reports = $this->db->query($query)->result();
 
         ?>
 
@@ -106,7 +106,9 @@
                     background-color: white;
                 }
             </style>
-
+<div class="row">
+                    <div class="col-md-12">
+                        <div class="block_div" id="new_registration_list">
 
 <table class="table table-bordered" id="summary_report">
     <thead>
@@ -133,6 +135,10 @@
     </tbody>
     
 </table>
+
+    </div>
+                    </div>
+</div>
 
             <?php
             
