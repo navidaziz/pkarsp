@@ -83,7 +83,7 @@
                             <th>District Name</th>
                             <th>Registered</th>
                             <th>Last Renewal</th>
-                            <th>Remarks</th>
+                            <th>Note</th>
                             <th>Action</th>
                         </tr>
                     </thead>

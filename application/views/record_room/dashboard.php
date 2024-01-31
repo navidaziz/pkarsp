@@ -397,7 +397,7 @@ $progress_reports = $this->db->query($query)->result();
                                         <th>Registration</th>
                                         <th>Registered</th>
                                         <th>Last Renewal</th>
-                                        <th>Remarks</th>
+                                        <th>Note</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
