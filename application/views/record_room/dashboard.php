@@ -391,17 +391,32 @@ $progress_reports = $this->db->query($query)->result();
                                     <tr>
                                         <th>#</th>
                                         <th>School ID</th>
+                                        <th>File No.</th>
                                         <th>School Name</th>
                                         <th>District Name</th>
                                         <th>Registration</th>
-                                        <th>File No.</th>
+                                        <th>Last Renewal</th>
+                                        <th>Remarks</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     $count = 1;
-                                    $query = "SELECT f.*, `district`.`districtTitle` FROM file_numbers as f 
+                                    $query = "SELECT f.*, `district`.`districtTitle`,
+                                    (SELECT sy.sessionYearTitle as sessionYearTitle
+                                    FROM school
+                                    INNER JOIN session_year AS sy ON (sy.sessionYearId = school.session_year_id)
+                                    WHERE school.schools_id = f.schoolId AND school.status = 1
+                                    AND school.renewal_code <=0 
+                                    ORDER BY school.schoolId DESC LIMIT 1) as registration,
+                                    (SELECT sy.sessionYearTitle as sessionYearTitle
+                                    FROM school
+                                    INNER JOIN session_year AS sy ON (sy.sessionYearId = school.session_year_id)
+                                    WHERE school.schools_id = f.schoolId AND school.status = 1
+                                    AND school.renewal_code >0 
+                                    ORDER BY school.schoolId DESC LIMIT 1) as last_renewal
+                                     FROM file_numbers as f 
                                     INNER JOIN district ON(f.district_id = district.districtId)
                                     WHERE f.file_no IS NULL
                                     AND district.new_region IN(" . $region_ids . ") ";
@@ -410,10 +425,12 @@ $progress_reports = $this->db->query($query)->result();
                                         <tr>
                                             <td><?php echo $count++; ?></td>
                                             <td><?php echo $file->schoolId; ?></td>
+                                            <td><?php echo $file->file_no; ?></td>
                                             <td><?php echo $file->schoolName; ?></td>
                                             <td><?php echo $file->districtTitle; ?></td>
                                             <td><?php echo $file->registrationNumber; ?></td>
-                                            <td><?php echo $file->file_no; ?></td>
+                                            <td><?php echo $file->last_renewal; ?></td>
+                                            <td><?php echo $file->rr_note; ?></td>
                                             <td>
                                                 <button onclick="get_document_update_form('<?php echo $file->schoolId ?>')" class="btn btn-link btn-sm "> Only Add File No. </button>
 
