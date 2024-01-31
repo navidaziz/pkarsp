@@ -51,7 +51,71 @@ class Print_visit_report extends CI_Controller
 		$this->data['age_and_class'] = $this->school_m->get_age_and_class_by_school_id($school_id);
 		// $school_bank = $this->school_m->get_bank_by_school_id($school_id);
 
-		$this->data['school_staff'] = $this->school_m->staff_by_school_id($school_id);
+
+		$staff_query = "SELECT
+                            `school_staff`.`schoolStaffId`
+                            , `school_staff`.`schoolStaffName`
+                            , `school_staff`.`schoolStaffFatherOrHusband`
+                            , `school_staff`.`schoolStaffCnic`
+                            , `school_staff`.`schoolStaffQaulificationProfessional`
+                            , `school_staff`.`schoolStaffQaulificationAcademic`
+                            , `school_staff`.`schoolStaffAppointmentDate`
+                            , `school_staff`.`schoolStaffDesignition`
+                            , `school_staff`.`schoolStaffNetPay`
+                            , `school_staff`.`schoolStaffAnnualIncreament`
+                            , `school_staff`.`schoolStaffType`
+                            , `school_staff`.`schoolStaffType`
+                            , `school_staff`.`schoolStaffType`
+                            , `staff_type`.`staffTtitle`
+                            , `school_staff`.`schoolStaffGender`
+                            , `gender`.`genderTitle`
+                            , `school_staff`.`TeacherTraining`
+                            , `school_staff`.`TeacherExperience`
+                            , `school_staff`.`school_id`
+                        FROM
+                            `school_staff`
+                            INNER JOIN `staff_type` 
+                                ON (`school_staff`.`schoolStaffType` = `staff_type`.`staffTypeId`)
+                            INNER JOIN `gender` 
+                                ON (`school_staff`.`schoolStaffGender` = `gender`.`genderId`)
+                            WHERE school_id = '" . $school_id . "'
+							AND `school_staff`.`schoolStaffType` = 2
+							ORDER BY `school_staff`.`schoolStaffName` ASC;";
+		$this->data['non_teaching_staffs'] =  $this->db->query($staff_query)->result();
+
+		$staff_query = "SELECT
+                            `school_staff`.`schoolStaffId`
+                            , `school_staff`.`schoolStaffName`
+                            , `school_staff`.`schoolStaffFatherOrHusband`
+                            , `school_staff`.`schoolStaffCnic`
+                            , `school_staff`.`schoolStaffQaulificationProfessional`
+                            , `school_staff`.`schoolStaffQaulificationAcademic`
+                            , `school_staff`.`schoolStaffAppointmentDate`
+                            , `school_staff`.`schoolStaffDesignition`
+                            , `school_staff`.`schoolStaffNetPay`
+                            , `school_staff`.`schoolStaffAnnualIncreament`
+                            , `school_staff`.`schoolStaffType`
+                            , `school_staff`.`schoolStaffType`
+                            , `school_staff`.`schoolStaffType`
+                            , `staff_type`.`staffTtitle`
+                            , `school_staff`.`schoolStaffGender`
+                            , `gender`.`genderTitle`
+                            , `school_staff`.`TeacherTraining`
+                            , `school_staff`.`TeacherExperience`
+                            , `school_staff`.`school_id`
+                        FROM
+                            `school_staff`
+                            INNER JOIN `staff_type` 
+                                ON (`school_staff`.`schoolStaffType` = `staff_type`.`staffTypeId`)
+                            INNER JOIN `gender` 
+                                ON (`school_staff`.`schoolStaffGender` = `gender`.`genderId`)
+                            WHERE school_id = '" . $school_id . "'
+							AND `school_staff`.`schoolStaffType` = 1
+							ORDER BY `school_staff`.`schoolStaffName` ASC;";
+		$this->data['teaching_staffs'] =  $this->db->query($staff_query)->result();
+
+
+		//$this->data['school_staff'] = $this->school_m->staff_by_school_id($school_id); 
 
 		$this->data['school_fee'] = $this->school_m->fee_by_school_id($school_id);
 		$this->data['school_fee_mentioned_in_form'] = $this->school_m->fee_mentioned_in_form_by_school_id($school_id);

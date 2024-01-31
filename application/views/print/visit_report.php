@@ -14,7 +14,7 @@
     .table>thead>tr>td,
     .table>tbody>tr>td,
     .table>tfoot>tr>td {
-      padding: 4px;
+      padding: 5px;
       line-height: 1;
       vertical-align: top;
       font-size: 11px !important;
@@ -36,6 +36,20 @@
       margin: 0px !important;
     }
 
+    .table_large>thead>tr>th,
+    .table_large>tbody>tr>th,
+    .table_large>tfoot>tr>th,
+    .table_large>thead>tr>td,
+    .table_large>tbody>tr>td,
+    .table_large>tfoot>tr>td {
+      padding: 2px;
+      line-height: 1.9;
+      vertical-align: top;
+      border-top: 1px solid #ddd;
+      font-size: 10px !important;
+      color: black;
+      margin: 0px !important;
+    }
     
     .table-bordered>thead>tr>th,
     .table-bordered>tbody>tr>th,
@@ -46,10 +60,12 @@
     {
       border:1px solid black !important;
     }
+
+    
     
     .table {
-      margin: 3px !important;
-    }
+      margin: 1px !important;
+    } 
     
       @media print {
       body {
@@ -122,7 +138,7 @@
          
           <table class="table table_large ">
             <tr>
-              <td>
+              <td style="width: 30%;">
               <?php
                   $query = "SELECT principal_cnic,
                                    principal,
@@ -131,10 +147,10 @@
                             WHERE schoolId = '" . $school_id . "'";
                   $principal = $this->db->query($query)->row();
                   ?>
-                <h5>Head of the Institute (Principal / Director)</h5>
-                <table class="table table_large table-bordered">
+                <h5>(Principal / Director Info)</h5>
+                <table class="table table_large ">
                     <tr>
-                      <td style="width: 10px;"> Name: </td>
+                      <td > Name: </td>
                       <td><?php  echo $principal->principal; ?></td>
                     </tr>
                     <tr>
@@ -142,7 +158,7 @@
                       <td><?php echo $principal->principal_cnic; ?></td>
                     </tr>
                     <tr>
-                      <td> Contact: </td>
+                      <td> Contact No: </td>
                       <td> <?php  echo $principal->principal_contact_no; ?> </td>
                     </tr>
                   </table>
@@ -169,13 +185,13 @@
                 }
 
                 ?>
-                <table class="table table_large table-bordered">
+                <table class="table table_large ">
                   <tr>
                     <th>#</th>
                     <th>Owner CNIC</th>
                     <th>Owner Name</th>
                     <th>Father Name</th>
-                    <th>Owner CNIC</th>
+                    <th>Contact No.</th>
                   </tr>
                   <?php 
                   $count=1;
@@ -188,7 +204,7 @@
                     <td><?php echo $owner->owner_contact_no; ?></td>
                   </tr>
                   <?php } ?>
-                 <?php for($i=$count; $i<=4; $i++){ ?>
+                 <?php for($i=$count; $i<=3; $i++){ ?>
                   <tr>
                     <td><?php echo $i; ?>.</td>
                     <td></td>
@@ -311,10 +327,10 @@
               <th style="width: 100px;">Covered Area</th>
             </tr>
             <tr>
-              <td style="width:420px">
+              <td >
                 1. Owned 
                 <span style="margin-left:15px;"></span>
-               2. Rented: <small> Monthly Rent (Rs.):______________</small> 
+               2. Rented: <small> Monthly Rent (Rs.):____________</small> 
                 <span style="margin-left:15px;"></span>
                3.  Donated/Trusted
               </td>
@@ -335,11 +351,11 @@
           <strong>Please confirm Year of Establishment</strong>
           <table class="table table-bordered">
             <tr>
-              <th>Year of establisment online apply</th>
-              <th>First Student Addmission Date</th>
+              <th>Establishment Year (Online Apply)</th>
+              <th>First Student Enrollment Date</th>
               <th>First Teacher Appointment Date</th>
               <th>Rent Aggrement Date</th>
-              <th>Confirm Year of establisment</th>
+              <th>Confirm Year of Establishment</th>
               <th>Suggest Session</th>
             </tr>
             <tr>
@@ -489,7 +505,8 @@
               </table>
             </td>
             <td>
-              Registers Maintained
+              
+              <strong>Registers Maintained</strong>
               <table class="table table-bordered">
                 <tr>
                   <th>Admission and withdrawal </th>
@@ -498,46 +515,69 @@
                 </tr>
                 <tr>
                   <th>
-                    Student Attend </th>
+                    Student Attendance  </th>
                   <td>Yes</td>
                   <td>No</td>
                 </tr>
                 <tr>
                   <th>
-                    Teacher Attend: </th>
+                    Teacher Attendance  </th>
                   <td>Yes</td>
                   <td>No</td>
                 </tr>
                 <tr>
                   <th>
-                    Teacher Salary Registers
+                    Teacher Salary 
                   </th>
                   <td>Yes</td>
                   <td>No</td>
                 </tr>
-                <tr>
-                  <td colspan="3"><strong>Internet Facility</strong></td>
-                </tr>
 
+                <tr>
+                  <th>
+                   Fee Register
+                  </th>
+                  <td>Yes</td>
+                  <td>No</td>
+                </tr>
+               
+
+              </table>
+              <br />
+
+
+              <strong>IT Facility In School</strong>
                 <table class="table table-bordered">
                   <tr>
-                    <th>Computer Facility</th>
+                    <th>Computer Availability</th>
                     <td>Yes</td>
                     <td>No</td>
                   </tr>
                   <tr>
-                    <th>Internet Facility</th>
+                    <th>Internet Connection</th>
                     <td>Yes</td>
                     <td>No</td>
                   </tr>
                   <tr>
-                    <th>Mobile 3G / 4G</th>
+                    <th>Mobile 3G / 4G Access</th>
                     <td>Yes</td>
                     <td>No</td>
                   </tr>
                 </table>
-
-              </table>
+                <br />
+<strong>Others</strong>
+                <table class="table table-bordered">
+                  <tr>
+                    <th>Is there a shared building for both Madrasa and School?</th>
+                    <td>Yes</td>
+                    <td>No</td>
+                  </tr>
+                  <tr>
+                    <th>Is there a Tuition Academy within the school?</th>
+                    <td>Yes</td>
+                    <td>No</td>
+                  </tr>
+                </table>
 
             </td>
 
@@ -546,7 +586,9 @@
           
           <table class="table">
             <tr>
-              <td>
+              <td style="width:52%">
+              <strong>(If transportation is available) List of Institutional Vehicles</strong>
+ 
                 <table class="table table-bordered">
                   <tbody>
                     <tr>
@@ -570,30 +612,30 @@
                 </table>
               </td>
               <td>
-
+<strong>Institute Bank Account  <span style="margin-left: 10px;"></span> Yes <span style="margin-left: 10px;"></span> No</strong>
                 <table class="table table-bordered">
                   <tr>
                     <td >Account Type:</td>
                     <td>
-                      <span style="margin-left: 10px;"></span> Individual
-                      <span style="margin-left: 10px;"></span> Designated
-                      <span style="margin-left: 10px;"></span> Joint
+                      <span style="margin-left: 2px;"></span> 1. Individual
+                      <span style="margin-left: 10px;"></span> 2. Designated
+                      <span style="margin-left: 10px;"></span> 3. Joint
                     </td>
                   </tr>
                   <tr>
-                    <td>Bank Account No:</td>
+                    <th>Bank Account No:</th>
                     <td> </td>
                   </tr>
                   <tr>
-                    <td>Bank Title:</td>
+                    <th>Bank Title:</th>
                     <td> </td>
                   </tr>
                   <tr>
-                    <td>Bank Branch Code:</td>
+                    <th>Bank Branch Code:</th>
                     <td> </td>
                   </tr>
                   <tr>
-                    <td>Bank Branch Address:</td>
+                    <th>Bank Branch Address:</th>
                     <td> </td>
                   </tr>
                 </table>
@@ -970,12 +1012,12 @@
             <tr>
               <td>
                 <strong>High Level Institute Teachers</strong>
-                <table class="table table_medium  table-bordered">
+                <table class="table table_large  ">
                   <tr>
                     <th>#</th>
-                    <th style="width: 130px;">Subject</th>
-                    <th style="width: 200px;">Teacher Name</th>
-                    <th>Qualification</th>
+                    <th >Subject</th>
+                    <th >Teacher Name</th>
+                    <th >Qualification</th>
                     <th>Prof. Degree</th>
                   </tr>
                   <?php
@@ -995,11 +1037,11 @@
               </td>
               <td>
                 <strong>High Sec. level Institute Teachers</strong>
-                <table class="table table_medium table-bordered">
+                <table class="table table_large ">
                   <tr>
                     <th>#</th>
-                    <th style="width: 130px;">Subject</th>
-                    <th style="width: 200px;">Teacher Name</th>
+                    <th >Subject</th>
+                    <th >Teacher Name</th>
                     <th>Qualification</th>
                     <th>Prof. Degree</th>
                   </tr>
@@ -1060,7 +1102,7 @@
                         <td></td>
                       </tr>
                       <tr>
-                        <td><span style="margin-left:20px"><span>2.3 Children Attendant</td>
+                        <td><span style="margin-left:20px"><span>2.3 Children Attendant / Aaya</td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -1265,9 +1307,9 @@
                     </th>
                     <th colspan="2" style="padding-top:10px;">
 
-*Student Class Rooms Ratio. ___________________ <= 40<br />
+*Student Class Rooms Ratio. ____________ <= 40<br />
 <br />
-*Student Class Teachers Ratio. _________________ <= 40 
+*Student Class Teachers Ratio. __________ <= 40 
 
                     </th>
 
@@ -1385,7 +1427,7 @@
                           </tr>
                         </tbody>
                       </table>
-                      <h5>Total Number of Labs ___________________ </5>
+                      <h5>Total Number(s) of Science Labs ____________</5>
                     </td>
                     <td>
                     <table class="table table-bordered">
@@ -1524,45 +1566,44 @@
           <table class="table table_small table-bordered" >
             <thead>
               <tr>
-                <th colspan="14" style="text-align: center;">
-                  <strong>Staff Detail</strong>
+                <th colspan="13" >
+                  <strong>Teaching Staffs</strong>
                 </th>
               </tr>
               <tr>
                 <th>#</th>
-                <th style="width: 130px;">Name</th>
-                <th style="width: 130px;">F/Husband Name</th>
-                <th style="width: 100px;">CNIC</th>
+                <th >Name</th>
+                <th >F/Husband Name</th>
+                <th >CNIC</th>
                 <th>Gender</th>
-                <th>Type</th>
+               
                 <th>Academic</th>
                 <th>Professional</th>
-                <th>Training In Months</th>
-                <th>Experience In Months</th>
+                <th>Training <br />In Months</th>
+                <th>Experience <br />In Months</th>
                 <th>Designation</th>
-                <th>Appointment At</th>
+                <th>Appointment</th>
                 <th>Net.Pay</th>
-                <th>Annual Increament</th>
+                <th>Annual Inc.</th>
 
               </tr>
             </thead>
             <tbody>
               <?php $counter = 1; ?>
 
-              <?php foreach ($school_staff as $st) : ?>
+              <?php foreach ($teaching_staffs as $st) : ?>
                 <tr>
                   <td><?php echo $counter; ?></td>
-                  <td><?php echo $st->schoolStaffName; ?></td>
-                  <td><?php echo $st->schoolStaffFatherOrHusband; ?></td>
+                  <td><?php echo ucwords(strtolower($st->schoolStaffName)); ?></td>
+                  <td><?php echo ucwords(strtolower($st->schoolStaffFatherOrHusband)); ?></td>
                   <td><?php echo $st->schoolStaffCnic; ?></td>
                   <td><?php echo $st->genderTitle; ?></td>
-                  <td><?php echo $st->staffTtitle; ?></td>
                   <td><?php echo $st->schoolStaffQaulificationAcademic; ?></td>
                   <td><?php echo $st->schoolStaffQaulificationProfessional; ?></td>
                   <td><?php echo $st->TeacherTraining; ?></td>
                   <td><?php echo $st->TeacherExperience; ?></td>
                   <td><?php echo $st->schoolStaffDesignition; ?></td>
-                  <td><?php echo $st->schoolStaffAppointmentDate; ?></td>
+                  <td><?php echo date("d-m-Y",strtotime($st->schoolStaffAppointmentDate)); ?></td>
                   <td><?php echo $st->schoolStaffNetPay; ?></td>
                   <td><?php echo $st->schoolStaffAnnualIncreament; ?></td>
 
@@ -1573,14 +1614,60 @@
 
             </tbody>
           </table>
+<br />
+          <table class="table table_small table-bordered" >
+            <thead>
+              <tr>
+                <th colspan="13" >
+                  <strong>Non Teaching Staffs</strong>
+                </th>
+              </tr>
+              <tr>
+                <th>#</th>
+                <th >Name</th>
+                <th >F/Husband Name</th>
+                <th >CNIC</th>
+                <th>Gender</th>
+               
+                <th>Academic</th>
+                <th>Professional</th>
+                <th>Training <br />In Months</th>
+                <th>Experience <br />In Months</th>
+                <th>Designation</th>
+                <th>Appointment</th>
+                <th>Net.Pay</th>
+                <th>Annual Inc.</th>
 
+              </tr>
+            </thead>
+            <tbody>
+              <?php $counter = 1; ?>
+
+              <?php foreach ($non_teaching_staffs as $st) : ?>
+                <tr>
+                  <td><?php echo $counter; ?></td>
+                  <td><?php echo ucwords(strtolower($st->schoolStaffName)); ?></td>
+                  <td><?php echo ucwords(strtolower($st->schoolStaffFatherOrHusband)); ?></td>
+                  <td><?php echo $st->schoolStaffCnic; ?></td>
+                  <td><?php echo $st->genderTitle; ?></td>
+                  <td><?php echo $st->schoolStaffQaulificationAcademic; ?></td>
+                  <td><?php echo $st->schoolStaffQaulificationProfessional; ?></td>
+                  <td><?php echo $st->TeacherTraining; ?></td>
+                  <td><?php echo $st->TeacherExperience; ?></td>
+                  <td><?php echo $st->schoolStaffDesignition; ?></td>
+                  <td><?php echo date("d-m-Y",strtotime($st->schoolStaffAppointmentDate)); ?></td>
+                  <td><?php echo $st->schoolStaffNetPay; ?></td>
+                  <td><?php echo $st->schoolStaffAnnualIncreament; ?></td>
+
+                </tr>
+                <?php $counter++; ?>
+              <?php endforeach; ?>
+
+
+            </tbody>
+          </table>
         </tbody>
-        <tfoot>
-          <tr>
-            <td colspan="2">
-              
-          </tr>
-        </tfoot>
+        
 
       </table>
                   </div>
