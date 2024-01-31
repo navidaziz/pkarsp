@@ -478,48 +478,17 @@
                 {
                     extend: 'print',
                     title: 'Record Room Summary Report',
-                    exportOptions: {
-                        <?php if ($request_type == 2) { ?>
-                            //columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
-                        <?php } ?>
-                        <?php if ($request_type == 1) { ?>
-                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                        <?php } ?>
-                        <?php if ($request_type == 4) { ?>
-                            //columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                        <?php } ?>
-                    }
                 },
                 {
                     extend: 'excelHtml5',
                     title: 'Record Room Summary Report',
-                    exportOptions: {
-                        <?php if ($request_type == 2) { ?>
-                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-                        <?php } ?>
-                        <?php if ($request_type == 1) { ?>
-                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                        <?php } ?>
-                        <?php if ($request_type == 4) { ?>
-                            //columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                        <?php } ?>
-                    }
+                    
                 },
                 {
                     extend: 'pdfHtml5',
                     title: 'Record Room Summary Report',
                     pageSize: 'A4',
-                    exportOptions: {
-                        <?php if ($request_type == 2) { ?>
-                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-                        <?php } ?>
-                        <?php if ($request_type == 1) { ?>
-                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                        <?php } ?>
-                        <?php if ($request_type == 4) { ?>
-                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                        <?php } ?>
-                    }
+                
                 }
             ]
         });
@@ -536,48 +505,18 @@
                 {
                     extend: 'print',
                     title: 'Record Room Missing File',
-                    exportOptions: {
-                        <?php if ($request_type == 2) { ?>
-                            //columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
-                        <?php } ?>
-                        <?php if ($request_type == 1) { ?>
-                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                        <?php } ?>
-                        <?php if ($request_type == 4) { ?>
-                            //columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                        <?php } ?>
-                    }
+                    
                 },
                 {
                     extend: 'excelHtml5',
                     title: 'Record Room Missing File',
-                    exportOptions: {
-                        <?php if ($request_type == 2) { ?>
-                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-                        <?php } ?>
-                        <?php if ($request_type == 1) { ?>
-                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                        <?php } ?>
-                        <?php if ($request_type == 4) { ?>
-                            //columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                        <?php } ?>
-                    }
+                    
                 },
                 {
                     extend: 'pdfHtml5',
                     title: 'Record Room Missing File',
                     pageSize: 'A4',
-                    exportOptions: {
-                        <?php if ($request_type == 2) { ?>
-                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-                        <?php } ?>
-                        <?php if ($request_type == 1) { ?>
-                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                        <?php } ?>
-                        <?php if ($request_type == 4) { ?>
-                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                        <?php } ?>
-                    }
+                    
                 }
             ]
         });
@@ -594,48 +533,17 @@
                 {
                     extend: 'print',
                     title: 'New Registration Cases',
-                    exportOptions: {
-                        <?php if ($request_type == 2) { ?>
-                            //columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
-                        <?php } ?>
-                        <?php if ($request_type == 1) { ?>
-                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                        <?php } ?>
-                        <?php if ($request_type == 4) { ?>
-                            //columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                        <?php } ?>
-                    }
+                   
                 },
                 {
                     extend: 'excelHtml5',
                     title: 'New Registration Cases',
-                    exportOptions: {
-                        <?php if ($request_type == 2) { ?>
-                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-                        <?php } ?>
-                        <?php if ($request_type == 1) { ?>
-                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                        <?php } ?>
-                        <?php if ($request_type == 4) { ?>
-                            //columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                        <?php } ?>
-                    }
+                    
                 },
                 {
                     extend: 'pdfHtml5',
                     title: 'New Registration Cases',
                     pageSize: 'A4',
-                    exportOptions: {
-                        <?php if ($request_type == 2) { ?>
-                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-                        <?php } ?>
-                        <?php if ($request_type == 1) { ?>
-                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                        <?php } ?>
-                        <?php if ($request_type == 4) { ?>
-                            // columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                        <?php } ?>
-                    }
                 }
             ]
         });
