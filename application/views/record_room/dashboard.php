@@ -395,6 +395,7 @@ $progress_reports = $this->db->query($query)->result();
                                         <th>School Name</th>
                                         <th>District Name</th>
                                         <th>Registration</th>
+                                        <th>Registered</th>
                                         <th>Last Renewal</th>
                                         <th>Remarks</th>
                                         <th>Action</th>
@@ -429,6 +430,7 @@ $progress_reports = $this->db->query($query)->result();
                                             <td><?php echo $file->schoolName; ?></td>
                                             <td><?php echo $file->districtTitle; ?></td>
                                             <td><?php echo $file->registrationNumber; ?></td>
+                                            <td><?php echo $file->registration; ?></td>
                                             <td><?php echo $file->last_renewal; ?></td>
                                             <td><?php echo $file->rr_note; ?></td>
                                             <td>
