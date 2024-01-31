@@ -50,7 +50,7 @@
                         $fileNumber .= $file_number->file_number . ",";
                     }
                     ?>
-                    <input class="form-control" required type="text" name="file_no" id="file_no" value="<?php echo rtrim($fileNumber, ',') ?>" />
+                    <input class="form-control" type="text" name="file_no" id="file_no" value="<?php echo rtrim($fileNumber, ',') ?>" />
                 </td>
             </tr>
             <tr>

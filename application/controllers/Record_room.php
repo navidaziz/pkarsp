@@ -133,27 +133,28 @@ class Record_room extends Admin_Controller
 
       $school_id = (int) $this->input->post('school_id');
       $file_no = $this->db->escape($this->input->post('file_no'));
+      if ($file_no) {
+         $query = "SELECT COUNT(0) as total FROM school_file_numbers WHERE school_id = $school_id";
+         $total = $this->db->query($query)->row()->total;
+         if ($total) {
+            // if ($this->input->post('file_no') == "" or $this->input->post('file_no') == 0) {
+            //    $query = "DELETE FROM school_file_numbers WHERE school_id = $school_id";
+            // } else {
+            $query = "UPDATE school_file_numbers SET file_number = $file_no WHERE school_id = $school_id";
+            // }
 
-      $query = "SELECT COUNT(0) as total FROM school_file_numbers WHERE school_id = $school_id";
-      $total = $this->db->query($query)->row()->total;
-      if ($total) {
-         // if ($this->input->post('file_no') == "" or $this->input->post('file_no') == 0) {
-         //    $query = "DELETE FROM school_file_numbers WHERE school_id = $school_id";
-         // } else {
-         $query = "UPDATE school_file_numbers SET file_number = $file_no WHERE school_id = $school_id";
-         // }
-
-         if ($this->db->query($query)) {
-            //echo 'success';
+            if ($this->db->query($query)) {
+               //echo 'success';
+            } else {
+               //echo 'error';
+            }
          } else {
-            //echo 'error';
-         }
-      } else {
-         $query = "INSERT INTO school_file_numbers (`school_id`, `file_number`) VALUES ($school_id, $file_no)";
-         if ($this->db->query($query)) {
-            // echo 'success';
-         } else {
-            //echo 'error';
+            $query = "INSERT INTO school_file_numbers (`school_id`, `file_number`) VALUES ($school_id, $file_no)";
+            if ($this->db->query($query)) {
+               // echo 'success';
+            } else {
+               //echo 'error';
+            }
          }
       }
 
