@@ -140,7 +140,7 @@ class Record_room extends Admin_Controller
          // if ($this->input->post('file_no') == "" or $this->input->post('file_no') == 0) {
          //    $query = "DELETE FROM school_file_numbers WHERE school_id = $school_id";
          // } else {
-            $query = "UPDATE school_file_numbers SET file_number = $file_no WHERE school_id = $school_id";
+         $query = "UPDATE school_file_numbers SET file_number = $file_no WHERE school_id = $school_id";
          // }
 
          if ($this->db->query($query)) {
@@ -158,8 +158,21 @@ class Record_room extends Admin_Controller
       }
 
       $docs = (int) $this->input->post('docs');
-      $query = "UPDATE schools SET docs = $docs WHERE schoolId = $school_id";
+      $rr_note = $this->db->escape($this->input->post('rr_note'));
+      $query = "UPDATE schools SET docs = " . $docs . " ,  
+                rr_note = " . $rr_note . "
+                WHERE schoolId = $school_id";
       $this->db->query($query);
-      redirect("record_room/index");
+
+      redirect($_SERVER['HTTP_REFERER']);
+   }
+
+
+   public function schools_file_number_list()
+   {
+      $this->data['title'] = 'Record Room';
+      $this->data['description'] = 'info about module';
+      $this->data['view'] = 'record_room/schools_file_number_list';
+      $this->load->view('layout', $this->data);
    }
 }

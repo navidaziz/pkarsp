@@ -62,7 +62,7 @@
                         <li><small>Teachers Appoinments Letters</small></li>
                         <li><small>Institute Building Map</small></li>
                         <li> <small>Rent Agreement (if it applies) </small></li>
-                        <li> <strong>Online Apply For Registration</strong></li>
+                        <li> <small>Online Apply For Registration</small></li>
                     </ol>
 
                     <input <?php if ($school->docs == 0) { ?> checked <?php } ?> required type="radio" value="0" name="docs" /> <strong> No</strong>
@@ -71,6 +71,12 @@
 
                 </td>
 
+            </tr>
+            <tr>
+                <td colspan="2">
+                    Write any notes here.
+                    <textarea style="width: 100%;" name="rr_note"></textarea>
+                </td>
             </tr>
             <tr>
                 <td colspan="2" style="text-align: center;">

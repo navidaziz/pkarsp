@@ -55,21 +55,23 @@
         background-color: transparent !important;
     }
 </style>
+<style>
+    .block_div {
+        border: 1px solid #9FC8E8;
+        border-radius: 10px;
+        min-height: 3px;
+        margin: 3px;
+        padding: 10px;
+        background-color: white;
+    }
+</style>
 
-<div class="content-wrapper">
-
-    <section class="content" style="background-image:url(img/fairview-hospital-hero.jpg); background-repeat:no-repeat; min-height:500px;">
-
-        <!-- Small boxes (Stat box) -->
-        <div class="row">
-
-        <h4>Progress Report</h4>
-        <?php 
-        $userId = $this->session->userdata('userId');
-        $query = "SELECT region_ids FROM users WHERE userId = '" . $userId . "'";
-        $region_ids = $this->db->query($query)->row()->region_ids;
-        $query="SELECT
-        IF(district.new_region=1,'Central', IF(district.new_region=2,'South', IF(district.new_region=3,'Malakand', IF(district.new_region=4,'Hazara', IF(district.new_region=5,'Peshawar', 'Other')))) ) as Region,
+<?php
+$userId = $this->session->userdata('userId');
+$query = "SELECT region_ids FROM users WHERE userId = '" . $userId . "'";
+$region_ids = $this->db->query($query)->row()->region_ids;
+$query = "SELECT
+                IF(district.new_region=1,'Central', IF(district.new_region=2,'South', IF(district.new_region=3,'Malakand', IF(district.new_region=4,'Hazara', IF(district.new_region=5,'Peshawar', 'Other')))) ) as Region,
                  COUNT(*) as Total,
                  SUM(IF(schools.docs IS NULL, 1, 0)) as Not_Update,
                  SUM(IF(schools.docs=1, 1, 0)) as Doc_Yes,
@@ -90,140 +92,134 @@
                  AND `school`.`reg_type_id`= '1'
                  AND `schools`.`school_type_id`= '1'  
                  GROUP BY district.new_region;";
-        
-                 $progress_reports = $this->db->query($query)->result();
 
-        ?>
+$progress_reports = $this->db->query($query)->result();
+
+?>
 
 
-            <style>
-                .block_div {
-                    border: 1px solid #9FC8E8;
-                    border-radius: 10px;
-                    min-height: 3px;
-                    margin: 3px;
-                    padding: 10px;
-                    background-color: white;
-                }
-            </style>
-<div class="row">
-                    <div class="col-md-12">
-                        <div class="block_div" id="new_registration_list">
+<div class="content-wrapper">
 
-<table class="table table-bordered" id="summary_report">
-    <thead>
-    <tr>
-        <th>Region</th>
-        <th>Total</th>
-        <th>Not Update</th>
-        <th>Doc Yes</th>
-        <th>Doc No</th>
-    </tr>
-    </thead>
-    <?php foreach($progress_reports as $progress_report){ ?>
-    <tr>
-<th><?php echo $progress_report->Region ?></th>
-<td><?php echo $progress_report->Total ?></td>
-<td><?php echo $progress_report->Not_Update ?></td>
-<td><?php echo $progress_report->Doc_Yes ?></td>
-<td><?php echo $progress_report->Doc_No ?></td>
+    <section class="content" style="background-image:url(img/fairview-hospital-hero.jpg); background-repeat:no-repeat; min-height:500px;">
 
-    </tr>
-    <?php } ?>
-    <tbody>
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
 
-    </tbody>
-    
-</table>
 
-    </div>
-                    </div>
-</div>
 
-            <?php
-            
-            $status = 2;
-            $file_status = "1,5";
-            $institute_type_id = 2;
-            $request_type = 1;
-            $query = "SELECT
-         `schools`.schoolId as schools_id,
-         `schools`.schoolName,
-         `schools`.docs,
-         `schools`.registrationNumber,
-         `schools`.biseRegister,
-         `schools`.`biseregistrationNumber`,
-         `session_year`.`sessionYearTitle`,
-         `session_year`.`sessionYearId`,
-         `school`.`status`,
-         `reg_type`.`regTypeTitle`,
-         `school`.`schoolId` as school_id,
-         `district`.`districtTitle`,
-         `school`.`file_status`,
-         `school`.`apply_date`,
-         schools.isfined,
-         school.status_remark,
-         `schools`.`school_type_id`,
-         school.visit,
-         school.recommended,
-         school.flag_color,
-         school.flag_detail,
-         `school`.`level_of_school_id`,
-         `schools`.`yearOfEstiblishment`,
-         (SELECT `tehsils`.`tehsilTitle` FROM `tehsils` WHERE `tehsils`.`tehsilId` = schools.tehsil_id) as tehsil,
-         schools.address,
-         (SELECT `levelofinstitute`.`levelofInstituteTitle` FROM `levelofinstitute`  WHERE `levelofinstitute`.`levelofInstituteId`= school.level_of_school_id) as level,
-         
-         schools.telePhoneNumber,
-         schools.schoolMobileNumber,
-         school.principal_contact_no,
-         (SELECT `users`.`contactNumber` FROM users WHERE `users`.`userId`=schools.owner_id) as owner_contact_no,
-         
-         (SELECT s.status
-         FROM school as s WHERE 
-         s.schools_id = `schools`.`schoolId`
-         AND  s.session_year_id = (`school`.`session_year_id`-1) and s.schools_id = schools.schoolId LIMIT 1) as previous_session_status,
-         (SELECT COUNT(*)
-         FROM school as s WHERE 
-         s.schools_id = `schools`.`schoolId`
-         AND  s.status != 1 and `s`.`file_status`=5) as deficient
-         FROM
-         `school`,
-         `schools`,
-         `session_year`,
-         `reg_type`,
-         `district` 
-         WHERE  `session_year`.`sessionYearId` = `school`.`session_year_id`
-         AND `school`.`schools_id` = `schools`.`schoolId`
-         AND `school`.`reg_type_id` = `reg_type`.`regTypeId` 
-         AND schools.district_id = district.districtId
-         AND `school`.`status`='" . $status . "'
-         AND `school`.`file_status` IN ( " . $file_status . " )
-         AND district.new_region IN(" . $region_ids . ")
-         AND `school`.`reg_type_id`= '" . $request_type . "'
-         ORDER BY `school`.`schools_id` ASC, 
-         `schools`.`docs` ASC
-         ";
 
-            //  "AND district.new_region IN(" . $region_ids . ") 
-            //  
-            //  
-            //  AND `school`.`reg_type_id`= '" . $registration_type_id . "' 
-            //  AND `schools`.`school_type_id`= '" . $institute_type_id . "' 
-            // ";
-            $requests = $this->db->query($query)->result();
 
-            ?>
+            <div class="row">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+
             <section class="content" style="padding-top: 0px !important;">
 
 
                 <div class="row">
                     <div class="col-md-12">
                         <div class="block_div" id="new_registration_list">
+                            <h4>Progress Report</h4>
+                            <table class="table table-bordered" id="summary_report">
+                                <thead>
+                                    <tr>
+                                        <th>Region</th>
+                                        <th>Total</th>
+                                        <th>Not Update</th>
+                                        <th>Doc Yes</th>
+                                        <th>Doc No</th>
+                                    </tr>
+                                </thead>
+                                <?php foreach ($progress_reports as $progress_report) { ?>
+                                    <tr>
+                                        <th><?php echo $progress_report->Region ?></th>
+                                        <td><?php echo $progress_report->Total ?></td>
+                                        <td><?php echo $progress_report->Not_Update ?></td>
+                                        <td><?php echo $progress_report->Doc_Yes ?></td>
+                                        <td><?php echo $progress_report->Doc_No ?></td>
+
+                                    </tr>
+                                <?php } ?>
+                                <tbody>
+
+                            </table>
+
+                        </div>
+                        <div class="block_div" id="new_registration_list">
+
                             <h4>New Registration Appllied Cases</h4>
                             <div class="table-responsive">
 
+                                <?php
+                                $status = 2;
+                                $file_status = "1,5";
+                                $institute_type_id = 2;
+                                $request_type = 1;
+                                $query = "SELECT
+                                    `schools`.schoolId as schools_id,
+                                    `schools`.schoolName,
+                                    `schools`.docs,
+                                    `schools`.rr_note,
+                                    `schools`.registrationNumber,
+                                    `schools`.biseRegister,
+                                    `schools`.`biseregistrationNumber`,
+                                    `session_year`.`sessionYearTitle`,
+                                    `session_year`.`sessionYearId`,
+                                    `school`.`status`,
+                                    `reg_type`.`regTypeTitle`,
+                                    `school`.`schoolId` as school_id,
+                                    `district`.`districtTitle`,
+                                    `school`.`file_status`,
+                                    `school`.`apply_date`,
+                                    schools.isfined,
+                                    school.status_remark,
+                                    `schools`.`school_type_id`,
+                                    school.visit,
+                                    school.recommended,
+                                    school.flag_color,
+                                    school.flag_detail,
+                                    `school`.`level_of_school_id`,
+                                    `schools`.`yearOfEstiblishment`,
+                                    (SELECT `tehsils`.`tehsilTitle` FROM `tehsils` WHERE `tehsils`.`tehsilId` = schools.tehsil_id) as tehsil,
+                                    schools.address,
+                                    (SELECT `levelofinstitute`.`levelofInstituteTitle` FROM `levelofinstitute`  WHERE `levelofinstitute`.`levelofInstituteId`= school.level_of_school_id) as level,
 
+                                    schools.telePhoneNumber,
+                                    schools.schoolMobileNumber,
+                                    school.principal_contact_no,
+                                    (SELECT `users`.`contactNumber` FROM users WHERE `users`.`userId`=schools.owner_id) as owner_contact_no,
+
+                                    (SELECT s.status
+                                    FROM school as s WHERE 
+                                    s.schools_id = `schools`.`schoolId`
+                                    AND  s.session_year_id = (`school`.`session_year_id`-1) and s.schools_id = schools.schoolId LIMIT 1) as previous_session_status,
+                                    (SELECT COUNT(*)
+                                    FROM school as s WHERE 
+                                    s.schools_id = `schools`.`schoolId`
+                                    AND  s.status != 1 and `s`.`file_status`=5) as deficient
+                                    FROM
+                                    `school`,
+                                    `schools`,
+                                    `session_year`,
+                                    `reg_type`,
+                                    `district` 
+                                    WHERE  `session_year`.`sessionYearId` = `school`.`session_year_id`
+                                    AND `school`.`schools_id` = `schools`.`schoolId`
+                                    AND `school`.`reg_type_id` = `reg_type`.`regTypeId` 
+                                    AND schools.district_id = district.districtId
+                                    AND `school`.`status`='" . $status . "'
+                                    AND `school`.`file_status` IN ( " . $file_status . " )
+                                    AND district.new_region IN(" . $region_ids . ")
+                                    AND `school`.`reg_type_id`= '" . $request_type . "'
+                                    ORDER BY `school`.`schools_id` ASC, 
+                                    `schools`.`docs` ASC
+                                    ";
+
+                                $requests = $this->db->query($query)->result();
+
+                                ?>
                                 <table class="table table-bordered table_small" id="table_new_registration" style="font-size:11px">
                                     <thead>
                                         <tr>
@@ -232,7 +228,7 @@
                                             <th>File No.</th>
                                             <th>Level</th>
                                             <th>District</th>
-                                            <th style="width: 100px;">School Name</th>
+                                            <th>School Name</th>
                                             <th>Session</th>
                                             <th>Flag</th>
                                             <th>Days</th>
@@ -241,14 +237,11 @@
                                             <th>Fine</th>
                                             <th>Visit</th>
                                             <th>Reco.</th>
-                                            <th>Remarks</th>
-
-                                            <th>Tehsil</th>
-                                            <th>Address</th>
+                                            <th>Note</th>
                                             <th>Contact</th>
                                             <th>YofEst</th>
                                             <th>BISE Reg.</td>
-                                            <th>Documents</th>
+                                            <th>Doc</th>
                                             <th>Action</th>
 
 
@@ -339,18 +332,24 @@
                                                     <td><?php echo $request->recommended; ?></td>
 
 
-                                                    <td><?php echo $request->status_remark; ?></td>
-
-
-
-
-
-                                                    <td><?php echo $request->tehsil; ?></td>
-                                                    <td><?php echo $request->address; ?></td>
-                                                    <td><?php echo $request->telePhoneNumber; ?>,
-                                                        <?php echo $request->schoolMobileNumber; ?>,
-                                                        <?php echo $request->principal_contact_no; ?>,
-                                                        <?php echo $request->owner_contact_no; ?>,
+                                                    <td><?php echo $request->rr_note; ?></td>
+                                                    <td>
+                                                        <?php
+                                                        $mobile_number = array();
+                                                        if ($request->telePhoneNumber) {
+                                                            $mobile_number[preg_replace('/[^0-9]/', '', $request->telePhoneNumber)] = $request->telePhoneNumber;
+                                                        }
+                                                        if ($request->schoolMobileNumber) {
+                                                            $mobile_number[preg_replace('/[^0-9]/', '', $request->schoolMobileNumber)] = $request->schoolMobileNumber;
+                                                        }
+                                                        if ($request->principal_contact_no) {
+                                                            $mobile_number[preg_replace('/[^0-9]/', '', $request->principal_contact_no)] = $request->principal_contact_no;
+                                                        }
+                                                        if ($request->owner_contact_no) {
+                                                            $mobile_number[preg_replace('/[^0-9]/', '', $request->owner_contact_no)] = $request->owner_contact_no;
+                                                        }
+                                                        echo rtrim(implode(", ", $mobile_number), ",");
+                                                        ?>
                                                     </td>
                                                     <td><?php echo $request->yearOfEstiblishment; ?></td>
                                                     <td><?php
@@ -362,7 +361,7 @@
 
 
                                                     <td>
-                                                        <?php 
+                                                        <?php
                                                         //echo $request->docs;
                                                         if ($request->docs === '0') {
                                                             echo '<i style="color:red" class="fa fa-times-circle-o" aria-hidden="true"></i> No';
@@ -385,167 +384,150 @@
 
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="block_div" id="deficient_list">
+                        <div class="block_div" id="new_registration_list">
+                            <h4>Missing File Numbers</h4>
+                            <table class="table table-bordered table_small" id="missing_file_number">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>School ID</th>
+                                        <th>School Name</th>
+                                        <th>District Name</th>
+                                        <th>Registration</th>
+                                        <th>File No.</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $count = 1;
+                                    $query = "SELECT f.*, `district`.`districtTitle` FROM file_numbers as f 
+                                    INNER JOIN district ON(f.district_id = district.districtId)
+                                    WHERE f.file_no IS NULL
+                                    AND district.new_region IN(" . $region_ids . ") ";
+                                    $files = $this->db->query($query)->result();
+                                    foreach ($files as $file) { ?>
+                                        <tr>
+                                            <td><?php echo $count++; ?></td>
+                                            <td><?php echo $file->schoolId; ?></td>
+                                            <td><?php echo $file->schoolName; ?></td>
+                                            <td><?php echo $file->districtTitle; ?></td>
+                                            <td><?php echo $file->registrationNumber; ?></td>
+                                            <td><?php echo $file->file_no; ?></td>
+                                            <td>
+                                                <button onclick="get_document_update_form('<?php echo $file->schoolId ?>')" class="btn btn-link btn-sm "> Only Add File No. </button>
 
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-
                 </div>
+
+
+            </section>
         </div>
 
-        <h4>
-            Missing File Numbers
-        </h4>
-        <table class="table table-bordered table_small" id="missing_file_number" >
-                                    <thead>
-        <tr>
-            <th>#</th>
-            <th>School ID</th>
-            <th>School Name</th>
-            <th>District Name</th>
-            <th>Registration</th>
-            <th>File No.</th>
-            <th>Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php
-        $count=1; 
-        $query="SELECT f.*, `district`.`districtTitle` FROM file_numbers as f 
-         INNER JOIN district ON(f.district_id = district.districtId)
-        WHERE f.file_no IS NULL
-        AND district.new_region IN(" . $region_ids . ") ";
-        $files = $this->db->query($query)->result(); 
-        foreach($files as $file){ ?>
-        <tr>
-            <td><?php echo $count++; ?></td>
-            <td><?php echo $file->schoolId; ?></td>
-            <td><?php echo $file->schoolName; ?></td>
-            <td><?php echo $file->districtTitle; ?></td>
-            <td><?php echo $file->registrationNumber; ?></td>
-            <td><?php echo $file->file_no; ?></td>
-            <td>
-            <button onclick="get_document_update_form('<?php echo $file->schoolId ?>')" class="btn btn-link btn-sm "> Only Add File No. </button>
-                                                  
-            </td>
-        </tr>
-        <?php } ?>
-        </tbody>
-        </table>
+        <script>
+            function get_document_update_form(schools_id) {
+                $.ajax({
+                        method: "POST",
+                        url: "<?php echo site_url('record_room/school_detail'); ?>",
+                        data: {
+                            schools_id: schools_id
+                        },
+                    })
+                    .done(function(respose) {
+                        $('#modal').modal('show');
+                        $('#modal_title').html("Update Documents Status");
+                        $('#modal_body').html(respose);
+                    });
+            }
+        </script>
 
-        <div class="clearfix"></div>
+        <script>
+            $(document).ready(function() {
+                $('#summary_report').DataTable({
+                    dom: 'Bfrtip',
+                    paging: false,
+                    title: 'Record Room Summary Report',
+                    "order": [],
+                    searching: true,
+                    buttons: [
 
+                        {
+                            extend: 'print',
+                            title: 'Record Room Summary Report',
+                        },
+                        {
+                            extend: 'excelHtml5',
+                            title: 'Record Room Summary Report',
 
-        <!-- Main row -->
-        <!-- /.row (main row) -->
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            title: 'Record Room Summary Report',
+                            pageSize: 'A4',
 
-</div>
-
-
-</section>
-</div>
-
-<script>
-    function get_document_update_form(schools_id) {
-        $.ajax({
-                method: "POST",
-                url: "<?php echo site_url('record_room/school_detail'); ?>",
-                data: {
-                    schools_id: schools_id
-                },
-            })
-            .done(function(respose) {
-                $('#modal').modal('show');
-                $('#modal_title').html("Update Documents Status");
-                $('#modal_body').html(respose);
+                        }
+                    ]
+                });
             });
-    }
-</script>
-
-<script>
-    
-    $(document).ready(function() {
-        $('#summary_report').DataTable({
-            dom: 'Bfrtip',
-            paging: false,
-            title: 'Record Room Summary Report',
-            "order": [],
-            searching: true,
-            buttons: [
-
-                {
-                    extend: 'print',
-                    title: 'Record Room Summary Report',
-                },
-                {
-                    extend: 'excelHtml5',
-                    title: 'Record Room Summary Report',
-                    
-                },
-                {
-                    extend: 'pdfHtml5',
-                    title: 'Record Room Summary Report',
-                    pageSize: 'A4',
-                
-                }
-            ]
-        });
-    });
-    $(document).ready(function() {
-        $('#missing_file_number').DataTable({
-            dom: 'Bfrtip',
-            paging: false,
-            title: 'Record Room Missing File',
-            "order": [],
-            searching: true,
-            buttons: [
-
-                {
-                    extend: 'print',
+            $(document).ready(function() {
+                $('#missing_file_number').DataTable({
+                    dom: 'Bfrtip',
+                    paging: false,
                     title: 'Record Room Missing File',
-                    
-                },
-                {
-                    extend: 'excelHtml5',
-                    title: 'Record Room Missing File',
-                    
-                },
-                {
-                    extend: 'pdfHtml5',
-                    title: 'Record Room Missing File',
-                    pageSize: 'A4',
-                    
-                }
-            ]
-        });
-    });
-    $(document).ready(function() {
-        $('#table_new_registration').DataTable({
-            dom: 'Bfrtip',
-            paging: false,
-            title: 'New Registration Cases',
-            "order": [],
-            searching: true,
-            buttons: [
+                    "order": [],
+                    searching: true,
+                    buttons: [
 
-                {
-                    extend: 'print',
+                        {
+                            extend: 'print',
+                            title: 'Record Room Missing File',
+
+                        },
+                        {
+                            extend: 'excelHtml5',
+                            title: 'Record Room Missing File',
+
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            title: 'Record Room Missing File',
+                            pageSize: 'A4',
+
+                        }
+                    ]
+                });
+            });
+            $(document).ready(function() {
+                $('#table_new_registration').DataTable({
+                    dom: 'Bfrtip',
+                    paging: false,
                     title: 'New Registration Cases',
-                   
-                },
-                {
-                    extend: 'excelHtml5',
-                    title: 'New Registration Cases',
-                    
-                },
-                {
-                    extend: 'pdfHtml5',
-                    title: 'New Registration Cases',
-                    pageSize: 'A4',
-                }
-            ]
-        });
-    });
-</script>
+                    "order": [],
+                    searching: true,
+                    buttons: [
+
+                        {
+                            extend: 'print',
+                            title: 'New Registration Cases',
+
+                        },
+                        {
+                            extend: 'excelHtml5',
+                            title: 'New Registration Cases',
+
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            title: 'New Registration Cases',
+                            pageSize: 'A4',
+                        }
+                    ]
+                });
+            });
+        </script>
