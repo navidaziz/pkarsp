@@ -77,7 +77,6 @@ class Login extends Admin_Controller
 		$this->form_validation->set_rules($validations);
 
 		if ($this->form_validation->run() === TRUE) {
-			$recaptchaResponse = trim($this->input->post('g-recaptcha-response'));
 
 			$secret = '6Leuqa4ZAAAAACHxncAMn6I8ULX2Rf3R6hT7NhjP';
 
@@ -95,6 +94,8 @@ class Login extends Admin_Controller
 			$response = curl_exec($verify);
 
 			$status = json_decode($response, true);
+			var_dump($status);
+			exit();
 
 			if ($status['success'] != 1) {
 				$this->session->set_flashdata('msg', 'Captcha error, Please try again.');
