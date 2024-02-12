@@ -118,7 +118,7 @@
                                         }
                                     }
                                 </script>
-                                <input type="text" name="fine_type_ids" id="fine_type_ids" />
+                                <input type="hidden" name="fine_type_ids" id="fine_type_ids" />
 
                                 <table class="table">
                                     <?php
