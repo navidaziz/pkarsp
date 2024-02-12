@@ -14,7 +14,7 @@ class Fine_management extends CI_Controller
 
 	public function index()
 	{
-		$this->data["title"] = "Fine Management";
+		$this->data["title"] = "Fine Management System";
 		$this->data["view"] = "fms/fine_management/fine_management_home";
 		$this->load->view("layout", $this->data);
 	}

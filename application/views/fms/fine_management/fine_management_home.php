@@ -13,7 +13,10 @@
 		<div class='row'>
 			<div class='col-md-6'>
 				<div class='clearfix'>
-					<h3 class='content-title pull-left'><?php echo $title; ?></h3>
+					<h3 class='content-title pull-left'><?php echo $title; ?>
+						<br />
+						Dashboard
+					</h3>
 				</div>
 				<small><?php echo @$description; ?></small>
 			</div>

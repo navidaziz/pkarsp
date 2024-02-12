@@ -4,7 +4,7 @@ SUM(fine_amount) as fine_amount,
 (SELECT SUM(w.waived_off_amount) FROM fine_waived_off as w WHERE w.is_deleted=0 AND w.school_id = f.school_id ) as total_waived_off,
 (SELECT SUM(fp.deposit_amount) FROM fine_payments as fp WHERE fp.is_deleted=0 AND fp.school_id = f.school_id ) as total_fine_paid
 FROM fines as f
- WHERE f.status=1";
+WHERE f.is_deleted=0";
 $fine_summary = $this->db->query($query)->result()[0];
 
 
