@@ -79,12 +79,12 @@
 
                         <tr>
                             <th colspan="4" style="text-align: right;">Fine Paid: (Rs) </th>
-                            <th style="text-align: center;"><?php echo @number_format($fine->total_payment, 2) ?></td>
+                            <th style="text-align: center;"><?php echo @number_format($fine->total_fine_paid, 2) ?></td>
                         </tr>
 
                         <tr>
                             <th colspan="4" style="text-align: right;">Total Fine Remaining: (Rs) </th>
-                            <th style="text-align: center;"><?php echo @number_format($fine->fine_amount - $fine->total_payment, 2) ?> </th>
+                            <th style="text-align: center;"><?php echo @number_format($fine->fine_amount - $fine->total_waived_off - $fine->total_fine_paid, 2) ?> </th>
                         </tr>
 
                     </table>

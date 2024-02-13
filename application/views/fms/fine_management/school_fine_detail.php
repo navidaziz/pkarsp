@@ -22,6 +22,23 @@
     </div>
 </div>
 <script>
+    function activity_log(fine_id) {
+        $('#fine_modal_body').html('Please wait......');
+        $('#fine_model').modal('show');
+        $.ajax({
+                method: "POST",
+                url: "<?php echo site_url('fms/fine_management/get_activity_logs'); ?>",
+                data: {
+                    school_id: <?php echo $school->school_id; ?>,
+                    fine_id: fine_id
+                },
+            })
+            .done(function(respose) {
+                console.log(respose);
+                $('#fine_modal_body').html(respose);
+            });
+    }
+
     function fine_amount_detail(fine_id) {
         $('#fine_modal_body').html('Please wait......');
         $('#fine_model').modal('show');
@@ -160,6 +177,7 @@
                     <table class="table" style="font-size: 12px;">
                         <tr>
                             <th></th>
+                            <th></th>
                             <th>Fine ID</th>
                             <th>Letter No</th>
                             <th>Date</th>
@@ -190,6 +208,11 @@
                                     <?php if ($fine->is_deleted == 1) { ?>
                                         <button class="btn btn-dark btn-sm" onclick="restore_fine('<?php echo $fine->fine_id ?>')" class="btn btn-danger btn-sm"><i class="fa fa-undo" aria-hidden="true"></i></button>
                                     <?php } ?>
+                                </td>
+                                <td>
+                                    <button class="btn btn-dark btn-sm" onclick="activity_log('<?php echo $fine->fine_id ?>')" class="btn btn-danger btn-sm"><i class="fa fa-flag" aria-hidden="true"></i></button>
+
+
                                 </td>
                                 <td><strong><?php echo $fine->fine_id ?></strong></td>
                                 <td><?php echo $fine->letter_no; ?></td>
@@ -242,7 +265,7 @@
 
                         <?php } ?>
                         <tr>
-                            <th colspan="8" style="text-align: right;">Total</th>
+                            <th colspan="9" style="text-align: right;">Total</th>
                             <th><?php echo @number_format($fine_summary->fine_amount, 2); ?></th>
                             <th><?php echo @number_format($fine_summary->total_waived_off, 2); ?></th>
                             <th><?php echo @number_format($fine_summary->fine_amount - $fine_summary->total_waived_off, 2); ?></th>

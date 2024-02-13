@@ -55,8 +55,22 @@ class Fine_management extends CI_Controller
 		$this->load->view("fms/fine_management/add_fine", $this->data);
 	}
 
+	public function get_activity_logs()
+	{
+		$this->data["title"] = "Fine Activity Logs";
+		$this->data['school_id'] = (int) $this->input->post('school_id');
+		$this->data['fine_id'] = (int) $this->input->post('fine_id');
+		$this->load->view("fms/fine_management/fine_activity_logs", $this->data);
+	}
+
+
+
 	public function get_fine_payment_details()
 	{
+
+
+
+
 		$this->data['school_id'] = $school_id =  $this->input->post('school_id');
 		$this->data['fine_id'] = $fine_id = $this->input->post('fine_id');
 
@@ -205,11 +219,7 @@ class Fine_management extends CI_Controller
 
 	public function add_fine()
 	{
-
-
 		$fine_type_ids = explode(",", $this->input->post('fine_type_ids'));
-
-
 		$slected_fines = array();
 		$seleted_fine_amount = 0;
 		foreach ($fine_type_ids as $fine_type_id) {
@@ -243,10 +253,9 @@ class Fine_management extends CI_Controller
 		);
 		$this->form_validation->set_rules($validations);
 		$input = array();
-		$input['school_id'] = $school_id =  (int) $this->input->post('school_id');
+
 		if ($this->form_validation->run() === TRUE) {
 			if ($this->uploadfile($school_id, "fine_file")) {
-
 				$input['fine_file']  = $this->data["upload_data"]["dir"] . $this->data["upload_data"]["file_name"];
 			} else {
 				$response['error'] = true;
@@ -257,6 +266,7 @@ class Fine_management extends CI_Controller
 
 			//$input["file_number"] = $this->input->post("file_number");
 			//$input["fine_type_id"] = $this->input->post("fine_type_id");
+			$input['school_id'] = $school_id =  (int) $this->input->post('school_id');
 			$input["fine_channel_id"] = $this->input->post("fine_channel_id");
 			$input["fine_amount"] = $this->input->post("fine_amount");
 			$input["fine_nature"] = $this->input->post("fine_nature");
@@ -265,7 +275,8 @@ class Fine_management extends CI_Controller
 			$input["remarks"] = $this->input->post("remarks");
 			$input["letter_no"] = $this->input->post("letter_no");
 			$input['created_by'] = $this->session->userdata('userId');
-			$fine_id = $this->db->insert('fines', $input);
+			$this->db->insert('fines', $input);
+			$fine_id = $this->db->insert_id();
 			if ($fine_id) {
 				$this->db->where('fine_id', $fine_id);
 				$this->db->delete('fine_amount_details');
@@ -275,7 +286,7 @@ class Fine_management extends CI_Controller
 					$fine_amount['school_id'] = $school_id;
 					$fine_amount['fine_type_id'] = $fine_type_id;
 					$fine_amount['amount'] = $amount;
-					$fine_id = $this->db->insert('fine_amount_details', $fine_amount);
+					$this->db->insert('fine_amount_details', $fine_amount);
 				}
 				$response['error'] = false;
 				$response['msg'] = 'Fine Add Successfully';
@@ -615,11 +626,12 @@ class Fine_management extends CI_Controller
 	public function delete_fine()
 	{
 
-		$where['fine_id'] = (int) $this->input->post('fine_id');
+		$where['fine_id'] = $fine_id  = (int) $this->input->post('fine_id');
+
 		$this->db->where($where);
 		$status['is_deleted'] = 1;
 		if ($this->db->update('fines', $status)) {
-			$this->activity_logs('fine', 'delete_fine', '0');
+			$this->activity_logs('fine', $fine_id, 'delete_fine', '0');
 			echo 1;
 		} else {
 			echo 0;
@@ -629,11 +641,11 @@ class Fine_management extends CI_Controller
 	public function retore_fine()
 	{
 
-		$where['fine_id'] = (int) $this->input->post('fine_id');
+		$where['fine_id'] = $fine_id =  (int) $this->input->post('fine_id');
 		$this->db->where($where);
 		$status['is_deleted'] = 0;
 		if ($this->db->update('fines', $status)) {
-			$this->activity_logs('fine', 'restore_fine', '1');
+			$this->activity_logs('fine', $fine_id, 'restore_fine', '1');
 			echo 1;
 		} else {
 			echo 0;
@@ -649,7 +661,7 @@ class Fine_management extends CI_Controller
 		$status['is_deleted'] = 1;
 		if ($this->db->update('fine_payments', $status)) {
 			$this->update_fine_status($fine_id);
-			$this->activity_logs('fine_payment', 'delete_payment', '1');
+			$this->activity_logs('fine_payment', $fine_id, 'delete_payment', '1', $payment_id);
 			echo 1;
 		} else {
 			echo 0;
@@ -666,6 +678,7 @@ class Fine_management extends CI_Controller
 		$status['is_deleted'] = 1;
 		if ($this->db->update('fine_waived_off', $status)) {
 			$this->update_fine_status($fine_id);
+			$this->activity_logs('fine_waived_off', $fine_id, 'delete_waived_off', '1', $fine_waived_off_id);
 			echo 1;
 		} else {
 			echo 0;
@@ -733,9 +746,11 @@ class Fine_management extends CI_Controller
 		$this->load->view("fms/fine_management/fined_school_list", $this->data);
 	}
 
-	private function activity_logs($table, $activity, $status)
+	private function activity_logs($table, $fine_id, $activity, $status, $other_id = NULL)
 	{
+		$activity_input['fine_id'] = $fine_id;
 		$activity_input['table'] = $table;
+		$activity_input['other_id'] = $other_id;
 		$activity_input['activity'] = $activity;
 		$activity_input['activity_status'] = $status;
 		$activity_input['created_by'] = $this->session->userdata('userId');

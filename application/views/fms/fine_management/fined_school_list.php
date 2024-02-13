@@ -18,67 +18,38 @@ f.is_deleted,
         FROM fines as f
         INNER JOIN schools s ON (s.schoolId = f.school_id)
         INNER JOIN district d ON (`d`.`districtId` = `s`.`district_id`)
-        WHERE f.is_deleted=0";
+        WHERE f.is_deleted =0
+       GROUP BY f.school_id
+        ";
 
 $fines = $this->db->query($query)->result();
 foreach ($fines as $fine) {
 ?>
-    <?php if ($fine->is_deleted == 0) { ?>
-        <tr>
-            <td><?php echo $count++; ?></td>
-            <td><?php echo $fine->school_id; ?></td>
-            <td><?php echo $fine->reg_number; ?></td>
-            <td><?php echo $fine->school_name; ?></td>
-            <td><?php echo $fine->district_name; ?></td>
-            <td><?php echo $fine->tehsil_name; ?></td>
-            <td><?php echo $fine->uc; ?></td>
-            <td><?php echo $fine->address; ?></td>
-            <td><?php echo $fine->level; ?></td>
-            <td><?php echo $fine->density; ?></td>
-            <td><?php echo @number_format($fine->fine_amount, 2); ?></td>
-            <td><?php echo @number_format($fine->total_waived_off, 2); ?></td>
-            <td><?php echo @number_format($fine->fine_amount - $fine_summary->total_waived_off, 2); ?></td>
-            <td><?php echo @number_format($fine->total_fine_paid, 2); ?></td>
-            <td><?php echo @number_format(($fine->fine_amount - $fine_summary->total_waived_off) - $fine_summary->total_fine_paid, 2); ?></td>
+    <tr>
+        <td><?php echo $count++; ?></td>
+        <td><?php echo $fine->school_id; ?></td>
+        <td><?php echo $fine->reg_number; ?></td>
+        <td><?php echo $fine->school_name; ?></td>
+        <td><?php echo $fine->district_name; ?></td>
+        <td><?php echo $fine->tehsil_name; ?></td>
+        <td><?php echo $fine->uc; ?></td>
+        <td><?php echo $fine->address; ?></td>
+        <td><?php echo $fine->level; ?></td>
+        <td><?php echo $fine->density; ?></td>
+        <td><?php echo @number_format($fine->fine_amount, 2); ?></td>
+        <td><?php echo @number_format($fine->total_waived_off, 2); ?></td>
+        <td><?php echo @number_format($fine->fine_amount - $fine_summary->total_waived_off, 2); ?></td>
+        <td><?php echo @number_format($fine->total_fine_paid, 2); ?></td>
+        <td><?php echo @number_format(($fine->fine_amount - $fine_summary->total_waived_off) - $fine_summary->total_fine_paid, 2); ?></td>
 
-            <td>
-                <!-- <button onclick="get_add_fine_payment_form('<?php echo $fine->fined_school_id; ?>')" class="btn btn-link btn-sm">
+        <td>
+            <!-- <button onclick="get_add_fine_payment_form('<?php echo $fine->fined_school_id; ?>')" class="btn btn-link btn-sm">
                 View
             </button> -->
-                <a href="<?php echo site_url("fms/fine_management/view_fine_detail/" . $fine->school_id); ?>">
-                    View
-                </a>
-            </td>
-        </tr>
-    <?php } else { ?>
-        <tr style="text-decoration: line-through;">
-            <td><?php echo $count++; ?></td>
-            <td><?php echo $fine->school_id; ?></td>
-            <td><?php echo $fine->reg_number; ?></td>
-            <td><?php echo $fine->school_name; ?></td>
-            <td><?php echo $fine->district_name; ?></td>
-            <td><?php echo $fine->tehsil_name; ?></td>
-            <td><?php echo $fine->uc; ?></td>
-            <td><?php echo $fine->address; ?></td>
-            <td><?php echo $fine->level; ?></td>
-            <td><?php //echo $fine->density; 
-                ?></td>
-            <td><?php //echo @number_format($fine->fine_amount, 2); 
-                ?></td>
-            <td><?php //echo @number_format($fine->total_waived_off, 2); 
-                ?></td>
-            <td><?php //echo @number_format($fine->fine_amount - $fine_summary->total_waived_off, 2); 
-                ?></td>
-            <td><?php //echo @number_format($fine->total_fine_paid, 2); 
-                ?></td>
-            <td><?php //echo @number_format(($fine->fine_amount - $fine_summary->total_waived_off) - $fine_summary->total_fine_paid, 2); 
-                ?></td>
+            <a href="<?php echo site_url("fms/fine_management/view_fine_detail/" . $fine->school_id); ?>">
+                View
+            </a>
+        </td>
+    </tr>
 
-            <td>
-                <a href="<?php echo site_url("fms/fine_management/view_fine_detail/" . $fine->school_id); ?>">
-                    View
-                </a>
-            </td>
-        </tr>
-    <?php } ?>
 <?php } ?>

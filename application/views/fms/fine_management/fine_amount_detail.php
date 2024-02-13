@@ -19,11 +19,11 @@
                         </tr>
                         <?php
                         $query = "SELECT fine_amount_details.*, 
-                                fine_types.fine_type_category,
-                                `fine_types`.`fine_title`
-                                FROM `fine_amount_details` 
-                                INNER JOIN fine_types ON (fine_types.fine_type_id = fine_amount_details.fine_type_id) 
-                                        WHERE fine_id = '" . $fine_id . "'";
+                        fine_types.fine_type_category,
+                        `fine_types`.`fine_title`
+                        FROM `fine_amount_details` 
+                        INNER JOIN fine_types ON (fine_types.fine_type_id = fine_amount_details.fine_type_id) 
+                        WHERE fine_id = '" . $fine_id . "'";
                         $fine_amounts = $this->db->query($query)->result();
                         $count = 1;
                         foreach ($fine_amounts as $fine_amount) {
@@ -33,9 +33,21 @@
                                 <td><?php echo $fine_amount->fine_type_category; ?></td>
                                 <td><?php echo $fine_amount->fine_title; ?></td>
                                 <td><?php echo $fine_amount->amount; ?></td>
-                                <td></td>
                             </tr>
                         <?php } ?>
+                        <?php
+                        $query = "SELECT SUM(fine_amount_details.amount) as total
+                        FROM `fine_amount_details`
+                        WHERE fine_id = '" . $fine_id . "'";
+                        $fine_amount = $this->db->query($query)->row();
+
+                        ?>
+                        <tr>
+                            <td style="text-align: right;" colspan="3">Total</td>
+                            <td><?php echo $fine_amount->total; ?></td>
+
+                        </tr>
+
                     </table>
                 </div>
             </div>
