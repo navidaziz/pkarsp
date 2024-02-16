@@ -126,8 +126,11 @@
                                 $count++;
                               }
                               ?></strong><br />
-
-            Contact: <?php echo $school->telePhoneNumber; ?>, <?php echo $school->schoolMobileNumber; ?>
+            <?php
+            $query = "SELECT telePhoneNumber, schoolMobileNumber FROM schools WHERE schoolId = '" . $school->schoolId . "'";
+            $contact = $this->db->query($query)->row();
+            ?>
+            Contact: <?php echo $contact->telePhoneNumber; ?>, <?php echo $contact->schoolMobileNumber; ?>
 
           </h6>
 
