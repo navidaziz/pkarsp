@@ -530,6 +530,13 @@
               </tr>
               <tr>
                 <th>
+                  Student Fee Register
+                </th>
+                <td>Yes</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <th>
                   Teacher Attendance </th>
                 <td>Yes</td>
                 <td>No</td>
@@ -542,13 +549,7 @@
                 <td>No</td>
               </tr>
 
-              <tr>
-                <th>
-                  Fee Register
-                </th>
-                <td>Yes</td>
-                <td>No</td>
-              </tr>
+
 
 
             </table>
