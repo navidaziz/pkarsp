@@ -170,6 +170,10 @@
                   <td> Contact No: </td>
                   <td> <?php echo $principal->principal_contact_no; ?> </td>
                 </tr>
+                <tr>
+                  <td>B.Ed</td>
+                  <td> <span style="margin-left: 5px;"></span>1. Yes <span style="margin-left: 20px;"></span> 2. No </td>
+                </tr>
               </table>
 
 
