@@ -92,6 +92,7 @@
         <table class="table table2">
             <tr>
                 <th>Session</th>
+                <th>Visit Report</th>
                 <th>Notesheet</th>
                 <th>Apply For</th>
                 <th>Level</th>
@@ -112,8 +113,10 @@
             $previous_max = NULL;
             $missing = 0;
             $note_sheet_count = 0;
+            $session_count = 0;
             if ($school_sessions) {
                 foreach ($school_sessions as $school_session) {
+                    $session_count++;
                     if ($school_session->status == 0) {
                         $missing = 1;
                     }
@@ -124,15 +127,22 @@
                             <?php if ($school_session->status != 0) { ?>
                                 <a href="<?php echo site_url("print_file/school_session_detail/" . $school_session->schoolId); ?>" target="new">
                                     <i class="fa fa-print" aria-hidden="true"></i> <?php echo $school_session->sessionYearTitle; ?></a>
+
                             <?php } else { ?>
                                 <?php echo $school_session->sessionYearTitle; ?>
                             <?php } ?>
+                        </td>
+                        <td>
+                            <a href="<?php echo site_url("print_visit_report/visit_report/" . $school_session->schoolId); ?>" target="new">
+                                <i class="fa fa-print" aria-hidden="true"></i> Visit Report</a>
+
                         </td>
                         <td>
                             <?php if ($school_session->status == 2 and $missing == 0) {
                                 $note_sheet_count++;
                             ?>
                                 <a target="new" href="<?php echo site_url("online_cases/single_note_sheet/" . $school->schools_id . "/" . $school_session->schoolId) ?>">Notesheet</a>
+
                             <?php } ?>
                         </td>
                         <?php if ($school_session->status != 0) { ?>
