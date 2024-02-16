@@ -1080,7 +1080,7 @@
         <table class="table">
           <tr>
             <td>
-              <strong>Staff informaiton</strong>
+              <strong>Non-Teaching Staff Informaiton</strong>
               <table class="table table_large table-bordered">
                 <thead>
                   <tr>
@@ -1455,7 +1455,7 @@
                     <table class="table table-bordered">
 
                       <tr>
-                        <th>Total Computers <span style="margin-left: 10px;">Yes</span> <span style="margin-left: 10px;">No</span></th>
+                        <th>Total Computers </th>
                         <td style="width:30px"> </td>
                       </tr>
                       <tr>
