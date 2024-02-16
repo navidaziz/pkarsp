@@ -126,7 +126,8 @@
                                 $count++;
                               }
                               ?></strong><br />
-            Contact: <?php $school->telePhoneNumber; ?>, <?php $school->schoolMobileNumber; ?>
+
+            Contact: <?php echo $school->telePhoneNumber; ?>, <?php echo $school->schoolMobileNumber; ?>
 
           </h6>
 
