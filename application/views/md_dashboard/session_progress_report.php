@@ -459,13 +459,8 @@ from (((`school`
 join `schools` on(`schools`.`schoolId` = `school`.`schools_id`)) 
 join `district` on(`district`.`districtId` = `schools`.`district_id`)) 
 join `session_year` on(`session_year`.`sessionYearId` = `school`.`session_year_id`)) 
-";
-if ($institute_type_id) {
-    $query .= " AND `schools`.`school_type_id`= '" . $institute_type_id . "' ";
-}
-$query .= " AND `school`.`level_of_school_id`('3,4') ";
-
-$query .= " GROUP BY `district`.`bise` ORDER BY `district`.`bise`";
+WHERE  `school`.`level_of_school_id` IN('3,4') 
+ GROUP BY `district`.`bise` ORDER BY `district`.`bise`";
 $pending_files = $this->db->query($query)->result();
 ?>
 <div class="jumbotron" style="padding: 9px;">
