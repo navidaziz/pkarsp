@@ -106,7 +106,7 @@
           <h5> Applied for <strong><?php echo @$school->regTypeTitle; ?></strong></h5>
         </td>
         <td>
-          <h5>
+          <h6>
             School Id # <?php echo $school->schoolId; ?> <br />
             <?php if ($school->registrationNumber != 0) : ?>
               <?php echo "Registration # " . @$school->registrationNumber; ?><br />
@@ -125,8 +125,10 @@
 
                                 $count++;
                               }
-                              ?></strong>
-          </h5>
+                              ?></strong><br />
+            Contact: <?php $school->telePhoneNumber; ?>, <?php $school->schoolMobileNumber; ?>
+
+          </h6>
 
 
         </td>
