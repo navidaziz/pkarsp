@@ -41,48 +41,73 @@
 
         <div class="box-body">
           <div class="row">
-            <?php if ($school->reg_type_id != 2) { ?>
+            <?php if ($school->registrationNumber <= 0) { ?>
               <div class="col-md-5">
-                <h2>
-                  Documents Needed for <i><strong>"<?php echo $school->levelofInstituteTitle; ?>"</strong></i> Registration</h2>
-                <h4>
-                  PSRA officials will collect these documents during the inspection for registration. Please ensure you have them ready before your visit:
-                </h4>
-                <ol style="font-size: larger;">
-                  <li>Ownership Documents or Affidavit
-                    <a target="_blank" href="https://psra.gkp.pk/uploads/attachments/A_Affadavit.pdf">PDF Download</a>
-                    <span style="margin-left: 10px;"></span>
-                    <a target="_blank" href="https://psra.gkp.pk/uploads/attachments/A_Affadavit.pdf">Docx Download</a>
-                  </li>
-                  <li>Rent Agreement (if it applies)</li>
-                  <li> Copy of the Owner or Owners' CNIC</li>
-                  <li> Building Map</li>
-                </ol>
+                <div style="margin:0px auto; width:100%; border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;   padding: 5px; background-color: white;">
+
+                  <h3>
+                    Required Documents for New Registration
+                  </h3>
+                  <h4>
+                    Please ensure the submission of the following documents for new registration:
+                  </h4>
+
+                  <ol style="font-size: larger;">
+                    <li>Ownership Documents or Affidavit
+                      <a target="_blank" href="https://psra.gkp.pk/uploads/attachments/A_Affadavit.pdf">PDF Download</a>
+                      <span style="margin-left: 10px;"></span>
+                      <a target="_blank" href="https://psra.gkp.pk/uploads/attachments/A_Affadavit.pdf">Docx Download</a>
+                    </li>
+                    <li>Rent Agreement (if it applies)</li>
+                    <li> Copy of the Owner's or Owners' CNICs</li>
+                    <li> Institute Building Map</li>
+                  </ol>
+                  <h4>
+                    Kindly dispatch the documents to the office of PSRA promptly.
+                    <h4>
+                      <h4>
+                        <strong>
+                          <address>
+                            Postal Address: <br />
+                            <div class="alert alert-success">
+                              To: Record Room Private Schools Regulatory Authority (PSRA)
+                              18-E Jamal Ud Din Afghani Road, University Town
+                              Peshawar
+                              <br />
+                              <br />
+                              From: School: <?php echo ucwords(strtolower($school->schoolName)); ?>, Institute ID: <?php echo $school->schools_id; ?>
+                            </div>
+                          </address>
+                        </strong>
+                      </h4>
+                </div>
               </div>
             <?php } ?>
             <div class="col-md-7">
               <div style="text-align:center; margin:0px auto; width:100%; border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;   padding: 5px; background-color: white;">
 
-                <h4> Online Applicaiton Status</h4>
-                <h3> <?php echo $school->regTypeTitle ?> for <?php echo $school->levelofInstituteTitle; ?> Session: <?php echo $session_detail->sessionYearTitle; ?></h3>
-                <p style="text-align: left;">
-                  Your application has been successfully submitted online, and there is no need to submit any printed documents. PSRA officials will keep you informed about the progress of your application. Keep view PSRA institute portal regularly. Make sure to regularly check the PSRA institute portal for any updates.
-                </p>
-                <p style="direction: rtl; text-align: right;">
-                  آپ کی درخواست کامیابی کے ساتھ آن لائن جمع کرائی گئی ہے، اور کوئی بھی پرنٹ شدہ دستاویزات جمع کرانے کی ضرورت نہیں ہے۔
-                  <br />
-                  PSRA کے اہلکار آپ کو آپ کی درخواست کی پیشرفت سے آگاہ کرتے رہیں گے۔
-                  <br />
-                  PSRA انسٹی ٹیوٹ پورٹل کو باقاعدگی سے دیکھیں۔
-                  <br />
-                  کسی بھی اپ ڈیٹ کے لیے "PSRA" انسٹی ٹیوٹ پورٹل کو باقاعدگی سے چیک کرنا یقینی بنائیں۔
-                </p>
 
+                <h3> <?php echo $school->regTypeTitle ?>
+                  <?php if ($school->reg_type_id != 4) { ?>
+                    <?php echo " for " . $school->levelofInstituteTitle; ?>
+                  <?php } ?>
+                  for Session: <?php echo $session_detail->sessionYearTitle; ?></h3>
+
+                <h4> Online Applicaiton Status</h4>
+                <h3><strong>
+                    <?php echo get_session_request_status($school->status); ?>
+                  </strong></h3>
+
+                <div style="margin: 20px; font-size:20px">
+                  <p style="text-align:justify">
+                    Your online application has been successfully submitted, and there's no requirement to provide a printed copy of online apply. PSRA officials will keep you updated on the status of your application. Be sure to check the online institute portal regularly for any updates.
+                  </p>
+                  <p style="direction: rtl; text-align:justify">
+                    آپ کی آن لائن درخواست کامیابی کے ساتھ جمع کر دی گئی ہے، اور آن لائن درخواست کی پرنٹ شدہ کاپی فراہم کرنے کی کوئی ضرورت نہیں ہے۔ PSRA کے اہلکار آپ کو آپ کی درخواست کی حیثیت سے آگاہ کرتے رہیں گے۔ کسی بھی اپ ڈیٹ کے لیے آن لائن انسٹی ٹیوٹ پورٹل کو باقاعدگی سے چیک کرنا یقینی بنائیں۔</p>
+                </div>
                 <h4>
 
-                  <strong>
-                    <?php echo get_session_request_status($school->status); ?>
-                  </strong><br />
+                  <br />
                   <br />
 
 
