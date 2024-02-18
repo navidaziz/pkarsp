@@ -140,7 +140,7 @@ class Online_cases extends Admin_Controller
       $this->get_request_list(2, 1, 3, 'Upgradation');
       $this->get_request_list(2, 3, 2, 'Pending Due Previous (Renewals)');
       $this->get_request_list(2, 3, 4, 'Pending Due Previous (Renewal+Upgradation)');
-      $this->get_request_list(2, 3, 4, 'Pending Due Previous (New Registration)');
+      $this->get_request_list(2, 3, 1, 'Pending Due Previous (New Registration)');
    }
 
 
