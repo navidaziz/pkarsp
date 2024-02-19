@@ -732,7 +732,7 @@ class Fine_management extends CI_Controller
 				$response['msg'] = "Payment Add successfully.";
 			} else {
 				$response['error'] = true;
-				$response['msg'] = "Error while adding payment detail.";
+				$response['msg'] = "Error while adding payment detail." . $this->db->error();
 			}
 		} else {
 
