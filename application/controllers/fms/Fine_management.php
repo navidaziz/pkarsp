@@ -207,7 +207,7 @@ class Fine_management extends CI_Controller
 
 	public function file_upload_check()
 	{
-		$allowed = array('pdf');
+		$allowed = array('pdf', 'jpg', 'jpeg', 'png');
 		$filename = $_FILES['fine_file']['name'];
 		$ext = pathinfo($filename, PATHINFO_EXTENSION);
 		if (!in_array($ext, $allowed)) {
@@ -305,7 +305,7 @@ class Fine_management extends CI_Controller
 		if (is_null($config)) {
 			$config = array(
 				"upload_path" => $_SERVER['DOCUMENT_ROOT'] . $upload_path,
-				"allowed_types" => "pdf",
+				"allowed_types" => "pdf|jpg|jpeg|png",
 				"max_size" => 10000,
 				"max_width" => 0,
 				"max_height" => 0,
@@ -522,7 +522,7 @@ class Fine_management extends CI_Controller
 
 	public function wo_attachment_check()
 	{
-		$allowed = array('pdf');
+		$allowed = array('pdf', 'jpg', 'jpeg', 'png');
 		if (!isset($_FILES['waived_off_file']) || $_FILES['waived_off_file']['error'] == 4) {
 			$this->form_validation->set_message('wo_attachment_check', 'Notification File is required for waive off');
 
