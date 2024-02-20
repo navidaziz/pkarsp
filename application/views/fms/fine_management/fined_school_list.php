@@ -24,6 +24,7 @@ f.is_deleted,
 
 $fines = $this->db->query($query)->result();
 foreach ($fines as $fine) {
+
 ?>
     <tr>
         <td><?php echo $count++; ?></td>
@@ -38,9 +39,9 @@ foreach ($fines as $fine) {
         <td><?php echo $fine->density; ?></td>
         <td><?php echo @number_format($fine->fine_amount, 2); ?></td>
         <td><?php echo @number_format($fine->total_waived_off, 2); ?></td>
-        <td><?php echo @number_format($fine->fine_amount - $fine_summary->total_waived_off, 2); ?></td>
+        <td><?php echo @number_format(($fine->fine_amount - $fine->total_waived_off), 2); ?></td>
         <td><?php echo @number_format($fine->total_fine_paid, 2); ?></td>
-        <td><?php echo @number_format(($fine->fine_amount - $fine_summary->total_waived_off) - $fine_summary->total_fine_paid, 2); ?></td>
+        <td><?php echo @number_format((($fine->fine_amount - $fine->total_waived_off) - $fine->total_fine_paid), 2); ?></td>
 
         <td>
             <!-- <button onclick="get_add_fine_payment_form('<?php echo $fine->fined_school_id; ?>')" class="btn btn-link btn-sm">
