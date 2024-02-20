@@ -442,6 +442,67 @@ $progress_reports = $this->db->query($query)->result();
                                 </tbody>
                             </table>
                         </div>
+
+
+                        <div class="block_div">
+                            <h4>UnRegistered Files</h4>
+                            <table class="table table-bordered table_small" id="registration_pending_cases">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>School ID</th>
+                                        <th>File No.</th>
+                                        <th>School Name</th>
+                                        <th>District Name</th>
+                                        <th>Registration ID</th>
+                                        <th>Applied For</th>
+                                        <th>Last Renewal</th>
+                                        <th>Note</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $count = 1;
+                                    $query = "SELECT f.*, `district`.`districtTitle`,
+                                    (SELECT sy.sessionYearTitle as sessionYearTitle
+                                    FROM school
+                                    INNER JOIN session_year AS sy ON (sy.sessionYearId = school.session_year_id)
+                                    WHERE school.schools_id = f.schoolId AND school.status != 1
+                                    AND school.renewal_code <=0 
+                                    ORDER BY school.schoolId DESC LIMIT 1) as registration,
+                                    (SELECT sy.sessionYearTitle as sessionYearTitle
+                                    FROM school
+                                    INNER JOIN session_year AS sy ON (sy.sessionYearId = school.session_year_id)
+                                    WHERE school.schools_id = f.schoolId AND school.status = 1
+                                    AND school.renewal_code >0 
+                                    ORDER BY school.schoolId DESC LIMIT 1) as last_renewal
+                                     FROM file_numbers_unregistered as f 
+                                    INNER JOIN district ON(f.district_id = district.districtId)
+                                    WHERE f.file_no IS NOT NULL
+                                    AND district.new_region IN(" . $region_ids . ") ";
+                                    $files = $this->db->query($query)->result();
+                                    foreach ($files as $file) { ?>
+                                        <tr>
+                                            <td><?php echo $count++; ?></td>
+                                            <td><?php echo $file->schoolId; ?></td>
+                                            <td><?php echo $file->file_no; ?></td>
+                                            <td><?php echo $file->schoolName; ?></td>
+                                            <td><?php echo $file->districtTitle; ?></td>
+                                            <td><?php echo $file->registrationNumber; ?></td>
+                                            <td><?php echo $file->registration; ?></td>
+                                            <td><?php echo $file->last_renewal; ?></td>
+                                            <td><?php echo $file->rr_note; ?></td>
+                                            <td>
+                                                <button onclick="get_document_update_form('<?php echo $file->schoolId ?>')" class="btn btn-link btn-sm "> Only Add File No. </button>
+
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
                 </div>
 
@@ -544,6 +605,35 @@ $progress_reports = $this->db->query($query)->result();
                         {
                             extend: 'pdfHtml5',
                             title: 'New Registration Cases',
+                            pageSize: 'A4',
+                        }
+                    ]
+                });
+            });
+
+
+            $(document).ready(function() {
+                $('#registration_pending_cases').DataTable({
+                    dom: 'Bfrtip',
+                    paging: false,
+                    title: 'UnRegistered Files',
+                    "order": [],
+                    searching: true,
+                    buttons: [
+
+                        {
+                            extend: 'print',
+                            title: 'UnRegistered Files',
+
+                        },
+                        {
+                            extend: 'excelHtml5',
+                            title: 'UnRegistered Files',
+
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            title: 'UnRegistered Files',
                             pageSize: 'A4',
                         }
                     ]
