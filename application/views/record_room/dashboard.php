@@ -405,6 +405,7 @@ $progress_reports = $this->db->query($query)->result();
                                     <?php
                                     $count = 1;
                                     $query = "SELECT f.*, `district`.`districtTitle`,
+                                     `schools`.rr_note,
                                     (SELECT sy.sessionYearTitle as sessionYearTitle
                                     FROM school
                                     INNER JOIN session_year AS sy ON (sy.sessionYearId = school.session_year_id)
@@ -419,6 +420,7 @@ $progress_reports = $this->db->query($query)->result();
                                     ORDER BY school.schoolId DESC LIMIT 1) as last_renewal
                                      FROM file_numbers as f 
                                     INNER JOIN district ON(f.district_id = district.districtId)
+                                    INNER JOIN schools  ON(schools.schoolId = f.schoolId)
                                     WHERE f.file_no IS NULL
                                     AND district.new_region IN(" . $region_ids . ") ";
                                     $files = $this->db->query($query)->result();
@@ -452,11 +454,14 @@ $progress_reports = $this->db->query($query)->result();
                                         <th>#</th>
                                         <th>School ID</th>
                                         <th>File No.</th>
+                                        <th>Registration ID</th>
                                         <th>School Name</th>
                                         <th>District Name</th>
-                                        <th>Registration ID</th>
+                                        <th>Tehsil</th>
+                                        <th>Address</th>
+                                        <th>Contact</th>
+
                                         <th>Applied For</th>
-                                        <th>Last Renewal</th>
                                         <th>Note</th>
                                         <th>Action</th>
                                     </tr>
@@ -464,21 +469,20 @@ $progress_reports = $this->db->query($query)->result();
                                 <tbody>
                                     <?php
                                     $count = 1;
-                                    $query = "SELECT f.*, `district`.`districtTitle`,
+                                    $query = "SELECT f.*, `district`.`districtTitle`, schools.address,
+                                    (SELECT `tehsilTitle` FROM `tehsils` WHERE `tehsils`.`tehsilId`=schools.tehsil_id) as tehsil,
+                                    `schools`.rr_note,
+                                    schools.telePhoneNumber,
+                                    schools.schoolMobileNumber,
                                     (SELECT sy.sessionYearTitle as sessionYearTitle
                                     FROM school
                                     INNER JOIN session_year AS sy ON (sy.sessionYearId = school.session_year_id)
                                     WHERE school.schools_id = f.schoolId AND school.status != 1
                                     AND school.renewal_code <=0 
-                                    ORDER BY school.schoolId DESC LIMIT 1) as registration,
-                                    (SELECT sy.sessionYearTitle as sessionYearTitle
-                                    FROM school
-                                    INNER JOIN session_year AS sy ON (sy.sessionYearId = school.session_year_id)
-                                    WHERE school.schools_id = f.schoolId AND school.status = 1
-                                    AND school.renewal_code >0 
-                                    ORDER BY school.schoolId DESC LIMIT 1) as last_renewal
+                                    ORDER BY school.schoolId DESC LIMIT 1) as registration
                                      FROM file_numbers_unregistered as f 
                                     INNER JOIN district ON(f.district_id = district.districtId)
+                                    INNER JOIN schools  ON(schools.schoolId = f.schoolId)
                                     WHERE f.file_no IS NOT NULL
                                     AND district.new_region IN(" . $region_ids . ") ";
                                     $files = $this->db->query($query)->result();
@@ -487,14 +491,30 @@ $progress_reports = $this->db->query($query)->result();
                                             <td><?php echo $count++; ?></td>
                                             <td><?php echo $file->schoolId; ?></td>
                                             <td><?php echo $file->file_no; ?></td>
+                                            <td><?php echo $file->registrationNumber; ?></td>
                                             <td><?php echo $file->schoolName; ?></td>
                                             <td><?php echo $file->districtTitle; ?></td>
-                                            <td><?php echo $file->registrationNumber; ?></td>
+                                            <td><?php echo $file->tehsil; ?></td>
+                                            <td><?php echo $file->address; ?></td>
+                                            <td><?php
+                                                $mobile_number = array();
+                                                if ($request->telePhoneNumber) {
+                                                    $mobile_number[preg_replace('/[^0-9]/', '', $request->telePhoneNumber)] = $request->telePhoneNumber;
+                                                }
+                                                if ($request->schoolMobileNumber) {
+                                                    $mobile_number[preg_replace('/[^0-9]/', '', $request->schoolMobileNumber)] = $request->schoolMobileNumber;
+                                                }
+
+                                                if ($request->owner_contact_no) {
+                                                    $mobile_number[preg_replace('/[^0-9]/', '', $request->owner_contact_no)] = $request->owner_contact_no;
+                                                }
+                                                echo rtrim(implode(", ", $mobile_number), ",");
+                                                ?></td>
+
                                             <td><?php echo $file->registration; ?></td>
-                                            <td><?php echo $file->last_renewal; ?></td>
                                             <td><?php echo $file->rr_note; ?></td>
                                             <td>
-                                                <button onclick="get_document_update_form('<?php echo $file->schoolId ?>')" class="btn btn-link btn-sm "> Only Add File No. </button>
+                                                <button onclick="get_document_update_form('<?php echo $file->schoolId ?>')" class="btn btn-link btn-sm "> Add Remark </button>
 
                                             </td>
                                         </tr>
