@@ -469,7 +469,7 @@ $progress_reports = $this->db->query($query)->result();
                                 <tbody>
                                     <?php
                                     $count = 1;
-                                    $query = "SELECT f.*, `district`.`districtTitle`, schools.address,
+                                    echo $query = "SELECT f.*, `district`.`districtTitle`, schools.address,
                                     (SELECT `tehsilTitle` FROM `tehsils` WHERE `tehsils`.`tehsilId`=schools.tehsil_id) as tehsil,
                                     `schools`.rr_note,
                                     schools.telePhoneNumber,
