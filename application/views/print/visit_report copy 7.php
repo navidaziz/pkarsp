@@ -104,8 +104,9 @@
                                                                                         echo " - PPC Code" . $school->ppcCode;
                                                                                       } ?></h5>
           <h5> Applied for <strong><?php echo @$school->regTypeTitle; ?></strong></h5>
-          BISE REG. <strong><?php echo $school->biseRegister; ?></strong> -
-          BISE REG. No. <strong><?php echo $school->biseregistrationNumber; ?></strong>
+          <strong>BISE REG. <?php echo $school->biseRegister; ?> -
+            BISE REG. No. <?php echo $school->biseregistrationNumber; ?>
+          </strong>
         </td>
         <td>
           <h6>
@@ -284,7 +285,7 @@
               } ?> <span style="margin-left: 3px;"></span> Girls <span style="margin-left: 20px;"></span>
               <?php if ($school->genderOfSchoolTitle === "Co-education") {
                 echo "&#10004;";
-              } ?> <span style="margin-left: 3px;"></span> Co-Edu.
+              } ?> <span style="margin-left: 3px;"></span> Co-education
 
 
 
@@ -363,7 +364,7 @@
           </tr>
 
         </table>
-        <strong><i><small>(Only for New Registration)</small></i> Please confirm Year of Establishment</strong>
+        <strong>Please confirm Year of Establishment</strong>
         <table class="table table-bordered">
           <tr>
             <th>Y.of.Estb.(Online Apply)</th>
@@ -616,7 +617,7 @@
                     <th>Total Seats</th>
                   </tr>
                   <tr>
-                    <th style="height: 70px;"></th>
+                    <th style="height: 80px;"></th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -1370,8 +1371,8 @@
                           <td></td>
                         </tr>
                         <tr>
-                          <th><small>Reception / Wating Area</small></th>
-                          <td><small>Yes / No </small></td>
+                          <th>Reception</th>
+                          <td></td>
                         </tr>
 
                       </tbody>
@@ -1511,9 +1512,9 @@
             <th>Primary <br /><small>(PG to 5th)</small></th>
             <th>Middle <br />(6th to 8th)</th>
             <th>High <br />(9th to 10th)</th>
-            <th>Higher Sec. <br />(11th to 2nd)</th>
-            <th style="width: 150px; border: 0px !important;">1. PSRA Officer </th>
-            <th style="width: 150px; border: 0px !important;">2. PSRA Official </th>
+            <th>High Sec <br />(11th to 2nd)</th>
+            <th style="width: 150px; border: 0px !important;">Officer Signature</th>
+            <th style="width: 150px; border: 0px !important;">Official Signature</th>
             <th style="width: 80px; border: 0px !important;">Institute</th>
           </tr>
           <tr>
@@ -1585,6 +1586,109 @@
 
 
 
+        <table class="table table_small table-bordered">
+          <thead>
+            <tr>
+              <th colspan="13">
+                <strong>Teaching Staffs</strong>
+              </th>
+            </tr>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>F/Husband Name</th>
+              <th>CNIC</th>
+              <th>Gender</th>
+
+              <th>Academic</th>
+              <th>Professional</th>
+              <th>Training <br />In Months</th>
+              <th>Experience <br />In Months</th>
+              <th>Designation</th>
+              <th>Appointment</th>
+              <th>Net.Pay</th>
+              <th>Annual Inc.</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <?php $counter = 1; ?>
+
+            <?php foreach ($teaching_staffs as $st) : ?>
+              <tr>
+                <td><?php echo $counter; ?></td>
+                <td><?php echo ucwords(strtolower($st->schoolStaffName)); ?></td>
+                <td><?php echo ucwords(strtolower($st->schoolStaffFatherOrHusband)); ?></td>
+                <td><?php echo $st->schoolStaffCnic; ?></td>
+                <td><?php echo $st->genderTitle; ?></td>
+                <td><?php echo $st->schoolStaffQaulificationAcademic; ?></td>
+                <td><?php echo $st->schoolStaffQaulificationProfessional; ?></td>
+                <td><?php echo $st->TeacherTraining; ?></td>
+                <td><?php echo $st->TeacherExperience; ?></td>
+                <td><?php echo $st->schoolStaffDesignition; ?></td>
+                <td><?php echo date("d-m-Y", strtotime($st->schoolStaffAppointmentDate)); ?></td>
+                <td><?php echo $st->schoolStaffNetPay; ?></td>
+                <td><?php echo $st->schoolStaffAnnualIncreament; ?></td>
+
+              </tr>
+              <?php $counter++; ?>
+            <?php endforeach; ?>
+
+
+          </tbody>
+        </table>
+        <br />
+        <table class="table table_small table-bordered">
+          <thead>
+            <tr>
+              <th colspan="13">
+                <strong>Non Teaching Staffs</strong>
+              </th>
+            </tr>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>F/Husband Name</th>
+              <th>CNIC</th>
+              <th>Gender</th>
+
+              <th>Academic</th>
+              <th>Professional</th>
+              <th>Training <br />In Months</th>
+              <th>Experience <br />In Months</th>
+              <th>Designation</th>
+              <th>Appointment</th>
+              <th>Net.Pay</th>
+              <th>Annual Inc.</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <?php $counter = 1; ?>
+
+            <?php foreach ($non_teaching_staffs as $st) : ?>
+              <tr>
+                <td><?php echo $counter; ?></td>
+                <td><?php echo ucwords(strtolower($st->schoolStaffName)); ?></td>
+                <td><?php echo ucwords(strtolower($st->schoolStaffFatherOrHusband)); ?></td>
+                <td><?php echo $st->schoolStaffCnic; ?></td>
+                <td><?php echo $st->genderTitle; ?></td>
+                <td><?php echo $st->schoolStaffQaulificationAcademic; ?></td>
+                <td><?php echo $st->schoolStaffQaulificationProfessional; ?></td>
+                <td><?php echo $st->TeacherTraining; ?></td>
+                <td><?php echo $st->TeacherExperience; ?></td>
+                <td><?php echo $st->schoolStaffDesignition; ?></td>
+                <td><?php echo date("d-m-Y", strtotime($st->schoolStaffAppointmentDate)); ?></td>
+                <td><?php echo $st->schoolStaffNetPay; ?></td>
+                <td><?php echo $st->schoolStaffAnnualIncreament; ?></td>
+
+              </tr>
+              <?php $counter++; ?>
+            <?php endforeach; ?>
+
+
+          </tbody>
+        </table>
       </tbody>
 
 
