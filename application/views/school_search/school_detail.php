@@ -187,9 +187,10 @@
                             </td>
                         <?php } ?>
                         <td>
-                            <a href="<?php echo site_url("print_visit_report/visit_report/" . $school_session->schoolId); ?>" target="new">
-                                <i class="fa fa-print" aria-hidden="true"></i> Visit Report</a>
-
+                            <?php if ($school_session->status != 0) { ?>
+                                <a href="<?php echo site_url("print_visit_report/visit_report/" . $school_session->schoolId); ?>" target="new">
+                                    <i class="fa fa-print" aria-hidden="true"></i> Visit Report</a>
+                            <?php } ?>
                         </td>
 
                         <?php if ($school_session->status != 0) { ?>
