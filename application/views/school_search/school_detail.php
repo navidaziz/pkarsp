@@ -142,6 +142,7 @@
             <tr>
                 <th>Session</th>
                 <th>Applied For</th>
+                <th>Visit Report</th>
                 <th>Level</th>
                 <th>Gender Of Edu.</th>
                 <th>Max Fee</th>
@@ -179,12 +180,17 @@
                                 <a href="<?php echo site_url("print_file/school_session_detail/" . $school_session->schoolId); ?>" target="new">
                                     <i class="fa fa-print" aria-hidden="true"></i> <?php echo $school_session->sessionYearTitle; ?></a>
                             </td>
+
                         <?php } else { ?>
                             <td style="color:#b2aeae;">
                                 <?php echo $school_session->sessionYearTitle; ?>
                             </td>
                         <?php } ?>
+                        <td>
+                            <a href="<?php echo site_url("print_visit_report/visit_report/" . $school_session->schoolId); ?>" target="new">
+                                <i class="fa fa-print" aria-hidden="true"></i> Visit Report</a>
 
+                        </td>
 
                         <?php if ($school_session->status != 0) { ?>
                             <td> <?php echo $school_session->regTypeTitle; ?></td>
