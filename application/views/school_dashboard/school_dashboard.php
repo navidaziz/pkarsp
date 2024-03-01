@@ -1229,24 +1229,30 @@
                       </div>
                     <?php } ?>
                   <?php } else { ?>
-                    <?php if ($school_type_id == 7) { ?>
-                      <h4>Now Apply for Academy Registration with PSRA</h4>
-                    <?php } else { ?>
-                      <h4>Now Apply for Registration with PSRA</h4>
-                    <?php } ?>
 
-                    <?php if ($school_type_id != 7) { ?>
-                      <p>Note:
 
-                        As your school was established in <strong> <?php echo date("M, Y", strtotime($school->yearOfEstiblishment)); ?> </strong> , therefore you should register your school with PSRA for session <strong> <?php echo $session->sessionYearTitle; ?></strong>
 
-                      </p><br />
-                      <p style="font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif; direction: rtl; line-height: 25px;">
-                        اب PSRA کے ساتھ رجسٹریشن کے لیے درخواست دیں۔
-                        چونکہ آپ کا اسکول <strong> <?php echo date("M, Y", strtotime($school->yearOfEstiblishment)); ?> </strong> میں قائم ہوا تھا، اس لیے آپ کو اپنے اسکول کو <strong> <?php echo $session->sessionYearTitle; ?></strong> کے سیشن کے لیے PSRA کے ساتھ رجسٹر کرنا چاہیے۔
-                      </p>
-                    <?php } ?>
-                    <a onclick="return confirm('Are you sure?')" class="btn btn-primary" href="<?php echo site_url("apply/registration/$session->sessionYearId"); ?>">Apply for Registration. <?php echo $session->sessionYearTitle; ?></a>
+                    <?php if ($session->sessionYearId) { ?>
+                      <?php if ($school_type_id == 7) { ?>
+                        <h4>Now Apply for Academy Registration with PSRA</h4>
+                      <?php } else { ?>
+                        <h4>Now Apply for Registration with PSRA</h4>
+                      <?php } ?>
+                      <?php if ($school_type_id != 7) { ?>
+                        <p>Note:
+
+                          As your school was established in <strong> <?php echo date("M, Y", strtotime($school->yearOfEstiblishment)); ?> </strong> , therefore you should register your school with PSRA for session <strong> <?php echo $session->sessionYearTitle; ?></strong>
+
+                        </p><br />
+                        <p style="font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif; direction: rtl; line-height: 25px;">
+                          اب PSRA کے ساتھ رجسٹریشن کے لیے درخواست دیں۔
+                          چونکہ آپ کا اسکول <strong> <?php echo date("M, Y", strtotime($school->yearOfEstiblishment)); ?> </strong> میں قائم ہوا تھا، اس لیے آپ کو اپنے اسکول کو <strong> <?php echo $session->sessionYearTitle; ?></strong> کے سیشن کے لیے PSRA کے ساتھ رجسٹر کرنا چاہیے۔
+                        </p>
+                      <?php } ?>
+                      <a onclick="return confirm('Are you sure?')" class="btn btn-primary" href="<?php echo site_url("apply/registration/$session->sessionYearId"); ?>">Apply for Registration. <?php echo $session->sessionYearTitle; ?></a>
+                    <?php } else {
+                      echo "<h4>The session hasn't started yet. The new session will start in April.</h4>";
+                    } ?>
                   <?php } ?>
 
                 </div>
