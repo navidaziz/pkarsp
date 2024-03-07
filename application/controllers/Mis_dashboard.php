@@ -341,12 +341,46 @@ class Mis_dashboard extends Admin_Controller
    {
       date_default_timezone_set("Asia/Karachi");
       $dated =  date("Y-m-d h:i:s");
-      $school_id = $this->input->post('school_id');
-      $schools_id = $this->input->post('schools_id');
-
-
+      $school_id = (int) $this->input->post('school_id');
+      $schools_id = (int) $this->input->post('schools_id');
 
       $row = $this->db->where('schoolId', $schools_id)->get('schools')->row();
+
+      $MIS_CODE = "";
+      $query = "SELECT COUNT(*) as total FROM mis_codes WHERE school_id = '$schools_id'";
+      $mis_code_count = $this->db->query($query)->row()->total;
+
+      if ($mis_code_count == 0) {
+         $query = "INSERT INTO `mis_codes`(`school_id`) VALUES ('$schools_id')";
+         if ($this->db->query($query)) {
+            $mis_code_id = $this->db->insert_id();
+            $prefix = ($row->school_type_id == 1) ? "PS" : (($row->school_type_id == 7) ? "PA" : "");
+            $MIS_CODE = $prefix . sprintf("%05d", $mis_code_id);
+            $query = "UPDATE `mis_codes` SET `mis_code`='$MIS_CODE' WHERE `code_id` = '$mis_code_id'";
+            $this->db->query($query);
+         }
+      } else {
+         $query = "SELECT * FROM mis_codes WHERE school_id = '$schools_id'";
+         $MIS_CODE = $this->db->query($query)->row()->mis_code;
+      }
+
+
+      if ($MIS_CODE == "") {
+         $arr['msg'] = "Error In MIS Code.";
+         $arr['success'] = false;
+         echo json_encode($arr);
+         exit();
+      }
+
+      $query = "SELECT COUNT(*) as total FROM schools WHERE mis_code = '$MIS_CODE'";
+      $mis_code_duplicate = $this->db->query($query)->row()->total;
+
+      if ($mis_code_duplicate != 0) {
+         $arr['msg'] = "Duplicate MIS Code: $MIS_CODE for SID: $schools_id";
+         $arr['success'] = false;
+         echo json_encode($arr);
+         exit();
+      }
 
       $yearOfEstiblishment = $row->yearOfEstiblishment;
       $tehsil_id = $row->tehsil_id;
@@ -444,8 +478,11 @@ class Mis_dashboard extends Admin_Controller
       $data["school_id"] = $school_id;
       $data["codeCombined"] = $codeCombined;
 
+
+
       $update_data = array(
          'registrationNumber' => $codeCombined,
+         'mis_code' => $MIS_CODE,
          'updatedDate' => $dated,
          'updatedBy' => $this->session->userdata('userId')
       );
@@ -455,7 +492,8 @@ class Mis_dashboard extends Admin_Controller
       $this->db->update('schools', $update_data);
       $affected_rows = $this->db->affected_rows();
       if ($affected_rows) {
-
+         $query = "UPDATE `mis_codes` SET `registration_code`='" . $codeCombined . "' WHERE `code_id` = '" . $mis_code_id . "'";
+         $this->db->query($query);
          $signatory = (int) $this->input->post('signatory');
          $update_data = array(
             'renewal_code' => 0,
