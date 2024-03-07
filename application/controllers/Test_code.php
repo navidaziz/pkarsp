@@ -36,6 +36,7 @@ class Test_code extends CI_Controller
 		error_reporting(-1);
 		error_reporting(E_ERROR | E_PARSE);
 		ini_set('display_errors', 1);
+		ini_set('memory_limit', '128M');
 		$query = "SELECT * FROM schools WHERE registrationNumber>0";
 		$schools = $this->db->query($query)->result();
 		foreach ($schools as $school) {
