@@ -56,15 +56,20 @@
                     <li>Ownership Documents or Affidavit
                       <a target="_blank" href="https://psra.gkp.pk/uploads/attachments/A_Affadavit.pdf">PDF Download</a>
                       <span style="margin-left: 10px;"></span>
-                      <a target="_blank" href="https://psra.gkp.pk/uploads/attachments/A_Affadavit.pdf">Docx Download</a>
+                      <a target="_blank" href="https://psra.gkp.pk/uploads/attachments/A_Affadavit.docx">Docx Download</a>
                     </li>
                     <li>Rent Agreement (if it applies)</li>
-                    <li> Copy of the Owner's or Owners' CNICs</li>
-                    <li> Institute Building Map</li>
+                    <li>Copy of the Owner's or Owners' CNICs</li>
+                    <li>Institute Building Map</li>
+                    <li>Teachers' Contracts</li>
                   </ol>
                   <h4>
-                    Kindly dispatch the documents to the office of PSRA promptly.
+                    Kindly dispatch the documents to the PSRA office.
+
                     <h4>
+                      <h5 style="text-align: right;">
+                        مہربانی کر کے یہ سارے ڈاکومنٹس پی ایس ار اے افس بھیج دیں
+                      </h5>
                       <h4>
                         <strong>
                           <address>
@@ -123,7 +128,7 @@
 
                   if ($school->school_type_id == 1) { ?>
                     <a class="btn btn-primary" href="<?php echo site_url("update_sectionc/updatesectionc/$school_session_id"); ?>">
-                      <i class="fa fa-edit" aria-hidden="true"></i> Edit Section C
+                      <i class="fa fa-edit" aria-hidden="true"></i> Update Section C
                     </a>
                   <?php } ?>
                   <!-- <span style="margin-left: 20px;"></span>
@@ -276,7 +281,7 @@
                     <input class="btn btn-success" type="submit" name="update_section_e" value="Update Section E (Fee Data)" />
                     <br />
                     <br />
-                    <p style="text-align: ;">
+                    <p style="text-align: center;">
                       After updating, please remember to submit section E as well.
                     </p>
 

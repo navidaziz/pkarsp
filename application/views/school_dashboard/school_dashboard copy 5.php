@@ -209,15 +209,554 @@
 
         <div class="row">
 
+          <!-- Modal -->
+          <div class="modal fade" id="vehicles" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" style="display: inline;" id="exampleModalLabel">Institute Vehicles Detail</h5>
+                  <button type="button" class="close pull-right" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div style="margin: 5px; padding:5px; background-color: #F1F2F4;">
+                    <div class="row">
+                      <div class="form-group col-md-4">
+                        <label for="vehicle_number">Vehicle No</label>
+                        <input placeholder="Vehicle Number" class="form-control" type="text" id="vehicle_number" name="vehicle_number" required>
+                      </div>
+                      <div class="form-group col-md-4">
+                        <label for="vehicle_model_year">Model Year</label>
+                        <select class="form-control" name="vehicle_model_year" id="vehicle_model_year" required>
+                          <option value="0">Select Year</option>
+                          <?php for ($years = 2023; $years >= 1950; $years--) { ?>
+                            <option value="<?php echo $years; ?>"><?php echo $years; ?></option>
+                          <?php } ?>
+                        </select>
+                      </div>
+                      <div class="form-group col-md-4">
+                        <label for="type_of_vehicle">Type of Vehicle</label>
+                        <input placeholder="Couster, Bus, Van, Coach etc" class="form-control" style="width: 100% !important;" type="text" id="type_of_vehicle" name="type_of_vehicle" required>
+                      </div>
+                      <div class="form-group col-md-5">
+                        <label for="expiry_of_fit_certificate">Fitness Certificate (Expiry Date)</label>
+                        <input class="form-control" style="width: 100% !important;" type="date" id="expiry_of_fit_certificate" name="expiry_of_fit_certificate" required>
+                      </div>
+                      <div class="form-group col-md-4">
+                        <label for="total_seats">Total No. of Seats</label>
+                        <input placeholder="10, 20, 50 etc" class="form-control" min="5" max="100" style="width: 100% !important;" title="10" type="number" id="total_seats" name="total_seats" required>
+
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label for="add_record">Add Record</label>
+                        <input onclick="add_vehicle_info()" type="button" class="btn btn-primary btn-sm" value="Add Vehicle">
+
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="table-responsive" id="vehicle_list">
+                    <table class="table" style="font-size: 11px;">
+                      <tr>
+                        <th>S/No</td>
+                        <th>Vehicle No.</th>
+                        <th>Model Year</th>
+                        <th>Type of Vehicle</th>
+                        <th>Date of expiry of last fitness Certificate</th>
+                        <th>Total Seats</th>
+                        <th>Action</th>
+                      </tr>
+                      <?php $query = "SELECT * FROM school_vehicles WHERE school_id = '" . $school->schoolId . "'";
+                      $school_vehicles = $this->db->query($query)->result();
+                      if ($school_vehicles) {
+                        $count = 1;
+                        foreach ($school_vehicles as $school_vehicle) { ?>
+                          <tr>
+                            <td><?php echo $count++; ?></td>
+                            <td><?php echo $school_vehicle->vehicle_number; ?></td>
+                            <td><?php echo $school_vehicle->vehicle_model_year; ?></td>
+                            <td><?php echo $school_vehicle->type_of_vehicle; ?></td>
+                            <td><?php
+                                // echo $school_vehicle->expiry_of_fit_certificate;
+                                if ($school_vehicle->expiry_of_fit_certificate != '0000-00-00') {
+                                  echo date('d M, Y', strtotime($school_vehicle->expiry_of_fit_certificate));
+                                } ?></td>
+                            <td><?php echo $school_vehicle->total_seats; ?></td>
+
+                            <td><a href="#" onclick="delete_vehicle_date(<?php echo $school_vehicle->vehicle_id ?>)">delete</a></td>
+
+                          </tr>
+                        <?php } ?>
+                      <?php } ?>
+                    </table>
+                  </div>
+
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
 
 
 
+
+
+          <script>
+            function delete_vehicle_date(vehicle_id) {
+              $.ajax({
+                  method: "POST",
+                  url: "<?php echo site_url('Temp_controller/delete_vehicle_data'); ?>",
+                  data: {
+                    vehicle_id: vehicle_id,
+                    school_id: <?php echo $school->schoolId ?>
+                  }
+                })
+                .done(function(msg) {
+                  $('#vehicle_list').html(msg);
+                });
+            }
+
+            function add_vehicle_info() {
+              var vehicle_number = $('#vehicle_number').val();
+              if (vehicle_number == '') {
+                alert('Please enter Vehicle No');
+                return false;
+              }
+              var vehicle_model_year = $('#vehicle_model_year').val();
+              if (vehicle_model_year == '' || vehicle_model_year == 0) {
+                alert('Please Select Vehicle Model Year.');
+                return false;
+              }
+
+
+
+              var type_of_vehicle = $('#type_of_vehicle').val();
+              if (type_of_vehicle == '') {
+                alert('Type of Vehicle Required');
+                return false;
+              }
+
+              var total_seats = $('#total_seats').val();
+              if (total_seats == '') {
+                alert('Total Seats Required');
+                return false;
+              }
+              if (total_seats > 100) {
+                alert('Please mention seats between 5 and 100.');
+                return false;
+              }
+              if (total_seats < 5) {
+                alert('Seats should not be less than 5.');
+                return false;
+              }
+
+              var expiry_of_fit_certificate = $('#expiry_of_fit_certificate').val();
+              $.ajax({
+                  method: "POST",
+                  url: "<?php echo site_url('Temp_controller/temp_vehicle'); ?>",
+                  data: {
+                    vehicle_number: vehicle_number,
+                    vehicle_model_year: vehicle_model_year,
+                    total_seats: total_seats,
+                    type_of_vehicle: type_of_vehicle,
+                    expiry_of_fit_certificate: expiry_of_fit_certificate,
+                    school_id: <?php echo $school->schoolId ?>
+                  }
+                })
+                .done(function(msg) {
+                  $('#vehicle_list').html(msg);
+                  $('#total_seats').val("");
+                  $('#vehicle_number').val("");
+                  $('#vehicle_model_year').val("");
+                });
+            }
+          </script>
 
 
           <?php if ($school->school_type_id == 1) { ?>
             <div class="col-md-3">
 
+              <?php if ($school->registrationNumber > 0) { ?>
 
+                <div class="alert alert-primary" style="display:block; border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
+                  <div class="alert alert-info">
+                    <style>
+                      .blink_me {
+                        animation: blinker 1s linear infinite;
+                        color: red;
+                      }
+
+                      @keyframes blinker {
+                        50% {
+                          opacity: 0;
+                        }
+                      }
+                    </style>
+                    <span class="blink_me">Urgent information</span> is required regarding school vehicles. Please provide details about the school vehicles.
+                  </div>
+                  <div style="text-align: center;">
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#vehicles">
+                      <i class="fa fa-bus"></i> School Vehicles Information
+                    </button>
+                  </div>
+                </div>
+
+
+                <div class="alert alert-primary" style="display:none; border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="update_voter_info" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" style="display: inline;" id="exampleModalLabel">Please verify your voter information by 6th November, 2023</h5>
+                          <button type="button" class="close pull-right" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form action="<?php echo site_url('temp_controller/add_voter_information'); ?>" method="post">
+                            <input type="hidden" name="school_id" value="<?php echo $school->schoolId; ?>" />
+                            <?php $query = "SELECT sessionYearId FROM `session_year` WHERE status=1";
+                            $session = $this->db->query($query)->row(); ?>
+                            <input type="hidden" name="session_id" value="<?php echo $session->sessionYearId; ?>" />
+                            <div class="alert alert-primary" style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
+
+
+                              <h3>Institute Name: <?php echo ucwords(strtolower($school->schoolName)); ?></h3>
+                              <h4>Institute ID: <?php echo $school->schoolId ?><br />
+                                <?php if ($school->registrationNumber > 0) { ?>
+                                  <span>Registration ID: <?php echo $school->registrationNumber ?></span>
+                                <?php } ?>
+                              </h4>
+
+                              <p>According to PSRA data, the following is the voter information who will be allowed to cast a vote on behalf of your school in the upcoming election of private schools member of PSRA. Please confirm it or if you want to nominate the Principal/Director/Head of your school as a voter, please update the name and CNIC and submit by 6th November 2023</p>
+
+                              <br />
+                              <?php
+                              $query = "SELECT * FROM voters_list WHERE school_id = '" . $school->schoolId . "' AND session_id ='" . $session->sessionYearId . "'";
+                              $voter_info = $this->db->query($query)->row();
+                              if (!$voter_info) {
+                                $query = "SELECT owner_id FROM schools WHERE schoolId = " . $school->schoolId;
+                                $owner_id = $this->db->query($query)->row()->owner_id;
+                                $query = "SELECT userTitle,cnic FROM users WHERE userId = " . $owner_id;
+                                $user_info = $this->db->query($query)->row();
+                                $voter_name = $user_info->userTitle;
+                                $voter_cnic = $user_info->cnic;
+                              } else {
+                                $voter_name = $voter_info->voter_name;
+                                $voter_cnic = $voter_info->voter_cnic;
+                              }
+                              ?>
+                              <strong>Voter Name:(Principal/Director/Head/Owner Name) ووٹر کا نام</strong>
+                              <input name="voter_name" type="text" required class="form-control" value="<?php echo $voter_name; ?>" />
+                              <br />
+                              <strong>Voter CNIC: ووٹر کا شناختی کارڈ</strong><input name="voter_cnic" pattern="\d{5}-\d{7}-\d{1}" required type="text" class="form-control" onKeyUp="nic_dash1(this)" value="<?php echo $voter_cnic; ?>" />
+
+                              <br />
+                              <br />
+                              <script language="javascript">
+                                function nic_dash1(t)
+
+                                {
+                                  var donepatt = /^(\d{5})\/(\d{7})\/(\d{1})$/;
+
+                                  var patt = /(\d{5}).*(\d{7}).*(\d{1})/;
+
+                                  var str = t.value;
+
+                                  if (!str.match(donepatt))
+
+                                  {
+                                    result = str.match(patt);
+
+                                    if (result != null)
+
+                                    {
+                                      t.value = t.value.replace(/[^\d]/gi, '');
+
+                                      str = result[1] + '-' + result[2] + '-' + result[3];
+
+                                      t.value = str;
+
+                                    } else {
+
+                                      if (t.value.match(/[^\d]/gi))
+
+                                        t.value = t.value.replace(/[^\d]/gi, '');
+
+                                    }
+                                  }
+                                }
+                              </script>
+                            </div>
+
+                            <div style=" text-align: center;">
+                              <input type="submit" class="btn btn-danger" name="survey_data" value="Confirm Voter Information" />
+                            </div>
+                          </form>
+                        </div>
+
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="alert alert-danger">
+                    Please verify your voter information by 6th November, 2023.
+                  </div>
+                  <div style="text-align: center;">
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#update_voter_info">
+                      <i class="fa fa-vote"></i> Verify Voter Information
+                    </button>
+                  </div>
+                </div>
+              <?php } ?>
+
+              <div class="alert alert-primary" style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
+
+                <!-- Modal -->
+                <div class="modal fade" id="survey" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" style="display: inline;" id="exampleModalLabel">Survey on Textbooks Used in Private Schools of Khyber Pakhtunkhwa</h5>
+                        <button type="button" class="close pull-right" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <form action="<?php echo site_url('temp_controller/add_survey'); ?>" method="post">
+                          <input type="hidden" name="school_id" value="<?php echo $school->schoolId; ?>" />
+                          <?php $query = "SELECT sessionYearId FROM `session_year` WHERE status=1";
+                          $session = $this->db->query($query)->row();
+
+                          ?>
+                          <input type="hidden" name="session_id" value="<?php echo $session->sessionYearId; ?>" />
+                          <div class="alert alert-primary" style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
+                            <?php
+
+                            $query = "SELECT level_of_school_id as max_level, schoolId as pre_school_id FROM school
+                                         WHERE schools_id = '" . $school->schoolId . "' ORDER BY schoolId DESC LIMIT 1 ";
+                            $previous_session = $this->db->query($query)->row();
+                            $max_level = $previous_session->max_level;
+
+
+
+                            $min_level = array();
+                            $query = "select SUM(`s`.`enrolled`) as total FROM
+                                      `age_and_class` as `s` 
+                                  where `s`.`class_id` in (1,2,3,4,5,6,7)
+                                  AND `s`.`school_id` = '" . $previous_session->pre_school_id . "'";
+                            $primary = $this->db->query($query)->row()->total;
+                            if ($primary) {
+                              $min_level[] = 1;
+                            }
+
+                            $query = "select SUM(`s`.`enrolled`) as total FROM
+                                `age_and_class` as `s` 
+                            where `s`.`class_id` in (9,10,11)
+                            AND `s`.`school_id` = '" . $previous_session->pre_school_id . "'";
+                            $middle = $this->db->query($query)->row()->total;
+                            if ($middle) {
+                              $min_level[] = 2;
+                            }
+                            $query = "select SUM(`s`.`enrolled`) as total FROM
+                                `age_and_class` as `s` 
+                            where `s`.`class_id` in (12,13)
+                            AND `s`.`school_id` = '" . $previous_session->pre_school_id . "'";
+                            $high = $this->db->query($query)->row()->total;
+                            if ($high) {
+                              $min_level[] = 3;
+                            }
+
+                            $query = "select SUM(`s`.`enrolled`) as total FROM
+                                `age_and_class` as `s` 
+                            where `s`.`class_id` in (14,15)
+                            AND `s`.`school_id` = '" . $previous_session->pre_school_id . "'";
+                            $high_sec = $this->db->query($query)->row()->total;
+                            if ($high_sec) {
+                              $min_level[] = 4;
+                            }
+
+                            //var_dump($min_level);
+                            // its only for renewal and registration
+                            if (!$min_level) {
+                              $min_level = 1;
+                            } else {
+                              $min_level = min($min_level);
+                            }
+
+                            ?>
+
+
+
+                            <h4>Textbooks being taught in all private schools of Khyber Pakhtunkhwa</h4>
+                            <p>All private institutions in Khyber Pakhtunkhwa are directed to submit a compliance report on textbooks being taught at each level for the current session.</p>
+                            <br />
+                            <strong>Which publisher's textbooks are being taught in</strong>
+                            <?php
+                            $query = "SELECT * FROM `publishers`";
+                            $publishers = $this->db->query($query)->result();
+                            $query = "SELECT * FROM `levelofinstitute` WHERE levelofInstituteId >='" . $min_level . "' and levelofInstituteId<= '" . $max_level . "'";
+                            $levels = $this->db->query($query)->result();
+
+
+                            $query = "SELECT * FROM textbooks 
+                                      WHERE school_id = '" . $school->schoolId . "' 
+                                      AND session_id = '" . $session->sessionYearId . "'";
+                            $text_book = $this->db->query($query)->row();
+                            $publisher_id = 0;
+                            foreach ($levels as $key => $level) { ?>
+                              <div style="margin: 5px; padding:5px; background-color: #F1F2F4;">
+                                <div class="form-group">
+                                  <label for="<?php echo $level->levelofInstituteTitle; ?>">
+                                    <strong><?php echo $level->levelofInstituteTitle; ?>-Level</strong> classes?
+                                  </label>
+                                  <select class="publisher_list form-control" style="width: 100% !important;" id="<?php echo $level->levelofInstituteTitle; ?>" name="levels[<?php echo $level->levelofInstituteId; ?>]" required>
+                                    <option value="">Select Publisher</option>
+                                    <?php
+                                    if ($text_book) {
+                                      if ($level->levelofInstituteId == 1) {
+                                        $publisher_id = $text_book->primary;
+                                      }
+                                      if ($level->levelofInstituteId == 2) {
+                                        $publisher_id = $text_book->middle;
+                                      }
+                                      if ($level->levelofInstituteId == 3) {
+                                        $publisher_id = $text_book->high;
+                                      }
+                                      if ($level->levelofInstituteId == 4) {
+                                        $publisher_id = $text_book->high_sec;
+                                      }
+                                    }
+                                    foreach ($publishers as $publisher) { ?>
+                                      <option <?php if ($publisher_id == $publisher->id) { ?>selected <?php } ?> value="<?php echo $publisher->id; ?>"><?php echo $publisher->publisher_name; ?></option>
+                                    <?php } ?>
+                                    <option value="other">Other</option>
+                                  </select>
+                                  <small id="emailHelp" class="form-text text-muted" style="color: red;">If the publisher's name is not in the list, please choose the 'Other' option.</small>
+
+                                  <div style="display:none;" id="<?php echo $level->levelofInstituteId; ?>_other_div">
+
+                                    Please Enter Publisher Name:
+                                    <input minlength="10" class="control-form" style="width: 100%;" type="text" value="" name="<?php echo $level->levelofInstituteId; ?>_other" id="<?php echo $level->levelofInstituteId; ?>_other" />
+                                  </div>
+                                </div>
+                              </div>
+
+                            <?php } ?>
+
+
+                          </div>
+                          <div class="alert alert-primary" style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
+                            <h4>Implementation of Pashtu / Regional languages in all private schools of Khyber Pakhtunkhwa</h4>
+                            Whether Pashtu / Regional languages are being taught in your school ?
+                            <span style="margin: 5px;"></span>
+                            <input <?php if ($text_book->regional_language == 'Yes') { ?> checked <?php } ?> onclick="$('#language').show(); $('#comment').hide(); $('.level_language').attr('required', 'true')" required type="radio" name="regional_language" value="Yes" id=""> Yes
+                            <span style="margin: 10px;"></span>
+                            <input <?php if ($text_book->regional_language == 'No') { ?> checked <?php } ?> onclick="$('#language').hide(); $('#comment').show();  $('.level_language').removeAttr('required'); $('.lang2').removeAttr('required');" required type="radio" name="regional_language" value="No" id=""> No
+
+                            <div id="language" style="margin-top: 10px; <?php if (!$text_book) { ?> display:none <?php } ?> <?php if ($text_book->regional_language == 'No') { ?> display:none <?php } ?>">
+
+                              Pashtu / Regional languages are being taught in <br />
+                              <?php foreach ($levels as $key => $level) {
+
+                                if ($text_book) {
+                                  if ($level->levelofInstituteId == 1) {
+                                    $rg = $text_book->rl_primary;
+                                    if ($rg) {
+                                      $level_language = 'Yes';
+                                    } else {
+                                      $level_language = 'No';
+                                    }
+                                  }
+                                  if ($level->levelofInstituteId == 2) {
+                                    $rg = $text_book->rl_middle;
+                                    if ($rg) {
+                                      $level_language = 'Yes';
+                                    } else {
+                                      $level_language = 'No';
+                                    }
+                                  }
+                                  if ($level->levelofInstituteId == 3) {
+                                    $rg = $text_book->rl_high;
+                                    if ($rg) {
+                                      $level_language = 'Yes';
+                                    } else {
+                                      $level_language = 'No';
+                                    }
+                                  }
+                                  if ($level->levelofInstituteId == 4) {
+                                    $rg = $text_book->rl_high_sec;
+                                    if ($rg) {
+                                      $level_language = 'Yes';
+                                    } else {
+                                      $level_language = 'No';
+                                    }
+                                  }
+                                }
+                              ?>
+                                <strong><?php echo $level->levelofInstituteTitle; ?>-Level</strong> classes ?
+                                <span style="margin: 5px;"></span>
+                                <input class="level_language" <?php if ($level_language == 'Yes' && $text_book) { ?> checked <?php } ?> onclick="$('#level_language_<?php echo $level->levelofInstituteId; ?>').show(); $('.language_<?php echo $level->levelofInstituteId; ?>').attr('required', 'true')" type="radio" name="rg[<?php echo $level->levelofInstituteId; ?>]" value="Yes" id=""> Yes
+                                <span style="margin: 10px;"></span>
+                                <input class="level_language" <?php if ($level_language == 'No' && $text_book) { ?> checked <?php } ?> onclick="$('#level_language_<?php echo $level->levelofInstituteId; ?>').hide(); $('.language_<?php echo $level->levelofInstituteId; ?>').removeAttr('required'); $('.language_<?php echo $level->levelofInstituteId; ?>').prop('checked', false);" type="radio" name="rg[<?php echo $level->levelofInstituteId; ?>]" value="No" id=""> No
+
+                                <div id="level_language_<?php echo $level->levelofInstituteId; ?>" <?php if (!$text_book) { ?>style="display:none" <?php } ?> <?php if ($text_book && $level_language == 'No') { ?>style="display:none" <?php } ?>>
+                                  Select Language:
+                                  <span style="margin: 10px;"></span>
+                                  <input <?php if ($rg == 'Pashtu') { ?> checked <?php } ?> class="lang2 language_<?php echo $level->levelofInstituteId; ?>" type="radio" name="language[<?php echo $level->levelofInstituteId; ?>]" value="Pashtu" /> Pashto
+                                  <span style="margin: 5px;"></span>
+                                  <input <?php if ($rg == 'Hindko') { ?> checked <?php } ?> class="lang2 language_<?php echo $level->levelofInstituteId; ?>" type="radio" name="language[<?php echo $level->levelofInstituteId; ?>]" value="Hindko" /> Hindko
+                                  <span style="margin: 5px;"></span>
+                                  <input <?php if ($rg == 'Khowar') { ?> checked <?php } ?> class="lang2 language_<?php echo $level->levelofInstituteId; ?>" type="radio" name="language[<?php echo $level->levelofInstituteId; ?>]" value="Khowar" /> Khowar
+                                  <span style="margin: 5px;"></span>
+                                  <input <?php if ($rg == 'Seraiki') { ?> checked <?php } ?> class="lang2 language_<?php echo $level->levelofInstituteId; ?>" type="radio" name="language[<?php echo $level->levelofInstituteId; ?>]" value="Seraiki" /> Seraiki
+                                  <span style="margin: 5px;"></span>
+                                  <input <?php if ($rg == 'Kohistani') { ?> checked <?php } ?> class="lang2 language_<?php echo $level->levelofInstituteId; ?>" type="radio" name="language[<?php echo $level->levelofInstituteId; ?>]" value="Kohistani" /> Kohistani
+                                  <span style="margin: 5px;"></span>
+                                </div>
+                                <br />
+                              <?php } ?>
+
+                            </div>
+
+                            <div id="comment" style="margin-top: 10px; <?php if (!$text_book) { ?> display:none <?php } ?><?php if ($text_book->regional_language == 'Yes') { ?> display:none <?php } ?>">
+                              <strong>Please comment</strong>
+                              <textarea style="width: 100%; border-radius:5px; padding-top:2px;" name="comment"><?php echo $text_book->comment; ?></textarea>
+                            </div>
+
+                          </div>
+                          <div style=" text-align: center;">
+                            <input type="submit" class="btn btn-primary" name="survey_data" value="Submit Data" />
+                          </div>
+                        </form>
+                      </div>
+
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="alert alert-warning">
+                  PSRA is currently conducting a survey on both the textbooks and the teaching of regional languages in private schools throughout Khyber Pakhtunkhwa.
+                </div>
+                <div style="text-align: center;">
+                  <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#survey">
+                    <i class="fa fa-flag-o"></i> Take a survey
+                  </button>
+                </div>
+              </div>
 
               <div class="alert " style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
 
@@ -831,9 +1370,58 @@
 </div>
 
 
+<?php if ($school->registrationNumber > 0 and 1 == 2) { ?>
+
+  <?php if (!$voter_info) { ?>
+    <script>
+      $(document).ready(function() {
+        $('#update_voter_info').modal('show');
+      });
+    </script>
+
+  <?php } ?>
+
+  <?php if (!$text_book and $voter_info) { ?>
+    <script>
+      $(document).ready(function() {
+        $('#survey').modal('show');
+      });
+    </script>
+
+
+  <?php } ?>
+
+<?php } else { ?>
+  <?php if (!$text_book) { ?>
+    <script>
+      $(document).ready(function() {
+        //  $('#survey').modal('show');
+      });
+    </script>
+  <?php } ?>
+
+<?php } ?>
+<script>
+  $(document).ready(function() {
+    $('#vehicles').modal('show');
+  });
+</script>
+
 
 <script>
-  // $(document).ready(function() {
-  //   $('#vehicles').modal('show');
-  // });
+  $(document).ready(function() {
+    <?php foreach ($levels as $key => $level) { ?>
+      $("#<?php echo $level->levelofInstituteTitle ?>").on('select2:select', function(e) {
+        // Your code here for the first dropdown
+        //console.log("Dropdown 1 selected: " + e.params.data.value);
+        if (e.params.data.text == 'Other') {
+          $('#<?php echo $level->levelofInstituteId ?>_other_div').show();
+          $('#<?php echo $level->levelofInstituteId ?>_other').attr("required", true);
+        } else {
+          $('#<?php echo $level->levelofInstituteId ?>_other_div').hide();
+          $('#<?php echo $level->levelofInstituteId ?>_other').removeAttr("required");
+        }
+      });
+    <?php } ?>
+  });
 </script>

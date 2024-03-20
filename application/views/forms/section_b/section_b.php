@@ -114,6 +114,18 @@
                   }
                 }
 
+                function science_lab() {
+                  if ($('#sciencelab').is(":checked")) {
+                    $('#science_lab').show();
+                    $('.science_lab').prop('required', true);
+                  } else {
+                    $('#science_lab').hide();
+                    $('.science_lab').val('');
+                    $('.science_lab').prop('checked', false);
+                    $('.science_lab').prop('required', false);
+                  }
+                }
+
                 function number_of_computers() {
                   if ($('#computer_lab').is(":checked")) {
                     $('#total_number_of_computer').show();
@@ -189,7 +201,6 @@
                   <br />
 
                   <?php
-
                   $query = "SELECT * FROM physical_facilities_academic_meta WHERE  school_type_id like '%" . $school->school_type_id . "%'";
                   $academics = $this->db->query($query)->result();
                   //var_dump($academics);
@@ -197,14 +208,98 @@
                     <?php foreach ($academics as $academic) : ?>
 
                       <?php if (in_array($academic->academicId, $academic_ids)) :  ?>
-                        <?php $check = 'checked'; ?>
+                        <?php $check = 'checked';
+                        $required = 'required';
+                        ?>
                       <?php else : ?>
-                        <?php $check = ''; ?>
+                        <?php $check = '';
+                        $required = '';
+                        ?>
                       <?php endif; ?>
-                      <input <?php if ($academic->academicId == 2) { ?> onclick="books_detail()" id="library" <?php } ?> <?php if ($academic->academicId == 4) { ?> onclick="number_of_computers()" id="computer_lab" <?php } ?> type="checkbox" name="academic_id[]" value="<?php echo $academic->academicId; ?>" <?php echo $check; ?> />
+                      <input <?php if ($academic->academicId == 1) { ?> onclick="science_lab()" id="sciencelab" <?php } ?> <?php if ($academic->academicId == 2) { ?> onclick="books_detail()" id="library" <?php } ?> <?php if ($academic->academicId == 4) { ?> onclick="number_of_computers()" id="computer_lab" <?php } ?> type="checkbox" name="academic_id[]" value="<?php echo $academic->academicId; ?>" <?php echo $check; ?> />
                       <?php echo $academic->academicTitle; ?>
                       <span style="margin-left: 20px;"></span>
                       </span>
+
+
+                      <?php if ($academic->academicId == 1) { ?>
+                        <br />
+                        <table id="science_lab" class="table table-bordered" style="margin-top: 10px; <?php if (!in_array($academic->academicId, $academic_ids)) {  ?>display: none; <?php } ?>">
+
+                          <tbody>
+                            <?php if ($school->level_of_school_id == 3) { ?>
+                              <tr>
+                                <th>#</th>
+                                <th colspan="2">HIGH LEVEL Lab: </th>
+
+                              </tr>
+                              <tr>
+                                <th>1.</th>
+                                <th>Dedicated Science Lab</th>
+                                <th><input <?php if ($school_physical_facilities->high_science_lab == 'Yes') {
+                                              echo 'checked';
+                                            } ?> type="radio" class="science_lab" name="high_science_lab" value="Yes" <?php echo $required; ?> /> Yes
+                                  <span style="margin-left: 10px;"></span>
+                                  <input <?php if ($school_physical_facilities->high_science_lab == 'No') {
+                                            echo 'checked';
+                                          } ?> type="radio" class="science_lab" name="high_science_lab" value="No" <?php echo $required; ?> /> No
+                                </th>
+
+                              </tr>
+                            <?php } ?>
+                            <?php if ($school->level_of_school_id == 4) { ?>
+                              <tr>
+                                <th>#</th>
+                                <th colspan="2">HIGHER Sec. LEVEL Science Labs: </th>
+
+                              </tr>
+
+                              <tr>
+                                <th>1.</th>
+                                <th>Dedicated Physics Lab</th>
+                                <th><input <?php if ($school_physical_facilities->physics_lab == 'Yes') {
+                                              echo 'checked';
+                                            } ?> type="radio" class="science_lab" name="physics_lab" value="Yes" <?php echo $required; ?> /> Yes
+                                  <span style="margin-left: 10px;"></span>
+                                  <input <?php if ($school_physical_facilities->physics_lab == 'No') {
+                                            echo 'checked';
+                                          } ?> type="radio" class="science_lab" name="physics_lab" value="No" <?php echo $required; ?> /> No
+                                </th>
+
+                              </tr>
+                              <tr>
+                                <th>2.</th>
+                                <th>Dedicated Chemistry Lab</th>
+                                <th><input <?php if ($school_physical_facilities->chemistry_lab == 'Yes') {
+                                              echo 'checked';
+                                            } ?> type="radio" class="science_lab" name="chemistry_lab" value="Yes" <?php echo $required; ?> /> Yes
+                                  <span style="margin-left: 10px;"></span>
+                                  <input <?php if ($school_physical_facilities->chemistry_lab == 'No') {
+                                            echo 'checked';
+                                          } ?> type="radio" class="science_lab" name="chemistry_lab" value="No" <?php echo $required; ?> /> No
+                                </th>
+
+                              </tr>
+                              <tr>
+                                <th>3.</th>
+                                <th>Dedicated Biology Lab</th>
+                                <th><input <?php if ($school_physical_facilities->biology_lab == 'Yes') {
+                                              echo 'checked';
+                                            } ?> type="radio" class="science_lab" name="biology_lab" value="Yes" <?php echo $required; ?> /> Yes
+                                  <span style="margin-left: 10px;"></span>
+                                  <input <?php if ($school_physical_facilities->biology_lab == 'No') {
+                                            echo 'checked';
+                                          } ?> type="radio" class="science_lab" name="biology_lab" value="No" <?php echo $required; ?> /> No
+                                </th>
+
+                              </tr>
+                            <?php } ?>
+
+                          </tbody>
+                        </table>
+
+                      <?php } ?>
+
                       <?php if ($academic->academicId == 2) { ?>
                         <br />
                         <table id="books_detail" class="table table-bordered" style="margin-top: 10px; <?php if (!in_array($academic->academicId, $academic_ids)) {  ?>display: none; <?php } ?>">

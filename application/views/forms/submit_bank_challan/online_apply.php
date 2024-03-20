@@ -26,15 +26,19 @@ if ($isfined == 1) { ?>
     </div>
 <?php } else { ?>
 
-    <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px;">
-        <h4>Submit Bank Challan for session <?php echo $session_detail->sessionYearTitle; ?></h4>
-        <small>
-            <i style="color: red;">"STAN can be found on the upper right corner of bank generated receipt"
-                <br />
-                For manual bank recipt only write 6 times zero. 000000
-            </i>
-        </small>
-        <img width="100%" src="<?php echo site_url("assets/stan.jpeg"); ?>" />
+    <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
+
+
+        <h4>Submit Deposited Challan STAN No. and Transaction Date for session <?php echo $session_detail->sessionYearTitle; ?></h4>
+        <hr />
+        <div style="margin: 10px;">
+            <small>
+                <i style="color: red;">"STAN can be found on the upper right corner of bank generated receipt"
+
+                </i>
+            </small>
+            <img width="70%" src="<?php echo site_url("assets/stan.jpeg"); ?>" />
+        </div>
         <script>
             function validateForm() {
                 const challan_no = $('#challan_no').val();
@@ -52,7 +56,9 @@ if ($isfined == 1) { ?>
                 }
             }
         </script>
-
+        <div>
+            For 2018, 2019 manual bank recipt enter deposit date and 6 times zero as STAN No.
+        </div>
         <form onsubmit="return validateForm();" action="<?php echo site_url("form/add_bank_challan"); ?>" method="post">
             <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
             <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
@@ -81,25 +87,26 @@ if ($isfined == 1) { ?>
                 <input type="hidden" name="challan_for" value="Renewal" />
                 <input type="hidden" name="reg_type_id" value="2" />
             <?php } ?>
-            <table class="table table-bordered">
-                <tr>
-                    <td>Bank Transaction Date</td>
-                    <td>Bank Transaction No (STAN)</td>
-                </tr>
-                <tr>
-                    <td><input required name="challan_date" type="date" class="form-control" min="2018-01-01" max="<?php echo date('Y-m-d'); ?>" />
-                    </td>
-                    <td><input required maxlength="6" id="challan_no" name="challan_no" type="text" autocomplete="off" class="form-control" />
-                    </td>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <tr>
+                        <td>Transaction Date</td>
+                        <td>STAN No.</td>
+                    </tr>
+                    <tr>
+                        <td><input required name="challan_date" type="date" class="form-control" min="2018-01-01" max="<?php echo date('Y-m-d'); ?>" />
+                        </td>
+                        <td><input required maxlength="6" id="challan_no" name="challan_no" type="text" autocomplete="off" class="form-control" />
+                        </td>
 
-                    <td><input type="submit" class="btn btn-success" name="submit" value="Submit Bank Challan" />
-                    </td>
-                </tr>
+                        <td><input type="submit" class="btn btn-success" name="submit" value="Add Challan" />
+                        </td>
+                    </tr>
         </form>
         <tr>
-            <th>Bank Transaction Date</th>
-            <th>Bank Transaction No (STAN No)</th>
-            <th>Remove Challan</th>
+            <th>Transaction Date</th>
+            <th>STAN No.</th>
+            <th>Remove</th>
         </tr>
 
         <?php
@@ -137,24 +144,32 @@ if ($isfined == 1) { ?>
             </tr>
         <?php } ?>
         </table>
-        <div style="text-align: center;">
-            <?php if ($finished == 1) { ?>
+        <h5 style="text-align: center;">ایس ٹی این نمبر اور تاریخ انٹر کرنے کے بعد ایپلیکیشن کو ان لائن سبمٹ کر لیں</h5>
+    </div>
+    <div style="text-align: center;">
+        <?php if ($finished == 1) { ?>
 
-                <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
-                    <p style="color: red;"> براہ کرم نوٹ کریں کہ ایک بار آن لائن درخواست جمع کروانے کے بعد، آپ مزید تبدیلیاں نہیں کر سکیں گے۔</p>
-                    <p style="color: red;">Please note that once you submit the application online, you will not be able to make any further changes.</p>
+            <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
+                <p style="color: red;"> براہ کرم نوٹ کریں کہ ایک بار آن لائن درخواست جمع کروانے کے بعد، آپ مزید تبدیلیاں نہیں کر سکیں گے۔</p>
+                <p style="color: red;">Please note that once you submit the application online, you will not be able to make any further changes.</p>
 
-                </div>
+            </div>
 
 
-                <a class="btn btn-success" style="margin: 2px;" href="<?php echo site_url("form/section_h/$school_id"); ?>">
-                    <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Previous Section ( Fee Concession ) </a>
 
-                <a href="<?php echo site_url('form/submit_application_online/' . $school_id . '/' . $schools_id) ?>" onclick="return confirm('Are you sure. you want to submit?')" class=" btn btn-danger">
-                    <i class="fa fa-flag-checkered" aria-hidden="true"></i>
-                    Submit Application Online</a>
-            <?php } ?>
-        </div>
+            <a href="<?php echo site_url('form/submit_application_online/' . $school_id . '/' . $schools_id) ?>" onclick="return confirm('Are you sure. you want to submit?')" class=" btn btn-danger">
+                <i class="fa fa-flag-checkered" aria-hidden="true"></i>
+                Submit Application Online</a>
+
+
+
+
+        <?php } ?>
+
+        <!-- <a class="btn btn-success" style="margin: 2px;" href="<?php echo site_url("form/section_h/$school_id"); ?>">
+            <i class="fa fa-arrow-left" aria-hidden="true" style="margin-right: 10px;"></i> Previous Section H</a> -->
+
+    </div>
     </div>
 
 <?php } ?>

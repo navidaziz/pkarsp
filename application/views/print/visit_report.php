@@ -1403,7 +1403,7 @@
                       <tbody>
                         <tr>
                           <th>#</th>
-                          <th colspan="4">HIGH LEVEL ONLY: <span style="margin-left: 10px;"></span>Equipment:</th>
+                          <th colspan="4">HIGH LEVEL ONLY: <span style="margin-left: 10px;"></span>Equipments:</th>
 
                         </tr>
                         <tr>
@@ -1421,7 +1421,7 @@
                       <tbody>
                         <tr>
                           <th>#</th>
-                          <th colspan="4">HIGH Sec. LEVEL ONLY: <span style="margin-left: 10px;"></span> Equipment:</th>
+                          <th colspan="4">HIGH Sec. LEVEL ONLY: <span style="margin-left: 10px;"></span> Equipments:</th>
 
                         </tr>
 
@@ -1435,7 +1435,7 @@
                         </tr>
                         <tr>
                           <td>2.</td>
-                          <th>Chemistery</th>
+                          <th>Chemistry</th>
                           <td>Yes</td>
                           <td>No</td>
                           <th style="text-align: center;"> (i) *Sufficient <span style="margin-left: 10px;"></span> (ii) Deficient</th>

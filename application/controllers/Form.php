@@ -310,10 +310,28 @@ class Form extends Admin_Controller
 			'timing' => $posts['timing'],
 			'female_washrooms' => $posts['female_washrooms'],
 			'male_washrooms' => $posts['male_washrooms']
-
 		);
 
+		$physical_facilities['high_science_lab'] = NULL;
+		$physical_facilities['physics_lab'] = NULL;
+		$physical_facilities['chemistry_lab'] = NULL;
+		$physical_facilities['biology_lab'] = NULL;
 
+		if ($posts['high_science_lab']) {
+			$physical_facilities['high_science_lab'] = $posts['high_science_lab'];
+		}
+
+		if ($posts['physics_lab']) {
+			$physical_facilities['physics_lab'] = $posts['physics_lab'];
+		}
+
+		if ($posts['chemistry_lab']) {
+			$physical_facilities['chemistry_lab'] = $posts['chemistry_lab'];
+		}
+
+		if ($posts['biology_lab']) {
+			$physical_facilities['biology_lab'] = $posts['biology_lab'];
+		}
 
 
 		$this->db->insert('physical_facilities', $physical_facilities);
@@ -813,6 +831,8 @@ class Form extends Admin_Controller
 		$enrolment['gender_id'] = $gender_id;
 		$enrolment['non_muslim'] = (int)  $this->input->post('non_muslim');
 		$enrolment['disabled']  = (int)  $this->input->post('disabled');
+		$enrolment['afghani']  = (int)  $this->input->post('afghani');
+		$enrolment['non_afghani']  = (int)  $this->input->post('non_afghani');
 		$this->db->insert('school_enrolments', $enrolment);
 
 		$gender = '';
@@ -1056,6 +1076,82 @@ class Form extends Admin_Controller
 			$this->db->insert('fee_concession', $input);
 		}
 
+
+
+		//var_dump($_POST);
+		$input = array();
+		$input['school_id']  = $schools_id  = (int) $this->input->post("schools_id");
+		$input['session_id'] = $session_id =  (int) $this->input->post("session_id");
+		$input['regional_language'] = $this->input->post("regional_language");
+		$input['rl_primary'] =  NULL;
+		$input['rl_middle'] = NULL;
+		$input['rl_high'] = NULL;
+		$input['rl_high_sec'] = NULL;
+		$input['comment'] = $this->input->post("comment");
+		if ($input['regional_language'] == 'Yes') {
+			$languages = $this->input->post("language");
+			foreach ($languages as $level_id => $language) {
+				if ($level_id == 1) {
+					$input['rl_primary'] =  $language;
+				}
+				if ($level_id == 2) {
+					$input['rl_middle'] =  $language;
+				}
+				if ($level_id == 3) {
+					$input['rl_high'] =  $language;
+				}
+				if ($level_id == 4) {
+					$input['rl_high_sec'] = $language;
+				}
+			}
+			$input['comment'] = NULL;
+		}
+
+		$levels = $this->input->post("levels");
+		foreach ($levels as $level_id => $publisher_id) {
+			if ($level_id == 1) {
+				$input['primary'] = (int) $publisher_id;
+				if ($publisher_id == 'other') {
+					$input['primary'] = $this->add_new_publisher($level_id);
+				}
+			}
+			if ($level_id == 2) {
+				$input['middle'] = (int) $publisher_id;
+				if ($publisher_id == 'other') {
+					$input['middle'] = $this->add_new_publisher($level_id);
+				}
+			}
+			if ($level_id == 3) {
+				$input['high'] = (int) $publisher_id;
+				if ($publisher_id == 'other') {
+					$input['middle'] = $this->add_new_publisher($level_id);
+				}
+			}
+			if ($level_id == 4) {
+				$input['high_sec'] = (int) $publisher_id;
+				if ($publisher_id == 'other') {
+					$input['middle'] = $this->add_new_publisher($level_id);
+				}
+			}
+		}
+		//check data already inserted or not
+		$query = "SELECT COUNT(*) as total FROM textbooks WHERE school_id = '" . $schools_id . "' and session_id = '" . $session_id . "'";
+		$count = $this->db->query($query)->row()->total;
+		if ($count == 0) {
+			//insert data
+			$this->db->insert('textbooks', $input);
+			$this->session->set_flashdata('msg_success', 'Data insert successfully!');
+		} else {
+			//update data 
+			$where['school_id'] = $schools_id;
+			$where['session_id'] = $session_id;
+			$this->db->where($where);
+			$this->db->update('textbooks', $input);
+
+			$this->session->set_flashdata('msg_success', 'Data updated successfully!');
+		}
+
+
 		$form_input['form_h_status'] = 1;
 		$this->db->where('school_id', $school_id);
 		$this->db->update('forms_process', $form_input);
@@ -1063,6 +1159,24 @@ class Form extends Admin_Controller
 		$this->session->set_flashdata('msg', 'Hazards with Associated Risks.');
 		$session_id = (int) $this->input->post('session_id');
 		redirect("form/section_h/$school_id");
+	}
+
+	private function add_new_publisher($level_id)
+	{
+		//if publisher ID 77 means Other please check and add as new publisher
+		$new_publisher_name = $this->input->post($level_id . "_other");
+
+		$query = "SELECT id, COUNT(*) as total 
+              FROM publishers 
+              WHERE publisher_name = " . $this->db->escape($new_publisher_name);
+		$publisher = $this->db->query($query)->row();
+		if ($publisher->total == 0) {
+			$new_publisher_input['publisher_name'] = $new_publisher_name;
+			$this->db->insert('publishers', $new_publisher_input);
+			return $this->db->insert_id();
+		} else {
+			return $publisher->id;
+		}
 	}
 
 	private function registaion_type($type_id)
@@ -1242,7 +1356,7 @@ class Form extends Admin_Controller
 		$userId = $this->session->userdata('userId');
 		if ($owner_id == $userId) {
 			$date = date('Y-m-d H:i:s');
-			$query = "UPDATE school set status = '2', file_status='1', apply_date ='" . $date . "', updatedDate ='" . $date . "' WHERE schoolId = '" . $school_id . "' and schools_id = '" . $schools_id . "'";
+			$query = "UPDATE school set status = '2', file_status='1', `visit` = 'No',  apply_date ='" . $date . "', updatedDate ='" . $date . "' WHERE schoolId = '" . $school_id . "' and schools_id = '" . $schools_id . "'";
 			if ($this->db->query($query)) {
 				$this->session->set_flashdata('msg_success', 'online application request submitted.');
 			} else {
@@ -1271,7 +1385,7 @@ class Form extends Admin_Controller
 
 	public function add_bank_challan()
 	{
-		if ($this->input->post('submit') == 'Submit Bank Challan') {
+		if ($this->input->post('submit') == 'Add Challan') {
 			$challan_data = array();
 			$challan_data['school_id'] = $school_id = (int) $this->input->post('school_id');
 			$challan_data['schools_id'] = (int) $this->input->post('schools_id');

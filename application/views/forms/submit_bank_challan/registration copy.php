@@ -8,8 +8,57 @@
         <div class="box-body">
 
           <div class="row">
+            <div class="col-md-7">
+              <div class="col-md-6">
+                <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
+                  <h4>
+                    <i class="fa fa-info-circle" aria-hidden="true"></i> How system calculate <i>"Deposit Fee Challan" ?</i>
+                  </h4>
+                  <ol>
+                    <li>According to the data you have entered, your institute was established in <strong><?php echo date('M Y', strtotime($school->yearOfEstiblishment)); ?></strong>.
+                      For session <strong><?php echo $session_detail->sessionYearTitle; ?></strong> your institute
+                      charged Max Tuition Fee
+                      <strong><?php echo $max_tuition_fee; ?> Rs. </strong> per month.
+                    </li>
+                    <li>As per PSRA Registration and Renewal Fee Structure, Institute charging monthly fee between
+                      <strong><?php echo $fee_sturucture->fee_min; ?> Rs. </strong> and <strong> <?php echo $fee_sturucture->fee_max; ?> Rs. </strong>
+                      Must Deposit
+                      <ol>
+                        <li> Application Processing Fee: <strong><?php echo $fee_sturucture->renewal_app_processsing_fee; ?> Rs. </strong></li>
+                        <li> Inspection Fee: <strong><?php echo $fee_sturucture->renewal_app_inspection_fee; ?> Rs.</strong></li>
+                        <li> Security Fee (1st Time Registration)
+                          <ol>
+                            <?php
+                            $query = "SELECT * FROM `levelofinstitute`
+                              WHERE school_type_id = '" . $school->school_type_id . "'
+                              ";
+                            $level_securities = $this->db->query($query)->result();
+                            foreach ($level_securities as $level_security) {
+                            ?>
+                              <li><?php echo  $level_security->levelofInstituteTitle; ?> <strong> <?php echo  $level_security->security_fee; ?> Rs.</strong> </li>
+                            <?php } ?>
+                          </ol>
+                        </li>
 
-            <div class="col-md-6">
+                    </li>
+
+                  </ol>
+                  <li>In case of confusion and queries, please contact <strong>PSRA MIS Section <a style="font-weight: bold; color:red" href="tel:+92091-9216205">
+                        <i class="fa fa-phone" aria-hidden="true"></i>
+                        091-9216205 </a></strong></li>
+                  </li>
+                  </ol>
+                  <button onclick="renewal_fee_sturucture()" class="btn btn-link">
+                    <i class="fa fa-info-circle" aria-hidden="true"></i> PSRA Registration Fee Struture Detail</button>
+                </div>
+              </div>
+
+              <?php $this->load->view('forms/submit_bank_challan/cut_off_dates');   ?>
+
+              <?php $this->load->view('forms/submit_bank_challan/online_apply_instructions');   ?>
+            </div>
+
+            <div class="col-md-5">
               <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
                 <h4>Session: <?php echo $session_detail->sessionYearTitle; ?> Registration Fee Detail</h4>
                 <div class="table-responsive">
@@ -143,7 +192,10 @@
 
                       <tr>
                         <td colspan="2" style="text-align:center;">
-                          <h5>برائے مہربانی نیچے دیے ہوئے بینک چالان پرنٹ کریں اور بینک میں جمع کر لیں</h5>
+
+
+
+
                           <a target="new" class="btn btn-warning" href="<?php echo site_url("form/print_registration_bank_challan/$school_id") ?>"> <i class="fa fa-print" aria-hidden="true"></i> Print PSRA Registration Challan</a>
                           <?php if ($school->biseRegister != 'Yes') { ?>
 
@@ -183,66 +235,10 @@
                   </table>
                 </div>
               </div>
-            </div>
-            <div class="col-md-6">
-
               <?php $this->load->view('forms/submit_bank_challan/online_apply');   ?>
+
+
             </div>
-          </div>
-          <div class="row">
-
-            <div class="col-md-6">
-              <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
-                <h4>
-                  <i class="fa fa-info-circle" aria-hidden="true"></i> How system calculate <i>"Deposit Fee Challan" ?</i>
-                </h4>
-                <ol>
-                  <li>According to the data you have entered, your institute was established in <strong><?php echo date('M Y', strtotime($school->yearOfEstiblishment)); ?></strong>.
-                    For session <strong><?php echo $session_detail->sessionYearTitle; ?></strong> your institute
-                    charged Max Tuition Fee
-                    <strong><?php echo $max_tuition_fee; ?> Rs. </strong> per month.
-                  </li>
-                  <li>As per PSRA Registration and Renewal Fee Structure, Institute charging monthly fee between
-                    <strong><?php echo $fee_sturucture->fee_min; ?> Rs. </strong> and <strong> <?php echo $fee_sturucture->fee_max; ?> Rs. </strong>
-                    Must Deposit
-                    <ol>
-                      <li> Application Processing Fee: <strong><?php echo $fee_sturucture->renewal_app_processsing_fee; ?> Rs. </strong></li>
-                      <li> Inspection Fee: <strong><?php echo $fee_sturucture->renewal_app_inspection_fee; ?> Rs.</strong></li>
-                      <li> Security Fee (1st Time Registration)
-                        <ol>
-                          <?php
-                          $query = "SELECT * FROM `levelofinstitute`
-                              WHERE school_type_id = '" . $school->school_type_id . "'
-                              ";
-                          $level_securities = $this->db->query($query)->result();
-                          foreach ($level_securities as $level_security) {
-                          ?>
-                            <li><?php echo  $level_security->levelofInstituteTitle; ?> <strong> <?php echo  $level_security->security_fee; ?> Rs.</strong> </li>
-                          <?php } ?>
-                        </ol>
-                      </li>
-
-                  </li>
-
-                </ol>
-                <li>In case of confusion and queries, please contact <strong>PSRA MIS Section <a style="font-weight: bold; color:red" href="tel:+92091-9216205">
-                      <i class="fa fa-phone" aria-hidden="true"></i>
-                      091-9216205 </a></strong></li>
-                </li>
-                </ol>
-                <button onclick="renewal_fee_sturucture()" class="btn btn-link">
-                  <i class="fa fa-info-circle" aria-hidden="true"></i> PSRA Registration Fee Struture Detail</button>
-              </div>
-            </div>
-
-            <?php //$this->load->view('forms/submit_bank_challan/cut_off_dates');
-            ?>
-            <div class="col-md-6">
-              <?php $this->load->view('forms/submit_bank_challan/online_apply_instructions');
-              ?>
-            </div>
-
-
 
 
 

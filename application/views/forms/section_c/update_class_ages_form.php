@@ -65,7 +65,10 @@
         <td style="text-align: center;"> Total Students In Class <?php echo $class->classTitle ?></td>
         <td style="text-align: center;"><span class="total_students"><?php echo $total_students; ?></span></td>
       </tr>
-      <?php $query = "SELECT SUM(`non_muslim`) as non_muslim, SUM(`disabled`) as disabled
+      <?php $query = "SELECT SUM(`non_muslim`) as non_muslim, 
+      SUM(`disabled`) as disabled,
+      SUM(non_afghani) as non_afghani,
+      SUM(afghani) as afghani
                                   FROM `school_enrolments`  
                                   WHERE  school_id ='" . $school_id . "'
                                   AND session_id =  '" . $session_id . "'
@@ -88,6 +91,21 @@
                                                                   echo $query_result[0]->disabled;
                                                                 } ?>" style="width: 50px;" type="number" min="0" max="<?php echo $total_students; ?>" id="disabled" name="disabled" /></td>
       </tr>
+      <tr>
+        <td colspan="2">Foreign students</td>
+      </tr>
+      <tr>
+        <th style="text-align: center; background-color: <?php if ($gender_id == 1) { ?> #9FC8E8 <?php } else { ?> #FFC0CB <?php } ?>;">Afghani <?php if ($gender_id == 1) { ?> Boys <?php } else { ?> Girls <?php } ?> In Class <?php echo $class->classTitle ?></th>
+        <td style="text-align: center;"><input required value="<?php if ($query_result) {
+                                                                  echo $query_result[0]->afghani;
+                                                                } ?>" style="width: 50px;" type="number" min="0" max="<?php echo $total_students; ?>" id="afghani" name="afghani" /></td>
+      </tr>
+      <tr>
+        <th style="text-align: center; background-color: <?php if ($gender_id == 1) { ?> #9FC8E8 <?php } else { ?> #FFC0CB <?php } ?>;">Non Afghani <?php if ($gender_id == 1) { ?> Boys <?php } else { ?> Girls <?php } ?> In Class <?php echo $class->classTitle ?></th>
+        <td style="text-align: center;"><input required value="<?php if ($query_result) {
+                                                                  echo $query_result[0]->non_afghani;
+                                                                } ?>" style="width: 50px;" type="number" min="0" max="<?php echo $total_students; ?>" id="non_afghani" name="non_afghani" /></td>
+      </tr>
       <td colspan="2" style="text-align: center; padding: 5px !important;">
         <input type="submit" class="btn btn-primary" value="Update Class Age Wise Data" />
 
@@ -108,6 +126,14 @@
         "min": 0 // values (or variables) here
       });
       $("#disabled").attr({
+        "max": sum, // substitute your own
+        "min": 0 // values (or variables) here
+      });
+      $("#afghani").attr({
+        "max": sum, // substitute your own
+        "min": 0 // values (or variables) here
+      });
+      $("#non_afghani").attr({
         "max": sum, // substitute your own
         "min": 0 // values (or variables) here
       });

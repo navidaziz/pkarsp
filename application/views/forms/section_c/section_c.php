@@ -112,7 +112,7 @@
                     <tr>
                       <th rowspan="2" style="text-align: center; vertical-align: middle;">Classes</th>
                       <th colspan="19" style="text-align: center;">Age Categories</th>
-                      <th colspan="4"></th>
+                      <th colspan="6"></th>
                     </tr>
                     <tr>
 
@@ -124,7 +124,8 @@
                       <th style="text-align: center;">Total</th>
                       <th style="text-align: center;">Non-Muslims</th>
                       <th style="text-align: center;">Special Students</th>
-
+                      <th style="text-align: center;">Afghani</th>
+                      <th style="text-align: center;">Non Afghani</th>
                       <td style="text-align: center;"></td>
                     </tr>
 
@@ -152,7 +153,7 @@
                           $total_school_entrollment += $total_class_enrollment;
                         } ?>
                         <th style="text-align: center;"><?php echo $total_class_enrollment; ?></th>
-                        <?php $query = "SELECT `non_muslim`,`disabled` FROM `school_enrolments`  
+                        <?php $query = "SELECT `non_muslim`,`disabled`, afghani, non_afghani FROM `school_enrolments`  
                                   WHERE  school_id ='" . $school_id . "'
                                   AND session_id =  '" . $session_id . "'
                                   AND class_id ='" . $class->classId . "' 
@@ -165,7 +166,12 @@
                         <th style="text-align: center;"> <?php if ($query_result) {
                                                             echo $query_result[0]->disabled;
                                                           } ?> </th>
-
+                        <th style="text-align: center;"> <?php if ($query_result) {
+                                                            echo $query_result[0]->afghani;
+                                                          } ?> </th>
+                        <th style="text-align: center;"> <?php if ($query_result) {
+                                                            echo $query_result[0]->non_afghani;
+                                                          } ?> </th>
                         <td style="text-align: center;">
                           <?php
 
@@ -211,7 +217,10 @@
 
 
                       <th style="text-align: center;"><?php echo $total_school_entrollment; ?></th>
-                      <?php $query = "SELECT SUM(`non_muslim`) as non_muslim, SUM(`disabled`) as disabled
+                      <?php $query = "SELECT SUM(`non_muslim`) as non_muslim, 
+                      SUM(`disabled`) as disabled,
+                      SUM(`afghani`) as afghani,
+                      SUM(`non_afghani`) as non_afghani
                                   FROM `school_enrolments`  
                                   WHERE  school_id ='" . $school_id . "'
                                   AND session_id =  '" . $session_id . "'
@@ -223,6 +232,12 @@
                                                       } ?> </th>
                       <th style="text-align: center;"> <?php if ($query_result) {
                                                           echo $query_result[0]->disabled;
+                                                        } ?> </th>
+                      <th style="text-align: center;"> <?php if ($query_result) {
+                                                          echo $query_result[0]->afghani;
+                                                        } ?> </th>
+                      <th style="text-align: center;"> <?php if ($query_result) {
+                                                          echo $query_result[0]->non_afghani;
                                                         } ?> </th>
                       <td></td>
                     </tr>
@@ -241,7 +256,8 @@
                     <tr style="text-align: center; background-color: #FFC0CB;">
                       <th rowspan="2" style="text-align: center; vertical-align: middle; background-color: #FFC0CB;">Classes</th>
                       <th colspan="19" style="text-align: center; background-color: #FFC0CB;">Age Categories</th>
-                      <th colspan="4" style="background-color: #FFC0CB;"></th>
+                      <th colspan="6" style="background-color: #FFC0CB;"></th>
+
                     </tr>
                     <tr>
                       <?php
@@ -252,8 +268,9 @@
                       <th style="background-color: #FFC0CB; text-align: center;">Total</th>
                       <th style="background-color: #FFC0CB; text-align: center;">Non-Muslims</th>
                       <th style="background-color: #FFC0CB; text-align: center;">Special Students</th>
-
-                      <td style="text-align: center;"></td>
+                      <th style="background-color: #FFC0CB; text-align: center;">Afghani</th>
+                      <th style="background-color: #FFC0CB; text-align: center;">Non Afghani</th>
+                      <th style="background-color: #FFC0CB; text-align: center;"></th>
                     </tr>
 
                     <?php
@@ -279,7 +296,7 @@
                           $total_school_entrollment += $total_class_enrollment;
                         } ?>
                         <th style="text-align: center; background-color: #FFC0CB;"><?php echo $total_class_enrollment; ?></th>
-                        <?php $query = "SELECT `non_muslim`,`disabled` FROM `school_enrolments`  
+                        <?php $query = "SELECT `non_muslim`,`disabled`, non_afghani, afghani FROM `school_enrolments`  
                                   WHERE  school_id ='" . $school_id . "'
                                   AND session_id =  '" . $session_id . "'
                                   AND class_id ='" . $class->classId . "' 
@@ -292,8 +309,14 @@
                         <th style="background-color: #FFC0CB; text-align: center;"> <?php if ($query_result) {
                                                                                       echo $query_result[0]->disabled;
                                                                                     } ?> </th>
+                        <th style="background-color: #FFC0CB; text-align: center;"> <?php if ($query_result) {
+                                                                                      echo $query_result[0]->afghani;
+                                                                                    } ?> </th>
+                        <th style="background-color: #FFC0CB; text-align: center;"> <?php if ($query_result) {
+                                                                                      echo $query_result[0]->non_afghani;
+                                                                                    } ?> </th>
 
-                        <td style="text-align: center;">
+                        <td style="background-color: #FFC0CB; text-align: center;">
                           <?php
 
                           $query = "SELECT `enrolled` FROM `age_and_class`  
@@ -340,7 +363,10 @@
 
 
                       <th style="text-align: center; background-color: #FFC0CB;"><?php echo $total_school_entrollment; ?></th>
-                      <?php $query = "SELECT SUM(`non_muslim`) as non_muslim, SUM(`disabled`) as disabled
+                      <?php $query = "SELECT SUM(`non_muslim`) as non_muslim, 
+                      SUM(`disabled`) as disabled,
+                      SUM(`afghani`) as afghani,
+                      SUM(`non_afghani`) as non_afghani
                                   FROM `school_enrolments`  
                                   WHERE  school_id ='" . $school_id . "'
                                   AND session_id =  '" . $session_id . "'
@@ -352,6 +378,12 @@
                                                                                   } ?> </th>
                       <th style="text-align: center; background-color: #FFC0CB;"> <?php if ($query_result) {
                                                                                     echo $query_result[0]->disabled;
+                                                                                  } ?> </th>
+                      <th style="text-align: center; background-color: #FFC0CB;"> <?php if ($query_result) {
+                                                                                    echo $query_result[0]->afghani;
+                                                                                  } ?> </th>
+                      <th style="text-align: center; background-color: #FFC0CB;"> <?php if ($query_result) {
+                                                                                    echo $query_result[0]->non_afghani;
                                                                                   } ?> </th>
                       <td></td>
                     </tr>
@@ -371,7 +403,7 @@
                     <th rowspan="2" style="text-align: center; vertical-align: middle; background-color: #337AB7; color:white">Total School Enrollment<br />
                       Session: <?php echo $session_detail->sessionYearTitle; ?></th>
                     <th colspan="19" style="text-align: center; background-color: #337AB7; color:white">Age Categories</th>
-                    <th colspan="3" style="background-color: #337AB7; color:white"></th>
+                    <th colspan="5" style="background-color: #337AB7; color:white"></th>
                   </tr>
                   <tr>
                     <?php
@@ -382,6 +414,8 @@
                     <th style="background-color: #337AB7; color:white; text-align: center;">Total</th>
                     <th style="background-color: #337AB7; color:white; text-align:center;">Non-Muslims</th>
                     <th style="background-color: #337AB7; color:white; text-align: center;">Special Students</th>
+                    <th style="background-color: #337AB7; color:white; text-align: center;">Afghani</th>
+                    <th style="background-color: #337AB7; color:white; text-align: center;">Non Afghani</th>
                   </tr>
 
                   <?php foreach ($classes  as $class) { ?>
@@ -406,7 +440,10 @@
                       } ?>
                       <th style="text-align: center; "><?php echo $total_class_enrollment; ?></th>
                       <?php $query = "SELECT SUM(`non_muslim`) as non_muslim,
-                      SUM(`disabled`) as disabled FROM `school_enrolments`  
+                      SUM(`disabled`) as disabled,
+                      SUM(`afghani`) as afghani,
+                      SUM(`non_afghani`) as non_afghani
+                       FROM `school_enrolments`  
                                     WHERE  school_id ='" . $school_id . "'
                                     AND session_id =  '" . $session_id . "'
                                     AND class_id ='" . $class->classId . "'  ";
@@ -417,6 +454,12 @@
                                                         } ?> </th>
                       <th style=" text-align: center;"> <?php if ($query_result) {
                                                           echo $query_result[0]->disabled;
+                                                        } ?> </th>
+                      <th style=" text-align: center;"><?php if ($query_result) {
+                                                          echo $query_result[0]->afghani;
+                                                        } ?> </th>
+                      <th style=" text-align: center;"> <?php if ($query_result) {
+                                                          echo $query_result[0]->non_afghani;
                                                         } ?> </th>
 
 
@@ -441,7 +484,10 @@
 
 
                     <th style="text-align: center; "><?php echo $total_school_entrollment; ?></th>
-                    <?php $query = "SELECT SUM(`non_muslim`) as non_muslim, SUM(`disabled`) as disabled
+                    <?php $query = "SELECT SUM(`non_muslim`) as non_muslim, 
+                    SUM(`disabled`) as disabled,
+                    SUM(`afghani`) as afghani,
+                    SUM(`non_afghani`) as non_afghani
                                   FROM `school_enrolments`  
                                   WHERE  school_id ='" . $school_id . "'
                                   AND session_id =  '" . $session_id . "'";
@@ -453,7 +499,13 @@
                     <th style="text-align: center; "> <?php if ($query_result) {
                                                         echo $query_result[0]->disabled;
                                                       } ?> </th>
-                    <td></td>
+                    <th style="text-align: center; "> <?php if ($query_result) {
+                                                        echo $query_result[0]->afghani;
+                                                      } ?> </th>
+                    <th style="text-align: center; "> <?php if ($query_result) {
+                                                        echo $query_result[0]->non_afghani;
+                                                      } ?> </th>
+
                   </tr>
 
                 </table>

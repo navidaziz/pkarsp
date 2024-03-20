@@ -71,7 +71,7 @@
               <?php } ?>
               <h4>
                 <ul class="list-group">
-                  <li class="list-group-item">Institute security deposit slip
+                  <li class="list-group-item">New Registration security deposit slip
                     <a onclick="$('#security').toggle();" class="pull-right" class="btn btn-primary" href="javascirpt:return false;">
                       <i class="fa fa-print"></i> Print Slip</a>
                     <br />
