@@ -110,6 +110,29 @@ class Form extends Admin_Controller
 		$this->load->view('layout', $this->data);
 	}
 
+	public function update_levels()
+	{
+		$upgradation_levels = '';
+		if ($this->input->post('levels')) {
+			foreach ($this->input->post('levels') as $level_id => $level) {
+				if ($level === 'on') {
+					$upgradation_levels .= $level_id . ',';
+				}
+			}
+			$upgradation_levels = trim($upgradation_levels, ",");
+		}
+		$form_input['upgradation_levels'] = $upgradation_levels;
+		$school_id = (int) $this->input->post('school_id');
+		$this->db->where('schoolId', $school_id);
+		$this->db->update('school', $form_input);
+		$this->session->set_flashdata('msg', 'Update Successfully');
+		if ($this->input->post('update') == 'save_next') {
+			redirect("form/section_c/$school_id");
+		} else {
+			redirect("form/section_b/$school_id");
+		}
+	}
+
 	public function section_d($school_session_id)
 	{
 
@@ -153,44 +176,67 @@ class Form extends Admin_Controller
 		$this->data['session_detail'] = $this->get_session_detail($session_id);
 		$this->data['form_status'] = $this->get_form_status($school_id);
 
-		//we use this code for only session 2023-24 howwver next year we get levels from school session 
-
-		$query = "SELECT MAX(schoolId) as pre_school_id FROM school WHERE schools_id = $school->schools_id and status=1";
+		$query = "SELECT MAX(schoolId) as pre_school_id FROM school 
+		WHERE schools_id = $school->schools_id and status=1";
 		$previous_session = $this->db->query($query)->row();
-		$min_level = array();
 
-		$query = "select SUM(`s`.`enrolled`) as total FROM
+		if ($previous_session->pre_school_id) {
+			$min_level = array();
+
+			//check level mentioned on last issued certificate or not
+
+			$query = "SELECT `primary`, `middle`, `high`, `high_sec` FROM school 
+				WHERE new_certificate=1
+				AND school.schoolId = $previous_session->pre_school_id";
+			$school_levels = $this->db->query($query)->row();
+			if ($school_levels) {
+				if ($school_levels->primary == 1) {
+					$min_level[] = 1;
+				}
+				if ($school_levels->middle == 1) {
+					$min_level[] = 2;
+				}
+				if ($school_levels->high == 1) {
+					$min_level[] = 3;
+				}
+				if ($school_levels->high_sec == 1) {
+					$min_level[] = 4;
+				}
+			} else {
+				$query = "select SUM(`s`.`enrolled`) as total FROM
 		         `age_and_class` as `s` 
 				 where `s`.`class_id` in (1,2,3,4,5,6,7)
 				 AND `s`.`school_id` = '" . $previous_session->pre_school_id . "'";
-		$primary = $this->db->query($query)->row()->total;
-		if ($primary) {
-			$min_level[] = 1;
-		}
-		$query = "select SUM(`s`.`enrolled`) as total FROM
+				$primary = $this->db->query($query)->row()->total;
+				if ($primary) {
+					$min_level[] = 1;
+				}
+				$query = "select SUM(`s`.`enrolled`) as total FROM
 		         `age_and_class` as `s` 
 				 where `s`.`class_id` in (9,10,11)
 				 AND `s`.`school_id` = '" . $previous_session->pre_school_id . "'";
-		$middle = $this->db->query($query)->row()->total;
-		if ($middle) {
-			$min_level[] = 2;
-		}
-		$query = "select SUM(`s`.`enrolled`) as total FROM
+				$middle = $this->db->query($query)->row()->total;
+				if ($middle) {
+					$min_level[] = 2;
+				}
+				$query = "select SUM(`s`.`enrolled`) as total FROM
 		         `age_and_class` as `s` 
 				 where `s`.`class_id` in (12,13)
 				 AND `s`.`school_id` = '" . $previous_session->pre_school_id . "'";
-		$high = $this->db->query($query)->row()->total;
-		if ($high) {
-			$min_level[] = 3;
-		}
+				$high = $this->db->query($query)->row()->total;
+				if ($high) {
+					$min_level[] = 3;
+				}
 
-		$query = "select SUM(`s`.`enrolled`) as total FROM
+				$query = "select SUM(`s`.`enrolled`) as total FROM
 		         `age_and_class` as `s` 
 				 where `s`.`class_id` in (14,15)
 				 AND `s`.`school_id` = '" . $previous_session->pre_school_id . "'";
-		$high_sec = $this->db->query($query)->row()->total;
-		if ($high_sec) {
-			$min_level[] = 4;
+				$high_sec = $this->db->query($query)->row()->total;
+				if ($high_sec) {
+					$min_level[] = 4;
+				}
+			}
 		}
 
 		if (!$min_level) {
@@ -211,9 +257,10 @@ class Form extends Admin_Controller
 		}
 
 		//for upgradation 
-		if ($this->data['school']->reg_type_id == 4) {
+		if ($this->data['school']->reg_type_id == 4 or $this->data['school']->reg_type_id == 1) {
 			$class_levels_id = $this->data['school']->upgradation_levels;
 			if ($class_levels_id) {
+				$classIds = array();
 				$query = "SELECT classId FROM `class` 
 				WHERE level_id IN(" . $class_levels_id . ")";
 				$class_Ids = $this->db->query($query)->result_array();
@@ -271,15 +318,7 @@ class Form extends Admin_Controller
 	public function update_form_b_data()
 	{
 
-		$upgradation_levels = '';
-		if ($this->input->post('levels')) {
-			foreach ($this->input->post('levels') as $level_id => $level) {
-				if ($level === 'on') {
-					$upgradation_levels .= $level_id . ',';
-				}
-			}
-			$upgradation_levels = trim($upgradation_levels, ",");
-		}
+
 
 
 		$posts = $this->input->post();
@@ -405,7 +444,8 @@ class Form extends Admin_Controller
 		$form_input['principal'] = $this->input->post('principal');
 		$form_input['principal_cnic'] = $this->input->post('principal_cnic');
 		$form_input['principal_contact_no'] = $this->input->post('principal_contact_no');
-		$form_input['upgradation_levels'] = $upgradation_levels;
+
+		$form_input['upgradation_levels'] = $this->input->post('upgradation_levels');
 
 		$this->db->where('schoolId', $school_id);
 		$this->db->update('school', $form_input);
@@ -436,6 +476,7 @@ class Form extends Admin_Controller
 		$input["schoolStaffName"] = $this->input->post("schoolStaffName");
 		$input["schoolStaffFatherOrHusband"] = $this->input->post("schoolStaffFatherOrHusband");
 		$input["schoolStaffCnic"] = $this->input->post("schoolStaffCnic");
+		$input["contact"] = $this->input->post("contact");
 		$input["schoolStaffGender"] = $this->input->post("schoolStaffGender");
 		$input["schoolStaffType"] = $this->input->post("schoolStaffType");
 		$input["schoolStaffQaulificationAcademic"] = $this->input->post("schoolStaffQaulificationAcademic");
@@ -489,6 +530,7 @@ class Form extends Admin_Controller
 		$input["schoolStaffName"] = $this->input->post("schoolStaffName");
 		$input["schoolStaffFatherOrHusband"] = $this->input->post("schoolStaffFatherOrHusband");
 		$input["schoolStaffCnic"] = $this->input->post("schoolStaffCnic");
+		$input["contact"] = $this->input->post("contact");
 		$input["schoolStaffGender"] = $this->input->post("schoolStaffGender");
 		$input["schoolStaffType"] = $this->input->post("schoolStaffType");
 		$input["schoolStaffQaulificationAcademic"] = $this->input->post("schoolStaffQaulificationAcademic");
@@ -635,43 +677,69 @@ class Form extends Admin_Controller
 
 		//we use this code for only session 2023-24 howover next year we get levels from school session 
 
-		$query = "SELECT MAX(schoolId) as pre_school_id FROM school WHERE schools_id = $school->schools_id and status=1";
+		$query = "SELECT MAX(schoolId) as pre_school_id FROM school 
+		WHERE schools_id = $school->schools_id and status=1";
 		$previous_session = $this->db->query($query)->row();
-		$min_level = array();
 
-		$query = "select SUM(`s`.`enrolled`) as total FROM
+		if ($previous_session->pre_school_id) {
+			$min_level = array();
+
+			//check level mentioned on last issued certificate or not
+
+			$query = "SELECT `primary`, `middle`, `high`, `high_sec` FROM school 
+				WHERE new_certificate=1
+				AND school.schoolId = $previous_session->pre_school_id";
+			$school_levels = $this->db->query($query)->row();
+			if ($school_levels) {
+				if ($school_levels->primary == 1) {
+					$min_level[] = 1;
+				}
+				if ($school_levels->middle == 1) {
+					$min_level[] = 2;
+				}
+				if ($school_levels->high == 1) {
+					$min_level[] = 3;
+				}
+				if ($school_levels->high_sec == 1) {
+					$min_level[] = 4;
+				}
+			} else {
+				$query = "select SUM(`s`.`enrolled`) as total FROM
 		         `age_and_class` as `s` 
 				 where `s`.`class_id` in (1,2,3,4,5,6,7)
 				 AND `s`.`school_id` = '" . $previous_session->pre_school_id . "'";
-		$primary = $this->db->query($query)->row()->total;
-		if ($primary) {
-			$min_level[] = 1;
-		}
-		$query = "select SUM(`s`.`enrolled`) as total FROM
+				$primary = $this->db->query($query)->row()->total;
+				if ($primary) {
+					$min_level[] = 1;
+				}
+				$query = "select SUM(`s`.`enrolled`) as total FROM
 		         `age_and_class` as `s` 
 				 where `s`.`class_id` in (9,10,11)
 				 AND `s`.`school_id` = '" . $previous_session->pre_school_id . "'";
-		$middle = $this->db->query($query)->row()->total;
-		if ($middle) {
-			$min_level[] = 2;
-		}
-		$query = "select SUM(`s`.`enrolled`) as total FROM
+				$middle = $this->db->query($query)->row()->total;
+				if ($middle) {
+					$min_level[] = 2;
+				}
+				$query = "select SUM(`s`.`enrolled`) as total FROM
 		         `age_and_class` as `s` 
 				 where `s`.`class_id` in (12,13)
 				 AND `s`.`school_id` = '" . $previous_session->pre_school_id . "'";
-		$high = $this->db->query($query)->row()->total;
-		if ($high) {
-			$min_level[] = 3;
-		}
+				$high = $this->db->query($query)->row()->total;
+				if ($high) {
+					$min_level[] = 3;
+				}
 
-		$query = "select SUM(`s`.`enrolled`) as total FROM
+				$query = "select SUM(`s`.`enrolled`) as total FROM
 		         `age_and_class` as `s` 
 				 where `s`.`class_id` in (14,15)
 				 AND `s`.`school_id` = '" . $previous_session->pre_school_id . "'";
-		$high_sec = $this->db->query($query)->row()->total;
-		if ($high_sec) {
-			$min_level[] = 4;
+				$high_sec = $this->db->query($query)->row()->total;
+				if ($high_sec) {
+					$min_level[] = 4;
+				}
+			}
 		}
+
 		// its only for renewal and registration
 		if (!$min_level) {
 			$min_level = 1;
@@ -688,9 +756,11 @@ class Form extends Admin_Controller
 			$classIds[] = $class_Id['classId'];
 		}
 		//for upgradation 
-		if ($this->data['school']->reg_type_id == 4) {
+		if ($this->data['school']->reg_type_id == 4 or $this->data['school']->reg_type_id == 1) {
+			//$classIds = array();
 			$class_levels_id = $this->data['school']->upgradation_levels;
 			if ($class_levels_id) {
+				$classIds = array();
 				$query = "SELECT classId FROM `class` 
 				WHERE level_id IN(" . $class_levels_id . ")";
 				$class_Ids = $this->db->query($query)->result_array();
@@ -1081,6 +1151,7 @@ class Form extends Admin_Controller
 		//var_dump($_POST);
 		$input = array();
 		$input['school_id']  = $schools_id  = (int) $this->input->post("schools_id");
+		$input['school_session_id']  = $school_id  = (int) $this->input->post("school_id");
 		$input['session_id'] = $session_id =  (int) $this->input->post("session_id");
 		$input['regional_language'] = $this->input->post("regional_language");
 		$input['rl_primary'] =  NULL;

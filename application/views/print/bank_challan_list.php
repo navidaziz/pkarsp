@@ -33,9 +33,9 @@
               <br />
               <br />
               <h5 style="line-height: 20px;">
-                <p style="direction: rtl;">آن لائن پورٹل نے نجی اسکولوں کی رجسٹریشن، تجدید، اپ گریڈیشن کے ساتھ تجدید، اور صرف اپ گریڈیشن کے لیے ایک نیا بینک چالان جنریشن سسٹم متعارف کرایا ہے۔ خالی بینک چالان اب آن لائن قابل رسائی نہیں ہیں، اور اسکولوں کو کمپیوٹر سے تیار کردہ بینک چالان حاصل کرنے کے لیے پورٹل کے ذریعے درخواست دینا ہوگی۔</p>
+                <p style="direction: rtl; line-height: 41px;">آن لائن پورٹل نے نجی اسکولوں کی رجسٹریشن، تجدید، اپ گریڈیشن کے ساتھ تجدید، اور صرف اپ گریڈیشن کے لیے ایک نیا بینک چالان جنریشن سسٹم متعارف کرایا ہے۔ خالی بینک چالان اب آن لائن قابل رسائی نہیں ہیں، اور اسکولوں کو کمپیوٹر سے تیار کردہ بینک چالان حاصل کرنے کے لیے پورٹل کے ذریعے درخواست دینا ہوگی۔</p>
                 <br />
-                <p style="direction: rtl;">تاہم، اسکول سیکیورٹی، نام کی تبدیلی، عمارت، مقام، اور درخواست دہندگان کے سرٹیفکیٹ کے لیے ڈپازٹ سلپس اب بھی خالی دستیاب ہیں۔ ان تک رسائی کے لیے، براہ کرم درج ڈپازٹ سلپس پرنٹ کریں یا ڈاؤن لوڈ کریں۔</p>
+                <p style="direction: rtl; line-height: 41px;">تاہم، اسکول سیکیورٹی، نام کی تبدیلی، عمارت، مقام، اور درخواست دہندگان کے سرٹیفکیٹ کے لیے ڈپازٹ سلپس اب بھی خالی دستیاب ہیں۔ ان تک رسائی کے لیے، براہ کرم درج ڈپازٹ سلپس پرنٹ کریں یا ڈاؤن لوڈ کریں۔</p>
               </h5>
             </div>
           </div>
@@ -105,6 +105,10 @@
                         </td>
                       </tr>
                     </table>
+                  </li>
+                  <li class="list-group-item" style="background-color: #DF8E0B;">Upgradation security deposit slip
+                    <a class="pull-right" target="_blank" class="btn btn-primary" href="<?php echo site_url('print_file/upgradation_security_slip/' . $school_id) ?>">
+                      <i class="fa fa-print"></i> Print Slip</a>
                   </li>
                   <li class="list-group-item">Change of Name deposit slip
                     <a onclick="$('#name_change').toggle();" class="pull-right" class="btn btn-primary" href="javascirpt:return false;">

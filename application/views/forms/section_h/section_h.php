@@ -281,11 +281,11 @@
                 <?php
 
                 $query = "SELECT level_of_school_id as max_level, 
-session_year_id as session_id,
-schoolId as pre_school_id 
-FROM school
-WHERE schoolId = '" . $school_id . "'
-AND schools_id = '" . $schools_id . "'";
+              session_year_id as session_id,
+              schoolId as current_session_school_id 
+              FROM school
+              WHERE schoolId = '" . $school_id . "'
+              AND schools_id = '" . $schools_id . "'";
                 $current_session = $this->db->query($query)->row();
                 $max_level = $current_session->max_level;
 
@@ -312,7 +312,7 @@ AND schools_id = '" . $schools_id . "'";
                     $query = "select SUM(`s`.`enrolled`) as total FROM
                 `age_and_class` as `s` 
             where `s`.`class_id` in (1,2,3,4,5,6,7)
-            AND `s`.`school_id` = '" . $current_session->pre_school_id . "'";
+            AND `s`.`school_id` = '" . $current_session->current_session_school_id . "'";
                     $primary = $this->db->query($query)->row()->total;
                     if ($primary) {
                       $min_level[] = 1;
@@ -321,7 +321,7 @@ AND schools_id = '" . $schools_id . "'";
                     $query = "select SUM(`s`.`enrolled`) as total FROM
           `age_and_class` as `s` 
       where `s`.`class_id` in (9,10,11)
-      AND `s`.`school_id` = '" . $current_session->pre_school_id . "'";
+      AND `s`.`school_id` = '" . $current_session->current_session_school_id . "'";
                     $middle = $this->db->query($query)->row()->total;
                     if ($middle) {
                       $min_level[] = 2;
@@ -329,7 +329,7 @@ AND schools_id = '" . $schools_id . "'";
                     $query = "select SUM(`s`.`enrolled`) as total FROM
           `age_and_class` as `s` 
       where `s`.`class_id` in (12,13)
-      AND `s`.`school_id` = '" . $current_session->pre_school_id . "'";
+      AND `s`.`school_id` = '" . $current_session->current_session_school_id . "'";
                     $high = $this->db->query($query)->row()->total;
                     if ($high) {
                       $min_level[] = 3;
@@ -338,7 +338,7 @@ AND schools_id = '" . $schools_id . "'";
                     $query = "select SUM(`s`.`enrolled`) as total FROM
           `age_and_class` as `s` 
       where `s`.`class_id` in (14,15)
-      AND `s`.`school_id` = '" . $current_session->pre_school_id . "'";
+      AND `s`.`school_id` = '" . $current_session->current_session_school_id . "'";
                     $high_sec = $this->db->query($query)->row()->total;
                     if ($high_sec) {
                       $min_level[] = 4;
@@ -346,14 +346,17 @@ AND schools_id = '" . $schools_id . "'";
 
                     //var_dump($min_level);
                     // its only for renewal and registration
-                    if (!$min_level) {
-                      $min_level = 1;
-                    } else {
-                      $min_level = min($min_level);
-                    }
+                    // if (!$min_level) {
+                    //   $min_level = 1;
+                    // } else {
+                    //   $min_level = min($min_level);
+                    // }
 
-                    $query = "SELECT * FROM `levelofinstitute` WHERE levelofInstituteId >='" . $min_level . "' 
-                    AND levelofInstituteId<= '" . $max_level . "'";
+                    // echo $query = "SELECT * FROM `levelofinstitute` WHERE levelofInstituteId >='" . $min_level . "' 
+                    // AND levelofInstituteId<= '" . $max_level . "'";
+                    $query = "SELECT * FROM `levelofinstitute` 
+                              WHERE levelofInstituteId IN(" . implode(",", $min_level) . ")";
+
                     $levels = $this->db->query($query)->result();
 
 

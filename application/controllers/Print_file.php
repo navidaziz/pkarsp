@@ -144,6 +144,13 @@ class Print_file extends Admin_Controller
 		$this->data['title'] = 'Security';
 		$this->load->view('print/security_slip', $this->data);
 	}
+	public function upgradation_security_slip($school_id = NULL)
+	{
+		$this->data['school'] = $this->get_school_info($school_id);
+		$this->data['title'] = 'Security';
+		$this->load->view('print/upgradation_security_slip', $this->data);
+	}
+
 
 	public function print_change_of_name_bank_challan($level_type, $school_id = NULL)
 	{

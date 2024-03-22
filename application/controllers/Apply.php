@@ -64,6 +64,11 @@ class Apply extends Admin_Controller
 
 			redirect("form/section_b/$school_new_session_id");
 		} else {
+			$query = "SELECT schoolId FROM school 
+			WHERE schools_id = '" . $school_id . "' 
+			AND session_year_id='" . $session_id . "'";
+			$school_new_session_id = $this->db->query($query)->row()->schoolId;
+
 			redirect("form/section_b/$school_new_session_id");
 		}
 	}
@@ -106,8 +111,8 @@ class Apply extends Admin_Controller
 			//insert new session...
 			$new_session['schools_id'] = $schools_id;
 			$new_session['reg_type_id'] = 2;
-			//$new_session['gender_type_id'] = $last_session_detail->gender_type_id;
-			$new_session['gender_type_id'] = 0;
+			$new_session['gender_type_id'] = $last_session_detail->gender_type_id;
+			//$new_session['gender_type_id'] = 0;
 			$new_session['school_type_id'] = $last_session_detail->school_type_id;
 			$new_session['level_of_school_id'] = $last_session_detail->level_of_school_id;
 			$new_session['session_year_id'] = $session_id;
@@ -220,8 +225,8 @@ class Apply extends Admin_Controller
 			//insert new session...
 			$new_session['schools_id'] = $schools_id;
 			$new_session['reg_type_id'] = 4;
-			//$new_session['gender_type_id'] = $last_session_detail->gender_type_id;
-			$new_session['gender_type_id'] = 0;
+			$new_session['gender_type_id'] = $last_session_detail->gender_type_id;
+			//$new_session['gender_type_id'] = 0;
 			$new_session['school_type_id'] = $last_session_detail->school_type_id;
 			$new_session['level_of_school_id'] = $last_session_detail->level_of_school_id;
 			$new_session['session_year_id'] = $session_id;

@@ -522,14 +522,14 @@
                               <p class="btn btn-outline-success" <?php if ($apply <= 0) { ?> style="border-color: #D6D6D6" <?php } ?>>
                                 Apply For <?php echo $session->sessionYearTitle; ?>
                                 <?php if ($apply > 0) { ?>
-                                  <a onclick="return confirm('Are you sure?')" class="btn btn-success" style="margin: 1px;" href="<?php echo site_url("apply/renewal/$session->sessionYearId"); ?>"> Renewal </a>
+                                  <a onclick="return confirm('Are you sure? only renewal')" class="btn btn-danger" style="margin: 1px;" href="<?php echo site_url("apply/renewal/$session->sessionYearId"); ?>"> Renewal Only</a>
                                   <?php
                                   // var_dump($school);
                                   if ($school->school_type_id != 7) { ?>
-                                    <a onclick="return confirm('Are you sure?')" class="btn btn-warning" style="margin: 1px;" href="<?php echo site_url("apply/renewal_upgradation/$session->sessionYearId"); ?>">Upgradation + Renewal</a>
+                                    <a onclick="return confirm('Are you sure? you want to apply for Upgradation + Renewal')" class="btn" style="background-color:lightgray; margin-left: 20px;" href="<?php echo site_url("apply/renewal_upgradation/$session->sessionYearId"); ?>">Upgradation + Renewal</a>
                                   <?php } ?>
                                 <?php } else { ?>
-                                  <a class="btn btn-success" style="margin: 1px; background-color: #E6E6E6; border-color: #D6D6D6" data-toggle="tooltip" data-placement="top" title="" href=" # " data-original-title="Please apply and complete previous session data entry."> Renewal </a>
+                                  <a class="btn btn-success" style="margin: 1px; background-color: #E6E6E6; border-color: #D6D6D6" data-toggle="tooltip" data-placement="top" title="" href=" # " data-original-title="Please apply and complete previous session data entry."> Renewal Only</a>
                                   <?php if ($school->school_type_id != 7) { ?>
                                     <a class="btn btn-warning" style="margin: 1px; background-color: #E6E6E6; border-color: #D6D6D6" data-toggle="tooltip" data-placement="top" title="" href=" # " data-original-title="Please apply and complete previous session data entry.">Upgradation + Renewal</a>
                                   <?php } ?>

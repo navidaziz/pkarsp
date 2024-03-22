@@ -101,6 +101,10 @@
                 <td><input class="form-control" type="text" id="schoolStaffCnic" name="schoolStaffCnic" required /> </td>
               </tr>
               <tr>
+                <th>Contact</th>
+                <td><input class="form-control" type="text" id="contact" name="contact" value="<?php echo  $school_staff->contact; ?>" /> </td>
+              </tr>
+              <tr>
                 <th>Gender</th>
                 <td> <select class="form-control" id="schoolStaffGender" name="schoolStaffGender" required="required">
                     <?php if (!empty($gender)) : ?>
@@ -324,6 +328,7 @@
                       <th>Name</th>
                       <th>F/Husband Name</th>
                       <th>CNIC</th>
+                      <th>Contact</th>
                       <th>Gender</th>
 
                       <th>Academic Qualification</th>
@@ -357,6 +362,7 @@
                           <td><?php echo $st->schoolStaffName; ?></td>
                           <td><?php echo $st->schoolStaffFatherOrHusband; ?></td>
                           <td><?php echo $st->schoolStaffCnic; ?></td>
+                          <td><?php echo $st->contact; ?></td>
                           <td><?php echo $st->genderTitle; ?></td>
 
                           <td><?php echo $st->schoolStaffQaulificationAcademic; ?></td>

@@ -57,6 +57,10 @@
         <td><input class="form-control" type="text" id="schoolStaffCnic2" name="schoolStaffCnic" required value="<?php echo  $school_staff->schoolStaffCnic; ?>" /> </td>
       </tr>
       <tr>
+        <th>Contact</th>
+        <td><input class="form-control" type="text" id="contact" name="contact" value="<?php echo  $school_staff->contact; ?>" /> </td>
+      </tr>
+      <tr>
         <th>Gender</th>
         <td> <select class="form-control" required name="schoolStaffGender">
             <option value="">Gender</option>

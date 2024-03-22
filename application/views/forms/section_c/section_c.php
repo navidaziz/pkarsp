@@ -50,7 +50,7 @@
       <?php $this->load->view('forms/navigation_bar');   ?>
       <?php if ($school->reg_type_id == 4) { ?>
         <div class="alert alert-success" style="text-align: center;">
-          If the upgradation classes are not listed, please go back to
+          If required classes of Primary,Middle, High or Higher Secondary are not listed, please go back to
           <a href="<?php echo site_url("form/section_b/" . $school_id); ?>"><strong>Section B</strong></a>
           and review the upgradation levels.
         </div>
