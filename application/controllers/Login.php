@@ -96,10 +96,10 @@ class Login extends Admin_Controller
 
 			$status = json_decode($response, true);
 
-			// if ($status['success'] != 1 ) {
-			// 	$this->session->set_flashdata('msg', 'Captcha error, Please try again.');
-			// 	redirect("login");
-			// }
+			if ($status['success'] != 1) {
+				$this->session->set_flashdata('msg', 'Captcha error, Please try again.');
+				redirect("login");
+			}
 
 			$input_values = array(
 				'userName' => $this->input->post("userName"),
