@@ -15,6 +15,33 @@
 </style>
 <h3 class="form_title" style="border-left: 20px solid #9FC8E8; padding-left:5px; color: #337AB7;">
     <?php echo @ucfirst($title); ?> Session: <?php echo $session_detail->sessionYearTitle; ?>
+    for
+    <?php
+    $issued_levels[] = $school->level_of_school_id;
+    $query = "SELECT MAX(schoolId) as pre_school_id FROM school 
+		                    WHERE schools_id = $school->schools_id and status=1";
+    $previous_session = $this->db->query($query)->row();
+    if ($previous_session->pre_school_id) {
+        $query = "SELECT `primary`, `middle`, `high`, `high_sec` FROM school 
+                                  WHERE new_certificate=1
+                                  AND school.schoolId = $previous_session->pre_school_id";
+        $school_levels = $this->db->query($query)->row();
+        if ($school_levels) {
+            $issued_levels[] = $school_levels->primary;
+        }
+    }
+
+    $in_condition = implode(",", $issued_levels);
+    $apply_levels = '';
+    $query = "SELECT * FROM `levelofinstitute` 
+          WHERE  levelofInstituteId IN ($in_condition)
+          ORDER BY `levelofInstituteId` ASC";
+    $levels = $this->db->query($query)->result();
+    foreach ($levels as $level) {
+        $apply_levels .= " " . $level->levelofInstituteTitle . ",";
+    }
+    echo "( " . rtrim($apply_levels, ',') . " )";
+    ?>
 </h3>
 <div class="box" style="border-top: 0px solid #d2d6de !important; margin-top:2px">
     <div class="row">

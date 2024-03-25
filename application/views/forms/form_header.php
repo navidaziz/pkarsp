@@ -14,5 +14,6 @@
         <li><a class="btn btn-warning btn-sm" href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"> <i class="fa fa-arrow-left" aria-hidden="true"></i> Back To Dashboard </a></li>
         <!-- <li><a href="#">Examples</a></li> -->
         <li class="active"><?php echo @ucfirst($title); ?>s Session: <?php echo $session_detail->sessionYearTitle; ?></li>
+
     </ol>
 </section>
