@@ -354,7 +354,7 @@
 
                     // echo $query = "SELECT * FROM `levelofinstitute` WHERE levelofInstituteId >='" . $min_level . "' 
                     // AND levelofInstituteId<= '" . $max_level . "'";
-                    $query = "SELECT * FROM `levelofinstitute` 
+                    echo $query = "SELECT * FROM `levelofinstitute` 
                               WHERE levelofInstituteId IN(" . implode(",", $min_level) . ")";
 
                     $levels = $this->db->query($query)->result();
