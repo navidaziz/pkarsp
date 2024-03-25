@@ -309,7 +309,7 @@
 
 
                     $min_level = array();
-                    $query = "select SUM(`s`.`enrolled`) as total FROM
+                    echo  $query = "select SUM(`s`.`enrolled`) as total FROM
                 `age_and_class` as `s` 
             where `s`.`class_id` in (1,2,3,4,5,6,7)
             AND `s`.`school_id` = '" . $current_session->current_session_school_id . "'";
@@ -344,7 +344,7 @@
                       $min_level[] = 4;
                     }
 
-                    //var_dump($min_level);
+                    var_dump($min_level);
                     // its only for renewal and registration
                     // if (!$min_level) {
                     //   $min_level = 1;
