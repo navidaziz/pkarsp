@@ -309,7 +309,7 @@
 
 
                     $min_level = array();
-                    echo  $query = "select COUNT(`s`.`enrolled`) as total FROM
+                    $query = "select COUNT(`s`.`enrolled`) as total FROM
                 `age_and_class` as `s` 
             where `s`.`class_id` in (1,2,3,4,5,6,7)
             AND `s`.`school_id` = '" . $current_session->current_session_school_id . "'";
@@ -344,7 +344,7 @@
                       $min_level[] = 4;
                     }
 
-                    var_dump($min_level);
+                    // var_dump($min_level);
                     // its only for renewal and registration
                     // if (!$min_level) {
                     //   $min_level = 1;
@@ -354,7 +354,7 @@
 
                     // echo $query = "SELECT * FROM `levelofinstitute` WHERE levelofInstituteId >='" . $min_level . "' 
                     // AND levelofInstituteId<= '" . $max_level . "'";
-                    echo $query = "SELECT * FROM `levelofinstitute` 
+                    $query = "SELECT * FROM `levelofinstitute` 
                               WHERE levelofInstituteId IN(" . implode(",", $min_level) . ")";
 
                     $levels = $this->db->query($query)->result();
