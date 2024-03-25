@@ -309,7 +309,7 @@
 
 
                     $min_level = array();
-                    echo  $query = "select SUM(`s`.`enrolled`) as total FROM
+                    echo  $query = "select COUNT(`s`.`enrolled`) as total FROM
                 `age_and_class` as `s` 
             where `s`.`class_id` in (1,2,3,4,5,6,7)
             AND `s`.`school_id` = '" . $current_session->current_session_school_id . "'";
@@ -318,7 +318,7 @@
                       $min_level[] = 1;
                     }
 
-                    $query = "select SUM(`s`.`enrolled`) as total FROM
+                    $query = "select COUNT(`s`.`enrolled`) as total FROM
           `age_and_class` as `s` 
       where `s`.`class_id` in (9,10,11)
       AND `s`.`school_id` = '" . $current_session->current_session_school_id . "'";
@@ -326,7 +326,7 @@
                     if ($middle) {
                       $min_level[] = 2;
                     }
-                    $query = "select SUM(`s`.`enrolled`) as total FROM
+                    $query = "select COUNT(`s`.`enrolled`) as total FROM
           `age_and_class` as `s` 
       where `s`.`class_id` in (12,13)
       AND `s`.`school_id` = '" . $current_session->current_session_school_id . "'";
@@ -335,7 +335,7 @@
                       $min_level[] = 3;
                     }
 
-                    $query = "select SUM(`s`.`enrolled`) as total FROM
+                    $query = "select COUNT(`s`.`enrolled`) as total FROM
           `age_and_class` as `s` 
       where `s`.`class_id` in (14,15)
       AND `s`.`school_id` = '" . $current_session->current_session_school_id . "'";
