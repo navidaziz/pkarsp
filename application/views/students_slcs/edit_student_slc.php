@@ -132,7 +132,7 @@
 
                           <td colspan="2">
                             In which class is the student currently enrolled?
-                            <input required type="text" name="current_class" value="<?php echo $student_slc->slc_certificate_no; ?>" placeholder="Nursery, KG, Ist etc" />
+                            <input required type="text" name="current_class" value="<?php echo $student_slc->current_class; ?>" placeholder="Nursery, KG, Ist etc" />
                             <br />
                             Would you recommend promoting the student to the next class?
                             <input <?php if ($student_slc->promoted_to_class) {
