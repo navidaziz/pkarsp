@@ -190,34 +190,34 @@
 
 <script>
 	title = "<?php echo "Fine Management Data: Date:" . date("d M, Y h:m:s"); ?>";
-	$(document).ready(function() {
-		$('#ajax_fine_list').DataTable({
-			dom: 'Bfrtip',
-			paging: false,
-			title: title,
-			"order": [],
-			"ordering": false,
-			searching: true,
-			buttons: [
+	// $(document).ready(function() {
+	// 	$('#ajax_fine_list').DataTable({
+	// 		dom: 'Bfrtip',
+	// 		paging: false,
+	// 		title: title,
+	// 		"order": [],
+	// 		"ordering": false,
+	// 		searching: true,
+	// 		buttons: [
 
-				{
-					extend: 'print',
-					title: title,
+	// 			{
+	// 				extend: 'print',
+	// 				title: title,
 
-				},
-				{
-					extend: 'excelHtml5',
-					title: title,
+	// 			},
+	// 			{
+	// 				extend: 'excelHtml5',
+	// 				title: title,
 
-				},
-				{
-					extend: 'pdfHtml5',
-					title: title,
-					pageSize: 'A4',
-					orientation: 'landscape',
+	// 			},
+	// 			{
+	// 				extend: 'pdfHtml5',
+	// 				title: title,
+	// 				pageSize: 'A4',
+	// 				orientation: 'landscape',
 
-				}
-			]
-		});
+	// 			}
+	// 		]
+	// 	});
 	});
 </script>
