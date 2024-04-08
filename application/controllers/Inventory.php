@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Inventory extends CI_Controller
 {
-
+    //sone changes here....
     public function __construct()
     {
         parent::__construct();
