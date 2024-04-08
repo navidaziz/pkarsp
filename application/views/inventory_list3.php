@@ -167,7 +167,7 @@
 							</button>
 							<!-- Check if image_path is available and enable/disable the button -->
 							<?php if ($item->image_path) : ?>
-								<button class="btn btn-primary view-image-button" data-toggle="modal" data-target="#imageModal" data-image="<?= base_url($item->image_path); ?>">View Image</button>
+								<button class="btn btn-primary view-image-button" data-toggle="modal" data-target="#imageModal" data-image="<?= 'https://psra.gkp.pk/' . $item->image_path; ?>">View Image</button>
 							<?php else : ?>
 								<button class="btn btn-secondary" disabled>View Image</button>
 							<?php endif; ?>
@@ -324,9 +324,9 @@
 							</button>
 
 							<?php if (!empty($allotedItem->image_path)) : ?>
-								<button class="btn btn-primary view-image-button" data-toggle="modal" data-target="#imageModal" data-image="<?= base_url($allotedItem->image_path); ?>">View Image</button>
+								<button class="btn btn-primary view-image-button" data-toggle="modal" data-target="#imageModal" data-image="<?= 'https://psra.gkp.pk/' . $allotedItem->image_path; ?>">View Image</button>
 							<?php elseif (!empty($allotedItem->item_image_path)) : ?>
-								<button class="btn btn-primary view-image-button" data-toggle="modal" data-target="#imageModal" data-image="<?= base_url($allotedItem->item_image_path); ?>">View Image</button>
+								<button class="btn btn-primary view-image-button" data-toggle="modal" data-target="#imageModal" data-image="<?= 'https://psra.gkp.pk/' . $allotedItem->image_path; ?>">View Image</button>
 							<?php else : ?>
 								<button class="btn btn-secondary" disabled>View Image</button>
 							<?php endif; ?>

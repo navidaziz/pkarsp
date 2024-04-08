@@ -59,7 +59,7 @@ class Inventory extends CI_Controller
                     redirect('inventory');
                 } else {
                     $upload_data = $this->upload->data();
-                    $image_path = 'uploads/item_images/' . $upload_data['file_name'];
+                    $image_path = 'uploads/inventory/' . $upload_data['file_name'];
                 }
             } else {
                 // No image uploaded
@@ -110,7 +110,7 @@ class Inventory extends CI_Controller
             } else {
                 // File uploaded successfully, get the uploaded file data
                 $upload_data = $this->upload->data();
-                $image_path = 'uploads/item_images_allot/' . $upload_data['file_name'];
+                $image_path = 'uploads/inventory/' . $upload_data['file_name'];
             }
         } else {
             // No file was uploaded, set $image_path to an empty string or a default value
@@ -152,7 +152,7 @@ class Inventory extends CI_Controller
             } else {
                 // File uploaded successfully, get the uploaded file data
                 $upload_data = $this->upload->data();
-                $image_path = 'uploads/item_images_allot/' . $upload_data['file_name'];
+                $image_path = 'uploads/inventory/' . $upload_data['file_name'];
             }
             $data = array(
                 'item_id' => $this->input->post('allot_id'),
