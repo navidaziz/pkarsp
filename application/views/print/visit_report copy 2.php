@@ -503,7 +503,7 @@
                     <th rowspan="2">Rooms</th>
                     <th rowspan="2">Rooms Size (sq feet)</th>
                     <th colspan="2">Students</th>
-                    <th rowspan="2" style="width: 80px;">Max Tuition Fee</th>
+                    <th rowspan="2" style="width: 80px;">Max Fee</th>
                     <th rowspan="2">Regional language</th>
                     <th rowspan="2" style="width: 200px;">Publisher's textbooks are being taught in each levels</th>
 

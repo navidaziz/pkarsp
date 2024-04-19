@@ -120,7 +120,7 @@
                         <th>Classes</th>
                         <?php
                         foreach ($sessions  as $session) { ?>
-                          <th style="text-align: center;">Maximum tuition fee in class</th>
+                          <th style="text-align: center;">Maximum fee in class</th>
                         <?php } ?>
                       </tr>
 

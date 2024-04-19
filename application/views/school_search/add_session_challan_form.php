@@ -113,7 +113,7 @@
                 $max_tuition_fee = $this->db->query($query)->row()->max_tution_fee;
                 $max_tuition_fee = (int) preg_replace('/[^0-9.]/', '', $max_tuition_fee);
                 ?>
-                <h6>Max tuition fee charge by school for session <?php echo $school_session->sessionYearTitle; ?>: <?php echo $max_tuition_fee . " Rs. Per Month"; ?></h6>
+                <h6>Max fee charge by school for session <?php echo $school_session->sessionYearTitle; ?>: <?php echo $max_tuition_fee . " Rs. Per Month"; ?></h6>
                 <p>School administration apply for session <?php echo $school_session->sessionYearTitle; ?>
                     <?php echo $school_session->regTypeTitle; ?> level <?php echo $school_session->levelofInstituteTitle; ?> and submit the following Challan detail.
                 </p>

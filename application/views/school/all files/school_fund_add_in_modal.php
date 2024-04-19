@@ -34,9 +34,9 @@
 
 		<div class="form-group" style="padding-top:8px;">
 
-			<label class="control-label col-sm-2" for="tuitionFee">Tuition Fees:</label>
+			<label class="control-label col-sm-2" for="tuitionFee">Fees:</label>
 			<div class="col-sm-10">
-				<input type="number" name="tuitionFee" placeholder="Tuition Fees i-e 500, 600, 700 etc" class="form-control" form="Form1" id="tuitionFee" required />
+				<input type="number" name="tuitionFee" placeholder="Fees i-e 500, 600, 700 etc" class="form-control" form="Form1" id="tuitionFee" required />
 			</div>
 		</div>
 

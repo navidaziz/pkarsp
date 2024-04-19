@@ -742,7 +742,7 @@
             </table>
 
             <li>
-              <p><i>Session / class wise monthly tuition fee</i></p>
+              <p><i>Session / class wise monthly fee</i></p>
             </li>
             <?php $classes = $this->db->query("SELECT * FROM class")->result(); ?>
             <table class="table table-bordered table2" style="font-size: 11px;">
@@ -970,7 +970,7 @@
               $class_count = 0;
             ?>
               <!-- <li>
-                As per para 3. of notesheet, the school administration increase max tuition fee for
+                As per para 3. of notesheet, the school administration increase max fee for
                 <?php foreach ($fee_increase as $session => $classes) { ?>
                   session <?php echo $session  ?>
                   <?php foreach ($classes as $class => $increase) { ?>

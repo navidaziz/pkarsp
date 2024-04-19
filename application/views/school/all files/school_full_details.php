@@ -50,51 +50,51 @@
   <?php //var_dump($school);exit; 
   ?>
   <section class="invoice" style="border:1px solid #ccc;">
-      <?php
-      $edit_allow = false;
-      $section_c = true;
-      $section_e = true;
-      $query = "SELECT owner_id from schools WHERE schoolId = '" . $school->schoolId . "'";
-      $owner_id = $this->db->query($query)->row()->owner_id;
-      $userId = $this->session->userdata('userId');
-      if ($owner_id == $userId) {
-        $edit_allow = true;
-      }
+    <?php
+    $edit_allow = false;
+    $section_c = true;
+    $section_e = true;
+    $query = "SELECT owner_id from schools WHERE schoolId = '" . $school->schoolId . "'";
+    $owner_id = $this->db->query($query)->row()->owner_id;
+    $userId = $this->session->userdata('userId');
+    if ($owner_id == $userId) {
+      $edit_allow = true;
+    }
 
-      ?>
+    ?>
     <!-- title row -->
     <?php if ($school->status == 0 and $edit_allow) { ?>
       <div class="row alert alert-danger">
         <div class="col-md-6">
-            <h4>Guidelines for submission of online application</h4>
-          
-        <ol>
+          <h4>Guidelines for submission of online application</h4>
+
+          <ol>
             <li>School must submit updated online data in all sections B to H for every academic session</li>
             <li>Data of all Sections B to H must be updated for every academic session</li>
-            <li>Section C (Student Enrollment) and Section E (Fee Details) will be blank for each session. So  add section C (Student Enrollment) and E (Fee Details) data. Your application will be considered incomplete without sections C and E.</li>
-        <li>After completing the data of each section for the session you can add the bank STAN Number and Transaction date</li>
-        <li>After entering Bank STAN Number and Transaction date you can submit online application and get print button option enabled</li>
-        </ol> 
-        <p>Remember - once you submit the "Online Application". You will not be able to edit the data again. Thanks<br />
+            <li>Section C (Student Enrollment) and Section E (Fee Details) will be blank for each session. So add section C (Student Enrollment) and E (Fee Details) data. Your application will be considered incomplete without sections C and E.</li>
+            <li>After completing the data of each section for the session you can add the bank STAN Number and Transaction date</li>
+            <li>After entering Bank STAN Number and Transaction date you can submit online application and get print button option enabled</li>
+          </ol>
+          <p>Remember - once you submit the "Online Application". You will not be able to edit the data again. Thanks<br />
 
-If you have any further queries please feel free to contact us on phone number 091-9216205.</p>
+            If you have any further queries please feel free to contact us on phone number 091-9216205.</p>
 
 
         </div>
         <div class="col-md-6" style="direction: rtl; ">
-            <h4 style="direction: rtl;">آن لائن درخواست جمع کرانے کے لیے رہنما اصول</h4>
-          
-        <ol style="direction: rtl; font-size:15px">
+          <h4 style="direction: rtl;">آن لائن درخواست جمع کرانے کے لیے رہنما اصول</h4>
+
+          <ol style="direction: rtl; font-size:15px">
             <li>اسکول کو ہر تعلیمی سیشن کے لیے تمام سیکشنز B سے H میں تازہ ترین آن لائن ڈیٹا جمع کرنا چاہیے۔</li>
             <li>تمام سیکشنز B سے H کا ڈیٹا ہر تعلیمی سیشن کے لیے اپ ڈیٹ ہونا چاہیے۔</li>
             <li>سیکشن C (طلبہ کا اندراج) اور سیکشن E (فیس کی تفصیلات) ہر سیشن کے لیے خالی ہوں گے۔ لہذا سیکشن C (طلبہ کا اندراج) اور E (فیس کی تفصیلات) ڈیٹا شامل کریں۔ آپ کی درخواست سیکشن سی اور ای کے بغیر نامکمل سمجھی جائے گی۔</li>
-        <li>سیشن کے لیے ہر سیکشن کا ڈیٹا مکمل کرنے کے بعد آپ بینک سٹین نمبر اور ٹرانزیکشن کی تاریخ شامل کر سکتے ہیں۔</li>
-        <li>بینک سٹین نمبر اور لین دین کی تاریخ داخل کرنے کے بعد آپ آن لائن درخواست جمع کر سکتے ہیں اور پرنٹ بٹن کا اختیار فعال کر سکتے ہیں۔</li>
-        </ol> 
-        <p>یاد رکھیں - ایک بار جب آپ "آن لائن درخواست" جمع کرائیں گے۔ آپ دوبارہ ڈیٹا میں ترمیم نہیں کر سکیں گے۔ شکریہ 
-        <br />
-        اگر آپ کے مزید سوالات ہیں تو براہ کرم بلا جھجھک ہم سے فون نمبر 091-9216205 پر رابطہ کریں۔
-        </p>
+            <li>سیشن کے لیے ہر سیکشن کا ڈیٹا مکمل کرنے کے بعد آپ بینک سٹین نمبر اور ٹرانزیکشن کی تاریخ شامل کر سکتے ہیں۔</li>
+            <li>بینک سٹین نمبر اور لین دین کی تاریخ داخل کرنے کے بعد آپ آن لائن درخواست جمع کر سکتے ہیں اور پرنٹ بٹن کا اختیار فعال کر سکتے ہیں۔</li>
+          </ol>
+          <p>یاد رکھیں - ایک بار جب آپ "آن لائن درخواست" جمع کرائیں گے۔ آپ دوبارہ ڈیٹا میں ترمیم نہیں کر سکیں گے۔ شکریہ
+            <br />
+            اگر آپ کے مزید سوالات ہیں تو براہ کرم بلا جھجھک ہم سے فون نمبر 091-9216205 پر رابطہ کریں۔
+          </p>
 
 
         </div>
@@ -102,7 +102,7 @@ If you have any further queries please feel free to contact us on phone number 0
     <?php } ?>
     <div class="row page_break_before light-blue">
 
-      
+
 
 
 
@@ -534,7 +534,7 @@ If you have any further queries please feel free to contact us on phone number 0
                 <td><?php echo $ac->enrolled; ?></td>
                 <td class="no-print">
                   <?php if ($school->status != 1) {
-                 // if ($school->status == 0 or $userId=='28727' or $userId=='28870') {
+                    // if ($school->status == 0 or $userId=='28727' or $userId=='28870') {
                   ?>
                     <a href="javascript:void(0);" title="Delete Enrollement" onclick="delete_record_by_id(<?php echo $ac->ageAndClassId; ?>, 'ageAndClassId', 'age_and_class', 'enrolled_row_');"> &nbsp;<i class="fa fa-trash-o text-danger"></i>
                     </a>
@@ -564,7 +564,8 @@ If you have any further queries please feel free to contact us on phone number 0
         </table>
         <div style="text-align: center; margin-bottom:10px">
           <?php if ($school->status != 1) {
-          //if ($school->status == 0 and $edit_allow or $userId=='2887') { ?>
+            //if ($school->status == 0 and $edit_allow or $userId=='2887') { 
+          ?>
             <button type="button" onclick="load_form_in_modal(<?php echo $schoolId; ?>, 'Add New Enrollement To School', 'School/school_enrollement_add_ajax');" class="btn btn-flat btn-sm btn-primary no-print"><i class="fa fa-plus"></i> Add Enrollement
             </button>
 
@@ -642,9 +643,9 @@ If you have any further queries please feel free to contact us on phone number 0
           </tbody>
         </table>
         <?php if ($school->status == 0 and $edit_allow) { ?>
-        <div style="text-align: center; padding:10px;">
-          <button type="button" onclick="load_form_in_modal(<?php echo $schoolId; ?>, 'Add New Staff Member To School', 'School/school_staff_add_ajax');" class="btn btn-flat btn-sm btn-primary no-print"><i class="fa fa-plus"></i> Add Staff
-          </button>
+          <div style="text-align: center; padding:10px;">
+            <button type="button" onclick="load_form_in_modal(<?php echo $schoolId; ?>, 'Add New Staff Member To School', 'School/school_staff_add_ajax');" class="btn btn-flat btn-sm btn-primary no-print"><i class="fa fa-plus"></i> Add Staff
+            </button>
           </div>
         <?php } ?>
       </div>
@@ -663,7 +664,7 @@ If you have any further queries please feel free to contact us on phone number 0
               <?php if ($school->reg_type_id == '2') { ?>
                 <!--<th>Addmission Fee</th>-->
               <?php } ?>
-              <th>Monthly Tuition Fee</th>
+              <th>Monthly Fee</th>
               <!--<th>Security Fund</th>-->
               <!--<th>Other Fund</th>-->
               <?php if ($school->status == '2') { ?>
@@ -744,14 +745,14 @@ If you have any further queries please feel free to contact us on phone number 0
             <?php } ?>
           </tbody>
         </table>
-        
+
         <?php if ($school->status == 0 and $edit_allow) { ?>
           <!--<div style="text-align: center;">-->
-          <!--  <button type="button" onclick="load_form_in_modal(<?php echo $schoolId; ?>, 'Add School Tuition Fee', 'School/school_fund_add_ajax');" class="btn btn-flat btn-sm btn-primary no-print"><i class="fa fa-plus"></i> Add Classes Tuition Fee-->
+          <!--  <button type="button" onclick="load_form_in_modal(<?php echo $schoolId; ?>, 'Add School Fee', 'School/school_fund_add_ajax');" class="btn btn-flat btn-sm btn-primary no-print"><i class="fa fa-plus"></i> Add Classes Fee-->
           <!--  </button>-->
           <!--</div>-->
         <?php } ?>
-        
+
         <div class="row">
           <div class="col-sm-8">
 
@@ -778,9 +779,9 @@ If you have any further queries please feel free to contact us on phone number 0
 
         </div>
         <?php if ($school->status == 0 and $edit_allow) { ?>
-        <div style="text-align: center; padding:10px;">
-          <button type="button" onclick="load_form_in_modal(<?php echo $schoolId; ?>, 'Add Student Dues/Funds Details To School', 'School/school_fund_add_ajax');" class="btn btn-flat btn-sm btn-primary no-print"><i class="fa fa-plus"></i> Add Student Dues/Funds Details
-          </button>
+          <div style="text-align: center; padding:10px;">
+            <button type="button" onclick="load_form_in_modal(<?php echo $schoolId; ?>, 'Add Student Dues/Funds Details To School', 'School/school_fund_add_ajax');" class="btn btn-flat btn-sm btn-primary no-print"><i class="fa fa-plus"></i> Add Student Dues/Funds Details
+            </button>
           </div>
         <?php } ?>
       </div>
@@ -980,10 +981,10 @@ If you have any further queries please feel free to contact us on phone number 0
                   <h4>
                     <i class="fa fa-get-pocket" aria-hidden="true"></i>
                     Fetch previous session data
-                    
+
                   </h4>
                 </a>
-                
+
                 <?php if ($school->status == 0 and $edit_allow) { ?>
                   <a class=" btn btn-primary" href="<?php echo base_url('school/add_section_f/' . $schoolId); ?>" title="Add Security Measures"> &nbsp;<i class="fa fa-plus"></i>Add Security Measures </a>
                 <?php } ?>
@@ -1242,113 +1243,113 @@ If you have any further queries please feel free to contact us on phone number 0
       <!-- col-md-offset-1 -->
       <div class="col-md-12">
 
-        <?php 
+        <?php
         $stan_submission = true;
         if ($section_c == false) { ?>
           <h4 style="color:red"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Section C is missing. </h4>
-        <?php 
-        $stan_submission =false;
+        <?php
+          $stan_submission = false;
         } ?>
 
         <?php if ($section_e == false) { ?>
           <h4 style="color:red"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Section E is missing. </h4>
-        <?php 
-        $stan_submission =false;
+        <?php
+          $stan_submission = false;
         } ?>
 
-        
-<?php if($stan_submission==true){ ?>
-<h4>Submit Bank Challan</h4>
-        <form class="form-horizontal" method="post" enctype="multipart/form-data" id="role_form" action="<?php echo base_url('school/add_session_bank_challan'); ?>">
 
-          <input type="hidden" name="school_id" value="<?php echo $schoolId; ?>" />
+        <?php if ($stan_submission == true) { ?>
+          <h4>Submit Bank Challan</h4>
+          <form class="form-horizontal" method="post" enctype="multipart/form-data" id="role_form" action="<?php echo base_url('school/add_session_bank_challan'); ?>">
+
+            <input type="hidden" name="school_id" value="<?php echo $schoolId; ?>" />
 
 
-          <?php if ($school->registrationNumber <= 0) { ?>
-            <input type="hidden" name="apply_for" value="Registration" />
-          <?php } else { ?>
-            <input type="hidden" name="apply_for" value="<?php echo @$school->regTypeTitle; ?>" />
-          <?php } ?>
-          <small><i>"STAN can be found on the upper right corner of bank generated receipt"</i></small>
-          <table class="table">
-            <tr>
-              <th>Challan For </th>
-              <th>Bank Challan for Session</th>
-              <th>Bank Transaction No (STAN No)</th>
-              <th>Bank Transaction Date</th>
-              <th>Add Challan</th>
-            </tr>
-            <?php if ($school->status == 0 and $edit_allow) { ?>
-              <tr>
-                <td>
-                  <?php if ($school->registrationNumber <= 0) { ?>
-                    <input type="hidden" name="reg_type_id" value="1" />
-                    New Registration
-                  <?php } else { ?>
-                    <?php $query = "SELECT reg_type_id FROM school WHERE schoolId = '" . $schoolId . "'";
-                    $reg_type_id = $this->db->query($query)->result()[0]->reg_type_id;
-                    ?>
-                    <input type="hidden" name="reg_type_id" value="<?php echo $reg_type_id; ?>" />
-                    <?php echo @$school->regTypeTitle; ?>
-                  <?php } ?>
-                </td>
-                <td><?php echo @$school->sessionYearTitle; ?></td>
-                <td><input required="required" min="1000" maxlength="6" type="number" autocomplete="off" id="bt_no" name="bt_no[]" class="form-control" /></td>
-                <td>
-                  <input required="required" id='bt_date' min="2017-01-01" max="<?php echo date("Y-m-d") ?>" type="date" name="bt_date[]" class="form-control bt_date" />
-                </td>
-                <td><input style="display: block;" type="submit" class="btn btn-info" value="Add Bank Challan" id="add_form" />
-                </td>
-              </tr>
-            <?php } ?>
-            <?php
-            $query = "SELECT * FROM bank_transaction where school_id = '" . $schoolId . "'";
-            $session_bank_challans = $this->db->query($query)->result();
-            if ($session_bank_challans) {
-              foreach ($session_bank_challans as $session_bank_challan) { ?>
-                <tr>
-                  <th><?php echo @$school->regTypeTitle; ?></th>
-                  <th><?php echo @$school->sessionYearTitle; ?></th>
-                  <th><?php echo $session_bank_challan->bt_no; ?></th>
-                  <th><?php
-                      if ($session_bank_challan->bt_date) {
-                        echo date("d m, Y", strtotime($session_bank_challan->bt_date));
-                      }
-                      ?></th>
-                  <th>
-                    <?php if ($school->status == 0 and $edit_allow) { ?>
-                      <a href="<?php echo site_url('school/remove_bank_challan/' . $schoolId . '/' . $session_bank_challan->bt_id); ?>"><small>
-                          <i>Remove</i>
-                        </small></a>
-                    <?php } ?>
-                  </th>
-                </tr>
-
-              <?php } ?>
-              <tr>
-                <td colspan="5" style="text-align: center;">
-                  <?php if ($school->status == 0 and $edit_allow) { ?>
-                    <a href="<?php echo site_url('school/submit_application_online/' . $schoolId . '/' . $school->schoolId) ?>" onclick="return confirm('Are you sure. you want to submit?')" class=" btn btn-danger"> Submit Application Online</a>
-                  <?php } ?>
-
-                  <?php if ($school->status != 0) { ?>
-                    <a target="new" href="<?php echo site_url('school/print_application/' . $schoolId . '/' . $school->schoolId) ?>" class=" btn btn-success"> <i class="fa fa-print"></i> Print Application</a>
-                  <?php } ?>
-                </td>
-              </tr>
+            <?php if ($school->registrationNumber <= 0) { ?>
+              <input type="hidden" name="apply_for" value="Registration" />
             <?php } else { ?>
-              <tr>
-                <td colspan="5" style="text-align: center;">
-                  No Bank Challan Submitted.
-                </td>
-              </tr>
+              <input type="hidden" name="apply_for" value="<?php echo @$school->regTypeTitle; ?>" />
             <?php } ?>
-          </table>
-        </form>
+            <small><i>"STAN can be found on the upper right corner of bank generated receipt"</i></small>
+            <table class="table">
+              <tr>
+                <th>Challan For </th>
+                <th>Bank Challan for Session</th>
+                <th>Bank Transaction No (STAN No)</th>
+                <th>Bank Transaction Date</th>
+                <th>Add Challan</th>
+              </tr>
+              <?php if ($school->status == 0 and $edit_allow) { ?>
+                <tr>
+                  <td>
+                    <?php if ($school->registrationNumber <= 0) { ?>
+                      <input type="hidden" name="reg_type_id" value="1" />
+                      New Registration
+                    <?php } else { ?>
+                      <?php $query = "SELECT reg_type_id FROM school WHERE schoolId = '" . $schoolId . "'";
+                      $reg_type_id = $this->db->query($query)->result()[0]->reg_type_id;
+                      ?>
+                      <input type="hidden" name="reg_type_id" value="<?php echo $reg_type_id; ?>" />
+                      <?php echo @$school->regTypeTitle; ?>
+                    <?php } ?>
+                  </td>
+                  <td><?php echo @$school->sessionYearTitle; ?></td>
+                  <td><input required="required" min="1000" maxlength="6" type="number" autocomplete="off" id="bt_no" name="bt_no[]" class="form-control" /></td>
+                  <td>
+                    <input required="required" id='bt_date' min="2017-01-01" max="<?php echo date("Y-m-d") ?>" type="date" name="bt_date[]" class="form-control bt_date" />
+                  </td>
+                  <td><input style="display: block;" type="submit" class="btn btn-info" value="Add Bank Challan" id="add_form" />
+                  </td>
+                </tr>
+              <?php } ?>
+              <?php
+              $query = "SELECT * FROM bank_transaction where school_id = '" . $schoolId . "'";
+              $session_bank_challans = $this->db->query($query)->result();
+              if ($session_bank_challans) {
+                foreach ($session_bank_challans as $session_bank_challan) { ?>
+                  <tr>
+                    <th><?php echo @$school->regTypeTitle; ?></th>
+                    <th><?php echo @$school->sessionYearTitle; ?></th>
+                    <th><?php echo $session_bank_challan->bt_no; ?></th>
+                    <th><?php
+                        if ($session_bank_challan->bt_date) {
+                          echo date("d m, Y", strtotime($session_bank_challan->bt_date));
+                        }
+                        ?></th>
+                    <th>
+                      <?php if ($school->status == 0 and $edit_allow) { ?>
+                        <a href="<?php echo site_url('school/remove_bank_challan/' . $schoolId . '/' . $session_bank_challan->bt_id); ?>"><small>
+                            <i>Remove</i>
+                          </small></a>
+                      <?php } ?>
+                    </th>
+                  </tr>
 
-<?php }else{ ?>
+                <?php } ?>
+                <tr>
+                  <td colspan="5" style="text-align: center;">
+                    <?php if ($school->status == 0 and $edit_allow) { ?>
+                      <a href="<?php echo site_url('school/submit_application_online/' . $schoolId . '/' . $school->schoolId) ?>" onclick="return confirm('Are you sure. you want to submit?')" class=" btn btn-danger"> Submit Application Online</a>
+                    <?php } ?>
 
-<?php } ?>
+                    <?php if ($school->status != 0) { ?>
+                      <a target="new" href="<?php echo site_url('school/print_application/' . $schoolId . '/' . $school->schoolId) ?>" class=" btn btn-success"> <i class="fa fa-print"></i> Print Application</a>
+                    <?php } ?>
+                  </td>
+                </tr>
+              <?php } else { ?>
+                <tr>
+                  <td colspan="5" style="text-align: center;">
+                    No Bank Challan Submitted.
+                  </td>
+                </tr>
+              <?php } ?>
+            </table>
+          </form>
+
+        <?php } else { ?>
+
+        <?php } ?>
       </div>
     </div>
 

@@ -1553,7 +1553,7 @@ FROM
       // ),
       array(
         'field' =>  'tuitionFee[]',
-        'label' =>  'Tuition Fee',
+        'label' =>  'Fee',
         'rules' =>  'trim|required'
       ),
       array(
@@ -2091,7 +2091,7 @@ FROM
       ),
       array(
         'field' =>  'tuitionFee',
-        'label' =>  'Tuition Fee',
+        'label' =>  'Fee',
         'rules' =>  'trim|required'
       ),
       array(

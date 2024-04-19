@@ -397,7 +397,7 @@ if ($this->session->userdata('role_id') == '34' or $this->session->userdata('rol
         <table class="table table2 table-bordered">
             <tr>
                 <th colspan="21">
-                    <h4>Session Wise Monthly Tuition Fee</h4>
+                    <h4>Session Wise Monthly Fee</h4>
                 </th>
             </tr>
 

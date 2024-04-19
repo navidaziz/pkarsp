@@ -305,7 +305,7 @@
 if ($this->session->userdata('role_id') == '34' or $this->session->userdata('role_id') == '26'  or $this->session->userdata('role_id') == '13' or $this->session->userdata('role_id') == '9') { ?>
     <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
         <h4> <i class="fa fa-info-circle" aria-hidden="true"></i>
-            Session Wise Monthly Tuition Fee
+            Session Wise Monthly Fee
         </h4>
         <div class="table-responsive">
             <table class="table table2 table-bordered">

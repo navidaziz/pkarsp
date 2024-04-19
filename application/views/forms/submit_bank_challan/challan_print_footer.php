@@ -1,5 +1,5 @@
 <?php if ($max_tuition_fee) { ?>
-    <p style="text-align: center;">Note: Challan calculated on max tuition fee
+    <p style="text-align: center;">Note: Challan calculated on max fee
         <strong>
             <?php echo $max_tuition_fee; ?> Rs. Per / Month
         </strong>

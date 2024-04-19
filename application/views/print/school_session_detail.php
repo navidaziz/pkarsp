@@ -735,7 +735,7 @@
             <!--  <?php echo $otherFund_row; ?>-->
             <!--</tr>-->
             <tr>
-              <th>Tuition Fee</th>
+              <th>Fee</th>
               <?php echo $tuitionFee_row; ?>
             </tr>
 

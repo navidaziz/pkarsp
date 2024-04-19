@@ -391,7 +391,7 @@ class Temp_controller extends CI_Controller
           <th>Session</th>
           <th>Registration / Renewals</th>
           <th>School Level</th>
-          <!--<th>Max Tuition Fee</th>-->
+          <!--<th>Max Fee</th>-->
           <!--<th>Total Students</th>-->
           <!--<th>Teaching Staffs</th>-->
           <!--<th>Non Teaching Staffs</th>-->

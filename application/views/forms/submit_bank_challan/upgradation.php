@@ -24,7 +24,7 @@
               <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
                 <h4> <i class="fa fa-info-circle" aria-hidden="true"></i> How system calculate deposit fee challan?</h4>
                 <ol>
-                  <li>According to data you entered, your institute charged max tuition fee
+                  <li>According to data you entered, your institute charged max fee
                     <strong><?php echo $max_tuition_fee; ?> Rs. </strong> per month for Session: <strong><?php echo $session_detail->sessionYearTitle; ?></strong>.
                   </li>
                   <li>As per PSRA Fee Structure, Institute charged monthly fee between

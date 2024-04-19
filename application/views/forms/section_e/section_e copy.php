@@ -55,7 +55,7 @@
             <div class="col-md-12">
               <h4 style="border-left: 20px solid #9FC8E8; padding-left:5px"><strong>SECTION E</strong> (SCHOOL FEE DETAIL)<br />
                 <small class="guideline" style="color: red;">
-                  Note: Please fill exact tuition fee details as this data will be used in making PSRA fee bank challan for you at the end of this application form.
+                  Note: Please fill exact fee details as this data will be used in making PSRA fee bank challan for you at the end of this application form.
                   <br />
                   <p style="font-weight: bold; font-family: 'Noto Nastaliq Urdu Draft', serif !important; direction: rtl;">
                     براہ کرم ٹیوشن فیس کی صحیح تفصیلات پُر کریں کیونکہ اس ڈیٹا کو اس درخواست فارم کے آخر میں آپ کے لیے PSRA فیس بینک چالان بنانے میں استعمال کیا جائے گا۔
@@ -129,7 +129,7 @@
                   <?php
                   foreach ($sessions  as $session) { ?>
                     <th style="text-align: center; display: none;">Admision </th>
-                    <th style="text-align: center;">Maximum tuition fee in class</th>
+                    <th style="text-align: center;">Maximum fee in class</th>
                     <th style="text-align: center; display: none;">Security</th>
                     <th style="text-align: center; display: none;">Others</th>
                   <?php } ?>

@@ -1211,7 +1211,7 @@
                   <th rowspan="2">Rooms <small style="display:blockx">(In Number)</small></th>
                   <th rowspan="2">Rooms Size <small>(sq feet)</small></th>
                   <th colspan="2">Students</th>
-                  <th rowspan="2" style="width: 80px;">Max Tuition Fee</th>
+                  <th rowspan="2" style="width: 80px;">Max Fee</th>
                   <th rowspan="2">Regional language</th>
                   <th rowspan="2" style="width: 200px;">Publisher's textbooks are being taught in each levels</th>
 
@@ -1325,7 +1325,7 @@
 
                   <th style=" vertical-align:bottom; text-align: center;">
 
-                    <small style="font-size: 8px;">Max Tuition Fee</small>
+                    <small style="font-size: 8px;">Max Fee</small>
                   </th>
                   <th colspan="2" style="padding-top:10px;">
 

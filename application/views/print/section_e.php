@@ -243,7 +243,7 @@
             <table class="table table2 table-bordered">
               <tr>
                 <th colspan="17">
-                  <h4>Sessions and class wise monthly tuition fee comparison</h4>
+                  <h4>Sessions and class wise monthly fee comparison</h4>
                 </th>
               </tr>
 

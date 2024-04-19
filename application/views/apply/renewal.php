@@ -164,7 +164,7 @@
               <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 15px; padding: 5px;">
                 <h4> <i class="fa fa-info-circle" aria-hidden="true"></i> How system calculate renewal fee challan ?</h4>
                 <ol>
-                  <li>According to registration with PSRA, your institute charged max tuition fee
+                  <li>According to registration with PSRA, your institute charged max fee
                     Rs. <strong><?php echo $max_tuition_fee; ?></strong> per month.</li>
                   <li>As per PSRA rule institute charged monthly fee between
                     <strong>Rs.<?php echo $fee_sturucture->fee_min; ?> </strong> and <strong> Rs.<?php echo $fee_sturucture->fee_max; ?></strong> pay

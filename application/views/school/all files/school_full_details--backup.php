@@ -28,9 +28,9 @@
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
-  
+
   <section class="content-header">
-     
+
     <h1>
       School
       <small>details</small>
@@ -46,33 +46,33 @@
   ?>
   <section class="invoice" style="border:1px solid #ccc;">
     <!-- title row -->
-    <?php if (1 ==0) { ?>
-    <div class="row alert alert-danger">
+    <?php if (1 == 0) { ?>
+      <div class="row alert alert-danger">
         <div class="col-md-6">
           <small>
-         Guidelines for online apply<br />
-         Please update the data of all sections (B,C,D,E,F,G,H) for session <?php echo @$school->sessionYearTitle; ?>. Sections C and E are blank when you apply for any session. So please fill section C and E data before submitting online application otherwise your form will be considered incomplete. In case of any problem contact MIS Section. Phone number 091-9216205.
-         
-         </small>
+            Guidelines for online apply<br />
+            Please update the data of all sections (B,C,D,E,F,G,H) for session <?php echo @$school->sessionYearTitle; ?>. Sections C and E are blank when you apply for any session. So please fill section C and E data before submitting online application otherwise your form will be considered incomplete. In case of any problem contact MIS Section. Phone number 091-9216205.
+
+          </small>
+        </div>
+        <div class="col-md-6" style="direction: rtl !important;">
+          <small>
+
+            آن لائن اپلائی کرنے کے لیے گائیڈ لائن
+            <br />
+
+            نوٹ: براہ کرم سیشن 2018-2019 کے لیے تمام سیکشنز (B,C,D,E,F,G,H) کا ڈیٹا اپ ڈیٹ کریں۔ جب آپ کسی بھی سیشن کے لیے آن لائن درخواست دیتے ہیں تو سیکشنز C اور E خالی ہوتے ہیں۔ لہذا براہ کرم آن لائن درخواست جمع کرانے سے پہلے سیکشن C اور E ڈیٹا کو پُر کریں ورنہ آپ کا فارم نامکمل سمجھا جائے گا۔ کسی بھی پریشانی کی صورت میں ایم آئی ایس سیکشن سے رابطہ کریں۔ فون نمبر
+            <span style="direction: ltr !important;">091-9216205</span>
+          </small>
+        </div>
       </div>
-  <div class="col-md-6" style="direction: rtl !important;">
-          <small >
-              
-              آن لائن اپلائی کرنے کے لیے گائیڈ لائن
-              <br />
-              
-      نوٹ: براہ کرم سیشن 2018-2019 کے لیے تمام سیکشنز (B,C,D,E,F,G,H) کا ڈیٹا اپ ڈیٹ کریں۔ جب آپ کسی بھی سیشن کے لیے آن لائن درخواست دیتے ہیں تو سیکشنز C اور E خالی ہوتے ہیں۔ لہذا براہ کرم آن لائن درخواست جمع کرانے سے پہلے سیکشن C اور E ڈیٹا کو پُر کریں ورنہ آپ کا فارم نامکمل سمجھا جائے گا۔ کسی بھی پریشانی کی صورت میں ایم آئی ایس سیکشن سے رابطہ کریں۔ فون نمبر
-       <span style="direction: ltr !important;">091-9216205</span>
-      </small>
-      </div>
-    </div>
     <?php } ?>
     <div class="row page_break_before light-blue">
-        
-         
-      
-        
-        
+
+
+
+
+
       <div class="col-xs-12">
         <h2 class="page-header" style="font-weight: bolder;height:  auto;">
           <i class="fa fa-university"></i> <?php echo @$school->schoolName; ?> &nbsp;&nbsp;&nbsp; <?php if (!empty($school->ppcCode)) {
@@ -416,15 +416,15 @@
               <tr>
                 <td class="text-center" colspan="2" id="empty_td_staff">
                   <h3 class="text-center" style="color:red;">No Physical Facility Added Yet.</h3>
-                    <br />
-                    <br />
-                    <a class="btn btn-danger" href="<?php echo site_url("school/fetch_previous_data/" . $schoolId . "/" . $school->schoolId); ?>">
-                      <h4>
-                        <i class="fa fa-get-pocket" aria-hidden="true"></i>
-                        Fetch previous session data <?php echo $schoolId; ?> - <?php echo $school->status; ?>
-                      </h4>
-                    </a>
-                  
+                  <br />
+                  <br />
+                  <a class="btn btn-danger" href="<?php echo site_url("school/fetch_previous_data/" . $schoolId . "/" . $school->schoolId); ?>">
+                    <h4>
+                      <i class="fa fa-get-pocket" aria-hidden="true"></i>
+                      Fetch previous session data <?php echo $schoolId; ?> - <?php echo $school->status; ?>
+                    </h4>
+                  </a>
+
                   <?php if ($school->status == 2) { ?>
                     <a class=" btn btn-primary" href="<?php echo base_url('school/add_section_b/' . $schoolId); ?>" title="Add Physical Facilities"> &nbsp;<i class="fa fa-plus"></i>Add Physical Facilities</a>
                   <?php } ?>
@@ -606,7 +606,7 @@
               <?php if ($school->reg_type_id == '2') { ?>
                 <!--<th>Addmission Fee</th>-->
               <?php } ?>
-              <th>Monthly Tuition Fee</th>
+              <th>Monthly Fee</th>
               <!--<th>Security Fund</th>-->
               <!--<th>Other Fund</th>-->
               <?php if ($school->status == '2') { ?>

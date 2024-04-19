@@ -109,7 +109,7 @@
                   <ol>
                     <li>According to the data you have entered, your institute was established in <strong><?php echo date('M Y', strtotime($school->yearOfEstiblishment)); ?></strong>.
                       For session <strong><?php echo $session_detail->sessionYearTitle; ?></strong> your institute
-                      charged Max Tuition Fee
+                      charged Max Fee
                       <strong><?php echo $max_tuition_fee; ?> Rs. </strong> per month.
                     </li>
                     <li>As per PSRA Registration and Renewal Fee Structure, Institute charging monthly fee between
