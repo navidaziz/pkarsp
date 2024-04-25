@@ -247,7 +247,7 @@
                   <li>Phone No: <strong><?php echo $school->phone_no; ?></strong></li>
                   <li>Mobile No: <strong><?php echo $school->mobile_no; ?></strong></li>
                   <li>Owner No: <strong><?php echo $school->owner_no; ?></strong></li>
-                  <oul>
+                </ol>
               </td>
             </tr>
           </table>

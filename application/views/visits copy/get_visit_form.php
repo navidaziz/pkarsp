@@ -1762,7 +1762,6 @@
                     location.reload();
                 } else {
                     $('#result_response').html(response);
-
                 }
 
             }

@@ -1,0 +1,369 @@
+.block_div {
+	/* border: 1px solid #9FC8E8;
+	border-radius: 10px; */
+	min-height: 3px;
+	margin: 3px;
+	padding: 10px;
+	background-color: var(--bg);
+	color: white;
+}
+
+/* .block_div {
+	border: 1px solid #9FC8E8;
+	border-radius: 10px;
+	min-height: 3px;
+	margin: 3px;
+	padding: 10px;
+	background-color: #38404B;
+} */
+
+/* Variables */
+/* Replace variables with their actual values */
+:root {
+	--font: 'Roboto', sans-serif;
+	--bg: #37404a;
+	--white: #FFF;
+	--black: #000;
+	--grey: #333;
+	--rose: #E87E91;
+	--blue-light: #73bec8;
+	--blue-lighter: #ABDAD3;
+	--green: #85FFC7;
+	--red: #EF5350;
+}
+
+/* Margin & Padding */
+.m-b-xs {
+	margin-bottom: 2%;
+}
+
+.m-b-md {
+	margin-bottom: 10%;
+}
+
+.m-t-xs {
+	margin-top: 2%;
+}
+
+.m-t-sm {
+	margin-top: 5%;
+}
+
+/* General */
+* {
+	outline: 0 !important;
+	color: var(--white);
+}
+
+body {
+	background-color: var(--bg);
+}
+
+h1 {
+	font-family: var(--font);
+	font-size: 2.2em;
+	font-weight: 300;
+	color: var(--green);
+	text-transform: uppercase;
+}
+
+p {
+	font-family: var(--font);
+	font-size: 1.1em;
+	font-weight: 300;
+	color: var(--black);
+}
+
+
+a {
+	color: var(--white);
+}
+
+a:hover {
+	text-decoration: none;
+	color: var(--white);
+}
+
+#visits label,
+#visits .labels {
+	display: block;
+	margin-bottom: 2%;
+	font-family: var(--font);
+	font-size: 1.1em;
+	font-weight: 300;
+	color: var(--white);
+	letter-spacing: 0.5px;
+}
+
+/* ... */
+/* ... */
+
+#visits input::-webkit-input-placeholder {
+	color: transparent !important;
+}
+
+#visits input::-moz-placeholder {
+	color: transparent !important;
+}
+
+#visits input:-ms-input-placeholder {
+	color: transparent !important;
+}
+
+#visits input:-moz-placeholder {
+	color: transparent !important;
+}
+
+#visits input,
+#visits select {
+	display: block;
+	width: 100%;
+	overflow: hidden;
+	outline: none;
+	border: 2px solid var(--grey);
+}
+
+#visits input {
+	margin-top: 1.5%;
+	padding: 0 0 5px 0;
+	background: transparent;
+	border: none;
+	outline: none;
+	border-bottom: 2px solid var(--white); 
+	font-size: 1.1em;
+	font-weight: 300;
+	color: var(--green);
+}
+
+#visits input:focus {
+	border-color: var(--green);
+}
+
+/* ... */
+
+#visits [type="checkbox"],
+#visits [type="radio"] {
+	display: inline-block;
+	margin: 0 1px 0 0 !important;
+	position: relative;
+	top: 5px;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+	-o-appearance: none;
+	appearance: none;
+	height: 23px;
+	width: 23px;
+	transition: all 0.15s ease-out 0s;
+	background: var(--bg);
+	color: var(--white);
+	cursor: pointer;
+	outline: none;
+	z-index: 0;
+	border: 1px solid var(--white);
+}
+
+#visits [type="checkbox"]:hover,
+#visits [type="radio"]:hover {
+	border-color: var(--green);
+}
+
+#visits [type="checkbox"]:checked:before {
+	display: inline-block;
+	height: 21px;
+	width: 21px;
+	position: relative;
+	left: 0;
+	bottom: 0;
+	content: "\2713";
+	text-align: center;
+	font-family: 'Glyphicons Halflings';
+	line-height: 20px;
+	font-size: 15px;
+	color: var(--green);
+}
+
+#visits [type="checkbox"]:focus {
+	outline: none;
+	border-color: var(--white);
+}
+
+/* ... */
+
+#visits select {
+	height: 40px;
+	padding-left: 5px;
+	background-color: var(--bg);
+	border: 2px solid var(--white);
+	color: var(--green);
+}
+
+#visits select option {
+	padding: 5px 10px;
+	font-weight: 300;
+	cursor: pointer;
+}
+
+#visits select option:hover {
+	background-color: var(--green);
+}
+
+/* ... */
+
+#visits textarea {
+	resize: none;
+	margin-top: 2%;
+	padding: 10px 10px 0px 20px;
+	width: 100%;
+	height: 90px;
+	color: var(--green);
+	background-color: var(--bg);
+	border: 2px solid var(--white);
+}
+
+/* ... */
+
+#visits .btn {
+	display: inline-block;
+	position: relative;
+	width: 100%;
+	margin: 3% 0 0 0;
+	height: 45px;
+	text-transform: uppercase;
+	text-decoration: none;
+	cursor: pointer;
+	border: 3px solid var(--green);
+	border-radius: 0;
+	font-weight: 500;
+	font-size: 1.2em;
+	color: var(--green);
+	text-align: center;
+	background: none;
+	transition: color 0.25s ease;
+}
+
+#visits .btn:after {
+	position: absolute;
+	content: '';
+	top: 0;
+	left: 0;
+	width: 0;
+	height: 100%;
+	background-color: var(--green);
+	transform-origin: left;
+	transition: width 0.5s ease;
+}
+
+/* Targeting radio buttons */
+#visits [type="radio"] {
+	display: inline-block;
+	margin: 0 1px 0 0 !important;
+	position: relative;
+	top: 5px;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+	-o-appearance: none;
+	appearance: none;
+	height: 23px;
+	width: 23px;
+	transition: all 0.15s ease-out 0s;
+	background: var(--bg);
+	color: var(--white);
+	cursor: pointer;
+	outline: none;
+	z-index: 0;
+	border: 1px solid var(--white);
+}
+
+/* Styling checked radio buttons */
+#visits [type="radio"]:checked:before {
+	display: inline-block;
+	content: "\2713";
+	/* Checkmark symbol */
+	font-size: 20px;
+	/* Adjust size as needed */
+	color: var(--green);
+	/* Color of the checkmark */
+	position: absolute;
+	top: 0;
+	left: 0;
+	line-height: 23px;
+}
+
+
+
+.col-form-label{
+	font-size: 12px !important;
+}
+
+.navbar {
+	position: fixed;
+	width: 100%;
+	border-radius: 0px;
+	border-bottom: none;
+	background-color: #333;
+}
+
+.footer {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background-color: #333;
+	color: #fff;
+	text-align: center;
+	padding: 5px 0;
+}
+
+.table1_small>thead>tr>th,
+.table1_small>tbody>tr>th,
+.table1_small>tfoot>tr>th,
+.table1_small>thead>tr>td,
+.table1_small>tbody>tr>td,
+.table1_small>tfoot>tr>td {
+	padding: 1px;
+	line-height: 1;
+	vertical-align: top;
+	border-top: 1px solid #ddd;
+	color: var(--white);
+	margin: 0px !important;
+	background-color: transparent !important;
+	
+}
+
+.table1>thead>tr>th,
+.table1>tbody>tr>th,
+.table1>tfoot>tr>th,
+.table1>thead>tr>td,
+.table1>tbody>tr>td,
+.table1>tfoot>tr>td {
+	background-color: transparent !important;
+	border: none;
+	border-bottom: 1px solid gray;
+	vertical-align: middle;
+
+}
+
+.table1 {
+	background-color: transparent !important;
+	font-size: 0.93em;
+	width: 100%;
+}
+.btn-dark {
+    color: #fff;
+    background-color: #343a40;
+    border-color: #343a40;
+}
+
+.btn-light {
+    color: #212529;
+    background-color: #f8f9fa;
+    border-color: #f8f9fa;
+}
