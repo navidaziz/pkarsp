@@ -24,6 +24,17 @@
 
         </div>
 
+    <?php } else { ?>
+        <?php if ($input->high_l == 1 and $input->high_sec_l == 0 and $input->high_lab_image == NULL and $input->high_level_lab == 'Yes') { ?>
+            <div class="col-xs-4">
+                <figure class="figure" style="height: 130px;">
+                    <div style="height: 100px;  width:100%; display: flex; justify-content: center; align-items: center; border:1px solid white; padding:1px; border-radius:5px">
+                        <i style="font-size: x-large;" class="fa fa-camera" aria-hidden="true"></i>
+                    </div>
+                    <figcaption class="figure-caption text-left"><small>High School Lab Image Required</small></figcaption>
+                </figure>
+            </div>
+        <?php } ?>
     <?php } ?>
 
     <?php if ($input->high_sec_l == 1 and $input->physics_lab_image != NULL and $input->physics_lab == 'Yes') { ?>
@@ -33,28 +44,56 @@
                 <figcaption class="figure-caption text-right" style="margin-top: -20px; margin-right:5px"><small><i>Higher Secodary Physics Lab Image</i></small></figcaption>
             </figure>
         </div>
-    <?php }  ?>
-
+    <?php } else { ?>
+        <?php if ($input->high_sec_l == 1 and $input->physics_lab_image == NULL and $input->physics_lab == 'Yes') { ?>
+            <div class="col-xs-4">
+                <figure class="figure" style="height: 130px;">
+                    <div style="height: 100px;  width:100%; display: flex; justify-content: center; align-items: center; border:1px solid white; padding:1px; border-radius:5px">
+                        <i style="font-size: x-large;" class="fa fa-camera" aria-hidden="true"></i>
+                    </div>
+                    <figcaption class="figure-caption text-left"><small>Physics Lab Image Required</small></figcaption>
+                </figure>
+            </div>
+        <?php } ?>
+    <?php } ?>
     <?php if ($input->high_sec_l == 1  and $input->biology_lab_image != NULL and $input->biology_lab == 'Yes') { ?>
-
-        <div class="col-xs-12">
-            <figure class="figure" style="height: 200px; margin-bottom:10px">
-                <img style="height: 200px;  width:100%; border:1px solid white; border-radius:5px" src="<?php echo 'https://' . $_SERVER['HTTP_HOST'] . $input->biology_lab_image; ?>" />
-                <figcaption class="figure-caption text-right" style="margin-top: -20px; margin-right:5px"><small><i>Higher Secodary Biology Lab Image</i></small></figcaption>
+        <div class="col-xs-4">
+            <figure class="figure" style="height: 130px;">
+                <img style="height: 100px;  width:100%" src="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . $input->biology_lab_image; ?>" />
+                <figcaption class="figure-caption text-left"><small>Biology Lab Image</small></figcaption>
             </figure>
         </div>
-
+    <?php } else { ?>
+        <?php if ($input->high_sec_l == 1 and $input->physics_lab_image == NULL and $input->biology_lab_image == NULL and $input->biology_lab == 'Yes') { ?>
+            <div class="col-xs-4">
+                <figure class="figure" style="height: 130px;">
+                    <div style="height: 100px;  width:100%; display: flex; justify-content: center; align-items: center; border:1px solid white; padding:1px; border-radius:5px">
+                        <i style="font-size: x-large;" class="fa fa-camera" aria-hidden="true"></i>
+                    </div>
+                    <figcaption class="figure-caption text-left"><small>Biology Lab Image Required</small></figcaption>
+                </figure>
+            </div>
+        <?php } ?>
     <?php } ?>
-
     <?php if ($input->high_sec_l == 1 and $input->chemistry_lab_image != NULL and $input->chemistry_lab == 'Yes') { ?>
-        <div class="col-xs-12">
-            <figure class="figure" style="height: 200px; margin-bottom:10px">
-                <img style="height: 200px;  width:100%; border:1px solid white; border-radius:5px" src="<?php echo 'https://' . $_SERVER['HTTP_HOST'] . $input->chemistry_lab_image; ?>" />
-                <figcaption class="figure-caption text-right" style="margin-top: -20px; margin-right:5px"><small><i>Higher Secodary Chemistry Lab Image</i></small></figcaption>
+        <div class="col-xs-4">
+            <figure class="figure" style="height: 130px;">
+                <img style="height: 100px;  width:100%" src="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . $input->chemistry_lab_image; ?>" />
+                <figcaption class="figure-caption text-left"><small>Chemistry Lab Image</small></figcaption>
             </figure>
         </div>
+    <?php } else { ?>
+        <?php if ($input->high_sec_l == 1  and $input->chemistry_lab_image == NULL and $input->chemistry_lab == 'Yes') { ?>
+            <div class="col-xs-4">
+                <figure class="figure" style="height: 130px;">
+                    <div style="height: 100px;  width:100%; display: flex; justify-content: center; align-items: center; border:1px solid white; padding:1px; border-radius:5px">
+                        <i style="font-size: x-large;" class="fa fa-camera" aria-hidden="true"></i>
+                    </div>
+                    <figcaption class="figure-caption text-left"><small>Chemistry Lab Image Required</small></figcaption>
+                </figure>
+            </div>
+        <?php } ?>
     <?php } ?>
-
 </div>
 <form id="visits" class="form-horizontal" enctype="multipart/form-data" method="post">
     <input type="hidden" name="visit_id" value="<?php echo $input->visit_id; ?>" />
@@ -127,7 +166,7 @@
     <?php if ($input->high_sec_l == 1 and $input->physics_lab_image != NULL and $input->biology_lab_image == NULL and $input->biology_lab == 'Yes') { ?>
         <input type="hidden" name="form" value="picture_file" />
         <div class="alert alert-danger" style="margin-top: 5px;">
-            <h5><i class="fa fa-camera" aria-hidden="true" style="color: #AA4644;"></i> Higher Secondary School Biology Lab Image</h5>
+            <h5><i class="fa fa-camera" aria-hidden="true" style="color: #AA4644;"></i> Required Photo Documentation for Higher Secondary School Biology Lab</h5>
             Please take a picture of the Higher Secondary School Biology Lab with both the assigned official and officer present. This picture will serve as evidence of the Physics lab's existence and equipment during the visit, and it will be included in the visit report.
         </div>
         <div class="row">
@@ -152,15 +191,13 @@
             </div>
         </div>
 
-    <?php
-        $next_button = 0;
-    } ?>
+    <?php } ?>
 
     <?php if ($input->high_sec_l == 1 and $input->physics_lab_image != NULL and $input->biology_lab_image != NULL and $input->chemistry_lab_image == NULL and $input->chemistry_lab == 'Yes') { ?>
         <input type="hidden" name="form" value="picture_file" />
         <input type="hidden" name="form" value="picture_file" />
         <div class="alert alert-danger" style="margin-top: 5px;">
-            <h5><i class="fa fa-camera" aria-hidden="true" style="color: #AA4644;"></i> Higher Secondary School Chemistry Lab Image</h5>
+            <h5><i class="fa fa-camera" aria-hidden="true" style="color: #AA4644;"></i> Required Photo Documentation for Higher Secondary School Chemistry Lab</h5>
             Please take a picture of the Higher Secondary School Chemistry Lab with both the assigned official and officer present. This picture will serve as evidence of the Physics lab's existence and equipment during the visit, and it will be included in the visit report.
         </div>
         <div class="row">

@@ -27,11 +27,26 @@
             transform: translate(-50%, -50%);
             background-color: transparent;
             /* Add your additional styling here */
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid #3498db;
+            width: 120px;
+            height: 120px;
+            -webkit-animation: spin 2s linear infinite;
+            /* Safari */
+            animation: spin 2s linear infinite;
+        }
+
+        hr {
+            margin-top: 1px;
+            margin-bottom: 1px;
+            border: 0;
+            border-top: 1px solid #eee;
         }
     </style>
     <!-- Add a preloader element -->
     <div id="preloader" style="display: bloack;">
-        <img src="https://psra.gkp.pk/institute/assets/loader.png" />
+        <!-- <img src="https://psra.gkp.pk/institute/assets/loader.png" /> -->
     </div>
     <script>
         $(document).ready(function() {
@@ -56,11 +71,9 @@
     </script>
     <nav class="navbar fixed-top" style="z-index: 1;">
         <a class="navbar-brand" href="<?php echo isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '#'; ?>"><i class="fa fa-arrow-left" style="color: white;"></i></a>
-        <a class="navbar-brand" href="#">PSRA Visit APP</a>
-
-
+        <a class="navbar-brand" href="#">S-ID: <?php echo $school->schools_id; ?> (<?php echo $input->visit_reason; ?>)</a>
         <div class="pull-right" id="">
-            <a class="navbar-brand" href="<?php echo site_url("visits/index") ?>"><i class="fa fa-home" style="color: white;"></i></a>
+            <a class="navbar-brand" href="<?php echo site_url("visits/school_detail/" . $school->schools_id) ?>"><i class="fa fa-home" style="color: white;"></i></a>
         </div>
     </nav>
 
@@ -72,25 +85,22 @@
                 <main id="main" class="con tainer" style="height: 100%; padding:0px; margin-top:60px; ">
                     <div class="row">
                         <div class="col-xs-12 col-lg-offset-3 col-lg-6">
-
-
                             <?php if ($school) { ?>
-                                <div class="alert alert-success" role="alert">
-                                    <h4 class="alert-heading pull-left">Ins. ID: <?php echo $school->schools_id; ?></h4>
-                                    <h4 class="alert-heading pull-right">
-                                        <?php if ($school->registrationNumber > 0) { ?> REG. No:
+                                <div class="alert alert-success" role="alert" style="margin-bottom: 5px;">
+
+                                    <h4>
+                                        <?php if ($school->registrationNumber > 0) { ?> REGISTRATION NO:
                                             <?php echo $school->registrationNumber ?>
                                         <?php } else {
                                             echo '<span style="color:#721c24">Not Registered Yet!</span>';
                                         } ?>
                                     </h4>
-                                    <div style="clear: both;"></div>
                                     <h4 class="alert-heading"><?php echo $school->schoolName; ?></h4>
 
                                     <hr>
                                     <?php if ($form == 'a') { ?>
 
-                                        <p class="mb-0" style="text-align: center; color:inherit !important">
+                                        <p class="mb-0" style="text-align: left; color:inherit !important">
                                             <small style="color: inherit;">
 
                                                 <?php if ($school->division) {
@@ -232,7 +242,7 @@
                                     </p>
                                 </div>
                             <?php } ?>
-                            <?php if ($input->a == 1 and $input->picture_1) { ?>
+                            <?php if ($input->a == 1 and $input->picture_1 and $input->visited == 'No') { ?>
                                 <style>
                                     .btn-form {
                                         display: inline-block;
@@ -253,7 +263,8 @@
                                         background: lightgray;
                                         transition: color 0.25s ease;
                                         margin-left: 3px;
-
+                                        box-shadow: 0 4px 2px -2px white;
+                                        box
                                     }
 
                                     .complete {
@@ -336,6 +347,6 @@
                                                                                                                                                                                 } ?>">H
                                         <span style="font-size: 7px; display:block; color:inherit; margin-top:-6px">Form</span></a>
 
-                                    <hr />
+                                    <hr style="margin-top:6px; margin-bottom:10px" />
                                 </div>
                             <?php } ?>

@@ -151,7 +151,7 @@
                     </div>
                 </div>
                 <div class="col-xs-5">
-                    <input type="text" required id="male_washrooms" name="male_washrooms" value="<?php echo $input->male_washrooms; ?>" class="form-control">
+                    <input type="number" required id="male_washrooms" name="male_washrooms" value="<?php echo $input->male_washrooms; ?>" class="form-control">
                 </div>
             </div>
             <div class="col-xs-12">
@@ -161,7 +161,7 @@
                     </div>
                 </div>
                 <div class="col-xs-5">
-                    <input type="text" required id="female_washrooms" name="female_washrooms" value="<?php echo $input->female_washrooms; ?>" class="form-control">
+                    <input type="number" required id="female_washrooms" name="female_washrooms" value="<?php echo $input->female_washrooms; ?>" class="form-control">
                 </div>
             </div>
 
@@ -194,7 +194,7 @@
                     </div>
                 </div>
                 <div class="col-xs-5">
-                    <input type="text" required id="teaching_male_staff" name="teaching_male_staff" value="<?php echo $input->teaching_male_staff; ?>" class="form-control">
+                    <input type="number" required id="teaching_male_staff" name="teaching_male_staff" value="<?php echo $input->teaching_male_staff; ?>" class="form-control">
                 </div>
             </div>
             <div class="col-xs-12">
@@ -204,7 +204,7 @@
                     </div>
                 </div>
                 <div class="col-xs-5">
-                    <input type="text" required id="teaching_female_staff" name="teaching_female_staff" value="<?php echo $input->teaching_female_staff; ?>" class="form-control">
+                    <input type="number" required id="teaching_female_staff" name="teaching_female_staff" value="<?php echo $input->teaching_female_staff; ?>" class="form-control">
                 </div>
             </div>
 
@@ -421,7 +421,7 @@
                         </div>
                     </div>
                     <div class="col-xs-5">
-                        <input type="text" id="total_working_computers" name="total_working_computers" value="<?php echo $input->total_working_computers; ?>" class="form-control computers">
+                        <input type="number" id="total_working_computers" name="total_working_computers" value="<?php echo $input->total_working_computers; ?>" class="form-control computers">
                     </div>
                 </div>
                 <div class="col-xs-12">
@@ -466,7 +466,7 @@
                         </div>
                     </div>
                     <div class="col-xs-5">
-                        <input type="text" id="library_books" name="library_books" value="<?php echo $input->library_books; ?>" class="form-control library_books">
+                        <input type="number" id="library_books" name="library_books" value="<?php echo $input->library_books; ?>" class="form-control library_books">
                     </div>
                 </div>
             </div>
@@ -482,7 +482,7 @@
             </div>
 
             <div class="col-xs-4" style="text-align: center;">
-                <button class="btn btn-small" type="submit" name="submitButton" value="same">Save F-C</button>
+                <button class="btn btn-small" type="submit" name="submitButton" value="same">Save (C))</button>
             </div>
 
             <div class="col-xs-4" style="text-align: center;">

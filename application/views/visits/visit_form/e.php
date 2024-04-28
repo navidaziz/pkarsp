@@ -428,7 +428,7 @@ $school_security_measures = $this->db->query($query)->row();
             </div>
 
             <div class="col-xs-4" style="text-align: center;">
-                <button class="btn btn-small" type="submit" name="submitButton" value="same">Save F-E</button>
+                <button class="btn btn-small" type="submit" name="submitButton" value="same">Save (E)</button>
             </div>
 
             <div class="col-xs-4" style="text-align: center;">

@@ -10,7 +10,9 @@ class Visits extends CI_Controller
     {
         parent::__construct();
         $this->lang->load("system", 'english');
+        $this->load->model("school_m");
         //$this->output->enable_profiler(TRUE);
+
     }
     //---------------------------------------------------------------
 
@@ -26,6 +28,15 @@ class Visits extends CI_Controller
         //$this->data['view'] = 'visits/index';
         // $this->load->view('layout', $this->data);
         $this->load->view('visits/index', $this->data);
+    }
+
+    public function visit_list()
+    {
+
+        $this->data["title"] = 'Visit Reports';
+        $this->data["description"] = 'Visit Report List';
+        $this->data['view'] = 'visits/visit_list';
+        $this->load->view('layout', $this->data);
     }
 
     public function get_school_by_school_id()
@@ -66,6 +77,7 @@ class Visits extends CI_Controller
 
     public function institute_visit_report($visit_id, $schools_id, $school_id, $form)
     {
+
         $this->data['visit_id'] = $visit_id = (int) $visit_id;
         $this->data['schools_id'] = $schools_id = (int) $schools_id;
         $this->data['school_id'] = $school_id = (int) $school_id;
@@ -79,26 +91,28 @@ class Visits extends CI_Controller
             visits 
             WHERE visit_id = $visit_id";
             $input = $this->db->query($query)->row();
-            if ($input->high_level_lab == NULL) {
-                $input->high_level_lab = 'No';
-            }
-            if ($input->physics_lab == NULL) {
-                $input->physics_lab = 'No';
-            }
-            if ($input->chemistry_lab == NULL) {
-                $input->chemistry_lab = 'No';
-            }
-            if ($input->biology_lab == NULL) {
-                $input->biology_lab = 'No';
-            }
+            // if ($input->high_level_lab == NULL) {
+            //     $input->high_level_lab = 'No';
+            // }
+            // if ($input->physics_lab == NULL) {
+            //     $input->physics_lab = 'No';
+            // }
+            // if ($input->chemistry_lab == NULL) {
+            //     $input->chemistry_lab = 'No';
+            // }
+            // if ($input->biology_lab == NULL) {
+            //     $input->biology_lab = 'No';
+            // }
 
-            if ($input->computer_lab == NULL) {
-                $input->computer_lab = 'No';
-            }
-            if ($input->library == NULL) {
-                $input->library = 'No';
-            }
+            // if ($input->computer_lab == NULL) {
+            //     $input->computer_lab = 'No';
+            // }
+            // if ($input->library == NULL) {
+            //     $input->library = 'No';
+            // }
         }
+
+
 
         $query = "SELECT
         `schools`.schoolId as schools_id
@@ -141,7 +155,11 @@ class Visits extends CI_Controller
         $this->data['session'] = $this->db->query($query)->row();
 
         $this->data["input"] = $input;
-        $this->data['view'] = 'visits/visit_form/' . $form;
+        if ($input->visited == 'Yes') {
+            $this->data['view'] = 'visits/visit_form/visit_report';
+        } else {
+            $this->data['view'] = 'visits/visit_form/' . $form;
+        }
         $this->load->view('visits/visit_form/layout', $this->data);
         //$this->load->view('visits/institute_visit_report', $this->data);
         //$this->load->view('visits/visit_form/' . $form, $this->data);
@@ -154,14 +172,6 @@ class Visits extends CI_Controller
         // foreach ($_POST as $var => $value) {
         //     echo '$input["' . $var . '"] = $this->input->post("' . $var . '");<br />';
         // }
-
-        //exit();
-        // $this->form_validation->set_rules("visit_id", "Visit Id", "required");
-        // $this->form_validation->set_rules("form", "Form", "required");
-        // $this->form_validation->set_rules("primary_l", "Primary L", "required");
-        // $this->form_validation->set_rules("middle_l", "Middle L", "required");
-        // $this->form_validation->set_rules("high_l", "High L", "required");
-        // $this->form_validation->set_rules("high_sec_l", "High Sec L", "required");
         $this->form_validation->set_rules("gender_of_edu", "Gender Of Edu", "required");
         $this->form_validation->set_rules("timing", "Timing", "required");
         $this->form_validation->set_rules("o_a_levels", "O A Levels", "required");
@@ -182,10 +192,15 @@ class Visits extends CI_Controller
         } else {
             $input["a"] = 1;
             $input["d"] = 0;
+            $input['visit_status'] = 'Inprogress';
             $input["primary_l"] = $this->input->post("primary_l");
             $input["middle_l"] = $this->input->post("middle_l");
             $input["high_l"] = $this->input->post("high_l");
             $input["high_sec_l"] = $this->input->post("high_sec_l");
+            if ($this->input->post("high_l") == 1 or $this->input->post("high_sec_l") == 1) {
+                $input["g"] = 0;
+                $input["c"] = 0;
+            }
             $input["gender_of_edu"] = $this->input->post("gender_of_edu");
             $input["timing"] = $this->input->post("timing");
             $input["o_a_levels"] = $this->input->post("o_a_levels");
@@ -218,14 +233,6 @@ class Visits extends CI_Controller
     }
     private function add_form_b_data()
     {
-        // foreach ($_POST as $var => $value) {
-        //     echo ' $this->form_validation->set_rules("' . $var . '", "' . ucwords(strtolower(str_replace('_', ' ', $var))) . '", "required");<br />';
-        // }
-        // foreach ($_POST as $var => $value) {
-        //     echo '$input["' . $var . '"] = $this->input->post("' . $var . '");<br />';
-        // }
-
-        // exit();
         $this->form_validation->set_rules("visit_id", "Visit Id", "required");
         $this->form_validation->set_rules("form", "Form", "required");
         if ($this->input->post("registered") == 0) {
@@ -593,6 +600,101 @@ class Visits extends CI_Controller
 
         echo 'success';
     }
+    private function add_form_h_data()
+    {
+
+        $this->form_validation->set_rules("agree", "Agree Check Box", "required");
+        $this->form_validation->set_rules("visited_by_officers", "Visited By Officers", "required");
+        $this->form_validation->set_rules("visited_by_officials", "Visited By Officials", "required");
+        $this->form_validation->set_rules("visit_date", "Visit Date", "required");
+        $this->form_validation->set_rules("recommendation", "Recommendation", "required");
+        if ($this->input->post("recommendation") == 'Recommended') {
+            //$this->form_validation->set_rules("r_primary_l", "R Primary L", "required");
+            if (!$this->input->post("r_primary_l") and !$this->input->post("r_middle_l") and !$this->input->post("r_high_l") and !$this->input->post("r_high_sec_l")) {
+                $this->form_validation->set_rules("r_primary_l", "level is required", "required");
+            }
+        }
+        if ($this->input->post("recommendation") == 'Not Recommended') {
+            $this->form_validation->set_rules("not_recommendation_remarks", "Not Recommendation Remarks", "required");
+        }
+        // $this->form_validation->set_rules("other_remarks", "Other Remarks", "required");
+        if ($this->form_validation->run() == FALSE) {
+            echo '<div class="alert alert-danger">' . validation_errors() . "</div>";
+            exit();
+        } else {
+            $input["visit_id"] = $this->input->post("visit_id");
+            $input["h"] = 1;
+            $input["visited"] = 'Yes';
+            $input['visit_status'] = 'Visited';
+            $input['visit_end'] = date('Y-m-d H:i:s');
+            $input["schools_id"] = $this->input->post("schools_id");
+            $input["school_id"] = $this->input->post("school_id");
+            $input["visited_by_officers"] = $this->input->post("visited_by_officers");
+            $input["visited_by_officials"] = $this->input->post("visited_by_officials");
+            $input["visit_date"] = $this->input->post("visit_date");
+            $input["recommendation"] = $this->input->post("recommendation");
+
+            $input["report_location_latitude"] = $this->input->post("report_location_latitude");
+            $input["report_location_longitude"] = $this->input->post("report_location_longitude");
+            $input["report_location_altitude"] = $this->input->post("report_location_altitude");
+            $input["device"] = $_SERVER['HTTP_USER_AGENT'];
+
+            $input['report_submitted_by'] = $this->session->userdata("userId");
+            $input['report_submitted_date'] = date('Y-m-d H:i:s');
+
+            if ($this->input->post("r_primary_l")) {
+                $input["r_primary_l"] = $this->input->post("r_primary_l");
+            } else {
+                $input["r_primary_l"] = 0;
+            }
+            if ($this->input->post("r_middle_l")) {
+                $input["r_middle_l"] = $this->input->post("r_middle_l");
+            } else {
+                $input["r_middle_l"] = 0;
+            }
+            if ($this->input->post("r_high_l")) {
+                $input["r_high_l"] = $this->input->post("r_high_l");
+            } else {
+                $input["r_high_l"] = 0;
+            }
+            if ($this->input->post("r_high_sec_l")) {
+                $input["r_high_sec_l"] = $this->input->post("r_high_sec_l");
+            } else {
+                $input["r_high_sec_l"] = 0;
+            }
+            if ($this->input->post("r_academy_l")) {
+                $input["r_academy_l"] = $this->input->post("r_academy_l");
+            } else {
+                $input["r_academy_l"] = 0;
+            }
+
+            $input["not_recommendation_remarks"] = $this->input->post("not_recommendation_remarks");
+            $input["other_remarks"] = $this->input->post("other_remarks");
+            $visit_id = $this->input->post("visit_id");
+            $this->db->where("visit_id", $visit_id);
+            $input['last_updated'] = date('Y-m-d H:i:s');
+            $input['last_updated_by'] = $this->session->userdata("userId");
+            if ($this->db->update("visits", $input)) {
+                echo "success";
+            }
+        }
+
+        // foreach ($_POST as $var => $value) {
+        //     echo ' $this->form_validation->set_rules("' . $var . '", "' . ucwords(strtolower(str_replace('_', ' ', $var))) . '", "required");<br />';
+        // }
+        // foreach ($_POST as $var => $value) {
+        //     echo '$input["' . $var . '"] = $this->input->post("' . $var . '");<br />';
+        // }
+
+        // exit();
+        // $visit_id = (int) $this->input->post('visit_id');
+        // $this->db->where("visit_id", $visit_id);
+        // $form['g'] = 1;
+        // $this->db->update("visits", $form);
+
+        // echo 'success';
+    }
+
 
     public function upload_picture_file($picture_file)
     {
@@ -661,9 +763,13 @@ class Visits extends CI_Controller
             case 'g':
                 $this->add_form_g_data();
                 break;
+            case 'h':
+                $this->add_form_h_data();
+                break;
             case 'picture_file':
                 $field_name = '0';
                 if (in_array('picture_1', array_keys($_FILES))) {
+                    $input['visit_start'] = date('Y-m-d H:i:s');
                     $field_name = 'picture_1';
                     $input["latitude"] = $this->input->post("latitude");
                     $input["longitude"] = $this->input->post("longitude");
@@ -837,29 +943,29 @@ class Visits extends CI_Controller
         }
 
         $query = "SELECT
-   	`schools`.schoolId as schools_id
-   	, `schools`.`registrationNumber`
-      , `schools`.`schoolName`
-      , `schools`.`yearOfEstiblishment`
-      , `schools`.`school_type_id`
-      , `schools`.`level_of_school_id`
-      , `schools`.`gender_type_id`
-      , (IF(district.region=1,'Central', IF(district.region=2, 'South', IF(district.region=3, 'Malakand', IF(district.region=4, 'Hazara', 'Other'))))) as division
-      , `district`.`districtTitle` 
-      , `tehsils`.`tehsilTitle`
-      , (SELECT `uc`.`ucTitle` FROM `uc` WHERE `uc`.`ucId` = `schools`.`uc_id`) as `ucTitle`,
-      `schools`.`address`,
-      `schools`.`telePhoneNumber` as `phone_no`,
-      `schools`.`schoolMobileNumber` as `mobile_no`,
-      `schools`.`isfined`,
-      `schools`.`file_no`,
-      `schools`.`principal_email`,
-      users.userTitle,
-      users.userName,
-      users.userPassword,
-      users.cnic,
-      users.contactNumber as owner_no
-   	FROM `schools` INNER JOIN `district` 
+            `schools`.schoolId as schools_id
+            , `schools`.`registrationNumber`
+            , `schools`.`schoolName`
+            , `schools`.`yearOfEstiblishment`
+            , `schools`.`school_type_id`
+            , `schools`.`level_of_school_id`
+            , `schools`.`gender_type_id`
+            , (IF(district.region=1,'Central', IF(district.region=2, 'South', IF(district.region=3, 'Malakand', IF(district.region=4, 'Hazara', 'Other'))))) as division
+            , `district`.`districtTitle` 
+            , `tehsils`.`tehsilTitle`
+            , (SELECT `uc`.`ucTitle` FROM `uc` WHERE `uc`.`ucId` = `schools`.`uc_id`) as `ucTitle`,
+            `schools`.`address`,
+            `schools`.`telePhoneNumber` as `phone_no`,
+            `schools`.`schoolMobileNumber` as `mobile_no`,
+            `schools`.`isfined`,
+            `schools`.`file_no`,
+            `schools`.`principal_email`,
+            users.userTitle,
+            users.userName,
+            users.userPassword,
+            users.cnic,
+            users.contactNumber as owner_no
+            FROM `schools` INNER JOIN `district` 
         ON (`schools`.`district_id` = `district`.`districtId`) 
         INNER JOIN `tehsils` ON( `tehsils`.`tehsilId` = `schools`.`tehsil_id`) 
         INNER JOIN users ON(users.userId = schools.owner_id)";
@@ -1099,5 +1205,103 @@ class Visits extends CI_Controller
             }
             echo "success";
         }
+    }
+
+    public function print_visit_report($visit_id, $schools_id, $school_id)
+    {
+
+        $this->data['visit_id'] = $visit_id = (int) $visit_id;
+        $this->data['schools_id'] = $schools_id = (int) $schools_id;
+        $this->data['school_id'] = $school_id = (int) $school_id;
+        $this->data['form'] = $form = $form;
+
+        if ($visit_id == 0) {
+            $input = $this->get_inputs();
+            $input->high_level_lab = 'No';
+        } else {
+            $query = "SELECT * FROM 
+            visits 
+            WHERE visit_id = $visit_id";
+            $input = $this->db->query($query)->row();
+            // if ($input->high_level_lab == NULL) {
+            //     $input->high_level_lab = 'No';
+            // }
+            // if ($input->physics_lab == NULL) {
+            //     $input->physics_lab = 'No';
+            // }
+            // if ($input->chemistry_lab == NULL) {
+            //     $input->chemistry_lab = 'No';
+            // }
+            // if ($input->biology_lab == NULL) {
+            //     $input->biology_lab = 'No';
+            // }
+
+            // if ($input->computer_lab == NULL) {
+            //     $input->computer_lab = 'No';
+            // }
+            // if ($input->library == NULL) {
+            //     $input->library = 'No';
+            // }
+        }
+
+
+
+        $query = "SELECT
+        `schools`.schoolId as schools_id
+        , `schools`.`registrationNumber`
+      , `schools`.`schoolName`
+      , `schools`.`yearOfEstiblishment`
+      , `schools`.`school_type_id`
+      , `schools`.`level_of_school_id`
+      , `schools`.`gender_type_id`
+      , (IF(district.region=1,'Central', IF(district.region=2, 'South', IF(district.region=3, 'Malakand', IF(district.region=4, 'Hazara', 'Other'))))) as division
+      , `district`.`districtTitle` 
+      , `tehsils`.`tehsilTitle`
+      , (SELECT `uc`.`ucTitle` FROM `uc` WHERE `uc`.`ucId` = `schools`.`uc_id`) as `ucTitle`,
+      `schools`.`address`,
+      `schools`.`telePhoneNumber` as `phone_no`,
+      `schools`.`schoolMobileNumber` as `mobile_no`,
+      `schools`.`isfined`,
+      `schools`.`file_no`,
+      `schools`.`principal_email`,
+      users.userTitle,
+      users.userName,
+      users.userPassword,
+      users.cnic,
+      users.contactNumber as owner_no
+   	    FROM `schools` INNER JOIN `district` 
+        ON (`schools`.`district_id` = `district`.`districtId`) 
+        INNER JOIN `tehsils` ON( `tehsils`.`tehsilId` = `schools`.`tehsil_id`) 
+        INNER JOIN users ON(users.userId = schools.owner_id)";
+        $query .= " WHERE `schools`.`schoolId` = '" . $input->schools_id . " '";
+        $this->data['school'] = $this->db->query($query)->row();
+
+        $query = "SELECT session_year.sessionYearTitle, reg_type.regTypeTitle,
+        school_type.typeTitle
+        FROM school 
+        INNER JOIN session_year ON(session_year.sessionYearId = school.session_year_id)
+        INNER JOIN reg_type ON(reg_type.regTypeId = school.reg_type_id)
+        INNER JOIN school_type ON(school_type.typeId = school.school_type_id)
+        WHERE schools_id = '" . $input->schools_id . "' 
+        AND schoolId = '" . $input->school_id . "'";
+        $this->data['session'] = $this->db->query($query)->row();
+
+
+        $this->data['school_security_measures'] = $this->school_m->security_measures_by_school_id($school_id);
+
+        $this->data['school_hazards_with_associated_risks'] = $this->school_m->hazards_with_associated_risks_by_school_id($school_id);
+        $this->data['hazards_with_associated_risks_unsafe_list'] = $this->school_m->hazards_with_associated_risks_unsafe_list_by_school_id($school_id);
+
+
+
+        $this->data["input"] = $input;
+        if ($input->visited == 'Yes') {
+            $this->load->view('visits/print_visit_report', $this->data);
+        } else {
+            'Not Visited Yet';
+        }
+
+        //$this->load->view('visits/institute_visit_report', $this->data);
+        //$this->load->view('visits/visit_form/' . $form, $this->data);
     }
 }

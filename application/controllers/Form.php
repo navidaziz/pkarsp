@@ -1429,6 +1429,67 @@ class Form extends Admin_Controller
 			$date = date('Y-m-d H:i:s');
 			$query = "UPDATE school set status = '2', file_status='1', `visit` = 'No',  apply_date ='" . $date . "', updatedDate ='" . $date . "' WHERE schoolId = '" . $school_id . "' and schools_id = '" . $schools_id . "'";
 			if ($this->db->query($query)) {
+				$query = "SELECT reg_type_id, upgradation_levels, level_of_school_id 
+				FROM school 
+				WHERE schools_id ='" . $schools_id . "' 
+				AND schoolId = '" . $school_id . "'";
+				$apply_detail = $this->db->query($query)->row();
+				if ($apply_detail->reg_type_id == 1 or $apply_detail->reg_type_id == 4) {
+					$input["schools_id"] = $schools_id;
+					$input["school_id"] = $school_id;
+
+					if ($apply_detail->reg_type_id == 1) {
+						$input["visit_reason"] = 'New Registration';
+					} elseif ($apply_detail->reg_type_id == 4) {
+						$input["visit_reason"] = 'Upgradation';
+					}
+
+					$upgradation_levels = $apply_detail->upgradation_levels;
+					$levels_array = explode(",", $upgradation_levels);
+					$input["primary_l"] = 0;
+					$input["middle_l"] = 0;
+					$input["high_l"] = 0;
+					$input["high_sec_l"] = 0;
+					$input["academy_l"] = 0;
+					if ($apply_detail->level_of_school_id == 1) {
+						$input["primary_l"] = 1;
+					}
+					if ($apply_detail->level_of_school_id == 2) {
+						$input["middle_l"] = 1;
+					}
+					if ($apply_detail->level_of_school_id == 3) {
+						$input["high_l"] = 1;
+					}
+					if ($apply_detail->level_of_school_id == 4) {
+						$input["high_sec_l"] = 1;
+					}
+					if ($apply_detail->level_of_school_id == 5) {
+						$input["academy_l"] = 1;
+					}
+
+					if ($apply_detail->upgradation_levels) {
+						if (in_array("1", $levels_array)) {
+							$input["primary_l"] = 1;
+						}
+						if (in_array("2", $levels_array)) {
+							$input["middle_l"] = 1;
+						}
+						if (in_array("3", $levels_array)) {
+							$input["high_l"] = 1;
+						}
+						if (in_array("4", $levels_array)) {
+							$input["high_sec_l"] = 1;
+						}
+						if (in_array("5", $levels_array)) {
+							$input["academy_l"] = 1;
+						}
+					}
+					$input["visited"] = 'No';
+
+					$inputs =  (object) $input;
+					$inputs->created_by = $this->session->userdata("userId");
+					$this->db->insert("visits", $inputs);
+				}
 				$this->session->set_flashdata('msg_success', 'online application request submitted.');
 			} else {
 				$this->session->set_flashdata('msg_error', "Something's wrong, Please try again.");

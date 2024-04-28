@@ -387,7 +387,7 @@ $hazards_hazard_with_associated_risks = $this->db->query($query)->row();
                 </div>
 
                 <div class="col-xs-4" style="text-align: center;">
-                    <button class="btn btn-small" type="submit" name="submitButton" value="same">Save F-F</button>
+                    <button class="btn btn-small" type="submit" name="submitButton" value="same">Save (F)</button>
                 </div>
 
                 <div class="col-xs-4" style="text-align: center;">

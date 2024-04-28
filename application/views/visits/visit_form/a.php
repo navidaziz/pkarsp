@@ -7,14 +7,14 @@
         <input type="hidden" name="schools_id" value="<?php echo $schools_id; ?>" />
         <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
         <div class="alert alert-danger">
-            <h5><i class="fa fa-exclamation-triangle" aria-hidden="true" style="color: #AA4644;"></i> Required Photo Documentation for Official Visits</h5>
-            Please take a picture of the institute board with both the assigned official and officer there. This photo will prove they were personally present during the visit and will be added to the visit report.
+            <h5><i class="fa fa-camera" aria-hidden="true" style="color: #721c23;"></i> Picture of Instititute Sign Board</h5>
+            Please take a picture of the institute sign board with both the assigned official and officer there. This photo will prove that both personally present during the visit and will be added to the visit report.
         </div>
         <div class="row">
             <div class="col-xs-12">
                 <div class="form-group">
                     <div class="col-xs-6">
-                        <label for="visited_by_officers" class="col-form-label">Take Picture or Upload an Image <span class="required">*</span></label>
+                        <label for="visited_by_officers" class="col-form-label">Take Picture and Upload Image <span class="required">*</span></label>
                     </div>
                     <div class="col-xs-6">
                         <input name="picture_1" id="picture_1" type="file" accept="image/*" capture="camera" class="form-control" placeholder="Take Picture" />
@@ -134,16 +134,16 @@
                     break;
             }
         }
-
-
-
-        // Call getLocation() when the page loads to prompt for permission
         window.onload = getLocation();
     </script>
 <?php } else { ?>
     <div class="row">
         <div class="col-xs-12">
-            <img style="width: auto; height:100px" src="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . $input->picture_1; ?>" width="100%" />
+            <figure class="figure" style="height: 200px; margin-bottom:10px">
+                <img style="height: 200px;  width:100%; border:1px solid white; border-radius:5px" src="<?php echo 'https://' . $_SERVER['HTTP_HOST'] . $input->picture_1; ?>" />
+                <figcaption class="figure-caption text-right" style="margin-top: -20px; margin-right:5px"><small><i>Officals With Instititute Signboard</i></small></figcaption>
+            </figure>
+
         </div>
     </div>
     <form id="visits" class="form-horizontal" enctype="multipart/form-data" method="post">

@@ -761,7 +761,7 @@
             </div>
 
             <div class="col-xs-4" style="text-align: center;">
-                <button class="btn btn-small" type="submit" name="submitButton" value="same">Save F-B</button>
+                <button class="btn btn-small" type="submit" name="submitButton" value="same">Save (F)</button>
             </div>
 
             <div class="col-xs-4" style="text-align: center;">
