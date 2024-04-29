@@ -65,6 +65,7 @@
                         <th>Contact</th>
                         <th>Session</th>
                         <th>Visit Reason</th>
+                        <th>Already Registered</th>
                         <th>Primary</th>
                         <th>Middle</th>
                         <th>High</th>
@@ -150,6 +151,23 @@
                                 ?></td>
                             <td><?php echo $row->sessionYearTitle; ?></td>
                             <td><?php echo $row->visit_reason; ?></td>
+                            <td>
+
+                                <?php
+                                $query = "SELECT `level_of_school_id`,
+                                `primary`, middle, high, high_sec FROM school 
+                                WHERE schools_id = '" . $row->schools_id . "' 
+                                AND  status = 1 ORDER BY schoolId DESC LIMIT 1";
+                                $reg_levels = $this->db->query($query)->row(); ?>
+                                <?php echo ($reg_levels->primary == 1 or $reg_levels->level_of_school_id == 1) ? 'Primary, ' : '' ?>
+                                <?php echo ($reg_levels->middle == 1 or $reg_levels->level_of_school_id == 2) ? 'Middle, ' : '' ?>
+                                <?php echo ($reg_levels->high == 1 or $reg_levels->level_of_school_id == 3) ? 'High, ' : '' ?>
+                                <?php echo ($reg_levels->higher_sec == 1 or $reg_levels->level_of_school_id == 4) ? 'High Sec, ' : '' ?>
+
+
+
+
+                            </td>
                             <td><?php echo $row->primary_l == 1 ? 'Primary' : '' ?></td>
                             <td><?php echo $row->middle_l == 1 ? 'Middle' : '' ?></td>
                             <td><?php echo $row->high_l == 1 ? 'High' : ''; ?></td>
