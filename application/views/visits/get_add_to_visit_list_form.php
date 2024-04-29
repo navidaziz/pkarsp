@@ -1,17 +1,8 @@
 <form id="visits" class="form-horizontal" enctype="multipart/form-data" method="post">
     <input type="hidden" name="visit_id" value="<?php echo $input->visit_id; ?>" />
-    <div class="form-group row">
-        <label for="schools_id" class="col-sm-4 col-form-label">Schools Id</label>
-        <div class="col-sm-8">
-            <input type="text" required id="schools_id" name="schools_id" value="<?php echo $input->schools_id; ?>" class="form-control">
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="school_id" class="col-sm-4 col-form-label">School Id</label>
-        <div class="col-sm-8">
-            <input type="text" required id="school_id" name="school_id" value="<?php echo $input->school_id; ?>" class="form-control">
-        </div>
-    </div>
+    <input type="hidden" required id="school_id" name="school_id" value="<?php echo $input->school_id; ?>" class="form-control">
+    <input type="hidden" required id="schools_id" name="schools_id" value="<?php echo $input->schools_id; ?>" class="form-control">
+
     <div class="form-group row">
         <label for="visit_reason" class="col-sm-4 col-form-label">Visit Reason</label>
 

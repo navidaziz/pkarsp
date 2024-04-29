@@ -65,48 +65,48 @@
             }
         </style>
         <script>
-            $(document).ready(function() {
-                $('.copy-button').click(function() {
-                    var codeBlock = $('#' + $(this).prev('pre').find('code').attr('id'));
-                    var codeText = codeBlock.text();
+            // $(document).ready(function() {
+            //     $('.copy-button').click(function() {
+            //         var codeBlock = $('#' + $(this).prev('pre').find('code').attr('id'));
+            //         var codeText = codeBlock.text();
 
-                    // Create a textarea element to hold the code
-                    var textarea = $('<textarea></textarea>').val(codeText).appendTo('body').select();
+            //         // Create a textarea element to hold the code
+            //         var textarea = $('<textarea></textarea>').val(codeText).appendTo('body').select();
 
-                    // Copy the code to the clipboard
-                    document.execCommand('copy');
+            //         // Copy the code to the clipboard
+            //         document.execCommand('copy');
 
-                    // Remove the textarea
-                    textarea.remove();
+            //         // Remove the textarea
+            //         textarea.remove();
 
-                    // Change button text briefly to indicate success
-                    $(this).text('Code Copied!');
-                    setTimeout(function() {
-                        $('.copy-button').text('Copy Code');
-                    }, 1500);
-                });
+            //         // Change button text briefly to indicate success
+            //         $(this).text('Code Copied!');
+            //         setTimeout(function() {
+            //             $('.copy-button').text('Copy Code');
+            //         }, 1500);
+            //     });
 
-                // Typewriter effect
-                function typeWriter(element, text, speed) {
-                    var i = 0;
-                    if (text.length > 0) {
-                        var interval = setInterval(function() {
-                            element.append(text.charAt(i));
-                            i++;
-                            if (i > text.length) {
-                                clearInterval(interval);
-                            }
-                        }, speed);
-                    }
-                }
+            //     // Typewriter effect
+            //     function typeWriter(element, text, speed) {
+            //         var i = 0;
+            //         if (text.length > 0) {
+            //             var interval = setInterval(function() {
+            //                 element.append(text.charAt(i));
+            //                 i++;
+            //                 if (i > text.length) {
+            //                     clearInterval(interval);
+            //                 }
+            //             }, speed);
+            //         }
+            //     }
 
-                var codeElements = $('.code-container code');
-                codeElements.each(function(index, element) {
-                    var codeText = $(element).text();
-                    $(element).empty(); // Clear existing text
-                    typeWriter($(element), codeText, 0.9); // Typewriter effect
-                });
-            });
+            //     var codeElements = $('.code-container code');
+            //     codeElements.each(function(index, element) {
+            //         var codeText = $(element).text();
+            //         $(element).empty(); // Clear existing text
+            //         typeWriter($(element), codeText, 0.001); // Typewriter effect
+            //     });
+            // });
         </script>
         <div class="row">
             <div class="col-md-4">

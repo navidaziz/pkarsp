@@ -33,8 +33,8 @@ class Visits extends CI_Controller
     public function visit_list()
     {
 
-        $this->data["title"] = 'Visit Reports';
-        $this->data["description"] = 'Visit Report List';
+        $this->data["title"] = 'Visit List';
+        $this->data["description"] = 'Not Visited Institutes List';
         $this->data['view'] = 'visits/visit_list';
         $this->load->view('layout', $this->data);
     }

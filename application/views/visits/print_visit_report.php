@@ -394,211 +394,158 @@
         <table class="table">
           <td>
             <table class="table  table-bordered">
-              <tbody>
-                <tr>
-                  <th>Portrait of Quid-e-Azam</th>
-                  <td style="width: 50px;">Yes</td>
-                  <td style="width: 50px;">No</td>
-                </tr>
-                <tr>
-                  <th>Portrait of Allama Iqbal</th>
-                  <td style="width: 50px;">Yes</td>
-                  <td style="width: 50px;">No</td>
-                </tr>
-                <tr>
-                  <th>Waiting Area for visitor</th>
-                  <td style="width: 50px;">Yes</td>
-                  <td style="width: 50px;">No</td>
-                </tr>
 
-                <tr>
-                  <th>Furniture provided to all students</th>
-                  <td style="width: 50px;">Yes</td>
-                  <td style="width: 50px;">No</td>
-                </tr>
-                <tr>
-                  <th>Furniture provided to all staff</th>
-                  <td style="width: 50px;">Yes</td>
-                  <td style="width: 50px;">No</td>
-                </tr>
-                <tr>
-                  <th>Cross-ventilation in the classroom exists</th>
-                  <td style="width: 50px;">Yes</td>
-                  <td style="width: 50px;">No</td>
-                </tr>
-
-                <tr>
-                  <th>Notice Board exist</th>
-                  <td style="width: 50px;">Yes</td>
-                  <td style="width: 50px;">No</td>
-                </tr>
-                <tr>
-                  <th>Class bell exist</th>
-                  <td style="width: 50px;">Yes</td>
-                  <td style="width: 50px;">No</td>
-                </tr>
-                <tr>
-                  <th>National Flag exist</th>
-                  <td style="width: 50px;">Yes</td>
-                  <td style="width: 50px;">No</td>
-                </tr>
-
-                <tr>
-                  <th>School Fee details displayed outside (attach pictures)</th>
-                  <td style="width: 50px;">Yes</td>
-                  <td style="width: 50px;">No</td>
-                </tr>
-                <tr>
-                  <th>Annual calendar displayed for each class</th>
-                  <td style="width: 50px;">Yes</td>
-                  <td style="width: 50px;">No</td>
-                </tr>
-
+              <tr>
+                <td>Portrait of Quaid-e-Azam</td>
+                <td><?php echo $input->portrait_quaid; ?></td>
+              </tr>
+              <tr>
+                <td>Portrait of Allama Iqbal</td>
+                <td><?php echo $input->portrait_iqbal; ?></td>
+              </tr>
+              <tr>
+                <td>Furnitures Provided to All Students</td>
+                <td><?php echo $input->student_furnitures; ?></td>
+              </tr>
+              <tr>
+                <td>Furnitures Provided to All Staff</td>
+                <td><?php echo $input->staff_furnitures; ?></td>
+              </tr>
+              <tr>
+                <td>Cross Ventilation in class rooms</td>
+                <td><?php echo $input->cross_ventilation; ?></td>
+              </tr>
+              <tr>
+                <td>Notice board</td>
+                <td><?php echo $input->notice_board; ?></td>
+              </tr>
+              <tr>
+                <td>Class Bell Exist</td>
+                <td><?php echo $input->class_bell; ?></td>
+              </tr>
+              <tr>
+                <td>National Flag Exist</td>
+                <td><?php echo $input->national_flag; ?></td>
+              </tr>
+              <tr>
+                <td>Fee Details Displayed outside</td>
+                <td><?php echo $input->fee_displayed; ?></td>
+              </tr>
+              <tr>
+                <td>Annual Calendar Displayed for each class</td>
+                <td><?php echo $input->annual_displayed; ?></td>
+              </tr>
 
             </table>
-
           </td>
           <td>
             <table class="table  table-bordered">
-              <tbody>
+              <tr>
+                <td>Water</td>
+                <td><?php echo $input->water; ?></td>
+              </tr>
+              <tr>
+                <td>Electricity</td>
+                <td><?php echo $input->electricity; ?></td>
+              </tr>
 
-                <tr>
-                  <th>
-                    Water </th>
-                  <td style="width: 50px;">Yes</td>
-                  <td style="width: 50px;">No</td>
-                </tr>
-                <tr>
-                  <th>
-                    Electricity </th>
-                  <td style="width: 50px;">Yes</td>
-                  <td style="width: 50px;">No</td>
-                </tr>
-                <tr>
-                  <th>
-                    Boundary Wall </th>
-                  <td style="width: 50px;">Yes</td>
-                  <td style="width: 50px;">No</td>
-                </tr>
-                <tr>
-                  <th>Exam Hall</th>
-                  <td>Yes</td>
-                  <td>No</td>
-                </tr>
-                <tr>
-                  <th>Play Ground</th>
-                  <td>Yes</td>
-                  <td>No</td>
-                </tr>
-                <tr>
-                  <th>Play area exist</th>
-                  <td style="width: 50px;">Yes</td>
-                  <td style="width: 50px;">No</td>
-                </tr>
-                <tr>
-                  <th>Canteen</th>
-                  <td>Yes</td>
-                  <td>No</td>
-                </tr>
-                <tr>
-                  <th>Hostel (For Student)</th>
-                  <td>Yes</td>
-                  <td>No</td>
-                </tr>
-                <tr>
-                  <th>Hostel (For Staff)</th>
-                  <td>Yes</td>
-                  <td>No</td>
-                </tr>
-                <tr>
-                  <th>Transport</th>
-                  <td>Yes</td>
-                  <td>No</td>
-                </tr>
-                <tr>
-                  <th>First Aid</th>
-                  <td>Yes</td>
-                  <td>No</td>
-                </tr>
+              <tr>
+                <td>Boundary Wall</td>
+                <td><?php echo $input->boundary_wall; ?></td>
+              </tr>
+              <tr>
+                <td>Exam Hall</td>
+                <td><?php echo $input->exam_hall; ?></td>
+              </tr>
+              <tr>
+                <td>Play Ground</td>
+                <td><?php echo $input->play_ground; ?></td>
+              </tr>
+              <tr>
+                <td>Play Area</td>
+                <td><?php echo $input->play_area; ?></td>
+              </tr>
+              <tr>
+                <td>Canteen</td>
+                <td><?php echo $input->canteen; ?></td>
+              </tr>
+              <tr>
+                <td>Students Hostel</td>
+                <td><?php echo $input->stud_hostel; ?></td>
+              </tr>
+              <tr>
+                <td>Staff Hostel</td>
+                <td><?php echo $input->staff_hostel; ?></td>
+              </tr>
+              <tr>
+                <td>Transport</td>
+                <td><?php echo $input->transport; ?></td>
+              </tr>
+              <tr>
+                <td>First Aid</td>
+                <td><?php echo $input->first_aid; ?></td>
+              </tr>
 
-
-
-              </tbody>
             </table>
+
           </td>
           <td>
 
             <strong>Registers Maintained</strong>
             <table class="table table-bordered">
               <tr>
-                <th>Admission and withdrawal </th>
-                <td>Yes</td>
-                <td>No</td>
-              </tr>
-              <tr>
-                <th>
-                  Student Attendance </th>
-                <td>Yes</td>
-                <td>No</td>
-              </tr>
-              <tr>
-                <th>
-                  Student Fee Register
-                </th>
-                <td>Yes</td>
-                <td>No</td>
-              </tr>
-              <tr>
-                <th>
-                  Teacher Attendance </th>
-                <td>Yes</td>
-                <td>No</td>
-              </tr>
-              <tr>
-                <th>
-                  Teacher Salary
-                </th>
-                <td>Yes</td>
-                <td>No</td>
+                <td>Admi. / Withdrawal Reg.</td>
+                <td><?php echo $input->admi_withdreal_reg; ?></td>
               </tr>
 
-
-
+              <tr>
+                <td>Stud. Attendance Reg.</td>
+                <td><?php echo $input->stu_attend_reg; ?></td>
+              </tr>
+              <tr>
+                <td>Students Fee Reg.</td>
+                <td><?php echo $input->stu_fee_reg; ?></td>
+              </tr>
+              <tr>
+                <td>Teach. Attendance Reg.</td>
+                <td><?php echo $input->tecah_attend_reg; ?></td>
+              </tr>
+              <tr>
+                <td>Teachers Salary Reg.</td>
+                <td><?php echo $input->tecah_salary_reg; ?></td>
+              </tr>
 
             </table>
+
             <br />
 
 
             <strong>IT Facility In School</strong>
             <table class="table table-bordered">
               <tr>
-                <th>Computer Availability</th>
-                <td>Yes</td>
-                <td>No</td>
+                <td>Computer Availability</td>
+                <td><?php echo $input->computer_available; ?></td>
               </tr>
               <tr>
-                <th>Internet Connection</th>
-                <td>Yes</td>
-                <td>No</td>
+                <td>Internet / DSL Connection</td>
+                <td><?php echo $input->internet_connection; ?></td>
               </tr>
               <tr>
-                <th>Mobile 3G / 4G Access</th>
-                <td>Yes</td>
-                <td>No</td>
+                <td>Mobile 3G / 4G Access</td>
+                <td><?php echo $input->mobile_connectivity; ?></td>
               </tr>
+
             </table>
             <br />
             <strong>Others</strong>
             <table class="table table-bordered">
               <tr>
-                <th>Is there a shared building for both Madrasa and School?</th>
-                <td>Yes</td>
-                <td>No</td>
+                <td>Shared building for Madrasa and School</td>
+                <td><?php echo $input->mardrasa; ?></td>
               </tr>
               <tr>
-                <th>Is there a Tuition Academy within the school?</th>
-                <td>Yes</td>
-                <td>No</td>
+                <td>Tuition Academy within the school</td>
+                <td><?php echo $input->academy; ?></td>
               </tr>
             </table>
 
