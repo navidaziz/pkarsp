@@ -32,10 +32,21 @@ class Visits extends CI_Controller
 
     public function visit_list()
     {
-
-        $this->data["title"] = 'Visit List';
-        $this->data["description"] = 'Not Visited Institutes List';
-        $this->data['view'] = 'visits/visit_list';
+        $menu = 'not_visited_list';
+        if ($this->input->get('menu')) {
+            $menu = $this->input->get('menu');
+        }
+        $this->data['menu'] = $menu;
+        if ($menu == 'not_visited_list') {
+            $this->data["title"] = 'Not Visited List';
+            $this->data["description"] = 'Not Visited Institutes List';
+            $this->data['view'] = 'visits/not_visited_list';
+        }
+        if ($menu == 'visited_list') {
+            $this->data["title"] = 'Visited List';
+            $this->data["description"] = 'Visited Institutes List';
+            $this->data['view'] = 'visits/visited_list';
+        }
         $this->load->view('layout', $this->data);
     }
 
@@ -999,17 +1010,17 @@ class Visits extends CI_Controller
             $input["high_l"] = 0;
             $input["high_sec_l"] = 0;
             $input["academy_l"] = 0;
-
             $input =  (object) $input;
+            $this->data["input"] = $input;
+            $this->load->view("visits/search_school", $this->data);
         } else {
             $query = "SELECT * FROM 
             visits 
             WHERE visit_id = $visit_id";
             $input = $this->db->query($query)->row();
+            $this->data["input"] = $input;
+            $this->load->view("visits/get_add_to_visit_list_form", $this->data);
         }
-
-        $this->data["input"] = $input;
-        $this->load->view("visits/get_add_to_visit_list_form", $this->data);
     }
 
     public function add_to_visit_list()
@@ -1025,14 +1036,46 @@ class Visits extends CI_Controller
 
 
             $input["visit_id"] = $this->input->post("visit_id");
-            $input["schools_id"] = $this->input->post("schools_id");
-            $input["school_id"] = $this->input->post("school_id");
+            $input["schools_id"] = $schools_id = (int) $this->input->post("schools_id");
+            $input["school_id"] = $school_id = (int) $this->input->post("school_id");
             $input["visit_reason"] = $this->input->post("visit_reason");
-            $input["primary_l"] = $this->input->post("primary_l");
-            $input["middle_l"] = $this->input->post("middle_l");
-            $input["high_l"] = $this->input->post("high_l");
-            $input["high_sec_l"] = $this->input->post("high_sec_l");
-            $input["academy_l"] = $this->input->post("academy_l");
+
+            $query = "SELECT COUNT(*) as total FROM visits 
+                    WHERE visited = 'No' 
+                    AND school_id = '" . $school_id . "'
+                     AND schools_id = '" . $schools_id . "'";
+            $pending_visit_total = $this->db->query($query)->row()->total;
+            if ($pending_visit_total > 0) {
+                echo '<div class="alert alert-danger">School is already in visit list and not visited yet !</div>';
+                exit();
+            }
+
+
+            if ($this->input->post("primary_l")) {
+                $input["primary_l"] = $this->input->post("primary_l");
+            } else {
+                $input["primary_l"] = 0;
+            }
+            if ($this->input->post("middle_l")) {
+                $input["middle_l"] = $this->input->post("middle_l");
+            } else {
+                $input["middle_l"] = 0;
+            }
+            if ($this->input->post("high_l")) {
+                $input["high_l"] = $this->input->post("high_l");
+            } else {
+                $input["high_l"] = 0;
+            }
+            if ($this->input->post("high_sec_l")) {
+                $input["high_sec_l"] = $this->input->post("high_sec_l");
+            } else {
+                $input["high_sec_l"] = 0;
+            }
+            if ($this->input->post("academy_l")) {
+                $input["academy_l"] = $this->input->post("academy_l");
+            } else {
+                $input["academy_l"] = 0;
+            }
             $input["visited"] = 'No';
             $inputs =  (object) $input;
 
@@ -1044,6 +1087,7 @@ class Visits extends CI_Controller
                 $this->db->where("visit_id", $visit_id);
                 $inputs->last_updated = date('Y-m-d H:i:s');
                 $inputs->last_updated_by = $this->session->userdata("userId");
+
                 $this->db->update("visits", $inputs);
             }
             echo "success";
@@ -1303,5 +1347,37 @@ class Visits extends CI_Controller
 
         //$this->load->view('visits/institute_visit_report', $this->data);
         //$this->load->view('visits/visit_form/' . $form, $this->data);
+    }
+
+
+    public function search_school()
+    {
+        $schools_id = (int) $this->input->post('schools_id');
+        $query = "SELECT s.schoolId, s.schoolName, s.registrationNumber,
+        (SELECT tehsilTitle FROM `tehsils` WHERE tehsils.tehsilId=s.tehsil_id) as tehsil,
+                    (SELECT `ucTitle` FROM `uc` WHERE uc.ucId=s.uc_id) as uc,
+                    d.districtTitle,
+                    d.region
+        FROM schools as s 
+        INNER JOIN district as d ON(d.districtId = s.district_id) 
+        WHERE s.schoolId = '" . $schools_id . "'";
+        $school = $this->db->query($query)->row();
+        if ($school) {
+            $this->data['school'] = $school;
+            $input["visit_id"] =  $visit_id;
+            $input["schools_id"] = NULL;
+            $input["school_id"] = NULL;
+            $input["visit_reason"] = NULL;
+            $input["primary_l"] = 0;
+            $input["middle_l"] = 0;
+            $input["high_l"] = 0;
+            $input["high_sec_l"] = 0;
+            $input["academy_l"] = 0;
+            $input =  (object) $input;
+            $this->data["input"] = $input;
+            $this->load->view("visits/add_to_visit_list_add_form", $this->data);
+        } else {
+            echo 'Search Again School not Found.';
+        }
     }
 }

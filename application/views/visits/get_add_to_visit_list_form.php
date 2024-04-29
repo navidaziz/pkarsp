@@ -8,7 +8,13 @@
 
         <div class="col-sm-8">
             <?php
-            $options = array("New Registration", "Renewal", "Upgradation", "Change of Location", "Closure of School");
+            $query = "SELECT registrationNumber FROM schools WHERE schools.schoolId = '" . $input->schools_id . "'";
+            $reg_no = $this->db->query($query)->row()->registrationNumber;
+            if ($reg_no > 0) {
+                $options = array("Renewal", "Upgradation", "Change of Location", "Closure of School");
+            } else {
+                $options = array("New Registration");
+            }
             foreach ($options as $option) {
                 $checked = "";
                 if ($option == $input->visit_reason) {
