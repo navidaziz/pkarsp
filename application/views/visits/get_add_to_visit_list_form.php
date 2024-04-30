@@ -60,6 +60,13 @@
 
         </div>
     </div>
+    <div class="form-group row">
+        <label for="visit_for_level" class="col-sm-4 col-form-label">Note</label>
+        <div class="col-sm-8">
+            <input class="form-control" style="width: 100%;" type="text" name="visit_note" value="<?php echo $input->visit_note; ?>" />
+        </div>
+    </div>
+
     <div class="form-group row" style="text-align:center">
         <div id="result_response"></div>
         <?php if ($input->visit_id == 0) { ?>

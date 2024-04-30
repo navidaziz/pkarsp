@@ -1039,15 +1039,17 @@ class Visits extends CI_Controller
             $input["schools_id"] = $schools_id = (int) $this->input->post("schools_id");
             $input["school_id"] = $school_id = (int) $this->input->post("school_id");
             $input["visit_reason"] = $this->input->post("visit_reason");
-
-            $query = "SELECT COUNT(*) as total FROM visits 
+            $visit_id = (int) $this->input->post("visit_id");
+            if ($visit_id == 0) {
+                $query = "SELECT COUNT(*) as total FROM visits 
                     WHERE visited = 'No' 
                     AND school_id = '" . $school_id . "'
                      AND schools_id = '" . $schools_id . "'";
-            $pending_visit_total = $this->db->query($query)->row()->total;
-            if ($pending_visit_total > 0) {
-                echo '<div class="alert alert-danger">School is already in visit list and not visited yet !</div>';
-                exit();
+                $pending_visit_total = $this->db->query($query)->row()->total;
+                if ($pending_visit_total > 0) {
+                    echo '<div class="alert alert-danger">School is already in visit list and not visited yet !</div>';
+                    exit();
+                }
             }
 
 
@@ -1077,10 +1079,12 @@ class Visits extends CI_Controller
                 $input["academy_l"] = 0;
             }
             $input["visited"] = 'No';
+            $input['visit_note'] = $this->input->post('visit_note');
             $inputs =  (object) $input;
 
+
             $inputs->created_by = $this->session->userdata("userId");
-            $visit_id = (int) $this->input->post("visit_id");
+
             if ($visit_id == 0) {
                 $this->db->insert("visits", $inputs);
             } else {

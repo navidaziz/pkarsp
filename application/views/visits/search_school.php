@@ -1,9 +1,10 @@
 <form id="search_school" class="form-horizontal" enctype="multipart/form-data" method="post">
+    <h4>Search Instititute by Instititute ID</h4>
     <div class="row">
         <div class="col-md-12">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="visit_reason" class="col-form-label">Visit Reason</label>
+                    <label for="visit_reason" class="col-form-label">Instititute ID</label>
                     <input class="form-control" type="text" name="schools_id" value="" />
                 </div>
             </div>

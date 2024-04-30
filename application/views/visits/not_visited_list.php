@@ -75,6 +75,7 @@
                                             <th>Contact</th>
                                             <th>Already Registered</th>
                                             <th>Visit Reason</th>
+                                            <th>Note</th>
                                             <th>Session</th>
                                             <th>Primary</th>
                                             <th>Middle</th>
@@ -109,6 +110,7 @@
                     s.schoolMobileNumber,
                     s.telePhoneNumber,
                     v.visit_status,
+                    v.visit_note,
                     v.created_by
                     FROM visits as v 
                     INNER JOIN schools as s ON(s.schoolId = v.schools_id) 
@@ -118,6 +120,7 @@
                     WHERE is_deleted = 0
                     AND v.visited = 'No'";
                                         $rows = $this->db->query($query)->result();
+
                                         foreach ($rows as $row) { ?>
                                             <tr>
                                                 <td>
@@ -175,6 +178,7 @@
                                                 </td>
 
                                                 <td><?php echo $row->visit_reason; ?></td>
+                                                <td><?php echo $row->visit_note; ?></td>
                                                 <td><?php echo $row->sessionYearTitle; ?></td>
                                                 <td><?php echo $row->primary_l == 1 ? 'Primary' : '' ?></td>
                                                 <td><?php echo $row->middle_l == 1 ? 'Middle' : '' ?></td>
