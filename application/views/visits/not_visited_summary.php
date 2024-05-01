@@ -75,7 +75,7 @@
                                     </thead>
                                     <tbody>
                                         <?php
-                                        $count = 1;
+
                                         $query = "SELECT `d`.`new_region`,
                                         `d`.`new_region` AS `new_region`,if((`d`.`new_region` = 1),'Central',if((`d`.`new_region` = 2),'South',if((`d`.`new_region` = 3),'Malakand',if((`d`.`new_region` = 4),'Hazara',if((`d`.`new_region` = 5),'Peshawar','Others'))))) AS `region`
                                          FROM district as d 
@@ -93,7 +93,9 @@
                                             ";
                                             $rows = $this->db->query($query)->result();
 
-                                            foreach ($rows as $row) { ?>
+                                            foreach ($rows as $row) {
+                                                $count = 1;
+                                            ?>
                                                 <tr>
 
                                                     <td style="text-align: right;"><?php echo $count++ ?></td>
