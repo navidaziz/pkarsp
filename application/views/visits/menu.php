@@ -24,6 +24,11 @@
     <li class="<?php echo $menu == 'not_visited_list' ? 'active' : '' ?>">
         <a href="<?php echo site_url('/visits/visit_list/?menu=not_visited_list'); ?>"><i class="fa fa-clock-o" aria-hidden="true"></i> Not Visited List</a>
     </li>
+    <li class="<?php echo $menu == 'not_visited_summary' ? 'active' : '' ?>">
+        <a href="<?php echo site_url('/visits/visit_list/?menu=not_visited_summary'); ?>"><i class="fa fa-clock-o" aria-hidden="true"></i> Not Visited Summary</a>
+    </li>
+
+
 
     <li class="<?php echo $menu == 'visited_list' ? 'active' : '' ?>">
         <a href="<?php echo site_url('/visits/visit_list/?menu=visited_list'); ?>"><i class="fa fa-check" aria-hidden="true"></i> Visited List</a>

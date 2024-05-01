@@ -53,6 +53,13 @@ class Visits extends CI_Controller
             $this->data["description"] = 'New Registration and Upgradation Pending Cases';
             $this->data['view'] = 'visits/pending_cases';
         }
+        if ($menu == 'not_visited_summary') {
+            $this->data["title"] = 'Not Visited Summary';
+            $this->data["description"] = 'New Registration and Upgradation Not Visited Summary';
+            $this->data['view'] = 'visits/not_visited_summary';
+        }
+
+
         $this->load->view('layout', $this->data);
     }
 
