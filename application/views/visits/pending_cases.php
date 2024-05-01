@@ -67,7 +67,8 @@
                                     return preg_replace('/\D/', '', $number);
                                 }
                                 $count = 1;
-                                $query = "SELECT `schools`.schoolId as schools_id, 
+                                $query = "SELECT `schools`.schoolId as schools_id,
+                                `school`.schoolId as school_id, 
                                         `schools`.schoolName, 
                                         `schools`.registrationNumber, 
                                         `schools`.biseRegister, 
@@ -153,121 +154,201 @@
                                         $count = 1;
                                         $previous_school_id = 0;
                                         foreach ($requests as $request) {
-                                            if ($request->previous_session_status != 8) {
+
+
+
+
                                         ?>
 
 
-                                                <tr style="<?php if ($request->flag_color) { ?>
+                                            <tr style="<?php if ($request->flag_color) { ?>
             background-color: <?php echo $request->flag_color; ?>; <?php } ?> <?php if ($request->deficient > 0) { ?> color:red; <?php if ($list_type == 1) { ?> display:no ne;<?php } ?> <?php } ?>">
-                                                    <td><?php echo $count++; ?> </td>
 
-                                                    <td><?php echo $request->regTypeTitle; ?></td>
+                                                <td>
+                                                    <?php
+                                                    $school_id = $request->school_id;
+                                                    $schools_id = $request->schools_id;
+                                                    $query = "SELECT COUNT(*) as total FROM visits 
+                                                     WHERE visited = 'No' 
+                                                     AND school_id = '" . $request->school_id . "'
+                                                      AND schools_id = '" . $request->schools_id . "'";
+                                                    $pending_visit_total = $this->db->query($query)->row()->total;
+                                                    if ($pending_visit_total == 0) {
+                                                        $query = "SELECT reg_type_id, upgradation_levels, level_of_school_id 
+                                                             FROM school 
+                                                             WHERE schools_id ='" . $request->schools_id . "' 
+                                                             AND schoolId = '" . $request->school_id . "'";
+                                                        $apply_detail = $this->db->query($query)->row();
+                                                        if ($apply_detail->reg_type_id == 1 or $apply_detail->reg_type_id == 4) {
+                                                            $input["schools_id"] = $schools_id;
+                                                            $input["school_id"] = $school_id;
 
-                                                    <td><?php echo $request->schools_id ?></td>
-                                                    <td>
-                                                        <?php
-                                                        $query = "SELECT * FROM `school_file_numbers` WHERE `school_id`='$request->schools_id'";
-                                                        $file_numbers = $this->db->query($query)->result();
-                                                        $fcount = 1;
-                                                        foreach ($file_numbers as $file_number) {
-                                                            if ($fcount > 1) {
-                                                                echo ", ";
+                                                            if ($apply_detail->reg_type_id == 1) {
+                                                                $input["visit_reason"] = 'New Registration';
+                                                            } elseif ($apply_detail->reg_type_id == 4) {
+                                                                $input["visit_reason"] = 'Upgradation';
                                                             }
-                                                            echo $file_number->file_number;
 
-                                                            $fcount++;
+                                                            $upgradation_levels = $apply_detail->upgradation_levels;
+                                                            $levels_array = explode(",", $upgradation_levels);
+                                                            $input["primary_l"] = 0;
+                                                            $input["middle_l"] = 0;
+                                                            $input["high_l"] = 0;
+                                                            $input["high_sec_l"] = 0;
+                                                            $input["academy_l"] = 0;
+                                                            if ($apply_detail->level_of_school_id == 1) {
+                                                                $input["primary_l"] = 1;
+                                                            }
+                                                            if ($apply_detail->level_of_school_id == 2) {
+                                                                $input["middle_l"] = 1;
+                                                            }
+                                                            if ($apply_detail->level_of_school_id == 3) {
+                                                                $input["high_l"] = 1;
+                                                            }
+                                                            if ($apply_detail->level_of_school_id == 4) {
+                                                                $input["high_sec_l"] = 1;
+                                                            }
+                                                            if ($apply_detail->level_of_school_id == 5) {
+                                                                $input["academy_l"] = 1;
+                                                            }
+
+                                                            if ($apply_detail->upgradation_levels) {
+                                                                if (in_array("1", $levels_array)) {
+                                                                    $input["primary_l"] = 1;
+                                                                }
+                                                                if (in_array("2", $levels_array)) {
+                                                                    $input["middle_l"] = 1;
+                                                                }
+                                                                if (in_array("3", $levels_array)) {
+                                                                    $input["high_l"] = 1;
+                                                                }
+                                                                if (in_array("4", $levels_array)) {
+                                                                    $input["high_sec_l"] = 1;
+                                                                }
+                                                                if (in_array("5", $levels_array)) {
+                                                                    $input["academy_l"] = 1;
+                                                                }
+                                                            }
+                                                            $input["visited"] = 'No';
+
+                                                            $inputs =  (object) $input;
+                                                            $inputs->created_by = $this->session->userdata("userId");
+                                                            $this->db->insert("visits", $inputs);
+                                                            echo 'add to visit List';
                                                         }
-                                                        ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php if ($request->level_of_school_id == 1) {
-                                                            echo "Primary";
-                                                        } ?>
-                                                        <?php if ($request->level_of_school_id == 2) {
-                                                            echo "Middle";
-                                                        } ?>
-                                                        <?php if ($request->level_of_school_id == 3) {
-                                                            echo "High";
-                                                        } ?>
-                                                        <?php if ($request->level_of_school_id == 4) {
-                                                            echo "H.Sec";
-                                                        } ?>
-                                                        <?php if ($request->level_of_school_id == 5) {
-                                                            echo "Academy";
-                                                        } ?>
-                                                    </td>
-                                                    <td><?php echo $request->districtTitle; ?></td>
-                                                    <td><?php echo substr($request->schoolName, 0, 45) ?></td>
+                                                    } else {
+                                                        echo 'already in list';
+                                                    }
+                                                    ?>
+                                                </td>
+                                                <td><?php echo $count++; ?> </td>
 
+                                                <td><?php echo $request->regTypeTitle; ?></td>
 
-
-
-                                                    <td><?php echo $request->sessionYearTitle ?></td>
-                                                    <td><?php echo $request->flag_detail ?></td>
-                                                    <td>
-
-                                                        <?php if ($request->docs == 0) {
-                                                            echo '<i style="color:red" class="fa fa-times-circle-o" aria-hidden="true"></i> No';
-                                                        } ?>
-                                                        <?php if ($request->docs == 1) {
-                                                            echo '<i style="color:green" class="fa fa-check-circle" aria-hidden="true"></i> Yes';
-                                                        } ?>
-
-                                                    </td>
-                                                    <td style="text-align: center;" title="<?php echo date('d M, Y', strtotime($request->apply_date)); ?>">
-                                                        <?php
-                                                        //strtotime($request->apply_date)
-                                                        if ($request->apply_date) {
-                                                            echo timeago(strtotime($request->apply_date));
+                                                <td><?php echo $request->schools_id ?></td>
+                                                <td>
+                                                    <?php
+                                                    $query = "SELECT * FROM `school_file_numbers` WHERE `school_id`='$request->schools_id'";
+                                                    $file_numbers = $this->db->query($query)->result();
+                                                    $fcount = 1;
+                                                    foreach ($file_numbers as $file_number) {
+                                                        if ($fcount > 1) {
+                                                            echo ", ";
                                                         }
-                                                        ?></td>
-                                                    <td><?php echo $request->apply_date; ?></td>
-                                                    <td style="text-align: center;">
-                                                        <?php
-                                                        $query = "SELECT COUNT(*) as total FROM `file_status_logs` WHERE `file_status` = 5 and schools_id = '" . $request->schools_id . "'";
-                                                        $once_deficient = $this->db->query($query)->row()->total;
-                                                        if ($once_deficient > 0) {
-                                                            echo '<i title="Deficiency completed" class="fa fa-flag" style="color:red" aria-hidden="true">1</i>';
-                                                        }
-                                                        ?>
-                                                    </td>
-                                                    <td style="text-align: center;">
-                                                        <?php
-                                                        $query = "SELECT COUNT(*) as total FROM `comments` WHERE school_id='" . $request->school_id . "' and schools_id = '" . $request->schools_id . "' and deleted=0";
-                                                        $comments = $this->db->query($query)->row()->total;
-                                                        if ($comments > 0) {
-                                                            echo '<i title="Maybe notesheet completed" class="fa fa-comment" style="color:green" aria-hidden="true">1</i>';
-                                                        }
-                                                        ?>
-                                                    </td>
-                                                    <td style="text-align: center;">
-                                                        <?php if ($request->isfined == 1) { ?>
-                                                            <i class="fa fa-ban" title="Fine on this school" style="color: red;">1</i>
-                                                        <?php } ?>
-                                                    </td>
+                                                        echo $file_number->file_number;
 
-                                                    <td><?php echo $request->visit; ?></td>
-                                                    <td><?php echo $request->recommended; ?></td>
+                                                        $fcount++;
+                                                    }
+                                                    ?>
+                                                </td>
+                                                <td>
+                                                    <?php if ($request->level_of_school_id == 1) {
+                                                        echo "Primary";
+                                                    } ?>
+                                                    <?php if ($request->level_of_school_id == 2) {
+                                                        echo "Middle";
+                                                    } ?>
+                                                    <?php if ($request->level_of_school_id == 3) {
+                                                        echo "High";
+                                                    } ?>
+                                                    <?php if ($request->level_of_school_id == 4) {
+                                                        echo "H.Sec";
+                                                    } ?>
+                                                    <?php if ($request->level_of_school_id == 5) {
+                                                        echo "Academy";
+                                                    } ?>
+                                                </td>
+                                                <td><?php echo $request->districtTitle; ?></td>
+                                                <td><?php echo substr($request->schoolName, 0, 45) ?></td>
 
 
-                                                    <td><?php echo $request->status_remark; ?></td>
 
 
-                                                    <td><?php echo $request->yearOfEstiblishment; ?></td>
-                                                    <td><?php
-                                                        if ($request->biseRegister == 'Yes') {
-                                                            echo 'Yes - ';
-                                                        }
-                                                        echo $request->biseregistrationNumber;
-                                                        ?></td>
+                                                <td><?php echo $request->sessionYearTitle ?></td>
+                                                <td><?php echo $request->flag_detail ?></td>
+                                                <td>
 
-                                                    <td><?php echo file_status($request->file_status); ?></td>
+                                                    <?php if ($request->docs == 0) {
+                                                        echo '<i style="color:red" class="fa fa-times-circle-o" aria-hidden="true"></i> No';
+                                                    } ?>
+                                                    <?php if ($request->docs == 1) {
+                                                        echo '<i style="color:green" class="fa fa-check-circle" aria-hidden="true"></i> Yes';
+                                                    } ?>
 
-                                                </tr>
+                                                </td>
+                                                <td style="text-align: center;" title="<?php echo date('d M, Y', strtotime($request->apply_date)); ?>">
+                                                    <?php
+                                                    //strtotime($request->apply_date)
+                                                    if ($request->apply_date) {
+                                                        echo timeago(strtotime($request->apply_date));
+                                                    }
+                                                    ?></td>
+                                                <td><?php echo $request->apply_date; ?></td>
+                                                <td style="text-align: center;">
+                                                    <?php
+                                                    $query = "SELECT COUNT(*) as total FROM `file_status_logs` WHERE `file_status` = 5 and schools_id = '" . $request->schools_id . "'";
+                                                    $once_deficient = $this->db->query($query)->row()->total;
+                                                    if ($once_deficient > 0) {
+                                                        echo '<i title="Deficiency completed" class="fa fa-flag" style="color:red" aria-hidden="true">1</i>';
+                                                    }
+                                                    ?>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <?php
+                                                    $query = "SELECT COUNT(*) as total FROM `comments` WHERE school_id='" . $request->school_id . "' and schools_id = '" . $request->schools_id . "' and deleted=0";
+                                                    $comments = $this->db->query($query)->row()->total;
+                                                    if ($comments > 0) {
+                                                        echo '<i title="Maybe notesheet completed" class="fa fa-comment" style="color:green" aria-hidden="true">1</i>';
+                                                    }
+                                                    ?>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <?php if ($request->isfined == 1) { ?>
+                                                        <i class="fa fa-ban" title="Fine on this school" style="color: red;">1</i>
+                                                    <?php } ?>
+                                                </td>
+
+                                                <td><?php echo $request->visit; ?></td>
+                                                <td><?php echo $request->recommended; ?></td>
+
+
+                                                <td><?php echo $request->status_remark; ?></td>
+
+
+                                                <td><?php echo $request->yearOfEstiblishment; ?></td>
+                                                <td><?php
+                                                    if ($request->biseRegister == 'Yes') {
+                                                        echo 'Yes - ';
+                                                    }
+                                                    echo $request->biseregistrationNumber;
+                                                    ?></td>
+
+                                                <td><?php echo file_status($request->file_status); ?></td>
+
+                                            </tr>
 
                                         <?php
-                                                $previous_school_id =  $request->schools_id;
-                                            }
+
                                         } ?>
                                     </tbody>
                                 </table>
