@@ -68,6 +68,7 @@
                                             <th>#</th>
                                             <th>Institute ID</th>
                                             <th>School Name</th>
+                                            <th>Region</th>
                                             <th>District</th>
                                             <th>Tehsil</th>
                                             <th>UC</th>
@@ -97,7 +98,10 @@
                                             return preg_replace('/\D/', '', $number);
                                         }
                                         $count = 1;
-                                        $query = "SELECT v. visit_id, v.schools_id, v.schools_id, v.visit_reason, v.primary_l, 
+                                        $query = "SELECT 
+                                        `district`.`new_region` AS `new_region`,if((`district`.`new_region` = 1),'Central',if((`district`.`new_region` = 2),'South',if((`district`.`new_region` = 3),'Malakand',if((`district`.`new_region` = 4),'Hazara',if((`district`.`new_region` = 5),'Peshawar','Others'))))) AS `region`,
+		
+                                        v. visit_id, v.schools_id, v.schools_id, v.visit_reason, v.primary_l, 
                     v.middle_l, v.high_l, v.high_sec_l, v.academy_l, v.visited, 
                     s.schoolName, s.registrationNumber,
                     (SELECT tehsilTitle FROM `tehsils` WHERE tehsils.tehsilId=s.tehsil_id) as tehsil,
@@ -131,6 +135,7 @@
                                                 <td><?php echo $count++ ?></td>
                                                 <td><?php echo $row->schools_id; ?></td>
                                                 <td><?php echo $row->schoolName; ?></td>
+                                                <td><?php echo $row->region; ?></td>
                                                 <td><?php echo $row->districtTitle; ?></td>
                                                 <td><?php echo $row->tehsil; ?></td>
                                                 <td><?php echo $row->uc != NULL ? $row->uc : $row->uc_text; ?></td>
