@@ -131,6 +131,7 @@
                                             <th>Flag</th>
                                             <th>Docs</th>
                                             <th>Days</th>
+                                            <th>Date</th>
                                             <th>Defic</th>
                                             <th>Note</th>
                                             <th>Fine</th>
@@ -220,6 +221,7 @@
                                                             echo timeago(strtotime($request->apply_date));
                                                         }
                                                         ?></td>
+                                                    <td><?php echo date('d M, Y', strtotime($request->apply_date)); ?></td>
                                                     <td style="text-align: center;">
                                                         <?php
                                                         $query = "SELECT COUNT(*) as total FROM `file_status_logs` WHERE `file_status` = 5 and schools_id = '" . $request->schools_id . "'";
