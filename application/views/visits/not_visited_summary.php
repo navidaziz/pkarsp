@@ -70,6 +70,7 @@
                                             foreach ($options as $option) { ?>
                                                 <th><?php echo $option; ?></th>
                                             <?php }  ?>
+                                            <th>Total</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -82,10 +83,6 @@
                                          ORDER BY d.new_region ASC";
                                         $regions = $this->db->query($query)->result();
                                         foreach ($regions as $region) {  ?>
-
-
-
-
                                             <?php $query = "SELECT
                                             `d`.`districtId`,
                                             `d`.`districtTitle`,
@@ -102,17 +99,20 @@
                                                     <td style="text-align: right;"><?php echo $count++ ?></td>
                                                     <td><?php echo $row->districtTitle; ?></td>
                                                     <?php
+                                                    $total = 0;
                                                     $options = array("New Registration", "Renewal", "Upgradation", "Change of Location", "Closure of School");
                                                     foreach ($options as $option) {
-                                                        $query = "SELECT COUNT(v.schools_id) as total FROM visits as v 
+                                                        $query = "SELECT COUNT(v.visit_id) as total FROM visits as v 
                                                     INNER JOIN schools as s ON(s.schoolId = v.schools_id)
                                                     WHERE s.district_id = '" . $row->districtId . "'
                                                     AND v.visit_reason = '" . $option . "'
                                                     AND visited ='No'";
                                                         $count_visits = $this->db->query($query)->row()->total;
+                                                        $total += $count_visits;
                                                     ?>
                                                         <td style="text-align: center;"><?php echo $count_visits; ?></td>
                                                     <?php }  ?>
+                                                    <td style="text-align: center;"><?php echo $total; ?></td>
                                                 </tr>
                                             <?php } ?>
                                             <tr>
@@ -120,6 +120,7 @@
                                                 <th><?php echo $region->region; ?></th>
                                                 <th>Total</th>
                                                 <?php
+                                                $total = 0;
                                                 $options = array("New Registration", "Renewal", "Upgradation", "Change of Location", "Closure of School");
                                                 foreach ($options as $option) {
                                                     $query = "SELECT COUNT(v.schools_id) as total FROM visits as v 
@@ -129,9 +130,11 @@
                                                     AND v.visit_reason = '" . $option . "'
                                                     AND visited ='No'";
                                                     $count_visits = $this->db->query($query)->row()->total;
+                                                    $total += $count_visits;
                                                 ?>
                                                     <th style="text-align: center;"><?php echo $count_visits; ?></th>
                                                 <?php }  ?>
+                                                <th style="text-align: center;"><?php echo $total; ?></th>
                                             </tr>
 
                                         <?php } ?>
@@ -142,17 +145,20 @@
                                             <th></th>
                                             <th>Total</th>
                                             <?php
+                                            $total = 0;
                                             $options = array("New Registration", "Renewal", "Upgradation", "Change of Location", "Closure of School");
                                             foreach ($options as $option) {
-                                                $query = "SELECT COUNT(v.schools_id) as total FROM visits as v 
+                                                $query = "SELECT COUNT(v.visit_id) as total FROM visits as v 
                                                     INNER JOIN schools as s ON(s.schoolId = v.schools_id)
                                                     INNER JOIN district as d ON(d.districtId = s.district_id)
                                                     AND v.visit_reason = '" . $option . "'
                                                     AND visited ='No'";
                                                 $count_visits = $this->db->query($query)->row()->total;
+                                                $total += $count_visits;
                                             ?>
                                                 <th style="text-align: center;"><?php echo $count_visits; ?></th>
                                             <?php }  ?>
+                                            <th style="text-align: center;"><?php echo $total; ?></th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -169,24 +175,6 @@
 
 
 
-
-
-        <script>
-            function get_add_to_visit_list_form(visit_id) {
-                $.ajax({
-                        method: "POST",
-                        url: "<?php echo site_url('visits/get_add_to_visit_list_form'); ?>",
-                        data: {
-                            visit_id: visit_id
-                        },
-                    })
-                    .done(function(respose) {
-                        $('#modal').modal('show');
-                        $('#modal_title').html('Visits');
-                        $('#modal_body').html(respose);
-                    });
-            }
-        </script>
 
 
     </section>
