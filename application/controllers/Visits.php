@@ -11,6 +11,7 @@ class Visits extends CI_Controller
         parent::__construct();
         $this->lang->load("system", 'english');
         $this->load->model("school_m");
+        $this->load->helper('project_helper');
         //$this->output->enable_profiler(TRUE);
 
     }
@@ -46,6 +47,11 @@ class Visits extends CI_Controller
             $this->data["title"] = 'Visited List';
             $this->data["description"] = 'Visited Institutes List';
             $this->data['view'] = 'visits/visited_list';
+        }
+        if ($menu == 'pending_cases') {
+            $this->data["title"] = 'Pending Cases';
+            $this->data["description"] = 'New Registration and Upgradation Pending Cases';
+            $this->data['view'] = 'visits/pending_cases';
         }
         $this->load->view('layout', $this->data);
     }

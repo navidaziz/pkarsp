@@ -16,6 +16,11 @@
 </style>
 
 <ul class="nav nav-tabs" style="margin-bottom: 5px;">
+
+    <li class="<?php echo $menu == 'pending_cases' ? 'active' : '' ?>">
+        <a href="<?php echo site_url('/visits/visit_list/?menu=pending_cases'); ?>"><i class="fa fa-clock-o" aria-hidden="true"></i> Pending Cases</a>
+    </li>
+
     <li class="<?php echo $menu == 'not_visited_list' ? 'active' : '' ?>">
         <a href="<?php echo site_url('/visits/visit_list/?menu=not_visited_list'); ?>"><i class="fa fa-clock-o" aria-hidden="true"></i> Not Visited List</a>
     </li>
