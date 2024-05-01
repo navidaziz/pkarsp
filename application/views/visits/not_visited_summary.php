@@ -58,15 +58,13 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="table-responsive">
-                                <div style="text-align: center;">
-                                    <button onclick="get_add_to_visit_list_form(0)" class="btn btn-primary btn-sm">Add Institute to Visit List</button>
-                                </div>
+
                                 <table class="table table-bordered" id="visits_list">
                                     <thead>
                                         <tr>
 
-                                            <th>Region</th>
-                                            <th>District</th>
+                                            <th>Regions</th>
+                                            <th>Districts</th>
                                             <?php
                                             $options = array("New Registration", "Renewal", "Upgradation", "Change of Location", "Closure of School");
                                             foreach ($options as $option) { ?>
@@ -138,6 +136,25 @@
 
                                         <?php } ?>
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+
+                                            <th></th>
+                                            <th>Total</th>
+                                            <?php
+                                            $options = array("New Registration", "Renewal", "Upgradation", "Change of Location", "Closure of School");
+                                            foreach ($options as $option) {
+                                                $query = "SELECT COUNT(v.schools_id) as total FROM visits as v 
+                                                    INNER JOIN schools as s ON(s.schoolId = v.schools_id)
+                                                    INNER JOIN district as d ON(d.districtId = s.district_id)
+                                                    AND v.visit_reason = '" . $option . "'
+                                                    AND visited ='No'";
+                                                $count_visits = $this->db->query($query)->row()->total;
+                                            ?>
+                                                <th style="text-align: center;"><?php echo $count_visits; ?></th>
+                                            <?php }  ?>
+                                        </tr>
+                                    </tfoot>
                                 </table>
 
 
