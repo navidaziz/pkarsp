@@ -212,8 +212,8 @@
         $('#visits_list').DataTable({
             dom: 'Bfrtip',
             paging: false,
-            searching: true,
-            ordering: fasle, // Enable sorting
+            searching: false,
+            ordering: false, // Enable sorting
             buttons: [
                 'copy', 'csv', 'excel', 'print', {
                     extend: 'pdfHtml5',
