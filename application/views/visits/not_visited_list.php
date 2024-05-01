@@ -99,7 +99,7 @@
                                         }
                                         $count = 1;
                                         $query = "SELECT 
-                                        `district`.`new_region` AS `new_region`,if((`district`.`new_region` = 1),'Central',if((`district`.`new_region` = 2),'South',if((`district`.`new_region` = 3),'Malakand',if((`district`.`new_region` = 4),'Hazara',if((`district`.`new_region` = 5),'Peshawar','Others'))))) AS `region`,
+                                        `d`.`new_region` AS `new_region`,if((`d`.`new_region` = 1),'Central',if((`d`.`new_region` = 2),'South',if((`d`.`new_region` = 3),'Malakand',if((`d`.`new_region` = 4),'Hazara',if((`d`.`new_region` = 5),'Peshawar','Others'))))) AS `region`,
 		
                                         v. visit_id, v.schools_id, v.schools_id, v.visit_reason, v.primary_l, 
                     v.middle_l, v.high_l, v.high_sec_l, v.academy_l, v.visited, 
