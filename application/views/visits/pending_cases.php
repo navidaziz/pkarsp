@@ -135,11 +135,6 @@
                                             <th>Reco.</th>
                                             <th>Remarks</th>
 
-                                            <th>Action</th>
-
-                                            <th>Tehsil</th>
-                                            <th>Address</th>
-
                                             <th>YofEst</th>
                                             <th>BISE Reg.</td>
 
@@ -250,15 +245,6 @@
 
                                                     <td><?php echo $request->status_remark; ?></td>
 
-
-
-
-                                                    <td>
-
-                                                    </td>
-
-                                                    <td><?php echo $request->tehsil; ?></td>
-                                                    <td><?php echo $request->address; ?></td>
 
                                                     <td><?php echo $request->yearOfEstiblishment; ?></td>
                                                     <td><?php
