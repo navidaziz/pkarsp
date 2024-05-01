@@ -137,6 +137,7 @@
 
                                             <th>YofEst</th>
                                             <th>BISE Reg.</td>
+                                            <th>Status</th>
 
 
 
@@ -254,7 +255,7 @@
                                                         echo $request->biseregistrationNumber;
                                                         ?></td>
 
-
+                                                    <td><?php echo file_status($request->file_status); ?></td>
 
                                                 </tr>
 
