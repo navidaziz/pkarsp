@@ -92,9 +92,9 @@
                                             ORDER BY d.new_region ASC, d.districtTitle ASC
                                             ";
                                             $rows = $this->db->query($query)->result();
-
+                                            $count = 1;
                                             foreach ($rows as $row) {
-                                                $count = 1;
+
                                             ?>
                                                 <tr>
 
