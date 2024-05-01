@@ -109,7 +109,8 @@
                                          AND `school`.`reg_type_id` IN(1,4) 
                                          AND `schools`.`school_type_id`= '1' 
                                          AND school.visit != 'Yes'
-                                         ORDER BY `school`.`apply_date` ASC, `school`.`schools_id` ASC, `school`.`session_year_id` ASC;";
+                                         ORDER BY `school`.`apply_date` ASC, 
+                                         `school`.`schools_id` ASC, `school`.`session_year_id` ASC;";
                                 $requests = $this->db->query($query)->result();
                                 ?>
                                 <table class="table table-bordered table_small" id="visits_list" style="font-size:11px">
