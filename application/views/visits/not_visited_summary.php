@@ -85,24 +85,7 @@
                                         $regions = $this->db->query($query)->result();
                                         foreach ($regions as $region) {  ?>
 
-                                            <tr>
 
-                                                <th><?php echo $region->region; ?></th>
-                                                <th>Total</th>
-                                                <?php
-                                                $options = array("New Registration", "Renewal", "Upgradation", "Change of Location", "Closure of School");
-                                                foreach ($options as $option) {
-                                                    $query = "SELECT COUNT(v.schools_id) as total FROM visits as v 
-                                                    INNER JOIN schools as s ON(s.schoolId = v.schools_id)
-                                                    INNER JOIN district as d ON(d.districtId = s.district_id)
-                                                    WHERE d.new_region = '" . $region->new_region . "'
-                                                    AND v.visit_reason = '" . $option . "'
-                                                    AND visited ='No'";
-                                                    $count_visits = $this->db->query($query)->row()->total;
-                                                ?>
-                                                    <th style="text-align: center;"><?php echo $count_visits; ?></th>
-                                                <?php }  ?>
-                                            </tr>
 
 
                                             <?php $query = "SELECT
@@ -134,6 +117,24 @@
                                                     <?php }  ?>
                                                 </tr>
                                             <?php } ?>
+                                            <tr>
+
+                                                <th><?php echo $region->region; ?></th>
+                                                <th>Total</th>
+                                                <?php
+                                                $options = array("New Registration", "Renewal", "Upgradation", "Change of Location", "Closure of School");
+                                                foreach ($options as $option) {
+                                                    $query = "SELECT COUNT(v.schools_id) as total FROM visits as v 
+                                                    INNER JOIN schools as s ON(s.schoolId = v.schools_id)
+                                                    INNER JOIN district as d ON(d.districtId = s.district_id)
+                                                    WHERE d.new_region = '" . $region->new_region . "'
+                                                    AND v.visit_reason = '" . $option . "'
+                                                    AND visited ='No'";
+                                                    $count_visits = $this->db->query($query)->row()->total;
+                                                ?>
+                                                    <th style="text-align: center;"><?php echo $count_visits; ?></th>
+                                                <?php }  ?>
+                                            </tr>
 
                                         <?php } ?>
                                     </tbody>
