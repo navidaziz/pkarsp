@@ -108,6 +108,7 @@
                                          AND `school`.`file_status`!= '10' 
                                          AND `school`.`reg_type_id` IN(1,4) 
                                          AND `schools`.`school_type_id`= '1' 
+                                         AND (school.visit IS NULL or school.visit = 'No')
                                          ORDER BY `school`.`apply_date` ASC, 
                                          `school`.`schools_id` ASC, `school`.`session_year_id` ASC;";
                                 $requests = $this->db->query($query)->result();
