@@ -106,7 +106,7 @@
                                          AND district.new_region IN(1,2,3,4,5) 
                                          AND `school`.`status`='2' 
                                          AND `school`.`file_status`!= '10' 
-                                         AND `school`.`reg_type_id` IN(1,3) 
+                                         AND `school`.`reg_type_id` IN(1,4) 
                                          AND `schools`.`school_type_id`= '1' 
                                          ORDER BY `school`.`apply_date` ASC, `school`.`schools_id` ASC, `school`.`session_year_id` ASC;";
                                 $requests = $this->db->query($query)->result();
