@@ -110,8 +110,6 @@
                                          AND `school`.`reg_type_id` IN(1,4) 
                                          AND `schools`.`school_type_id`= '1' 
                                          AND (school.visit IS NULL or school.visit = 'No')
-                                         AND DATE(`school`.`apply_date`) >= '2023-09-01'
-                                        
                                          ORDER BY `school`.`apply_date` ASC, 
                                          `school`.`schools_id` ASC, `school`.`session_year_id` ASC;";
                                 $requests = $this->db->query($query)->result();
@@ -144,6 +142,7 @@
                                             <th>YofEst</th>
                                             <th>BISE Reg.</td>
                                             <th>Status</th>
+                                            <th>In Visit List</th>
 
 
 
@@ -166,79 +165,80 @@
 
                                                 <td>
                                                     <?php
-                                                    $school_id = $request->school_id;
-                                                    $schools_id = $request->schools_id;
-                                                    $query = "SELECT COUNT(*) as total FROM visits 
-                                                     WHERE visited = 'No' 
-                                                     AND school_id = '" . $request->school_id . "'
-                                                      AND schools_id = '" . $request->schools_id . "'";
-                                                    $pending_visit_total = $this->db->query($query)->row()->total;
-                                                    if ($pending_visit_total == 0) {
-                                                        $query = "SELECT reg_type_id, upgradation_levels, level_of_school_id 
-                                                             FROM school 
-                                                             WHERE schools_id ='" . $request->schools_id . "' 
-                                                             AND schoolId = '" . $request->school_id . "'";
-                                                        $apply_detail = $this->db->query($query)->row();
-                                                        if ($apply_detail->reg_type_id == 1 or $apply_detail->reg_type_id == 4) {
-                                                            $input["schools_id"] = $schools_id;
-                                                            $input["school_id"] = $school_id;
+                                                    // $school_id = $request->school_id;
+                                                    // $schools_id = $request->schools_id;
+                                                    // $query = "SELECT COUNT(*) as total FROM visits 
+                                                    //  WHERE visited = 'No' 
+                                                    //  AND school_id = '" . $request->school_id . "'
+                                                    //   AND schools_id = '" . $request->schools_id . "'";
+                                                    // $pending_visit_total = $this->db->query($query)->row()->total;
+                                                    // if ($pending_visit_total == 0) {
+                                                    //     $query = "SELECT reg_type_id, upgradation_levels, level_of_school_id 
+                                                    //          FROM school 
+                                                    //          WHERE schools_id ='" . $request->schools_id . "' 
+                                                    //          AND schoolId = '" . $request->school_id . "'";
+                                                    //     $apply_detail = $this->db->query($query)->row();
+                                                    //     if ($apply_detail->reg_type_id == 1 or $apply_detail->reg_type_id == 4) {
+                                                    //         $input["schools_id"] = $schools_id;
+                                                    //         $input["school_id"] = $school_id;
 
-                                                            if ($apply_detail->reg_type_id == 1) {
-                                                                $input["visit_reason"] = 'New Registration';
-                                                            } elseif ($apply_detail->reg_type_id == 4) {
-                                                                $input["visit_reason"] = 'Upgradation';
-                                                            }
+                                                    //         if ($apply_detail->reg_type_id == 1) {
+                                                    //             $input["visit_reason"] = 'New Registration';
+                                                    //         } elseif ($apply_detail->reg_type_id == 4) {
+                                                    //             $input["visit_reason"] = 'Upgradation';
+                                                    //         }
 
-                                                            $upgradation_levels = $apply_detail->upgradation_levels;
-                                                            $levels_array = explode(",", $upgradation_levels);
-                                                            $input["primary_l"] = 0;
-                                                            $input["middle_l"] = 0;
-                                                            $input["high_l"] = 0;
-                                                            $input["high_sec_l"] = 0;
-                                                            $input["academy_l"] = 0;
-                                                            if ($apply_detail->level_of_school_id == 1) {
-                                                                $input["primary_l"] = 1;
-                                                            }
-                                                            if ($apply_detail->level_of_school_id == 2) {
-                                                                $input["middle_l"] = 1;
-                                                            }
-                                                            if ($apply_detail->level_of_school_id == 3) {
-                                                                $input["high_l"] = 1;
-                                                            }
-                                                            if ($apply_detail->level_of_school_id == 4) {
-                                                                $input["high_sec_l"] = 1;
-                                                            }
-                                                            if ($apply_detail->level_of_school_id == 5) {
-                                                                $input["academy_l"] = 1;
-                                                            }
+                                                    //         $upgradation_levels = $apply_detail->upgradation_levels;
+                                                    //         $levels_array = explode(",", $upgradation_levels);
+                                                    //         $input["primary_l"] = 0;
+                                                    //         $input["middle_l"] = 0;
+                                                    //         $input["high_l"] = 0;
+                                                    //         $input["high_sec_l"] = 0;
+                                                    //         $input["academy_l"] = 0;
+                                                    //         if ($apply_detail->level_of_school_id == 1) {
+                                                    //             $input["primary_l"] = 1;
+                                                    //         }
+                                                    //         if ($apply_detail->level_of_school_id == 2) {
+                                                    //             $input["middle_l"] = 1;
+                                                    //         }
+                                                    //         if ($apply_detail->level_of_school_id == 3) {
+                                                    //             $input["high_l"] = 1;
+                                                    //         }
+                                                    //         if ($apply_detail->level_of_school_id == 4) {
+                                                    //             $input["high_sec_l"] = 1;
+                                                    //         }
+                                                    //         if ($apply_detail->level_of_school_id == 5) {
+                                                    //             $input["academy_l"] = 1;
+                                                    //         }
 
-                                                            if ($apply_detail->upgradation_levels) {
-                                                                if (in_array("1", $levels_array)) {
-                                                                    $input["primary_l"] = 1;
-                                                                }
-                                                                if (in_array("2", $levels_array)) {
-                                                                    $input["middle_l"] = 1;
-                                                                }
-                                                                if (in_array("3", $levels_array)) {
-                                                                    $input["high_l"] = 1;
-                                                                }
-                                                                if (in_array("4", $levels_array)) {
-                                                                    $input["high_sec_l"] = 1;
-                                                                }
-                                                                if (in_array("5", $levels_array)) {
-                                                                    $input["academy_l"] = 1;
-                                                                }
-                                                            }
-                                                            $input["visited"] = 'No';
+                                                    //         if ($apply_detail->upgradation_levels) {
+                                                    //             if (in_array("1", $levels_array)) {
+                                                    //                 $input["primary_l"] = 1;
+                                                    //             }
+                                                    //             if (in_array("2", $levels_array)) {
+                                                    //                 $input["middle_l"] = 1;
+                                                    //             }
+                                                    //             if (in_array("3", $levels_array)) {
+                                                    //                 $input["high_l"] = 1;
+                                                    //             }
+                                                    //             if (in_array("4", $levels_array)) {
+                                                    //                 $input["high_sec_l"] = 1;
+                                                    //             }
+                                                    //             if (in_array("5", $levels_array)) {
+                                                    //                 $input["academy_l"] = 1;
+                                                    //             }
+                                                    //         }
+                                                    //         $input["visited"] = 'No';
 
-                                                            $inputs =  (object) $input;
-                                                            $inputs->created_by = $this->session->userdata("userId");
-                                                            $this->db->insert("visits", $inputs);
-                                                            echo 'add to visit List';
-                                                        }
-                                                    } else {
-                                                        echo 'already in list';
-                                                    }
+                                                    //         $inputs =  (object) $input;
+                                                    //         $inputs->created_by = $this->session->userdata("userId");
+                                                    //         $this->db->insert("visits", $inputs);
+                                                    //         echo 'add to visit List';
+                                                    //     }
+                                                    // } else {
+                                                    //     echo 'already in list';
+                                                    // }
+                                                    // 
                                                     ?>
                                                 </td>
                                                 <td><?php echo $count++; ?> </td>
@@ -344,7 +344,17 @@
                                                     ?></td>
 
                                                 <td><?php echo file_status($request->file_status); ?></td>
-
+                                                <td>
+                                                    <?php
+                                                    $query = "SELECT COUNT(*) as total FROM visits 
+                                                    WHERE visited = 'No' 
+                                                    AND school_id = '" . $request->school_id . "'
+                                                    AND schools_id = '" . $request->schools_id . "'";
+                                                    $pending_visit_total = $this->db->query($query)->row()->total;
+                                                    if ($pending_visit_total == 0) { ?>
+                                                        add to visit list
+                                                    <?php }  ?>
+                                                </td>
                                             </tr>
 
                                         <?php
