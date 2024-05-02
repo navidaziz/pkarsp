@@ -111,6 +111,12 @@
       font-size: 15px !important;
 
     }
+
+    @media print {
+      @page {
+        size: landscape !important
+      }
+    }
   </style>
 </head>
 
