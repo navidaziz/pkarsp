@@ -246,6 +246,13 @@ class Print_file extends Admin_Controller
 		$this->load->view('print/section_e', $this->data);
 	}
 
+	public function all_section_e($schools_id)
+	{
+		$schools_id = (int) $schools_id;
+		$this->data['school'] = $this->school_m->explore_schools_by_school_id_m($schools_id);
+		$this->load->view('print/all_section_e', $this->data);
+	}
+
 	// private function school_detail($school_session_id)
 	// {
 	// 	$userId = $this->session->userdata('userId');

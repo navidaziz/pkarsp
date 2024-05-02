@@ -392,6 +392,9 @@ if ($this->session->userdata('role_id') == '34' or $this->session->userdata('rol
                 <a target="_blank" class="btn btn-success" href="<?php echo site_url("online_cases/combine_note_sheet/" . $school->schools_id) ?>">Process Note Sheet</a>
             </p>
         <?php } ?>
+        <p style="text-align: center;">
+            <a target="_blank" class="btn btn-danger" href="<?php echo site_url("print_file/all_section_e/" . $school->schools_id) ?>">Print All Session Fee</a>
+        </p>
     </div>
 <?php } ?>
 
