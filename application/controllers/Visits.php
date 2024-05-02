@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Visits extends CI_Controller
+class Visits extends Admin_Controller
 {
 
     /**
