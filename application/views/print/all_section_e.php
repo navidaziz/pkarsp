@@ -108,7 +108,7 @@
       line-height: 1;
       vertical-align: top;
       color: black !important;
-      font-size: 15px !important;
+      font-size: 20px !important;
 
     }
 
