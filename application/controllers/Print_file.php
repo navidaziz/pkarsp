@@ -249,7 +249,7 @@ class Print_file extends Admin_Controller
 	public function all_section_e($schools_id)
 	{
 		$schools_id = (int) $schools_id;
-		$this->data['school'] = $this->school_m->explore_schools_by_school_id_m($schools_id);
+		$this->data['schools_id'] = $schools_id;
 		$this->load->view('print/all_section_e', $this->data);
 	}
 

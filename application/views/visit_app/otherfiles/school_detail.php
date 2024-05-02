@@ -23,7 +23,7 @@
 
 
         <div class="pull-right" id="">
-            <a class="navbar-brand" href="<?php echo site_url("visit_app/index") ?>"><i class="fa fa-home"></i></a>
+            <a class="navbar-brand" href="<?php echo site_url("visits/index") ?>"><i class="fa fa-home"></i></a>
         </div>
     </nav>
 
@@ -187,7 +187,7 @@
                                         $labels[] = "Academy";
                                     }
                                 ?>
-                                    <a href="<?php echo site_url("visit_app/institute_visit_report/" . $row->visit_id . "/" . $row->schools_id . "/" . $row->school_id . '/a') ?>">
+                                    <a href="<?php echo site_url("visits/institute_visit_report/" . $row->visit_id . "/" . $row->schools_id . "/" . $row->school_id . '/a') ?>">
                                         <li class="list-group-item" style="background-color: transparent;">
                                             <div class="row">
                                                 <div class="col-xs-4">

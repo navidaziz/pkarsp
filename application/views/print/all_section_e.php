@@ -130,6 +130,14 @@
           <table class="table">
             <tr>
               <td>
+
+                <?php
+                $query = "SELECT *,d.districtTitle FROM schools 
+                INNER JOIN district as d ON(d.districtId = schools.district_id)
+                WHERE schoolId = '" . $schools_id . "'";
+                $school = $this->db->query($query)->row();
+
+                ?>
                 <h3 style="text-transform: uppercase;"><?php echo @$school->schoolName; ?> <?php if (!empty($school->ppcCode)) {
                                                                                               echo " - PPC Code" . $school->ppcCode;
                                                                                             } ?></h3>
@@ -163,10 +171,9 @@
                   <?php if ($school->registrationNumber != 0) : ?>
                     <?php echo "Registration # " . @$school->registrationNumber; ?><br />
                   <?php endif; ?>
-                  Session Year: <?php echo @$school->sessionYearTitle; ?><br />
-                  Case: <?php echo @$school->regTypeTitle; ?><br />
+
                   File No: <strong><?php
-                                    $query = "SELECT * FROM `school_file_numbers` WHERE `school_id`='$school->schoolId'";
+                                    $query = "SELECT * FROM `school_file_numbers` WHERE `school_id`='$schools_id'";
                                     $file_numbers = $this->db->query($query)->result();
                                     $count = 1;
                                     foreach ($file_numbers as $file_number) {
@@ -224,7 +231,7 @@ AND `gender`.`genderId` = `school`.`gender_type_id`
 
 AND `levelofinstitute`.`levelofInstituteId` = `school`.`level_of_school_id`
 AND `session_year`.`sessionYearId` = `school`.`session_year_id`
-AND schools_id = " . $school->schoolId . "
+AND schools_id = " . $schools_id . "
 ORDER BY `session_year`.`sessionYearId` ASC
 ";
         $school_sessions = $this->db->query($query)->result();

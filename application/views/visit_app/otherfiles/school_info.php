@@ -46,7 +46,7 @@
         </small>
         <hr>
         <p class="mb-0" style="text-align: center;">
-            <a href="<?php echo site_url('visit_app/school_detail/' . $school->schools_id) ?>" class="btn btn-success">View Instititute Detail</a>
+            <a href="<?php echo site_url('visits/school_detail/' . $school->schools_id) ?>" class="btn btn-success">View Instititute Detail</a>
         </p>
 
 

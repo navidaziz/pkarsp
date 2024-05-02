@@ -60,7 +60,7 @@
                                     $.ajax({
 
                                         type: 'POST',
-                                        url: '<?php echo site_url("visit_app/get_school_by_school_id") ?>', // URL to submit form data
+                                        url: '<?php echo site_url("visits/get_school_by_school_id") ?>', // URL to submit form data
                                         data: formData,
                                         success: function(response) {
 
