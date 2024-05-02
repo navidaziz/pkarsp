@@ -108,7 +108,7 @@
       line-height: 1;
       vertical-align: top;
       color: black !important;
-      font-size: 20px !important;
+      font-size: 17px !important;
 
     }
 
@@ -231,34 +231,33 @@ ORDER BY `session_year`.`sessionYearId` ASC
 
         ?>
         <div class="col-md-12">
-          <div class="table-responsive">
-            ِ<h4>Session Wise Classes Fee</h4>
-            <table class="table table-bordered table2">
+          ِ<h4>Session Wise Classes Fee</h4>
+          <table class="table table-bordered table2">
 
-              <tr>
-                <th style="width: 70px;">Session</th>
+            <tr>
+              <th style="width: 70px;">Session</th>
 
-                <?php
-
-
-
-
-                $classes = $this->db->query("SELECT * FROM class")->result();
-                foreach ($classes  as $class) { ?>
-                  <th><?php echo $class->classTitle ?></th>
-                <?php } ?>
-
-                <?php foreach ($school_sessions as $school_session) { ?>
-
-              <tr>
-                <td>
-                  <?php echo $school_session->sessionYearTitle ?>
-                </td>
               <?php
-                  foreach ($classes  as $class) {
 
 
-                    $query = "SELECT
+
+
+              $classes = $this->db->query("SELECT * FROM class")->result();
+              foreach ($classes  as $class) { ?>
+                <th><?php echo $class->classTitle ?></th>
+              <?php } ?>
+
+              <?php foreach ($school_sessions as $school_session) { ?>
+
+            <tr>
+              <td>
+                <?php echo $school_session->sessionYearTitle ?>
+              </td>
+            <?php
+                foreach ($classes  as $class) {
+
+
+                  $query = "SELECT
                         `fee`.`addmissionFee`
                         , `fee`.`tuitionFee`
                         , `fee`.`securityFund`
@@ -266,20 +265,20 @@ ORDER BY `session_year`.`sessionYearId` ASC
                         FROM
                         `fee` WHERE `fee`.`school_id` = '" . $school_session->schoolId . "'
                         AND `fee`.`class_id` ='" . $class->classId . "'";
-                    $session_fee = $this->db->query($query)->result()[0];
-                    $previous_session_id = $school_session->sessionYearId - 1;
-                    if ($previous_session_id) {
-                      $query = "SELECT schoolId FROM school WHERE session_year_id = $previous_session_id
+                  $session_fee = $this->db->query($query)->result()[0];
+                  $previous_session_id = $school_session->sessionYearId - 1;
+                  if ($previous_session_id) {
+                    $query = "SELECT schoolId FROM school WHERE session_year_id = $previous_session_id
                         AND school.schools_id = '" . $school->schools_id . "'
                         ";
-                      $previous_school_id = $this->db->query($query)->row()->schoolId;
-                    } else {
-                      $previous_school_id = 0;
-                    }
+                    $previous_school_id = $this->db->query($query)->row()->schoolId;
+                  } else {
+                    $previous_school_id = 0;
+                  }
 
 
-                    if ($previous_school_id) {
-                      $query = "SELECT
+                  if ($previous_school_id) {
+                    $query = "SELECT
                         `fee`.`addmissionFee`
                         , `fee`.`tuitionFee`
                         , `fee`.`securityFund`
@@ -287,32 +286,32 @@ ORDER BY `session_year`.`sessionYearId` ASC
                         FROM
                         `fee` WHERE `fee`.`school_id` = '" . $previous_school_id . "'
                         AND `fee`.`class_id` ='" . $class->classId . "'";
-                      $pre_session_tution_fee = preg_replace("/[^0-9.]/", "", $this->db->query($query)->result()[0]->tuitionFee);
-                    }
-                    $current_fee = preg_replace("/[^0-9.]/", "", $session_fee->tuitionFee);
-                    if ($session_fee->tuitionFee == 0) {
-                      echo '<td style="text-align:center">' . $session_fee->tuitionFee . '</td>';
-                    } else {
-                      echo '<td style="text-align:center">' . $session_fee->tuitionFee;
-
-
-                      if ($pre_session_tution_fee) {
-                        $incress = round((($current_fee - $pre_session_tution_fee) / $pre_session_tution_fee) * 100, 2);
-                        if ($incress > 10) {
-                          echo @" <small style='color:red;'><br /> <i class='fa fa-line-chart' aria-hidden='true'></i> (" . $incress . " %)</small>";
-                        } else {
-                          // echo @" <small style='color:green'>(" . $incress . " %)</small>";
-                        }
-                      }
-                      echo '</td>';
-                    }
+                    $pre_session_tution_fee = preg_replace("/[^0-9.]/", "", $this->db->query($query)->result()[0]->tuitionFee);
                   }
-                  echo '</tr>';
-                } ?>
+                  $current_fee = preg_replace("/[^0-9.]/", "", $session_fee->tuitionFee);
+                  if ($session_fee->tuitionFee == 0) {
+                    echo '<td style="text-align:center">' . $session_fee->tuitionFee . '</td>';
+                  } else {
+                    echo '<td style="text-align:center">' . $session_fee->tuitionFee;
 
 
-            </table>
-          </div>
+                    if ($pre_session_tution_fee) {
+                      $incress = round((($current_fee - $pre_session_tution_fee) / $pre_session_tution_fee) * 100, 2);
+                      if ($incress > 10) {
+                        echo @" <small style='color:red;'><br /> <i class='fa fa-line-chart' aria-hidden='true'></i> (" . $incress . " %)</small>";
+                      } else {
+                        // echo @" <small style='color:green'>(" . $incress . " %)</small>";
+                      }
+                    }
+                    echo '</td>';
+                  }
+                }
+                echo '</tr>';
+              } ?>
+
+
+          </table>
+
 
         </div>
 
