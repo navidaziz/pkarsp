@@ -104,11 +104,11 @@
     .table2>thead>tr>td,
     .table2>tbody>tr>td,
     .table2>tfoot>tr>td {
-      padding: 5px;
+      padding: 3px;
       line-height: 1;
       vertical-align: top;
       color: black !important;
-      font-size: 17px !important;
+      font-size: 16px !important;
 
     }
 
