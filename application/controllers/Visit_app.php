@@ -652,7 +652,7 @@ class Visit_app extends Admin_Controller
             $input['visit_status'] = 'Visited';
             $input['visit_end'] = date('Y-m-d H:i:s');
             $input["schools_id"] = $this->input->post("schools_id");
-            $input["school_id"] = $this->input->post("school_id");
+            $input["school_id"] = $school_id =  $this->input->post("school_id");
             $input["visited_by_officers"] = $this->input->post("visited_by_officers");
             $input["visited_by_officials"] = $this->input->post("visited_by_officials");
             $input["visit_date"] = $this->input->post("visit_date");
@@ -699,6 +699,18 @@ class Visit_app extends Admin_Controller
             $input['last_updated'] = date('Y-m-d H:i:s');
             $input['last_updated_by'] = $this->session->userdata("userId");
             if ($this->db->update("visits", $input)) {
+
+
+                //update set school session not visited not and recomended null.
+                $this->db->where("schoolId", $school_id);
+                $update['visit'] = 'Yes';
+                if ($this->input->post("recommendation") == 'Recommended') {
+                    $update['recommended'] = 'Yes';
+                } else {
+                    $update['recommended'] = 'No';
+                }
+                $this->db->update("school", $update);
+
                 echo "success";
             }
         }
