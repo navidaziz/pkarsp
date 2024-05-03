@@ -129,7 +129,7 @@
                                             <tr>
                                                 <td>
                                                     <?php if ($row->visited == 'No' and $row->visit_status == 'Visit Pending' and $row->created_by == $this->session->userdata("userId")) { ?>
-                                                        <a href="<?php echo site_url('visits/delete_visits/' . $row->visit_id); ?>" onclick="return confirm('Are you sure? you want to delete the record.')">Delete</a>
+                                                        <a href="<?php echo site_url('visits/delete_visit/' . $row->visit_id); ?>" onclick="return confirm('Are you sure? you want to delete the record.')">Delete</a>
                                                     <?php } ?>
                                                 </td>
                                                 <td><?php echo $count++ ?></td>
