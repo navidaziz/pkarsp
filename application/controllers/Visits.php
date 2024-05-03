@@ -1311,16 +1311,16 @@ class Visits extends Admin_Controller
     //     return $inputs;
     // }
 
-    // public function delete_visit($visit_id)
-    // {
-    //     $visit_id = (int) $visit_id;
-    //     $this->db->where("visit_id", $visit_id);
-    //     $update['is_deleted'] = 1;
-    //     $this->db->update('visits', $update);
-    //     //$this->db->delete("visits");
-    //     $requested_url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : base_url();
-    //     redirect($requested_url);
-    // }
+    public function delete_visit($visit_id)
+    {
+        $visit_id = (int) $visit_id;
+        $this->db->where("visit_id", $visit_id);
+        $update['is_deleted'] = 1;
+        $this->db->update('visits', $update);
+        //$this->db->delete("visits");
+        $requested_url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : base_url();
+        redirect($requested_url);
+    }
 
 
     // public function add_visit()
