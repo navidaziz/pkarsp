@@ -26,7 +26,7 @@ class Visit_app extends Admin_Controller
 
         $this->data["title"] = 'Visit Reports';
         $this->data["description"] = 'Visit Report List';
-        //$this->data['view'] = 'visits/index';
+        //$this->data['view'] = 'visit_app/index';
         // $this->load->view('layout', $this->data);
         $this->load->view('visit_app/index', $this->data);
     }
@@ -41,22 +41,22 @@ class Visit_app extends Admin_Controller
         if ($menu == 'not_visited_list') {
             $this->data["title"] = 'Not Visited List';
             $this->data["description"] = 'Not Visited Institutes List';
-            $this->data['view'] = 'visits/not_visited_list';
+            $this->data['view'] = 'visit_app/not_visited_list';
         }
         if ($menu == 'visited_list') {
             $this->data["title"] = 'Visited List';
             $this->data["description"] = 'Visited Institutes List';
-            $this->data['view'] = 'visits/visited_list';
+            $this->data['view'] = 'visit_app/visited_list';
         }
         if ($menu == 'pending_cases') {
             $this->data["title"] = 'Pending Cases';
             $this->data["description"] = 'New Registration and Upgradation Pending Cases';
-            $this->data['view'] = 'visits/pending_cases';
+            $this->data['view'] = 'visit_app/pending_cases';
         }
         if ($menu == 'not_visited_summary') {
             $this->data["title"] = 'Not Visited Summary';
             $this->data["description"] = 'New Registration and Upgradation Not Visited Summary';
-            $this->data['view'] = 'visits/not_visited_summary';
+            $this->data['view'] = 'visit_app/not_visited_summary';
         }
 
 
@@ -180,9 +180,9 @@ class Visit_app extends Admin_Controller
 
         $this->data["input"] = $input;
         if ($input->visited == 'Yes') {
-            $this->data['view'] = 'visits/visit_form/visit_report';
+            $this->data['view'] = 'visit_app/visit_form/visit_report';
         } else {
-            $this->data['view'] = 'visits/visit_form/' . $form;
+            $this->data['view'] = 'visit_app/visit_form/' . $form;
         }
         $this->load->view('visit_app/visit_form/layout', $this->data);
         //$this->load->view('visit_app/institute_visit_report', $this->data);
@@ -726,7 +726,7 @@ class Visit_app extends Admin_Controller
             $config = [];
             $school_id = (int) $this->input->post('school_id');
             $visit_id = (int) $this->input->post('visit_id');
-            $dir = '/uploads/visits/' . $school_id . "/" . $visit_id;
+            $dir = '/uploads/visit_app/' . $school_id . "/" . $visit_id;
             $upload_dir = $_SERVER['DOCUMENT_ROOT'] . $dir;
             if (!file_exists($upload_dir)) {
                 mkdir($upload_dir, 0777, true);  //create directory if not exist
@@ -1007,7 +1007,7 @@ class Visit_app extends Admin_Controller
         $this->data['session'] = $this->db->query($query)->row();
 
         $this->data["input"] = $input;
-        $this->load->view("visits/get_visit_form", $this->data);
+        $this->load->view("visit_app/get_visit_form", $this->data);
     }
     public function get_add_to_visit_list_form()
     {
@@ -1025,14 +1025,14 @@ class Visit_app extends Admin_Controller
             $input["academy_l"] = 0;
             $input =  (object) $input;
             $this->data["input"] = $input;
-            $this->load->view("visits/search_school", $this->data);
+            $this->load->view("visit_app/search_school", $this->data);
         } else {
             $query = "SELECT * FROM 
             visits 
             WHERE visit_id = $visit_id";
             $input = $this->db->query($query)->row();
             $this->data["input"] = $input;
-            $this->load->view("visits/get_add_to_visit_list_form", $this->data);
+            $this->load->view("visit_app/get_add_to_visit_list_form", $this->data);
         }
     }
 
@@ -1392,7 +1392,7 @@ class Visit_app extends Admin_Controller
             $input["academy_l"] = 0;
             $input =  (object) $input;
             $this->data["input"] = $input;
-            $this->load->view("visits/add_to_visit_list_add_form", $this->data);
+            $this->load->view("visit_app/add_to_visit_list_add_form", $this->data);
         } else {
             echo 'Search Again School not Found.';
         }

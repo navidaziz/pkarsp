@@ -73,7 +73,7 @@
         <a class="navbar-brand" href="<?php echo isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '#'; ?>"><i class="fa fa-arrow-left" style="color: white;"></i></a>
         <a class="navbar-brand" href="#">S-ID: <?php echo $school->schools_id; ?> (<?php echo $input->visit_reason; ?>)</a>
         <div class="pull-right" id="">
-            <a class="navbar-brand" href="<?php echo site_url("visits/school_detail/" . $school->schools_id) ?>"><i class="fa fa-home" style="color: white;"></i></a>
+            <a class="navbar-brand" href="<?php echo site_url("visit_app/school_detail/" . $school->schools_id) ?>"><i class="fa fa-home" style="color: white;"></i></a>
         </div>
     </nav>
 
@@ -288,58 +288,58 @@
                                     // Get the last segment
                                     $current_form = $this->uri->segment($total_segments);
                                     ?>
-                                    <a href="<?php echo site_url("visits/institute_visit_report/$visit_id/$schools_id/$school_id/a") ?>" class="btn btn-light btn-sm btn-form <?php if ($input->a == 1) {
-                                                                                                                                                                                    echo 'complete';
-                                                                                                                                                                                } ?>
+                                    <a href="<?php echo site_url("visit_app/institute_visit_report/$visit_id/$schools_id/$school_id/a") ?>" class="btn btn-light btn-sm btn-form <?php if ($input->a == 1) {
+                                                                                                                                                                                        echo 'complete';
+                                                                                                                                                                                    } ?>
                                                                                                                                                                                 <?php if ($current_form == 'a') {
                                                                                                                                                                                     echo 'current_btn';
                                                                                                                                                                                 } ?>
                                                                                                                                                                                 ">A
                                         <span style="font-size: 7px; display:block; color:inherit; margin-top:-6px">Form</span>
                                     </a>
-                                    <a href="<?php echo site_url("visits/institute_visit_report/$visit_id/$schools_id/$school_id/b") ?>" class="btn btn-light btn-sm btn-form <?php if ($input->b == 1) {
-                                                                                                                                                                                    echo 'complete';
-                                                                                                                                                                                } ?>
+                                    <a href="<?php echo site_url("visit_app/institute_visit_report/$visit_id/$schools_id/$school_id/b") ?>" class="btn btn-light btn-sm btn-form <?php if ($input->b == 1) {
+                                                                                                                                                                                        echo 'complete';
+                                                                                                                                                                                    } ?>
                                                                                                                                                                                 <?php if ($current_form == 'b') {
                                                                                                                                                                                     echo 'current_btn';
                                                                                                                                                                                 } ?>">B
                                         <span style="font-size: 7px; display:block; color:inherit; margin-top:-6px">Form</span></a>
-                                    <a href="<?php echo site_url("visits/institute_visit_report/$visit_id/$schools_id/$school_id/c") ?>" class="btn btn-light btn-sm btn-form <?php if ($input->c == 1) {
-                                                                                                                                                                                    echo 'complete';
-                                                                                                                                                                                } ?>
+                                    <a href="<?php echo site_url("visit_app/institute_visit_report/$visit_id/$schools_id/$school_id/c") ?>" class="btn btn-light btn-sm btn-form <?php if ($input->c == 1) {
+                                                                                                                                                                                        echo 'complete';
+                                                                                                                                                                                    } ?>
                                                                                                                                                                                 <?php if ($current_form == 'c') {
                                                                                                                                                                                     echo 'current_btn';
                                                                                                                                                                                 } ?>">C
                                         <span style="font-size: 7px; display:block; color:inherit; margin-top:-6px">Form</span></a>
-                                    <a href="<?php echo site_url("visits/institute_visit_report/$visit_id/$schools_id/$school_id/d") ?>" class="btn btn-light btn-sm btn-form <?php if ($input->d == 1) {
-                                                                                                                                                                                    echo 'complete';
-                                                                                                                                                                                } ?>
+                                    <a href="<?php echo site_url("visit_app/institute_visit_report/$visit_id/$schools_id/$school_id/d") ?>" class="btn btn-light btn-sm btn-form <?php if ($input->d == 1) {
+                                                                                                                                                                                        echo 'complete';
+                                                                                                                                                                                    } ?>
                                                                                                                                                                                 <?php if ($current_form == 'd') {
                                                                                                                                                                                     echo 'current_btn';
                                                                                                                                                                                 } ?>">D
                                         <span style="font-size: 7px; display:block; color:inherit; margin-top:-6px">Form</span></a>
-                                    <a href="<?php echo site_url("visits/institute_visit_report/$visit_id/$schools_id/$school_id/e") ?>" class="btn btn-light btn-sm btn-form <?php if ($input->e == 1) {
-                                                                                                                                                                                    echo 'complete';
-                                                                                                                                                                                } ?>
+                                    <a href="<?php echo site_url("visit_app/institute_visit_report/$visit_id/$schools_id/$school_id/e") ?>" class="btn btn-light btn-sm btn-form <?php if ($input->e == 1) {
+                                                                                                                                                                                        echo 'complete';
+                                                                                                                                                                                    } ?>
                                                                                                                                                                                 <?php if ($current_form == 'e') {
                                                                                                                                                                                     echo 'current_btn';
                                                                                                                                                                                 } ?>">E
                                         <span style="font-size: 7px; display:block; color:inherit; margin-top:-6px">Form</span></a>
-                                    <a href="<?php echo site_url("visits/institute_visit_report/$visit_id/$schools_id/$school_id/f") ?>" class="btn btn-dark btn-sm btn-form <?php if ($input->f == 1) {
+                                    <a href="<?php echo site_url("visit_app/institute_visit_report/$visit_id/$schools_id/$school_id/f") ?>" class="btn btn-dark btn-sm btn-form <?php if ($input->f == 1) {
                                                                                                                                                                                     echo 'complete';
                                                                                                                                                                                 } ?>
                                                                                                                                                                                 <?php if ($current_form == 'f') {
                                                                                                                                                                                     echo 'current_btn';
                                                                                                                                                                                 } ?>">F
                                         <span style="font-size: 7px; display:block; color:inherit; margin-top:-6px">Form</span></a>
-                                    <a href="<?php echo site_url("visits/institute_visit_report/$visit_id/$schools_id/$school_id/g") ?>" class="btn btn-dark btn-sm btn-form <?php if ($input->g == 1) {
+                                    <a href="<?php echo site_url("visit_app/institute_visit_report/$visit_id/$schools_id/$school_id/g") ?>" class="btn btn-dark btn-sm btn-form <?php if ($input->g == 1) {
                                                                                                                                                                                     echo 'complete';
                                                                                                                                                                                 } ?>
                                                                                                                                                                                 <?php if ($current_form == 'g') {
                                                                                                                                                                                     echo 'current_btn';
                                                                                                                                                                                 } ?>">G
                                         <span style="font-size: 7px; display:block; color:inherit; margin-top:-6px">Form</span></a>
-                                    <a href="<?php echo site_url("visits/institute_visit_report/$visit_id/$schools_id/$school_id/h") ?>" class="btn btn-dark btn-sm btn-form <?php if ($input->h == 1) {
+                                    <a href="<?php echo site_url("visit_app/institute_visit_report/$visit_id/$schools_id/$school_id/h") ?>" class="btn btn-dark btn-sm btn-form <?php if ($input->h == 1) {
                                                                                                                                                                                     echo 'complete';
                                                                                                                                                                                 } ?>
                                                                                                                                                                                 <?php if ($current_form == 'h') {

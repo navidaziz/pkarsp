@@ -424,7 +424,7 @@ $school_security_measures = $this->db->query($query)->row();
         <div class="row">
             <div id="result_response"></div>
             <div class="col-xs-4" style="text-align: center;">
-                <a class="btn btn-small" href='<?php echo site_url("visits/institute_visit_report/$visit_id/$schools_id/$school_id/d"); ?>'><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</a>
+                <a class="btn btn-small" href='<?php echo site_url("visit_app/institute_visit_report/$visit_id/$schools_id/$school_id/d"); ?>'><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</a>
             </div>
 
             <div class="col-xs-4" style="text-align: center;">
@@ -447,7 +447,7 @@ $school_security_measures = $this->db->query($query)->row();
         var submitButtonValue = $(document.activeElement).val();
         $.ajax({
             type: 'POST',
-            url: '<?php echo site_url("visits/add_visit_report"); ?>', // URL to submit form data
+            url: '<?php echo site_url("visit_app/add_visit_report"); ?>', // URL to submit form data
             data: formData,
             success: function(response) {
                 // Display response
@@ -457,7 +457,7 @@ $school_security_measures = $this->db->query($query)->row();
                             location.reload();
                             break;
                         case "next":
-                            window.location.href = "<?php echo site_url("visits/institute_visit_report/$visit_id/$schools_id/$school_id/f"); ?>";
+                            window.location.href = "<?php echo site_url("visit_app/institute_visit_report/$visit_id/$schools_id/$school_id/f"); ?>";
                             break;
                         default:
                             alert("Unknown button clicked");

@@ -76,7 +76,7 @@
             var submitButtonValue = $(document.activeElement).val();
             $.ajax({
                 type: 'POST',
-                url: '<?php echo site_url("visits/add_visit_report"); ?>', // URL to submit form data
+                url: '<?php echo site_url("visit_app/add_visit_report"); ?>', // URL to submit form data
                 data: formData,
                 contentType: false, // Not to set any content type header
                 processData: false, // Not to process data
@@ -88,7 +88,7 @@
                                 location.reload();
                                 break;
                             case "next":
-                                window.location.href = "<?php echo site_url("visits/institute_visit_report/$visit_id/$schools_id/$school_id/f"); ?>";
+                                window.location.href = "<?php echo site_url("visit_app/institute_visit_report/$visit_id/$schools_id/$school_id/f"); ?>";
                                 break;
                             default:
                                 alert("Unknown button clicked");
@@ -439,7 +439,7 @@
             var submitButtonValue = $(document.activeElement).val();
             $.ajax({
                 type: 'POST',
-                url: '<?php echo site_url("visits/add_visit_report"); ?>', // URL to submit form data
+                url: '<?php echo site_url("visit_app/add_visit_report"); ?>', // URL to submit form data
                 data: formData,
                 success: function(response) {
                     // Display response
@@ -449,7 +449,7 @@
                                 location.reload();
                                 break;
                             case "next":
-                                window.location.href = "<?php echo site_url("visits/institute_visit_report/$visit_id/$schools_id/$school_id/b"); ?>";
+                                window.location.href = "<?php echo site_url("visit_app/institute_visit_report/$visit_id/$schools_id/$school_id/b"); ?>";
                                 break;
                             default:
                                 alert("Unknown button clicked");
