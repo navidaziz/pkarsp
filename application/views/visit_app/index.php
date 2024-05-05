@@ -28,7 +28,7 @@
                         <div class="col-xs-12 col-lg-offset-3 col-lg-6">
                             <div class="m-b-md text-center">
                                 <h1 id="title">PSRA VISIT APP</h1>
-                                <p id="description" class="description" class="text-center">Private Schools Regulatory Authority</p>
+                                <p id="description" class="description" style="color: white;" class="text-center">Private Schools Regulatory Authority</p>
                             </div>
 
                             <form id="visits" name="survey-form">
