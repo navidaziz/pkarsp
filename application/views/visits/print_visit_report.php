@@ -145,14 +145,38 @@
             ?>
 
           </h5>
-          <h5> Applied for <strong><?php echo @$session->regTypeTitle; ?> for session <?php echo $session->sessionYearTitle; ?></strong></h5>
+          <h5> Visit for <strong><?php echo @$session->regTypeTitle; ?>
+
+              (
+              <?php
+              $visit_level_for = array();
+              if ($input->primary_l == 1) {
+                $visit_level_for['Primary'] = 'Primary';
+              }
+              if ($input->middle_l == 1) {
+                $visit_level_for['Middle'] = 'Middle';
+              }
+              if ($input->high_l == 1) {
+                $visit_level_for['High'] = 'High';
+              }
+              if ($input->high_sec_l == 1) {
+                $visit_level_for['Higher Secondary'] = 'Higher Secondary';
+              }
+              if ($input->academy_l == 1) {
+                $visit_level_for['Academy'] = 'Academy';
+              }
+
+              echo implode(", ", $visit_level_for); ?>
+              )
+
+              for session <?php echo $session->sessionYearTitle; ?></strong></h5>
           <?php if ($school->biseRegister or $school->biseregistrationNumber) { ?>
             BISE REG. <strong><?php echo $school->biseRegister; ?></strong> -
             BISE REG. No. <strong><?php echo $school->biseregistrationNumber; ?></strong>
           <?php } ?>
         </td>
         <td>
-          <h6>
+          <h6 style="line-height: 16px;">
             School Id # <?php echo $school->schools_id; ?> <br />
             <?php if ($school->registrationNumber != 0) : ?>
               <?php echo "Registration # " . @$school->registrationNumber; ?><br />
@@ -218,10 +242,7 @@
                   <td> Contact No: </td>
                   <td> <?php echo $principal->principal_contact_no; ?> </td>
                 </tr>
-                <tr>
-                  <td>B.Ed</td>
-                  <td> <span style="margin-left: 5px;"></span>1. Yes <span style="margin-left: 20px;"></span> 2. No </td>
-                </tr>
+
               </table>
 
 
@@ -283,29 +304,31 @@
         </table>
         <table class="table table-bordered">
           <tr style="text-align: center;">
-            <th>Primary</th>
-            <th>Middle</th>
-            <th>High</th>
-            <th>High Secondary</th>
-            <th>
-              O Level and A level
 
-            </th>
+            <th>O Level and A level</th>
             <th>Gender of Education</th>
             <th>Institute Timing</th>
 
-
+            <th>Property Possession</th>
+            <th>Land Type</th>
+            <th>Total Area</th>
+            <th>Covered Area</th>
           </tr>
           <tr style="text-align: center;">
-            <td><?php if ($school->levelofInstituteTitle == 'Primary') { ?>&#10004; <?php } ?></td>
-            <td><?php if ($school->levelofInstituteTitle == 'Middle') { ?>&#10004; <?php } ?></td>
-            <td><?php if ($school->levelofInstituteTitle == 'High') { ?>&#10004; <?php } ?></td>
-            <td><?php if ($school->levelofInstituteTitle == 'Higher Secondary') { ?>&#10004; <?php } ?></td>
-
             <td><?php echo $input->o_a_levels; ?></td>
             <td><?php echo $input->gender_of_edu; ?></td>
-
             <td><?php echo $input->timing; ?></td>
+            <td>
+              <?php echo $input->property_posession;
+              if ($input->property_posession == 'Rented') {
+                echo 'Rs: ' . $input->rent_amount . ' Per/Month';
+              }
+              ?>
+            </td>
+            <td><?php echo $input->land_type; ?></td>
+
+            <td><?php echo $input->covered_area; ?> Marla</td>
+            <td><?php echo $input->total_area; ?> Marla</td>
           </tr>
         </table>
         <strong>Please confirm address of the school</strong>
@@ -333,23 +356,10 @@
         <br />
         <table class="table table-bordered">
           <tr>
-            <th>Property Possession</th>
-            <th>Land Type</th>
-            <th>Total Area</th>
-            <th>Covered Area</th>
+
           </tr>
           <tr>
-            <td>
-              <?php echo $input->property_posession;
-              if ($input->property_posession == 'Rented') {
-                echo 'Rs: ' . $input->rent_amount . ' Per/Month';
-              }
-              ?>
-            </td>
-            <td><?php echo $input->land_type; ?></td>
 
-            <td><?php echo $input->covered_area; ?> Marla</td>
-            <td><?php echo $input->total_area; ?> Marla</td>
           </tr>
 
         </table>
@@ -1344,7 +1354,21 @@
     <div class="row" style="margin-bottom: 30px;">
       <div class="col-xs-12">
         <div class="col-xs-12">
-          <h4>Final Report</h4>
+          <h4>Final Report <small class="pull-right">Time Taken:
+              <?php
+              $visit_start = new DateTime($input->visit_start);
+              $visit_end = new DateTime($input->visit_end);
+
+              // Calculate the difference between visit_end and visit_start
+              $time_taken = $visit_end->diff($visit_start);
+
+              // Format the difference as a string
+              //$time_taken_formatted = $time_taken->format('%y years, %m months, %d days, %H hours, %I minutes, %S seconds');
+              echo $time_taken_formatted = $time_taken->format('%H hours, %I minutes, %S seconds');
+
+              ?>
+
+            </small></h4>
           <p>
             Institute <strong><?php echo $school->schoolName; ?></strong> (S-ID <strong><?php echo $school->schools_id ?></strong>) was visited by
             <strong><?php echo $input->visited_by_officers; ?></strong> and
@@ -1366,10 +1390,11 @@
           <table class="table table-bordered" style="border: 0px !important;">
             <tr>
               <th style="width:50px"></th>
+
               <th>Primary <small>(PG to 5th)</small></th>
               <th>Middle (6th to 8th)</th>
               <th>High (9th to 10th)</th>
-              <th>Higher Secondary (11thto 12th)</th>
+              <th>Higher Secondary (11th to 12th)</th>
             </tr>
 
             <tr>
@@ -1424,14 +1449,13 @@
     <!-- Your footer content goes here -->
     <p style="text-align:center; font-size:12px">
       <small>
-        School Id # <?php echo $school->schoolId; ?> -
-        <?php if ($school->registrationNumber != 0) : ?>
-          <?php //echo "Registration # " . @$school->registrationNumber; 
-          ?> -
-        <?php endif; ?>
-        Session Year: <?php echo @$school->sessionYearTitle; ?> -
-        Case: <?php echo @$school->regTypeTitle; ?> - File No: <?php
-                                                                $query = "SELECT * FROM `school_file_numbers` WHERE `school_id`='$school->schoolId'";
+        School Id # <?php echo $school->schools_id; ?> -
+
+        <?php echo "Visit ID # " . @$input->visit_id;  ?> -
+
+        Session Year: <?php echo @$session->sessionYearTitle; ?> -
+        Case: <?php echo @$session->regTypeTitle; ?> - File No: <?php
+                                                                $query = "SELECT * FROM `school_file_numbers` WHERE `school_id`='$school->schools_id'";
                                                                 $file_numbers = $this->db->query($query)->result();
                                                                 $count = 1;
                                                                 foreach ($file_numbers as $file_number) {
