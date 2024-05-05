@@ -97,6 +97,44 @@
                                     </h4>
                                     <h4 class="alert-heading"><?php echo $school->schoolName; ?></h4>
 
+                                    <h5>Registered Level:
+                                        <?php
+                                        //last renewal
+                                        $query = "SELECT reg_type_id, upgradation_levels, level_of_school_id,
+                                        `primary`, `middle`, `high`, `high_sec`,
+                                        l.levelofInstituteTitle 
+                                        FROM school 
+                                        INNER JOIN levelofinstitute as l ON(l.levelofInstituteId=school.level_of_school_id)
+                                        WHERE schools_id ='" . $schools_id . "' 
+                                        AND status=1;";
+                                        $last_renewal = $this->db->query($query)->row();
+                                        $renewal_issued = array();
+                                        $renewal_issued[$last_renewal->levelofInstituteTitle] = $last_renewal->levelofInstituteTitle;
+                                        if ($last_renewal->primary == 1) {
+                                            $renewal_issued['Primary'] = 'Primary';
+                                        }
+                                        if ($last_renewal->middle == 1) {
+                                            $renewal_issued['Middle'] = 'Middle';
+                                        }
+                                        if ($last_renewal->high == 1) {
+                                            $renewal_issued['High'] = 'High';
+                                        }
+                                        if ($last_renewal->high_sec == 1) {
+                                            $renewal_issued['Higher Secondary'] = 'Higher Secondary';
+                                        }
+                                        if ($last_renewal->academy == 1) {
+                                            $renewal_issued['Academy'] = 'Academy';
+                                        }
+
+                                        echo implode(", ", $renewal_issued);
+
+
+
+
+                                        ?>
+
+                                    </h5>
+
                                     <hr>
                                     <?php if ($form == 'a') { ?>
 

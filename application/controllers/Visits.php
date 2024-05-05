@@ -242,25 +242,6 @@ class Visits extends Admin_Controller
             visits 
             WHERE visit_id = $visit_id";
             $input = $this->db->query($query)->row();
-            // if ($input->high_level_lab == NULL) {
-            //     $input->high_level_lab = 'No';
-            // }
-            // if ($input->physics_lab == NULL) {
-            //     $input->physics_lab = 'No';
-            // }
-            // if ($input->chemistry_lab == NULL) {
-            //     $input->chemistry_lab = 'No';
-            // }
-            // if ($input->biology_lab == NULL) {
-            //     $input->biology_lab = 'No';
-            // }
-
-            // if ($input->computer_lab == NULL) {
-            //     $input->computer_lab = 'No';
-            // }
-            // if ($input->library == NULL) {
-            //     $input->library = 'No';
-            // }
         }
 
 

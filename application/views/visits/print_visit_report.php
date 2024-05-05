@@ -106,22 +106,60 @@
     <table class="table">
       <tr>
         <td>
-          <h5>PSRA Visit Proforma </h5>
-          <h5 style="text-transform: uppercase;"><?php echo @$school->schoolName; ?> <?php if (!empty($school->ppcCode)) {
-                                                                                        echo " - PPC Code" . $school->ppcCode;
-                                                                                      } ?></h5>
-          <h5> Applied for <strong><?php echo @$school->regTypeTitle; ?></strong></h5>
-          BISE REG. <strong><?php echo $school->biseRegister; ?></strong> -
-          BISE REG. No. <strong><?php echo $school->biseregistrationNumber; ?></strong>
+          <h3>PSRA Visit Report</h3>
+          <h5 style="text-transform: uppercase;"><?php echo @$school->schoolName; ?></h5>
+          <h5>Registered Level:
+            <?php
+            //last renewal
+            $query = "SELECT reg_type_id, upgradation_levels, level_of_school_id,
+                                        `primary`, `middle`, `high`, `high_sec`,
+                                        l.levelofInstituteTitle 
+                                        FROM school 
+                                        INNER JOIN levelofinstitute as l ON(l.levelofInstituteId=school.level_of_school_id)
+                                        WHERE schools_id ='" . $school->schools_id . "' 
+                                        AND status=1;";
+            $last_renewal = $this->db->query($query)->row();
+            $renewal_issued = array();
+            $renewal_issued[$last_renewal->levelofInstituteTitle] = $last_renewal->levelofInstituteTitle;
+            if ($last_renewal->primary == 1) {
+              $renewal_issued['Primary'] = 'Primary';
+            }
+            if ($last_renewal->middle == 1) {
+              $renewal_issued['Middle'] = 'Middle';
+            }
+            if ($last_renewal->high == 1) {
+              $renewal_issued['High'] = 'High';
+            }
+            if ($last_renewal->high_sec == 1) {
+              $renewal_issued['Higher Secondary'] = 'Higher Secondary';
+            }
+            if ($last_renewal->academy == 1) {
+              $renewal_issued['Academy'] = 'Academy';
+            }
+
+            echo implode(", ", $renewal_issued);
+
+
+
+
+            ?>
+
+          </h5>
+          <h5> Applied for <strong><?php echo @$session->regTypeTitle; ?> for session <?php echo $session->sessionYearTitle; ?></strong></h5>
+          <?php if ($school->biseRegister or $school->biseregistrationNumber) { ?>
+            BISE REG. <strong><?php echo $school->biseRegister; ?></strong> -
+            BISE REG. No. <strong><?php echo $school->biseregistrationNumber; ?></strong>
+          <?php } ?>
         </td>
         <td>
           <h6>
-            School Id # <?php echo $school->schoolId; ?> <br />
+            School Id # <?php echo $school->schools_id; ?> <br />
             <?php if ($school->registrationNumber != 0) : ?>
               <?php echo "Registration # " . @$school->registrationNumber; ?><br />
             <?php endif; ?>
-            Current Level: <?php echo $school->levelofInstituteTitle ?><br />
-            Session Year: <?php echo @$school->sessionYearTitle; ?><br />
+
+            Visit ID: <?php echo $input->visit_id ?><br />
+            Session Year: <?php echo $session->sessionYearTitle; ?><br />
             File No: <strong><?php
                               $query = "SELECT * FROM `school_file_numbers` WHERE `school_id`='$school->schoolId'";
                               $file_numbers = $this->db->query($query)->result();
@@ -136,10 +174,11 @@
                               }
                               ?></strong><br />
             <?php
-            $query = "SELECT telePhoneNumber, schoolMobileNumber FROM schools WHERE schoolId = '" . $school->schoolId . "'";
+            $query = "SELECT telePhoneNumber, schoolMobileNumber FROM schools WHERE schoolId = '" . $school->schools_id . "'";
             $contact = $this->db->query($query)->row();
             ?>
-            Contact: <?php echo $contact->telePhoneNumber; ?>, <?php echo $contact->schoolMobileNumber; ?>
+            Contact: <?php echo $contact->telePhoneNumber; ?> <br />
+            <?php echo $contact->schoolMobileNumber; ?>
 
           </h6>
 
@@ -195,10 +234,10 @@
                                u.cnic as owner_cnic,
                                u.contactNumber as owner_contact_no FROM `schools` as s 
                         INNER JOIN users as u ON(u.userId = s.owner_id)
-                        WHERE s.schoolId = '" . $school->schoolId . "'";
+                        WHERE s.schoolId = '" . $school->schools_id . "'";
               $owner = $this->db->query($query)->row();
               $all_owners[$owner->owner_cnic] = $owner;
-              $query = "SELECT * FROM `school_owners` WHERE school_id = '" . $school->schoolId . "'";
+              $query = "SELECT * FROM `school_owners` WHERE school_id = '" . $school->schools_id . "'";
               $owners = $this->db->query($query)->result();
               if ($owners) {
                 foreach ($owners as $owner) {
@@ -262,54 +301,11 @@
             <td><?php if ($school->levelofInstituteTitle == 'Middle') { ?>&#10004; <?php } ?></td>
             <td><?php if ($school->levelofInstituteTitle == 'High') { ?>&#10004; <?php } ?></td>
             <td><?php if ($school->levelofInstituteTitle == 'Higher Secondary') { ?>&#10004; <?php } ?></td>
-            <td>
-              <?php
-              $query = "select a_o_level, telePhoneNumber, schoolMobileNumber, principal_email FROM schools WHERE schoolId = '" . $schools_id . "'";
-              $school_more_info = $this->db->query($query)->row();
-              //var_dump($a_o_level);
-              ?>
 
-              <?php if ($school_more_info->a_o_level === "1") {
-                echo "&#10004;";
-              } ?> <span style="margin-left: 3px;"></span> Yes
+            <td><?php echo $input->o_a_levels; ?></td>
+            <td><?php echo $input->gender_of_edu; ?></td>
 
-              <span style="margin-left: 30px;"></span>
-              <?php if ($school_more_info->a_o_level === "0") {
-                echo "&#10004;";
-              } ?>
-              <span style="margin-left: 3px;"></span>
-              No
-            </td>
-            <td>
-
-              <?php
-              if ($school->genderOfSchoolTitle == 'Boys') {
-                echo "&#10004;";
-              } ?> <span style="margin-left: 3px;"></span> Boys <span style="margin-left: 20px;"></span>
-              <?php if ($school->genderOfSchoolTitle === "Girls") {
-                echo "&#10004;";
-              } ?> <span style="margin-left: 3px;"></span> Girls <span style="margin-left: 20px;"></span>
-              <?php if ($school->genderOfSchoolTitle === "Co-education") {
-                echo "&#10004;";
-              } ?> <span style="margin-left: 3px;"></span> Co-Edu.
-
-
-
-            </td>
-            <td>
-              <?php if ($school_physical_facilities->timing == 'morning') {
-                echo '&#10004;';
-              } ?> <span style="margin-left: 3px;"></span> Morning
-
-              <span style="margin-left: 10px;"></span>
-              <?php if ($school_physical_facilities->timing == 'evening') {
-                echo '&#10004;';
-              } ?> <span style="margin-left: 3px;"></span> Evening
-              <span style="margin-left: 10px;"></span>
-              <?php if ($school_physical_facilities->timing == 'both') {
-                echo '&#10004;';
-              } ?> <span style="margin-left: 3px;"></span> Both
-            </td>
+            <td><?php echo $input->timing; ?></td>
           </tr>
         </table>
         <strong>Please confirm address of the school</strong>
@@ -321,22 +317,16 @@
             <th style="width:300px">Address</th>
             <th style="width: 100px;">Latitude</th>
             <th style="width: 100px;">Longitude</th>
-          </tr>
-          <tr>
-            <td><?php echo $school->districtTitle; ?></td>
-            <td><?php echo $school->tehsilTitle; ?></td>
-            <td><?php echo $school->ucTitle; ?></td>
-            <td><?php echo $school->address; ?></td>
-            <td><?php echo $school->late; ?></td>
-            <td><?php echo $school->longitude; ?></td>
+            <th style="width: 100px;">Altitude</th>
           </tr>
           <tr>
             <td style="height: 20px;"></td>
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
-            <td></td>
+            <td><?php echo $input->latitude; ?></td>
+            <td><?php echo $input->longitude; ?></td>
+            <td><?php echo $input->altitude; ?></td>
           </tr>
 
         </table>
@@ -345,28 +335,21 @@
           <tr>
             <th>Property Possession</th>
             <th>Land Type</th>
-            <th style="width: 100px;">Total Area</th>
-            <th style="width: 100px;">Covered Area</th>
+            <th>Total Area</th>
+            <th>Covered Area</th>
           </tr>
           <tr>
             <td>
-              1. Owned
-              <span style="margin-left:15px;"></span>
-              2. Rented: <small> Monthly Rent (Rs.):____________</small>
-              <span style="margin-left:15px;"></span>
-              3. Donated/Trusted
+              <?php echo $input->property_posession;
+              if ($input->property_posession == 'Rented') {
+                echo 'Rs: ' . $input->rent_amount . ' Per/Month';
+              }
+              ?>
             </td>
-            <td style="width:180px">
-              <?php if ($school_physical_facilities->land_type == 'commercial') {
-                echo '&#10004;';
-              } ?> <span style="margin-left: 3px;"></span> Commercial <span style="margin-left: 30px;"></span>
-              Residential <?php if ($school_physical_facilities->land_type == 'residential') {
-                            echo '&#10004;';
-                          } ?>
+            <td><?php echo $input->land_type; ?></td>
 
-            </td>
-            <td><small>In Marla: </small></td>
-            <td><small>In Marla: </small></td>
+            <td><?php echo $input->covered_area; ?> Marla</td>
+            <td><?php echo $input->total_area; ?> Marla</td>
           </tr>
 
         </table>
@@ -378,15 +361,15 @@
             <th>First Teacher Appointment Date</th>
             <th>Rent Aggrement Date</th>
             <th>Confirm Year of Establishment</th>
-            <th>Suggest Session</th>
+
           </tr>
           <tr>
-            <td><?php echo " " . $school->yearOfEstiblishment; ?></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td><?php echo $school->yearOfEstiblishment; ?></td>
+            <td><?php echo $input->first_enrollement_date; ?></td>
+            <td><?php echo $input->first_teacher_appointment_date; ?></td>
+            <td><?php echo $input->rent_aggrement_date; ?></td>
+            <td><?php echo $input->year_of_establisment; ?></td>
+
           </tr>
 
         </table>
@@ -1386,7 +1369,7 @@
               <th>Primary <small>(PG to 5th)</small></th>
               <th>Middle (6th to 8th)</th>
               <th>High (9th to 10th)</th>
-              <th>Higher Secondary (11th to 2nd)</th>
+              <th>Higher Secondary (11thto 12th)</th>
             </tr>
 
             <tr>
