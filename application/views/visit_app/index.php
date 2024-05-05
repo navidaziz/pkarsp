@@ -35,7 +35,7 @@
     padding: 10px;
     height: 100px;" />
                                 <h4>Private Schools Regulatory Authority</h4>
-                                <h5>government of khyber pakhtunkhwa</h5>
+                                <h5>Government of Khyber Pakhtunkhwa</h5>
                                 <br />
                                 <h1 id="title">PSRA VISIT APP</h1>
 
