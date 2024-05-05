@@ -86,6 +86,7 @@
 
                                             <th>Visited</th>
                                             <th>Process</th>
+                                            <th>Duplicate</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -193,6 +194,15 @@
 
                                                 <td><?php echo $row->visited; ?></td>
                                                 <td><?php echo $row->visit_status; ?></td>
+                                                <th>
+                                                    <?php
+                                                    $query = "SELECT COUNT(*) as total FROM visits WHERE schools_id = $row->schools_id and visit_id != '" . $row->visit_id . "'";
+                                                    $duplicate = $this->db->query($query)->row()->total;
+                                                    if ($duplicate > 0) {
+                                                        echo $duplicate;
+                                                    }
+                                                    ?>
+                                                </th>
                                                 <td>
                                                     <?php if ($row->visited == 'Yes') { ?>
                                                         <a class="btn btn-link btn-sm" style="padding: 0px; margin:0px font-size:10px !important" href="<?php echo site_url('visit/print_visit_report/' . $row->visit_id . '/' . $row->schools_id . '/' . $row->school_id); ?>">Print</a>

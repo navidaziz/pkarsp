@@ -1434,10 +1434,6 @@
     </div>
 
 
-    <div class="box" style="height: 100px;">
-      <small>In case it is not recommended, please provide specific reasons for the non-recommendation.</small>
-    </div>
-
 
 
     </tbody>
