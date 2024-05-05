@@ -161,52 +161,58 @@
                                 </li>
                                 <?php
                                 $count = 1;
-                                $query = "SELECT * FROM visits";
+                                $query = "SELECT * FROM visits WHERE schools_id = '" . $school->schools_id . "'";
                                 $rows = $this->db->query($query)->result();
-                                foreach ($rows as $row) {
+                                if ($rows) {
+                                    foreach ($rows as $row) {
 
-                                    $labels = array();
+                                        $labels = array();
 
-                                    if ($row->primary_l == 1) {
-                                        $labels[] = "Primary";
-                                    }
+                                        if ($row->primary_l == 1) {
+                                            $labels[] = "Primary";
+                                        }
 
-                                    if ($row->middle_l == 1) {
-                                        $labels[] = "Middle";
-                                    }
+                                        if ($row->middle_l == 1) {
+                                            $labels[] = "Middle";
+                                        }
 
-                                    if ($row->high_l == 1) {
-                                        $labels[] = "High";
-                                    }
+                                        if ($row->high_l == 1) {
+                                            $labels[] = "High";
+                                        }
 
-                                    if ($row->high_sec_l == 1) {
-                                        $labels[] = "Higher Sec.";
-                                    }
+                                        if ($row->high_sec_l == 1) {
+                                            $labels[] = "Higher Sec.";
+                                        }
 
-                                    if ($row->academy_l == 1) {
-                                        $labels[] = "Academy";
-                                    }
+                                        if ($row->academy_l == 1) {
+                                            $labels[] = "Academy";
+                                        }
                                 ?>
-                                    <a href="<?php echo site_url("visit_app/institute_visit_report/" . $row->visit_id . "/" . $row->schools_id . "/" . $row->school_id . '/a') ?>">
-                                        <li class="list-group-item" style="background-color: transparent;">
-                                            <div class="row">
-                                                <div class="col-xs-4">
-                                                    <?php //echo $count++ 
-                                                    ?> <?php echo $row->visit_reason; ?>
-                                                </div>
-                                                <div class="col-xs-4">
-                                                    <?php echo implode(', ', $labels);  ?>
+                                        <a href="<?php echo site_url("visit_app/institute_visit_report/" . $row->visit_id . "/" . $row->schools_id . "/" . $row->school_id . '/a') ?>">
+                                            <li class="list-group-item" style="background-color: transparent;">
+                                                <div class="row">
+                                                    <div class="col-xs-4">
+                                                        <?php //echo $count++ 
+                                                        ?> <?php echo $row->visit_reason; ?>
+                                                    </div>
+                                                    <div class="col-xs-4">
+                                                        <?php echo implode(', ', $labels);  ?>
 
+                                                    </div>
+                                                    <div class="col-xs-2">
+                                                        <?php echo $row->session; ?>
+                                                    </div>
+                                                    <div class="col-xs-2">
+                                                        <?php echo $row->visited; ?>
+                                                    </div>
                                                 </div>
-                                                <div class="col-xs-2">
-                                                    <?php echo $row->session; ?>
-                                                </div>
-                                                <div class="col-xs-2">
-                                                    <?php echo $row->visited; ?>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </a>
+                                            </li>
+                                        </a>
+                                    <?php } ?>
+                                <?php } else { ?>
+                                    <li class="list-group-item" style="background-color: transparent;">
+                                        School is not in visit list.
+                                    </li>
                                 <?php } ?>
                             </ul>
 
