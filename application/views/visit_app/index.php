@@ -26,15 +26,19 @@
                 <main id="main" class="container">
                     <div class="row">
                         <div class="col-xs-12 col-lg-offset-3 col-lg-6">
-                            <div class="m-b-md text-center">
-                                <h1 id="title">PSRA VISIT APP</h1>
+                            <div class="m-b-md text-center" style="margin-top: 100px;">
+
                                 <img src=" https://psra.gkp.pk/institute/assets/admin/img/psra_log.png" class="menuLogo" style="vertical-align: middle;
     width: 100px;
     background-color: white;
     border-radius: 50px;
     padding: 10px;
     height: 100px;" />
-                                <p id="description" class="description" style="color: white;" class="text-center">Private Schools Regulatory Authority</p>
+                                <h4>Private Schools Regulatory Authority</h4>
+                                <h5>government of khyber pakhtunkhwa</h5>
+                                <br />
+                                <h1 id="title">PSRA VISIT APP</h1>
+
                             </div>
 
                             <form id="visits" name="survey-form">
