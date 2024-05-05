@@ -88,13 +88,13 @@
                             <?php if ($school) { ?>
                                 <div class="alert alert-success" role="alert" style="margin-bottom: 5px;">
 
-                                    <h4>
+                                    <h6>
                                         <?php if ($school->registrationNumber > 0) { ?> REGISTRATION NO:
                                             <?php echo $school->registrationNumber ?>
                                         <?php } else {
                                             echo '<span style="color:#721c24">Not Registered Yet!</span>';
                                         } ?>
-                                    </h4>
+                                    </h6>
                                     <h4 class="alert-heading"><?php echo $school->schoolName; ?></h4>
 
                                     <h6>Registered Level:
