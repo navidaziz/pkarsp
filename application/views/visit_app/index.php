@@ -28,6 +28,12 @@
                         <div class="col-xs-12 col-lg-offset-3 col-lg-6">
                             <div class="m-b-md text-center">
                                 <h1 id="title">PSRA VISIT APP</h1>
+                                <img src=" https://psra.gkp.pk/institute/assets/admin/img/psra_log.png" class="menuLogo" style="vertical-align: middle;
+    width: 100px;
+    background-color: white;
+    border-radius: 50px;
+    padding: 10px;
+    height: 100px;" />
                                 <p id="description" class="description" style="color: white;" class="text-center">Private Schools Regulatory Authority</p>
                             </div>
 
