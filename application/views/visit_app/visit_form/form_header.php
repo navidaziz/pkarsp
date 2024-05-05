@@ -97,7 +97,7 @@
                                     </h4>
                                     <h4 class="alert-heading"><?php echo $school->schoolName; ?></h4>
 
-                                    <h5>Registered Level:
+                                    <h6>Registered Level:
                                         <?php
                                         //last renewal
                                         $query = "SELECT reg_type_id, upgradation_levels, level_of_school_id,
@@ -133,7 +133,33 @@
 
                                         ?>
 
-                                    </h5>
+                                    </h6>
+                                    <h6> Visit for <?php echo @$session->regTypeTitle; ?>
+
+                                        (
+                                        <?php
+                                        $visit_level_for = array();
+                                        if ($input->primary_l == 1) {
+                                            $visit_level_for['Primary'] = 'Primary';
+                                        }
+                                        if ($input->middle_l == 1) {
+                                            $visit_level_for['Middle'] = 'Middle';
+                                        }
+                                        if ($input->high_l == 1) {
+                                            $visit_level_for['High'] = 'High';
+                                        }
+                                        if ($input->high_sec_l == 1) {
+                                            $visit_level_for['Higher Secondary'] = 'Higher Secondary';
+                                        }
+                                        if ($input->academy_l == 1) {
+                                            $visit_level_for['Academy'] = 'Academy';
+                                        }
+
+                                        echo implode(", ", $visit_level_for); ?>
+                                        )
+
+                                        for session <?php echo $session->sessionYearTitle; ?>
+                                    </h6>
 
                                     <hr>
                                     <?php if ($form == 'a') { ?>

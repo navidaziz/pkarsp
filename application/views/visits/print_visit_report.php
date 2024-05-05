@@ -169,7 +169,8 @@
               echo implode(", ", $visit_level_for); ?>
               )
 
-              for session <?php echo $session->sessionYearTitle; ?></strong></h5>
+              for session <?php echo $session->sessionYearTitle; ?></strong>
+          </h5>
           <?php if ($school->biseRegister or $school->biseregistrationNumber) { ?>
             BISE REG. <strong><?php echo $school->biseRegister; ?></strong> -
             BISE REG. No. <strong><?php echo $school->biseregistrationNumber; ?></strong>
