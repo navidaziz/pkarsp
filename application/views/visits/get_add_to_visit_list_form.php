@@ -9,8 +9,7 @@
     FROM school as ss
     INNER JOIN session_year as sy ON(sy.sessionYearId = ss.session_year_id)
     INNER JOIN reg_type as rt ON(rt.regTypeId = ss.reg_type_id)
-    WHERE ss.schools_id = '" . $input->schools_id . "' 
-    AND ss.status =2 OR sy.status=1";
+    WHERE ss.schools_id = '" . $input->schools_id . "'";
     $session = $this->db->query($query)->result(); ?>
     <div class="form-group row">
         <label for="school_id" class="col-sm-4 col-form-label">Session</label>
