@@ -257,23 +257,27 @@
                         <input type="hidden" name="session_id" value="<?php echo  $session->sessionYearId; ?>" />
                         <div class="form-group">
                           <label for="fresh_enrolment">Fresh / New Enrolment </label>
+                          <small id="fresh_enrolment" class="form-text text-muted" style="color: red; display:block; font-weight: bold;">Students enrolled for the first time.</small>
                           <input required value="<?php echo $fresh_enrolment; ?>" name="fresh_enrolment" id="fresh_enrolment" type="number" class="form-control" placeholder="">
-                          <small id="fresh_enrolment" class="form-text text-muted">Students enrolled for the first time.</small>
+
                         </div>
                         <div class="form-group">
                           <label for="gov_schools">Students From Government Schools</label>
+                          <small id="gov_schools" class="form-text text-muted" style="color: red; display:block; font-weight: bold;">Students enrolled in your school from government schools.</small>
+
                           <input required value="<?php echo $gov_schools; ?>" name="gov_schools" id="gov_schools" type="number" class="form-control" placeholder="">
-                          <small id="gov_schools" class="form-text text-muted">Students enrolled in your school from government schools.</small>
                         </div>
                         <div class="form-group">
                           <label for="private_schools">Students From Other Private Schools</label>
+                          <small id="private_schools" class="form-text text-muted" style="color: red; display:block; font-weight: bold;">Students enrolled in your school from other private schools.</small>
+
                           <input required value="<?php echo $private_schools; ?>" name="private_schools" id="private_schools" type="number" class="form-control" placeholder="">
-                          <small id="private_schools" class="form-text text-muted">Students enrolled in your school from other private schools.</small>
                         </div>
                         <div class="form-group">
-                          <label for="drop_out">Dropout Students Enrolment</label>
+                          <label for="drop_out">Dropout Enrolment</label>
+                          <small id="drop_out" class="form-text text-muted" style="color: red; display:block; font-weight: bold;">Students re-enrolled in your school after dropout.</small>
+
                           <input required value="<?php echo $drop_out; ?>" name="drop_out" id="drop_out" type="number" class="form-control" placeholder="">
-                          <small id="drop_out" class="form-text text-muted">Students re-enrolled in your school after dropout.</small>
                         </div>
                         <div style="text-align: center;">
                           <button type="submit" class="btn btn-primary">Add Enrolment Data</button>
