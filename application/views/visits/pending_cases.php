@@ -158,7 +158,8 @@
                                             $query = "SELECT COUNT(*) as total FROM visits 
                                                     WHERE visited = 'No' 
                                                     AND school_id = '" . $request->school_id . "'
-                                                    AND schools_id = '" . $request->schools_id . "'";
+                                                    AND schools_id = '" . $request->schools_id . "'
+                                                    AND is_deleted !=0";
                                             $pending_visit_total = $this->db->query($query)->row()->total;
                                             if ($pending_visit_total == 0) { ?>
 
