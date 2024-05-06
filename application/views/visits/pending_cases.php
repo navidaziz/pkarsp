@@ -146,7 +146,7 @@
                                             <th>BISE Reg.</td>
                                             <th>Status</th>
 
-
+                                            <th>Duplicate</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -269,7 +269,15 @@
                                                         ?></td>
 
                                                     <td><?php echo file_status($request->file_status); ?></td>
-
+                                                    <td>
+                                                        <?php
+                                                        $query = "SELECT COUNT(*) as total FROM visits WHERE schools_id = '" . $request->schools_id . "'";
+                                                        $duplicate = $this->db->query($query)->row()->total;
+                                                        if ($duplicate > 0) {
+                                                            echo '<strong>' . $duplicate . '</strong>';
+                                                        }
+                                                        ?>
+                                                    </td>
                                                 </tr>
                                             <?php }  ?>
 
