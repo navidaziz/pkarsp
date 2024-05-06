@@ -1,7 +1,30 @@
 <form id="visits" class="form-horizontal" enctype="multipart/form-data" method="post">
     <input type="hidden" name="visit_id" value="<?php echo $input->visit_id; ?>" />
-    <input type="hidden" required id="school_id" name="school_id" value="<?php echo $input->school_id; ?>" class="form-control">
     <input type="hidden" required id="schools_id" name="schools_id" value="<?php echo $input->schools_id; ?>" class="form-control">
+
+
+    <?php
+    $query = "SELECT ss.schoolId, sy.sessionYearTitle, 
+    rt.regTypeTitle
+    FROM school as ss
+    INNER JOIN session_year as sy ON(sy.sessionYearId = ss.session_year_id)
+    INNER JOIN reg_type as rt ON(rt.regTypeId = ss.reg_type_id)
+    WHERE ss.schools_id = '" . $input->schools_id . "' 
+    AND ss.status =2 OR sy.status=1";
+    $session = $this->db->query($query)->result(); ?>
+    <div class="form-group row">
+        <label for="school_id" class="col-sm-4 col-form-label">Session</label>
+        <div class="col-sm-8">
+            <?php
+            foreach ($session as $option) {
+            ?>
+                <span style="margin-left:5px"></span>
+                <input <?php if ($option->schoolId == $input->school_id) { ?>checked <?php } ?> required type="radio" id="<?php echo $option->schoolId; ?>" name="school_id" value="<?php echo $option->schoolId; ?>" class="">
+                <span style="margin-left:3px"></span> <?php echo $option->sessionYearTitle;  ?> (<?php echo $option->regTypeTitle; ?>) <br />
+            <?php } ?>
+        </div>
+    </div>
+
 
     <div class="form-group row">
         <label for="visit_reason" class="col-sm-4 col-form-label">Visit Reason</label>
@@ -30,6 +53,8 @@
 
 
     </div>
+
+
     <div class="form-group row">
         <label for="visit_for_level" class="col-sm-4 col-form-label">Visit For Levels</label>
         <div class="col-sm-8">
