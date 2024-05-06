@@ -5,7 +5,7 @@
 
     <?php
     $query = "SELECT ss.schoolId, sy.sessionYearTitle, 
-    rt.regTypeTitle
+    rt.regTypeTitle, ss.status, sy.status as session_status
     FROM school as ss
     INNER JOIN session_year as sy ON(sy.sessionYearId = ss.session_year_id)
     INNER JOIN reg_type as rt ON(rt.regTypeId = ss.reg_type_id)
@@ -18,6 +18,7 @@
             <?php
             foreach ($session as $option) {
             ?>
+                <?php if ($option->status == 2 or $option->session_status == 1) ?>
                 <span style="margin-left:5px"></span>
                 <input <?php if ($option->schoolId == $input->school_id) { ?>checked <?php } ?> required type="radio" id="<?php echo $option->schoolId; ?>" name="school_id" value="<?php echo $option->schoolId; ?>" class="">
                 <span style="margin-left:3px"></span> <?php echo $option->sessionYearTitle;  ?> (<?php echo $option->regTypeTitle; ?>) <br />
