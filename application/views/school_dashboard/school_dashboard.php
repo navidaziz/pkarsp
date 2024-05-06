@@ -217,51 +217,92 @@
           <?php if ($school->school_type_id == 1) { ?>
             <div class="col-md-3">
 
+              <?php
+              $query = "SELECT * FROM `session_year` WHERE status = 1";
+              $session = $this->db->query($query)->row();
+              $query = "SELECT * FROM `enrollments` 
+                        WHERE schools_id = '" . $school->schoolId . "'
+                        AND session_id = '" . $session->sessionYearId . "'";
+              $enrollment = $this->db->query($query)->row();
+              //var_dump($enrollment);
+              if ($enrollment) {
+                $school_enrollment =  $enrollment->enrollment;
+                $fresh_enrolment =  $enrollment->fresh_enrolment;
+                $gov_schools =  $enrollment->gov_schools;
+                $private_schools =  $enrollment->private_schools;
+                $drop_out =  $enrollment->drop_out;
+              } else {
+                $school_enrollment =  0;
+                $fresh_enrolment =  0;
+                $gov_schools =  0;
+                $private_schools =  0;
+                $drop_out =  0;
+              }
+              ?>
+              <!-- Modal -->
+              <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">
+                        <th>New Enrolment For Session <?php echo $session->sessionYearTitle; ?></th>
+                      </h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form method="post" action="<?php echo site_url('temp_controller/add_enrollement'); ?>">
+                        <input type="hidden" name="schools_id" value="<?php echo  $school->schoolId; ?>" />
+                        <input type="hidden" name="session_id" value="<?php echo  $session->sessionYearId; ?>" />
+                        <div class="form-group">
+                          <label for="fresh_enrolment">Fresh / New Enrolment </label>
+                          <input required value="<?php echo $fresh_enrolment; ?>" name="fresh_enrolment" id="fresh_enrolment" type="number" class="form-control" placeholder="">
+                          <small id="fresh_enrolment" class="form-text text-muted">Students enrolled for the first time.</small>
+                        </div>
+                        <div class="form-group">
+                          <label for="gov_schools">Students From Government Schools</label>
+                          <input required value="<?php echo $gov_schools; ?>" name="gov_schools" id="gov_schools" type="number" class="form-control" placeholder="">
+                          <small id="gov_schools" class="form-text text-muted">Students enrolled in your school from government schools.</small>
+                        </div>
+                        <div class="form-group">
+                          <label for="private_schools">Students From Other Private Schools</label>
+                          <input required value="<?php echo $private_schools; ?>" name="private_schools" id="private_schools" type="number" class="form-control" placeholder="">
+                          <small id="private_schools" class="form-text text-muted">Students enrolled in your school from other private schools.</small>
+                        </div>
+                        <div class="form-group">
+                          <label for="drop_out">Dropout Students Enrolment</label>
+                          <input required value="<?php echo $drop_out; ?>" name="drop_out" id="drop_out" type="number" class="form-control" placeholder="">
+                          <small id="drop_out" class="form-text text-muted">Students re-enrolled in your school after dropout.</small>
+                        </div>
+                        <div style="text-align: center;">
+                          <button type="submit" class="btn btn-primary">Add Enrolment Data</button>
+                        </div>
+                      </form>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+
+
 
 
               <div class="alert " style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
 
-                <?php
-                $query = "SELECT * FROM `session_year` WHERE status = 1";
-                $session = $this->db->query($query)->row();
-                $query = "SELECT * FROM `enrollments` 
-                        WHERE schools_id = '" . $school->schoolId . "'
-                        AND session_id = '" . $session->sessionYearId . "'";
-                $enrollment = $this->db->query($query)->row();
-                if ($enrollment) {
-                  $school_enrollment =  $enrollment->enrollment;
-                } else {
-                  $school_enrollment = 0;
-                }
-                ?>
+
                 <h4>Session <?php echo $session->sessionYearTitle; ?> Enrollment</h4>
                 <div class="alert alert-danger">
-                  Please enter the <strong>total</strong> number of newly enrolled students in your school in this session i.e. <strong><?php echo $session->sessionYearTitle; ?></strong> in class <strong>Playgroup / Nursery etc.</strong> and submit.
+                  Please enter the <strong>total</strong> number of newly enrolled students in your school for session <strong><?php echo $session->sessionYearTitle; ?></strong> and submit and submit online.
                   <br />
                   You need to update this figure daily
                 </div>
-                <form method="post" action="<?php echo site_url('temp_controller/add_enrollement'); ?>">
-                  <input type="hidden" name="schools_id" value="<?php echo  $school->schoolId; ?>" />
-                  <input type="hidden" name="session_id" value="<?php echo  $session->sessionYearId; ?>" />
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">
-                      <h4>Total New Enrollment</h4>
-                    </label>
-                    <input required min="1" max="2000" type="number" class="form-control" name="school_enrollment" id="school_enrollment" value="<?php echo $school_enrollment; ?>" placeholder="Enrollment">
-                    <small id="emailHelp" class="form-text text-muted">
-                      Updated on: <?php echo date('l F jS, Y', strtotime($enrollment->updated_date)) ?>
-                    </small>
-                  </div>
-                  <div style="text-align: center;">
-                    <?php if ($school_enrollment == 0) { ?>
-                      <button type="submit" class="btn btn-danger">Submit</button>
-
-                    <?php } else { ?>
-                      <button type="submit" class="btn btn-danger">Submit</button>
-                    <?php } ?>
-                  </div>
-                </form>
-
+                <div style="text-align: center;">
+                  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+                    New Enrollment Information
+                  </button>
+                </div>
               </div>
               <div class="alert " style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
 
@@ -833,7 +874,7 @@
 
 
 <script>
-  // $(document).ready(function() {
-  //   $('#vehicles').modal('show');
-  // });
+  $(document).ready(function() {
+    $('#exampleModal').modal('show');
+  });
 </script>

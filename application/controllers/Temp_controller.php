@@ -547,25 +547,29 @@ class Temp_controller extends CI_Controller
 
   public function add_enrollement()
   {
+    //$school_enrollment = (int) $this->input->post('school_enrollment');
     $schools_id = (int) $this->input->post('schools_id');
     $session_id = (int) $this->input->post('session_id');
-    $school_enrollment = (int) $this->input->post('school_enrollment');
+    $input['fresh_enrolment'] = (int) $this->input->post('fresh_enrolment');
+    $input['gov_schools'] = (int) $this->input->post('gov_schools');
+    $input['private_schools'] = (int) $this->input->post('private_schools');
+    $input['drop_out'] = (int) $this->input->post('drop_out');
+    $total_enrollment = $input['fresh_enrolment'] + $input['gov_schools'] + $input['private_schools'] + $input['drop_out'];
+    $input['enrollment'] = $total_enrollment;
     $query = "SELECT COUNT(*) as total FROM `enrollments` 
     WHERE schools_id = '" . $schools_id . "'
     AND session_id = '" . $session_id . "'";
     $enrollment_count = $this->db->query($query)->row()->total;
     if ($enrollment_count) {
-      //update
-      $query = "UPDATE `enrollments` set enrollment =  '" . $school_enrollment . "', `updated_date` = '" . date('Y-m-d') . "'
-             WHERE schools_id = '" . $schools_id . "'
-             AND session_id = '" . $session_id . "'";
-      $this->db->query($query);
+      $where['schools_id'] = $schools_id;
+      $where['session_id'] = $session_id;
+      $this->db->where($where);
+      $input['updated_date'] = date('Y-m-d');
+      $this->db->update('enrollments', $input);
     } else {
-      //insert
-      $query = "INSERT INTO `enrollments`
-      (`schools_id`, `session_id`, `enrollment`, `updated_date`) VALUES (
-        '" . $schools_id . "', '" . $session_id . "', '" . $school_enrollment . "', '" . date('Y-m-d') . "')";
-      $this->db->query($query);
+      $input['schools_id'] = $schools_id;
+      $input['session_id'] = $session_id;
+      $this->db->insert('enrollments', $input);
     }
     redirect("school_dashboard");
   }
