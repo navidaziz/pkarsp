@@ -275,7 +275,7 @@
                         </div>
                         <div class="form-group">
                           <label for="drop_out">Re-enrolment</label>
-                          <small id="drop_out" class="form-text text-muted" style="color: red; display:block; font-weight: bold;">Re-enrolment of students who returned to your school after previously dropping out.</small>
+                          <small id="drop_out" class="form-text text-muted" style="color: red; display:block; font-weight: bold;">Re-enrolment of students who returned to your school after dropped out.</small>
 
                           <input required min="0" value="<?php echo $drop_out; ?>" name="drop_out" id="drop_out" type="number" class="form-control" placeholder="">
                         </div>
