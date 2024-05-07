@@ -274,8 +274,8 @@
                           <input required value="<?php echo $private_schools; ?>" name="private_schools" id="private_schools" type="number" class="form-control" placeholder="">
                         </div>
                         <div class="form-group">
-                          <label for="drop_out">Dropout Enrolment</label>
-                          <small id="drop_out" class="form-text text-muted" style="color: red; display:block; font-weight: bold;">Students re-enrolled in your school after dropout.</small>
+                          <label for="drop_out">Re-enrolment</label>
+                          <small id="drop_out" class="form-text text-muted" style="color: red; display:block; font-weight: bold;">Re-enrolment of students who returned to your school after previously dropping out.</small>
 
                           <input required value="<?php echo $drop_out; ?>" name="drop_out" id="drop_out" type="number" class="form-control" placeholder="">
                         </div>
