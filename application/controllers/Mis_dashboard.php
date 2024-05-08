@@ -167,10 +167,12 @@ class Mis_dashboard extends Admin_Controller
 
 
 
-      echo  $query = "SELECT `level_of_school_id`, `downgrade` FROM school 
+      $query = "SELECT `level_of_school_id`, `downgrade` FROM school 
                 WHERE schools_id = '" . $schools_id . "'
                 AND status = 1
-                AND schoolId <'" . $school_id . "' LIMIT 1";
+                AND schoolId <'" . $school_id . "' 
+                ORDER BY schoolId DESC
+                LIMIT 1";
       $previous_session = $this->db->query($query)->row();
       $previous_session_level = 0;
       $downgrade = 0;
@@ -178,7 +180,7 @@ class Mis_dashboard extends Admin_Controller
          $previous_session_level =  $previous_session->level_of_school_id;
          $downgrade = $previous_session->downgrade;
       }
-      var_dump($previous_session);
+      //var_dump($previous_session);
       $this->data['downgrade'] = $downgrade;
       $this->data['previous_session_level'] = $previous_session_level;
 
