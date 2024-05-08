@@ -66,11 +66,36 @@
             </td>
             <td style="width: 250px; vertical-align: top;">
                 <strong>Owner Info</strong>
-                <ol style="margin-left: 5px;">
-                    <li>Owner Name: <strong><?php echo $school->userTitle; ?></strong></li>
-                    <li>Owner CNIC: <strong><?php echo $school->cnic; ?></strong></li>
-                    <li>Owner No: <strong><?php echo $school->owner_no; ?></strong></li>
-                    <oul>
+                <strong>Detail of Owner / Owners </strong>
+                <?php
+                $all_owners = array();
+                $query = "SELECT u.userTitle as owner_name,
+                               u.cnic as owner_cnic,
+                               u.contactNumber as owner_contact_no FROM `schools` as s 
+                        INNER JOIN users as u ON(u.userId = s.owner_id)
+                        WHERE s.schoolId = '" . $school->schools_id . "'";
+                $owner = $this->db->query($query)->row();
+                $all_owners[$owner->owner_cnic] = $owner;
+                $query = "SELECT * FROM `school_owners` WHERE school_id = '" . $school->schools_id . "'";
+                $owners = $this->db->query($query)->result();
+                if ($owners) {
+                    foreach ($owners as $owner) {
+                        $all_owners[$owner->owner_cnic] = $owner;
+                    }
+                }
+
+                ?>
+                <ul>
+                    <?php
+                    $count = 1;
+                    foreach ($all_owners as $owner_cnic => $owner) { ?>
+                        <li><?php echo $count++; ?>. <?php echo $owner->owner_name; ?>, <?php if ($owner->owner_father_name) {
+                                                                                            echo $owner->owner_father_name . ', ';
+                                                                                        } ?> <?php echo $owner_cnic; ?>, <?php echo $owner->owner_contact_no; ?></li>
+
+                    <?php } ?>
+
+                </ul>
             </td>
             <td style="width: 250px; vertical-align: top;">
                 <strong>Account info</strong>
