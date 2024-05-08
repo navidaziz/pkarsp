@@ -3,7 +3,7 @@
     <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
     <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
         <div class="row">
-            <?php if ($previous_session_level > $school->level_of_school_id) {
+            <?php if ($previous_session_level > $school->level_of_school_id and $downgrade == 0) {
                 $previous_level = '';
                 $current_level = '';
                 if ($previous_session_level == 1) {
