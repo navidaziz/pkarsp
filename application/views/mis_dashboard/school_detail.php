@@ -65,7 +65,6 @@
                     <oul>
             </td>
             <td style="width: 250px; vertical-align: top;">
-                <strong>Owner Info</strong>
                 <strong>Detail of Owner / Owners </strong>
                 <?php
                 $all_owners = array();
