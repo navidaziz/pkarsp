@@ -143,7 +143,7 @@
                                     <td><?php echo $total_dues; ?></td>
 
                                     <td><?php echo $challan->total_deposit_fee; ?></td>
-                                    <td><?php echo $total_dues = $total_dues - $challan->total_deposit_fee; ?></td>
+                                    <td><?php echo $total_dues =  $challan->total_deposit_fee - $total_dues; ?></td>
 
 
                                 </tr>
