@@ -143,7 +143,16 @@
                                     <td><?php echo $total_dues; ?></td>
 
                                     <td><?php echo $challan->total_deposit_fee; ?></td>
-                                    <td><?php echo $total_dues =  $challan->total_deposit_fee - $total_dues; ?></td>
+                                    <td><?php
+
+                                        $total_dues =  $challan->total_deposit_fee - $total_dues;
+                                        if ($total_dues > 0) {
+                                            echo '<span style="color:green">+' . $total_dues . '</span>';
+                                        } else {
+                                            echo '<span style="color:red">' . $total_dues . '</span>';
+                                        }
+
+                                        ?></td>
 
 
                                 </tr>
