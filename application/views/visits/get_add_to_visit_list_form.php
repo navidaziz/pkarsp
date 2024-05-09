@@ -23,7 +23,7 @@
             $query = "SELECT session_year_id FROM school 
             WHERE schools_id = '" . $school->schools_id . "'
             ORDER BY schoolId DESC LIMIT 1";
-            $last_issued_session = $this->db->query()->row();
+            $last_issued_session = $this->db->query($query)->row();
             if ($last_issued_session) {
                 $last_issued_id = $last_issued_session->session_year_id;
             }
