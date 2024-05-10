@@ -70,7 +70,7 @@ school.principal_contact_no,
 	   AND `school`.`status`='2'
 	   AND school.file_status=1
 	   AND `school`.`reg_type_id` IN (1,4)
-	    ORDER BY `school`.`apply_date` ASC, `school`.`schools_id` ASC, `school`.`session_year_id` ASC LIMIT 30";
+	    ORDER BY `school`.`apply_date` ASC, `school`.`schools_id` ASC, `school`.`session_year_id` ASC LIMIT 10";
 
 		$this->data['schools'] = $this->db->query($query)->result();
 		//var_dump($this->data['schools']);
