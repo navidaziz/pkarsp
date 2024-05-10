@@ -6,7 +6,7 @@
 
 
     <?php
-    $query = "SELECT ss.schoolId, sy.sessionYearTitle, 
+    echo $query = "SELECT ss.schoolId, sy.sessionYearTitle, 
     rt.regTypeTitle, ss.status, sy.status as session_status,
     ss.session_year_id
     FROM school as ss
