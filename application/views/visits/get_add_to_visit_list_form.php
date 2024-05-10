@@ -12,7 +12,7 @@
     FROM school as ss
     INNER JOIN session_year as sy ON(sy.sessionYearId = ss.session_year_id)
     INNER JOIN reg_type as rt ON(rt.regTypeId = ss.reg_type_id)
-    WHERE ss.schools_id = '" . $school->schools_id . "'
+    WHERE ss.schools_id = '" . $input->schools_id . "'
     ORDER BY sy.sessionYearId ASC";
     $session = $this->db->query($query)->result(); ?>
     <div class="form-group row">
