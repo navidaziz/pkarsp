@@ -6,7 +6,7 @@
 
 
     <?php
-    echo $query = "SELECT ss.schoolId, sy.sessionYearTitle, 
+    $query = "SELECT ss.schoolId, sy.sessionYearTitle, 
     rt.regTypeTitle, ss.status, sy.status as session_status,
     ss.session_year_id
     FROM school as ss
@@ -19,9 +19,17 @@
         <label for="school_id" class="col-sm-4 col-form-label">Session</label>
         <div class="col-sm-8">
             <?php
+            $last_issued_id = 0;
+            $query = "SELECT session_year_id FROM school 
+            WHERE schools_id = '" . $input->schools_id . "'
+            ORDER BY schoolId DESC LIMIT 1";
+            $last_issued_session = $this->db->query($query)->row();
+            if ($last_issued_session) {
+                $last_issued_id = $last_issued_session->session_year_id;
+            }
             foreach ($session as $option) {
             ?>
-                <?php if ($option->status == 2 or $option->session_status == 1) { ?>
+                <?php if ($option->status == 2 or $option->session_status == 1 or $option->session_year_id == $last_issued_id) { ?>
                     <span style="margin-left:5px"></span>
                     <input <?php if ($option->schoolId == $input->school_id) { ?>checked <?php } ?> required type="radio" id="<?php echo $option->schoolId; ?>" name="school_id" value="<?php echo $option->schoolId; ?>" class="">
                 <?php } ?>
