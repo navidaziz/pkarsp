@@ -8,11 +8,10 @@ class Print_visit_report extends CI_Controller
 
 		parent::__construct();
 		$this->load->model("school_m");
-		
 	}
 
-	
-	
+
+
 	public function  visit_report($school_id)
 	{
 		$school_id = (int) $school_id;
@@ -136,6 +135,16 @@ class Print_visit_report extends CI_Controller
 		$this->data['description'] = 'Section B (Physical Facilities)';
 
 		$this->load->view('print/visit_report', $this->data);
+	}
+
+	public function  visit_proforma()
+	{
+		$this->data['school_security_measures'] = $this->school_m->security_measures_by_school_id(0);
+
+		$this->data['school_hazards_with_associated_risks'] = $this->school_m->hazards_with_associated_risks_by_school_id(0);
+		$this->data['hazards_with_associated_risks_unsafe_list'] = $this->school_m->hazards_with_associated_risks_unsafe_list_by_school_id(0);
+
+		$this->load->view('print/visit_proforma', $this->data);
 	}
 
 	private function registaion_type($type_id)
