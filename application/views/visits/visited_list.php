@@ -60,23 +60,16 @@
                                 <table class="table table-bordered table_small" id="visits_list">
                                     <thead>
                                         <tr>
-                                            <th></th>
                                             <th>#</th>
                                             <th>Institute ID</th>
                                             <th>School Name</th>
                                             <th>District</th>
-                                            <th>Tehsil</th>
-                                            <th>UC</th>
-                                            <th>Address</th>
                                             <th>Contact</th>
                                             <th>Already Registered</th>
                                             <th>Visit Reason</th>
                                             <th>Session</th>
-                                            <th>Primary</th>
-                                            <th>Middle</th>
-                                            <th>High</th>
-                                            <th>Higher Sec.</th>
-                                            <th>Academy</th>
+                                            <th>Recommended</th>
+                                            <th>Recommended levels</th>
 
                                             <th>Visited</th>
                                             <th>Process</th>
@@ -94,6 +87,7 @@
                                         $count = 1;
                                         $query = "SELECT v. visit_id, v.schools_id, v.school_id, v.visit_reason, v.primary_l, 
                     v.middle_l, v.high_l, v.high_sec_l, v.academy_l, v.visited, 
+                    v.recommendation,
                     s.schoolName, s.registrationNumber,
                     (SELECT tehsilTitle FROM `tehsils` WHERE tehsils.tehsilId=s.tehsil_id) as tehsil,
                     (SELECT `ucTitle` FROM `uc` WHERE uc.ucId=s.uc_id) as uc,
@@ -116,18 +110,12 @@
                                         $rows = $this->db->query($query)->result();
                                         foreach ($rows as $row) { ?>
                                             <tr>
-                                                <td>
-                                                    <?php if ($row->visited == 'No' and $row->visit_status == 'Visit Pending' and $row->created_by == $this->session->userdata("userId")) { ?>
-                                                        <a href="<?php echo site_url(ADMIN_DIR . 'visits/delete_visits/' . $row->visit_id); ?>" onclick="return confirm('Are you sure? you want to delete the record.')">Delete</a>
-                                                    <?php } ?>
-                                                </td>
+
                                                 <td><?php echo $count++ ?></td>
                                                 <td><?php echo $row->schools_id; ?></td>
                                                 <td><?php echo $row->schoolName; ?></td>
                                                 <td><?php echo $row->districtTitle; ?></td>
-                                                <td><?php echo $row->tehsil; ?></td>
-                                                <td><?php echo $row->uc != NULL ? $row->uc : $row->uc_text; ?></td>
-                                                <td><?php echo $row->address; ?></td>
+
 
                                                 <td><?php
                                                     $contact = array();
@@ -160,9 +148,9 @@
 
                                                     <?php
                                                     $query = "SELECT `level_of_school_id`,
-                                `primary`, middle, high, high_sec FROM school 
-                                WHERE schools_id = '" . $row->schools_id . "' 
-                                AND  status = 1 ORDER BY schoolId DESC LIMIT 1";
+                                                    `primary`, middle, high, high_sec FROM school 
+                                                    WHERE schools_id = '" . $row->schools_id . "' 
+                                                    AND  status = 1 ORDER BY schoolId DESC LIMIT 1";
                                                     $reg_levels = $this->db->query($query)->row(); ?>
                                                     <?php echo ($reg_levels->primary == 1 or $reg_levels->level_of_school_id == 1) ? 'Primary, ' : '' ?>
                                                     <?php echo ($reg_levels->middle == 1 or $reg_levels->level_of_school_id == 2) ? 'Middle, ' : '' ?>
@@ -172,13 +160,19 @@
 
                                                 <td><?php echo $row->visit_reason; ?></td>
                                                 <td><?php echo $row->sessionYearTitle; ?></td>
-                                                <td><?php echo $row->primary_l == 1 ? 'Primary' : '' ?></td>
-                                                <td><?php echo $row->middle_l == 1 ? 'Middle' : '' ?></td>
-                                                <td><?php echo $row->high_l == 1 ? 'High' : ''; ?></td>
-                                                <td><?php echo $row->high_sec_l == 1 ? 'Higher Sec.' : ''  ?></td>
-                                                <td><?php echo $row->academy_l == 1 ? 'Academy' : ''  ?></td>
+                                                <td><?php if ($row->recommendation) { ?>
+                                                        <span><?php echo $row->recommendation; ?></span>
+                                                    <?php } else { ?>
+                                                        <span><?php echo $row->recommendation; ?></span>
+                                                    <?php } ?>
+                                                </td>
+                                                <td><?php echo $row->primary_l == 1 ? 'Primary, ' : '' ?>
+                                                    <?php echo $row->middle_l == 1 ? 'Middle, ' : '' ?>
+                                                    <?php echo $row->high_l == 1 ? 'High, ' : ''; ?>
+                                                    <?php echo $row->high_sec_l == 1 ? 'Higher Sec. ' : ''  ?>
+                                                    <?php echo $row->academy_l == 1 ? 'Academy ' : ''  ?>
+                                                </td>
 
-                                                <td><?php echo $row->visited; ?></td>
                                                 <td><?php echo $row->visit_status; ?></td>
                                                 <td>
                                                     <?php if ($row->visited == 'Yes') { ?>
