@@ -1125,8 +1125,7 @@
                 FROM visit_details 
                  WHERE visit_id ='" . $visit_id . "'
                  AND school_id ='" . $school_id . "' 
-                 AND schools_id ='" . $schools_id . "'
-                 AND class_id = '" . $class->classId . "'";
+                 AND schools_id ='" . $schools_id . "'";
                 $class_summary = $this->db->query($query)->row();
                 ?>
                 <tr>
