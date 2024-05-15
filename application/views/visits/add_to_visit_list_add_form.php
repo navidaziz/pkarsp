@@ -68,10 +68,12 @@
             }
             foreach ($session as $option) {
             ?>
-                <?php if ($option->status == 2 or $option->session_status == 1 or $option->session_year_id == $last_issued_id) { ?>
-                    <span style="margin-left:5px"></span>
-                    <input <?php if ($option->schoolId == $input->school_id) { ?>checked <?php } ?> required type="radio" id="<?php echo $option->schoolId; ?>" name="school_id" value="<?php echo $option->schoolId; ?>" class="">
-                <?php } ?>
+                <?php //if ($option->status == 2 or $option->session_status == 1 or $option->session_year_id == $last_issued_id) { 
+                ?>
+                <span style="margin-left:5px"></span>
+                <input <?php if ($option->schoolId == $input->school_id) { ?>checked <?php } ?> required type="radio" id="<?php echo $option->schoolId; ?>" name="school_id" value="<?php echo $option->schoolId; ?>" class="">
+                <?php //} 
+                ?>
                 <span style="margin-left:3px"></span> <?php echo $option->sessionYearTitle;  ?> (<?php echo $option->regTypeTitle; ?>) <br />
             <?php } ?>
         </div>
