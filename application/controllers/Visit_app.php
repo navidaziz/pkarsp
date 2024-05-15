@@ -301,12 +301,27 @@ class Visit_app extends Admin_Controller
             exit();
         } else {
             $input["b"] = 1;
-            if ($this->input->post("registered") == 0) {
+            if ($this->input->post("rent_aggrement_date")) {
                 $input["rent_aggrement_date"] = $this->input->post("rent_aggrement_date");
-                $input["first_enrollement_date"] = $this->input->post("first_enrollement_date");
-                $input["first_teacher_appointment_date"] = $this->input->post("first_teacher_appointment_date");
-                $input["year_of_establisment"] = $this->input->post("year_of_establisment");
+            } else {
+                $input["rent_aggrement_date"] = NULL;
             }
+            if ($this->input->post("first_enrollement_date")) {
+                $input["first_enrollement_date"] = $this->input->post("first_enrollement_date");
+            } else {
+                $input["first_enrollement_date"] = NULL;
+            }
+            if ($this->input->post("first_teacher_appointment_date")) {
+                $input["first_teacher_appointment_date"] = $this->input->post("first_teacher_appointment_date");
+            } else {
+                $input["first_teacher_appointment_date"] = NULL;
+            }
+            if ($this->input->post("year_of_establisment")) {
+                $input["year_of_establisment"] = $this->input->post("year_of_establisment");
+            } else {
+                $input["year_of_establisment"] = NULL;
+            }
+
             $input["portrait_quaid"] = $this->input->post("portrait_quaid");
             $input["portrait_iqbal"] = $this->input->post("portrait_iqbal");
             $input["student_furnitures"] = $this->input->post("student_furnitures");
