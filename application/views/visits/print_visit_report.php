@@ -322,14 +322,13 @@
             <td>
               <?php echo $input->property_posession;
               if ($input->property_posession == 'Rented') {
-                echo 'Rs: ' . $input->rent_amount . ' Per/Month';
+                echo ' Rs: ' . $input->rent_amount . ' Per/Month';
               }
               ?>
             </td>
             <td><?php echo $input->land_type; ?></td>
-
-            <td><?php echo $input->covered_area; ?> Marla</td>
             <td><?php echo $input->total_area; ?> Marla</td>
+            <td><?php echo $input->covered_area; ?> Marla</td>
           </tr>
         </table>
         <strong>Please confirm address of the school</strong>
