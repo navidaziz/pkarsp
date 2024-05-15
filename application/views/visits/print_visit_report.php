@@ -986,28 +986,28 @@
         <div class="row">
           <?php if ($input->picture_1 != NULL) { ?>
             <div class="col-xs-4">
-              <img style="height: 200px; width:100%; border:1px solid white; border-radius:5px" src="<?php echo 'https://' . $_SERVER['HTTP_HOST'] . $input->picture_1; ?>" />
+              <img style="height: 200px;  border:1px solid white; border-radius:5px" src="<?php echo 'https://' . $_SERVER['HTTP_HOST'] . $input->picture_1; ?>" />
               <small class="text-right"><i>Officials With Institute Signboard</i></small>
             </div>
           <?php } ?>
 
           <?php if ($input->high_lab_image != NULL) { ?>
             <div class="col-xs-4">
-              <img style="height: 200px; width:100%; border:1px solid white; border-radius:5px" src="<?php echo 'https://' . $_SERVER['HTTP_HOST'] . $input->high_lab_image; ?>" />
+              <img style="height: 200px;  border:1px solid white; border-radius:5px" src="<?php echo 'https://' . $_SERVER['HTTP_HOST'] . $input->high_lab_image; ?>" />
               <small class="text-right"><i>High School Lab Image</i></small>
             </div>
           <?php } ?>
 
           <?php if ($input->physics_lab_image != NULL) { ?>
             <div class="col-xs-4">
-              <img style="height: 200px; width:100%; border:1px solid white; border-radius:5px" src="<?php echo 'https://' . $_SERVER['HTTP_HOST'] . $input->physics_lab_image; ?>" />
+              <img style="height: 200px;  border:1px solid white; border-radius:5px" src="<?php echo 'https://' . $_SERVER['HTTP_HOST'] . $input->physics_lab_image; ?>" />
               <small class="text-right"><i>Higher Secondary Physics Lab Image</i></small>
             </div>
           <?php } ?>
 
           <?php if ($input->biology_lab_image != NULL) { ?>
             <div class="col-xs-4">
-              <img style="height: 200px; width:100%; border:1px solid white; border-radius:5px" src="<?php echo 'https://' . $_SERVER['HTTP_HOST'] . $input->biology_lab_image; ?>" />
+              <img style="height: 200px;  border:1px solid white; border-radius:5px" src="<?php echo 'https://' . $_SERVER['HTTP_HOST'] . $input->biology_lab_image; ?>" />
               <small class="text-right"><i>Higher Secondary Biology Lab Image</i></small>
             </div>
           <?php } ?>
