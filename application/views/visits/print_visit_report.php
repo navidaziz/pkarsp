@@ -1319,8 +1319,8 @@
                       <tr>
                         <th>Total</th>
                         <td><strong><?php echo $input->non_teaching_male_staff + $input->non_teaching_female_staff; ?></strong></td>
-                        <td><strong><?php echo $input->teaching_male_staff + $input->teaching_female_staff; ?></strong></td>
-                        <td><strong><?php echo $total_teachers = $input->non_teaching_male_staff + $input->non_teaching_female_staff + $input->teaching_male_staff + $input->teaching_female_staff; ?></strong></td>
+                        <td><strong><?php echo $total_teachers = $input->teaching_male_staff + $input->teaching_female_staff; ?></strong></td>
+                        <td><strong><?php echo  $input->non_teaching_male_staff + $input->non_teaching_female_staff + $input->teaching_male_staff + $input->teaching_female_staff; ?></strong></td>
                       </tr>
                     </table>
                     <br />
