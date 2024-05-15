@@ -11,14 +11,16 @@
         <div class="block_div">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                            <label for="rent_aggrement_date" class="col-form-label">Rent Aggrement Date</label>
+                    <?php if ($input->property_posession == 'Rented') { ?>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label for="rent_aggrement_date" class="col-form-label">Rent Aggrement Date</label>
 
-                            <input type="date" required id="rent_aggrement_date" name="rent_aggrement_date" value="<?php echo $input->rent_aggrement_date; ?>" class="form-control">
+                                <input type="date" required id="rent_aggrement_date" name="rent_aggrement_date" value="<?php echo $input->rent_aggrement_date; ?>" class="form-control">
 
+                            </div>
                         </div>
-                    </div>
+                    <?php } ?>
                     <div class="col-xs-6">
                         <div class="form-group">
                             <label for="first_enrollement_date" class="col-form-label">First Student Enrollment Date</label>
