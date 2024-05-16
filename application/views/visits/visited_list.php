@@ -87,6 +87,7 @@
                                         $count = 1;
                                         $query = "SELECT v. visit_id, v.schools_id, v.school_id, v.visit_reason, v.primary_l, 
                                         v.middle_l, v.high_l, v.high_sec_l, v.academy_l, v.visited, 
+                                        v.visit_date,
                                         v.recommendation,
                                         s.schoolName, s.registrationNumber,
                                         (SELECT tehsilTitle FROM `tehsils` WHERE tehsils.tehsilId=s.tehsil_id) as tehsil,
@@ -179,9 +180,7 @@
                                                     <?php if ($row->visited == 'Yes') { ?>
                                                         <a target="new" class="btn btn-link btn-sm" style="padding: 0px; margin:0px font-size:10px !important" href="<?php echo site_url('visits/print_visit_report/' . $row->visit_id . '/' . $row->schools_id . '/' . $row->school_id); ?>">Print</a>
                                                     <?php } ?>
-                                                    <?php if ($row->visited == 'No') { ?>
-                                                        <button class="btn btn-link btn-sm" style="padding: 0px; margin:0px" onclick="get_add_to_visit_list_form('<?php echo $row->visit_id; ?>')">Edit<botton>
-                                                            <?php } ?>
+
                                                 </td>
                                             </tr>
                                         <?php } ?>
