@@ -72,7 +72,6 @@
                                             <th>Recommended levels</th>
 
                                             <th>Visited</th>
-                                            <th>Process</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -86,27 +85,27 @@
                                         }
                                         $count = 1;
                                         $query = "SELECT v. visit_id, v.schools_id, v.school_id, v.visit_reason, v.primary_l, 
-                    v.middle_l, v.high_l, v.high_sec_l, v.academy_l, v.visited, 
-                    v.recommendation,
-                    s.schoolName, s.registrationNumber,
-                    (SELECT tehsilTitle FROM `tehsils` WHERE tehsils.tehsilId=s.tehsil_id) as tehsil,
-                    (SELECT `ucTitle` FROM `uc` WHERE uc.ucId=s.uc_id) as uc,
-                    s.uc_text,
-                    s.address,
-                    d.districtTitle,
-                    sy.sessionYearTitle,
-                    ss.principal_contact_no,
-                    s.schoolMobileNumber,
-                    s.telePhoneNumber,
-                    v.visit_status,
-                    v.created_by
-                    FROM visits as v 
-                    INNER JOIN schools as s ON(s.schoolId = v.schools_id) 
-                    INNER JOIN district as d ON(d.districtId = s.district_id) 
-                    INNER JOIN school as ss ON(ss.schoolId = v.school_id)
-                    INNER JOIN session_year as sy ON(sy.sessionYearId = ss.session_year_id)
-                    WHERE is_deleted = 0
-                    AND v.visited='Yes'";
+                                        v.middle_l, v.high_l, v.high_sec_l, v.academy_l, v.visited, 
+                                        v.recommendation,
+                                        s.schoolName, s.registrationNumber,
+                                        (SELECT tehsilTitle FROM `tehsils` WHERE tehsils.tehsilId=s.tehsil_id) as tehsil,
+                                        (SELECT `ucTitle` FROM `uc` WHERE uc.ucId=s.uc_id) as uc,
+                                        s.uc_text,
+                                        s.address,
+                                        d.districtTitle,
+                                        sy.sessionYearTitle,
+                                        ss.principal_contact_no,
+                                        s.schoolMobileNumber,
+                                        s.telePhoneNumber,
+                                        v.visit_status,
+                                        v.created_by
+                                        FROM visits as v 
+                                        INNER JOIN schools as s ON(s.schoolId = v.schools_id) 
+                                        INNER JOIN district as d ON(d.districtId = s.district_id) 
+                                        INNER JOIN school as ss ON(ss.schoolId = v.school_id)
+                                        INNER JOIN session_year as sy ON(sy.sessionYearId = ss.session_year_id)
+                                        WHERE is_deleted = 0
+                                        AND v.visited='Yes'";
                                         $rows = $this->db->query($query)->result();
                                         foreach ($rows as $row) { ?>
                                             <tr>
@@ -161,9 +160,9 @@
                                                 <td><?php echo $row->visit_reason; ?></td>
                                                 <td><?php echo $row->sessionYearTitle; ?></td>
                                                 <td><?php if ($row->recommendation) { ?>
-                                                        <span><?php echo $row->recommendation; ?></span>
+                                                        <span style="color: green;"><?php echo $row->recommendation; ?></span>
                                                     <?php } else { ?>
-                                                        <span><?php echo $row->recommendation; ?></span>
+                                                        <span style="color: red;"><?php echo $row->recommendation; ?></span>
                                                     <?php } ?>
                                                 </td>
                                                 <td><?php echo $row->primary_l == 1 ? 'Primary, ' : '' ?>
