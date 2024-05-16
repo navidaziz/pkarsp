@@ -164,7 +164,9 @@
                                             ?>
                                                 <th style="text-align: center;"><?php echo $count_visits; ?></th>
                                             <?php }  ?>
+
                                             <th style="text-align: center;"><?php echo $total; ?></th>
+                                            <th></th>
                                         </tr>
                                     </tfoot>
                                 </table>
