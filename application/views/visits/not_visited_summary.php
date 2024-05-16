@@ -71,6 +71,7 @@
                                                 <th><?php echo $option; ?></th>
                                             <?php }  ?>
                                             <th>Total</th>
+                                            <th>Print</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -116,6 +117,7 @@
                                                         <td style="text-align: center;"><?php echo $count_visits; ?></td>
                                                     <?php }  ?>
                                                     <td style="text-align: center;"><?php echo $total; ?></td>
+                                                    <td><a target="new" href="<?php echo site_url("visits/print_district_visit_list/" . $row->districtId); ?>"><i class="fa fa-print"></i> Visit List</a></td>
                                                 </tr>
                                             <?php } ?>
                                             <tr>
@@ -138,6 +140,7 @@
                                                     <th style="text-align: center;"><?php echo $count_visits; ?></th>
                                                 <?php }  ?>
                                                 <th style="text-align: center;"><?php echo $total; ?></th>
+                                                <th></th>
                                             </tr>
 
                                         <?php } ?>

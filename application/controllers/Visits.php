@@ -52,7 +52,17 @@ class Visits extends Admin_Controller
 
         $this->load->view('layout', $this->data);
     }
-
+    public function print_district_visit_list($district_id)
+    {
+        $district_id = (int) $district_id;
+        $query = "SELECT * FROM district WHERE districtId = '" . $district_id . "'";
+        $this->data['district'] = $district =  $this->db->query($query)->row();
+        $this->data['district_id'] = $district_id;
+        $this->data["title"] = $district->districtTitle;
+        $this->data["description"] = $district->districtTitle . ' Visit List';
+        $this->data['view'] = 'visits/print_district_visit_list';
+        $this->load->view('layout', $this->data);
+    }
     public function get_add_to_visit_list_form()
     {
 
