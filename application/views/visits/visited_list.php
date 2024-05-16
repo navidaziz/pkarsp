@@ -73,6 +73,7 @@
 
                                             <th>Visited</th>
                                             <th>Date</th>
+                                            <td>By</td>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -88,6 +89,7 @@
                                         $query = "SELECT v. visit_id, v.schools_id, v.school_id, v.visit_reason, v.primary_l, 
                                         v.middle_l, v.high_l, v.high_sec_l, v.academy_l, v.visited, 
                                         v.visit_date,
+                                        v.last_updated_by,
                                         v.recommendation,
                                         s.schoolName, s.registrationNumber,
                                         (SELECT tehsilTitle FROM `tehsils` WHERE tehsils.tehsilId=s.tehsil_id) as tehsil,
@@ -175,7 +177,16 @@
                                                 </td>
 
                                                 <td><?php echo $row->visit_status; ?></td>
-                                                <td><?php echo date('d M, y', $row->visit_date); ?></td>
+                                                <td><?php echo date('d-m-Y', strtotime($row->visit_date)); ?></td>
+                                                <td>
+                                                    <?php
+                                                    $query = "SELECT userTitle FROM users WHERE userId = '" . $row->last_updated_by . "'";
+                                                    $user = $this->db->query($query)->row();
+                                                    if ($user) {
+                                                        echo $user->userTitle;
+                                                    }
+                                                    ?>
+                                                </td>
                                                 <td>
                                                     <?php if ($row->visited == 'Yes') { ?>
                                                         <a target="new" class="btn btn-link btn-sm" style="padding: 0px; margin:0px font-size:10px !important" href="<?php echo site_url('visits/print_visit_report/' . $row->visit_id . '/' . $row->schools_id . '/' . $row->school_id); ?>">Print</a>
