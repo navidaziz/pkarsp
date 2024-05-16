@@ -111,7 +111,7 @@
                                         WHERE is_deleted = 0
                                         AND s.district_id = $district_id
                                         AND v.visited = 'No'
-                                        ORDER BY s.address ASC, s.uc_id ASC, s.tehsil_id ASC, s.district_id ASC";
+                                        ORDER BY s.district_id ASC, s.tehsil_id ASC, s.uc_id ASC, s.address ASC";
                                         $rows = $this->db->query($query)->result();
 
                                         foreach ($rows as $row) { ?>
@@ -156,9 +156,9 @@
 
                                                     <?php
                                                     $query = "SELECT `level_of_school_id`,
-                                `primary`, middle, high, high_sec FROM school 
-                                WHERE schools_id = '" . $row->schools_id . "' 
-                                AND  status = 1 ORDER BY schoolId DESC LIMIT 1";
+                                                    `primary`, middle, high, high_sec FROM school 
+                                                    WHERE schools_id = '" . $row->schools_id . "' 
+                                                    AND  status = 1 ORDER BY schoolId DESC LIMIT 1";
                                                     $reg_levels = $this->db->query($query)->row(); ?>
                                                     <?php echo ($reg_levels->primary == 1 or $reg_levels->level_of_school_id == 1) ? 'Primary, ' : '' ?>
                                                     <?php echo ($reg_levels->middle == 1 or $reg_levels->level_of_school_id == 2) ? 'Middle, ' : '' ?>
