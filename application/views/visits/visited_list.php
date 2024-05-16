@@ -72,6 +72,7 @@
                                             <th>Recommended levels</th>
 
                                             <th>Visited</th>
+                                            <th>Date</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -159,7 +160,7 @@
 
                                                 <td><?php echo $row->visit_reason; ?></td>
                                                 <td><?php echo $row->sessionYearTitle; ?></td>
-                                                <td><?php if ($row->recommendation) { ?>
+                                                <td><?php if ($row->recommendation == 'Recommended') { ?>
                                                         <span style="color: green;"><?php echo $row->recommendation; ?></span>
                                                     <?php } else { ?>
                                                         <span style="color: red;"><?php echo $row->recommendation; ?></span>
@@ -173,6 +174,7 @@
                                                 </td>
 
                                                 <td><?php echo $row->visit_status; ?></td>
+                                                <td><?php echo date('d M, y', $row->visit_date); ?></td>
                                                 <td>
                                                     <?php if ($row->visited == 'Yes') { ?>
                                                         <a target="new" class="btn btn-link btn-sm" style="padding: 0px; margin:0px font-size:10px !important" href="<?php echo site_url('visits/print_visit_report/' . $row->visit_id . '/' . $row->schools_id . '/' . $row->school_id); ?>">Print</a>
