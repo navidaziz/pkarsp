@@ -215,9 +215,9 @@
                 <table class="table table_reg">
                     <tr>
                         <th style="width: 130px;"> Due's Date </th>
-                        <th>Application Pro. Fee</th>
+                        <!-- <th>Application Pro. Fee</th>
                         <th>Renewal Fee</th>
-                        <th>Inspection Fee</th>
+                        <th>Inspection Fee</th> -->
 
                         <?php if ($this->input->post('challan_type') == 'renewal_upgradation') { ?>
                             <th>Upgradation Fee</th>
@@ -259,12 +259,12 @@
 
 
                             </td>
-                            <td><?php //echo number_format($fee_sturucture->renewal_app_processsing_fee); 
-                                ?></td>
+                            <!-- <td><?php //echo number_format($fee_sturucture->renewal_app_processsing_fee); 
+                                        ?></td>
                             <td><?php //echo number_format($fee_sturucture->renewal_fee); 
                                 ?></td>
                             <td><?php //echo number_format($fee_sturucture->renewal_app_inspection_fee); 
-                                ?></td>
+                                ?></td> -->
 
 
                             <?php if ($this->input->post('challan_type') == 'renewal_upgradation') { ?>
