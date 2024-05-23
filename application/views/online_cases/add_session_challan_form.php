@@ -212,7 +212,7 @@
                 <h6>Session: <?php echo $school_session->sessionYearTitle; ?>
                     <?php echo $school_session->regTypeTitle; ?>
                     Fee Detail</h6>
-                <table class="table table_reg" style="font-size: 9px;">
+                <table class="table table_reg">
                     <tr>
                         <th style="width: 130px;"> Due's Date </th>
                         <th>Application Pro. Fee</th>
