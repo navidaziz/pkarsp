@@ -204,7 +204,7 @@
 </style>
 <script>
     $(document).ready(function() {
-        document.title = "List of Not Visited Region Wise Summary Till Now (<?php echo date('d-m-y h:m:s') ?>)";
+        document.title = "Visit List Summary Till Now (<?php echo date('d-m-y h:m:s') ?>)";
         $('#visits_list').DataTable({
             dom: 'Bfrtip',
             paging: false,
@@ -212,9 +212,7 @@
             ordering: false, // Enable sorting
             buttons: [
                 'copy', 'csv', 'excel', 'print', {
-                    extend: 'pdfHtml5',
-                    orientation: 'landscape',
-                    pageSize: 'LEGAL',
+                    extend: 'pdfHtml5'
                 },
 
             ],

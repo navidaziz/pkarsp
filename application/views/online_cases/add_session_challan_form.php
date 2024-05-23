@@ -259,9 +259,12 @@
 
 
                             </td>
-                            <td><?php echo number_format($fee_sturucture->renewal_app_processsing_fee); ?></td>
-                            <td><?php echo number_format($fee_sturucture->renewal_fee); ?></td>
-                            <td><?php echo number_format($fee_sturucture->renewal_app_inspection_fee); ?></td>
+                            <td><?php //echo number_format($fee_sturucture->renewal_app_processsing_fee); 
+                                ?></td>
+                            <td><?php //echo number_format($fee_sturucture->renewal_fee); 
+                                ?></td>
+                            <td><?php //echo number_format($fee_sturucture->renewal_app_inspection_fee); 
+                                ?></td>
 
 
                             <?php if ($this->input->post('challan_type') == 'renewal_upgradation') { ?>
