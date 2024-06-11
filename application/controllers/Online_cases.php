@@ -441,7 +441,9 @@ class Online_cases extends Admin_Controller
 
       $userId = $this->session->userdata('userId');
 
-      $query = "SELECT count(*) as total FROM bank_challans WHERE challan_no = '" . $statn_number . "'";
+      $query = "SELECT count(*) as total FROM bank_challans 
+      WHERE challan_no = '" . $statn_number . "'
+      AND DATE(challan_date) = '".date('Y-m-d', strtotime($date_of_deposit))."'";
       $count = $this->db->query($query)->result()[0]->total;
       if ($count == 0) {
 
@@ -564,7 +566,10 @@ class Online_cases extends Admin_Controller
       $challan_for = $this->input->post("challan_for");
       $userId = $this->session->userdata('userId');
 
-      $query = "SELECT count(*) as total FROM bank_challans WHERE challan_no = '" . $statn_number . "' and bank_challan_id !='" . $bank_challan_id . "'";
+      $query = "SELECT count(*) as total FROM bank_challans 
+      WHERE challan_no = '" . $statn_number . "' 
+      AND DATE(challan_date) = '".date('Y-m-d', strtotime($date_of_deposit))."'
+      AND bank_challan_id !='" . $bank_challan_id . "'";
       $count = $this->db->query($query)->result()[0]->total;
       if ($count == 0) {
 
