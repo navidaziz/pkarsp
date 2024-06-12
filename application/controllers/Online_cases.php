@@ -494,7 +494,9 @@ class Online_cases extends Admin_Controller
          '1'
          )";
          if ($this->db->query($query)) {
-            $query = "SELECT (`application_processing_fee`+`renewal_fee`+`upgradation_fee`+`inspection_fee`+`fine`+`security_fee`+`late_fee`+`renewal_and_upgradation_fee`+`change_of_name_fee`+`change_of_ownership_fee`+`change_of_building_fee`+`miscellaneous`+`penalty`) as total FROM `bank_challans` WHERE challan_no = '" . $statn_number . "'";
+            $query = "SELECT (`application_processing_fee`+`renewal_fee`+`upgradation_fee`+`inspection_fee`+`fine`+`security_fee`+`late_fee`+`renewal_and_upgradation_fee`+`change_of_name_fee`+`change_of_ownership_fee`+`change_of_building_fee`+`miscellaneous`+`penalty`) as total 
+            FROM `bank_challans` WHERE challan_no = '" . $statn_number . "' 
+            AND DATE(challan_date) = '".date('Y-m-d', strtotime($date_of_deposit))."'";
             $challan_total = $this->db->query($query)->result()[0]->total;
             $query = "UPDATE bank_challans SET total_deposit_fee='" . $challan_total . "' WHERE challan_no = '" . $statn_number . "'";
             $this->db->query($query);
@@ -595,7 +597,9 @@ class Online_cases extends Admin_Controller
          if ($this->db->query($query)) {
             $query = "SELECT (`application_processing_fee`+`renewal_fee`+`upgradation_fee`+`inspection_fee`+`fine`+`security_fee`+`late_fee`+`renewal_and_upgradation_fee`+`change_of_name_fee`+`change_of_ownership_fee`+`change_of_building_fee`+`miscellaneous`+`penalty`) as total FROM `bank_challans` WHERE challan_no = '" . $statn_number . "'";
             $challan_total = $this->db->query($query)->result()[0]->total;
-            $query = "UPDATE bank_challans SET total_deposit_fee='" . $challan_total . "' WHERE bank_challan_id ='" . $bank_challan_id . "'";
+            $query = "UPDATE bank_challans SET total_deposit_fee='" . $challan_total . "' 
+            WHERE bank_challan_id ='" . $bank_challan_id . "'
+            AND DATE(challan_date) = '".date('Y-m-d', strtotime($date_of_deposit))."'";
             $this->db->query($query);
             echo "success";
          } else {
