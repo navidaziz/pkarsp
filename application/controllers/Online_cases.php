@@ -574,7 +574,7 @@ class Online_cases extends Admin_Controller
       AND bank_challan_id !='" . $bank_challan_id . "'";
       $count = $this->db->query($query)->result()[0]->total;
       if ($count == 0) {
-
+     
          $query = "UPDATE `bank_challans`
          SET
          `challan_for` = '" . $challan_for . "',
