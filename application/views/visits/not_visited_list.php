@@ -196,7 +196,7 @@
                                                 <td><?php echo $row->visit_status; ?></td>
                                                 <td>
                                                     <?php
-                                                    $query = "SELECT COUNT(*) as total FROM visits WHERE schools_id = $row->schools_id and visit_id != '" . $row->visit_id . "'";
+                                                    $query = "SELECT COUNT(*) as total FROM visits WHERE schools_id = $row->schools_id and visit_id != '" . $row->visit_id . "' and is_deleted=0";
                                                     $duplicate = $this->db->query($query)->row()->total;
                                                     if ($duplicate > 0) {
                                                         echo '<strong>' . $duplicate . '</strong>';
