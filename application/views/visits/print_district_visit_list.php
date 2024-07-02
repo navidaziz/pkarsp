@@ -176,7 +176,7 @@
                                                     <?php echo $row->high_sec_l == 1 ? 'Higher Sec., ' : ''  ?>
                                                     <?php echo $row->academy_l == 1 ? 'Academy, ' : ''  ?></td>
 
-                                                <td style="width: 100px;"></td>
+                                                <td style="width: 300px;"></td>
                                             </tr>
                                         <?php } ?>
                                     </tbody>
