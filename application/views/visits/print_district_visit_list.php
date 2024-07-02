@@ -235,7 +235,7 @@
     $(document).ready(function() {
 
 
-        document.title = "<?php echo $title; ?> List of Not Visited Institutes upto (<?php echo date('d-m-y h:m:s') ?>)";
+        document.title = "<?php echo $title; ?> Institutes Visit List upto (<?php echo date('d-m-y h:m:s') ?>)";
         $('#visits_list').DataTable({
             dom: 'Bfrtip',
             paging: false,
@@ -246,6 +246,9 @@
                     extend: 'pdfHtml5',
                     orientation: 'landscape',
                     pageSize: 'LEGAL',
+                    customize: function(doc) {
+                        doc.pageMargins = [2, 2, 2, 2]; // [left, top, right, bottom]
+                    }
                 },
 
             ],
