@@ -1093,6 +1093,7 @@
               <table class="table table-bordered">
                 <tr>
                   <th rowspan="2">Level</th>
+                  <th>#</th>
                   <th rowspan="2" style="width: 90px;">Classes</th>
                   <th rowspan="2">Rooms <small style="display:blockx">(In Number)</small></th>
                   <th rowspan="2">Rooms Size <small>(sq feet)</small></th>
@@ -1110,6 +1111,7 @@
 
 
                 <?php
+                $class_count = 1;
                 $query = "SELECT * FROM levelofinstitute";
                 $levels = $this->db->query($query)->result();
                 foreach ($levels as $level) { ?>
@@ -1127,6 +1129,7 @@
                       <?php
                         $count++;
                       } ?>
+                      <th><?php echo $class_count++; ?></th>
                       <th style=""><?php echo $class->classTitle ?></th>
                       <td></td>
                       <td></td>
@@ -1366,8 +1369,7 @@
             <th>Middle <br />(6th to 8th)</th>
             <th>High <br />(9th to 10th)</th>
             <th>Higher Sec. <br />(11th to 2nd)</th>
-            <th style="width: 150px; border: 0px !important;">1. PSRA Officer </th>
-            <th style="width: 150px; border: 0px !important;">2. PSRA Official </th>
+            <th style="width: 150px; border: 0px !important;">Visited By</th>
           </tr>
           <tr>
             <th style="height: 50px;">Not Recommended</th>
@@ -1383,29 +1385,31 @@
             <td style="vertical-align: bottom; text-align:center">
               <small>Signature</small>
             </td>
-            <td rowspan="2" style="border: 0px !important;">
-              Name:
-              <br />
-              <br />
-              <br />
-              <br />
-              Designation:
-              <br />
-              <br />
-              Signature:
+            <td rowspan="2" style="border: 0px !important; width:50%">
+              <table class="table">
+                <tr>
+                  <th>#</th>
+                  <th>Name / Designation</th>
+                  <th>Signature</th>
+                </tr>
+                <tr>
+                  <th>1.</th>
+                  <th></th>
+                  <th></th>
+                </tr>
+                <tr>
+                  <th>2.</th>
+                  <th></th>
+                  <th></th>
+                </tr>
+                <tr>
+                  <th>3.</th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </table>
             </td>
-            <td rowspan="2" style="border: 0px !important;">
-              Name:
-              <br />
-              <br />
-              <br />
-              <br />
-              Designation:
-              <br />
-              <br />
 
-              Signature:
-            </td>
 
           </tr>
           <tr>
@@ -1440,7 +1444,7 @@
     <!-- Your footer content goes here -->
     <p style="text-align:center; font-size:12px">
 
-      <strong> Officer Signature ___________________. Offical Signature ________________. Institute Stamp and Signature ___________________________. </strong>
+      <strong> Institute Stamp and Signature _________________________________________________. </strong>
 
       <br />
 
