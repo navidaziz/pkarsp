@@ -1093,7 +1093,7 @@
               <table class="table table-bordered">
                 <tr>
                   <th rowspan="2">Level</th>
-                  <th>#</th>
+                  <th rowspan="2">#</th>
                   <th rowspan="2" style="width: 90px;">Classes</th>
                   <th rowspan="2">Rooms <small style="display:blockx">(In Number)</small></th>
                   <th rowspan="2">Rooms Size <small>(sq feet)</small></th>
