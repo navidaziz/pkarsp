@@ -1172,9 +1172,9 @@
 
                       </tr>
                       <tr>
-                        <th colspan="2" style="text-align: center;">
+                        <td colspan="2">
                           Total:
-                        </th>
+                        </td>
                       </tr>
                     </table>
                   </td>
