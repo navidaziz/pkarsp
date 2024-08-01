@@ -236,7 +236,7 @@
             <div class="col-md-7">
               <h4 style="border-left: 20px solid #9FC8E8; padding-left:5px"><strong><?php echo @$description; ?></strong><br />
                 <small style="color: red; display:inline">
-                  Note: Please enter details of the Principal, Vice Principal, Teaching and Non-Teaching Staff (Others) of the session: <?php echo $session_detail->sessionYearTitle; ?>.
+                  Please provide the details for the Principal, Vice Principal, Teaching Staff, and Non-Teaching Staff.
                 </small>
 
               </h4>
