@@ -116,7 +116,7 @@ class Staff_statement extends Admin_Controller
 		$insert_id = $this->db->insert_id();
 		if ($insert_id) {
 			$this->session->set_flashdata('msg', 'Employee Detail Added Successfully.');
-			redirect("staff_statement/section_d");
+			redirect("staff_statement/staff_list");
 		} else {
 			$this->session->set_flashdata('msg', 'Error Try Again');
 			redirect("staff_statement/staff_list");
