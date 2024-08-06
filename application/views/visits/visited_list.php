@@ -86,8 +86,10 @@
                                             return preg_replace('/\D/', '', $number);
                                         }
                                         $count = 1;
-                                        $query = "SELECT v. visit_id, v.schools_id, v.school_id, v.visit_reason, v.primary_l, 
-                                        v.middle_l, v.high_l, v.high_sec_l, v.academy_l, v.visited, 
+                                        $query = "SELECT v. visit_id, v.schools_id, v.school_id, v.visit_reason, 
+                                        v.primary_l,v.middle_l, v.high_l, v.high_sec_l, v.academy_l, 
+                                        v.r_primary_l,v.r_middle_l, v.r_high_l, v.r_high_sec_l, v.r_academy_l, 
+                                        v.visited, 
                                         v.visit_date,
                                         v.last_updated_by,
                                         v.recommendation,
