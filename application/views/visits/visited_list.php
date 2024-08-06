@@ -169,11 +169,11 @@
                                                         <span style="color: red;"><?php echo $row->recommendation; ?></span>
                                                     <?php } ?>
                                                 </td>
-                                                <td><?php echo $row->primary_l == 1 ? 'Primary, ' : '' ?>
-                                                    <?php echo $row->middle_l == 1 ? 'Middle, ' : '' ?>
-                                                    <?php echo $row->high_l == 1 ? 'High, ' : ''; ?>
-                                                    <?php echo $row->high_sec_l == 1 ? 'Higher Sec. ' : ''  ?>
-                                                    <?php echo $row->academy_l == 1 ? 'Academy ' : ''  ?>
+                                                <td><?php echo $row->r_primary_l == 1 ? 'Primary, ' : '' ?>
+                                                    <?php echo $row->r_middle_l == 1 ? 'Middle, ' : '' ?>
+                                                    <?php echo $row->r_high_l == 1 ? 'High, ' : ''; ?>
+                                                    <?php echo $row->r_high_sec_l == 1 ? 'Higher Sec. ' : ''  ?>
+                                                    <?php echo $row->r_academy_l == 1 ? 'Academy ' : ''  ?>
                                                 </td>
 
                                                 <td><?php echo $row->visit_status; ?></td>

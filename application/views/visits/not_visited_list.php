@@ -208,7 +208,9 @@
                                                         <a class="btn btn-link btn-sm" style="padding: 0px; margin:0px font-size:10px !important" href="<?php echo site_url('visit/print_visit_report/' . $row->visit_id . '/' . $row->schools_id . '/' . $row->school_id); ?>">Print</a>
                                                     <?php } ?>
                                                     <?php if ($row->visited == 'No') { ?>
-                                                        <button class="btn btn-link btn-sm" style="padding: 0px; margin:0px" onclick="get_add_to_visit_list_form('<?php echo $row->visit_id; ?>')">Edit<botton>
+                                                        <button class="btn btn-link btn-sm" style="padding: 0px; margin:0px" onclick="get_add_to_visit_list_form('<?php echo $row->visit_id; ?>')">Edit</botton>
+                                                            <button class="btn btn-link btn-sm" style="padding: 0px; margin:0px" onclick="get_visit_update_form('<?php echo $row->visit_id; ?>')">Update</botton>
+
                                                             <?php } ?>
                                                 </td>
                                             </tr>
@@ -231,6 +233,21 @@
 
 
         <script>
+            function get_visit_update_form(visit_id) {
+                $.ajax({
+                        method: "POST",
+                        url: "<?php echo site_url('visits/get_visit_update_form'); ?>",
+                        data: {
+                            visit_id: visit_id
+                        },
+                    })
+                    .done(function(respose) {
+                        $('#modal').modal('show');
+                        $('#modal_title').html('Visits');
+                        $('#modal_body').html(respose);
+                    });
+            }
+
             function get_add_to_visit_list_form(visit_id) {
                 $.ajax({
                         method: "POST",

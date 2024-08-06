@@ -315,6 +315,18 @@ class Visits extends Admin_Controller
         //$this->load->view('visits/visit_form/' . $form, $this->data);
     }
 
+
+
+    public function get_visit_update_form()
+    {
+        $visit_id = (int) $this->input->post("visit_id");
+        $query = "SELECT * FROM 
+            visits 
+            WHERE visit_id = $visit_id";
+        $input = $this->db->query($query)->row();
+        $this->data["input"] = $input;
+        $this->load->view("visits/get_visit_update_form", $this->data);
+    }
     // public function institute_visit_report($visit_id, $schools_id, $school_id, $form)
     // {
 
@@ -1312,6 +1324,38 @@ class Visits extends Admin_Controller
         $requested_url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : base_url();
         redirect($requested_url);
     }
+
+    public function marked_as_visited()
+    {
+        $visit_id = (int) $this->input->post("visit_id");
+
+        $input["visited"] = 'Yes';
+        $input['visit_status'] = 'Visited';
+
+        $input["visit_date"] = $this->input->post("visit_date");
+        $input["recommendation"] = $this->input->post("recommendation");
+
+
+        $this->db->where("visit_id", $visit_id);
+        $input['last_updated'] = date('Y-m-d H:i:s');
+        $input['last_updated_by'] = 0;
+        if ($this->db->update("visits", $input)) {
+            //update set school session not visited not and recomended null.
+            $this->db->where("schoolId", $school_id);
+            $update['visit'] = 'Yes';
+            if ($this->input->post("recommendation") == 'Recommended') {
+                $update['recommended'] = 'Yes';
+            } else {
+                $update['recommended'] = 'No';
+            }
+            $this->db->update("school", $update);
+
+            echo "success";
+            exit();
+        }
+        echo  'error';
+    }
+
 
 
     // public function add_visit()
