@@ -290,7 +290,28 @@
               </div>
 
 
+              <div class="alert " style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
 
+
+                <h4>Staff Statement</h4>
+                <style>
+                  .blink_me {
+                    animation: blinker 1s linear infinite;
+                  }
+
+                  @keyframes blinker {
+                    50% {
+                      opacity: 0;
+                    }
+                  }
+                </style>
+                <div class="alert alert-warning blink_me" style="color: black !important;">
+                  Please update staff statement of session <?php echo $session->sessionYearTitle; ?>
+                </div>
+                <div style="text-align: center;">
+                  <a class="btn btn-warning" href="<?php echo site_url("staff_statement/staff_list") ?>">Update Staff Statement</a>
+                </div>
+              </div>
 
 
               <div class="alert " style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;  margin: 5px; padding: 5px; background-color: white;">
