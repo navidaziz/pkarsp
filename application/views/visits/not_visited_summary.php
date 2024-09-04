@@ -161,7 +161,8 @@
                                                     INNER JOIN schools as s ON(s.schoolId = v.schools_id)
                                                     INNER JOIN district as d ON(d.districtId = s.district_id)
                                                     WHERE  v.visit_reason = '" . $option . "'
-                                                    AND visited ='No'";
+                                                    AND visited ='No'
+                                                    AND v.is_deleted=0";
                                                 $count_visits = $this->db->query($query)->row()->total;
                                                 $total += $count_visits;
                                             ?>
