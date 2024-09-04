@@ -1,19 +1,19 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
 <style>
-    .table_small>thead>tr>th,
-    .table_small>tbody>tr>th,
-    .table_small>tfoot>tr>th,
-    .table_small>thead>tr>td,
-    .table_small>tbody>tr>td,
-    .table_small>tfoot>tr>td {
-        padding: 3px;
-        line-height: 1;
-        vertical-align: top;
-        border-top: 1px solid #ddd;
-        font-size: 11px !important;
-        color: black;
-        margin: 0px !important;
-    }
+.table_small>thead>tr>th,
+.table_small>tbody>tr>th,
+.table_small>tfoot>tr>th,
+.table_small>thead>tr>td,
+.table_small>tbody>tr>td,
+.table_small>tfoot>tr>td {
+    padding: 3px;
+    line-height: 1;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+    font-size: 11px !important;
+    color: black;
+    margin: 0px !important;
+}
 </style>
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -68,7 +68,7 @@
                                             <?php
                                             $options = array("New Registration", "Renewal", "Upgradation", "Change of Location", "Closure of School");
                                             foreach ($options as $option) { ?>
-                                                <th><?php echo $option; ?></th>
+                                            <th><?php echo $option; ?></th>
                                             <?php }  ?>
                                             <th>Total</th>
                                             <th>Print</th>
@@ -84,7 +84,7 @@
                                          ORDER BY d.new_region ASC";
                                         $regions = $this->db->query($query)->result();
                                         foreach ($regions as $region) {  ?>
-                                            <?php $query = "SELECT
+                                        <?php $query = "SELECT
                                             `d`.`districtId`,
                                             `d`.`districtTitle`,
                                             `d`.`new_region` AS `new_region`,if((`d`.`new_region` = 1),'Central',if((`d`.`new_region` = 2),'South',if((`d`.`new_region` = 3),'Malakand',if((`d`.`new_region` = 4),'Hazara',if((`d`.`new_region` = 5),'Peshawar','Others'))))) AS `region`
@@ -97,11 +97,11 @@
                                             foreach ($rows as $row) {
 
                                             ?>
-                                                <tr>
+                                        <tr>
 
-                                                    <td style="text-align: right;"><?php echo $count++ ?></td>
-                                                    <td><?php echo $row->districtTitle; ?></td>
-                                                    <?php
+                                            <td style="text-align: right;"><?php echo $count++ ?></td>
+                                            <td><?php echo $row->districtTitle; ?></td>
+                                            <?php
                                                     $total = 0;
                                                     $options = array("New Registration", "Renewal", "Upgradation", "Change of Location", "Closure of School");
                                                     foreach ($options as $option) {
@@ -114,17 +114,19 @@
                                                         $count_visits = $this->db->query($query)->row()->total;
                                                         $total += $count_visits;
                                                     ?>
-                                                        <td style="text-align: center;"><?php echo $count_visits; ?></td>
-                                                    <?php }  ?>
-                                                    <td style="text-align: center;"><?php echo $total; ?></td>
-                                                    <td><a target="new" href="<?php echo site_url("visits/print_district_visit_list/" . $row->districtId); ?>"><i class="fa fa-print"></i> Visit List</a></td>
-                                                </tr>
-                                            <?php } ?>
-                                            <tr>
+                                            <td style="text-align: center;"><?php echo $count_visits; ?></td>
+                                            <?php }  ?>
+                                            <td style="text-align: center;"><?php echo $total; ?></td>
+                                            <td><a target="new"
+                                                    href="<?php echo site_url("visits/print_district_visit_list/" . $row->districtId); ?>"><i
+                                                        class="fa fa-print"></i> Visit List</a></td>
+                                        </tr>
+                                        <?php } ?>
+                                        <tr>
 
-                                                <th><?php echo $region->region; ?></th>
-                                                <th>Total</th>
-                                                <?php
+                                            <th><?php echo $region->region; ?></th>
+                                            <th>Total</th>
+                                            <?php
                                                 $total = 0;
                                                 $options = array("New Registration", "Renewal", "Upgradation", "Change of Location", "Closure of School");
                                                 foreach ($options as $option) {
@@ -133,15 +135,16 @@
                                                     INNER JOIN district as d ON(d.districtId = s.district_id)
                                                     WHERE d.new_region = '" . $region->new_region . "'
                                                     AND v.visit_reason = '" . $option . "'
-                                                    AND visited ='No'";
+                                                    AND visited ='No'
+                                                    AND v.is_deleted=0";
                                                     $count_visits = $this->db->query($query)->row()->total;
                                                     $total += $count_visits;
                                                 ?>
-                                                    <th style="text-align: center;"><?php echo $count_visits; ?></th>
-                                                <?php }  ?>
-                                                <th style="text-align: center;"><?php echo $total; ?></th>
-                                                <th></th>
-                                            </tr>
+                                            <th style="text-align: center;"><?php echo $count_visits; ?></th>
+                                            <?php }  ?>
+                                            <th style="text-align: center;"><?php echo $total; ?></th>
+                                            <th></th>
+                                        </tr>
 
                                         <?php } ?>
                                     </tbody>
@@ -157,12 +160,12 @@
                                                 $query = "SELECT COUNT(v.visit_id) as total FROM visits as v 
                                                     INNER JOIN schools as s ON(s.schoolId = v.schools_id)
                                                     INNER JOIN district as d ON(d.districtId = s.district_id)
-                                                    AND v.visit_reason = '" . $option . "'
+                                                    WHERE  v.visit_reason = '" . $option . "'
                                                     AND visited ='No'";
                                                 $count_visits = $this->db->query($query)->row()->total;
                                                 $total += $count_visits;
                                             ?>
-                                                <th style="text-align: center;"><?php echo $count_visits; ?></th>
+                                            <th style="text-align: center;"><?php echo $count_visits; ?></th>
                                             <?php }  ?>
 
                                             <th style="text-align: center;"><?php echo $total; ?></th>
@@ -188,35 +191,35 @@
     </section>
 </div>
 <style>
-    .dt-buttons {
-        display: inline;
-    }
+.dt-buttons {
+    display: inline;
+}
 
-    table.dataTable.no-footer {
-        margin-top: 10px;
+table.dataTable.no-footer {
+    margin-top: 10px;
 
-    }
+}
 
-    .dataTables_filter {
-        display: inline;
-        float: right;
-    }
+.dataTables_filter {
+    display: inline;
+    float: right;
+}
 </style>
 <script>
-    $(document).ready(function() {
-        document.title = "Visit List Summary Till Now (<?php echo date('d-m-y h:m:s') ?>)";
-        $('#visits_list').DataTable({
-            dom: 'Bfrtip',
-            paging: false,
-            searching: false,
-            ordering: false, // Enable sorting
-            buttons: [
-                'copy', 'csv', 'excel', 'print', {
-                    extend: 'pdfHtml5'
-                },
+$(document).ready(function() {
+    document.title = "Visit List Summary Till Now (<?php echo date('d-m-y h:m:s') ?>)";
+    $('#visits_list').DataTable({
+        dom: 'Bfrtip',
+        paging: false,
+        searching: false,
+        ordering: false, // Enable sorting
+        buttons: [
+            'copy', 'csv', 'excel', 'print', {
+                extend: 'pdfHtml5'
+            },
 
-            ],
+        ],
 
-        });
     });
+});
 </script>
