@@ -216,7 +216,7 @@
                                             <td>
 
                                                 <?php 
-                                                if($row->registrationNumber>0){
+                                                if($row->registrationNumber<0){
                                                 if ($row->docs == 0) {
                                                             echo '<i style="color:red" class="fa fa-times-circle-o" aria-hidden="true"></i> No';
                                                         } ?>
