@@ -215,12 +215,15 @@
                                             </td>
                                             <td>
 
-                                                <?php if ($row->docs == 0) {
+                                                <?php 
+                                                if($row->registrationNumber>0){
+                                                if ($row->docs == 0) {
                                                             echo '<i style="color:red" class="fa fa-times-circle-o" aria-hidden="true"></i> No';
                                                         } ?>
                                                 <?php if ($row->docs == 1) {
                                                             echo '<i style="color:green" class="fa fa-check-circle" aria-hidden="true"></i> Yes';
-                                                        } ?>
+                                                        } 
+                                                    }?>
 
                                             </td>
                                             <td style="text-align: center;">
