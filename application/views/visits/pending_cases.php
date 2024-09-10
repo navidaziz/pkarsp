@@ -1,19 +1,19 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
 <style>
-    .table_small>thead>tr>th,
-    .table_small>tbody>tr>th,
-    .table_small>tfoot>tr>th,
-    .table_small>thead>tr>td,
-    .table_small>tbody>tr>td,
-    .table_small>tfoot>tr>td {
-        padding: 3px;
-        line-height: 1;
-        vertical-align: top;
-        border-top: 1px solid #ddd;
-        font-size: 11px !important;
-        color: black;
-        margin: 0px !important;
-    }
+.table_small>thead>tr>th,
+.table_small>tbody>tr>th,
+.table_small>tfoot>tr>th,
+.table_small>thead>tr>td,
+.table_small>tbody>tr>td,
+.table_small>tfoot>tr>td {
+    padding: 3px;
+    line-height: 1;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+    font-size: 11px !important;
+    color: black;
+    margin: 0px !important;
+}
 </style>
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -154,7 +154,7 @@
                                         $count = 1;
                                         $previous_school_id = 0;
                                         foreach ($requests as $request) { ?>
-                                            <?php
+                                        <?php
                                             $query = "SELECT COUNT(*) as total FROM visits 
                                                     WHERE visited = 'No' 
                                                     AND school_id = '" . $request->school_id . "'
@@ -162,17 +162,18 @@
                                             $pending_visit_total = $this->db->query($query)->row()->total;
                                             if ($pending_visit_total == 0) { ?>
 
-                                                <tr style="<?php if ($request->flag_color) { ?>
+                                        <tr
+                                            style="<?php if ($request->flag_color) { ?>
             background-color: <?php echo $request->flag_color; ?>; <?php } ?> <?php if ($request->deficient > 0) { ?> color:red; <?php if ($list_type == 1) { ?> display:no ne;<?php } ?> <?php } ?>">
 
 
-                                                    <td><?php echo $count++; ?> </td>
-                                                    <td><?php echo $request->region; ?></td>
-                                                    <td><?php echo $request->regTypeTitle; ?></td>
+                                            <td><?php echo $count++; ?> </td>
+                                            <td><?php echo $request->region; ?></td>
+                                            <td><?php echo $request->regTypeTitle; ?></td>
 
-                                                    <td><?php echo $request->schools_id ?></td>
-                                                    <td>
-                                                        <?php
+                                            <td><?php echo $request->schools_id ?></td>
+                                            <td>
+                                                <?php
                                                         $query = "SELECT * FROM `school_file_numbers` WHERE `school_id`='$request->schools_id'";
                                                         $file_numbers = $this->db->query($query)->result();
                                                         $fcount = 1;
@@ -185,101 +186,103 @@
                                                             $fcount++;
                                                         }
                                                         ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php if ($request->level_of_school_id == 1) {
+                                            </td>
+                                            <td>
+                                                <?php if ($request->level_of_school_id == 1) {
                                                             echo "Primary";
                                                         } ?>
-                                                        <?php if ($request->level_of_school_id == 2) {
+                                                <?php if ($request->level_of_school_id == 2) {
                                                             echo "Middle";
                                                         } ?>
-                                                        <?php if ($request->level_of_school_id == 3) {
+                                                <?php if ($request->level_of_school_id == 3) {
                                                             echo "High";
                                                         } ?>
-                                                        <?php if ($request->level_of_school_id == 4) {
+                                                <?php if ($request->level_of_school_id == 4) {
                                                             echo "H.Sec";
                                                         } ?>
-                                                        <?php if ($request->level_of_school_id == 5) {
+                                                <?php if ($request->level_of_school_id == 5) {
                                                             echo "Academy";
                                                         } ?>
-                                                    </td>
-                                                    <td><?php echo $request->districtTitle; ?></td>
-                                                    <td><?php echo substr($request->schoolName, 0, 45) ?></td>
+                                            </td>
+                                            <td><?php echo $request->districtTitle; ?></td>
+                                            <td><?php echo substr($request->schoolName, 0, 45) ?></td>
 
 
 
 
-                                                    <td><?php echo $request->sessionYearTitle ?></td>
-                                                    <td><?php echo $request->flag_detail ?></td>
-                                                    <td>
+                                            <td><?php echo $request->sessionYearTitle ?></td>
+                                            <td><?php echo $request->flag_detail ?></td>
+                                            <td>
 
-                                                        <?php if ($request->docs == 0) {
+                                                <?php if ($request->docs == 0) {
                                                             echo '<i style="color:red" class="fa fa-times-circle-o" aria-hidden="true"></i> No';
                                                         } ?>
-                                                        <?php if ($request->docs == 1) {
+                                                <?php if ($request->docs == 1) {
                                                             echo '<i style="color:green" class="fa fa-check-circle" aria-hidden="true"></i> Yes';
                                                         } ?>
 
-                                                    </td>
-                                                    <td style="text-align: center;" title="<?php echo date('d M, Y', strtotime($request->apply_date)); ?>">
-                                                        <?php
+                                            </td>
+                                            <td style="text-align: center;"
+                                                title="<?php echo date('d M, Y', strtotime($request->apply_date)); ?>">
+                                                <?php
                                                         //strtotime($request->apply_date)
                                                         if ($request->apply_date) {
                                                             echo timeago(strtotime($request->apply_date));
                                                         }
                                                         ?></td>
-                                                    <td><?php echo $request->apply_date; ?></td>
-                                                    <td style="text-align: center;">
-                                                        <?php
+                                            <td><?php echo $request->apply_date; ?></td>
+                                            <td style="text-align: center;">
+                                                <?php
                                                         $query = "SELECT COUNT(*) as total FROM `file_status_logs` WHERE `file_status` = 5 and schools_id = '" . $request->schools_id . "'";
                                                         $once_deficient = $this->db->query($query)->row()->total;
                                                         if ($once_deficient > 0) {
                                                             echo '<i title="Deficiency completed" class="fa fa-flag" style="color:red" aria-hidden="true">1</i>';
                                                         }
                                                         ?>
-                                                    </td>
-                                                    <td style="text-align: center;">
-                                                        <?php
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <?php
                                                         $query = "SELECT COUNT(*) as total FROM `comments` WHERE school_id='" . $request->school_id . "' and schools_id = '" . $request->schools_id . "' and deleted=0";
                                                         $comments = $this->db->query($query)->row()->total;
                                                         if ($comments > 0) {
                                                             echo '<i title="Maybe notesheet completed" class="fa fa-comment" style="color:green" aria-hidden="true">1</i>';
                                                         }
                                                         ?>
-                                                    </td>
-                                                    <td style="text-align: center;">
-                                                        <?php if ($request->isfined == 1) { ?>
-                                                            <i class="fa fa-ban" title="Fine on this school" style="color: red;">1</i>
-                                                        <?php } ?>
-                                                    </td>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <?php if ($request->isfined == 1) { ?>
+                                                <i class="fa fa-ban" title="Fine on this school"
+                                                    style="color: red;">1</i>
+                                                <?php } ?>
+                                            </td>
 
-                                                    <td><?php echo $request->visit; ?></td>
-                                                    <td><?php echo $request->recommended; ?></td>
-
-
-                                                    <td><?php echo $request->status_remark; ?></td>
+                                            <td><?php echo $request->visit; ?></td>
+                                            <td><?php echo $request->recommended; ?></td>
 
 
-                                                    <td><?php echo $request->yearOfEstiblishment; ?></td>
-                                                    <td><?php
+                                            <td><?php echo $request->status_remark; ?></td>
+
+
+                                            <td><?php echo $request->yearOfEstiblishment; ?></td>
+                                            <td><?php
                                                         if ($request->biseRegister == 'Yes') {
                                                             echo 'Yes - ';
                                                         }
                                                         echo $request->biseregistrationNumber;
                                                         ?></td>
 
-                                                    <td><?php echo file_status($request->file_status); ?></td>
-                                                    <td>
-                                                        <?php
+                                            <td><?php echo file_status($request->file_status); ?></td>
+                                            <td>
+                                                <?php
                                                         $query = "SELECT COUNT(*) as total FROM visits WHERE schools_id = '" . $request->schools_id . "' and is_deleted=0";
                                                         $duplicate = $this->db->query($query)->row()->total;
                                                         if ($duplicate > 0) {
                                                             echo '<strong>' . $duplicate . '</strong>';
                                                         }
                                                         ?>
-                                                    </td>
-                                                </tr>
-                                            <?php }  ?>
+                                            </td>
+                                        </tr>
+                                        <?php }  ?>
 
                                         <?php
 
@@ -302,57 +305,57 @@
 
 
         <script>
-            function get_add_to_visit_list_form(visit_id) {
-                $.ajax({
-                        method: "POST",
-                        url: "<?php echo site_url('visits/get_add_to_visit_list_form'); ?>",
-                        data: {
-                            visit_id: visit_id
-                        },
-                    })
-                    .done(function(respose) {
-                        $('#modal').modal('show');
-                        $('#modal_title').html('Visits');
-                        $('#modal_body').html(respose);
-                    });
-            }
+        function get_add_to_visit_list_form(visit_id) {
+            $.ajax({
+                    method: "POST",
+                    url: "<?php echo site_url('visits/get_add_to_visit_list_form'); ?>",
+                    data: {
+                        visit_id: visit_id
+                    },
+                })
+                .done(function(respose) {
+                    $('#modal').modal('show');
+                    $('#modal_title').html('Visits');
+                    $('#modal_body').html(respose);
+                });
+        }
         </script>
 
 
     </section>
 </div>
 <style>
-    .dt-buttons {
-        display: inline;
-    }
+.dt-buttons {
+    display: inline;
+}
 
-    table.dataTable.no-footer {
-        margin-top: 10px;
+table.dataTable.no-footer {
+    margin-top: 10px;
 
-    }
+}
 
-    .dataTables_filter {
-        display: inline;
-        float: right;
-    }
+.dataTables_filter {
+    display: inline;
+    float: right;
+}
 </style>
 <script>
-    $(document).ready(function() {
-        document.title = "List of Not Visited Institutes upto (<?php echo date('d-m-y h:m:s') ?>)";
-        $('#visits_list').DataTable({
-            dom: 'Bfrtip',
-            paging: false,
-            searching: true,
-            ordering: true, // Enable sorting
-            buttons: [
-                'copy', 'csv', 'excel', 'print', {
-                    extend: 'pdfHtml5',
-                    orientation: 'landscape',
-                    pageSize: 'LEGAL',
-                },
+$(document).ready(function() {
+    document.title = "List of Not Visited Institutes upto (<?php echo date('d-m-y h:m:s') ?>)";
+    $('#visits_list').DataTable({
+        dom: 'Bfrtip',
+        paging: false,
+        searching: true,
+        ordering: true, // Enable sorting
+        buttons: [
+            'copy', 'csv', 'excel', 'print', {
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                pageSize: 'LEGAL',
+            },
 
-            ],
+        ],
 
-        });
     });
+});
 </script>

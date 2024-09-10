@@ -1,19 +1,19 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
 <style>
-    .table_small>thead>tr>th,
-    .table_small>tbody>tr>th,
-    .table_small>tfoot>tr>th,
-    .table_small>thead>tr>td,
-    .table_small>tbody>tr>td,
-    .table_small>tfoot>tr>td {
-        padding: 3px;
-        line-height: 1;
-        vertical-align: top;
-        border-top: 1px solid #ddd;
-        font-size: 11px !important;
-        color: black;
-        margin: 0px !important;
-    }
+.table_small>thead>tr>th,
+.table_small>tbody>tr>th,
+.table_small>tfoot>tr>th,
+.table_small>thead>tr>td,
+.table_small>tbody>tr>td,
+.table_small>tfoot>tr>td {
+    padding: 3px;
+    line-height: 1;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+    font-size: 11px !important;
+    color: black;
+    margin: 0px !important;
+}
 </style>
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -62,6 +62,8 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Institute ID</th>
+                                            <th>File No.</th>
+                                            <th>RegNo</th>
                                             <th>School Name</th>
                                             <th>District</th>
                                             <th>Contact</th>
@@ -74,7 +76,11 @@
                                             <th>Visited</th>
                                             <th>Date</th>
                                             <td>By</td>
+                                            <th>DOCs</th>
+                                            <th>NoteSheet</th>
+                                            <th>Issued</th>
                                             <th>Action</th>
+
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -101,8 +107,10 @@
                                         d.districtTitle,
                                         sy.sessionYearTitle,
                                         ss.principal_contact_no,
+                                        ss.status,
                                         s.schoolMobileNumber,
                                         s.telePhoneNumber,
+                                        s.docs,
                                         v.visit_status,
                                         v.created_by
                                         FROM visits as v 
@@ -114,15 +122,31 @@
                                         AND v.visited='Yes'";
                                         $rows = $this->db->query($query)->result();
                                         foreach ($rows as $row) { ?>
-                                            <tr>
+                                        <tr>
 
-                                                <td><?php echo $count++ ?></td>
-                                                <td><?php echo $row->schools_id; ?></td>
-                                                <td><?php echo $row->schoolName; ?></td>
-                                                <td><?php echo $row->districtTitle; ?></td>
+                                            <td><?php echo $count++ ?></td>
+                                            <td><?php echo $row->schools_id; ?></td>
+                                            <td>
+                                                <?php
+                                                        $query = "SELECT * FROM `school_file_numbers` WHERE `school_id`='$row->schools_id'";
+                                                        $file_numbers = $this->db->query($query)->result();
+                                                        $fcount = 1;
+                                                        foreach ($file_numbers as $file_number) {
+                                                            if ($fcount > 1) {
+                                                                echo ", ";
+                                                            }
+                                                            echo $file_number->file_number;
+
+                                                            $fcount++;
+                                                        }
+                                                        ?>
+                                            </td>
+                                            <td><?php echo $row->registrationNumber; ?></td>
+                                            <td><?php echo $row->schoolName; ?></td>
+                                            <td><?php echo $row->districtTitle; ?></td>
 
 
-                                                <td><?php
+                                            <td><?php
                                                     $contact = array();
 
                                                     // Clean and add telePhoneNumber
@@ -149,53 +173,82 @@
                                                         echo $number . "<br /> ";
                                                     }
                                                     ?></td>
-                                                <td>
+                                            <td>
 
-                                                    <?php
+                                                <?php
                                                     $query = "SELECT `level_of_school_id`,
                                                     `primary`, middle, high, high_sec FROM school 
                                                     WHERE schools_id = '" . $row->schools_id . "' 
                                                     AND  status = 1 ORDER BY schoolId DESC LIMIT 1";
                                                     $reg_levels = $this->db->query($query)->row(); ?>
-                                                    <?php echo ($reg_levels->primary == 1 or $reg_levels->level_of_school_id == 1) ? 'Primary, ' : '' ?>
-                                                    <?php echo ($reg_levels->middle == 1 or $reg_levels->level_of_school_id == 2) ? 'Middle, ' : '' ?>
-                                                    <?php echo ($reg_levels->high == 1 or $reg_levels->level_of_school_id == 3) ? 'High, ' : '' ?>
-                                                    <?php echo ($reg_levels->higher_sec == 1 or $reg_levels->level_of_school_id == 4) ? 'High Sec, ' : '' ?>
-                                                </td>
+                                                <?php echo ($reg_levels->primary == 1 or $reg_levels->level_of_school_id == 1) ? 'Primary, ' : '' ?>
+                                                <?php echo ($reg_levels->middle == 1 or $reg_levels->level_of_school_id == 2) ? 'Middle, ' : '' ?>
+                                                <?php echo ($reg_levels->high == 1 or $reg_levels->level_of_school_id == 3) ? 'High, ' : '' ?>
+                                                <?php echo ($reg_levels->higher_sec == 1 or $reg_levels->level_of_school_id == 4) ? 'High Sec, ' : '' ?>
+                                            </td>
 
-                                                <td><?php echo $row->visit_reason; ?></td>
-                                                <td><?php echo $row->sessionYearTitle; ?></td>
-                                                <td><?php if ($row->recommendation == 'Recommended') { ?>
-                                                        <span style="color: green;"><?php echo $row->recommendation; ?></span>
-                                                    <?php } else { ?>
-                                                        <span style="color: red;"><?php echo $row->recommendation; ?></span>
-                                                    <?php } ?>
-                                                </td>
-                                                <td><?php echo $row->r_primary_l == 1 ? 'Primary, ' : '' ?>
-                                                    <?php echo $row->r_middle_l == 1 ? 'Middle, ' : '' ?>
-                                                    <?php echo $row->r_high_l == 1 ? 'High, ' : ''; ?>
-                                                    <?php echo $row->r_high_sec_l == 1 ? 'Higher Sec. ' : ''  ?>
-                                                    <?php echo $row->r_academy_l == 1 ? 'Academy ' : ''  ?>
-                                                </td>
+                                            <td><?php echo $row->visit_reason; ?></td>
+                                            <td><?php echo $row->sessionYearTitle; ?></td>
+                                            <td><?php if ($row->recommendation == 'Recommended') { ?>
+                                                <span style="color: green;"><?php echo $row->recommendation; ?></span>
+                                                <?php } else { ?>
+                                                <span style="color: red;"><?php echo $row->recommendation; ?></span>
+                                                <?php } ?>
+                                            </td>
+                                            <td><?php echo $row->r_primary_l == 1 ? 'Primary, ' : '' ?>
+                                                <?php echo $row->r_middle_l == 1 ? 'Middle, ' : '' ?>
+                                                <?php echo $row->r_high_l == 1 ? 'High, ' : ''; ?>
+                                                <?php echo $row->r_high_sec_l == 1 ? 'Higher Sec. ' : ''  ?>
+                                                <?php echo $row->r_academy_l == 1 ? 'Academy ' : ''  ?>
+                                            </td>
 
-                                                <td><?php echo $row->visit_status; ?></td>
-                                                <td><?php echo date('d-m-Y', strtotime($row->visit_date)); ?></td>
-                                                <td>
-                                                    <?php
+                                            <td><?php echo $row->visit_status; ?></td>
+                                            <td><?php echo date('d-m-Y', strtotime($row->visit_date)); ?></td>
+                                            <td>
+                                                <?php
                                                     $query = "SELECT userTitle FROM users WHERE userId = '" . $row->last_updated_by . "'";
                                                     $user = $this->db->query($query)->row();
                                                     if ($user) {
                                                         echo $user->userTitle;
                                                     }
                                                     ?>
-                                                </td>
-                                                <td>
-                                                    <?php if ($row->visited == 'Yes') { ?>
-                                                        <a target="new" class="btn btn-link btn-sm" style="padding: 0px; margin:0px font-size:10px !important" href="<?php echo site_url('visits/print_visit_report/' . $row->visit_id . '/' . $row->schools_id . '/' . $row->school_id); ?>">Print</a>
-                                                    <?php } ?>
+                                            </td>
+                                            <td>
 
-                                                </td>
-                                            </tr>
+                                                <?php if ($row->docs == 0) {
+                                                            echo '<i style="color:red" class="fa fa-times-circle-o" aria-hidden="true"></i> No';
+                                                        } ?>
+                                                <?php if ($row->docs == 1) {
+                                                            echo '<i style="color:green" class="fa fa-check-circle" aria-hidden="true"></i> Yes';
+                                                        } ?>
+
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <?php
+                                                        $query = "SELECT COUNT(*) as total FROM `comments` WHERE school_id='" . $row->school_id . "' and schools_id = '" . $row->schools_id . "' and deleted=0";
+                                                        $comments = $this->db->query($query)->row()->total;
+                                                        if ($comments > 0) {
+                                                            echo '<i title="Maybe notesheet completed" class="fa fa-comment" style="color:green" aria-hidden="true">Yes</i>';
+                                                        }
+                                                        ?>
+                                            </td>
+                                            <td>
+                                                <?php if($row->status==1){
+                                                    echo 'Issued';
+                                                }else{
+                                                    echo 'Pending';
+                                                } ?>
+                                            </td>
+                                            <td>
+                                                <?php if ($row->visited == 'Yes') { ?>
+                                                <a target="new" class="btn btn-link btn-sm"
+                                                    style="padding: 0px; margin:0px font-size:10px !important"
+                                                    href="<?php echo site_url('visits/print_visit_report/' . $row->visit_id . '/' . $row->schools_id . '/' . $row->school_id); ?>">Print</a>
+                                                <?php } ?>
+
+                                            </td>
+
+                                        </tr>
                                         <?php } ?>
                                     </tbody>
                                 </table>
@@ -215,57 +268,57 @@
 
 
         <script>
-            function get_add_to_visit_list_form(visit_id) {
-                $.ajax({
-                        method: "POST",
-                        url: "<?php echo site_url('visits/get_add_to_visit_list_form'); ?>",
-                        data: {
-                            visit_id: visit_id
-                        },
-                    })
-                    .done(function(respose) {
-                        $('#modal').modal('show');
-                        $('#modal_title').html('Visits');
-                        $('#modal_body').html(respose);
-                    });
-            }
+        function get_add_to_visit_list_form(visit_id) {
+            $.ajax({
+                    method: "POST",
+                    url: "<?php echo site_url('visits/get_add_to_visit_list_form'); ?>",
+                    data: {
+                        visit_id: visit_id
+                    },
+                })
+                .done(function(respose) {
+                    $('#modal').modal('show');
+                    $('#modal_title').html('Visits');
+                    $('#modal_body').html(respose);
+                });
+        }
         </script>
 
 
     </section>
 </div>
 <style>
-    .dt-buttons {
-        display: inline;
-    }
+.dt-buttons {
+    display: inline;
+}
 
-    table.dataTable.no-footer {
-        margin-top: 10px;
+table.dataTable.no-footer {
+    margin-top: 10px;
 
-    }
+}
 
-    .dataTables_filter {
-        display: inline;
-        float: right;
-    }
+.dataTables_filter {
+    display: inline;
+    float: right;
+}
 </style>
 <script>
-    $(document).ready(function() {
-        document.title = "List of Not Visited Institutes upto (<?php echo date('d-m-y h:m:s') ?>)";
-        $('#visits_list').DataTable({
-            dom: 'Bfrtip',
-            paging: false,
-            searching: true,
-            ordering: true, // Enable sorting
-            buttons: [
-                'copy', 'csv', 'excel', 'print', {
-                    extend: 'pdfHtml5',
-                    orientation: 'landscape',
-                    pageSize: 'LEGAL',
-                },
+$(document).ready(function() {
+    document.title = "List of Not Visited Institutes upto (<?php echo date('d-m-y h:m:s') ?>)";
+    $('#visits_list').DataTable({
+        dom: 'Bfrtip',
+        paging: false,
+        searching: true,
+        ordering: true, // Enable sorting
+        buttons: [
+            'copy', 'csv', 'excel', 'print', {
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                pageSize: 'LEGAL',
+            },
 
-            ],
+        ],
 
-        });
     });
+});
 </script>
