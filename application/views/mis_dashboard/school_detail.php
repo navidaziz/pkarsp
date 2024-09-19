@@ -1,4 +1,5 @@
-<div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
+<div
+    style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
     <table style="width: 100%;">
         <tr>
             <td>
@@ -8,8 +9,9 @@
 
                     </h4>
                     <h5> School ID: <?php echo $school->schools_id ?>
-                        <?php if ($school->registrationNumber > 0) { ?> <span style="margin-left: 20px;"></span> REG. ID:
-                            <?php echo $school->registrationNumber ?>
+                        <?php if ($school->registrationNumber > 0) { ?> <span style="margin-left: 20px;"></span> REG.
+                        ID:
+                        <?php echo $school->registrationNumber ?>
                         <?php } ?>
                         <span style="margin-left: 20px;"></span>
                         File No: <?php
@@ -70,10 +72,12 @@
                 $all_owners = array();
                 $query = "SELECT u.userTitle as owner_name,
                                u.cnic as owner_cnic,
+                               u.hide_owner_info,
                                u.contactNumber as owner_contact_no FROM `schools` as s 
                         INNER JOIN users as u ON(u.userId = s.owner_id)
                         WHERE s.schoolId = '" . $school->schools_id . "'";
                 $owner = $this->db->query($query)->row();
+                if($owner->hide_owner_info==0){
                 $all_owners[$owner->owner_cnic] = $owner;
                 $query = "SELECT * FROM `school_owners` WHERE school_id = '" . $school->schools_id . "'";
                 $owners = $this->db->query($query)->result();
@@ -82,19 +86,20 @@
                         $all_owners[$owner->owner_cnic] = $owner;
                     }
                 }
-
                 ?>
                 <ul>
                     <?php
                     $count = 1;
                     foreach ($all_owners as $owner_cnic => $owner) { ?>
-                        <li><?php echo $count++; ?>. <?php echo $owner->owner_name; ?>, <?php if ($owner->owner_father_name) {
+                    <li><?php echo $count++; ?>. <?php echo $owner->owner_name; ?>, <?php if ($owner->owner_father_name) {
                                                                                             echo $owner->owner_father_name . ', ';
-                                                                                        } ?> <?php echo $owner_cnic; ?>, <?php echo $owner->owner_contact_no; ?></li>
-
+                                                                                        } ?>
+                        <?php echo $owner_cnic; ?>, <?php echo $owner->owner_contact_no; ?></li>
                     <?php } ?>
-
                 </ul>
+                <?php }else{?>
+                <span style="color: red;">Profile Hide</span>
+                <?php } ?>
             </td>
             <td style="width: 250px; vertical-align: top;">
                 <strong>Account info</strong>
@@ -108,7 +113,8 @@
 </div>
 
 
-<div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
+<div
+    style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
     <h4> <i class="fa fa-info-circle" aria-hidden="true"></i>
         School Session's History
     </h4>
@@ -200,59 +206,61 @@
 
             ?>
 
-                    <tr title="<?php echo  $school_session->schoolId; ?>">
+            <tr title="<?php echo  $school_session->schoolId; ?>">
 
-                        <?php if ($school_session->status != 0) { ?>
-                            <td>
-                                <a href="<?php echo site_url("print_file/school_session_detail/" . $school_session->schoolId); ?>" target="new">
-                                    <i class="fa fa-print" aria-hidden="true"></i> <?php echo $school_session->sessionYearTitle; ?></a>
-                            </td>
-                        <?php } else { ?>
-                            <td style="color:#b2aeae;">
-                                <?php echo $school_session->sessionYearTitle; ?>
-                            </td>
-                        <?php } ?>
+                <?php if ($school_session->status != 0) { ?>
+                <td>
+                    <a href="<?php echo site_url("print_file/school_session_detail/" . $school_session->schoolId); ?>"
+                        target="new">
+                        <i class="fa fa-print" aria-hidden="true"></i>
+                        <?php echo $school_session->sessionYearTitle; ?></a>
+                </td>
+                <?php } else { ?>
+                <td style="color:#b2aeae;">
+                    <?php echo $school_session->sessionYearTitle; ?>
+                </td>
+                <?php } ?>
 
 
-                        <?php if ($school_session->status != 0) { ?>
-                            <td> <?php echo $school_session->regTypeTitle; ?></td>
-                            <td><?php echo substr($school_session->levelofInstituteTitle, 0, 15); ?></td>
-                            <td>
-                                <?php if ($school_session->gender_type_id == 1) { ?> BOYS <?php } ?>
-                                <?php if ($school_session->gender_type_id == 2) { ?> GIRLS <?php } ?>
-                                <?php if ($school_session->gender_type_id == 3) { ?> CO-EDU <?php } ?>
-                            </td>
-                            <td>
-                                <strong>
-                                    <?php
+                <?php if ($school_session->status != 0) { ?>
+                <td> <?php echo $school_session->regTypeTitle; ?></td>
+                <td><?php echo substr($school_session->levelofInstituteTitle, 0, 15); ?></td>
+                <td>
+                    <?php if ($school_session->gender_type_id == 1) { ?> BOYS <?php } ?>
+                    <?php if ($school_session->gender_type_id == 2) { ?> GIRLS <?php } ?>
+                    <?php if ($school_session->gender_type_id == 3) { ?> CO-EDU <?php } ?>
+                </td>
+                <td>
+                    <strong>
+                        <?php
                                     $query = "SELECT max(CONVERT(tuitionFee, SIGNED INTEGER)) as max_tution_fee  
                                               FROM `fee` WHERE school_id= '" . $school_session->schoolId . "'";
                                     $max_tuition_fee = $this->db->query($query)->result()[0]->max_tution_fee;
                                     $max_tuition_fee = (int) preg_replace('/[^0-9.]/', '', $this->db->query($query)->result()[0]->max_tution_fee);
                                     echo $max_tuition_fee;
                                     ?>
-                                </strong>
-                            </td>
+                    </strong>
+                </td>
 
-                            <td style="text-align: center;">
-                                <?php
+                <td style="text-align: center;">
+                    <?php
                                 $userId = $this->session->userdata('userId');
                                 if ($userId != 28870) { ?>
-                                    <?php if ($school_session->section_e == 0 and $school_session->status == 2) { ?>
-                                        <a href="#" onclick="lock_editing('<?php echo $school_session->schoolId; ?>')">
-                                            <i class="fa fa-unlock" style="color:red" aria-hidden="true"></i>
-                                        </a>
-                                    <?php } ?>
+                    <?php if ($school_session->section_e == 0 and $school_session->status == 2) { ?>
+                    <a href="#" onclick="lock_editing('<?php echo $school_session->schoolId; ?>')">
+                        <i class="fa fa-unlock" style="color:red" aria-hidden="true"></i>
+                    </a>
+                    <?php } ?>
 
-                                    <?php if ($school_session->section_e == 1 and $school_session->status == 2) { ?>
-                                        <a href="#" onclick="unlock_editing('<?php echo $school_session->schoolId; ?>')">
-                                            <i class="fa fa-lock" style="color:green" aria-hidden="true"></i>
-                                        </a>
-                                    <?php } ?>
-                                <?php } ?>
-                            </td>
+                    <?php if ($school_session->section_e == 1 and $school_session->status == 2) { ?>
+                    <a href="#" onclick="unlock_editing('<?php echo $school_session->schoolId; ?>')">
+                        <i class="fa fa-lock" style="color:green" aria-hidden="true"></i>
+                    </a>
+                    <?php } ?>
+                    <?php } ?>
+                </td>
 
-                            <td style="text-align: center;"><?php
+                <td style="text-align: center;"><?php
                                                             $query = "SELECT SUM(`enrolled`) as total FROM `age_and_class`
                                                                       WHERE `age_and_class`.`school_id`= '" . $school_session->schoolId . "'";
                                                             $enrollment = $this->db->query($query)->result()[0]->total;
@@ -264,24 +272,24 @@
 
                                                             ?></td>
 
-                            <td style="text-align: center;"><?php
+                <td style="text-align: center;"><?php
                                                             $query = "SELECT COUNT(`schoolStaffId`) as total FROM `school_staff`
                                                             WHERE `school_staff`.`school_id`= '" . $school_session->schoolId . "'";
                                                             echo $this->db->query($query)->result()[0]->total; ?></td>
 
 
-                            <td style="text-align: center;">
-                                <?php if ($school_session->status == 2) { ?>
-                                    Applied
-                                <?php } ?>
-                                <?php if ($school_session->status == 0) { ?>
-                                    Not Applied
-                                <?php } ?>
-                                <?php if ($school_session->status == 1) { ?>
-                                    Completed
-                                <?php } ?>
-                            </td>
-                            <td><?php
+                <td style="text-align: center;">
+                    <?php if ($school_session->status == 2) { ?>
+                    Applied
+                    <?php } ?>
+                    <?php if ($school_session->status == 0) { ?>
+                    Not Applied
+                    <?php } ?>
+                    <?php if ($school_session->status == 1) { ?>
+                    Completed
+                    <?php } ?>
+                </td>
+                <td><?php
                                 if ($school_session->cer_issue_date) {
                                     echo date('d M, y', strtotime($school_session->cer_issue_date));
                                 } else {
@@ -289,33 +297,33 @@
                                     echo '<small>Pending</small>';
                                 }
                                 ?></td>
-                            <td><?php if ($school_session->primary or $school_session->level_of_school_id == 1) {
+                <td><?php if ($school_session->primary or $school_session->level_of_school_id == 1) {
                                     echo '<i class="fa fa-check" aria-hidden="true"></i>';
                                 } else {
                                     //echo '<i class="fa fa-times" aria-hidden="true"></i>';
                                 } ?>
-                            </td>
-                            <td><?php if ($school_session->middle or $school_session->level_of_school_id == 2) {
+                </td>
+                <td><?php if ($school_session->middle or $school_session->level_of_school_id == 2) {
                                     echo '<i class="fa fa-check" aria-hidden="true"></i>';
                                 } else {
                                     // echo '<i class="fa fa-times" aria-hidden="true"></i>';
                                 }  ?></td>
-                            <td>
-                                <?php if ($school_session->high or $school_session->level_of_school_id == 3) {
+                <td>
+                    <?php if ($school_session->high or $school_session->level_of_school_id == 3) {
                                     echo '<i class="fa fa-check" aria-hidden="true"></i>';
                                 } else {
                                     //echo '<i class="fa fa-times" aria-hidden="true"></i>';
                                 } ?>
-                            </td>
-                            <td>
-                                <?php if ($school_session->high_sec or $school_session->level_of_school_id == 4) {
+                </td>
+                <td>
+                    <?php if ($school_session->high_sec or $school_session->level_of_school_id == 4) {
                                     echo '<i class="fa fa-check" aria-hidden="true"></i>';
                                 } else {
                                     //echo '<i class="fa fa-times" aria-hidden="true"></i>';
                                 } ?>
-                            </td>
-                            <?php if ($school_session->status == 1) { ?>
-                                <!-- <td>
+                </td>
+                <?php if ($school_session->status == 1) { ?>
+                <!-- <td>
                                     <?php
 
                                     $query = "SELECT * FROM users WHERE users.userId = '" . $school_session->updatedBy . "'";
@@ -323,11 +331,11 @@
                                     ?>
                                 </td> -->
 
-                                <td>
-                                    <form target="_blank" method="post" action="<?php echo site_url("print_file/certificate"); ?>">
-                                        <input type="hidden" name="school_id" value="<?php echo $school_session->schoolId ?>" />
-                                        <button class="btn btn-link btn-sm">
-                                            <?php
+                <td>
+                    <form target="_blank" method="post" action="<?php echo site_url("print_file/certificate"); ?>">
+                        <input type="hidden" name="school_id" value="<?php echo $school_session->schoolId ?>" />
+                        <button class="btn btn-link btn-sm">
+                            <?php
                                             if ($school_session->renewal_code) {
                                                 echo $school_session->renewal_code;
                                             } else {
@@ -335,55 +343,60 @@
                                                     echo '<strong>' . $school->registrationNumber . '</strong>';
                                                 }
                                             } ?>
-                                        </button>
-                                    </form>
-                                </td>
-                            <?php } else { ?>
-                                <td>
-                                    <?php if ($school_session->status == 2 and $pending == 0) {
+                        </button>
+                    </form>
+                </td>
+                <?php } else { ?>
+                <td>
+                    <?php if ($school_session->status == 2 and $pending == 0) {
                                         $pending = 1;
                                     ?>
-                                        <button onclick="get_renewal_issue_interface('<?php echo $school_session->schoolId; ?>')" class="<?php if ($school_session->reg_type_id == 1) { ?> btn btn-success <?php } ?> <?php if ($school_session->reg_type_id == 2) { ?> btn btn-danger <?php } ?> <?php if ($school_session->reg_type_id == 3) { ?> btn btn-primary <?php } ?> <?php if ($school_session->reg_type_id == 4) { ?> btn btn-warning <?php } ?>"><?php echo $school_session->regTypeTitle; ?></button>
-                                    <?php } else { ?>
-                                        Not Issue Yet
-                                    <?php } ?>
-                                </td>
+                    <button onclick="get_renewal_issue_interface('<?php echo $school_session->schoolId; ?>')"
+                        class="<?php if ($school_session->reg_type_id == 1) { ?> btn btn-success <?php } ?> <?php if ($school_session->reg_type_id == 2) { ?> btn btn-danger <?php } ?> <?php if ($school_session->reg_type_id == 3) { ?> btn btn-primary <?php } ?> <?php if ($school_session->reg_type_id == 4) { ?> btn btn-warning <?php } ?>"><?php echo $school_session->regTypeTitle; ?></button>
+                    <?php } else { ?>
+                    Not Issue Yet
+                    <?php } ?>
+                </td>
+                <?php } ?>
+
+
+                <?php } else { ?>
+
+                <td colspan="14" style="text-align: center; color:#b2aeae;">
+                    <small><i> Not applied yet.</i></small>
+
+                    <span style="margin-left: 10px;"></span>
+                    <span>
+                        <select id="reg_type_id_<?php echo $school_session->schoolId; ?>" name="reg_type_id"
+                            style="width: 150px;">
+                            <?php if ($school->registrationNumber <= 0) { ?>
+                            <option value="1"> New Registration</option>
+                            <?php } else { ?>
+                            <option <?php if ($school_session->reg_type_id == 2) { ?> selected <?php } ?> value="2">
+                                Renewal</option>
+                            <option <?php if ($school_session->reg_type_id == 4) { ?> selected <?php } ?> value="4">
+                                Upgradation Renewal</option>
                             <?php } ?>
+                        </select>
+                        <input onclick="change_apply_status(<?php echo $school_session->schoolId; ?>)" type="submit"
+                            name="change" value="Change Apply" style="font-size: 11px; margin:0px; color:black" />
+                    </span>
 
-
-                        <?php } else { ?>
-
-                            <td colspan="14" style="text-align: center; color:#b2aeae;">
-                                <small><i> Not applied yet.</i></small>
-
-                                <span style="margin-left: 10px;"></span>
-                                <span>
-                                    <select id="reg_type_id_<?php echo $school_session->schoolId; ?>" name="reg_type_id" style="width: 150px;">
-                                        <?php if ($school->registrationNumber <= 0) { ?>
-                                            <option value="1"> New Registration</option>
-                                        <?php } else { ?>
-                                            <option <?php if ($school_session->reg_type_id == 2) { ?> selected <?php } ?> value="2">Renewal</option>
-                                            <option <?php if ($school_session->reg_type_id == 4) { ?> selected <?php } ?> value="4">Upgradation Renewal</option>
-                                        <?php } ?>
-                                    </select>
-                                    <input onclick="change_apply_status(<?php echo $school_session->schoolId; ?>)" type="submit" name="change" value="Change Apply" style="font-size: 11px; margin:0px; color:black" />
-                                </span>
-
-                            </td>
-                        <?php } ?>
+                </td>
+                <?php } ?>
 
 
 
-                    </tr>
-                <?php
+            </tr>
+            <?php
                     $previous_max = $max_tuition_fee;
                 }
             } else { ?>
-                <tr style="color:#b2aeae;">
-                    <td colspan="12">
-                        Not applied for registartion.
-                    </td>
-                </tr>
+            <tr style="color:#b2aeae;">
+                <td colspan="12">
+                    Not applied for registartion.
+                </td>
+            </tr>
             <?php } ?>
 
         </table>
@@ -393,23 +406,24 @@
 </div>
 <div id="get_renewal_issue_interface"></div>
 <script>
-    function get_renewal_issue_interface(school_id) {
-        $('#get_renewal_issue_interface').html('Please Wait .....');
-        $.ajax({
-            type: "POST",
-            url: "<?php echo site_url("mis_dashboard/get_renewal_issue_interface"); ?>",
-            data: {
-                school_id: school_id,
-                schools_id: <?php echo $school->schools_id; ?>
-            }
-        }).done(function(data) {
+function get_renewal_issue_interface(school_id) {
+    $('#get_renewal_issue_interface').html('Please Wait .....');
+    $.ajax({
+        type: "POST",
+        url: "<?php echo site_url("mis_dashboard/get_renewal_issue_interface"); ?>",
+        data: {
+            school_id: school_id,
+            schools_id: <?php echo $school->schools_id; ?>
+        }
+    }).done(function(data) {
 
-            $('#get_renewal_issue_interface').html(data);
-        });
-    }
+        $('#get_renewal_issue_interface').html(data);
+    });
+}
 </script>
 
-<div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
+<div
+    style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
     <h4> <i class="fa fa-info-circle" aria-hidden="true"></i>
         Session Wise Monthly Fee
     </h4>
@@ -422,19 +436,19 @@
                 <?php
                 $classes = $this->db->query("SELECT * FROM class")->result();
                 foreach ($classes  as $class) { ?>
-                    <th><?php echo $class->classTitle ?></th>
+                <th><?php echo $class->classTitle ?></th>
                 <?php } ?>
             </tr>
 
             <?php foreach ($school_sessions as $school_session) { ?>
-                <?php if ($school_session->status > 0) { ?>
-                    <tr>
-                        <td>
-                            <a target="new" href="<?php echo site_url("print_file/section_e/" . $school_session->schoolId); ?>">
-                                <i class="fa fa-print" aria-hidden="true"></i> <?php echo $school_session->sessionYearTitle ?>
-                            </a>
-                        </td>
-                        <?php
+            <?php if ($school_session->status > 0) { ?>
+            <tr>
+                <td>
+                    <a target="new" href="<?php echo site_url("print_file/section_e/" . $school_session->schoolId); ?>">
+                        <i class="fa fa-print" aria-hidden="true"></i> <?php echo $school_session->sessionYearTitle ?>
+                    </a>
+                </td>
+                <?php
                         foreach ($classes  as $class) {
 
 
@@ -488,22 +502,22 @@
                                         // echo @" <small style='color:green'>(" . $incress . " %)</small>";
                                     }
                                 } ?>
-                                </td>
-                        <?php  }
+                </td>
+                <?php  }
                         } ?>
-                    </tr>
-                <?php   } else { ?>
-                    <tr>
-                        <td style="color:#b2aeae;">
-                            <a target="new" href="<?php echo site_url("print_file/section_e/" . $school_session->schoolId); ?>">
-                                <i class="fa fa-print" aria-hidden="true"></i> <?php echo $school_session->sessionYearTitle ?>
-                            </a>
-                        </td>
-                        <td colspan="21" style="color:#b2aeae;">
-                            <small><i> Not applied yet. </i></small>
-                        </td>
-                    </tr>
-                <?php } ?>
+            </tr>
+            <?php   } else { ?>
+            <tr>
+                <td style="color:#b2aeae;">
+                    <a target="new" href="<?php echo site_url("print_file/section_e/" . $school_session->schoolId); ?>">
+                        <i class="fa fa-print" aria-hidden="true"></i> <?php echo $school_session->sessionYearTitle ?>
+                    </a>
+                </td>
+                <td colspan="21" style="color:#b2aeae;">
+                    <small><i> Not applied yet. </i></small>
+                </td>
+            </tr>
+            <?php } ?>
             <?php   } ?>
 
 
@@ -513,67 +527,67 @@
 </div>
 
 <script>
-    function lock_editing(school_id) {
-        $.ajax({
-            url: "<?php echo base_url(); ?>mis_dashboard/lock_editing",
-            type: "POST",
-            data: {
-                school_id: school_id,
-                schools_id: '<?php echo $school->schools_id ?>'
-            },
-            success: function(data) {
-                console.log(data);
-                if (data == 'success') {
+function lock_editing(school_id) {
+    $.ajax({
+        url: "<?php echo base_url(); ?>mis_dashboard/lock_editing",
+        type: "POST",
+        data: {
+            school_id: school_id,
+            schools_id: '<?php echo $school->schools_id ?>'
+        },
+        success: function(data) {
+            console.log(data);
+            if (data == 'success') {
 
-                    search(<?php echo $school->schools_id ?>);
-                } else {
-                    alert('Something went wrong');
-                }
+                search(<?php echo $school->schools_id ?>);
+            } else {
+                alert('Something went wrong');
             }
-        });
-    }
+        }
+    });
+}
 
-    function unlock_editing(school_id) {
-        $.ajax({
-            url: "<?php echo base_url(); ?>mis_dashboard/unlock_editing",
-            type: "POST",
-            data: {
-                school_id: school_id,
-                schools_id: '<?php echo $school->schools_id ?>'
-            },
-            success: function(data) {
-                console.log(data);
-                if (data == 'success') {
+function unlock_editing(school_id) {
+    $.ajax({
+        url: "<?php echo base_url(); ?>mis_dashboard/unlock_editing",
+        type: "POST",
+        data: {
+            school_id: school_id,
+            schools_id: '<?php echo $school->schools_id ?>'
+        },
+        success: function(data) {
+            console.log(data);
+            if (data == 'success') {
 
-                    search(<?php echo $school->schools_id ?>);
-                } else {
-                    alert('Something went wrong');
-                }
+                search(<?php echo $school->schools_id ?>);
+            } else {
+                alert('Something went wrong');
             }
-        });
-    }
+        }
+    });
+}
 
-    function change_apply_status(school_id) {
+function change_apply_status(school_id) {
 
-        var reg_type_id = $('#reg_type_id_' + school_id).val();
+    var reg_type_id = $('#reg_type_id_' + school_id).val();
 
-        $.ajax({
-            url: "<?php echo base_url(); ?>mis_dashboard/change_apply_status",
-            type: "POST",
-            data: {
-                school_id: school_id,
-                schools_id: '<?php echo $school->schools_id ?>',
-                reg_type_id: reg_type_id
-            },
-            success: function(data) {
-                console.log(data);
-                if (data == 'success') {
+    $.ajax({
+        url: "<?php echo base_url(); ?>mis_dashboard/change_apply_status",
+        type: "POST",
+        data: {
+            school_id: school_id,
+            schools_id: '<?php echo $school->schools_id ?>',
+            reg_type_id: reg_type_id
+        },
+        success: function(data) {
+            console.log(data);
+            if (data == 'success') {
 
-                    search(<?php echo $school->schools_id ?>);
-                } else {
-                    alert('Something went wrong');
-                }
+                search(<?php echo $school->schools_id ?>);
+            } else {
+                alert('Something went wrong');
             }
-        });
-    }
+        }
+    });
+}
 </script>
