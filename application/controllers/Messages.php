@@ -66,18 +66,40 @@ class Messages extends Admin_Controller
       $query1 = "  SELECT * FROM `message_for_all` where message_id=$message_id ";
       $query1 = $this->db->query($query1);
       $message_info = $query1->row();
+      if($message_info){
       $query = "  SELECT * FROM `message_for_all_attachment` where message_id=$message_info->message_id ";
       $query = $this->db->query($query);
+      $attachments = $query->result();
 
+      $userId = $this->session->userdata('userId');
+      $query="SELECT schoolId FROM schools WHERE owner_id = ?";
+      $school = $this->db->query($query, [$userId])->row();
+      if($school){
+      $query="SELECT COUNT(*) as total FROM message_school WHERE message_id = ? and school_id = ? ";
+      $school_message = $this->db->query($query,[$message_id, $school->schoolId])->row()->total;
+         if($school_message>0){
+            //echo "It is specific school message";
+            $message_log['message_id'] = $message_id;
+            $message_log['school_id'] = $school->schoolId;
+            $message_log['user_id'] = $userId;
+            $this->db->insert('message_read_log', $message_log);
+            
+         }else{
+            //echo "Not school Message";
+         }
+      }
 
 
       $this->data['message_info'] = $message_info;
-      $this->data['attachments'] = $query->result();
+      $this->data['attachments'] = $attachments;
       //var_dump($this->data['attachments']);exit;
       $this->data['title'] = 'School Message Details';
       $this->data['description'] = 'info about Message ';
       $this->data['view'] = 'messages/school_message_details';
       $this->load->view('layout', $this->data);
+   }else{
+      echo 'Error in message ID';
+   }
    }
    public function sent_messages()
    {
