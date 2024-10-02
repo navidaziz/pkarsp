@@ -98,11 +98,15 @@ legend {
                             <div class="col-md-offset-1 col-md-10 col-sm-12 col-xs-12" style="min-height: 200px;">
                                 <div style="background-color: #fff;padding:20px;">
                                     <div class="">
-                                        <?php
+                                        <h4 style="text-decoration: underline;">Subject:
+                                            <?php echo $message_info->subject; ?></h4>
+                                        <p>
+                                            <?php
                     echo $message_info->discription;
                     //str_replace('http://localhost/pkarsp/school/certificate', site_url("print_file/certificate/"), $message_info->discription);
 
                     ?>
+                                        </p>
                                     </div>
 
                                     <hr>

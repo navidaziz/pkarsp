@@ -73,8 +73,8 @@ legend {
                         <fieldset style="background-color: #f9f6f6;">
                             <legend></legend>
                             <h3
-                                style="text-align:center;width:100%;font-size:   24px;padding:10px;font-family: Arial, Helvetica, sans-serif;text-transform:  capitalize;margin-top:0 !important;margin-bottom: 0 !important; ">
-                                <?php echo $message_info->subject; ?></h3>
+                                style="text-align:center;width:100%;font-size:   24px;padding:10px;font-family: Arial, Helvetica, sans-serif;text-transform:  capitalize;margin-top:0 !important;margin-bottom: 0 !important; text-decoration: underline; ">
+                                Subject: <?php echo $message_info->subject; ?></h3>
                             <p class="" style="font-size: 14px;color:#e95837;text-align: center;"><i
                                     class="fa fa-clock-o" aria-hidden="true"></i>
                                 <?php echo date("l , dS F Y", strtotime($message_info->created_date)); ?>,
