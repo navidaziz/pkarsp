@@ -89,6 +89,11 @@ class Messages extends Admin_Controller
          }
       }
 
+      $query="SELECT `users`.`userTitle`, message_read_log.read_date 
+      FROM message_read_log 
+      INNER JOIN `users` ON(`users`.`userId` = `message_read_log`.`user_id`)
+      WHERE message_read_log.message_id = ?";
+      $this->data['message_read_logs'] = $this->db->query($query, [$message_id])->result();
 
       $this->data['message_info'] = $message_info;
       $this->data['attachments'] = $attachments;
@@ -191,6 +196,11 @@ class Messages extends Admin_Controller
       ///////////////////////////////////////////
       $this->data['attachments'] = $query->result();
 
+      $query="SELECT `users`.`userTitle`, message_read_log.read_date 
+      FROM message_read_log 
+      INNER JOIN `users` ON(`users`.`userId` = `message_read_log`.`user_id`)
+      WHERE message_read_log.message_id = ?";
+      $this->data['message_read_logs'] = $this->db->query($query, [$message_id])->result();
 
       $query = "SELECT * FROM `message_school` WHERE `message_school`.`message_id` = '" . $message_info->message_id . "'";
       $school = $this->db->query($query)->result();
