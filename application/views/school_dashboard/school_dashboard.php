@@ -558,8 +558,9 @@
                                             <?php } ?>
                                         </td>
                                         <td>
+                                            print
                                             <a class="btn btn-warning btn-sm" target="_blank"
-                                                href="<?php echo site_url("print_file/school_session_detail/" . $reg_detail->school_id); ?>">
+                                                href="<?php echo site_url("print_file/school_session_detail/" . $upgradation_and_renewal->school_id); ?>">
                                                 <i class="fa fa-print" aria-hidden="true"></i> Print Application
                                             </a>
                                         </td>
