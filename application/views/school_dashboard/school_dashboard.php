@@ -558,6 +558,12 @@
                                             <?php } ?>
                                         </td>
                                         <td>
+                                            <a class="btn btn-warning btn-sm" target="_blank"
+                                                href="<?php echo site_url("print_file/school_session_detail/" . $reg_detail->school_id); ?>">
+                                                <i class="fa fa-print" aria-hidden="true"></i> Print Application
+                                            </a>
+                                        </td>
+                                        <td>
                                             <?php if ($reg_detail->isRejected == 0) { ?> <i class="fa fa-check"
                                                 aria-hidden="true"></i> <?php } else { ?> <i class="fa fa-times"
                                                 aria-hidden="true"></i> <?php } ?>
