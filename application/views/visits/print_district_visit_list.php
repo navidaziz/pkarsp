@@ -1,19 +1,19 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
 <style>
-    .table_small>thead>tr>th,
-    .table_small>tbody>tr>th,
-    .table_small>tfoot>tr>th,
-    .table_small>thead>tr>td,
-    .table_small>tbody>tr>td,
-    .table_small>tfoot>tr>td {
-        padding: 3px;
-        line-height: 1;
-        vertical-align: top;
-        border-top: 1px solid #ddd;
-        font-size: 11px !important;
-        color: black;
-        margin: 0px !important;
-    }
+.table_small>thead>tr>th,
+.table_small>tbody>tr>th,
+.table_small>tfoot>tr>th,
+.table_small>thead>tr>td,
+.table_small>tbody>tr>td,
+.table_small>tfoot>tr>td {
+    padding: 3px;
+    line-height: 1;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+    font-size: 11px !important;
+    color: black;
+    margin: 0px !important;
+}
 </style>
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -74,6 +74,7 @@
                                             <th>Note</th>
                                             <th>Session</th>
                                             <th>Visit Level</th>
+                                            <th>Applied Date</th>
                                             <th>Remarks</th>
                                         </tr>
                                     </thead>
@@ -103,7 +104,8 @@
                                         s.telePhoneNumber,
                                         v.visit_status,
                                         v.visit_note,
-                                        v.created_by
+                                        v.created_by,
+                                        v.created_date
                                         FROM visits as v 
                                         INNER JOIN schools as s ON(s.schoolId = v.schools_id) 
                                         INNER JOIN district as d ON(d.districtId = s.district_id) 
@@ -116,17 +118,17 @@
                                         $rows = $this->db->query($query)->result();
 
                                         foreach ($rows as $row) { ?>
-                                            <tr>
-                                                <td><?php echo $count++ ?></td>
-                                                <td><?php echo $row->schools_id; ?></td>
-                                                <td><?php echo $row->schoolName; ?></td>
-                                                <td><?php echo $row->region; ?></td>
-                                                <td><?php echo $row->districtTitle; ?></td>
-                                                <td><?php echo $row->tehsil; ?></td>
-                                                <td><?php echo $row->uc != NULL ? $row->uc : $row->uc_text; ?></td>
-                                                <td><?php echo $row->address; ?></td>
+                                        <tr>
+                                            <td><?php echo $count++ ?></td>
+                                            <td><?php echo $row->schools_id; ?></td>
+                                            <td><?php echo $row->schoolName; ?></td>
+                                            <td><?php echo $row->region; ?></td>
+                                            <td><?php echo $row->districtTitle; ?></td>
+                                            <td><?php echo $row->tehsil; ?></td>
+                                            <td><?php echo $row->uc != NULL ? $row->uc : $row->uc_text; ?></td>
+                                            <td><?php echo $row->address; ?></td>
 
-                                                <td><?php
+                                            <td><?php
                                                     $contact = array();
 
                                                     // Clean and add telePhoneNumber
@@ -153,31 +155,31 @@
                                                         echo $number . "<br /> ";
                                                     }
                                                     ?></td>
-                                                <td>
+                                            <td>
 
-                                                    <?php
+                                                <?php
                                                     $query = "SELECT `level_of_school_id`,
                                                     `primary`, middle, high, high_sec FROM school 
                                                     WHERE schools_id = '" . $row->schools_id . "' 
                                                     AND  status = 1 ORDER BY schoolId DESC LIMIT 1";
                                                     $reg_levels = $this->db->query($query)->row(); ?>
-                                                    <?php echo ($reg_levels->primary == 1 or $reg_levels->level_of_school_id == 1) ? 'Primary, ' : '' ?>
-                                                    <?php echo ($reg_levels->middle == 1 or $reg_levels->level_of_school_id == 2) ? 'Middle, ' : '' ?>
-                                                    <?php echo ($reg_levels->high == 1 or $reg_levels->level_of_school_id == 3) ? 'High, ' : '' ?>
-                                                    <?php echo ($reg_levels->higher_sec == 1 or $reg_levels->level_of_school_id == 4) ? 'High Sec, ' : '' ?>
-                                                </td>
+                                                <?php echo ($reg_levels->primary == 1 or $reg_levels->level_of_school_id == 1) ? 'Primary, ' : '' ?>
+                                                <?php echo ($reg_levels->middle == 1 or $reg_levels->level_of_school_id == 2) ? 'Middle, ' : '' ?>
+                                                <?php echo ($reg_levels->high == 1 or $reg_levels->level_of_school_id == 3) ? 'High, ' : '' ?>
+                                                <?php echo ($reg_levels->higher_sec == 1 or $reg_levels->level_of_school_id == 4) ? 'High Sec, ' : '' ?>
+                                            </td>
 
-                                                <td><?php echo $row->visit_reason; ?></td>
-                                                <td><?php echo $row->visit_note; ?></td>
-                                                <td><?php echo $row->sessionYearTitle; ?></td>
-                                                <td><?php echo $row->primary_l == 1 ? 'Primary, ' : '' ?>
-                                                    <?php echo $row->middle_l == 1 ? 'Middle, ' : '' ?>
-                                                    <?php echo $row->high_l == 1 ? 'High, ' : ''; ?>
-                                                    <?php echo $row->high_sec_l == 1 ? 'Higher Sec., ' : ''  ?>
-                                                    <?php echo $row->academy_l == 1 ? 'Academy, ' : ''  ?></td>
-
-                                                <td style="width: 200px;"></td>
-                                            </tr>
+                                            <td><?php echo $row->visit_reason; ?></td>
+                                            <td><?php echo $row->visit_note; ?></td>
+                                            <td><?php echo $row->sessionYearTitle; ?></td>
+                                            <td><?php echo $row->primary_l == 1 ? 'Primary, ' : '' ?>
+                                                <?php echo $row->middle_l == 1 ? 'Middle, ' : '' ?>
+                                                <?php echo $row->high_l == 1 ? 'High, ' : ''; ?>
+                                                <?php echo $row->high_sec_l == 1 ? 'Higher Sec., ' : ''  ?>
+                                                <?php echo $row->academy_l == 1 ? 'Academy, ' : ''  ?></td>
+                                            <td><?php echo date('d M, Y',$row->created_date); ?></td>
+                                            <td style="width: 200px;"></td>
+                                        </tr>
                                         <?php } ?>
                                     </tbody>
                                 </table>
@@ -197,62 +199,62 @@
 
 
         <script>
-            function get_add_to_visit_list_form(visit_id) {
-                $.ajax({
-                        method: "POST",
-                        url: "<?php echo site_url('visits/get_add_to_visit_list_form'); ?>",
-                        data: {
-                            visit_id: visit_id
-                        },
-                    })
-                    .done(function(respose) {
-                        $('#modal').modal('show');
-                        $('#modal_title').html('Visits');
-                        $('#modal_body').html(respose);
-                    });
-            }
+        function get_add_to_visit_list_form(visit_id) {
+            $.ajax({
+                    method: "POST",
+                    url: "<?php echo site_url('visits/get_add_to_visit_list_form'); ?>",
+                    data: {
+                        visit_id: visit_id
+                    },
+                })
+                .done(function(respose) {
+                    $('#modal').modal('show');
+                    $('#modal_title').html('Visits');
+                    $('#modal_body').html(respose);
+                });
+        }
         </script>
 
 
     </section>
 </div>
 <style>
-    .dt-buttons {
-        display: inline;
-    }
+.dt-buttons {
+    display: inline;
+}
 
-    table.dataTable.no-footer {
-        margin-top: 10px;
+table.dataTable.no-footer {
+    margin-top: 10px;
 
-    }
+}
 
-    .dataTables_filter {
-        display: inline;
-        float: right;
-    }
+.dataTables_filter {
+    display: inline;
+    float: right;
+}
 </style>
 <script>
-    $(document).ready(function() {
+$(document).ready(function() {
 
 
-        document.title = "<?php echo $title; ?> Institutes Visit List upto (<?php echo date('d-m-y h:m:s') ?>)";
-        $('#visits_list').DataTable({
-            dom: 'Bfrtip',
-            paging: false,
-            searching: true,
-            ordering: true, // Enable sorting
-            buttons: [
-                'copy', 'csv', 'excel', 'print', {
-                    extend: 'pdfHtml5',
-                    orientation: 'landscape',
-                    pageSize: 'LEGAL',
-                    customize: function(doc) {
-                        doc.pageMargins = [2, 2, 2, 2]; // [left, top, right, bottom]
-                    }
-                },
+    document.title = "<?php echo $title; ?> Institutes Visit List upto (<?php echo date('d-m-y h:m:s') ?>)";
+    $('#visits_list').DataTable({
+        dom: 'Bfrtip',
+        paging: false,
+        searching: true,
+        ordering: true, // Enable sorting
+        buttons: [
+            'copy', 'csv', 'excel', 'print', {
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                pageSize: 'LEGAL',
+                customize: function(doc) {
+                    doc.pageMargins = [2, 2, 2, 2]; // [left, top, right, bottom]
+                }
+            },
 
-            ],
+        ],
 
-        });
     });
+});
 </script>
