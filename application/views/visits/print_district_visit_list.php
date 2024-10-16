@@ -177,7 +177,7 @@
                                                 <?php echo $row->high_l == 1 ? 'High, ' : ''; ?>
                                                 <?php echo $row->high_sec_l == 1 ? 'Higher Sec., ' : ''  ?>
                                                 <?php echo $row->academy_l == 1 ? 'Academy, ' : ''  ?></td>
-                                            <td><?php echo date('d M, Y',$row->created_date); ?></td>
+                                            <td><?php echo date('d M, Y', strtotime($row->created_date)); ?></td>
                                             <td style="width: 200px;"></td>
                                         </tr>
                                         <?php } ?>
