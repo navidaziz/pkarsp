@@ -1,154 +1,179 @@
   <!-- Modal -->
   <script>
-    function update_class_fee_detail(class_id) {
-      $.ajax({
+function update_class_fee_detail(class_id) {
+    $.ajax({
         type: "POST",
         url: "<?php echo site_url("form/update_class_fee_from"); ?>",
         data: {
-          schools_id: <?php echo $school->schoolId; ?>,
-          class_id: class_id,
-          school_id: <?php echo $school_id; ?>,
-          session_id: <?php echo $session_id; ?>
+            schools_id: <?php echo $school->schoolId; ?>,
+            class_id: class_id,
+            school_id: <?php echo $school_id; ?>,
+            session_id: <?php echo $session_id; ?>
         }
-      }).done(function(data) {
+    }).done(function(data) {
 
         $('#update_class_ages_body').html(data);
-      });
+    });
 
-      $('#update_class_ages').modal('toggle');
-    }
+    $('#update_class_ages').modal('toggle');
+}
   </script>
-  <div class="modal fade" id="update_class_ages" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content" id="update_class_ages_body">
+  <div class="modal fade" id="update_class_ages" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content" id="update_class_ages_body">
 
-        ...
+              ...
 
+          </div>
       </div>
-    </div>
   </div>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <?php $this->load->view('forms/form_header');   ?>
+      <?php $this->load->view('forms/form_header');   ?>
 
 
-    <!-- Main content -->
-    <section class="content" style="padding-top: 0px !important;">
+      <!-- Main content -->
+      <section class="content" style="padding-top: 0px !important;">
 
-      <div class="box box-primary box-solid">
-
-
-        <div class="box-body">
-          <div class="row">
-            <?php if ($school->registrationNumber <= 0) { ?>
-              <div class="col-md-5">
-                <div style="margin:0px auto; width:100%; border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;   padding: 5px; background-color: white;">
-
-                  <h3>
-                    Required Documents for New Registration
-                  </h3>
-                  <h4>
-                    Please ensure the submission of the following documents for new registration:
-                  </h4>
-
-                  <ol style="font-size: larger;">
-                    <li>Ownership Documents or Affidavit
-                      <a target="_blank" href="https://psra.gkp.pk/uploads/attachments/A_Affadavit.pdf">PDF Download</a>
-                      <span style="margin-left: 10px;"></span>
-                      <a target="_blank" href="https://psra.gkp.pk/uploads/attachments/A_Affadavit.docx">Docx Download</a>
-                    </li>
-                    <li>Rent Agreement (if it applies)</li>
-                    <li>Copy of the Owner's or Owners' CNICs</li>
-                    <li>Institute Building Map</li>
-                    <li>Teachers' Contracts</li>
-                  </ol>
-                  <h4>
-                    Kindly dispatch the documents to the PSRA office.
-
-                    <h4>
-                      <h5 style="text-align: right;">
-                        مہربانی کر کے یہ سارے ڈاکومنٹس پی ایس ار اے افس بھیج دیں
-                      </h5>
-                      <h4>
-                        <strong>
-                          <address>
-                            Postal Address: <br />
-                            <div class="alert alert-success">
-                              To: Record Room Private Schools Regulatory Authority (PSRA)
-                              18-E Jamal Ud Din Afghani Road, University Town
-                              Peshawar
-                              <br />
-                              <br />
-                              From: School: <?php echo ucwords(strtolower($school->schoolName)); ?>, Institute ID: <?php echo $school->schools_id; ?>
-                            </div>
-                          </address>
-                        </strong>
-                      </h4>
-                </div>
-              </div>
-            <?php } ?>
-            <div class="col-md-7">
-              <div style="text-align:center; margin:0px auto; width:100%; border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;   padding: 5px; background-color: white;">
+          <div class="box box-primary box-solid">
 
 
-                <h3> <?php echo $school->regTypeTitle ?>
-                  <?php if ($school->reg_type_id != 4) { ?>
-                    <?php echo " for " . $school->levelofInstituteTitle; ?>
-                  <?php } ?>
-                  for Session: <?php echo $session_detail->sessionYearTitle; ?></h3>
+              <div class="box-body">
+                  <div class="row">
+                      <?php if ($school->registrationNumber <= 0) { ?>
+                      <div class="col-md-5">
+                          <div
+                              style="margin:0px auto; width:100%; border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;   padding: 5px; background-color: white;">
 
-                <h4> Online Applicaiton Status</h4>
-                <h3><strong>
-                    <?php echo get_session_request_status($school->status); ?>
-                  </strong></h3>
+                              <h3>
+                                  Required Documents for New Registration
+                              </h3>
+                              <h4>
+                                  Please ensure the submission of the following documents for new registration:
+                              </h4>
 
-                <div style="margin: 20px; font-size:20px">
-                  <p style="text-align:justify">
-                    Your online application has been successfully submitted, and there's no requirement to provide a printed copy of online apply. PSRA officials will keep you updated on the status of your application. Be sure to check the online institute portal regularly for any updates.
-                  </p>
-                  <p style="direction: rtl; text-align:justify">
-                    آپ کی آن لائن درخواست کامیابی کے ساتھ جمع کر دی گئی ہے، اور آن لائن درخواست کی پرنٹ شدہ کاپی فراہم کرنے کی کوئی ضرورت نہیں ہے۔ PSRA کے اہلکار آپ کو آپ کی درخواست کی حیثیت سے آگاہ کرتے رہیں گے۔ کسی بھی اپ ڈیٹ کے لیے آن لائن انسٹی ٹیوٹ پورٹل کو باقاعدگی سے چیک کرنا یقینی بنائیں۔</p>
-                </div>
-                <h4>
+                              <ol style="font-size: larger;">
+                                  <li>Ownership Documents or Affidavit
+                                      <a target="_blank"
+                                          href="https://psra.gkp.pk/uploads/attachments/A_Affadavit.pdf">PDF
+                                          Download</a>
+                                      <span style="margin-left: 10px;"></span>
+                                      <a target="_blank"
+                                          href="https://psra.gkp.pk/uploads/attachments/A_Affadavit.docx">Docx
+                                          Download</a>
+                                  </li>
+                                  <li>Rent Agreement (if it applies)</li>
+                                  <li>Copy of the Owner's or Owners' CNICs</li>
+                                  <li>Institute Building Map</li>
+                                  <li>Teachers' Contracts</li>
+                              </ol>
+                              <h4>
+                                  Kindly dispatch the documents to the PSRA office.
 
-                  <br />
-                  <br />
+                                  <h4>
+                                      <h5 style="text-align: right;">
+                                          مہربانی کر کے یہ سارے ڈاکومنٹس پی ایس ار اے افس بھیج دیں
+                                      </h5>
+                                      <h4>
+                                          <strong>
+                                              <address>
+                                                  Postal Address: <br />
+                                                  <div class="alert alert-success">
+                                                      To: Record Room Private Schools Regulatory Authority (PSRA)
+                                                      18-E Jamal Ud Din Afghani Road, University Town
+                                                      Peshawar
+                                                      <br />
+                                                      <br />
+                                                      From: School:
+                                                      <?php echo ucwords(strtolower($school->schoolName)); ?>, Institute
+                                                      ID: <?php echo $school->schools_id; ?>
+                                                  </div>
+                                              </address>
+                                          </strong>
+                                      </h4>
+                          </div>
+                      </div>
+                      <?php } ?>
+                      <div class="col-md-7">
+                          <div
+                              style="text-align:center; margin:0px auto; width:100%; border:1px solid #9FC8E8; border-radius: 10px; min-height: 2px;   padding: 5px; background-color: white;">
+
+
+                              <h3> <?php echo $school->regTypeTitle ?>
+                                  <?php if ($school->reg_type_id != 4) { ?>
+                                  <?php echo " for " . $school->levelofInstituteTitle; ?>
+                                  <?php } ?>
+                                  for Session: <?php echo $session_detail->sessionYearTitle; ?></h3>
+
+                              <h4> Online Applicaiton Status</h4>
+                              <h3><strong>
+                                      <?php echo get_session_request_status($school->status); ?>
+                                  </strong></h3>
+
+                              <div style="margin: 20px; font-size:20px">
+                                  <p style="text-align:justify">
+                                      Your online application has been successfully submitted, and there's no
+                                      requirement to provide a printed copy of online apply. PSRA officials will keep
+                                      you updated on the status of your application. Be sure to check the online
+                                      institute portal regularly for any updates.
+                                  </p>
+                                  <p style="direction: rtl; text-align:justify">
+                                      آپ کی آن لائن درخواست کامیابی کے ساتھ جمع کر دی گئی ہے، اور آن لائن درخواست کی
+                                      پرنٹ شدہ کاپی فراہم کرنے کی کوئی ضرورت نہیں ہے۔ PSRA کے اہلکار آپ کو آپ کی درخواست
+                                      کی حیثیت سے آگاہ کرتے رہیں گے۔ کسی بھی اپ ڈیٹ کے لیے آن لائن انسٹی ٹیوٹ پورٹل کو
+                                      باقاعدگی سے چیک کرنا یقینی بنائیں۔</p>
+                              </div>
+                              <h4>
+
+                                  <br />
+                                  <br />
 
 
 
 
 
-                  <a class="btn btn-warning" href="<?php echo site_url("school_dashboard"); ?>">
-                    <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Dashboard
-                    <i class="fa fa-dashboard"></i>
-                  </a>
-                  <?php
+                                  <a class="btn btn-warning" href="<?php echo site_url("school_dashboard"); ?>">
+                                      <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Dashboard
+                                      <i class="fa fa-dashboard"></i>
+                                  </a>
+
+
+
+                                  <a class="btn btn-success" target="_blank"
+                                      href="<?php echo site_url("print_file/school_session_detail/" . $school_session_id); ?>">
+                                      <i class="fa fa-print" aria-hidden="true"></i> Print Application
+                                  </a>
+
+                                  <?php
 
 
                   if ($school->school_type_id == 1) { ?>
-                    <a class="btn btn-primary" href="<?php echo site_url("update_sectionc/updatesectionc/$school_session_id"); ?>">
-                      <i class="fa fa-edit" aria-hidden="true"></i> Update Section C
-                    </a>
-                  <?php } ?>
-                  <!-- <span style="margin-left: 20px;"></span>
+                                  <a class="btn btn-primary"
+                                      href="<?php echo site_url("update_sectionc/updatesectionc/$school_session_id"); ?>">
+                                      <i class="fa fa-edit" aria-hidden="true"></i> Update Section C
+                                  </a>
+                                  <?php } ?>
+                                  <!-- <span style="margin-left: 20px;"></span>
                   <a target="_blank" class="btn btn-primary" href="<?php echo site_url("print_file/school_session_detail/" . $school->school_id); ?>">
                     <i class="fa fa-print" aria-hidden="true"></i> Print Data
                   </a> -->
 
 
-                </h4>
-                <?php
+                              </h4>
+                              <?php
                 $query = "SELECT section_e FROM school WHERE schoolId = '" . $school->school_id . "'";
                 $section_e = $this->db->query($query)->row()->section_e;
                 if ($section_e == 0) { ?>
-                  <form action="<?php echo site_url('online_application/update_section_e') ?>" method="post">
-                    <input type="hidden" value="<?php echo $school->school_id; ?>" name="school_id" />
-                    <table class="table table-bordered">
+                              <form action="<?php echo site_url('online_application/update_section_e') ?>"
+                                  method="post">
+                                  <input type="hidden" value="<?php echo $school->school_id; ?>" name="school_id" />
+                                  <table class="table table-bordered">
 
-                      <tr>
-                        <th>Sessions</th>
-                        <?php
+                                      <tr>
+                                          <th>Sessions</th>
+                                          <?php
 
                         $query = "SELECT * FROM class WHERE classId IN(SELECT class_id FROM fee WHERE school_id = '" . $school->school_id . "')";
 
@@ -168,18 +193,18 @@
 
                         asort($sessions);
                         foreach ($sessions  as $session) { ?>
-                          <th style="text-align: center;"><?php echo $session->sessionYearTitle; ?></th>
-                        <?php } ?>
-                      </tr>
-                      <tr>
-                        <th>Classes</th>
-                        <?php
+                                          <th style="text-align: center;"><?php echo $session->sessionYearTitle; ?></th>
+                                          <?php } ?>
+                                      </tr>
+                                      <tr>
+                                          <th>Classes</th>
+                                          <?php
                         foreach ($sessions  as $session) { ?>
-                          <th style="text-align: center;">Maximum fee in class</th>
-                        <?php } ?>
-                      </tr>
+                                          <th style="text-align: center;">Maximum fee in class</th>
+                                          <?php } ?>
+                                      </tr>
 
-                      <?php
+                                      <?php
                       $form_complete = 1;
                       $previous_session_max_fee = array();
                       $previous_session_fee = array();
@@ -194,9 +219,9 @@
                       foreach ($classes  as $class) {
                         $add = 1;
                       ?>
-                        <tr>
-                          <th><?php echo $class->classTitle ?></th>
-                          <?php
+                                      <tr>
+                                          <th><?php echo $class->classTitle ?></th>
+                                          <?php
                           $session_count = 1;
                           foreach ($sessions  as $session) {
 
@@ -221,27 +246,31 @@
                             }
 
                           ?>
-                            </td>
-                            <td style="text-align: center; ">
-                              <?php if ($session_count == 1) { ?>
-                                <strong><?php echo $session_fee->tuitionFee; ?> </strong>
-                              <?php } ?>
-                              <?php if ($session_count == 1) {
+                                          </td>
+                                          <td style="text-align: center; ">
+                                              <?php if ($session_count == 1) { ?>
+                                              <strong><?php echo $session_fee->tuitionFee; ?> </strong>
+                                              <?php } ?>
+                                              <?php if ($session_count == 1) {
                                 $number = $session_fee->tuitionFee;
                                 $percentage = 10;
                                 $result = $number + ($number * $percentage / 100);
                                 $previous_session_max_fee[$class->classId] = $result;
                                 $previous_session_fee[$class->classId] = $number;
                               } ?>
-                              <?php if ($session_count == 2) { ?>
-                                <small style="margin-left:15px;">Maximum expected value:
+                                              <?php if ($session_count == 2) { ?>
+                                              <small style="margin-left:15px;">Maximum expected value:
 
-                                  <strong><?php echo round($previous_session_max_fee[$class->classId], 2); ?></strong></small>
+                                                  <strong><?php echo round($previous_session_max_fee[$class->classId], 2); ?></strong></small>
 
-                                <input required type="number" <?php if ($previous_session_max_fee[$class->classId] > 0) { ?> max="<?php echo round($previous_session_max_fee[$class->classId], 2); ?>" <?php } ?> name="fee[<?php echo $session_fee->feeId; ?>]" value="<?php echo $session_fee->tuitionFee; ?>" />
+                                              <input required type="number"
+                                                  <?php if ($previous_session_max_fee[$class->classId] > 0) { ?>
+                                                  max="<?php echo round($previous_session_max_fee[$class->classId], 2); ?>"
+                                                  <?php } ?> name="fee[<?php echo $session_fee->feeId; ?>]"
+                                                  value="<?php echo $session_fee->tuitionFee; ?>" />
 
-                                <span style="margin-left: 5px; color:green">
-                                  <?php
+                                              <span style="margin-left: 5px; color:green">
+                                                  <?php
 
                                   $diff = $session_fee->tuitionFee - $previous_session_fee[$class->classId];
                                   if ($previous_session_fee[$class->classId]) {
@@ -254,50 +283,52 @@
                                   //$incress =  round((($session_fee->tuitionFee - $previous_session_fee[$class->classId]) / ($diff) * 100, 2);
                                   //echo round(((($session_fee->tuitionFee - $previous_session_fee[$class->classId]) / $session_fee->tuitionFee) * 100), 2);
                                   ?> %
-                                </span>
-                              <?php } ?>
+                                              </span>
+                                              <?php } ?>
 
 
-                              <small style="margin-left: 10px;">
-                                <i>
-                                  <?php
+                                              <small style="margin-left: 10px;">
+                                                  <i>
+                                                      <?php
                                   //$f = new NumberFormatter("in", NumberFormatter::SPELLOUT);
                                   //echo ucwords(strtolower(convertNumberToWord($session_fee->tuitionFee)));
                                   ?>
-                                </i>
-                              </small>
-                            </td>
+                                                  </i>
+                                              </small>
+                                          </td>
 
 
-                          <?php
+                                          <?php
                             $session_count++;
                           } ?>
 
-                        </tr>
-                      <?php } ?>
+                                      </tr>
+                                      <?php } ?>
 
 
-                    </table>
-                    <input class="btn btn-success" type="submit" name="update_section_e" value="Update Section E (Fee Data)" />
-                    <br />
-                    <br />
-                    <p style="text-align: center;">
-                      After updating, please remember to submit section E as well.
-                    </p>
+                                  </table>
+                                  <input class="btn btn-success" type="submit" name="update_section_e"
+                                      value="Update Section E (Fee Data)" />
+                                  <br />
+                                  <br />
+                                  <p style="text-align: center;">
+                                      After updating, please remember to submit section E as well.
+                                  </p>
 
-                    <input class="btn btn-danger" type="submit" name="update_section_e" value="Submit Section E" />
-
-
-                  </form>
-                <?php }  ?>
+                                  <input class="btn btn-danger" type="submit" name="update_section_e"
+                                      value="Submit Section E" />
 
 
-
-
+                              </form>
+                              <?php }  ?>
 
 
 
-                <?php
+
+
+
+
+                              <?php
                 $bank_challan_button = 0;
                 $query = "SELECT
                 `bank_challans`.*,
@@ -315,7 +346,7 @@
                 ORDER BY bank_challan_id ASC";
                 $session_bank_challans = $this->db->query($query)->result(); ?>
 
-                <!-- <table class="table">
+                              <!-- <table class="table">
                   <tr>
                     <th colspan="6">Bank Challan Detail</th>
                   </tr>
@@ -368,41 +399,49 @@
                           Re Submit Bank Challan</a> -->
 
 
-                <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
-                  <h4>Re Submit Bank Challan for session <?php echo $session_detail->sessionYearTitle; ?></h4>
-                  <form action="<?php echo site_url("form/add_bank_challan"); ?>" method="post">
+                              <div
+                                  style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px; background-color: white;">
+                                  <h4>Re Submit Bank Challan for session
+                                      <?php echo $session_detail->sessionYearTitle; ?></h4>
+                                  <form action="<?php echo site_url("form/add_bank_challan"); ?>" method="post">
 
-                    <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
-                    <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
-                    <input type="hidden" name="schools_id" value="<?php echo $school->schools_id; ?>" />
-                    <input type="hidden" name="challan_for" value="<?php echo $session_bank_challan->challan_for ?>" />
-                    <table class="table table-bordered">
-                      <tr>
-                        <td>Bank Transaction No (STAN)</td>
-                        <td>Bank Transaction Date</td>
-                      </tr>
-                      <tr>
-                        <td><input required maxlength="6" name="challan_no" type="number" autocomplete="off" class="form-control" />
-                          <small>"STAN can be found on the upper right corner of bank generated receipt"</small>
-                        </td>
-                        <td><input required name="challan_date" type="date" class="form-control" />
-                        </td>
-                        <td><input type="submit" class="btn btn-danger " name="submit" value="Re Submit Bank Challan" />
-                        </td>
-                      </tr>
-                    </table>
-                  </form>
-                </div>
-                </td>
-                </tr>
-              <?php } ?>
-              </table> -->
+                                      <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
+                                      <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
+                                      <input type="hidden" name="schools_id"
+                                          value="<?php echo $school->schools_id; ?>" />
+                                      <input type="hidden" name="challan_for"
+                                          value="<?php echo $session_bank_challan->challan_for ?>" />
+                                      <table class="table table-bordered">
+                                          <tr>
+                                              <td>Bank Transaction No (STAN)</td>
+                                              <td>Bank Transaction Date</td>
+                                          </tr>
+                                          <tr>
+                                              <td><input required maxlength="6" name="challan_no" type="number"
+                                                      autocomplete="off" class="form-control" />
+                                                  <small>"STAN can be found on the upper right corner of bank generated
+                                                      receipt"</small>
+                                              </td>
+                                              <td><input required name="challan_date" type="date"
+                                                      class="form-control" />
+                                              </td>
+                                              <td><input type="submit" class="btn btn-danger " name="submit"
+                                                      value="Re Submit Bank Challan" />
+                                              </td>
+                                          </tr>
+                                      </table>
+                                  </form>
+                              </div>
+                              </td>
+                              </tr>
+                              <?php } ?>
+                              </table> -->
 
-              <div class="row">
-                <?php
+                              <div class="row">
+                                  <?php
                 if ($school->status == 7) { ?>
-                  <h3 style="text-align: center;">Deficiency</h3>
-                  <?php $query = "SELECT * FROM deficiencies 
+                                  <h3 style="text-align: center;">Deficiency</h3>
+                                  <?php $query = "SELECT * FROM deficiencies 
                                   WHERE status =0
                                   AND school_id = '" . $school->school_id . "'";
                   $deficiencies =  $this->db->query($query)->result();
@@ -412,66 +451,78 @@
                     $d_bank_challan = $this->db->query($query)->result()[0];
                     if ($d_bank_challan->verified != 1) {
                   ?>
-                      <div class="col-md-12">
-                        <p><strong><?php echo $deficiency->deficiency_title; ?>
-                            <?php //echo $deficiency->deficiency_type; 
+                                  <div class="col-md-12">
+                                      <p><strong><?php echo $deficiency->deficiency_title; ?>
+                                              <?php //echo $deficiency->deficiency_type; 
                             ?></strong><br />
-                          <?php echo $deficiency->deficiency_detail; ?></p>
-                        <br />
-                        <p style="text-align: center;">
-                          <strong>Please print deficiency bank challan </strong><br />
-                          <a target="_new" class="btn btn-danger" href="<?php echo site_url("deficiency/bank_challan/" . $deficiency->deficiency_id); ?>">Pint Deficiency Bank Challan</a>
-                        </p>
+                                          <?php echo $deficiency->deficiency_detail; ?></p>
+                                      <br />
+                                      <p style="text-align: center;">
+                                          <strong>Please print deficiency bank challan </strong><br />
+                                          <a target="_new" class="btn btn-danger"
+                                              href="<?php echo site_url("deficiency/bank_challan/" . $deficiency->deficiency_id); ?>">Pint
+                                              Deficiency Bank Challan</a>
+                                      </p>
+                                  </div>
+                                  <div class="col-md-12">
+                                      <div
+                                          style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px;">
+                                          <h4>Submit Deficiency Challan for session
+                                              <?php echo $session_detail->sessionYearTitle; ?></h4>
+                                          <form action="<?php echo site_url("form/add_bank_challan"); ?>" method="post">
+                                              <input type="hidden" name="deficiency_id"
+                                                  value="<?php echo $deficiency->deficiency_id; ?>" />
+                                              <input type="hidden" name="last_status"
+                                                  value="<?php echo $deficiency->last_status; ?>" />
+                                              <input type="hidden" name="session_id"
+                                                  value="<?php echo $session_id; ?>" />
+                                              <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
+                                              <input type="hidden" name="schools_id"
+                                                  value="<?php echo $school->schools_id; ?>" />
+                                              <input type="hidden" name="challan_for" value="Deficiency" />
+                                              <table class="table table-bordered">
+                                                  <tr>
+                                                      <td>Bank Transaction No (STAN)</td>
+                                                      <td>Bank Transaction Date</td>
+                                                  </tr>
+                                                  <tr>
+                                                      <td><input required maxlength="6" name="challan_no" type="number"
+                                                              autocomplete="off" class="form-control" />
+                                                          <small>"STAN can be found on the upper right corner of bank
+                                                              generated receipt"</small>
+                                                      </td>
+                                                      <td><input required name="challan_date" type="date"
+                                                              class="form-control" />
+                                                      </td>
+                                                      <td><input type="submit" class="btn btn-success" name="submit"
+                                                              value="Submit Bank Challan" />
+                                                      </td>
+                                                  </tr>
+                                              </table>
+                                          </form>
+                                      </div>
+                                  </div>
+                                  <?php } ?>
+                                  <?php } ?>
+                                  <h4></h4>
+                                  <?php } ?>
+
+                              </div>
+                          </div>
+
+
                       </div>
-                      <div class="col-md-12">
-                        <div style="border:1px solid #9FC8E8; border-radius: 10px; min-height: 100px;  margin: 5px; padding: 5px;">
-                          <h4>Submit Deficiency Challan for session <?php echo $session_detail->sessionYearTitle; ?></h4>
-                          <form action="<?php echo site_url("form/add_bank_challan"); ?>" method="post">
-                            <input type="hidden" name="deficiency_id" value="<?php echo $deficiency->deficiency_id; ?>" />
-                            <input type="hidden" name="last_status" value="<?php echo $deficiency->last_status; ?>" />
-                            <input type="hidden" name="session_id" value="<?php echo $session_id; ?>" />
-                            <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
-                            <input type="hidden" name="schools_id" value="<?php echo $school->schools_id; ?>" />
-                            <input type="hidden" name="challan_for" value="Deficiency" />
-                            <table class="table table-bordered">
-                              <tr>
-                                <td>Bank Transaction No (STAN)</td>
-                                <td>Bank Transaction Date</td>
-                              </tr>
-                              <tr>
-                                <td><input required maxlength="6" name="challan_no" type="number" autocomplete="off" class="form-control" />
-                                  <small>"STAN can be found on the upper right corner of bank generated receipt"</small>
-                                </td>
-                                <td><input required name="challan_date" type="date" class="form-control" />
-                                </td>
-                                <td><input type="submit" class="btn btn-success" name="submit" value="Submit Bank Challan" />
-                                </td>
-                              </tr>
-                            </table>
-                          </form>
-                        </div>
-                      </div>
-                    <?php } ?>
-                  <?php } ?>
-                  <h4></h4>
-                <?php } ?>
+
+                  </div>
+
+
+
+
+
+
 
               </div>
-              </div>
-
-
-            </div>
-
           </div>
-
-
-
-
-
-
-
-        </div>
-      </div>
 
 
   </div>

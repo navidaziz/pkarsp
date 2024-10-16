@@ -65,6 +65,7 @@
                                             <th>File No.</th>
                                             <th>RegNo</th>
                                             <th>School Name</th>
+                                            <th>Region</th>
                                             <th>District</th>
                                             <th>Contact</th>
                                             <th>Already Registered</th>
@@ -78,6 +79,7 @@
                                             <td>By</td>
                                             <th>DOCs</th>
                                             <th>NoteSheet</th>
+                                            <th>File Status</th>
                                             <th>Issued</th>
                                             <th>Action</th>
 
@@ -105,6 +107,7 @@
                                         s.uc_text,
                                         s.address,
                                         d.districtTitle,
+                                        if((`d`.`new_region` = 1),'Central',if((`d`.`new_region` = 2),'South',if((`d`.`new_region` = 3),'Malakand',if((`d`.`new_region` = 4),'Hazara',if((`d`.`new_region` = 5),'Peshawar','Others'))))) AS `region`,
                                         sy.sessionYearTitle,
                                         ss.principal_contact_no,
                                         ss.status,
@@ -112,6 +115,7 @@
                                         s.telePhoneNumber,
                                         s.docs,
                                         v.visit_status,
+                                        ss.file_status,
                                         v.created_by
                                         FROM visits as v 
                                         INNER JOIN schools as s ON(s.schoolId = v.schools_id) 
@@ -143,6 +147,7 @@
                                             </td>
                                             <td><?php echo $row->registrationNumber; ?></td>
                                             <td><?php echo $row->schoolName; ?></td>
+                                            <td><?php echo $row->region; ?></td>
                                             <td><?php echo $row->districtTitle; ?></td>
 
 
@@ -234,6 +239,9 @@
                                                             echo '<i title="Maybe notesheet completed" class="fa fa-comment" style="color:green" aria-hidden="true">Yes</i>';
                                                         }
                                                         ?>
+                                            </td>
+                                            <td>
+                                                <?php echo file_status($row->file_status); ?>
                                             </td>
                                             <td>
                                                 <?php if($row->status==1){
