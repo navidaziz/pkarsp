@@ -73,9 +73,10 @@
                                             <th>Session</th>
                                             <th>Recommended</th>
                                             <th>Recommended levels</th>
-
+                                            <th>Applied Date</th>
                                             <th>Visited</th>
                                             <th>Date</th>
+
                                             <td>By</td>
                                             <th>DOCs</th>
                                             <th>NoteSheet</th>
@@ -101,6 +102,7 @@
                                         v.visit_date,
                                         v.last_updated_by,
                                         v.recommendation,
+                                        v.created_date,
                                         s.schoolName, s.registrationNumber,
                                         (SELECT tehsilTitle FROM `tehsils` WHERE tehsils.tehsilId=s.tehsil_id) as tehsil,
                                         (SELECT `ucTitle` FROM `uc` WHERE uc.ucId=s.uc_id) as uc,
@@ -206,9 +208,9 @@
                                                 <?php echo $row->r_high_sec_l == 1 ? 'Higher Sec. ' : ''  ?>
                                                 <?php echo $row->r_academy_l == 1 ? 'Academy ' : ''  ?>
                                             </td>
-
+                                            <td><?php echo date('d M, Y', strtotime($row->created_date)); ?></td>
                                             <td><?php echo $row->visit_status; ?></td>
-                                            <td><?php echo date('d-m-Y', strtotime($row->visit_date)); ?></td>
+                                            <td><?php echo date('d M, Y', strtotime($row->visit_date)); ?></td>
                                             <td>
                                                 <?php
                                                     $query = "SELECT userTitle FROM users WHERE userId = '" . $row->last_updated_by . "'";
@@ -250,6 +252,7 @@
                                                     echo 'Pending';
                                                 } ?>
                                             </td>
+
                                             <td>
                                                 <?php if ($row->visited == 'Yes') { ?>
                                                 <a target="new" class="btn btn-link btn-sm"
