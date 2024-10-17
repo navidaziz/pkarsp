@@ -68,7 +68,7 @@
                                             <th>Region</th>
                                             <th>District</th>
                                             <th>Contact</th>
-                                            <th>Already Registered</th>
+                                            <th>Current Level</th>
                                             <th>Visit Reason</th>
                                             <th>Session</th>
                                             <th>Recommended</th>
@@ -104,6 +104,7 @@
                                         v.recommendation,
                                         v.created_date,
                                         s.schoolName, s.registrationNumber,
+                                        ss.level_of_school_id,
                                         (SELECT tehsilTitle FROM `tehsils` WHERE tehsils.tehsilId=s.tehsil_id) as tehsil,
                                         (SELECT `ucTitle` FROM `uc` WHERE uc.ucId=s.uc_id) as uc,
                                         s.uc_text,
@@ -181,17 +182,10 @@
                                                     }
                                                     ?></td>
                                             <td>
-
-                                                <?php
-                                                    $query = "SELECT `level_of_school_id`,
-                                                    `primary`, middle, high, high_sec FROM school 
-                                                    WHERE schools_id = '" . $row->schools_id . "' 
-                                                    AND  status = 1 ORDER BY schoolId DESC LIMIT 1";
-                                                    $reg_levels = $this->db->query($query)->row(); ?>
-                                                <?php echo ($reg_levels->primary == 1 or $reg_levels->level_of_school_id == 1) ? 'Primary, ' : '' ?>
-                                                <?php echo ($reg_levels->middle == 1 or $reg_levels->level_of_school_id == 2) ? 'Middle, ' : '' ?>
-                                                <?php echo ($reg_levels->high == 1 or $reg_levels->level_of_school_id == 3) ? 'High, ' : '' ?>
-                                                <?php echo ($reg_levels->higher_sec == 1 or $reg_levels->level_of_school_id == 4) ? 'High Sec, ' : '' ?>
+                                                <?php if($row->level_of_school_id==1){ echo "Primary"; } ?>
+                                                <?php if($row->level_of_school_id==2){ echo "Middle"; } ?>
+                                                <?php if($row->level_of_school_id==3){ echo "High"; } ?>
+                                                <?php if($row->level_of_school_id==4){ echo "High Sec."; } ?>
                                             </td>
 
                                             <td><?php echo $row->visit_reason; ?></td>
