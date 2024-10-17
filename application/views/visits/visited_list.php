@@ -70,6 +70,11 @@
                                             <th>Contact</th>
                                             <th>Current Level</th>
                                             <th>Visit Reason</th>
+                                            <td>Primary</td>
+                                            <td>Middle</td>
+                                            <td>High</td>
+                                            <td>Higher Sec.</td>
+                                            <td>Academy</td>
                                             <th>Session</th>
                                             <th>Recommended</th>
                                             <th>Recommended levels</th>
@@ -189,6 +194,15 @@
                                             </td>
 
                                             <td><?php echo $row->visit_reason; ?></td>
+                                            <td><?php echo $row->r_primary_l == 1 ? 'Primary, ' : '' ?></td>
+                                            <td> <?php echo $row->r_middle_l == 1 ? 'Middle, ' : '' ?></td>
+                                            <td>
+                                                <?php echo $row->r_high_l == 1 ? 'High, ' : ''; ?></td>
+                                            <td>
+                                                <?php echo $row->r_high_sec_l == 1 ? 'Higher Sec. ' : ''  ?></td>
+                                            <td>
+                                                <?php echo $row->r_academy_l == 1 ? 'Academy ' : ''  ?></td>
+
                                             <td><?php echo $row->sessionYearTitle; ?></td>
                                             <td><?php if ($row->recommendation == 'Recommended') { ?>
                                                 <span style="color: green;"><?php echo $row->recommendation; ?></span>
