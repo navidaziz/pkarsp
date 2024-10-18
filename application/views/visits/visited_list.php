@@ -326,7 +326,7 @@ table.dataTable.no-footer {
 </style>
 <script>
 $(document).ready(function() {
-    document.title = "List of Not Visited Institutes upto (<?php echo date('d-m-y h:m:s') ?>)";
+    document.title = "List of Visited Institutes upto (<?php echo date('d-m-y h:m:s') ?>)";
     $('#visits_list').DataTable({
         dom: 'Bfrtip',
         paging: false,
